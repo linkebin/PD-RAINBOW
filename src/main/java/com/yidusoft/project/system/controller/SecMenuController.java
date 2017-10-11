@@ -271,15 +271,11 @@ public class SecMenuController {
    @PostMapping("/listByPages")
    @ResponseBody
    public Result listByPages(int page,
-                             int size, String params, String userId) {
+                             int size, String params) {
        SecMenuForParameter secMenuForParameter = JSON.parseObject(params,SecMenuForParameter.class);
-       secMenuForParameter.setUserId(userId);
-       //查询分页数据
-      // int total=secMenuService.getQueryAllTotal(secMenuForParameter);
        PageHelper.startPage(page,size);
        List<SecMenu> secOrgList=secMenuService.getQueryAll(secMenuForParameter);
        PageInfo pageInfo = new PageInfo(secOrgList);
-      // pageInfo.setTotal(total);
        return   ResultGenerator.genSuccessResult(pageInfo);
    }
 

@@ -63,18 +63,19 @@
                     <i class='eui-icon eui-font24'>&#xe61d;</i> 菜单列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <a href="###" class="eui-btn eui-btn-small" onclick="openTab()">添加菜单</a>
+                    <a href="###" class="eui-btn eui-btn-small" onclick="openTopTab()">添加顶层菜单</a>
+                    <a href="###" class="eui-btn eui-btn-small" onclick="openTab()">添加普通菜单</a>
                     <a href="###" class="eui-btn eui-btn-small" onclick="deleteOrg('')">删除菜单</a>
                 </div>
             </div>
             <table class="eui-table eui-form" id="userTable">
                 <colgroup>
                     <col width="50">
-                    <col width="60">
+                    <col width="100">
                     <col width="120">
-                    <col width="60">
-                    <col width="60">
-                    <col width="60">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
                     <col>
                 </colgroup>
                 <thead>
@@ -115,16 +116,23 @@
     <form  class="eui-form menuForm eui-marginT10 eui-paddingR10" id="menuForm">
         <input type="hidden"  name="creator"  th:value="${session.userSession.userName}" />
         <input type="hidden" name="id" value="">
+        <input id="parentName" type="hidden" value="" />
         <div class="eui-form-item">
             <label class="eui-form-label">菜单名称:</label>
             <div class="eui-input-inline">
-                <input type="text" id="menuNames" name="menuName" e-verify="account" autocomplete="off" class="eui-input">
+                <input type="text" id="menuNames"
+                       name="menuName" e-verify="account" autocomplete="off"
+                       class="eui-input">
             </div>
+        </div>
+
+        <div class="eui-form-item">
             <label class="eui-form-label">URL:</label>
             <div class="eui-input-inline">
                 <input type="text" name="url"   class="eui-input"  />
             </div>
         </div>
+
         <div class="eui-form-item">
             <label class="eui-form-label">排序:</label>
             <div class="eui-input-inline">
@@ -150,29 +158,43 @@
         </div>
 
         <div class="eui-form-item eui-grade">
-            <label class="eui-form-label">状态</label>
+            <label class="eui-form-label">状态:</label>
             <div class="eui-input-block">
                 <input type="radio" name="enabled" value="1" title="可用" checked>
                 <input type="radio"name="enabled" value="0" title="不可用">
             </div>
         </div>
 
+        <div id="showParentNameText" class="eui-form-item">
+            <label class="eui-form-label">父级菜单:</label>
+            <div class="eui-input-inline">
+                <input type="text" id="parentNameText"
+                        disabled="disabled"
+                       e-verify="account" autocomplete="off"
+                       class="eui-input">
+            </div>
+        </div>
+
+
+
     </form>
     <div class="taskConfirm" onclick="save()"><span class="eui-btn" id="upOrAddbnt">确认</span></div>
 </div>
 <!-- 左滑编辑结束 -->
-<!--这是添加和编辑用户时打开的tab页-->
-
-<!--编辑用户权限-->
-
-
-
-
 
 <script>
+
+    // 表单
+    eui.use(['form', 'layedit', 'laydate'], function() {
+        var form = eui.form
+            , layer = eui.layer
+            , laydate = eui.laydate;
+        //自定义验证规则
+        form.verify({
+        });
+    });
     function resetForm() {
         document.getElementById('searchFrom').reset();
-
     }
 
 // 高级筛选左滑
@@ -192,17 +214,16 @@ $(".taskClose,.taskFiltrate").click(function(event) {
     $(function () {
         loadOrgTree();
         doSearch();
-        jQuery.validator.addMethod("isMobile", function(value, element) {
-            var length = value.length;
-            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-            return this.optional(element) || (length == 11 && mobile.test(value));
-        }, "请输入有效手机号码");
+//        jQuery.validator.addMethod("isMobile", function(value, element) {
+//            var length = value.length;
+//            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+//            return this.optional(element) || (length == 11 && mobile.test(value));
+//        }, "请输入有效手机号码");
         $("#menuForm").validate();
     });
 
     //保存
     function save() {
-
                 eui.use(['form', 'layedit', 'laydate'], function() {
                     var form = eui.form
                         , layer = eui.layer
@@ -277,8 +298,6 @@ $(".taskClose,.taskFiltrate").click(function(event) {
                 params.parentId=$("#parentId").val();
                 params.id=$("#menuId").val();
                 var param=JSON.stringify(params);
-                console.info("修改");
-                console.info(param);
                 $.post("/sec/menu/updateMenu",{menuJson:param},function(result){
                     if(result.code=200){
                         $("#menuId").val("");
@@ -361,12 +380,14 @@ $(".taskClose,.taskFiltrate").click(function(event) {
                     parentIcon: 'folder',
                     childIcon: 'leaf' ,
                     slide: false, //是否显示动画
-                    nodeWidth: 150,
+                    nodeWidth: 200,
+                    isExpand:2,
                     idFieldName: 'id',
                     textFieldName:'name' ,
                     onSelect: function (node)
                     {
                         $("#id").val(node.data.id);
+                        $("#parentName").val(node.data.name);
                         doSearch();
                     },
                     onError:function(node){
@@ -424,8 +445,6 @@ $(".taskClose,.taskFiltrate").click(function(event) {
                 },
                 type:"post",
                 success:function(result){
-                    console.info("显示");
-                    console.info(result);
                     // 分页
                     var count=result.data.total;
                     laypage.render({
@@ -438,7 +457,6 @@ $(".taskClose,.taskFiltrate").click(function(event) {
                             if (first){
                                 //第一次，不需要查询数据
                                 var menuList = result.data.list;
-                                console.info("menuList:"+menuList)
                                 //遍历，拼接表格
                                 var tableHtml = getTable(menuList);
                                 $("#userTable tbody").html(tableHtml);
@@ -481,8 +499,6 @@ $(".taskClose,.taskFiltrate").click(function(event) {
                 , laydate = eui.laydate;
         for (var item in menuList){
             var secMenu = menuList[item];
-            console.info("secMenu:");
-            console.info(secMenu);
             tableHtml +=  '<tr>' ;
             tableHtml +=  '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secMenu.id + '"></td>';
             tableHtml +=  '<td>'+ secMenu.menuCode +'</td>' ;
@@ -497,7 +513,7 @@ $(".taskClose,.taskFiltrate").click(function(event) {
             }else {
                 tableHtml +=  '<td>打开新页面</td>' ;
             }
-            tableHtml +=  '<td>'+ secMenu.url +'</td>' ;
+//            tableHtml +=  '<td>'+ secMenu.url +'</td>' ;
             if(secMenu.enabled=='0'){
                 tableHtml +=  '<td>禁用</td>' ;
             }else {
@@ -517,30 +533,51 @@ $(".taskClose,.taskFiltrate").click(function(event) {
         });
         return tableHtml;
     }
+    function openTopTab() {
+        $("#showParentNameText").remove();
+        $("#upOrAddMenu").text("添加顶层菜单");
+        eui.use('element', function() {
+            var $ = eui.jquery
+                , element = eui.element,form = eui.form;
+            var id = new Date().getTime();
+            document.getElementById('menuForm').reset();
+            $(".taskFiltrate").show();
+            $(".filtrateIn").animate({right:'0'},400);
 
+            element.tabChange('menuFilter', id);
+            $(".eui-show input[name='account']").removeAttr("disabled");
+            //排序
+            $("#id").val('0');
+            $.post("/sec/menu/querySort",{"parentId":'0'},function (result) {
+                var sort=  result.data.sort;
+                var sortText="";
+                for(var i=1;i<=parseInt(sort)+1;i++){
+                    sortText+='<option value="'+i+'">'+i+'</option>';
+                }
+                $("[name='sort']").html(sortText);
+                form.render();
+            });
+            form.render();
+        });
+    }
     //打开tab
     function openTab() {
         if ($("#id").val()==''){
-            layer.msg('请选择菜单', {
+            layer.msg('请选择左侧菜单', {
                 time: 2000
             });
         }else{
-            $("#upOrAddMenu").text("添加菜单");
+            $("#upOrAddMenu").text("添加普通菜单");
 
             eui.use('element', function() {
                 var $ = eui.jquery
                     , element = eui.element,form = eui.form;
                 var id = new Date().getTime();
-               /* element.tabAdd('menuFilter', {
-                    title: '添加菜单'
-                    ,content: $("#userInfo").html()
-                    ,id: id
-                });*/
                 document.getElementById('menuForm').reset();
                 $(".taskFiltrate").show();
                 $(".filtrateIn").animate({right:'0'},400);
 
-
+                $("#parentNameText").val($("#parentName").val());
                 element.tabChange('menuFilter', id);
                 $(".eui-show input[name='account']").removeAttr("disabled");
                 //排序
@@ -570,8 +607,6 @@ $(".taskClose,.taskFiltrate").click(function(event) {
                 var $ = eui.jquery
                     , element = eui.element,form = eui.form;
 
-
-
                 var parentId =result.data.menus.parentId;
                 var sorts=result.data.menus.sort;
                 // result.menuName
@@ -590,7 +625,6 @@ $(".taskClose,.taskFiltrate").click(function(event) {
                     }
 
                 });
-
 
                 var id = new Date().getTime();
                 $("#upOrAddMenu").text("修改菜单");
