@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.questionnaire.dao.QuestionnaireSceneMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.questionnaire.domain.QuestionnaireScene">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="scene_id" jdbcType="VARCHAR" property="sceneId" />
+    <result column="questionnaire_id" jdbcType="VARCHAR" property="questionnaireId" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.transaction.dao.ProductSettingsMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.transaction.domain.ProductSettings">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_total" jdbcType="INTEGER" property="productTotal" />
+    <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="promotions_id" jdbcType="VARCHAR" property="promotionsId" />
+  </resultMap>
+</mapper>

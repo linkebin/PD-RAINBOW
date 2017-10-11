@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.transaction.dao.QuestionnairePromotionsMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.transaction.domain.QuestionnairePromotions">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="promotions_type" jdbcType="INTEGER" property="promotionsType" />
+    <result column="promotions_start" jdbcType="TIMESTAMP" property="promotionsStart" />
+    <result column="promotions_end" jdbcType="TIMESTAMP" property="promotionsEnd" />
+    <result column="promotions_discount" jdbcType="DECIMAL" property="promotionsDiscount" />
+    <result column="buy_total" jdbcType="INTEGER" property="buyTotal" />
+    <result column="promotions_buy_send" jdbcType="INTEGER" property="promotionsBuySend" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="promotions_state" jdbcType="INTEGER" property="promotionsState" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+  </resultMap>
+</mapper>

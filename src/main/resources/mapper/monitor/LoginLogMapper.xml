@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.monitor.dao.LoginLogMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.monitor.domain.LoginLog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="login_id" jdbcType="VARCHAR" property="loginId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="login_addr" jdbcType="VARCHAR" property="loginAddr" />
+    <result column="login_type" jdbcType="VARCHAR" property="loginType" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+  </resultMap>
+</mapper>

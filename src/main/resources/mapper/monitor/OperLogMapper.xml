@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.monitor.dao.OperLogMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.monitor.domain.OperLog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="oper_id" jdbcType="VARCHAR" property="operId" />
+    <result column="oper_type" jdbcType="VARCHAR" property="operType" />
+    <result column="oper_info" jdbcType="VARCHAR" property="operInfo" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="oper_time" jdbcType="TIMESTAMP" property="operTime" />
+  </resultMap>
+</mapper>

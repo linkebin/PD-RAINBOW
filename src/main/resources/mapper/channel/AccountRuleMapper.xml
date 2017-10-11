@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.channel.dao.AccountRuleMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.channel.domain.AccountRule">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+    <result column="rule" jdbcType="VARCHAR" property="rule" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="default_rule" jdbcType="INTEGER" property="defaultRule" />
+  </resultMap>
+</mapper>
