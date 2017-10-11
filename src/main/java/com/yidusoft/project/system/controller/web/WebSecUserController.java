@@ -23,7 +23,7 @@ public class WebSecUserController {
 
     @RequestMapping("/info")
     public String info(){
-        return "system/secuser/SecuserInfo";
+        return "project/system/secuser/SecuserInfo";
     }
 
     @RequestMapping("/userRole")
