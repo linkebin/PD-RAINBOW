@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SecMenuOrgMapper">
+    <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SecMenuOrg">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID_" jdbcType="VARCHAR" property="id" />
+        <result column="MENU_ID" jdbcType="VARCHAR" property="menuId" />
+        <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+    </resultMap>
+
+
+    <delete id="deleteOrgMenuAllByOrgId" parameterType="String">
+            DELETE FROM sec_menu_org WHERE ORG_ID=#{orgId}
+    </delete>
+
+</mapper>

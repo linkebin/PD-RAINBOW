@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>任务管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Le styles -->
+    <link rel="stylesheet"  th:href="@{/Styles/themes/default/style.css}"   media="all">
+    <link rel="stylesheet"  th:href="@{/Styles/themes/default/modules/pageLogin/login-base/login.css}"   media="all">
+    <style>
+        .loginTips{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="Login">
+    <div class="loginIn">
+        <div id="login1" class="login1">
+            <h3>登录易度系统平台</h3>
+            <p class="loginTxt"><input type="text" id="username"/></p>
+            <p class="loginPword"><input type="password" id="password"/></p>
+            <input type="hidden" name="loginType" value="account"/><!--首选登录方式为账号登录-->
+            <div class="eui-form">
+                <!-- <div class="eui-input-block"> -->
+               <!-- <select id="userType" name="interest" e-filter="aihao">
+                    <option value="系统管理员">系统管理员</option>
+                    <option value="普通用户">普通用户</option>
+                </select>-->
+                <!-- </div> -->
+            </div>
+            <span th:text="${msg}" class="loginTips"></span>
+            <div class="loginForget"><a class="register" href="##">注册</a><a href="##">忘记密码？</a></div>
+            <a class="loginB" href="###" onclick="login()">登 录</a>
+          <!--  <div class="loginO">
+                <p>————其他登录方式————</p>
+                <div class="loginOther"><a href="##"></a> <a href="##"></a> <a href="##"></a></div>
+            </div>-->
+        </div>
+        <div id="login2" class="login2">
+            <!--<img th:src="@{/Styles/themes/default/module/login/login-base/images/code.png}" alt="">-->
+            <p>请扫码登录</p>
+        </div>
+      <!--  <div id="loginImg" class="loginimg"><img id="img1" th:src="@{/Styles/themes/default/module/login/login-base/images/QRcode.png}" alt=""></div>-->
+    </div>
+</div>
+
+<!-- 用户登录信息 end-->
+<script th:src="@{/Scripts/module/eui.js}" charset="utf-8"></script>
+<script th:src="@{/Scripts/jquery-1.9.0.min.js}" charset="utf-8"></script>
+<script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $("#password").keydown(function(e) {
+            if (e.keyCode == 13) {
+                login();
+            }
+        });
+    });
+
+    //登录配置，将名称传入首页
+function login() {
+    //var type = document.getElementById("userType").value;
+    var type = "系统管理员";
+    var username = document.getElementById("username").value;
+    $("#password").val(md5($("#password").val()));
+    var password = document.getElementById("password").value;
+    var parames = new Array();
+    parames.push({ name: "username", value: username});
+    parames.push({ name: "password", value:password});
+    parames.push({ name: "type", value:type});
+    Post("/login", parames);
+   };
+
+eui.use(['form', 'layedit', 'laydate'], function(){
+  var form = eui.form
+  ,layer = eui.layer
+  ,layedit = eui.layedit
+  ,laydate = eui.laydate;
+
+  //自定义验证规则
+  form.verify({
+    title: function(value){
+      if(value.length < 5){
+        return '标题至少得5个字符啊';
+      }
+    }
+    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+    ,content: function(value){
+      layedit.sync(editIndex);
+    }
+  });
+
+});
+
+// 登录的切换
+var oImg = document.getElementById('img1');
+var oLoginImg = document.getElementById('loginImg');
+var oLogin1 = document.getElementById('login1');
+var oLogin2 = document.getElementById('login2');
+var onOff = true;
+oLogin2.style.display = 'none';
+
+//oLoginImg.onclick = function (){
+//    if (onOff) {
+//            oImg.src = '../Styles/themes/default/module/login/login-base/images/pc.png';
+//            oLogin1.style.display = 'none';
+//            oLogin2.style.display = 'block';
+//            onOff = false;
+//        } else {
+//            oImg.src = '../Styles/themes/default/module/login/login-base/images/QRcode.png';
+//            oLogin1.style.display = 'block';
+//            oLogin2.style.display = 'none';
+//            onOff = true;
+//        }
+//};
+    /*
+     *功能： 模拟form表单的提交
+     *参数： URL 跳转地址 PARAMTERS 参数
+     */
+    function Post(URL, PARAMTERS) {
+        //创建form表单
+        var temp_form = document.createElement("form");
+        temp_form.action = URL;
+        //如需打开新窗口，form的target属性要设置为'_blank'
+        temp_form.target = "_self";
+        temp_form.method = "post";
+        temp_form.style.display = "none";
+        //添加参数
+        for (var item in PARAMTERS) {
+            var opt = document.createElement("textarea");
+            opt.name = PARAMTERS[item].name;
+            opt.value = PARAMTERS[item].value;
+            temp_form.appendChild(opt);
+        }
+        document.body.appendChild(temp_form);
+        //提交数据
+        temp_form.submit();
+    }
+</script>
+</body>
+</html>

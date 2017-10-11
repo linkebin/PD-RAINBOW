@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SecRoleMemberMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SecRoleMember">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
+  </resultMap>
+  <select id="findRoleMemberIsExits" parameterType="com.yidusoft.project.system.domain.SecRoleMember" resultType="Integer">
+        SELECT COUNT(*) FROM sec_role_member WHERE USER_ID=#{userId} AND ROLE_ID=#{roleId}
+  </select>
+
+  <delete id="deleteUserIdAndRoleId" parameterType="com.yidusoft.project.system.domain.SecRoleMember">
+    DELETE FROM sec_role_member where user_id=#{userId} AND  role_id=#{roleId}
+  </delete>
+
+  <delete id="deleteByRoleId" parameterType="String">
+    DELETE FROM sec_role_member where role_id=#{roleId}
+  </delete>
+
+  <select id="getMemberAll" resultType="String" parameterType="Map">
+    SELECT su.id_ FROM sec_user su WHERE DELETED=0
+    <if test="orgId != null and orgId != ''">
+      AND su.ORG_ID like '%${orgId}%'
+    </if>
+    AND su.id_ NOT IN
+    (SELECT srm.user_id FROM sec_role_member srm WHERE role_id=#{roleId})
+  </select>
+</mapper>

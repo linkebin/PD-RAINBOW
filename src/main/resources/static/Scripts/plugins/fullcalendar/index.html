@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="keywords" content="日程安排,FullCalendar,jquery实例">
+<meta name="description" content="Helloweba，在线演示HTML、CSS、jquery、PHP示例DEMO。">
+<title>日程安排FullCalendar</title>
+<link rel="stylesheet" type="text/css" href="css/fullcalendar.css">
+<style type="text/css">
+.e-box{
+	display:none;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin-left:-300px;
+	margin-top:-150px;
+	background:#ffffff;
+	border:1px solid #ccc;
+	width:600px;
+	height:300px;
+	z-index:999999;
+}
+.e-boxbg{
+	display:none;
+	background:rgba(0,0,0,0.5);
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	z-index:99999;
+
+}
+
+body{
+}
+
+</style>
+
+
+</head>
+
+<body>
+
+    <div class="e-boxbg">
+  <div class="e-box">
+
+<div class="fancy">
+    <h3>
+        新建事件
+    </h3>
+    <form id="add_form" action="do.php" method="post">
+        <input type="hidden" name="action" value="add">
+        <p>
+            事件标题：
+            <input type="text" class="input" name="event" id="event" style="width:320px"
+            placeholder="请输入你的事件信息">
+        </p>
+        <p>
+            开始时间：
+            <input type="text" class="input datepicker" name="startdate" id="startdate"
+            value="">
+            <span id="sel_start" style="display:none">
+                <select name="s_hour">
+                    <option value="00">
+                        00
+                    </option>
+					<option value="30">
+                        30
+                    </option>
+                </select>
+                :
+                <select name="s_minute">
+                    <option value="00" selected>
+                        00
+                    </option>
+                </select>
+            </span>
+        </p>
+        <p id="p_endtime" style="display:none">
+            结束时间：
+            <input type="text" class="input datepicker" name="enddate" id="enddate"
+            value="">
+            <span id="sel_end" style="display:none">
+                <select name="e_hour">
+                    <option value="00">
+                        00
+                    </option>
+                </select>
+                :
+                <select name="e_minute">
+                    <option value="00" selected>
+                        00
+                    </option>
+                </select>
+            </span>
+        </p>
+        <p>
+            <label>
+                <input type="checkbox" value="1" id="isallday" name="isallday" checked>
+                全天
+            </label>
+            <label>
+                <input type="checkbox" value="1" id="isend" name="isend">
+                结束时间
+            </label>
+        </p>
+		 <p>
+            <label>
+                事件类别
+            </label>
+            <select name="eventStatus" class="eventStatus">
+                    <option value="danger">
+                        紧急
+                    </option>
+					<option value="purple">
+                        重要
+                    </option>
+					<option value="primary">
+                        一般
+                    </option>
+					<option value="success">
+                        普通
+                    </option>
+					<option value="info">
+                        其它
+                    </option>
+                </select>
+        </p>
+
+        <div class="sub_btn">
+            <!-- <span class="del">
+                <a href="###" class="btn btn_del" id="del_event">删除</a>
+            </span>-->
+            <a href="###" class="btn btn_ok">确定</a>
+            <a href="###" class="btn btn_cancel" id="boxClose">取消</a>
+        </div>
+    </form>
+</div>
+
+  </div>
+</div>
+
+   <div id='calendar'></div>
+
+
+<script src='js/jquery-1.9.1.min.js'></script>
+<script src='js/jquery-ui-1.9.2.custom.min.js'></script>   <!-- 移动和拉伸 -->
+<script src='js/fullcalendar.min.js'></script>
+<script type="text/javascript">
+$(function() {
+
+		$(".datepicker").datepicker();
+
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+
+		var today = new Date($.now());
+
+
+		$('#calendar').fullCalendar({
+			header: {
+				left: 'prevYear prev today',  //逗号表示按钮组，空格代表独立个体
+				center: 'title',
+				right: 'month,agendaWeek,agendaDay next nextYear'
+			},
+		//	weekends:false,  //不显示周末，将会隐藏周六和周日
+			firstDay:0,      //设置周日为第一天
+			editable: true,
+			timeFormat: 'H:mm',
+			axisFormat: 'H:mm',
+			weekMode: 'liquid',
+			weekNumbers: true,   //是否显示周数
+			weekNumberTitle:'周',
+
+
+
+			dayClick:function(){    //当点击或者拖动等事件发生时，可以调用相关函数
+				addEvent();
+
+			},
+			eventClick:function(){    //当点击事件时，可以调用相关函数
+			//	alert("dd");
+			},
+
+
+			events: [
+				{
+					title: '全天计划\r\n#####\r\n写代码',
+					start: new Date(y, m, 1)
+				},
+				{
+					title: '张家界四日游',
+					start: new Date(y, m, d-5),
+					end: new Date(y, m, d-2)
+				},
+				{
+					id: 999,
+					title: '电话回访客户',
+					start: new Date(y, m, d-6, 16, 0),
+					allDay: false
+				},
+				{
+					title: '中秋放假',
+					start: '2013-09-19',
+					end: '2013-09-21',
+				},
+				{
+					title: '午饭',
+					start: new Date(y, m, d, 12, 0),
+					end: new Date(y, m, d, 14, 0),
+					allDay: false
+				},
+			]
+		});
+
+
+
+
+
+	//	$(".datepicker").datepicker();
+
+		$body=$("body");
+		$titleVal=$(".titleVal");
+
+		function addEvent(){
+			/* 临时弹出 */
+			$body.css("overflow","hidden");
+			$(".e-boxbg").show();
+			$(".e-box").show();
+
+
+			$(".btn_ok").unbind('click').bind('click',function(){
+
+				var events = $("#event").val();
+				var start = $("#startdate").val();
+				var end = $("#enddate").val();
+				var categoryClass = "bg-"+$("select.eventStatus option:checked").val();
+
+				if(events==""){
+					alert("请输入日程内容！");
+					$("#event").focus();
+					return false;
+				}else{
+				/* 临时关闭 */
+					$body.css("overflow","auto");
+					$(".e-boxbg").hide();
+					$(".e-box").hide();
+
+					if(start==""){
+						start = today;
+					}
+
+					$('#calendar').fullCalendar('renderEvent',{
+						title: events,
+						start: start,
+						end:end,
+						className: categoryClass,
+
+					},true);
+
+				}
+
+				$(".e-box input").val("");
+
+			});
+
+		}
+
+
+		 $("#isallday").click(function(){//是否是全天事件
+			if($("#sel_start").css("display")=="none"){
+				$("#sel_start,#sel_end").show();
+			}else{
+				$("#sel_start,#sel_end").hide();
+			}
+		});
+
+		$("#isend").click(function(){//是否有结束时间
+			if($("#p_endtime").css("display")=="none"){
+				$("#p_endtime").show();
+			}else{
+				$("#p_endtime").hide();
+			}
+		});
+
+
+
+
+		$("#boxClose").unbind('click').bind('click',function(){
+			$body.css("overflow","auto");
+			$(".e-boxbg").hide();
+			$(".e-box").hide();
+		});
+
+
+
+	});
+</script>
+
+</body>
+</html>

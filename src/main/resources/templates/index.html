@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <title>任务管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/Styles/themes/default/style.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/Styles/themes/default/modules/baseframe/baseframe.css}" rel="stylesheet">
+    <style>
+        /* 去掉后台系统的滚动条 */
+        html
+        {
+            overflow: hidden;
+        }
+        /*#msgData p{padding: 10px; height: 40px; width: 800px; overflow:hidden;}*/
+        div.test
+        {
+            padding: 5px;
+            white-space:nowrap;
+            width:90%;
+            overflow:hidden;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<!--顶部导航-->
+<!-- <li class="active"><a href="#"><span>首　页</span></a></li> -->
+    <script id="topmenu_template" container="ul.navul" type="text/x-jsrender">
+	<li title="{{:name}}" >
+		<a href="{{:url}}" menuid="{{:id}}" data-type="tabAdd">
+        <img class="pngfix" src="{{:icon}}" alt="">
+			<span>
+				{{:name}}
+			</span>
+		</a>
+	</li>
+</script>
+
+<!--左边导航-->
+<script id="leftmenu_template" container="#sidebar ul.rootmenu" type="text/x-jsrender">
+	<li>
+		<a href="{{:url}}" class="root" menuid="{{:id}}" data-type="tabAdd">
+			<img class="pngfix" src="{{:icon}}" alt="">
+			<span>
+			    {{:name}}
+			</span>
+		</a>
+		{{if childs}}
+		<ul class="submenu">
+			{{for childs}}
+				<li><a href="{{:url}}" menuid="{{:id}}" data-type="tabAdd">{{:name}}</a></li>
+				{{if childs}}
+					<ul>
+						 {{for childs}}
+						 	<li><a href="{{:url}}" menuid="{{:id}}" data-type="tabAdd">{{:name}}</a></li>
+						 {{/for}}
+					</ul>
+					{{/if}}
+			{{/for}}
+		</ul>
+		{{/if}}
+	</li>
+</script>
+
+
+<!--退出系统-->
+<script id="shortcut_template" container="#exit" type="text/x-jsrender">
+	<a href="{{:url}}" shortcut-id="{{:id}}" class="btn-shortcut pngfix" title="{{:name}}" >
+		<span>
+			<b class="btn-text">{{:name}}</b>
+		</span>
+	</a>
+</script>
+<body>
+
+    <!-- 头部 start -->
+    <div id="header" class="header">
+        <!--logo start-->
+                    <div class="nav-logo float-left">
+                        <img src="../Styles/images/logo.png" width="100" alt="" />云心魔方
+                    </div>
+                    <!--<div class="nav-sreach float-left">-->
+                        <!--<input type="text" placeholder="Search"/>-->
+                    <!--</div>-->
+                    <div class="float-right">
+                        <ul class="eui-nav eui-nav-nobg">
+
+                            <li class="eui-nav-item">
+                                <a href="#" onclick="newIframe('个人信息','/web/sec/user/info','2000')">
+                                    <span class="userImg">
+                                        <th:block th:if="${session.userSession.headImg=='' || session.userSession.headImg==null}">
+                                        <img style="border-radius:50%;margin-right: 6px;" width="50px" height="50px"
+                                             class="userImgs" name="headImg" th:src="@{/Styles/images/ruhua.jpg}" alt="">
+                                        </th:block>
+                                         <th:block th:if="${session.userSession.headImg!='' && session.userSession.headImg!=null}">
+                                            <img style="border-radius:50%;margin-right: 6px;" width="50px" height="50px"
+                                                 class="userImgs" name="headImg" th:src="${'data:image/png;base64,'+session.userSession.headImg}" alt="">
+
+                                        </th:block>
+                                        <span id="msgCount"></span>
+
+                                    </span>
+
+                                    <span id="userinfoName" th:text="${session.userSession.userName}" class="eui-font20 eui-color-gray1">超级管理员</span>
+                                    <span class="eui-nav-more"></span>
+                                </a>
+                                <dl class="eui-nav-child">
+                                    <dd><a href="#"  onclick="newIframe('消息中心','/web/msg/msgCentre','3000')">消息中心</a>
+                                    </dd>
+                                    <dd><a href="#"  onclick="downApp()">app下载</a></dd>
+                                    <dd id="exit"></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                <!--一级导航-->
+                <div class="navBody float-right">
+                    <a href="#" class="nav-Arrow nav-leftArrow"><i class="eui-icon">&#xe603;</i></a>
+                    <div class="navulBody">
+                        <ul class="navul"></ul>
+                    </div>
+                    <a href="#" class="nav-Arrow nav-rightArrow"><i class="eui-icon">&#xe602;</i></a>
+                </div>
+
+
+        <!-- logo end -->
+    </div>
+    <!-- 头部 end -->
+
+    <!-- 左侧导航菜单  start -->
+    <div id="sidebar" class="sidebar">
+        <h2 class="sidebar-title">
+            <span>操作菜单</span>
+        </h2> <!-- 左导航菜单标题 -->
+        <a class="Lnav-Arrow nav-upArrow" href="###"><i class="eui-icon">&#xe619;</i></a>
+        <div class="rootmenu-div">
+            <ul class="rootmenu">
+            </ul>
+        </div>
+        <a class="Lnav-Arrow nav-downArrow" href="###"><i class="eui-icon">&#xe61a;</i></a>
+        <a href="#" id="menucollapse" class="menucollapse-hide"></a> <!-- 折叠菜单按钮 -->
+    </div>
+    <!-- 左边导航菜单  end-->
+ <!--  <span class="localTime">系统当前时间</span>-->
+    <!-- 中间主体内容 start -->
+   <div id="content" class="content" >
+       <!-- iframe start -->
+      <div class="eui-tab" e-filter="nav-tab" e-allowclose="true">
+           <ul class="eui-tab-title">
+           </ul>
+           <div class="eui-tab-content">
+           </div>
+       </div>
+
+       <!-- iframe end -->
+   </div>
+    <!-- 中间主体内容 end -->
+
+    <!-- 脚部 start -->
+    <div id="footer">
+        <div class="text-center font">
+            Copyright @ 2017 广州市易度软件开发有限公司
+        </div>
+    </div>
+    <!-- 脚部 end -->
+
+</body>
+<div id="downApp" style="display: none">
+    <div><img style="margin-left: 10px;" th:src="@{/app/qrcode/yd-qrcode.png}" ></div>
+</div>
+
+<div id="msgData">
+    <div style="height: 280px; overflow: hidden;" class="msgData_">
+
+    </div>
+    <a onclick="newIframe('我的任务','/web/task/manage','30000')" style="margin-left: 10px;">查看全部</a>
+</div>
+
+</html>
+
+<!-- script -->
+
+<script src="/Scripts/jquery-1.9.0.min.js" charset="utf-8"></script>
+<script src="/Scripts/common.js" charset="utf-8"></script>
+<script type="text/javascript"src="/Scripts/module/base/baseframe.js"></script>
+<script type="text/javascript" src="/Scripts/plugins/jsrender.js"></script>    <!-- 前端菜单渲染 -->
+<script type="text/javascript" src="/Scripts/plugins/jquery.query.js"></script><!--获取url参数-->
+<script type="text/javascript" src="/Scripts/plugins/jquery.cookie.js"></script>
+<!--<script type="text/javascript" src="../statics/scripts/plugins/jcarousel/jquery.jcarousel.js"></script>   此脚本是用来导航左右滚动的-->
+<!-- demo -->
+<script type="text/javascript" src="/navConfig.js"></script>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/main.js"></script>
+<script type="text/javascript">
+    var indexId;
+    eui.use(['element','layer'],function(){
+        var $ = eui.jquery
+                ,layer = eui.layer
+                ,element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+        //初始化首页
+        var indexVal = $("ul.navul >li:first-child a span").text(),
+                indexUrl = $("ul.navul >li:first-child a").attr("href");
+
+                indexId=$("ul.navul >li:first-child a").attr("menuid");
+
+        if (indexUrl!=undefined){
+            element.tabAdd("nav-tab", {
+                title:"首页"
+                ,content: "<iframe frameborder=0 class='contentIframe' src="+indexUrl+"></iframe>"
+                ,id: indexId
+            });
+            element.tabChange("nav-tab", indexId);
+            bindA();
+        }
+
+
+        $("#content .eui-tab-title li").trigger("click").addClass("firstNoClose").prepend("<i class='eui-icon'>&#xe622;</i>");
+
+        //点击菜单生成TAB页
+       $(document).on("click","#sidebar .rootmenu>li:not([class*='submenuLi'])>a," +
+           "#sidebar .rootmenu>li[class*='submenuLi'] .submenu li>a,ul.navul >li a.noChilds",function(){
+           closeRightContent();
+            var othis = $(this);
+            var navName = othis.text(),
+            aMenuid = othis.attr("menuid"),
+            aHref = othis.attr("href");
+           if($(".eui-tab-title li[e-id="+ aMenuid+"]").length <= 0){//如果菜单没点过
+               //新增一个Tab项
+               element.tabAdd("nav-tab", {
+                   title: navName
+                   ,content: "<iframe frameborder=0 class='contentIframe' " +
+                   " src='"+ aHref +"'></iframe>"
+                   ,id: aMenuid
+               });
+           }else{
+           }
+           element.tabChange("nav-tab", aMenuid); //切换到当前菜单
+           return false;
+        });
+
+        //TAB页右键弹出关闭图层
+       $(document).on("contextmenu","#content .eui-tab .eui-tab-title li",function(){
+            $(".tabContextmenu").remove();
+            if($(this).attr('e-id') != indexId){   //首页右键不弹出
+                $(this).append("" +
+                        "<dl id='tabContextmenu' class='tabContextmenu eui-nav-child eui-anim eui-anim-upbit'>" +
+                        "<dd><a href='###' id='closeCur'><i class='eui-icon'>&#x1006;</i> 关闭此标签页</a></dd>" +
+                        "<dd><a href='###' id='closeOther'><i class='eui-icon'>&#x1006;</i> 关闭其它页面</a></dd>" +
+                        "<dd><a href='###' id='closeAll'><i class='eui-icon'>&#x1006;</i> 关部所有页面</a></dd>" +
+                        "</dl>");
+                $(".tabContextmenu").addClass("eui-show");
+            }
+              return false;
+        });
+
+        //点击关闭当前TAB页
+        $(document).on("click","#closeCur",function(){
+            var eid = $(this).closest("li").attr("e-id");
+            element.tabDelete("nav-tab",eid);
+        });
+
+        //点击关闭其它TAB页面
+        $(document).on("click","#closeOther",function(){
+            var eid = $(this).closest("li").attr("e-id");
+            $("#content .eui-tab .eui-tab-title li").each(function(){
+                if($(this).attr("e-id") != '1'){
+                    if($(this).attr("e-id")!=eid){
+                        element.tabDelete("nav-tab",$(this).attr("e-id")).init();
+                    }
+                }
+            })
+        });
+
+        //点击关闭除了首页的其它TAB页面
+        $(document).on("click","#closeAll",function(){
+                 $("#content .eui-tab .eui-tab-title li").each(function(){
+                     if($(this).attr("e-id") != indexId){
+                         element.tabDelete("nav-tab",$(this).attr("e-id")).init();
+                     }
+                 })
+        });
+
+        //点击其它区域进行关闭
+        $(document).bind("click",function(){
+            closeRightContent();
+        });
+
+        //点击其它区域进行关闭
+        function closeRightContent(){
+            var target = $(target);
+            if(target.closest(".tabContextmenu").length == 0){
+                event.stopPropagation();
+                $(".tabContextmenu").remove();
+            }
+        };
+    });
+
+
+
+
+    //子页面调用父的方法
+    function childCallParent(baseForImg) {
+        $("[name='headImg']").attr("src",baseForImg)
+    }
+
+
+    function newIframe(name,src,id){
+        $("#msgCount").html('');
+        eui.use(['element','layer'],function() {
+            var $ = eui.jquery
+                , layer = eui.layer
+                , element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+            //新增一个Tab项
+            element.tabDelete("nav-tab", id);
+            element.tabAdd("nav-tab", {
+                title: name
+                ,content: "<iframe frameborder=0 class='contentIframe' " +
+                " src='"+ src +"'></iframe>"
+                ,id: id
+            });
+            element.tabChange("nav-tab", id);
+        });
+    }
+    //轮询查未读消息
+    setInterval(function() {
+        msgCount();
+    }, 60000);
+
+    function msgCount() {
+        $.ajax({
+            type: 'POST',
+            url: '/sys/message/findUserMessagesList',
+            success: function (result) {
+                var count = result.data;
+                if (count.length>0){
+                    $('#msgData .msgData_').html('');
+                    for (var i=0;i<count.length;i++){
+                        var msg = count[i].messageTitle.replace(/<br\/>/g, '&nbsp;');
+                        $('#msgData .msgData_').append('<div class="test" style="text-overflow: ellipsis;">' +
+                            '<a target="_blank" href="/web/task/info?taskId='+count[i].objId+'">'+msg+'</a></div>');
+                    }
+                    $("#msgCount").html('<span class="eui-badge">'+count.length+'</span>');
+                    eui.use('layer', function(){
+                        layer.open({
+                            type: 1
+                            ,title: '新消息'
+                            ,area: ['450px', '350px']
+                            ,offset: 'rb'
+                            ,anim: 6
+                            ,shade :0
+                            ,content: $('#msgData')
+                            ,cancel: function(index, layero){
+                                $.ajax({
+                                    url:"/sys/message/setPrompted",
+                                    type:"post",
+                                    success:function(result){
+                                    }
+                                });
+                            }
+                        });
+                    });
+                }
+
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        msgCount();
+        // $("#sidebar ul.rootmenu>li").has("ul").addClass("plus");
+
+        x = $.get('time.php', function (date) {
+                showTime('servertime12', date, 12);
+                showTime('servertime24', date, 0);
+            }
+        );
+        showTime('localtime12', 0, 12);
+        showTime('localtime24', 0, 0);
+        //showTime('time',0,12);
+        //数字<10加 "0" 函数(避免时间显示为8点1分3秒)
+        function fillZero(v) {
+            if (v < 10) {
+                v = '0' + v;
+            }
+            return v;
+        }
+
+        function showTime(ev, date, type) {
+            var d;
+            //ev = '#'+ev;
+            var Y, M, D, W, H, I, S;
+            var Week = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            if (date) {
+                d = new Date(date * 1000);
+            } else {
+                d = new Date();
+            }
+            Y = d.getFullYear(); ;
+            M = fillZero(d.getMonth() + 1);
+            D = fillZero(d.getDate());
+            W = Week[d.getDay()];
+            H = fillZero(d.getHours());
+            I = fillZero(d.getMinutes());
+            S = fillZero(d.getSeconds());
+            //alert(H+':'+I+':'+S);
+            //document.write(H+':'+I+':'+S);
+            if (type && type == 12) {
+                if (H < 10 && H >= 6) {
+                    H = '早晨:' + H;
+                } else if (H >= 10 && H < 12) {
+                    H = '上午:' + fillZero(H);
+                } else if (H >= 12 && H < 14) {
+                    H = '中午:' + H;
+                } else if (H >= 14 && H < 18) {
+                    H = '下午:' + H;
+                } else if (H >= 18 && H < 24) {
+                    H = '晚上:' + H;
+                } else if (H == 0) {
+                    H = '凌晨:00';
+                } else if (H > 0 && H < 6) {
+                    H = '夜晚:' + H;
+                }
+            }
+            //var showData = Y + '年' + M + '月' + D + '日' + ' ' + W + ' ' + H + '点' + I + '分' + S + '秒'
+            var showData = Y + '年' + M + '月' + D + '日' + ' ' + W;
+            $('#' + ev).html(showData);
+            if (date) {
+                date++;
+            }
+            setTimeout(function () { showTime(ev, date, type) }, 1000);
+            //setTimeout(arguments.callee,1000);
+        }
+
+        $(".dropDown").hover(function() {
+            $(this).children('.dropDown-menu').stop().fadeToggle(300);
+        });
+    });
+
+    function downApp() {
+        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+            layer.open({
+                type: 1,
+                title :'app下载',
+                id:"taskTags",
+                move: false,//禁止拖拽
+                shade: 0,//不显示遮罩
+                area:['300px', '350px'],
+                content: $('#downApp'),//这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+
+            });
+        });
+    }
+</script>
+
+
+<script>
+
+    $(function () {
+        bindA();
+    });
+
+
+    function bindA() {
+        eui.use(['element','layer'],function() {
+            var $ = eui.jquery
+                , layer = eui.layer
+                , element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+            $(".navul li a").click(function () {
+                var othis = $(this);
+                var navName = othis.text(),
+                    aMenuid = othis.attr("menuid"),
+                    aHref = othis.attr("href");
+
+                element.tabDelete('nav-tab', aMenuid);
+                element.tabAdd("nav-tab", {
+                    title:navName
+                    ,content: "<iframe frameborder=0 class='contentIframe'  src='"+ aHref +"'></iframe>"
+                    ,id: aMenuid
+                });
+                element.tabChange("nav-tab", aMenuid); //切换到当前菜单
+            });
+
+        });
+    }
+</script>

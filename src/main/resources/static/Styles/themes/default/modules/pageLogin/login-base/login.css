@@ -1,0 +1,125 @@
+@charset "utf-8";
+
+/*登陆页面*/
+
+.Login{
+    width: 100%;
+    height:100%;
+    display:block;
+    text-align: center;
+    background: url(images/loginbg.png) no-repeat center center;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+.loginIn{
+    width: 380px;
+    height: 280px;
+    background: #ffffff;
+    position: fixed;
+    left:50%;
+    top:50%;
+    margin-left: -190px;
+    margin-top: -220px;
+    border-radius:5px;
+    box-shadow: 0 4px 30px #333;
+}
+.login1{
+    padding: 10px;
+}
+.login1>h3{
+    font-size: 18px;
+    color:#f40002;
+    margin:16px;
+}
+.login1>p{
+    width: 220px;
+    height: 36px;
+    padding-left:20px;
+    border: 1px solid #e6e6e6;
+    border-radius:2px;
+    margin:0 auto;
+    margin-bottom:10px;
+}
+.login1 p input{
+    width: 200px;
+    height: 34px;
+    line-height: 34px;
+    color:#666;
+    border:none;
+}
+.loginTxt{
+    background: url(images/account.png) no-repeat left center;
+}
+.loginPword{
+    background: url(images/password.png) no-repeat left center;
+}
+
+.loginB{
+    display:inline-block;
+    width: 240px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    background: #f40002;
+    border-radius:5px;
+    color:#fff;
+}
+.loginB:hover{
+    color:#fff;
+}
+
+.login1 .eui-form{
+    width: 242px;
+    margin:0 0 10px 60px;
+}
+
+.loginForget{
+    text-align:right;
+    padding:0 60px;
+    color:#eee;
+    margin-bottom:10px;
+}
+.loginForget a{color:#999;}
+.loginForget .register{
+    float: left;
+}
+.loginO{
+    color:#999;
+    font-size: 12px;
+    line-height: 24px;
+    margin-top: 10px;
+}
+.loginOther{
+    margin-top: 5px;
+}
+
+
+.loginimg{width: 64px;height: 64px;position: absolute;right:0;top:0;cursor: pointer;}
+
+.login2{
+    position: absolute;
+    left:50px;
+    top:40px;
+}
+
+.eui-security{
+    overflow: hidden;
+}
+.eui-security .securityCode{
+    width:140px;
+    float: left;
+}
+.eui-security .securityImg{
+    float: left;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+
+
+
+
+/* 登录页面样式end */
+
+

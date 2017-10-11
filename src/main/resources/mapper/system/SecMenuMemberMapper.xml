@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SecMenuMemberMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SecMenuMember">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="MENU_ID" jdbcType="VARCHAR" property="menuId" />
+  </resultMap>
+
+  <select id="findSecMenu" parameterType="String" resultMap="BaseResultMap">
+
+SELECT smm.* from sec_menu_member smm  LEFT JOIN sec_menu sm ON smm.MENU_ID=sm.ID_
+    WHERE sm.DELETED=0 AND smm.USER_ID =#{secId}
+
+
+  </select>
+  <select id="findUserMenu" parameterType="String" resultMap="BaseResultMap">
+
+    SELECT smm.* from sec_menu_member smm  LEFT JOIN sec_menu sm ON smm.MENU_ID=sm.ID_
+    WHERE sm.DELETED=0 AND smm.USER_ID
+     in(SELECT srm.USER_ID from sec_role_member srm  WHERE srm.ROLE_ID=#{secId})
+  </select>
+
+  <delete id="deleteByUserIdAll" parameterType="String">
+        DELETE FROM `sec_menu_member` WHERE USER_ID=#{userID}
+  </delete>
+</mapper>

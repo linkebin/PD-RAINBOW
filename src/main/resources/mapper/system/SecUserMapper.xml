@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SecUserMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SecUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="USER_PASS" jdbcType="VARCHAR" property="userPass" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="ADDR" jdbcType="VARCHAR" property="addr" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="SEX" jdbcType="INTEGER" property="sex" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="DELETED" jdbcType="INTEGER" property="deleted" />
+    <result column="HEAD_IMG" jdbcType="VARCHAR" property="headImg" />
+      <result column="COMPANY_ID" jdbcType="VARCHAR" property="companyId" />
+
+      <result column="ORG_NAME" jdbcType="VARCHAR" property="orgName" />
+  </resultMap>
+
+  <resultMap id="userTree" type="com.yidusoft.utils.TreeNode">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+  </resultMap>
+
+    <select id="findUserInfoAndOrgInfoById" parameterType="String" resultMap="BaseResultMap">
+        SELECT su.*,so.ORG_NAME FROM sec_user su LEFT JOIN sec_org so ON su.ORG_ID=so.ID_  WHERE su.ID_=#{id}
+    </select>
+
+    <select id="findSecUserOrgInfos" resultMap="BaseResultMap">
+        SELECT su.ID_,su.USER_NAME,so.ORG_NAME ORG_ID FROM sec_user su LEFT JOIN sec_org so ON su.ORG_ID=so.ID_
+        WHERE su.ID_ in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findOrgUserList" parameterType="String" resultMap="BaseResultMap">
+        SELECT su.ID_,su.USER_NAME,su.ORG_ID,su.sex FROM sec_user su WHERE su.DELETED=0 AND su.ORG_ID =#{orgId}
+
+    </select>
+
+
+    <select id="findOrgByUsers" parameterType="com.yidusoft.project.system.domain.SecUser" resultMap="BaseResultMap">
+        SELECT su.* FROM sec_user su WHERE su.DELETED=0 AND su.ORG_ID =#{orgId}
+        <if test="userName!=null and userName!=''">
+            AND su.USER_NAME LIKE '%${userName}%'
+        </if>
+
+    </select>
+
+  <select id="getSecUserInfo" resultMap="BaseResultMap" parameterType="String" >
+     SELECT * FROM sec_user WHERE DELETED=0
+     AND (ACCOUNT = #{account} OR MOBILE = #{account} OR EMAIL = #{account})
+
+  </select>
+  <select id="isSecUser" resultMap="BaseResultMap" parameterType="String" >
+    SELECT * FROM sec_user WHERE  ACCOUNT=#{account} AND DELETED=0
+  </select>
+
+  <select id="isSecUser1" resultType="int" parameterType="String" >
+    SELECT count(*) FROM sec_user WHERE  ACCOUNT=#{account} AND DELETED=0
+  </select>
+
+  <select id="userListByRoleId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT  su.* FROM
+    sec_user su,sec_role_member srm where su.ID_=srm.USER_ID
+    AND srm.ROLE_ID=#{id}
+  </select>
+
+  <select id="roleChooseUser" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select t.ID_,t.account,t.user_name,t.mobile,t.email FROM sec_user t where t.DELETED=0
+    <if test="orgId != null and orgId != ''">
+      AND t.ORG_ID like '%${orgId}%'
+    </if>
+ AND t.ID_ not in (select trm.USER_ID from sec_role_member trm
+    WHERE t.ID_=trm.USER_ID AND trm.ROLE_ID=#{id})
+  </select>
+
+  <select id="getQueryAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.system.domain.SecUser">
+
+      SELECT * FROM sec_user WHERE DELETED = 0
+      <if test="orgId != null and orgId != ''">
+          AND ORG_ID IN(SELECT ID_ FROM sec_org WHERE FIND_IN_SET(ID_,F_getOrgChild(#{orgId})))
+    </if>
+    <if test="userName != null and userName != ''">
+      AND CONCAT(`USER_NAME`,`ACCOUNT`) LIKE '%${userName}%'
+    </if>
+  </select>
+
+  <select id="getQueryAllTotal" resultType="int" parameterType="com.yidusoft.project.system.domain.SecUser">
+
+    SELECT count(0) FROM `sec_user` WHERE DELETED=0
+    <if test="orgId != null and orgId != ''">
+      AND ORG_ID = #{orgId}
+    </if>
+    <if test="userName != null and userName != ''">
+      AND CONCAT(`USER_NAME`,`ACCOUNT`) LIKE '%${userName}%'
+    </if>
+  </select>
+
+    <!--select sr.*-->
+    <!--from sec_role sr-->
+    <!--where sr.DELETED=0 AND sr.ID_  not in-->
+    <!--<foreach collection="array" item="id" index="index"-->
+             <!--open="(" close=")" separator=",">-->
+        <!--#{id}-->
+    <!--</foreach>-->
+  <select id="getUserNoRoleList" parameterType="String" resultMap="com.yidusoft.project.system.dao.SecRoleMapper.BaseResultMap">
+      SELECT role.* FROM sec_role role WHERE role.DELETED=0 AND role.ID_ not
+      in(SELECT ROLE_ID FROM sec_role_member WHERE USER_ID=#{id})
+  </select>
+
+  <select id="userTreeList" resultMap="userTree" parameterType="java.lang.String">
+          SELECT sec_user.ID_ AS ID, sec_user.USER_NAME AS NAME, sec_user.ORG_ID AS parentId, '用户' AS FLAG
+      FROM sec_user
+      WHERE DELETED = 0
+          AND FIND_IN_SET(sec_user.ORG_ID, (
+              SELECT F_getOrgChild(sec_user.COMPANY_ID)
+              FROM sec_user
+              WHERE ID_ = #{userID}
+                  AND DELETED = 0
+              ))
+      UNION ALL
+      SELECT sec_org.ID_ AS ID, sec_org.ORG_NAME AS NAME, sec_org.PARENT_ID AS parentId, '组织' AS FLAG
+      FROM sec_org
+      WHERE DELETED = 0
+          AND FIND_IN_SET(sec_org.ID_, (
+              SELECT F_getOrgChild(sec_user.COMPANY_ID)
+              FROM sec_user
+              WHERE ID_ = #{userID}
+                  AND DELETED = 0
+		))
+  </select>
+
+
+    <select id="leadingTreeList" resultMap="userTree" parameterType="com.yidusoft.project.system.domain.SecUser">
+       SELECT b.* FROM
+(
+        SELECT sec_user.ID_ AS ID, sec_user.USER_NAME AS NAME, sec_user.ORG_ID AS parentId, '用户' AS FLAG
+        FROM sec_user
+        WHERE DELETED = 0
+        AND FIND_IN_SET(sec_user.ORG_ID, (
+        SELECT F_getOrgChild(sec_user.COMPANY_ID)
+        FROM sec_user
+        WHERE ID_ = #{id}
+        AND DELETED = 0
+        ))
+        UNION ALL
+        SELECT sec_org.ID_ AS ID, sec_org.ORG_NAME AS NAME, sec_org.PARENT_ID AS parentId, '组织' AS FLAG
+        FROM sec_org
+        WHERE DELETED = 0
+        AND FIND_IN_SET(sec_org.ID_, (
+        SELECT F_getOrgChild(sec_user.COMPANY_ID)
+        FROM sec_user
+        WHERE ID_ = #{id}
+        AND DELETED = 0
+        ))
+      ) b
+      <if test="userName!='' and userName!=null">
+          WHERE   NAME LIKE '%${userName}%';
+      </if>
+
+    </select>
+
+</mapper>

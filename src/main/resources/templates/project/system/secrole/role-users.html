@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8" />
+    <title>角色用户</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+</head>
+<body>
+<div class="eui-bd eui-padding15">
+    <div class="eui-mn1">
+        <div>
+            <div class="eui-container">
+                <div class="eui-row eui-searchTitle">
+                    <div class="eui-col-6">
+                        <span class="eui-panels-title1"><i class="eui-icon">&#xe632;</i> 成员列表</span>
+                    </div>
+                    <div class="eui-col-6">
+                        <div class="eui-btn-group eui-panelsIn">
+                            <button class="eui-btn" onclick="addRoleMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>
+                            <button class="eui-btn" onclick="deleteRoleUserBath()"><i class="eui-icon">&#xe640;</i> 批量移除成员</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="eui-row">
+    <div class="eui-col-12 nopadding">
+        <div class="eui-form">
+            <table class="eui-table nomargin" id="userTable">
+                <colgroup>
+                    <col width="20">
+                    <col width="100">
+                    <col width="100">
+                    <col width="100">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th><input name="" e-skin="primary" type="checkbox" e-filter="allChoose"></th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div id="pages" style="text-align:right;"></div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="roleId" th:value="${roleId}" />
+<script th:src="@{/Scripts/jquery-1.9.0.min.js}" charset="utf-8"></script>
+<script th:src="@{/pack.ajax.js}" charset="utf-8"></script>
+<script th:src="@{/Scripts/module/eui.js}" charset="utf-8"></script>
+<script th:src="@{/Scripts/plugins/jquery.validate.js}"></script>
+<script th:src="@{/date2format.js}"  charset="utf-8"></script>
+<script th:src="@{/Scripts/libs/ligerUI/js/ligerui.all.js}" type="text/javascript"></script>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        doSearch();
+    });
+    function addRoleMember() {
+        var iframeWin;//iframe对象
+        var index = layer.open({
+            type: 2 //此处以iframe举例
+            ,title: '选择成员'
+            ,area: ['390px', '350px']
+            ,shade: 0
+            ,maxmin: true
+            ,btn: ['确定', '取消']
+            ,content: '/web/sec/role/linkrolememberadd'
+            ,success: function(layero, index){
+
+                var body = layer.getChildFrame('body', index);
+                iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+            }
+            ,yes: function(){
+                var   memberType=iframeWin.memberTypes;
+                if(memberType=='1'){
+
+                }else  if(memberType=='2'){
+                    var users = iframeWin.confirmByTree();
+
+                    var ids = '';
+                    for(var i=0;i<users.length;i++){
+                        ids+=users[i].id+',';
+                    }
+                    var data = new Object();
+                    data.userId=ids;
+                    data.roleId=$("#roleId").val();
+                    $.postStatus('/sec/role/member/addRoleMember',{secRoleMemberJson:JSON.stringify(data)},function (data) {
+                        doSearch();
+                        layer.closeAll();
+
+                    });
+                }
+                }
+            ,btn2: function(){
+                layer.closeAll();
+            }
+        });
+
+    }
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            layer.load(2);
+            $.ajax({
+                url:"/sec/role/member/memberList",
+                data: {
+                    roleId:$("#roleId").val(),
+                    page:1,
+                    pagesize:5
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+//                        ,pages: result.data.pages
+                        ,count: result.data.total //数据总数
+                        ,skip: true
+                        , groups: 3
+                        , first: false
+                        , last: false
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/sec/role/memberList",
+                                    data: {
+                                        roleId:$("#roleId").val(),
+                                        page: obj.curr,
+                                        pagesize: 5
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            var sex = "男";
+            if (secUser.sex == 0){
+                sex = "女";
+            }
+            var id = "'" + secUser.id + "'";
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.userName +'</td>' +
+                '<td>'+ sex +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-small" title="移除用户" onclick="itemclick('+"'delete',"+id+')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+    //工具条按钮事件
+    function itemclick(item,id)
+    {
+        if (item=='add'){//添加
+            addTaskRole(id);
+        }else if (item == 'delete'){//删除
+            deleteRoleUser(id);
+        }else if (item=='edit'){//编辑
+            updateRole(id);
+        }else if (item == 'auth'){//查看角色权限
+            var index = layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '角色权限'
+                ,area: ['390px', '350px']
+                ,shade: 0
+                ,maxmin: true
+                ,btn: ['确定', '取消']
+                ,content: '/web/sec/role/linkPermission?roleId='+id
+                ,success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    taskTeamInfoiframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,yes: function(){
+                    var obj =  taskTeamInfoiframeWin.getCheckList();
+
+                    $.postStatus('/sec/role/saveMenuRole',{secMenuRoleJson:JSON.stringify(obj)},function (data) {
+                        layer.closeAll();
+                    });
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+            });
+        }else if (item == 'rolemember'){
+            var index = layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '角色成员'
+                ,area: ['750px', '450px']
+                ,shade: 0
+                ,maxmin: true
+                ,btn: ['确定', '取消']
+                ,content: '/web/sec/role/linkrolemember?roleId='+id
+                ,success: function(layero, index){
+//                    var body = layer.getChildFrame('body', index);
+//                    taskTeamInfoiframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,yes: function(){
+                    layer.closeAll();
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+            });
+        }
+    }
+
+    function deleteRoleUser(id) {
+        var  obj = new Object();
+        obj.userId=id;
+        obj.roleId=$("#roleId").val();
+        deletedSave(obj);
+    }
+
+    function deleteRoleUserBath() {
+
+        var  obj = new Object();
+        var ids = '';
+        $(".mycheckbox:checked").each(function(i){
+            var id = $(this).parent().find("input[name='userId']").val();
+            ids += id + ',';
+        });
+        obj.userId=ids;
+        obj.roleId=$("#roleId").val();
+        deletedSave(obj);
+    }
+    function deletedSave(obj) {
+        $.postStatus('/sec/role/member/deleteTrue',{secRoleMemberJson:JSON.stringify(obj)},function (data) {
+            doSearch();
+        });
+    }
+
+</script>
+</body>
+</html>

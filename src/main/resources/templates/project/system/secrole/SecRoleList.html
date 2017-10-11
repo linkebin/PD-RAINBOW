@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>角色权限管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+</head>
+<body>
+<div class="eui-bg-white eui-row eui-paddingT10">
+    <div class="eui-col-md12 eui-paddingR10">
+        <form class="eui-form" id="searchFrom">
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="roleName" e-verify="title" autocomplete="off" placeholder="角色名称/关键字" class="eui-input">
+            </div>
+            <div class="eui-input-inline">
+                <span class="eui-btn" onclick="doSearch()">查询</span>
+                <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+            </div>
+        </form>
+
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 角色
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <a href="###" class="eui-btn eui-btn-small roleNew"><i class='eui-icon eui-font24'>&#xe654;</i> 新建角色</a>
+            </div>
+        </div>
+        <table class="eui-table eui-form" id="userTable">
+            <colgroup>
+                <col width="60">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                    <th>角色编号</th>
+                    <th>角色名称</th>
+                    <th>创建人</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+
+<!-- 左滑新建角色开始 -->
+<div class="taskFiltrate">
+</div>
+<div class="filtrateIn">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe654;</i> 新建角色
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" action="">
+        <div class="eui-form-item">
+            <label class="eui-form-label">角色名称</label>
+            <div class="eui-input-block">
+                <input type="text" id="roleName" e-verify="title" autocomplete="off" placeholder="请输入内容" class="eui-input">
+            </div>
+        </div>
+   </form>
+    <div class="taskConfirm"><span onclick="addTaskRole()"  class="eui-btn">确认</span></div>
+</div>
+<!-- 左滑新建角色结束 -->
+
+<!-- 左滑角色权限设置开始 -->
+<div class="taskFiltrate1">
+</div>
+<div class="filtrateIn1">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe614;</i> 角色权限设置
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <div class="eui-form-item eui-marginT10">
+        <label class="eui-form-label">角色名称</label>
+        <div class="eui-input-inline eui-checkSmall">
+            <input type="text" e-verify="required" value="公司领导" autocomplete="off" class="eui-input" disabled>
+        </div>
+    </div>
+    <ul id="treeDemo" class="ztree eui-marginL20"></ul>
+    <div class="taskConfirm"><span class="eui-btn">确定</span></div>
+</div>
+<!-- 左滑角色权限设置结束 -->
+
+
+<!-- 左滑编辑角色开始 -->
+<div class="taskFiltrate2">
+</div>
+<div class="filtrateIn2">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe642;</i> 编辑角色
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10">
+        <input type="hidden" id="id_edit" />
+        <div class="eui-form-item">
+            <label class="eui-form-label">角色名称</label>
+            <div class="eui-input-block">
+                <input type="text" id="roleName_edit" e-verify="title" autocomplete="off" value="老总" class="eui-input">
+            </div>
+        </div>
+   </form>
+    <div class="taskConfirm"><span onclick="updateRole()" class="eui-btn">确认</span></div>
+</div>
+<!-- 左滑编辑角色结束 -->
+
+<!-- 左滑用户角色列表开始 -->
+<div class="taskFiltrate3">
+</div>
+<div class="filtrateIn3 taskT">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe613;</i> 角色成员
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" action="">
+        <div class="eui-form-item">
+            <label class="eui-form-label">角色名称</label>
+            <div class="eui-input-inline eui-checkSmall">
+                <input type="text" name="roleName" required="" e-verify="required" value="公司领导" autocomplete="off" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">角色成员</label>
+            <div class="eui-input-block">
+                <span class="eui-btn eui-btn-primary taskMenm">王楠 <i class="eui-icon taskPerson">&#x1006;</i></span>
+                <span class="eui-btn eui-btn-primary taskMenm">李笔锋 <i class="eui-icon taskPerson">&#x1006;</i></span>
+                <span class="eui-btn eui-btn-primary taskMenm">张乙浩 <i class="eui-icon taskPerson">&#x1006;</i></span>
+                <span class="eui-btn eui-btn-primary taskMenm">李成 <i class="eui-icon taskPerson">&#x1006;</i></span>
+                <button type="button" data-method="offset" data-type="auto" class="eui-btn teamAdd"><i class="eui-icon">&#xe654;</i> 添加成员</button>
+            </div>
+        </div>
+    </form>
+    <div class="taskConfirm"><span class="eui-btn">确定</span></div>
+</div>
+<!-- 左滑用户角色列表结束 -->
+
+
+<!-- 添加成员开始 -->
+<div id="principalAdd" class="eui-bg-white eui-padding10 eui-displayNone">
+    <div class="eui-tab eui-tab-card">
+        <ul class="eui-tab-title">
+            <li class="eui-this">角色查找</li>
+            <li>选择人员</li>
+        </ul>
+        <div class="eui-tab-content">
+            <div class="eui-tab-item eui-show">
+                <ul id="treeDemo2" class="ztree"></ul>
+            </div>
+            <div class="eui-tab-item">
+                <div class="staff">
+                    <ul class="eui-form">
+                        <li class="staffHead">C</li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>陈海龙</span></li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>陈泽鹏</span></li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>曾灿生</span></li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>陈文杰</span></li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>陈洁萍</span></li>
+                        <li class="staffHead">D</li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>邓铭铿</span></li>
+                        <li class="staffHead">G</li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>龚明珠</span></li>
+                        <li class="staffHead">H</li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>黄子君</span></li>
+                        <li class="staffList"><input type="checkbox" e-skin="primary"> <span>黄健智</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加成员结束 -->
+
+
+<script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
+<script src="../../../Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
+
+<!-- ztree -->
+<script src="../../../Scripts/libs/ztree/js/jquery.ztree.core.js"></script>
+<script src="../../../Scripts/libs/ztree/js/jquery.ztree.excheck.js"></script>
+<script src="../../../Scripts/libs/ztree/js/jquery.ztree.exedit.js"></script>
+
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+
+
+
+<script>
+
+// 表单
+eui.use(['element','form', 'layedit', 'laydate','laypage', 'layer'], function(){
+    var form = eui.form
+    ,layer = eui.layer
+    ,layedit = eui.layedit
+    ,laydate = eui.laydate
+    ,laypage = eui.laypage
+    ,$ = eui.jquery,
+    element = eui.element;
+
+
+    //全选
+    form.on('checkbox(allChoose)', function(data){
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+        child.each(function(index, item){
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
+
+    //日期范围
+    laydate.render({
+        elem: '#test6'
+        ,range: true
+    });
+
+});
+
+var newCount = 1;
+function addHoverDom(treeId, treeNode) {
+    var sObj = $("#" + treeNode.tId + "_span");
+    if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+        + "' title='add node' onfocus='this.blur();'></span>";
+    sObj.after(addStr);
+    var btn = $("#addBtn_"+treeNode.tId);
+    if (btn) btn.bind("click", function(){
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo","treeDemo2");
+        zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+        return false;
+    });
+};
+function removeHoverDom(treeId, treeNode) {
+    $("#addBtn_"+treeNode.tId).unbind().remove();
+};
+
+
+
+// 新建角色
+$(".taskFiltrate").hide();
+$(".roleNew").click(function(event) {
+    $(".taskFiltrate").show();
+    $(".filtrateIn").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate,.taskConfirm").click(function(event) {
+    $(".filtrateIn").animate({right:'-400px'},400);
+    $(".taskFiltrate").hide();
+});
+
+// 角色Edit
+$(".taskFiltrate2").hide();
+$(".roleEdit").click(function(event) {
+    $(".taskFiltrate2").show();
+    $(".filtrateIn2").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate2,.taskConfirm").click(function(event) {
+    $(".filtrateIn2").animate({right:'-400px'},400);
+    $(".taskFiltrate2").hide();
+});
+
+
+
+// 角色权限设置
+$(".taskFiltrate1").hide();
+$(".roleSet").click(function(event) {
+    $(".taskFiltrate1").show();
+    $(".filtrateIn1").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate1,.taskConfirm").click(function(event) {
+    $(".filtrateIn1").animate({right:'-400px'},400);
+    $(".taskFiltrate1").hide();
+});
+
+
+
+
+
+// 用户角色
+$(".taskFiltrate3").hide();
+$(".roleList").click(function(event) {
+    $(".taskFiltrate3").show();
+    $(".filtrateIn3").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate3,.taskConfirm").click(function(event) {
+    $(".filtrateIn3").animate({right:'-450px'},400);
+    $(".taskFiltrate3").hide();
+});
+
+
+eui.use('layer', function(){ //独立版的layer无需执行这一句
+  var $ = eui.jquery, layer = eui.layer; //独立版的layer无需执行这一句
+
+  //触发事件
+  var active = {
+    offset: function(othis){
+      var type = othis.data('type')
+      ,text = othis.text();
+
+      layer.open({
+        type: 1
+        ,title :'检索负责人'
+        ,area: ['700px', '500px']
+        ,offset: type
+        ,content: $("#principalAdd")
+        ,btn: ['保存','取消']
+        ,btnAlign: 'c' //按钮居中
+        ,yes: function(){
+          layer.closeAll();
+        }
+      });
+    }
+
+
+  };
+
+  $('.eui-btn,.eui-icon').on('click', function(){
+    var othis = $(this), method = othis.data('method');
+    active[method] ? active[method].call(this, othis) : '';
+  });
+
+});
+
+</script>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        doSearch();
+    });
+
+    function resetForm() {
+        document.getElementById('searchFrom').reset()
+    }
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/sec/role/listByPage",
+                data: {
+                    roleJson:JSON.stringify(params),
+                    page:1,
+                    pagesize:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+//                        ,pages: result.data.pages
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/sec/role/list",
+                                    data: {
+                                        roleJson: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+
+            var id = "'" + secUser.id + "'";
+            var name = "'" + secUser.roleName + "'";
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.roleCode +'</td>' +
+                '<td>'+ secUser.roleName +'</td>' +
+                '<td>'+ secUser.creator +'</td>' +
+                '<td>'+ new Date(secUser.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                ''+Buts(secUser.id,secUser.roleName)+'' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+    function Buts(id,name) {
+        id = "'" + id + "'";
+        var name1=name;
+        var name = "'" +name + "'";
+
+        if (name1 == '公司领导'){
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="角色权限" onclick="itemclick('+"'auth',"+id+')"><i class="eui-icon">&#xe614;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="角色成员" onclick="itemclick('+"'rolemember',"+id+')"><i class="eui-icon">&#xe613;</i></button> ';
+        }else {
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini roleEdit" title="编辑角色" onclick="RoleEdit('+"'edit',"+id+','+name+')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除角色" onclick="itemclick('+"'delete',"+id+')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="角色权限" onclick="itemclick('+"'auth',"+id+')"><i class="eui-icon">&#xe614;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="角色成员" onclick="itemclick('+"'rolemember',"+id+')"><i class="eui-icon">&#xe613;</i></button> ';
+        }
+    }
+
+    var taskTeamInfoiframeWin;
+
+    //工具条按钮事件
+    function itemclick(item,id)
+    {
+        if (item=='add'){//添加
+            addTaskRole();
+        }else if (item == 'delete'){//删除
+            deleteRole(id);
+        }else if (item=='edit'){//编辑
+        }else if (item == 'auth'){//查看角色权限
+            var index = layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '角色权限'
+                ,area: ['390px', '350px']
+                ,shade: 0
+                ,maxmin: true
+                ,btn: ['确定', '取消']
+                ,content: '/web/sec/role/linkPermission?roleId='+id
+                ,success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    taskTeamInfoiframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,yes: function(){
+                    var obj =  taskTeamInfoiframeWin.getCheckList();
+
+                    $.postStatus('/sec/menu/role/saveMenuRole',{secMenuRoleJson:JSON.stringify(obj)},function (data) {
+                        layer.closeAll();
+                    });
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+            });
+        }else if (item == 'rolemember'){
+            var index = layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '角色成员'
+                ,area: ['750px', '450px']
+                ,shade: 0
+                ,maxmin: true
+//                ,btn: ['确定', '取消']
+                ,content: '/web/sec/role/linkrolemember?roleId='+id
+                ,success: function(layero, index){
+//                    var body = layer.getChildFrame('body', index);
+//                    taskTeamInfoiframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,yes: function(){
+                    layer.closeAll();
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+            });
+        }
+    }
+
+    function RoleEdit(s,id,name) {
+        $("#roleName_edit").val(name);
+        $("#id_edit").val(id);
+        $(".taskFiltrate2").show();
+        $(".filtrateIn2").animate({right:'0'},400);
+    }
+
+    function updateRole() {
+        var roleName=$.trim($("#roleName_edit").val());
+        if(roleName != ''){
+            var indexs = layer.load(2); //加载
+            var obj = new Object();
+            obj.roleName=roleName;
+            obj.id=$("#id_edit").val();
+            $.post("/sec/role/update",{"secRoleJson":JSON.stringify(obj)},function (result) {
+                if(result.message='SUCCESS'){
+                    //关闭
+                    layer.closeAll();
+                    doSearch();
+                    layer.msg('编辑成功！', {
+                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                    });
+                }else{
+                    layer.close(indexs);
+                    layer.msg('添加失败！', {
+                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                    });
+
+                }
+            });
+        }else {
+            layer.msg('角色名称不能为空！', {
+                time: 2000 //1秒关闭（如果不配置，默认是3秒）
+            });
+        }
+//        layer.open({
+//            type: 1,
+//            title :'编辑角色',
+//            id:"addTaskTypeW",
+//            area: ['380px', '200px'],
+//            move: false,//禁止拖拽
+//            shade: 0,//不显示遮罩
+//            content: $('#layerForAddTaskType'),//这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+//            btn: ['确定','取消'],
+//            yes: function(index, layero){
+//
+//            },
+//            bnt2:function(index, layero){
+//                layer.close(index);
+//            }
+//        });
+    }
+
+    function addTaskRole() {
+        var roleName=$.trim($("#roleName").val());
+        if(roleName != ''){
+            var indexs = layer.load(2); //加载
+            var obj = new Object();
+            obj.roleName=roleName;
+            $.post("/sec/role/add",{"secRoleJson":JSON.stringify(obj)},function (result) {
+                if(result.message='SUCCESS'){
+                    //关闭
+                    layer.closeAll();
+                    layer.msg('新建成功！', {
+                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                    });
+                    $("#roleName").val("");
+                    doSearch();
+                }else{
+                    layer.close(indexs);
+                    layer.msg('新建失败！', {
+                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                    });
+
+                }
+            });
+        }else {
+            layer.msg('新建角色名称不能为空！', {
+                time: 2000 //1秒关闭（如果不配置，默认是3秒）
+            });
+        }
+//        layer.open({
+//            type: 1,
+//            title :'新建角色',
+//            id:"addTaskTypeW",
+//            area: ['380px', '200px'],
+//            move: false,//禁止拖拽
+//            shade: 0,//不显示遮罩
+//            content: $('#layerForAddTaskType'),//这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+//            btn: ['确定','取消'],
+//            yes: function(index, layero){
+//
+//            },
+//            bnt2:function(index, layero){
+//                layer.close(index);
+//            }
+//        });
+    }
+
+    function deleteRole(id) {
+        var indexs = layer.load(2); //加载
+        $.postStatus('/sec/role/deleteBacth',{ids:id},function (data) {
+            layer.closeAll();
+            doSearch();
+        });
+    }
+</script>
+<!--<div id="layerForAddTaskType" class="" style="display: none">-->
+
+    <!--<blockquote class=" eui-quote-search eui-marginB10">-->
+        <!--<div class="eui-form-item">-->
+            <!--<label class="eui-form-label">角色名称</label>-->
+            <!--<div class="eui-input-inline">-->
+                <!--<input type="text" id="roleName" e-verify="title" autocomplete="off" placeholder="请输入内容" class="eui-input">-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</blockquote>-->
+<!--</div>-->
+</body>
+</html>

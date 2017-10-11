@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SecMenuRoleMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SecMenuRole">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="ROLE_ID" jdbcType="VARCHAR" property="roleId" />
+    <result column="MENU_ID" jdbcType="VARCHAR" property="menuId" />
+  </resultMap>
+
+    <select id="findSecRoleMenu" parameterType="String" resultMap="BaseResultMap">
+     select smr.* from sec_menu_role smr LEFT JOIN sec_menu sm ON smr.MENU_ID=sm.ID_
+    WHERE sm.DELETED=0 AND smr.ROLE_ID
+          in(SELECT srm.USER_ID from sec_role_member srm  WHERE srm.USER_ID=#{secId})
+
+    </select>
+    <select id="findRoleMenu" parameterType="String" resultMap="BaseResultMap">
+       select smr.* from sec_menu_role smr LEFT JOIN sec_menu sm ON smr.MENU_ID=sm.ID_
+    WHERE sm.DELETED=0 AND smr.ROLE_ID=#{secId}
+    </select>
+
+    <delete id="deleteByRoleId" parameterType="String">
+        DELETE FROM sec_menu_role where role_id=#{roleId}
+    </delete>
+</mapper>

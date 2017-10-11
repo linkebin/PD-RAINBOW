@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SecRoleMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SecRole">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="DELETED" jdbcType="INTEGER" property="deleted" />
+    <result column="roleMemberId" jdbcType="VARCHAR" property="roleMemberId" />
+    <result column="COMPANY_ID" jdbcType="VARCHAR" property="companyId" />
+
+
+  </resultMap>
+
+    <resultMap id="userTree" type="com.yidusoft.utils.TreeNode">
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="flag" property="flag" jdbcType="VARCHAR" />
+    </resultMap>
+  <select id="getRole" resultMap="BaseResultMap">
+    SELECT id_,role_code,role_name,creator,create_time,deleted FROM sec_role where deleted=0 order by CREATE_TIME desc
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.system.domain.SecRole">
+    SELECT id_,role_code,role_name,creator,create_time,deleted FROM sec_role where deleted=0
+    <if test="roleName != null and roleName != ''">
+      AND role_name like "%"#{roleName}"%" order by CREATE_TIME desc
+    </if>
+  </select>
+
+  <update id="deleteList" parameterType="java.lang.String">
+    UPDATE sec_role set deleted=1 where ID_=#{id}
+  </update>
+
+  <select id="getSecUserRoles" resultMap="BaseResultMap" parameterType="String">
+
+          SELECT  sr.*,sss.ID_ roleMemberId  from sec_role sr
+        LEFT JOIN sec_role_member sss  ON sr.ID_=sss.ROLE_ID WHERE sr.DELETED=0
+
+        AND sss.USER_ID= #{secId}
+  </select>
+
+  <select id="findByRoleName" parameterType="String" resultType="String">
+      SELECT role_name FROM sec_role WHERE deleted =0 AND  role_name=#{roleName}
+  </select>
+
+  <select id="findRoleByCompanyId" parameterType="com.yidusoft.project.system.domain.SecRole" resultMap="BaseResultMap">
+      SELECT id_,role_code,role_name,creator,create_time,deleted FROM sec_role where deleted=0
+
+    <if test="roleName != null and roleName != ''">
+      AND role_name like "%"#{roleName}"%" order by CREATE_TIME desc
+    </if>
+  </select>
+
+<select id="userTreeList"  resultMap="userTree" >
+    SELECT sec_user.ID_ AS ID, sec_user.USER_NAME AS NAME, sec_user.ORG_ID AS parentId, '用户' AS FLAG
+    FROM sec_user
+    WHERE DELETED = 0
+    UNION ALL
+    SELECT sec_org.ID_ AS ID, sec_org.ORG_NAME AS NAME, sec_org.PARENT_ID AS parentId, '组织' AS FLAG
+    FROM sec_org
+    WHERE DELETED = 0
+</select>
+
+</mapper>

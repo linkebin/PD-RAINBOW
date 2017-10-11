@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SysMessageMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SysMessage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="SendID" jdbcType="VARCHAR" property="sendid" />
+    <result column="RecID" jdbcType="VARCHAR" property="recid" />
+    <result column="message_title" jdbcType="VARCHAR" property="messageTitle" />
+    <result column="Message" jdbcType="VARCHAR" property="message" />
+    <result column="Status" jdbcType="INTEGER" property="status" />
+    <result column="PDate" jdbcType="TIMESTAMP" property="pdate" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="message_type" jdbcType="VARCHAR" property="messageType" />
+    <result column="obj_id" jdbcType="VARCHAR" property="objId" />
+    <result column="obj_type" jdbcType="VARCHAR" property="objType" />
+  </resultMap>
+
+  <select id="findUserMessagesList" parameterType="String" resultMap="BaseResultMap">
+      SELECT * FROM sys_message WHERE deleted=0 AND RecID=#{userId} AND `Status`=0
+  </select>
+</mapper>

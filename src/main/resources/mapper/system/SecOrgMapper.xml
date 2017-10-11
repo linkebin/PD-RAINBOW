@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.SecOrgMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.SecOrg">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="ORG_CODE" jdbcType="VARCHAR" property="orgCode" />
+    <result column="ORG_NAME" jdbcType="VARCHAR" property="orgName" />
+    <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="DELETED" jdbcType="INTEGER" property="deleted" />
+  </resultMap>
+
+  <resultMap id="tree_map" type="com.yidusoft.utils.TreeNode">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+
+    <resultMap id="BaseResultMapSecMenu" type="com.yidusoft.project.system.domain.SecMenu">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID_" jdbcType="VARCHAR" property="id" />
+        <result column="MENU_CODE" jdbcType="VARCHAR" property="menuCode" />
+        <result column="MENU_NAME" jdbcType="VARCHAR" property="menuName" />
+        <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+        <result column="MENU_TYPE" jdbcType="INTEGER" property="menuType" />
+        <result column="OPEN_TYPE" jdbcType="INTEGER" property="openType" />
+        <result column="URL" jdbcType="VARCHAR" property="url" />
+        <result column="ENABLED" jdbcType="INTEGER" property="enabled" />
+        <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="DELETED" jdbcType="INTEGER" property="deleted" />
+        <result column="SORT" jdbcType="INTEGER" property="sort" />
+        <result column="flag" jdbcType="VARCHAR" property="flag" />
+    </resultMap>
+
+    <select id="findOrgParentStringIds" parameterType="String" resultType="String">
+        SELECT f_getOrgParent(#{orgId}) ID_
+    </select>
+
+    <select id="findOrgAllotMenuList" parameterType="com.yidusoft.project.system.domain.SecMenu" resultMap="BaseResultMapSecMenu">
+            SELECT 0 flag ,s.* FROM sec_menu s WHERE s.DELETED=0 AND s.ENABLED='1' AND s.ID_ not in(
+                    SELECT ID_ FROM sec_menu  WHERE DELETED=0 AND ID_ in(SELECT mo.menu_id FROM sec_menu_org mo WHERE mo.org_id=#{id})
+            )
+            UNION ALL
+            SELECT 1 flag ,s.* FROM sec_menu s WHERE s.DELETED=0 AND s.ID_ in(SELECT mo.menu_id FROM sec_menu_org mo WHERE mo.org_id=#{id})
+</select>
+
+
+  <select id="findOrgChildren" parameterType="String" resultMap="BaseResultMap">
+    SELECT tt.*
+           FROM sec_org tt
+          WHERE FIND_IN_SET(tt.ID_, F_getOrgChild(#{orgId})) AND tt.DELETED=0
+  </select>
+
+  <select id="getTree" resultMap="tree_map" parameterType="String">
+ SELECT ID_ id,ORG_NAME name,PARENT_ID parentId FROM sec_org s
+            WHERE deleted=0
+
+  </select>
+
+    <select id="findOrgNameCheckedIsExist" resultType="int">
+            SELECT COUNT(*) FROM (
+            SELECT so.* FROM sec_org so WHERE so.DELETED=0
+            AND so.PARENT_ID=#{1}
+                      UNION ALL
+                      SELECT so.* FROM sec_org so WHERE so.DELETED=0 AND so.ID_ = #{1}
+            ) b WHERE b.org_name=#{0}
+
+    </select>
+
+  <select id="getSecOrgList" resultMap="BaseResultMap" parameterType="com.yidusoft.project.system.domain.SecOrg">
+      SELECT b.* FROM (
+
+      SELECT so.* FROM sec_org so WHERE so.DELETED=0
+      <if test="id != null and id != ''">
+          AND so.PARENT_ID=#{id}
+          UNION ALL
+          SELECT so.* FROM sec_org so WHERE so.DELETED=0 AND so.ID_ = #{id}
+      </if>
+
+        <if test="orgName != null and orgName != ''">
+          AND so.ORG_NAME  LIKE  '%${orgName}%'
+        </if>
+
+        <if test="id != null and id != ''">
+                AND so.ID_=#{id}
+        </if>
+
+        <if test="orgName != null and orgName != ''">
+          AND so.ORG_NAME  LIKE  '%${orgName}%'
+        </if>
+      ) b ORDER BY b.CREATE_TIME ASC
+
+
+
+  </select>
+  <select id="orgTree" resultMap="tree_map">
+      SELECT ID_ ,ORG_NAME , PARENT_ID   FROM    SEC_ORG  WHERE  DELETED=0
+  </select>
+
+
+    <select id="getQueryAllTotal" resultType="int" parameterType="com.yidusoft.project.system.domain.SecOrgForParameter">
+
+        SELECT count(0) FROM sec_org s
+        WHERE deleted=0
+        <if test="id != null and id != ''">
+            AND  (s.ID_ = #{id} OR s.PARENT_ID =#{id})
+        </if>
+        <if test="orgName != null and orgName != ''">
+            AND  s.ORG_NAME LIKE '%${orgName}%'
+        </if>
+    </select>
+
+
+    <select id="getQueryAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.system.domain.SecOrgForParameter">
+
+        SELECT * FROM sec_org s
+        WHERE deleted=0
+        <if test="id != null and id != ''">
+            AND  (s.ID_ = #{id} OR  s.PARENT_ID =#{id})
+        </if>
+        <if test="orgName != null and orgName != ''">
+            AND  s.ORG_NAME  LIKE  '%${orgName}%'
+        </if>
+    </select>
+
+
+</mapper>

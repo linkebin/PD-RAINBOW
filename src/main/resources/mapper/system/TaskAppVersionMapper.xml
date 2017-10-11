@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.TaskAppVersionMapper">
+
+    <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.TaskAppVersion">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="apk_id" jdbcType="VARCHAR" property="apkId" />
+        <result column="version_code" jdbcType="VARCHAR" property="versionCode" />
+        <result column="update_content" jdbcType="VARCHAR" property="updateContent" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="download_url" jdbcType="VARCHAR" property="downloadUrl" />
+        <result column="update_flag" jdbcType="INTEGER" property="updateFlag" />
+        <result column="deleted" jdbcType="VARCHAR" property="deleted" />
+    </resultMap>
+
+    <select id="findAppVersionList" resultMap="BaseResultMap">
+          SELECT * FROM task_app_version WHERE deleted=0 AND update_flag=1
+    </select>
+
+</mapper>

@@ -1,0 +1,950 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+
+    <style>
+        #menuDig{
+            height: 300px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="eui-bd">
+    <div class="eui-sd1 eui-sd1-type3">
+        <div class="eui-col-md3 etree">
+            <p>组织结构树</p>
+            <ul id="orgTree"></ul>
+        </div>
+    </div>
+    <div class="eui-mn1 eui-bg-white">
+        <div class="eui-mn1-type3">
+            <form class="eui-form" id="searchFrom">
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="userName" e-verify="title" value="" autocomplete="off" placeholder="用户账号/名称/关键字" class="eui-input">
+                    <input type="hidden" name="orgId" id="orgId" />
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 用户列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                    <a href="###" class="eui-btn eui-btn-small userAdd">添加用户</a>
+                    <a href="###" onclick="deleteUser('')" class="eui-btn eui-btn-small">批量删除</a>
+                </div>
+            </div>
+            <table class="eui-table eui-form" id="userTable">
+                <colgroup>
+                    <col width="60">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                        <th>账号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>手机</th>
+                        <th>状态</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div id="pages"></div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- 左滑添加用户开始 -->
+<div class="taskFiltrate">
+</div>
+<div class="filtrateIn">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe654;</i> 添加用户
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="userInfoAdd" onsubmit="return false;">
+        <div class="eui-form-item">
+            <label class="eui-form-label">账号</label>
+            <div class="eui-input-block">
+                <input type="text" name="account" e-verify="title"  autocomplete="off" placeholder="账号保存后不可修改" class="eui-input" required="required" data-msg-required="请填写账户信息">
+                <input type="hidden" name="id" value="">
+            </div>
+        </div>
+        <div class="eui-form-item eui-grade">
+            <label class="eui-form-label">姓名</label>
+            <div class="eui-input-block">
+                <input type="text" name="userName" e-verify="title" autocomplete="off" placeholder="请输入真实姓名" class="eui-input" required data-msg-required="请填写姓名">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">地址</label>
+            <div class="eui-input-block">
+                <input type="text" name="addr" e-verify="title" autocomplete="off" placeholder="选填" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item eui-grade">
+            <label class="eui-form-label">性别</label>
+            <div class="eui-input-block">
+                <input type="radio" name="sex" value="1" title="男">
+                <input type="radio" name="sex" value="0" title="女" checked>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">联系电话</label>
+            <div class="eui-input-block">
+                <input type="text" name="mobile" e-verify="title" autocomplete="off" placeholder="请输入常用手机号" class="eui-input" data-rule-isMobile="true">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">联系邮箱</label>
+            <div class="eui-input-block">
+                <input type="email" name="email" e-verify="title" autocomplete="off" placeholder="请输入常用邮箱" class="eui-input" data-msg-email="请输入有效邮箱">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">登录密码</label>
+            <div class="eui-input-block">
+                <input type="password" name="password" id="password" e-verify="title" autocomplete="off" placeholder="请输入密码" class="eui-input" data-msg-required="请输入密码" required >
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">确认密码</label>
+            <div class="eui-input-block">
+                <input type="password" name="userPass" id="userPass" e-verify="title" autocomplete="off" placeholder="请确认密码" class="eui-input" data-msg-required="请输入密码" required >
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">状态</label>
+            <div class="eui-input-block eui-checkSmall">
+                <input type="radio" name="status" value="1" title="可用" checked>
+                <input type="radio" name="status" value="0" title="不可用">
+            </div>
+        </div>
+        <div class="taskConfirm"><button type="submit" onclick="openTab('userInfoAdd')" class="eui-btn">确定</button>
+            </div>
+    </form>
+</div>
+<!-- 左滑添加用户结束 -->
+
+
+<!-- 左滑编辑开始 -->
+<div class="taskFiltrate1">
+</div>
+<div class="filtrateIn1">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe642;</i> 编辑用户
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="userInfoEdit" onsubmit="return false;">
+        <div class="eui-form-item">
+            <label class="eui-form-label">账号</label>
+            <div class="eui-input-block">
+                <input type="text" name="account" e-verify="title" autocomplete="off" placeholder="" class="eui-input" required="required">
+                <input type="hidden" name="id" value="">
+            </div>
+        </div>
+        <div class="eui-form-item eui-grade">
+            <label class="eui-form-label">姓名</label>
+            <div class="eui-input-block">
+                <input type="text" name="userName" e-verify="title" autocomplete="off" placeholder="" class="eui-input" required data-msg-required="请填写姓名">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">地址</label>
+            <div class="eui-input-block">
+                <input type="text" name="addr" e-verify="title" autocomplete="off" placeholder="" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item eui-grade">
+            <label class="eui-form-label">性别</label>
+            <div class="eui-input-block">
+                <input type="radio" name="sex" value="1" title="男">
+                <input type="radio" name="sex" value="0" title="女" checked>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">联系电话</label>
+            <div class="eui-input-block">
+                <input type="text" name="mobile" e-verify="title" autocomplete="off" placeholder="" class="eui-input" data-rule-isMobile="true">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">联系邮箱</label>
+            <div class="eui-input-block">
+                <input type="email" name="email" e-verify="title" autocomplete="off" placeholder="" class="eui-input" data-msg-email="请输入有效邮箱">
+            </div>
+        </div>
+
+        <!--<input type="hidden" name="userPass">-->
+        <div class="eui-form-item">
+            <label class="eui-form-label">状态</label>
+            <div class="eui-input-block eui-checkSmall">
+                <input type="radio" name="status" value="1" title="可用" checked>
+                <input type="radio" name="status" value="0" title="不可用">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">所属部门</label>
+            <div class="eui-input-block">
+                <input readonly="readonly" type="text" onclick="userUpdateOrgTree()" orgId="" name="orgName"
+                       e-verify="title" autocomplete="off" placeholder="请选择部门信息"
+                       class="eui-input" data-msg-required="请选择部门信息">
+            </div>
+        </div>
+
+
+        <div class="taskConfirm"><button type="submit" onclick="openTab('userInfoEdit')" class="eui-btn">确认修改</button></div>
+    </form>
+</div>
+<!--编辑用户权限-->
+<div id="menuDig">
+    <ul id="menuTree"></ul>
+</div>
+
+<div class="userUpdateOrgTree" style="display: none;">
+    <ul id="userUpdateOrgTree"></ul>
+</div>
+
+<div id="userPassDig" style="display: none">
+    <form id="userPassDigForm" class="eui-form eui-marginT10 eui-paddingR10"  onsubmit="return false;">
+        <div class="eui-form-item">
+            <label class="eui-form-label">登录密码</label>
+            <div class="eui-input-block">
+                <input type="password" name="password"  e-verify="title" autocomplete="off" placeholder="请输入密码" class="eui-input" data-msg-required="请输入密码" required >
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">确认密码</label>
+            <div class="eui-input-block">
+                <input type="password" name="userPass" e-verify="title" autocomplete="off" placeholder="请确认密码" class="eui-input" data-msg-required="请输入密码" required >
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" charset="utf-8"></script>
+<script src="/date2format.js" charset="utf-8"></script>
+<script src="/Scripts/plugins/md5/md5.min.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+
+
+
+<script>
+// 表单
+eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
+    var form = eui.form
+    ,layer = eui.layer
+    ,layedit = eui.layedit
+    ,laydate = eui.laydate
+    ,laypage = eui.laypage;
+
+    //全选
+    form.on('checkbox(allChoose)', function(data){
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+        child.each(function(index, item){
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
+
+    //日期范围
+    laydate.render({
+        elem: '#test6'
+        ,range: true
+    });
+
+
+});
+
+
+var newCount = 1;
+function addHoverDom(treeId, treeNode) {
+    var sObj = $("#" + treeNode.tId + "_span");
+    if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+    var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+        + "' title='add node' onfocus='this.blur();'></span>";
+    sObj.after(addStr);
+    var btn = $("#addBtn_"+treeNode.tId);
+    if (btn) btn.bind("click", function(){
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo","treeDemo2");
+        zTree.addNodes(treeNode, {id:(100 + newCount), pId:treeNode.id, name:"new node" + (newCount++)});
+        return false;
+    });
+};
+function removeHoverDom(treeId, treeNode) {
+    $("#addBtn_"+treeNode.tId).unbind().remove();
+};
+
+// 高级筛选左滑
+$(".taskFiltrate").hide();
+$(".userAdd").click(function(event) {
+    document.getElementById('userInfoAdd').reset()
+    $(".taskFiltrate").show();
+    $(".filtrateIn").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate").click(function(event) {
+    $(".filtrateIn").animate({right:'-400px'},400);
+    $(".taskFiltrate").hide();
+});
+
+$(".taskFiltrate1").hide();
+$(".userEdit").click(function(event) {
+    $(".taskFiltrate1").show();
+    $(".filtrateIn1").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate1").click(function(event) {
+    $(".filtrateIn1").animate({right:'-400px'},400);
+    $(".taskFiltrate1").hide();
+});
+
+$(".taskFiltrate2").hide();
+$(".userSet").click(function(event) {
+    $(".taskFiltrate2").show();
+    $(".filtrateIn2").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate2,.taskConfirm").click(function(event) {
+    $(".filtrateIn2").animate({right:'-400px'},400);
+    $(".taskFiltrate2").hide();
+});
+
+$(".taskFiltrate3").hide();
+$(".roleList").click(function(event) {
+    $(".taskFiltrate3").show();
+    $(".filtrateIn3").animate({right:'0'},400);
+    /* Act on the event */
+});
+
+$(".taskClose,.taskFiltrate3,.taskConfirm").click(function(event) {
+    $(".filtrateIn3").animate({right:'-450px'},400);
+    $(".taskFiltrate3").hide();
+});
+
+eui.use('layer', function(){ //独立版的layer无需执行这一句
+  var $ = eui.jquery, layer = eui.layer; //独立版的layer无需执行这一句
+
+  //触发事件
+  var active = {
+
+    offset: function(othis){
+      var type = othis.data('type')
+      ,text = othis.text();
+
+      layer.open({
+        type: 1
+        ,title :'添加角色'
+        ,area: ['600px', '400px']
+        ,offset: type
+        ,content: $("#principalAdd")
+        ,btn: ['保存','取消']
+        ,btnAlign: 'c' //按钮居中
+        ,yes: function(){
+          layer.closeAll();
+        }
+      });
+    }
+
+
+  };
+
+  $('.eui-btn,.eui-icon').on('click', function(){
+    var othis = $(this), method = othis.data('method');
+    active[method] ? active[method].call(this, othis) : '';
+  });
+
+});
+
+</script>
+
+<script type="text/javascript">
+    var orgTree=null;
+    var menuTree=null;
+    $(function () {
+        loadOrgTree();
+        doSearch();
+        jQuery.validator.addMethod("isMobile", function(value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "请输入有效手机号码");
+        $(".eui-show .userForm").validate();
+    });
+
+
+
+    //新增或修改用户
+    function addOrUpdate(type) {
+        if(type == 'userInfoAdd'){
+            if ($("#userInfoAdd input[name='userPass']").val()!=$("#userInfoAdd input[name='password']").val()){
+                layer.msg("两次密码输入不一致", {
+                    icon: 2,
+                    time: 2000
+                });
+                return;
+            }
+            if ($("#userInfoAdd input[name='id']").val()==""){
+                //新增用户
+                $("#userPass").val(md5($("#userPass").val()));
+                $("#password").val(md5($("#userPass").val()));
+                var params = $("#userInfoAdd").serializeObject();
+                params.orgId = $("#orgId").val();
+                $.ajax({
+                    url:"/sec/user/add",
+                    data: {
+                        params:JSON.stringify(params)
+                    },
+                    type:"post",
+                    success:function(result){
+                        var msg = result.message;
+                        if(msg=="SUCCESS"){
+                            layer.msg('添加成功', {
+                                icon: 1,
+                                time: 2000
+                            });
+                            $(".filtrateIn").animate({right:'-400px'},400);
+                            $(".taskFiltrate").hide();
+                            doSearch();
+                        }else{
+                            layer.msg(msg, {
+                                icon: 2,
+                                time: 2000
+                            });
+                        }
+                    }
+                });
+            }
+        } else {
+            //修改用户
+            var params = $("#userInfoEdit").serializeObject();
+            params.orgId=$("#userInfoEdit input[name='orgName']").attr('orgId');
+            $.ajax({
+                url:"/sec/user/update",
+                data: {
+                    params:JSON.stringify(params)
+                },
+                type:"post",
+                success:function(result){
+                    var msg = result.message;
+                    if(msg=="SUCCESS"){
+                        layer.msg('修改成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                        doSearch();
+                        $(".filtrateIn1").animate({right:'-400px'},400);
+                        $(".taskFiltrate1").hide();
+                    }else{
+                        layer.msg(msg, {
+                            icon: 2,
+                            time: 2000
+                        });
+                    }
+                }
+            });
+
+        }
+    }
+
+    //删除用户
+    function deleteUser(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='userId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的用户', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该用户吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                $.ajax({
+                    url:"/sec/user/deleteBacth",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                        doSearch();
+                    }
+                });
+            });
+        }
+    }
+
+    //加载组织树
+    function loadOrgTree() {
+        $.ajax({
+            url:"/sec/org/tree",
+            type:"post",
+            success:function(result){
+                //组织树
+                orgTree =   $("#orgTree").ligerTree({
+                    data:result.data,
+                    checkbox: false,
+                    parentIcon: 'folder',
+                    childIcon: 'leaf' ,
+                    slide: false, //是否显示动画
+                    nodeWidth: 200,
+                    idFieldName: 'id',
+                    textFieldName:'name' ,
+                    onSelect: function (node)
+                    {
+                        $("#orgId").val(node.data.id);
+                        doSearch();
+                    },
+                    onError:function(node){
+
+                    }
+                });
+                $("#orgTree .l-body").mouseover(function(){
+                    var text =$(this).find('span').html();
+                    $(this).attr("title",text);
+                });
+
+                orgTree.selectNode(orgTree.getNodeDom(0));
+            }
+        });
+    }
+
+    //工具条按钮事件
+    function itemclick(item,id)
+    {
+        if (item=='add'){//添加
+            openTab();
+        }else if (item == 'delete'){//删除
+            deleteUser(id);
+        }else if (item=='edit'){//编辑
+            $.ajax({
+                url:"/sec/user/detail",
+                data: {
+                    id:id,
+                    page:1,
+                    size:5
+                },
+                type:"post",
+                success:function(result){
+                    var secUser = result.data;
+                        $(".taskFiltrate1").show();
+                        $(".filtrateIn1").animate({right:'0'},400);
+
+                        $("#userInfoEdit input[name='account']").attr("disabled","disabled");
+                        $("#userInfoEdit input[name='account']").val(secUser.account);
+                        $("#userInfoEdit input[name='id']").val(secUser.id);
+                        $("#userInfoEdit input[name='userName']").val(secUser.userName);
+                        $("#userInfoEdit input[name='addr']").val(secUser.addr);
+                        $("#userInfoEdit input[name='mobile']").val(secUser.mobile);
+                        $("#userInfoEdit input[name='email']").val(secUser.email);
+                        if(secUser.sex == '1'){
+                            $("#userInfoEdit input[name='sex'][value='1']").prop('checked',true);
+                        } else {
+                            $("#userInfoEdit input[name='sex'][value='0']").prop('checked',true);
+                        }
+                        if(secUser.status){
+                            $("#userInfoEdit input[name='status'][value='1']").prop('checked',true);
+                        }else{
+                            $("#userInfoEdit input[name='status'][value='0']").prop('checked',true);
+                        }
+
+                    $("#userInfoEdit input[name='orgName']").val(secUser.orgName);
+                    $("#userInfoEdit input[name='orgName']").attr('orgId',secUser.orgId);
+
+                    eui.use(['form'], function(){
+                        var form = eui.form
+                        form.render('radio');
+                    });
+                }
+            });
+        }else if (item == 'menu'){//用户权限
+            editMenus(id);
+        }else if (item == 'role'){
+            var index = layer.open({
+                type: 2 //此处以iframe举例
+                ,title: '用户角色'
+                ,area: ['800px', '400px']
+                ,shade: 0
+                ,maxmin: true
+                ,content: '/web/sec/user/userRole?id='+id
+                ,success: function(layero, index){
+                    //var body = layer.getChildFrame('body', index);
+                    //taskTeamInfoiframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,yes: function(){
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+            });
+        }else if(item == 'pass'){
+            $("#userPassDigForm input[name='userPass']").val('');
+            $("#userPassDigForm input[name='password']").val('')
+            var index = layer.open({
+                type: 1
+                ,id:'upass'
+                ,title: '修改密码'
+                ,area: ['400px', '250px']
+                ,btn:['确定','取消']
+                ,shade: 0
+                ,maxmin: true
+                ,content: $("#userPassDig")
+                ,success: function(layero, index){
+
+                }
+                ,yes: function(){
+                    if ($("#userPassDigForm input[name='userPass']").val().trim()!='' &&
+                        $("#userPassDigForm input[name='password']").val().trim()!=''){
+
+                        if ($("#userPassDigForm input[name='userPass']").val()
+                            !=$("#userPassDigForm input[name='password']").val()){
+                            layer.msg("两次密码输入不一致", {
+                                time: 2000
+                            });
+                            return;
+                        }
+                        var obj = $("#userPassDigForm").serializeObject();
+                        obj.userPass=md5(obj.userPass);
+                        obj.id=id;
+                        $.postStatus('/sec/user/updateUserPass',{json:JSON.stringify(obj)},function () {
+                            layer.msg("修改成功", {
+                                time: 2000
+                            });
+                            layer.closeAll();
+                        });
+                    }else {
+                        layer.msg("请把输入框填写完整", {
+                            time: 2000
+                        });
+                    }
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+            });
+        }
+    }
+
+    function PassUpdate() {
+        
+    }
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            $.ajax({
+                url:"/sec/user/listByPage",
+                data: {
+                    params:JSON.stringify(params),
+                    page:1,
+                    size:10
+                },
+                type:"post",
+                success:function(result){
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/sec/user/listByPage",
+                                    data: {
+                                        params: JSON.stringify(params),
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            var sex = "男";
+            if (secUser.sex == 0){
+                sex = "女";
+            }
+            var status = "不可用";
+            if (secUser.status){
+                status = "可用";
+            }
+            var id = "'" + secUser.id + "'";
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.account +'</td>' +
+                '<td>'+ secUser.userName +'</td>' +
+                '<td>'+ sex +'</td>' +
+                '<td>'+ secUser.mobile +'</td>' +
+                '<td>'+ status +'</td>' +
+                '<td>'+ secUser.creator +'</td>' +
+                '<td>'+ new Date(secUser.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit',"+id+')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete',"+id+')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="设置权限" onclick="itemclick('+"'menu',"+id+')"><i class="eui-icon">&#xe614;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看角色" onclick="itemclick('+"'role',"+id+')"><i class="eui-icon">&#xe613;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="修改密码" onclick="itemclick('+"'pass',"+id+')"><i class="eui-icon">&#xe60a;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+    //打开tab
+    function openTab(type) {
+
+        if (type == 'userInfoAdd'){
+            $("#userInfoAdd").validate({
+                submitHandler: function() {
+                    addOrUpdate(type);
+                }
+            });
+        }else {
+            $("#userInfoEdit").validate({
+                submitHandler: function() {
+                    addOrUpdate(type);
+                }
+            });
+        }
+    }
+
+    function resetForm() {
+        document.getElementById('searchFrom').reset()
+    }
+
+    //修改用户权限
+    function editMenus(userId) {
+        loadMenuTree(userId);
+        layer.open({
+            type: 1,
+            shade:0,
+            title:'修改权限',
+            content: $('#menuDig'),
+            btn: ['确定', '取消'],
+            yes:function (index, layero) {
+                saveMenus(userId);
+            }
+        });
+    }
+    var userUpdateOrgTreeX;
+
+    function userUpdateOrgTree() {
+        $.ajax({
+            url:"/sec/org/tree",
+            type:"post",
+            success:function(result){
+                //组织树
+                userUpdateOrgTreeX =$("#userUpdateOrgTree").ligerTree({
+                    data:result.data,
+                    checkbox: false,
+                    parentIcon: 'folder',
+                    childIcon: 'leaf' ,
+                    slide: false, //是否显示动画
+                    nodeWidth: 214,
+                    idFieldName: 'id',
+                    textFieldName:'name' ,
+                    onSelect: function (node)
+                    {
+                    },
+                    onError:function(node){
+                    }
+                });
+                $("#userUpdateOrgTree .l-body").mouseover(function(){
+                    var text =$(this).find('span').html();
+                    $(this).attr("title",text);
+                });
+            }
+        });
+        layer.open({
+            type: 1,
+            shade:0,
+            title:'选择组织',
+            content: $('.userUpdateOrgTree'),
+            btn: ['确定', '取消'],
+            yes:function (index, layero) {
+                var d = userUpdateOrgTreeX.getSelected();
+                $("#userInfoEdit input[name='orgName']").val(d.data.name);
+                $("#userInfoEdit input[name='orgName']").attr('orgId',d.data.id);
+                layer.closeAll();
+            }
+        });
+    }
+
+    //保存权限
+    function saveMenus(userId){
+        var ids = '';
+        var data =menuTree.getChecked();
+        for(var i=0 ; i<data.length ; i++){
+            if(data[i].data.flag != '0'){
+                ids+=data[i].data.id+',';
+            }
+        }
+        var obj = new Object();
+        obj.menuId=ids.substring(0,ids.length-1);
+        obj.userId=userId;
+        var index;
+        $.ajax({
+            url:"/sec/menu/member/bacthAdd",
+            data: {
+                params:JSON.stringify(obj)
+            },
+            type:"post",
+            beforeSend:function(){
+                index = layer.load(2, {time: 10000});
+            },
+            success:function(result){
+                layer.close(index);
+                layer.msg("修改成功", {
+                    icon: 1,
+                    time: 2000,
+                },function(){
+                    layer.closeAll();
+                });
+            }
+        });
+    }
+
+    //加载菜单树
+    function loadMenuTree(userId) {
+        $.ajax({
+            url:'/sec/user/menuTreeByUser',
+            type:"post",
+            data: {
+                userId:userId
+            },
+            success:function(result){
+                var data = result.data;
+                //菜单树
+                menuTree =   $("#menuTree").ligerTree({
+                    data:data,
+                    checkbox: true,
+                    parentIcon: 'folder',
+                    childIcon: 'leaf' ,
+                    slide: false, //是否显示动画
+                    nodeWidth: 150,
+                    autoCheckboxEven:true,
+                    enabledCompleteCheckbox: false,
+                    idFieldName: 'id',
+                    textFieldName:'name' ,
+                    parentIDFieldName:'parentId'
+                });
+                for(var i=0;i<data.length;i++){
+                    if(data[i].flag=='1'){
+                        f_selectNode(data[i].id);
+                    }else if (data[i].flag=='0'){
+                        f_selectNode(data[i].id);
+                    }
+                }
+
+                $("#menuTree .l-body").mouseover(function(){
+                    var text =$(this).find('span').html();
+                    $(this).attr("title",text);
+                });
+            }
+        });
+    }
+
+    //勾选树节点
+    function f_selectNode(str) {
+        str = "," + str+",";
+        var parm = function(data) {
+            if (str.indexOf("," + data.id + ",") != -1)
+            { return true; } else { return false }
+        };
+        menuTree.selectNode(parm);
+    };
+
+</script>
+
+</body>
+</html>

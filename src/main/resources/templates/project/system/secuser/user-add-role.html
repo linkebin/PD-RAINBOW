@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8" />
+    <title>添加用户角色</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+</head>
+<body>
+<div class="eui-bd eui-padding15">
+    <div>
+        <div class="eui-container">
+            <div class="eui-row">
+                <div class="eui-col-12 nopadding">
+                    <div class="eui-form">
+                        <table class="eui-table nomargin" id="userTable">
+                            <colgroup>
+                                <col width="30">
+                                <col width="100">
+                                <col width="150">
+                                <col width="150">
+                                <col width="150">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th><input name="" e-skin="primary" type="checkbox" e-filter="allChoose"></th>
+                                <th>角色编号</th>
+                                <th>角色名称</th>
+                                <th>创建人</th>
+                                <th>创建时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <!--<div id="pages" style="text-align:right;"></div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="id" th:value="${id}" />
+<script th:src="@{/Scripts/jquery-1.9.0.min.js}" charset="utf-8"></script>
+<script th:src="@{/pack.ajax.js}" charset="utf-8"></script>
+<script th:src="@{/Scripts/module/eui.js}" charset="utf-8"></script>
+<script th:src="@{/Scripts/plugins/jquery.validate.js}"></script>
+<script th:src="@{/date2format.js}"  charset="utf-8"></script>
+<script th:src="@{/Scripts/libs/ligerUI/js/ligerui.all.js}" type="text/javascript"></script>
+
+
+
+<script type="text/javascript">
+    $(function () {
+        doSearch();
+    });
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            $.ajax({
+                url:"/sec/user/getUserNoRoleList",
+                data: {
+                    id:$("#id").val(),
+                    page:1,
+                    size:1000
+                },
+                type:"post",
+                success:function(result){
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,pages: 1
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/sec/user/getUserNoRoleList",
+                                    data: {
+                                        id:$("#id").val(),
+                                        page: obj.curr,
+                                        size: 1000
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+
+            var id = "'" + secUser.id + "'";
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.roleCode +'</td>' +
+                '<td>'+ secUser.roleName +'</td>' +
+                '<td>'+ secUser.creator +'</td>' +
+                '<td>'+ new Date(secUser.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+    function getCheckList() {
+        var ids ='';
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='userId']").val();
+                ids += id + ',';
+            });
+        return ids;
+    }
+</script>
+</body>
+</html>
