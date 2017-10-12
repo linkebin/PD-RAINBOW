@@ -4,6 +4,11 @@ import javax.persistence.*;
 
 @Table(name = "channel_rule")
 public class ChannelRule {
+
+    @Id
+    @Column(name = "id_")
+    private String id;
+
     /**
      * 渠道商ID
      */
@@ -32,6 +37,14 @@ public class ChannelRule {
      */
     public void setChannelId(String channelId) {
         this.channelId = channelId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
