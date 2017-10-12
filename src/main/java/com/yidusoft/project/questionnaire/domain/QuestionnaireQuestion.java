@@ -54,6 +54,14 @@ public class QuestionnaireQuestion {
     @Column(name = "question_type")
     private Integer questionType;
 
+
+    /**
+     * 类型名称
+     */
+    @Transient
+    private Integer optionName;
+
+
     /**
      * 问题内容
      */
@@ -227,7 +235,16 @@ public class QuestionnaireQuestion {
         return questionContent;
     }
 
-    /**
+
+        public Integer getOptionName() {
+            return optionName;
+        }
+
+        public void setOptionName(Integer optionName) {
+            this.optionName = optionName;
+        }
+
+        /**
      * 设置问题内容
      *
      * @param questionContent 问题内容
