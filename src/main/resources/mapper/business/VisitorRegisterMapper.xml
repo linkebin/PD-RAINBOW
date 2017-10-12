@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.business.dao.VisitorRegisterMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.business.domain.VisitorRegister">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="visitor_name" jdbcType="VARCHAR" property="visitorName" />
+    <result column="visitor_code" jdbcType="VARCHAR" property="visitorCode" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="occupation" jdbcType="VARCHAR" property="occupation" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="blood_type" jdbcType="VARCHAR" property="bloodType" />
+    <result column="nation" jdbcType="VARCHAR" property="nation" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="exigence_contacts" jdbcType="VARCHAR" property="exigenceContacts" />
+    <result column="exigence_phone" jdbcType="VARCHAR" property="exigencePhone" />
+    <result column="marital_status" jdbcType="INTEGER" property="maritalStatus" />
+    <result column="marry_total" jdbcType="INTEGER" property="marryTotal" />
+    <result column="child_sex" jdbcType="INTEGER" property="childSex" />
+    <result column="child_age" jdbcType="INTEGER" property="childAge" />
+    <result column="education_level" jdbcType="INTEGER" property="educationLevel" />
+    <result column="Religious_belief" jdbcType="INTEGER" property="religiousBelief" />
+    <result column="father_age" jdbcType="INTEGER" property="fatherAge" />
+    <result column="father_death_your_age" jdbcType="INTEGER" property="fatherDeathYourAge" />
+    <result column="father_education" jdbcType="VARCHAR" property="fatherEducation" />
+    <result column="father_occupation" jdbcType="VARCHAR" property="fatherOccupation" />
+    <result column="mother_age" jdbcType="INTEGER" property="motherAge" />
+    <result column="mother_death_your_age" jdbcType="INTEGER" property="motherDeathYourAge" />
+    <result column="mother_education" jdbcType="VARCHAR" property="motherEducation" />
+    <result column="mother_occupation" jdbcType="VARCHAR" property="motherOccupation" />
+    <result column="parental_separation_your_age" jdbcType="INTEGER" property="parentalSeparationYourAge" />
+    <result column="parental_divorce_your_age" jdbcType="INTEGER" property="parentalDivorceYourAge" />
+    <result column="brothers_sisters_total" jdbcType="INTEGER" property="brothersSistersTotal" />
+    <result column="brothers_sisters_ranking" jdbcType="INTEGER" property="brothersSistersRanking" />
+    <result column="psychological_counseling" jdbcType="INTEGER" property="psychologicalCounseling" />
+    <result column="counseling_total" jdbcType="INTEGER" property="counselingTotal" />
+    <result column="counseling_address" jdbcType="VARCHAR" property="counselingAddress" />
+    <result column="away_now_total" jdbcType="INTEGER" property="awayNowTotal" />
+    <result column="medical_treatment" jdbcType="INTEGER" property="medicalTreatment" />
+    <result column="diagnosis_result" jdbcType="VARCHAR" property="diagnosisResult" />
+    <result column="medical_history" jdbcType="INTEGER" property="medicalHistory" />
+    <result column="specific_circumstances" jdbcType="VARCHAR" property="specificCircumstances" />
+    <result column="Long_medication" jdbcType="INTEGER" property="longMedication" />
+    <result column="adverse_drug_symptoms" jdbcType="VARCHAR" property="adverseDrugSymptoms" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="treatment_condition" jdbcType="LONGVARCHAR" property="treatmentCondition" />
+  </resultMap>
+</mapper>

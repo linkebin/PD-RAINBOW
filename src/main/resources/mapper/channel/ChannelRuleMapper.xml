@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.channel.dao.ChannelRuleMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.channel.domain.ChannelRule">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+    <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+  </resultMap>
+</mapper>

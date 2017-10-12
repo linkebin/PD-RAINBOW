@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.business.dao.LaunchActivitiesMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.business.domain.LaunchActivities">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="activity_code" jdbcType="VARCHAR" property="activityCode" />
+    <result column="activity_name" jdbcType="VARCHAR" property="activityName" />
+    <result column="activity_aim" jdbcType="VARCHAR" property="activityAim" />
+    <result column="participant" jdbcType="VARCHAR" property="participant" />
+    <result column="activity_adress" jdbcType="VARCHAR" property="activityAdress" />
+    <result column="contacts" jdbcType="VARCHAR" property="contacts" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="activity_total" jdbcType="INTEGER" property="activityTotal" />
+    <result column="uestionnaire_id" jdbcType="VARCHAR" property="uestionnaireId" />
+    <result column="uestionnaire_name" jdbcType="VARCHAR" property="uestionnaireName" />
+    <result column="activity_start" jdbcType="TIMESTAMP" property="activityStart" />
+    <result column="activity_end" jdbcType="TIMESTAMP" property="activityEnd" />
+    <result column="uestionnaire_uri" jdbcType="VARCHAR" property="uestionnaireUri" />
+    <result column="activity_porn" jdbcType="VARCHAR" property="activityPorn" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="Initiator_type" jdbcType="INTEGER" property="initiatorType" />
+    <result column="activity_status" jdbcType="INTEGER" property="activityStatus" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.channel.dao.ChannelManageMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.channel.domain.ChannelManage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="channel_code" jdbcType="VARCHAR" property="channelCode" />
+    <result column="channel_name" jdbcType="VARCHAR" property="channelName" />
+    <result column="linkman" jdbcType="VARCHAR" property="linkman" />
+    <result column="linkman_tell" jdbcType="VARCHAR" property="linkmanTell" />
+    <result column="linkman_addr" jdbcType="VARCHAR" property="linkmanAddr" />
+    <result column="channel_manager" jdbcType="VARCHAR" property="channelManager" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+</mapper>

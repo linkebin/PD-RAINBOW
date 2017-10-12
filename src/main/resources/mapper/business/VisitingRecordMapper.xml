@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.business.dao.VisitingRecordMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.business.domain.VisitingRecord">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="record_code" jdbcType="VARCHAR" property="recordCode" />
+    <result column="Visiting_purpose" jdbcType="VARCHAR" property="visitingPurpose" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="visitor_id" jdbcType="VARCHAR" property="visitorId" />
+    <result column="process_log" jdbcType="LONGVARCHAR" property="processLog" />
+    <result column="Follow_up_plan" jdbcType="LONGVARCHAR" property="followUpPlan" />
+    <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
+  </resultMap>
+</mapper>

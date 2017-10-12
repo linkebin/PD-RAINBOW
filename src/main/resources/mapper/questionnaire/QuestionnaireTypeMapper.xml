@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.questionnaire.dao.QuestionnaireTypeMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.questionnaire.domain.QuestionnaireType">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="questionnaire_type_code" jdbcType="VARCHAR" property="questionnaireTypeCode" />
+    <result column="questionnaire_type_name" jdbcType="VARCHAR" property="questionnaireTypeName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="pid" jdbcType="VARCHAR" property="pid" />
+  </resultMap>
+</mapper>

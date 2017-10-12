@@ -104,7 +104,7 @@ function setDelimiters( openChars, closeChars ) {
 //=================
 
 function getHelper( helper ) {
-	// Helper method called as view.hlp() from compiled template, for helper functions or template parameters ~foo
+	// Helper method called as view.hlp() from compiled generator.template, for helper functions or generator.template parameters ~foo
 	var view = this,
 	tmplHelpers = view.tmpl.helpers || {};
 	helper = (view.ctx[ helper ] !== undefined ? view.ctx : tmplHelpers[ helper ] !== undefined ? tmplHelpers : helpers[ helper ] !== undefined ? helpers : {})[ helper ];
@@ -128,7 +128,7 @@ function convert( converter, view, text ) {
 //=================
 
 function renderTag( tag, parentView, converter, content, tagObject ) {
-	// Called from within compiled template function, to render a nested tag
+	// Called from within compiled generator.template function, to render a nested tag
 	// Returns the rendered tag
 	tagObject.props = tagObject.props || {};
 	var ret,
@@ -238,7 +238,7 @@ function templates( name, tmpl ) {
 }
 
 function tags( name, tagFn ) {
-	// Register template tags
+	// Register generator.template tags
 	// Setter: Use $.view.tags( name, tagFn ) or $.view.tags({ name: tagFn, ... }) to add additional tags to the registered tags collection.
 	// Getter: Use var tagFn = $.views.tags( name ) or $.views.tags[name] or $.views.tags.name to return the function for the registered tag.
 	// Remove: Use $.view.tags( name, null ) to remove a registered tag from $.view.tags.
@@ -253,7 +253,7 @@ function helpers( name, helperFn ) {
 	// Setter: Use $.view.helpers( name, helperFn ) or $.view.helpers({ name: helperFn, ... }) to add additional helpers to the registered helpers collection.
 	// Getter: Use var helperFn = $.views.helpers( name ) or $.views.helpers[name] or $.views.helpers.name to return the function.
 	// Remove: Use $.view.helpers( name, null ) to remove a registered helper function from $.view.helpers.
-	// Within a template, access the helper using the syntax: {{... ~myHelper(...) ...}}.
+	// Within a generator.template, access the helper using the syntax: {{... ~myHelper(...) ...}}.
 	return addToStore( this, helpers, name, helperFn );
 }
 
@@ -262,7 +262,7 @@ function converters( name, converterFn ) {
 	// Setter: Use $.view.converters( name, converterFn ) or $.view.converters({ name: converterFn, ... }) to add additional converters to the registered converters collection.
 	// Getter: Use var converterFn = $.views.converters( name ) or $.views.converters[name] or $.views.converters.name to return the converter function.
 	// Remove: Use $.view.converters( name, null ) to remove a registered converter from $.view.converters.
-	// Within a template, access the converter using the syntax: {{myConverter:...}}.
+	// Within a generator.template, access the converter using the syntax: {{myConverter:...}}.
 	return addToStore( this, converters, name, converterFn );
 }
 
@@ -271,7 +271,7 @@ function converters( name, converterFn ) {
 //=================
 
 function renderContent( data, context, parentView, path, index ) {
-	// Render template against data as a tree of subviews (nested template), or as a string (top-level template).
+	// Render generator.template against data as a tree of subviews (nested generator.template), or as a string (top-level generator.template).
 	// tagName parameter for internal use only. Used for rendering templates registered as tags (which may have associated presenter objects)
 	var i, l, dataItem, newView, itemWrap, itemsWrap, itemResult, parentContext, tmpl, layout,
 		props = {},
@@ -350,18 +350,18 @@ function renderContent( data, context, parentView, path, index ) {
 }
 
 //===========================
-// Build and compile template
+// Build and compile generator.template
 //===========================
 
-// Generate a reusable function that will serve to render a template against data
-// (Compile AST then build template function)
+// Generate a reusable function that will serve to render a generator.template against data
+// (Compile AST then build generator.template function)
 
 function syntaxError( message, e ) {
 	throw (e ? (e.name + ': "' + e.message + '"') : "Syntax error")  +  (message ? (" \n" + message) : "");
 }
 
 function tmplFn( markup, tmpl, bind ) {
-	// Compile markup to AST (abtract syntax tree) then build the template function code from the AST nodes
+	// Compile markup to AST (abtract syntax tree) then build the generator.template function code from the AST nodes
 	// Used for compiling templates, and also by JsViews to build functions for data link expressions
 	var newNode, node, i, l, code, hasTag, hasEncoder, getsValue, hasConverter, hasViewPath, tag, converter, params, hash, nestedTmpl, allowCode,
 		tmplOptions = tmpl ? {
@@ -459,7 +459,7 @@ function tmplFn( markup, tmpl, bind ) {
 
 	pushPreceedingContent( markup.length );
 
-	// Use the AST (astTop) to build the template function
+	// Use the AST (astTop) to build the generator.template function
 	l = astTop.length;
 	code = (l ? "" : '"";');
 
@@ -478,7 +478,7 @@ function tmplFn( markup, tmpl, bind ) {
 			hash = node[ 4 ];
 			markup = node[ 5 ];
 			if ( content ) {
-				// Create template object for nested template
+				// Create generator.template object for nested generator.template
 				nestedTmpl = TmplObject( markup, tmplOptions, tmpl, nestedIndex++ );
 				// Compile to AST and then to compiled function
 				tmplFn( markup, nestedTmpl);
@@ -493,7 +493,7 @@ function tmplFn( markup, tmpl, bind ) {
 						: (getsValue = TRUE, "((v=" + params + ')!=u?v:""')
 				)
 				: (hasTag = TRUE, 't("' + tag + '",view,"' + (converter || "") + '",'
-					+ (content ? nested.length : '""') // For block tags, pass in the key (nested.length) to the nested content template
+					+ (content ? nested.length : '""') // For block tags, pass in the key (nested.length) to the nested content generator.template
 					+ "," + hash + (params ? "," : "") + params))
 					+ ")+";
 		}
@@ -513,7 +513,7 @@ function tmplFn( markup, tmpl, bind ) {
 	try {
 		code =  new Function( "data, view, j, b, u", code );
 	} catch(e) {
-		syntaxError( "Error in compiled template code:\n" + code, e );
+		syntaxError( "Error in compiled generator.template code:\n" + code, e );
 	}
 
 	// Include only the var references that are needed in the code
@@ -621,14 +621,14 @@ function parseParams( params, bind ) {
 }
 
 function compile( name, tmpl, parent, options ) {
-	// tmpl is either a template object, a selector for a template script block, the name of a compiled template, or a template object
-	// options is the set of template properties, c
+	// tmpl is either a generator.template object, a selector for a generator.template script block, the name of a compiled generator.template, or a generator.template object
+	// options is the set of generator.template properties, c
 	var tmplOrMarkup, elem, key, nested, nestedItem;
 
 	//==== nested functions ====
 	function tmplOrMarkupFromStr( value ) {
-		// If value is of type string - treat as selector, or name of compiled template
-		// Return the template object, if already compiled, or the markup string
+		// If value is of type string - treat as selector, or name of compiled generator.template
+		// Return the generator.template object, if already compiled, or the markup string
 
 		if ( ("" + value === value) || value.nodeType > 0 ) {
 			try {
@@ -658,19 +658,19 @@ function compile( name, tmpl, parent, options ) {
 		// If value is not a string or dom element, return undefined
 	}
 
-	//==== Compile the template ====
+	//==== Compile the generator.template ====
 	tmplOrMarkup = tmplOrMarkupFromStr( tmpl );
 
-	// If tmpl is a template object, use it for options
+	// If tmpl is a generator.template object, use it for options
 	options = options || (tmpl.markup ? tmpl : {});
 	options.name = name;
 	nested = options.templates;
 
-	// If tmpl is not a markup string or a selector string, then it must be a template object
+	// If tmpl is not a markup string or a selector string, then it must be a generator.template object
 	// In that case, get it from the markup property of the object
 	if ( !tmplOrMarkup && tmpl.markup && (tmplOrMarkup = tmplOrMarkupFromStr( tmpl.markup ))) {
 		if ( tmplOrMarkup.fn && (tmplOrMarkup.debug !== tmpl.debug || tmplOrMarkup.allowCode !== tmpl.allowCode )) {
-			// if the string references a compiled template object, but the debug or allowCode props are different, need to recompile
+			// if the string references a compiled generator.template object, but the debug or allowCode props are different, need to recompile
 			tmplOrMarkup = tmplOrMarkup.markup;
 		}
 	}
@@ -690,14 +690,14 @@ function compile( name, tmpl, parent, options ) {
 				}
 			}
 		} else {
-			// tmplOrMarkup is a markup string, not a compiled template
-			// Create template object
+			// tmplOrMarkup is a markup string, not a compiled generator.template
+			// Create generator.template object
 			tmpl = TmplObject( tmplOrMarkup, options, parent, 0 );
 			// Compile to AST and then to compiled function
 			tmplFn( tmplOrMarkup, tmpl );
 		}
 		for ( key in nested ) {
-			// compile nested template declarations
+			// compile nested generator.template declarations
 			nestedItem = nested[ key ];
 			if ( nestedItem.name !== key ) {
 				nested[ key ] = compile( key, nestedItem, tmpl );
@@ -807,7 +807,7 @@ tags({
 			tagObject.path = "";
 			return tagObject.renderContent( view );
 			// Test is satisfied, so render content, while remaining in current data context
-			// By passing the view, we inherit data context from the parent view, and the content is treated as a layout template
+			// By passing the view, we inherit data context from the parent view, and the content is treated as a layout generator.template
 			// (so if the data is an array, it will not iterate over the data
 		};
 		return view.onElse( this, arguments );
