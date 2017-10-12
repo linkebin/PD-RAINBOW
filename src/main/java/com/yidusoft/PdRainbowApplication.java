@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PdFainbowApplication {
+public class PdRainbowApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PdFainbowApplication.class, args);
+		SpringApplication.run(PdRainbowApplication.class, args);
 	}
 }
