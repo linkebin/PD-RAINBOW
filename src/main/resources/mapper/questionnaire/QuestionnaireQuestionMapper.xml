@@ -16,4 +16,18 @@
     <result column="question_type" jdbcType="INTEGER" property="questionType" />
     <result column="question_content" jdbcType="LONGVARCHAR" property="questionContent" />
   </resultMap>
+
+
+  <select id="questionListByPage" resultMap="BaseResultMap" parameterType="com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion">
+        SELECT
+          *
+          FROM
+             questionnaire_question
+          WHERE deleted=0
+            <if test="questionCode != null and questionCode != ''">
+              AND   question_code  LIKE  '%${questionCode}%'
+            </if>
+            ORDER BY  CREATE_TIME ASC
+
+  </select>
 </mapper>

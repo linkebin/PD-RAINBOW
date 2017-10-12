@@ -1,11 +1,13 @@
 package com.yidusoft.project.questionnaire.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.project.questionnaire.service.QuestionnaireQuestionService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.project.system.domain.SecRole;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,6 +21,39 @@ import java.util.List;
 public class QuestionnaireQuestionController {
     @Resource
     private QuestionnaireQuestionService questionnaireQuestionService;
+
+
+
+    /**
+     * 分页条件查询所有的问题
+     * @param questionnaireQuestion
+     * @param page
+     * @param pagesize
+     * @return
+     */
+    @PostMapping("/questionListByPage")
+    @ResponseBody
+    public Result questionListByPage(QuestionnaireQuestion questionnaireQuestion, int page, int pagesize) {
+        PageHelper.startPage(page, pagesize);
+        List<QuestionnaireQuestion> list =questionnaireQuestionService.questionListByPage(questionnaireQuestion);
+        //查询所有的相关数据
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/addORupdateQuestion")
+    @ResponseBody
+    public Result addORupdateQuestion(QuestionnaireQuestion questionnaireQuestion) {
+        //修改删除
+
+
+        return ResultGenerator.genSuccessResult("");
+    }
+
+
+
+    /*------------------下面系统自动生成            分割--------------------------------*/
+
 
     @PostMapping
     public Result add(QuestionnaireQuestion questionnaireQuestion) {

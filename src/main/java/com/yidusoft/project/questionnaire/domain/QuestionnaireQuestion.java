@@ -3,7 +3,7 @@ package com.yidusoft.project.questionnaire.domain;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "questionnaire_question")
+    @Table(name = "questionnaire_question")
 public class QuestionnaireQuestion {
     @Id
     @Column(name = "ID_")

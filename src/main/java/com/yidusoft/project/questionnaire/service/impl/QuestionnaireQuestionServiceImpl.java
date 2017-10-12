@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +21,9 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     @Resource
     private QuestionnaireQuestionMapper questionnaireQuestionMapper;
 
+    //分页条件查询问题
+    @Override
+    public List<QuestionnaireQuestion> questionListByPage(QuestionnaireQuestion questionnaireQuestion) {
+        return questionnaireQuestionMapper.questionListByPage(questionnaireQuestion);
+    }
 }
