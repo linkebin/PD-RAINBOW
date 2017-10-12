@@ -19,12 +19,16 @@ import java.util.Properties;
  */
 @Configuration
 public class MybatisConfigurer {
+    public  final String BASE_PACKAGE = "com.yidusoft";//项目基础包名称
+    public  final String MODEL_PACKAGE = BASE_PACKAGE + ".project.*.domain";//Model所在包
+    public  final String MAPPER_PACKAGE = BASE_PACKAGE + ".project.*.dao";//Mapper所在包
+    public  final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".core.Mapper";//Mapper插件基础接口的完全限定名
 
     @Bean
     public SqlSessionFactory sqlSessionFactoryBean(DataSource dataSource) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(dataSource);
-        factory.setTypeAliasesPackage(ProjectConstant.MODEL_PACKAGE);
+        factory.setTypeAliasesPackage(MODEL_PACKAGE);
 
         //配置分页插件，详情请查阅官方文档
         PageHelper pageHelper = new PageHelper();
@@ -47,11 +51,11 @@ public class MybatisConfigurer {
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
-        mapperScannerConfigurer.setBasePackage(ProjectConstant.MAPPER_PACKAGE);
+        mapperScannerConfigurer.setBasePackage(MAPPER_PACKAGE);
 
         //配置通用Mapper，详情请查阅官方文档
         Properties properties = new Properties();
-        properties.setProperty("mappers", ProjectConstant.MAPPER_INTERFACE_REFERENCE);
+        properties.setProperty("mappers", MAPPER_INTERFACE_REFERENCE);
         properties.setProperty("notEmpty", "false");//insert、update是否判断字符串类型!='' 即 test="str != null"表达式内是否追加 and str != ''
         properties.setProperty("IDENTITY", "MYSQL");
         mapperScannerConfigurer.setProperties(properties);

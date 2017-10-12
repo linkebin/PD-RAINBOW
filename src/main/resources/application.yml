@@ -1,14 +1,13 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost/pd_fainbow?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://192.168.1.35/pd-rainbow?useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password:
     initialSize: 1
     minIdle: 1
     maxActive: 20
-
   thymeleaf:
     cache: false
     mode: LEGACYHTML5
@@ -32,3 +31,9 @@ mybatis:
 server:
   port: 8088
 
+
+logging:
+   level:
+     com:
+       yidusoft:
+           project: debug
