@@ -69,7 +69,15 @@
             </div>
             <div class="eui-col-md4">
                 <div style="width: 250px; height: 150px;">
-                    <img class="userImg" imgPath="" th:src="${'data:image/png;base64,'+session.userSession.headImg}" style="width: 200px; height: 112px;">
+                    <th:block th:if="${session.userSession.headImg=='' || session.userSession.headImg==null}">
+                        <img style="width: 200px; height: 112px;"
+                             class="userImg"  th:src="@{/Styles/images/ruhua.png}" alt="">
+                    </th:block>
+                    <th:block th:if="${session.userSession.headImg!='' && session.userSession.headImg!=null}">
+                        <img class="userImg" imgPath="" th:src="${'data:image/png;base64,'+session.userSession.headImg}" style="width: 200px; height: 112px;">
+                    </th:block>
+
+
                 </div>
 
                 <div style="height: 30px; width: 250px;">

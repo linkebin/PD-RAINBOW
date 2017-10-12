@@ -13,4 +13,25 @@
     <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
     <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
   </resultMap>
+
+  <select id="findLoginLogByParameter" parameterType="com.yidusoft.project.monitor.dao.LoginLogMapper" resultMap="BaseResultMap">
+      SELECT * FROM login_log WHERE 1=1
+
+      <if test="userName!='' and userName!=null">
+        AND user_name LIKE  '%${userName}%'
+      </if>
+      <if test="loginAddr!='' and loginAddr!=null">
+        AND login_addr LIKE  '%${loginAddr}%'
+      </if>
+      <if test="loginIp!='' and loginIp!=null">
+        AND login_ip LIKE  '%${loginIp}%'
+      </if>
+
+        <if test="loginType!='' and loginType!=null">
+          AND login_type =  '${loginType}'
+        </if>
+
+      ORDER BY login_time DESC
+
+  </select>
 </mapper>
