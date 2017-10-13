@@ -26,15 +26,16 @@ public class QuestionnaireQuestionController {
 
     /**
      * 分页条件查询所有的问题
-     * @param questionnaireQuestion
+     * @param params
      * @param page
-     * @param pagesize
+     * @param size
      * @return
      */
     @PostMapping("/questionListByPage")
     @ResponseBody
-    public Result questionListByPage(QuestionnaireQuestion questionnaireQuestion, int page, int pagesize) {
-        PageHelper.startPage(page, pagesize);
+    public Result questionListByPage(String params, int page, int size) {
+        QuestionnaireQuestion questionnaireQuestion=JSON.parseObject(params,QuestionnaireQuestion.class);
+        PageHelper.startPage(page, size);
         List<QuestionnaireQuestion> list =questionnaireQuestionService.questionListByPage(questionnaireQuestion);
         //查询所有的相关数据
         PageInfo pageInfo = new PageInfo(list);
