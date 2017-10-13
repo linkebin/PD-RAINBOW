@@ -17,14 +17,9 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -108,7 +103,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 
             loginLog.setLoginIp(ip);
             loginLog.setLoginTime(new Date());
-            loginLog.setLoginType("PC");
+            loginLog.setLoginType("网页登录");
             loginLog.setLoginAddr("未知地点");
             try{
                 if (!"未知IP".equals(ip)){
