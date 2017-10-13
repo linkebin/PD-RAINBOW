@@ -5,7 +5,6 @@ import com.github.pagehelper.util.StringUtil;
 import com.yidusoft.project.system.service.SecMenuService;
 import com.yidusoft.shiro.MyShiroRealm;
 import com.yidusoft.project.system.domain.SecMenu;
-import com.yidusoft.shiro.PermissionsAuthorizationFilter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -130,12 +129,6 @@ public class ShiroConfigurer {
         return myShiroRealm;
     }
 
-    @Bean
-    public PermissionsAuthorizationFilter permissionsAuthorizationFilter(){
-        PermissionsAuthorizationFilter permissionsAuthorizationFilter = new PermissionsAuthorizationFilter();
-
-        return permissionsAuthorizationFilter;
-    }
 
     /**
      * 凭证匹配器

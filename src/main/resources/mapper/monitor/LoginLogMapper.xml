@@ -14,7 +14,7 @@
     <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
   </resultMap>
 
-  <select id="findLoginLogByParameter" parameterType="com.yidusoft.project.monitor.dao.LoginLogMapper" resultMap="BaseResultMap">
+  <select id="findLoginLogByParameter" parameterType="com.yidusoft.project.monitor.domain.LoginLog" resultMap="BaseResultMap">
       SELECT * FROM login_log WHERE 1=1
 
       <if test="userName!='' and userName!=null">

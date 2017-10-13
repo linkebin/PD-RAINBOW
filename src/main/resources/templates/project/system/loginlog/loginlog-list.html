@@ -17,6 +17,13 @@
                 <input type="text" name="userName" e-verify="title" autocomplete="off" placeholder="用户名称" class="eui-input">
             </div>
 
+            <div class="eui-input-inline">
+                <select name="" e-verify="required">
+                    <option value="">全部账号类型</option>
+                    <option value="">内部用户</option>
+                    <option value="">外部用户</option>
+                </select>
+            </div>
             <div class="eui-input-inline eui-padding10">
                 <input type="text" name="loginAddr" e-verify="title" autocomplete="off" placeholder="登陆地址" class="eui-input">
             </div>
@@ -25,11 +32,19 @@
                 <input type="text" name="loginIp" e-verify="title" autocomplete="off" placeholder="登陆IP" class="eui-input">
             </div>
 
+            <div class="eui-input-inline">
+                <select name="loginType" e-verify="required">
+                    <option value="">全部登陆方式</option>
+                    <option value="PC">PC</option>
+                </select>
+            </div>
 
             <div class="eui-input-inline">
                 <span class="eui-btn" onclick="doSearch()">查询</span>
                 <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
             </div>
+
+
         </form>
 
         <div class="eui-row eui-padding10 eui-borderB">
