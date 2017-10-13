@@ -81,7 +81,6 @@ public class SecMenuMemberController {
 
         List<SecMenu> menuList = secMenuMemberService.findMenuByUser(userId);
         for (SecMenu menu : menuList){
-            System.out.println(menu.getId());
         }
         return ResultGenerator.genSuccessResult(menuList);
     }

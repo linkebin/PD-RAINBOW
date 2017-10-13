@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -19,4 +20,13 @@ public class LoginLogServiceImpl extends AbstractService<LoginLog> implements Lo
     @Resource
     private LoginLogMapper loginLogMapper;
 
+    @Override
+    public void insertLoginInfo(LoginLog loginLog) {
+        loginLogMapper.insert(loginLog);
+    }
+
+    @Override
+    public List<LoginLog> findLoginLogByParameter(LoginLog loginLog) {
+        return loginLogMapper.findLoginLogByParameter(loginLog);
+    }
 }

@@ -1,11 +1,13 @@
 package com.yidusoft.project.monitor.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.monitor.domain.LoginLog;
 import com.yidusoft.project.monitor.service.LoginLogService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.project.system.domain.SecMenu;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -19,6 +21,19 @@ import java.util.List;
 public class LoginLogController {
     @Resource
     private LoginLogService loginLogService;
+
+
+    @PostMapping("/listByparameter")
+    public Result listByparameter(int page,int pagesize,String json) {
+        LoginLog loginLog = JSON.parseObject(json,LoginLog.class);
+
+        PageHelper.startPage(page,pagesize);
+
+        PageInfo pageInfo = new PageInfo(loginLogService.findLoginLogByParameter(loginLog));
+        return   ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+
 
     @PostMapping
     public Result add(LoginLog loginLog) {

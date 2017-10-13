@@ -78,7 +78,7 @@
     <div id="header" class="header">
         <!--logo start-->
                     <div class="nav-logo float-left">
-                        <img src="../Styles/images/logo.png" width="100" alt="" />云心魔方
+                        <img src="../Styles/images/logo.png" width="100" alt="" />心云魔方
                     </div>
                     <!--<div class="nav-sreach float-left">-->
                         <!--<input type="text" placeholder="Search"/>-->
@@ -91,12 +91,11 @@
                                     <span class="userImg">
                                         <th:block th:if="${session.userSession.headImg=='' || session.userSession.headImg==null}">
                                         <img style="border-radius:50%;margin-right: 6px;" width="50px" height="50px"
-                                             class="userImgs" name="headImg" th:src="@{/Styles/images/ruhua.jpg}" alt="">
+                                             class="userImgs" name="headImg" th:src="@{/Styles/images/ruhua.png}" alt="">
                                         </th:block>
                                          <th:block th:if="${session.userSession.headImg!='' && session.userSession.headImg!=null}">
                                             <img style="border-radius:50%;margin-right: 6px;" width="50px" height="50px"
                                                  class="userImgs" name="headImg" th:src="${'data:image/png;base64,'+session.userSession.headImg}" alt="">
-
                                         </th:block>
                                         <span id="msgCount"></span>
 

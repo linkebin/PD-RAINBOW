@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>促销活动管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+    <script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
+    <script src="../../../Scripts/main.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
+    <!-- ztree -->
+    <script src="../../../Scripts/libs/ztree/js/jquery.ztree.core.js"></script>
+    <script src="../../../Scripts/libs/ztree/js/jquery.ztree.excheck.js"></script>
+    <script src="../../../Scripts/libs/ztree/js/jquery.ztree.exedit.js"></script>
+
+    <script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+    <script src="/pack.ajax.js" type="text/javascript"></script>
+    <script src="/Scripts/date2format.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="eui-bg-white eui-row eui-paddingT10">
+    <div class="eui-col-md12 eui-paddingR10">
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 活动
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <a href="###" class="eui-btn eui-btn-small promotionNew"><i class='eui-icon eui-font24'>&#xe654;</i>设置活动</a>
+            </div>
+        </div>
+        <table class="eui-table eui-form" id="promotionTable">
+            <colgroup>
+                <col width="60">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                <th>促销类型</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>折扣</th>
+                <th>购买次数</th>
+                <th>赠送数量</th>
+                <th>是否启用</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+<!-- 左滑新建活动开始 -->
+<div class="promotionFiltrate">
+</div>
+<div class="filtrateIn">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe654;</i> 新建活动
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 promotionClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="promotionForm">
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动类型</label>
+            <div class="eui-input-block">
+                <input type="radio" name="promotionsType" value="1" title="套餐折扣" checked>
+                <input type="radio" name="promotionsType" value="2" title="多买多送">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">开始时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="promotionsStart" id="startTime" placeholder="年-月-日">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">结束时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="promotionsEnd" id="endTime" placeholder="年-月-日">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">折扣</label>
+            <div class="eui-input-block">
+                <input type="text" name="promotionsDiscount" e-verify="title" autocomplete="off" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">购买次数</label>
+            <div class="eui-input-block">
+                <input type="text" name="buyTotal" e-verify="title" autocomplete="off" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">赠送数量</label>
+            <div class="eui-input-block">
+                <input type="text" name="promotionsBuySend" e-verify="title" autocomplete="off" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">是否开启</label>
+            <div class="eui-input-block">
+                <input type="radio" name="promotionsState" value="0" title="是" checked>
+                <input type="radio" name="promotionsState" value="1" title="否">
+            </div>
+        </div>
+    </form>
+    <div class="promotionConfirm">
+        <span onclick="addPromotion()" class="eui-btn">确认</span>
+    </div>
+</div>
+<!-- 左滑新建活动结束 -->
+
+<script type="text/javascript">
+    // 日期和时间选择
+    eui.use('laydate', function () {
+        var laydate = eui.laydate;
+
+        //常规用法
+        laydate.render({
+            elem: '#startTime',
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endTime',
+            type: 'datetime'
+        });
+    })
+    $(function () {
+        doSearch();
+    });
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer,
+                    $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url: "/questionnaire/promotions/listByPage",
+                data: {
+                    page: 1,
+                    size: 10
+                },
+                type: "post",
+                success: function (result) {
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+//                        ,pages: result.data.pages
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var promotionList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(promotionList);
+                                $("#promotionTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/questionnaire/promotions/list",
+                                    type: "post",
+                                    success: function (result) {
+                                        var promotionList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(promotionList);
+                                        $("#promotionTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        console.log(userList);
+        var tableHtml = '';
+        for (var item in userList) {
+            var promotion = userList[item];
+
+            var id = "'" + promotion.id + "'";
+            tableHtml += '<tr>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + promotion.id + '"></td>' +
+                    '<td>' + promotion.promotionsType + '</td>' +
+                    '<td>' + promotion.promotionsStart + '</td>' +
+                    '<td>' + promotion.promotionsEnd + '</td>' +
+                    '<td>' + promotion.promotionsDiscount + '</td>' +
+                    '<td>' + promotion.buyTotal + '</td>' +
+                    '<td>' + promotion.promotionsBuySend + '</td>';
+
+            promotion.promotionsState == 0 ? tableHtml += '<td>是</td>' : tableHtml += '<td>否</td>'
+
+            tableHtml +=
+                    '<td>' + promotion.creator + '</td>' +
+                    '<td>' + new Date(promotion.createTime).Format('yyyy-MM-dd') + '</td>' +
+                    '<td>' +
+                    '<div class="eui-btn-group"> ' +
+                    '' + Btns(promotion) + '' +
+                    '</div>' +
+                    '</td>' +
+                    '</tr>';
+        }
+        return tableHtml;
+    }
+    function Btns(promotion) {
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit" title="编辑活动" onclick="promotionEdit(promotion)"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="itemclick(' + "'delete'," + promotion.id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+    }
+    //
+    function promotionEdit(promotion) {
+        console.log('1');
+
+    }
+    //工具条按钮事件
+    function itemclick(item, id) {
+        if (item == 'edit') {//修改
+        } else {//删除
+            deleteRole(id);
+        }
+    }
+    /**
+     * 新建活动
+     */
+    function addPromotion() {
+        var params = $("#promotionForm").serializeObject();
+        if (params.promotionsStart.trim() == "") {
+            layer.msg('开始时间不能为空！');
+            return;
+        }
+        else if (params.promotionsEnd.trim() == "") {
+            layer.msg('结束时间不能为空！');
+            return;
+        }
+        else if (params.promotionsDiscount.trim() == "") {
+            layer.msg('折扣不能为空！');
+            return;
+        }
+        else if (params.buyTotal.trim() == "") {
+            layer.msg('购买次数不能为空！');
+            return;
+        }
+        else if (params.promotionsBuySend.trim() == "") {
+            layer.msg('赠送数量不能为空！');
+            return;
+        }
+
+        $.post("/questionnaire/promotions/add", {"promotionsJson": JSON.stringify(params)}, function (result) {
+            if (result.message = 'SUCCESS') {
+                //关闭
+                layer.closeAll();
+                layer.msg('新建成功！', {
+                    time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                });
+                $("[name='promotionsStart']").val("");
+                $("[name='promotionsEnd']").val("");
+                $("[name='promotionsDiscount']").val("");
+                $("[name='buyTotal']").val("");
+                $("[name='promotionsBuySend']").val("");
+                $(".filtrateIn").animate({right: '-400px'}, 400);
+                $(".promotionFiltrate").hide();
+                doSearch();
+            } else {
+                layer.close(indexs);
+                layer.msg('新建失败！', {
+                    time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                });
+
+            }
+        });
+    }
+
+    // 新建活动
+    $(".promotion").hide();
+    $(".promotionNew").click(function (event) {
+        $(".promotion").show();
+        $(".filtrateIn").animate({right: '0'}, 400);
+        /* Act on the event */
+    });
+
+    $(".promotionClose,.promotionFiltrate").click(function (event) {
+        $(".filtrateIn").animate({right: '-400px'}, 400);
+        $(".promotionFiltrate").hide();
+    });
+</script>
+</body>
+</html>

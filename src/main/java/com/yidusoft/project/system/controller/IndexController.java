@@ -4,12 +4,14 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
+import com.yidusoft.utils.IpAddressUtils;
 import com.yidusoft.utils.Security;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * Created by you on 2017/7/17.
@@ -63,6 +66,7 @@ public class IndexController {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token=new UsernamePasswordToken(username,password);
         try {
+
             subject.login(token);
             return "index";
         } catch (LockedAccountException lae) {
@@ -90,6 +94,9 @@ public class IndexController {
                 }
             }
             token.clear();
+            Session session = SecurityUtils.getSubject().getSession();
+            session.removeAttribute("userSessionId");
+            session.removeAttribute("userSession");
             request.setAttribute("msg", "密码不正确！");
             return "login";
         }
