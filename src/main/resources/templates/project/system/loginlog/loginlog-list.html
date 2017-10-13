@@ -146,9 +146,9 @@
                             }else {
                                 var params = $("#searchFrom").serializeObject();
                                 $.ajax({
-                                    url: "/sec/role/list",
+                                    url: "/login/log/listByparameter",
                                     data: {
-                                        roleJson: JSON.stringify(params),
+                                        json: JSON.stringify(params),
                                         page: obj.curr,
                                         pagesize: obj.limit
                                     },
@@ -185,7 +185,7 @@
                 '<td>'+ secUser.loginAddr +'</td>' +
                 '<td>'+ secUser.loginType +'</td>' +
                 '<td>'+ secUser.loginIp +'</td>' +
-                '<td>'+ new Date(secUser.loginTime).Format('yyyy-MM-dd mm:ss:qq') +'</td>' +
+                '<td>'+ new Date(secUser.loginTime).Format('yyyy-MM-dd hh:mm:ss') +'</td>' +
                 '</tr>';
         }
         return tableHtml;

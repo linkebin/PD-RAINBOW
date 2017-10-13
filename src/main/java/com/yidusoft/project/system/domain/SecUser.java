@@ -23,6 +23,8 @@ public class SecUser implements Serializable {
     @Column(name = "ACCOUNT")
     private String account;
 
+    @Column(name = "ACCOUNT_TYPE")
+    private Integer accountType;
 
     /**
      * 密码
@@ -113,6 +115,25 @@ public class SecUser implements Serializable {
 
     @Transient
     private String  orgName;
+
+    @Transient
+    private Integer msgCode;
+
+    public Integer getMsgCode() {
+        return msgCode;
+    }
+
+    public void setMsgCode(Integer msgCode) {
+        this.msgCode = msgCode;
+    }
+
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
 
     public String getOrgName() {
         return orgName;

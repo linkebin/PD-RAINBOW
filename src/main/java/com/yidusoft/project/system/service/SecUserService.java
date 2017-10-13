@@ -15,6 +15,10 @@ import java.util.Map;
  */
 public interface SecUserService extends Service<SecUser> {
 
+
+
+
+
     SecUser findUserInfoAndOrgInfoById(String id);
     /**
      * 根据多个用户id查询用户部门信息
@@ -52,6 +56,8 @@ public interface SecUserService extends Service<SecUser> {
     Result updateUser(String params);
 
     Result addUser(String params);
+
+
 
     /**
      * 获取用户树

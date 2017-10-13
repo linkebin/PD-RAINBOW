@@ -64,6 +64,8 @@
     background: #f40002;
     border-radius:5px;
     color:#fff;
+    border: none;
+    cursor: pointer;
 }
 .loginB:hover{
     color:#fff;

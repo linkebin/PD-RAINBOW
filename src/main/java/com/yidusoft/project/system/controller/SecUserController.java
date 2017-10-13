@@ -10,10 +10,7 @@ import com.yidusoft.project.system.domain.SecMenu;
 import com.yidusoft.project.system.domain.SecRole;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.*;
-import com.yidusoft.utils.Base64ToImage;
-import com.yidusoft.utils.PasswordHelper;
-import com.yidusoft.utils.Security;
-import com.yidusoft.utils.TreeNode;
+import com.yidusoft.utils.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
@@ -24,10 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 /**
 * Created by CodeGenerator on 2017/07/18.
@@ -40,6 +35,56 @@ public class SecUserController {
 
     @Resource
     private SecMenuMemberService secMenuMemberService;
+
+
+    /**
+     * 用户注册
+     * @param json
+     * @return
+     */
+    @PostMapping("/sign")
+    @ResponseBody
+    public Result sign(String json,HttpServletRequest request) {
+
+        SecUser secUser = JSON.parseObject(json,SecUser.class);
+
+        String code = (String) request.getSession().getAttribute("signCode");
+        if (Integer.parseInt(code) != secUser.getMsgCode()){
+            return ResultGenerator.genFailResult("验证码错误");
+        }
+
+        Result result = secUserService.addUser(JSON.toJSONString(secUser));
+        if (result.getCode() !=200){
+            return result;
+        }
+
+        return ResultGenerator.genSuccessResult("/index");
+    }
+
+    /**
+     * 发送注册手机验证码
+     * @param request
+     * @return
+     */
+    @PostMapping("/sign/code")
+    @ResponseBody
+    public Result signcode(HttpServletRequest request,String mobile) {
+
+        try{
+            String json = SendMessageCode.sendMessageCode(mobile);
+            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
+            if (smsCode.getCode() == 200){
+                request.getSession().setAttribute("signCode",smsCode.getObj());
+            }else{
+                return ResultGenerator.genFailResult("验证码发生失败");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("验证码发生失败");
+        }
+        return ResultGenerator.genSuccessResult();
+    }
+
 
     @PostMapping("/updateUserInfoPass")
     @ResponseBody

@@ -23,6 +23,8 @@ import org.thymeleaf.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+import static com.yidusoft.utils.Security.*;
+
 /**
  * Created by you on 2017/7/17.
  */
@@ -36,8 +38,17 @@ public class IndexController {
      */
     @RequestMapping(value ={"/index",""})
     public String main(){
-        return  "index";
+        if (getUserId()==null){
+            return "login";
+        }
+        SecUser secUser = Security.getUser();
+        if (0==secUser.getAccountType()){
+            return  "index";
+        }else {
+            return  "menhu";
+        }
     }
+
 
     @RequestMapping("/403")
     public String forbidden(){
@@ -46,10 +57,15 @@ public class IndexController {
 
     @RequestMapping(value="/login",method= RequestMethod.GET)
     public String login(){
-        if (Security.getUserId()==null){
+        if (getUserId()==null){
             return "login";
         }
-        return "index";
+        SecUser secUser = Security.getUser();
+        if (0==secUser.getAccountType()){
+            return  "index";
+        }else {
+            return  "menhu";
+        }
     }
 
     @RequestMapping(value="/indexInfo")
@@ -68,7 +84,7 @@ public class IndexController {
         try {
 
             subject.login(token);
-            return "index";
+            return "5555";
         } catch (LockedAccountException lae) {
             token.clear();
             request.setAttribute("msg", "账号已被锁定，请与管理员联系！");
@@ -112,7 +128,7 @@ public class IndexController {
         UsernamePasswordToken token=new UsernamePasswordToken(username,password);
         try {
             subject.login(token);
-            return ResultGenerator.genSuccessResult(Security.getUser());
+            return ResultGenerator.genSuccessResult(getUser());
         } catch (LockedAccountException lae) {
             token.clear();
             return ResultGenerator.genFailResult("账号已被锁定，请与管理员联系！");
