@@ -14,4 +14,9 @@
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="promotions_id" jdbcType="VARCHAR" property="promotionsId" />
   </resultMap>
+
+  <select id="getProductAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.transaction.domain.ProductSettings">
+    SELECT id_,product_code,product_total,product_price,creator,create_time,deleted,promotions_id FROM product_settings where deleted=0 order by CREATE_TIME desc
+  </select>
 </mapper>
+

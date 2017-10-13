@@ -1,8 +1,10 @@
 package com.yidusoft.project.transaction.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "questionnaire_promotions")
 public class QuestionnairePromotions {
@@ -52,6 +54,7 @@ public class QuestionnairePromotions {
     /**
      * 创建人
      */
+    @Column(name = "creator")
     private String creator;
 
     /**
@@ -69,6 +72,7 @@ public class QuestionnairePromotions {
     /**
      * 是否删除
      */
+    @Column(name = "deleted")
     private Integer deleted;
 
     /**

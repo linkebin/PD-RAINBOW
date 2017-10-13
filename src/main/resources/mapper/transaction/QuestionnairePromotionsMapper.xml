@@ -17,4 +17,7 @@
     <result column="promotions_state" jdbcType="INTEGER" property="promotionsState" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
+  <select id="getPromotionAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.transaction.domain.QuestionnairePromotions">
+    SELECT * FROM questionnaire_promotions WHERE deleted=0 order by CREATE_TIME desc
+  </select>
 </mapper>
