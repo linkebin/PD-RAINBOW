@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +21,9 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
     @Resource
     private GaugeMapper gaugeMapper;
 
+    //分页条件查询量表
+    @Override
+    public List<Gauge> gaugeListByPage(Gauge gauge) {
+        return gaugeMapper.gaugeListByPage(gauge);
+    }
 }

@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>问题管理</title>
+    <title>量表管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -26,7 +26,7 @@
         <div class="eui-mn1-type">
             <form class="eui-form" id="searchFrom">
                 <div class="eui-input-inline eui-padding10">
-                    <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
+                    <input type="text" name="gaugeCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
                 </div>
                 <div class="eui-input-inline">
                     <span class="eui-btn" onclick="doSearch()">查询</span>
@@ -35,10 +35,10 @@
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
-                    <i class='eui-icon eui-font24'>&#xe61d;</i> 问题列表
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 量表列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <a href="###"  onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加问题</a>
+                    <a href="###"  onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加量表</a>
                     <a href="###" onclick="deleteQuestion('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
             </div>
@@ -50,12 +50,10 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
-                        <th>问题编号</th>
-                        <th>问题内容</th>
-                        <th>选项</th>
-                        <th>对应分数</th>
-                        <th>答案</th>
+                        <th>量表编号</th>
+                        <th>量表名称</th>
                         <th>类型</th>
+                        <th>状态</th>
                         <th>创建人</th>
                         <th>创建时间</th>
                         <th>操作</th>
@@ -318,7 +316,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             //加载层
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
             $.ajax({
-                url:"/questionnaire/question/questionListByPage",
+                url:"/gauge/gaugeListByPage",
                 data: {
                     params:JSON.stringify(params),
                     page:1,
@@ -336,9 +334,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                         ,jump: function(obj,first){
                             if (first){
                                 //第一次，不需要查询数据
-                                var questionList = result.data.list;
+                                var gaugeList = result.data.list;
                                 //遍历，拼接表格
-                                var tableHtml = getTable(questionList);
+                                var tableHtml = getTable(gaugeList);
                                 $("#questionTable tbody").html(tableHtml);
                                 form.render('checkbox');
                             }else {
@@ -346,7 +344,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                                 //加载层
                                 var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
                                 $.ajax({
-                                    url: "/questionnaire/question/questionListByPage",
+                                    url: "/gauge/gaugeListByPage",
                                     data: {
                                         params: JSON.stringify(params),
                                         page: obj.curr,
@@ -355,9 +353,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                                     type: "post",
                                     success: function (result) {
                                         layer.closeAll();
-                                        var questionList = result.data.list;
+                                        var gaugeList = result.data.list;
                                         //遍历，拼接表格
-                                        var tableHtml = getTable(questionList);
+                                        var tableHtml = getTable(gaugeList);
                                         $("#questionTable tbody").html(tableHtml);
                                         //重新加载复选框
                                         form.render('checkbox');
@@ -373,25 +371,23 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     }
 
     //渲染数据，拼接表格
-    function getTable(questionList) {
+    function getTable(gaugeList) {
         var tableHtml = '';
 
-        for (var item in questionList){
-            var question=questionList[item];
+        for (var item in gaugeList){
+            var gauge=gaugeList[item];
             tableHtml +=  '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionId" type="hidden" value="' + question.id + '"></td>' +
-                '<td>'+ question.questionCode +'</td>' +
-                '<td>'+ question.questionContent +'</td>' +
-                '<td>'+ question.optionAnswer +'</td>'   +
-                '<td>'+ question.optionScore +'</td>' +
-                '<td>'+ question.answer +'</td>' +
-                '<td>'+ question.questionType +'</td>' +
-                '<td>'+ question.creator +'</td>' +
-                '<td>'+ new Date(question.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionId" type="hidden" value="' + gauge.id + '"></td>' +
+                '<td>'+ gauge.gaugeCode +'</td>' +
+                '<td>'+ gauge.gaugeName +'</td>' +
+                '<td>'+ gauge.questionnaireTypeName +'</td>'   +
+                '<td>'+ gauge.gaugeState +'</td>' +
+                '<td>'+ gauge.creator +'</td>' +
+                '<td>'+ new Date(gauge.createTime).Format('yyyy-MM-dd') +'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+question.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+question.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+gauge.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+gauge.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';

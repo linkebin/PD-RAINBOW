@@ -1,5 +1,7 @@
 package com.yidusoft.project.questionnaire.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -20,12 +22,26 @@ public class Gauge {
     @Column(name = "gauge_state")
     private Integer gaugeState;
 
+    @Column(name = "creator")
     private String creator;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "deleted")
     private Integer deleted;
+
+    @Transient
+    private  String questionnaireTypeName;
+
+    public String getQuestionnaireTypeName() {
+        return questionnaireTypeName;
+    }
+
+    public void setQuestionnaireTypeName(String questionnaireTypeName) {
+        this.questionnaireTypeName = questionnaireTypeName;
+    }
 
     /**
      * @return ID_

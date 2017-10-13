@@ -14,4 +14,41 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
+
+  <resultMap id="BaseResultMap1" type="com.yidusoft.project.questionnaire.domain.Gauge">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="gauge_code" jdbcType="VARCHAR" property="gaugeCode" />
+    <result column="gauge_type" jdbcType="VARCHAR" property="gaugeType" />
+    <result column="gauge_name" jdbcType="VARCHAR" property="gaugeName" />
+    <result column="gauge_state" jdbcType="INTEGER" property="gaugeState" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="questionnaire_type_name" jdbcType="VARCHAR" property="questionnaireTypeName" />
+  </resultMap>
+
+  <select id="gaugeListByPage" resultMap="BaseResultMap1" parameterType="com.yidusoft.project.questionnaire.domain.Gauge">
+        SELECT
+        g.*,q.questionnaire_type_name
+        FROM
+        gauge g
+        LEFT JOIN
+        questionnaire_type  q
+        ON g.gauge_type =q.id_
+        WHERE g.deleted=0
+          <if test="gaugeCode != null and gaugeCode != ''">
+            AND  ( g.gauge_code  LIKE  '%${gaugeCode}%'
+                     OR
+                   g.gauge_name LIKE  '%${gaugeCode}%'
+                  )
+          </if>
+
+        ORDER BY  g.CREATE_TIME ASC
+
+  </select>
+
+
 </mapper>

@@ -1,4 +1,4 @@
-package com.yidusoft.project.questionnaire.controller;
+package com.yidusoft.project.questionnaire.controller.web;
 
 
 import org.springframework.stereotype.Controller;
