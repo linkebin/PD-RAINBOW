@@ -45,6 +45,17 @@ public class LoginLog {
     @Column(name = "login_time")
     private Date loginTime;
 
+    @Column(name = "user_account")
+    private String userAccount;
+
+    public String getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(String userAccount) {
+        this.userAccount = userAccount;
+    }
+
     /**
      * 登录账号类型
      */

@@ -14,6 +14,7 @@
     <result column="channel_manager" jdbcType="VARCHAR" property="channelManager" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
 
   <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">

@@ -7,6 +7,7 @@ import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,19 @@ public class ChannelManageController {
         ChannelManage channelManage = JSON.parseObject(json,ChannelManage.class);
         channelManageService.update(channelManage);
         return ResultGenerator.genSuccessResult();
+    }
+
+    @PostMapping("/deleteBacth")
+    public Result deleteBacth(String ids) {
+        String arr [] = ids.split(",");
+        for(String str : arr){
+            ChannelManage channelManage = channelManageService.findById(str);
+            if (channelManage!=null){
+                channelManage.setDeleted(1);
+                channelManageService.update(channelManage);
+            }
+        }
+        return ResultGenerator.genSuccessResult("删除成功！");
     }
 
     @PostMapping("/detail")

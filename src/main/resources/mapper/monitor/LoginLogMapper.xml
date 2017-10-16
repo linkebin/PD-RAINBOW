@@ -13,7 +13,7 @@
     <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
     <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
       <result column="account_type" jdbcType="INTEGER" property="accountType" />
-
+      <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
   </resultMap>
 
   <select id="findLoginLogByParameter" parameterType="com.yidusoft.project.monitor.domain.LoginLog" resultMap="BaseResultMap">

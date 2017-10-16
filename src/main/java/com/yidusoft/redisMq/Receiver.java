@@ -50,6 +50,7 @@ public class Receiver {
         loginLog.setLoginId(UUID.randomUUID().toString());
         loginLog.setUserId(sysMessage.getRecid());
         loginLog.setUserName(sysMessage.getMessageTitle());
+        loginLog.setUserAccount(sysMessage.getMessage());
         loginLog.setAccountType(sysMessage.getDeleted());
         String ip = IpAddressUtils.getIpAddr(); //获取IP地址
         loginLog.setLoginIp(ip);

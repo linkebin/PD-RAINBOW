@@ -2,17 +2,16 @@ package com.yidusoft.project.system.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.sun.tools.internal.ws.processor.model.Model;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.monitor.domain.LoginLog;
 import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.redisMq.MsgGenerator;
 import com.yidusoft.redisMq.MsgSend;
-import com.yidusoft.utils.Base64ToImage;
-import com.yidusoft.utils.SMSCode;
-import com.yidusoft.utils.Security;
-import com.yidusoft.utils.SendMessageCode;
+import com.yidusoft.utils.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -134,8 +133,6 @@ public class IndexController {
         return "indexInfo";
     }
 
-    @Resource
-    private LoginLogService loginLogService;
     @Resource
     private MsgSend msgSend;
 

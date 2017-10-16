@@ -13,9 +13,13 @@
 </head>
 <body>
 
-<div class="eui-bg-white eui-row eui-paddingT10">
+<div class="eui-bg-white eui-row eui-padding15">
     <div class="eui-col-md12 eui-paddingR10">
         <form class="eui-form" id="searchFrom">
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="channelName" e-verify="title" value=""
+                       autocomplete="off" placeholder="渠道名称/关键字" class="eui-input">
+            </div>
             <div class="eui-input-inline">
                 <span class="eui-btn eui-btn-small eui-btn" onclick="doSearch()">查询</span>
                 <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
@@ -260,6 +264,42 @@
         });
     }
 
+    //删除用户
+    function deleteB(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='userId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的用户', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该渠道商吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                $.ajax({
+                    url:"/channel/manage/deleteBacth",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                        doSearch();
+                    }
+                });
+            });
+        }
+    }
+
     //加载数据
     function doSearch() {
         eui.use(['form','laypage','layer'], function(){
@@ -350,7 +390,8 @@
                 '<td>'+ secUser.creator +'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="修改密码"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="修改"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteB('+id+')" title="删除"><i class="eui-icon">&#xe640;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';

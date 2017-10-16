@@ -55,6 +55,17 @@ public class ChannelManage {
      */
     private String creator;
 
+    @Column(name = "deleted")
+    private Integer deleted;
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
     /**
      * @return id_
      */
