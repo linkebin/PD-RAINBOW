@@ -1,7 +1,7 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost/pd-rainbow?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://192.168.1.35/pd-rainbow?useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password:
@@ -13,7 +13,7 @@ spring:
     mode: LEGACYHTML5
 
   redis:
-      host: localhost
+      host: 192.168.1.155
       port: 6379
       timeout: 0
       pool:
