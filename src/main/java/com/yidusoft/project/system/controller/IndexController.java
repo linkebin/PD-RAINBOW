@@ -2,14 +2,17 @@ package com.yidusoft.project.system.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.sun.tools.internal.ws.processor.model.Model;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
-import com.yidusoft.project.monitor.domain.LoginLog;
 import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.utils.*;
+import com.yidusoft.redisMq.MsgGenerator;
+import com.yidusoft.redisMq.MsgSend;
+import com.yidusoft.utils.Base64ToImage;
+import com.yidusoft.utils.SMSCode;
+import com.yidusoft.utils.Security;
+import com.yidusoft.utils.SendMessageCode;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -32,12 +35,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.UUID;
 
-import static com.yidusoft.utils.Security.*;
+import static com.yidusoft.utils.Security.getUser;
 
 /**
  * Created by you on 2017/7/17.
@@ -59,8 +58,8 @@ public class IndexController {
         if (0==secUser.getAccountType()){
             return  "index";
         }else {
-            return  "menhu";
-        }
+            return  "project/cube/index";
+}
     }
 
 
@@ -78,7 +77,7 @@ public class IndexController {
         if (0==secUser.getAccountType()){
             return  "index";
         }else {
-            return  "menhu";
+            return  "project/cube/index";
         }
     }
 
@@ -137,6 +136,8 @@ public class IndexController {
 
     @Resource
     private LoginLogService loginLogService;
+    @Resource
+    private MsgSend msgSend;
 
 
     /**
@@ -188,34 +189,7 @@ public class IndexController {
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", user.getId());
         session.setAttribute("userSession", user);
-        LoginLog loginLog = new LoginLog();
-        loginLog.setLoginId(UUID.randomUUID().toString());
-        loginLog.setUserId(Security.getUserId());
-        loginLog.setUserName(Security.getUser().getAccount());
-
-        String ip = IpAddressUtils.getIpAddr(); //获取IP地址
-        loginLog.setLoginIp(ip);
-        loginLog.setLoginTime(new Date());
-        loginLog.setLoginType("网页登录");
-        loginLog.setLoginAddr("未知地点");
-        loginLog.setAccountType(Security.getUser().getAccountType());
-        try{
-            if (!"未知IP".equals(ip)){
-                Map<String,Object> map = IpAddressUtils.getAddress("ip="+ip, "utf-8");
-                StringBuffer buffer = new StringBuffer();
-                buffer.append(map.get("region").toString()+"->");
-                if (!"".equals(map.get("city").toString())){
-                    buffer.append(map.get("city").toString());
-                }
-                if (!"".equals(map.get("county").toString())){
-                    buffer.append(map.get("county").toString());
-                }
-                loginLog.setLoginAddr(buffer.toString());
-            }
-            loginLogService.insertLoginInfo(loginLog);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        msgSend.send(MsgGenerator.genLoginLogMessage(user));
         return  "redirect:/index";
     }
 
