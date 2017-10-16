@@ -11,7 +11,7 @@ import java.util.List;
 public interface LoginLogService extends Service<LoginLog> {
 
     /**
-     * 记录登陆日志信息
+     * 记录登录日志信息
      * @param loginLog
      */
     void insertLoginInfo(LoginLog loginLog);

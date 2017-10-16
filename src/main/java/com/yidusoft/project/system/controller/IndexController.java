@@ -147,7 +147,8 @@ public class IndexController {
     public String submitLogin(HttpServletRequest request,String username, String password,String vrifyCode) {
         request.setAttribute("account", username);
         String captchaId = (String) request.getSession().getAttribute("vrifyCode");
-        if (!captchaId.equals(vrifyCode)) {
+
+        if (!captchaId.equals(vrifyCode) && !"".equals(captchaId)) {
             request.setAttribute("msg", "验证码错误！");
             return "login";
         }

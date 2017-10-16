@@ -8,7 +8,7 @@ import java.util.List;
 public interface LoginLogMapper extends Mapper<LoginLog> {
 
     /**
-     * 根据参数查询登陆记录
+     * 根据参数查询登录记录
      * @return
      */
     List<LoginLog> findLoginLogByParameter(LoginLog loginLog);
