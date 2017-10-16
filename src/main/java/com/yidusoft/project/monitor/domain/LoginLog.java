@@ -46,6 +46,20 @@ public class LoginLog {
     private Date loginTime;
 
     /**
+     * 登录账号类型
+     */
+    @Column(name = "account_type")
+    private Integer accountType;
+
+    public Integer getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(Integer accountType) {
+        this.accountType = accountType;
+    }
+
+    /**
      * @return login_id
      */
     public String getLoginId() {

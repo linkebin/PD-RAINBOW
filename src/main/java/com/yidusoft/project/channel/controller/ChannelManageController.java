@@ -1,15 +1,19 @@
 package com.yidusoft.project.channel.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -20,8 +24,12 @@ public class ChannelManageController {
     @Resource
     private ChannelManageService channelManageService;
 
-    @PostMapping
-    public Result add(ChannelManage channelManage) {
+    @PostMapping("/add")
+    public Result add(String json) {
+        ChannelManage channelManage = JSON.parseObject(json,ChannelManage.class);
+        channelManage.setId(UUID.randomUUID().toString());
+        channelManage.setChannelCode(CodeHelper.getCode("QD"));
+        channelManage.setCreator(Security.getUser().getUserName());
         channelManageService.save(channelManage);
         return ResultGenerator.genSuccessResult();
     }
@@ -32,23 +40,27 @@ public class ChannelManageController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(ChannelManage channelManage) {
+    @PostMapping("/update")
+    public Result update(String  json) {
+        ChannelManage channelManage = JSON.parseObject(json,ChannelManage.class);
         channelManageService.update(channelManage);
         return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
+    @PostMapping("/detail")
+    public Result detail(String id) {
         ChannelManage channelManage = channelManageService.findById(id);
         return ResultGenerator.genSuccessResult(channelManage);
     }
 
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<ChannelManage> list = channelManageService.findAll();
+    @PostMapping("/listByparameter")
+    public Result list(int page,  int pagesize,String json) {
+
+        ChannelManage channelManage = JSON.parseObject(json,ChannelManage.class);
+        PageHelper.startPage(page, pagesize);
+        List<ChannelManage> list = channelManageService.finndChannelByParameterList(channelManage);
         PageInfo pageInfo = new PageInfo(list);
+
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 }

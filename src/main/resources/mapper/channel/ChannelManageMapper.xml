@@ -15,4 +15,10 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
   </resultMap>
+
+  <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">
+      SELECT cm.* FROM channel_manage cm
+
+      ORDER BY create_time
+  </select>
 </mapper>

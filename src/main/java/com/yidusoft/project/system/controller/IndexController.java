@@ -198,6 +198,7 @@ public class IndexController {
         loginLog.setLoginTime(new Date());
         loginLog.setLoginType("网页登录");
         loginLog.setLoginAddr("未知地点");
+        loginLog.setAccountType(Security.getUser().getAccountType());
         try{
             if (!"未知IP".equals(ip)){
                 Map<String,Object> map = IpAddressUtils.getAddress("ip="+ip, "utf-8");

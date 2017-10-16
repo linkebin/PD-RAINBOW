@@ -45,7 +45,7 @@
 <div  class="Login loginDiv">
     <div class="loginIn">
         <div id="login1" class="login1">
-            <h3>登录易度系统平台</h3>
+            <h3>心云魔方平台</h3>
             <p class="loginTxt"><input type="text" th:value="${account}" id="username" placeholder="请输入手机号"/></p>
             <p class="loginPword"><input type="password" id="password" placeholder="请输入登陆密码"/></p>
             <input type="hidden" name="loginType" value="account"/><!--首选登录方式为账号登录-->
@@ -79,7 +79,7 @@
 <div style="display: none;"   class="sign Login">
     <div  class="sign_dig">
         <div  class="login1">
-        <h3 style="text-align: center">注册易度系统平台</h3>
+        <h3 style="text-align: center">心云魔方平台</h3>
             <form id="signForm" onsubmit="return false;">
                 <p class="loginTxt"><input  id="mobile" name="account" type="text" placeholder="手机号码" /></p>
                 <input type="hidden" value="1"   name="accountType" />
@@ -127,7 +127,9 @@
 
     function sendMsgCode(o) {
         var m = $("#mobile").val();
-
+        curCount = count;
+        $(o).attr('disabled','true');
+        InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
         $.ajax({
             url:'/sign/code',
             type:"post",
@@ -139,9 +141,7 @@
                 if(data.code!=undefined) {
                     if(data.code==200)
                     {
-                        curCount = count;
-                        $(o).attr('disabled','true');
-                        InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+
                     }
                 }
             }
