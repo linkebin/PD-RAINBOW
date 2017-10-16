@@ -12,6 +12,8 @@
     <result column="login_type" jdbcType="VARCHAR" property="loginType" />
     <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
     <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+      <result column="account_type" jdbcType="INTEGER" property="accountType" />
+      <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
   </resultMap>
 
   <select id="findLoginLogByParameter" parameterType="com.yidusoft.project.monitor.domain.LoginLog" resultMap="BaseResultMap">
@@ -30,6 +32,10 @@
         <if test="loginType!='' and loginType!=null">
           AND login_type =  '${loginType}'
         </if>
+
+      <if test="accountType!='' and accountType!=null">
+          AND account_type =  '${accountType}'
+      </if>
 
       ORDER BY login_time DESC
 

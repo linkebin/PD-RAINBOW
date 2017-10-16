@@ -18,23 +18,6 @@
  -moz-osx-font-smoothing: grayscale
 }
 
-.eui-width100{
- width: 100px!important;
-}
-.eui-width200{
- width: 200px!important;
-}
-.eui-width300{
- width: 300px!important;
-}
-.eui-width400{
- width: 400px!important;
-}
-.eui-width500{
- width: 500px!important;
-}
-
-
 /* 字符图标结束 */
 
 .eui-btn,.eui-inline,img {
@@ -2522,7 +2505,7 @@ body .eui-table-tips .eui-layer-content {
  *display: inline;
  *zoom: 1;
  vertical-align: middle;
- line-height: 52px
+ line-height: 60px
 }
 
 .eui-nav .eui-nav-item a {
@@ -2578,7 +2561,7 @@ body .eui-table-tips .eui-layer-content {
  transition: all .2s;
  -webkit-transition: all .2s;
  position: absolute;
- top: 24px;
+ top: 28px;
  right: 3px;
  border-width: 6px;
  opacity: .8
@@ -2594,7 +2577,7 @@ body .eui-table-tips .eui-layer-content {
  display: none;
  position: absolute;
  left: 0;
- top: 55px;
+ top: 65px;
  min-width: 100%;
  line-height: 36px;
  padding: 5px 0;
@@ -3032,22 +3015,19 @@ body .eui-table-tips .eui-layer-content {
 .eui-btn .eui-badge,.eui-btn .eui-badge-dot {
  margin-left: 5px
 }
-
 .userImg{
- position: relative;
+  position: relative;
+}
+.userImg img{
+  width: 55px;
 }
 .userImg .eui-badge{
- position: absolute;
- top: -10px;
- right: 0px;
+  position: absolute;
+  top: -16px;
+  right: 0px;
 }
 .eui-nav .eui-badge,.eui-nav .eui-badge-dot {
  position: absolute;
-}
-.eui-nav .eui-badge,.eui-nav .eui-badge-dot {
- position: absolute;
- top: -10px;
- right: 50px;
 }
 
 .eui-tab-title .eui-badge,.eui-tab-title .eui-badge-dot {
@@ -3662,7 +3642,7 @@ body .eui-util-face .eui-layer-content {
  margin-top: 10px;
 }
 .eui-textNum span{
- font-size: 24px;
+ font-size: 30px;
 }
 
 /* 自适应布局 */
@@ -3735,6 +3715,9 @@ body .eui-util-face .eui-layer-content {
 
 
 /* 常用样式 */
+.eui-border0{
+  border: 0;
+}
 .eui-border{
  border: 1px solid #eee!important;
 }
@@ -3749,6 +3732,27 @@ body .eui-util-face .eui-layer-content {
 }
 .eui-borderB{
  border-bottom: 1px solid #eee!important;
+}
+.eui-padding5{
+ padding: 5px!important;
+}
+.eui-paddingLR5{
+ padding: 0 5px!important;
+}
+.eui-paddingTB5{
+ padding: 5px 0!important;
+}
+.eui-paddingT5{
+ padding-top: 5px!important;
+}
+.eui-paddingL5{
+ padding-left: 5px!important;
+}
+.eui-paddingR5{
+ padding-right: 5px!important;
+}
+.eui-paddingB5{
+ padding-bottom: 5px!important;
 }
 .eui-padding10{
  padding: 10px!important;
@@ -3876,6 +3880,40 @@ body .eui-util-face .eui-layer-content {
 .eui-marginB20{
  margin-bottom: 20px!important;
 }
+.eui-marginL40{
+  margin-left: 40px!important;
+}
+.eui-margin0{
+ margin: 0px!important;
+}
+.eui-marginT0{
+ margin-top: 0px!important;
+}
+.eui-marginB0{
+ margin-bottom: 0px!important;
+}
+.eui-marginL0{
+ margin-left: 0px!important;
+}
+.eui-marginR0{
+ margin-right: 0px!important;
+}
+.eui-padding0{
+ padding: 0px!important;
+}
+.eui-paddingT0{
+ padding-top: 0px!important;
+}
+.eui-paddingB0{
+ padding-bottom: 0px!important;
+}
+.eui-paddingL0{
+ padding-left: 0px!important;
+}
+.eui-paddingR0{
+ padding-right: 0px!important;
+}
+
 .eui-lineHeight24{
  line-height: 24px;
 }
@@ -3905,12 +3943,20 @@ body .eui-util-face .eui-layer-content {
  color:#fff;
  border-radius:2px;
 }
-
+.eui-width100{
+ width: 100px!important;
+}
 .eui-width200{
  width: 200px!important;
 }
 .eui-width300{
  width: 300px!important;
+}
+.eui-width400{
+ width: 400px!important;
+}
+.eui-width500{
+ width: 500px!important;
 }
 
 .eui-searchIn{
@@ -3957,26 +4003,20 @@ body .eui-util-face .eui-layer-content {
  background-color: #6435c9!important;
 }
 /* 字体颜色和大小 */
-.h1 {
- font-size: 36px;
-}
-.h2 {
- font-size: 30px;
-}
-.h3,.eui-font24 {
- font-size: 24px!important;
-}
-.h4,.eui-font18 {
- font-size: 18px!important;
-}
-.h5,.eui-font14 {
- font-size: 14px!important;
-}
-.h6,.eui-font12 {
+
+
+
+.eui-font12 {
  font-size: 12px!important;
+}
+.eui-font14 {
+ font-size: 14px!important;
 }
 .eui-font16{
  font-size: 16px!important;
+}
+.eui-font18 {
+ font-size: 18px!important;
 }
 .eui-font20{
  font-size: 20px!important;
@@ -3984,17 +4024,29 @@ body .eui-util-face .eui-layer-content {
 .eui-font22{
  font-size: 22px!important;
 }
+.eui-font24 {
+ font-size: 24px!important;
+}
 .eui-font26{
  font-size: 26px!important;
 }
 .eui-font28{
  font-size: 28px!important;
 }
-.h1 .small, .h1 small, .h2 .small, .h2 small, .h3 .small, .h3 small {
+.eui-font30{
+  font-size: 30px!important;
+}
+.eui-font36{
+  font-size: 36px!important;
+}
+.eui-font16 .eui-small,.eui-font18 .eui-small,.eui-font20 .eui-small, .eui-font22 .eui-small, .eui-font24 .eui-small {
  font-size: 65%;
 }
-.h4 .small, .h4 small, .h5 .small, .h5 small, .h6 .small, .h6 small {
+.eui-font26 .eui-small, .eui-font28 .eui-small, .eui-font30 .eui-small {
  font-size: 75%;
+}
+.eui-color-white{
+    color:#ffffff;
 }
 .eui-color-yellow{
  color:#f7bf3a;
@@ -4020,9 +4072,7 @@ body .eui-util-face .eui-layer-content {
 .eui-color-gray3{
  color:#999;
 }
-.eui-color-white{
-  color:#fff;
-}
+
 
 /* 星级评分 */
 .eui-grade .br-wrapper-e .eui-form-select{display: none!important;}
@@ -4137,27 +4187,288 @@ body .eui-util-face .eui-layer-content {
     background-color: #cdcdcd;
 }
 
-
-
-
-.eui-overflow{
-  overflow: hidden;
+.eui-cursorp{
+  cursor: pointer;
+}
+/* 组织树 */
+.etree p{
+  width: 260px;
+  font-size: 14px;
+  padding:10px;
+  background: #eeeeee;
+}
+.etree .ztree{
+  width: 270px;
+  border: 1px solid #eeeeee;
 }
 
 
 
+/* 右滑 */
+.eui-slipBg{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  right:0;
+  top: 0;
+  background: rgba(0,0,0,0.3);
+}
+.eui-slipContent{
+  width: 400px;
+  height: 100%;
+  position: fixed;
+  right: -400px;
+  top: 0;
+  background: #ffffff;
+}
+.eui-slipConfirm{
+    width: 360px;
+    text-align: center;
+    position: absolute;
+    left:0;
+    bottom: 10px;
+    margin:0 20px;
+}
+.eui-slipConfirm .eui-btn{
+    width: 100%;
+}
+.eui-iconClose{
+    cursor: pointer;
+}
+.eui-checkSmall .eui-form-checkbox{
+    height: 26px;
+    line-height: 24px;
+    padding-right: 20px;
+    margin-bottom: 6px;
+}
+.eui-checkSmall .eui-form-checkbox span{
+    padding: 0 8px;
+}
+.eui-checkSmall .eui-form-checkbox i{
+    width: 23px;
+    font-size: 16px;
+}
+.eui-textNum span{
+  font-size: 24px;
+}
+/* 左滑 */
+.eui-slipContent-left{
+  width: 400px;
+  height: 100%;
+  position: fixed;
+  left: -400px;
+  top: 0;
+  background: #ffffff;
+  z-index:100;
+}
+
+/* 坐滑结束 */
 
 
 
 
 
+/* ----------------------小字号导航配置开始-------------------------- */
+/* 顶部导航-small */
+.eui-header-small{
+    height: 32px!important;
+    padding: 10px!important;
+}
+.eui-header-small .nav-logo{
+    font-size: 18px;
+}
+.eui-header-small .nav-logo img{
+    width: 100px;
+    margin-right: 10px;
+}
+.eui-header-small .nav-sreach input{
+    height: 30px!important;
+    background-size: 20px;
+    padding-left: 36px;
+}
+.eui-header-small .userImg img{
+    width: 42px;
+    margin-top: -6px;
+}
+.eui-header-small .eui-badge{
+    min-width:6px!important;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    padding: 0;
+    top: -12px;
+}
+.eui-header-small .navul li a{
+    font-size: 16px;
+}
+.eui-header-small .eui-nav-child{
+  top:57px;
+}
+/* tab栏标题-small */
+.eui-tab-small{
+    height: 32px;
+}
+.eui-tab-small li{
+    line-height: 32px;
+    padding: 0 8px;
+    font-size: 14px;
+}
+.eui-tab-small li .eui-icon{
+    margin-left: 0;
+}
+.eui-tab-small .eui-tab-bar{
+  top: -2px;
+  height: 32px;
+  line-height: 32px;
+}
+/* 左侧导航-small */
+.eui-sidebar-small{
+    top: 53px!important;
+}
+
+/* ----------------------小字号导航配置结束-------------------------- */
+.eui-borderRadiusC{
+    border-radius: 50%!important;
+}
+.eui-borderRadius{
+    border-radius: 5px!important;
+}
+.eui-borderRadiusLR1{
+    border-radius: 5px 5px 0 0!important;
+}
+.eui-borderRadiusLR2{
+    border-radius:0 0 5px 5px!important;
+}
+
+.eui-user-top{
+    width: 100%;
+    height: 243px;
+    background: url(../../images/indexImg1/userbg.jpg) no-repeat center center;
+    background-size: 500px;
+    position: relative;
+    color: #ffffff;
+    border-radius: 5px 5px 0 0;
+}
+.eui-user-top .eui-userName{
+    padding: 160px 0 0 20px;
+    color: #ffffff;
+}
+.eui-user-top .eui-userJob{
+    padding: 10px 0 0 20px;
+    color: #ffffff;
+}
+.eui-userImg{
+    position:absolute;
+    right:24px;
+    bottom: -40px;
+    padding: 3px;
+    background: #ffffff;
+    border-radius: 50%;
+}
+.eui-userImg img{
+    border-radius: 50%;
+}
+.eui-newsList li{
+    line-height: 34px;
+    font-size: 14px;
+}
+.eui-tableList{
+    margin: 0 20px;
+}
+
+/* 浮动 */
+.eui-float-left{
+    float: left!important;
+}
+.eui-float-right{
+    float: right!important;
+}
+.eui-overflowH{
+    overflow: hidden!important;
+}
 
 
 
+/* 首页2 */
+.eui-index2-left{
+  width: 240px!important;
+  margin-right: -240px!important;
+}
+
+.eui-index2-right{
+  margin-left: 250px!important;
+}
+.eui-index2-user{
+    background: #b5abab;
+    color: #ffffff;
+    border-radius: 5px 5px 0 0;
+}
+.eui-index2-title .eui-this{
+  color:#ff6838!important;
+}
+
+.eui-index2-title .eui-this:after{
+    border-bottom: 2px solid #ff6838!important;
+}
+
+.eui-index2-title li{
+    font-size: 16px;
+}
+.eui-badge-dotS{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
 
 
+/* 首页3 */
+.eui-index3-mode{
+    background-color: rgba(82, 187, 86, 0.75);
+    border: 6px solid rgba(82, 187, 86, 0.3);
+}
+.eui-index3-mode2{
+    background-color: rgba(3, 156, 253, 0.75);
+    border: 6px solid rgba(3, 156, 253, 0.3);
+}
+.eui-index3-mode3{
+    background-color: rgba(239, 83, 80, 0.75);
+    border: 6px solid rgba(239, 83, 80, 0.3);
+}
+.eui-index3-mode4{
+    background-color: rgba(114, 102, 186, 0.75);
+    border: 6px solid rgba(114, 102, 186, 0.3);
+}
 
+.eui-index3-icon{
+    height: 80px;
+    width: 80px;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 74px;
+}
+.eui-index3-icon .eui-icon{
+    color:#fff;
+    font-size: 32px;
+}
 
+.eui-font-bold{
+  font-weight: bold;
+}
+
+.eui-area{
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.eui-display-Ib{
+  display:inline-block;
+}
+
+ /* 图表样式 */
+.eui-echarts{
+  width: 100%;
+  height:280px;
+}
 
 
 

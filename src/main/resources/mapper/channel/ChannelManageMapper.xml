@@ -14,5 +14,28 @@
     <result column="channel_manager" jdbcType="VARCHAR" property="channelManager" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
+
+  <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">
+      SELECT cm.* FROM channel_manage cm WHERE 1=1
+
+    <if test="channelName!='' and channelName!=null">
+      AND cm.channel_name LIKE  '%${channelName}%'
+    </if>
+
+    <if test="linkman!='' and linkman!=null">
+      AND cm.linkman LIKE  '%${linkman}%'
+    </if>
+
+    <if test="channelManager!='' and channelManager!=null">
+      AND cm.channel_manager LIKE  '%${channelManager}%'
+    </if>
+
+    <if test="joinStartTime!='' and joinEndTime!=''">
+      AND cm.create_time &gt;= #{joinStartTime} AND cm.create_time &lt;= #{joinEndTime}
+    </if>
+
+      ORDER BY cm.create_time
+  </select>
 </mapper>

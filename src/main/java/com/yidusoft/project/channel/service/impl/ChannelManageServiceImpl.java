@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +21,8 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     @Resource
     private ChannelManageMapper channelManageMapper;
 
+    @Override
+    public List<ChannelManage> finndChannelByParameterList(ChannelManage channelManage) {
+        return channelManageMapper.finndChannelByParameterList(channelManage);
+    }
 }

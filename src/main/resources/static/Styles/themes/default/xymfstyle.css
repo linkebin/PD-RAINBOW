@@ -1,0 +1,298 @@
+/* @charset "utf-8"; */
+/*  */
+.xymfHome .eui-header{
+    background: #fff;
+    box-shadow: 0 0 20px #68a8d7;
+    position: static;
+}
+.xymfHome .headerIn{
+    width: 1200px;
+    height: 60px;
+    margin: 0 auto;
+}
+
+.xymfHome .eui-nav .eui-nav-item a{
+    color: #333;
+}
+.xymfHome .eui-nav .eui-this:after, .eui-nav-bar, .eui-nav-tree .eui-nav-itemed:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 5px;
+    background-color: #1e9eff;
+    transition: all .2s;
+    -webkit-transition: all .2s;
+}
+.xymfHome .eui-logo {
+    position: static;
+    float: left;
+    width: 200px;
+    height: 100%;
+    line-height: 60px;
+    text-align: left;
+    color: #009688;
+    font-size: 16px;
+}
+.xymfHome .eui-nav .eui-badge, .eui-nav .eui-badge-dot {
+    margin: 0;
+    top: 14px;
+    left: 38px;
+}
+.xymfHome .xymfNav{
+    float: left;
+}
+.xymfHome .personage{
+    float: right;
+}
+.xymfHome .eui-area{
+    overflow: hidden;
+}
+.xymfHome .eui-layout-admin .eui-side {
+    position: static;
+    width: 200px;
+}
+.xymfHome .eui-body {
+    position: static;
+    margin-left: 220px;
+    width: auto;
+    box-sizing: border-box;
+}
+
+.xymfHome .eui-side {
+    position: static;
+    width: 200px;
+    margin: 20px 0;
+    float: left;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 3px 3px 15px #ccc;
+    min-height: 524px;
+}
+
+.xymfHome .eui-user-top {
+    background: url(../../images/xymfImages/xymf/bg.png) no-repeat center top;
+    background-size: 200px;
+    position: relative;
+    color: #333;
+    height: auto;
+}
+.xymfHome .eui-userImg{
+    right: 118px;
+    bottom: 0px;
+}
+.xymfHome .eui-user-top .eui-userName {
+    padding: 60px 0 0 90px;
+}
+.xymfHome .eui-user-top .eui-userJob {
+    padding:20px 0 0 90px;
+    color: #333;
+}
+
+.cymfNav{
+    line-height: 50px;
+    margin: 50px 0;
+}
+.cymfNav li{
+    padding-left: 20px;
+    cursor: pointer;
+}
+.cymfNav li:nth-child(1){
+    padding-left: 70px;
+    background: url(../../images/xymfImages/xymf/order.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(2){
+    padding-left: 70px;
+    background: url(../../images/xymfImages/xymf/PSQ.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(3){
+    padding-left: 70px;
+    background: url(../../images/xymfImages/xymf/privilege.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(4){
+    padding-left: 70px;
+    background: url(../../images/xymfImages/xymf/personal.png) no-repeat 40px center;
+}
+.cymfNav li:hover{
+    background: #e6f4ff;
+    color: #1e9eff;
+}
+.cymfNav li:nth-child(1):hover{
+    background:#e6f4ff url(../../images/xymfImages/xymf/order-2.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(2):hover{
+    padding-left: 70px;
+    background:#e6f4ff url(../../images/xymfImages/xymf/PSQ-2.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(3):hover{
+    padding-left: 70px;
+    background:#e6f4ff url(../../images/xymfImages/xymf/privilege-2.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(4):hover{
+    padding-left: 70px;
+    background:#e6f4ff url(../../images/xymfImages/xymf/personal-2.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(1).nav-this{
+    padding-left: 70px;
+    color: #1e9eff;
+    background:#e6f4ff url(../../images/xymfImages/xymf/order-2.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(2).nav-this{
+    padding-left: 70px;
+    color: #1e9eff;
+    background:#e6f4ff url(../../images/xymfImages/xymf/PSQ-2.png) no-repeat 40px center;
+}
+.cymfNav li:nth-child(3).nav-this{
+    padding-left: 70px;
+    background:#e6f4ff url(../../images/xymfImages/xymf/privilege-2.png) no-repeat 40px center;
+    color: #1e9eff;
+}
+.cymfNav li:nth-child(4).nav-this{
+    padding-left: 70px;
+    color: #1e9eff;
+    background:#e6f4ff url(../../images/xymfImages/xymf/personal-2.png) no-repeat 40px center;
+}
+
+.xymfHome .xymfContent{
+    overflow: hidden;
+    margin-top: 20px;
+}
+.xymfContent .contentL{
+    float: left;
+    width: 676px;
+    height: auto;
+    margin-right: 20px;
+}
+.xymfContent .contentR{
+    height: auto;
+    margin-left: 696px;
+    width: 272px;
+}
+.xymfContent .activity img{
+    box-shadow: 3px 3px 15px #ccc;
+    margin-bottom: 20px;
+}
+
+
+.contentForm .formTop{
+    padding-top: 20px;
+}
+.contentForm .formTop .eui-btn{
+    border-radius: 20px;
+}
+.contentForm .xymfForm{
+    padding: 20px;
+}
+
+.contentForm .eui-table thead tr{
+    background: transparent;
+    border-bottom: 1px solid #eee;
+}
+.contentForm .eui-table[e-even] tr:nth-child(even){
+    background: transparent;
+}
+
+.contentForm,.contentR{
+    background: #fff;
+    box-shadow:  3px 3px 15px #ccc;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 20px;
+    min-height: 377px;
+}
+.xymfContent .contentR .eui-laydate-footer{
+    display: none;
+}
+.contentR .eui-laydate-content td, .eui-laydate-content th{
+    height: 36px;
+    border-radius: 50%;
+}
+.contentR .eui-laydate-header{
+    border-bottom: 0;
+    background: #1e9eff;
+    color: #fff;
+    border-radius: 5px 5px 0 0;
+}
+.contentR .eui-laydate, .eui-laydate-hint{
+    border-radius: 6px 6px 0 0;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    box-shadow: none;
+}
+
+.contentR .eui-laydate-header i{
+    color: #fff;
+}
+
+.contentR .eui-laydate .eui-this{
+    background-color: #1e9eff!important;
+}
+
+.contentR .calendarEvents{
+    padding: 20px;
+    min-height: 171px;
+}
+
+
+.xymfHome .eui-footer{
+    width: 100%;
+    left: 0;
+    right: 0;
+    height: 40px;
+    line-height: 40px;
+    text-align:center;
+}
+
+
+/* 我的订单 */
+.orderContent{
+    margin-top: 20px;
+    background: #fff;
+    box-shadow: 3px 3px 15px #ccc;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 20px;
+    min-height: 524px;
+    width: 970px;
+}
+.orderContent .eui-tab-title{
+    height: 50px;
+}
+.orderContent .eui-tab-title li{
+    line-height: 52px;
+}
+.orderContent .eui-tab-title .eui-this:after{
+    height: 50px;
+    border-bottom: 2px solid #1e9eff;
+}
+.orderContent .eui-tab-brief>.eui-tab-title .eui-this{
+    color:#1e9eff;
+}
+
+.orderForm .orderT{
+    background: transparent;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.orderForm .eui-table tr:hover{
+    background: transparent;
+}
+
+.orderForm .orderIn{
+    background: #f4f9fd;
+    margin-top: 10px;
+    width: 100%;
+}
+.orderForm .orderNum{
+    padding: 12px;
+}
+.orderForm .orderInfo{
+    border: 1px solid #f4f9fd;
+    height: 100px;
+}
+
+.orderForm .eui-table{
+    margin: 0;
+}
+
+
+
+
