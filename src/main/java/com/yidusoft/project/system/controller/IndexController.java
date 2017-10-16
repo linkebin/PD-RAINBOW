@@ -1,11 +1,15 @@
 package com.yidusoft.project.system.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.sun.tools.internal.ws.processor.model.Model;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.monitor.domain.LoginLog;
+import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.utils.IpAddressUtils;
-import com.yidusoft.utils.Security;
+import com.yidusoft.utils.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -13,15 +17,25 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.StringUtils;
 
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.yidusoft.utils.Security.*;
 
@@ -38,7 +52,7 @@ public class IndexController {
      */
     @RequestMapping(value ={"/index",""})
     public String main(){
-        if (getUserId()==null){
+        if (Security.getUserId()==null){
             return "login";
         }
         SecUser secUser = Security.getUser();
@@ -57,7 +71,7 @@ public class IndexController {
 
     @RequestMapping(value="/login",method= RequestMethod.GET)
     public String login(){
-        if (getUserId()==null){
+        if (Security.getUserId()==null){
             return "login";
         }
         SecUser secUser = Security.getUser();
@@ -68,54 +82,195 @@ public class IndexController {
         }
     }
 
+    /**
+     * 用户注册
+     * @param json
+     * @return
+     */
+    @PostMapping("/sign")
+    @ResponseBody
+    public Result sign(String json,HttpServletRequest request) {
+
+        SecUser secUser = JSON.parseObject(json,SecUser.class);
+
+        String code = (String) request.getSession().getAttribute("signCode");
+        if (Integer.parseInt(code) != secUser.getMsgCode()){
+            return ResultGenerator.genFailResult("验证码错误");
+        }
+
+        Result result = secUserService.addUser(JSON.toJSONString(secUser));
+        if (result.getCode() !=200){
+            return result;
+        }
+
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 发送注册手机验证码
+     * @param request
+     * @return
+     */
+    @PostMapping("/sign/code")
+    @ResponseBody
+    public Result signcode(HttpServletRequest request,String mobile) {
+
+        try{
+            String json = SendMessageCode.sendMessageCode(mobile);
+            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
+            if (smsCode.getCode() == 200){
+                request.getSession().setAttribute("signCode",smsCode.getObj());
+            }else{
+                return ResultGenerator.genFailResult("验证码发生失败");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("验证码发生失败");
+        }
+        return ResultGenerator.genSuccessResult();
+    }
+
     @RequestMapping(value="/indexInfo")
     public String indexInfo(){
         return "indexInfo";
     }
 
-    @RequestMapping(value="/login",method= RequestMethod.POST)
-    public String login(HttpServletRequest request, String username, String password){
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-            request.setAttribute("msg", "请输入用户名和密码！");
+    @Resource
+    private LoginLogService loginLogService;
+
+
+    /**
+     * 登录请求
+     * @param username
+     * @param password
+     * @return
+     */
+    @RequestMapping(value="/login",method=RequestMethod.POST)
+    public String submitLogin(HttpServletRequest request,String username, String password,String vrifyCode) {
+        request.setAttribute("account", username);
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+        if (!captchaId.equals(vrifyCode)) {
+            request.setAttribute("msg", "验证码错误！");
             return "login";
         }
-        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token=new UsernamePasswordToken(username,password);
-        try {
 
+
+        UsernamePasswordToken token = null;
+        try {
+            token = new UsernamePasswordToken(username, password);
+            Subject subject= SecurityUtils.getSubject();
             subject.login(token);
-            return "5555";
+
         } catch (LockedAccountException lae) {
             token.clear();
-            request.setAttribute("msg", "账号已被锁定，请与管理员联系！");
+            request.setAttribute("msg", lae.getMessage());
             return "login";
-        } catch (UnknownAccountException uae) {
+        } catch (UnknownAccountException e) {
             token.clear();
-            request.setAttribute("msg", "账号不存在！");
+            request.setAttribute("msg", e.getMessage());
             return "login";
-        } catch (AuthenticationException ae) {
-            //用户名和密码不匹配时，切换为手机或邮箱登录
-            SecUser secUser = null;
-            try{
-                secUser = secUserService.getSecUserInfo(username);
-            }catch (Exception e){
-                token.clear();
-                request.setAttribute("msg", "账号异常，请联系管理员！");
-                return "login";
-            }
-            if (secUser!=null){
-                if(!"true".equals(request.getAttribute("flag"))){
-                    request.setAttribute("flag","true");
-                    login(request, secUser.getAccount(), password);
-                }
-            }
+        } catch (AuthenticationException e) {
             token.clear();
-            Session session = SecurityUtils.getSubject().getSession();
-            session.removeAttribute("userSessionId");
-            session.removeAttribute("userSession");
-            request.setAttribute("msg", "密码不正确！");
+            request.setAttribute("msg", "密码错误");
             return "login";
         }
+        SecUser  user = secUserService.getSecUserInfo(username);
+
+        try {
+            //将图片转换成base64
+            if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
+                user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
+            }
+        }catch (Exception e) {
+            user.setHeadImg("");
+        }
+
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute("userSessionId", user.getId());
+        session.setAttribute("userSession", user);
+        LoginLog loginLog = new LoginLog();
+        loginLog.setLoginId(UUID.randomUUID().toString());
+        loginLog.setUserId(Security.getUserId());
+        loginLog.setUserName(Security.getUser().getAccount());
+
+        String ip = IpAddressUtils.getIpAddr(); //获取IP地址
+        loginLog.setLoginIp(ip);
+        loginLog.setLoginTime(new Date());
+        loginLog.setLoginType("网页登录");
+        loginLog.setLoginAddr("未知地点");
+        try{
+            if (!"未知IP".equals(ip)){
+                Map<String,Object> map = IpAddressUtils.getAddress("ip="+ip, "utf-8");
+                StringBuffer buffer = new StringBuffer();
+                buffer.append(map.get("region").toString()+"->");
+                if (!"".equals(map.get("city").toString())){
+                    buffer.append(map.get("city").toString());
+                }
+                if (!"".equals(map.get("county").toString())){
+                    buffer.append(map.get("county").toString());
+                }
+                loginLog.setLoginAddr(buffer.toString());
+            }
+            loginLogService.insertLoginInfo(loginLog);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  "redirect:/index";
+    }
+
+    @RequestMapping(value="/login1",method= RequestMethod.POST)
+    public String login(HttpServletRequest request, String username, String password,String vrifyCode){
+//        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+//            request.setAttribute("msg", "请输入用户名和密码！");
+//            return "login";
+//        }
+//
+//        if (!"vrifyCode".equals(vrifyCode)){
+//            String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+//            System.out.println(vrifyCode);
+//            if (!captchaId.equals(vrifyCode)) {
+//                request.setAttribute("msg", "错误的验证码！");
+//                return "login";
+//            }
+//        }
+//
+//        Subject subject = SecurityUtils.getSubject();
+//        UsernamePasswordToken token=new UsernamePasswordToken(username,password);
+//        try {
+//
+//            subject.login(token);
+//            return "index";
+//        } catch (LockedAccountException lae) {
+//            token.clear();
+//            request.setAttribute("msg", "账号已被锁定，请与管理员联系！");
+//            return "login";
+//        } catch (UnknownAccountException uae) {
+//            token.clear();
+//            request.setAttribute("msg", "账号不存在！");
+//            return "login";
+//        } catch (AuthenticationException ae) {
+//            //用户名和密码不匹配时，切换为手机或邮箱登录
+//            SecUser secUser = null;
+//            try{
+//                secUser = secUserService.getSecUserInfo(username);
+//            }catch (Exception e){
+//                token.clear();
+//                request.setAttribute("msg", "账号异常，请联系管理员！");
+//                return "login";
+//            }
+//            if (secUser!=null){
+//                if(!"true".equals(request.getAttribute("flag"))){
+//                    request.setAttribute("flag","true");
+//                    login(request, secUser.getAccount(), password,"passCode");
+//                }
+//            }
+//            token.clear();
+//            Session session = SecurityUtils.getSubject().getSession();
+//            session.removeAttribute("userSessionId");
+//            session.removeAttribute("userSession");
+//            request.setAttribute("msg", "密码不正确！");
+            return "login";
+//        }
     }
 
     @RequestMapping(value="/appLogin",method= RequestMethod.POST)
@@ -152,5 +307,36 @@ public class IndexController {
             token.clear();
             return ResultGenerator.genFailResult("密码不正确！");
         }
+    }
+    @Autowired
+    DefaultKaptcha defaultKaptcha;
+
+    @RequestMapping("/sign/imgcode")
+    public void defaultKaptcha(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) throws Exception{
+        byte[] captchaChallengeAsJpeg = null;
+        ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
+        try {
+            //生产验证码字符串并保存到session中
+            String createText = defaultKaptcha.createText();
+            httpServletRequest.getSession().setAttribute("vrifyCode", createText);
+            //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
+            BufferedImage challenge = defaultKaptcha.createImage(createText);
+            ImageIO.write(challenge, "jpg", jpegOutputStream);
+        } catch (IllegalArgumentException e) {
+            httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
+        //定义response输出类型为image/jpeg类型，使用response输出流输出图片的byte数组
+        captchaChallengeAsJpeg = jpegOutputStream.toByteArray();
+        httpServletResponse.setHeader("Cache-Control", "no-store");
+        httpServletResponse.setHeader("Pragma", "no-cache");
+        httpServletResponse.setDateHeader("Expires", 0);
+        httpServletResponse.setContentType("image/jpeg");
+        ServletOutputStream responseOutputStream =
+                httpServletResponse.getOutputStream();
+        responseOutputStream.write(captchaChallengeAsJpeg);
+        responseOutputStream.flush();
+        responseOutputStream.close();
     }
 }

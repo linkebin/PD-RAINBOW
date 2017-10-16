@@ -32,7 +32,7 @@
             margin-bottom: 10px;
         }
         .sign_dig .login1 #signForm  p input {
-            width: 200px;
+            width: 250px;
             height: 34px;
             line-height: 34px;
             color: #666;
@@ -46,19 +46,22 @@
     <div class="loginIn">
         <div id="login1" class="login1">
             <h3>登录易度系统平台</h3>
-            <p class="loginTxt"><input type="text" id="username"/></p>
-            <p class="loginPword"><input type="password" id="password"/></p>
+            <p class="loginTxt"><input type="text" th:value="${account}" id="username" placeholder="请输入手机号"/></p>
+            <p class="loginPword"><input type="password" id="password" placeholder="请输入登陆密码"/></p>
             <input type="hidden" name="loginType" value="account"/><!--首选登录方式为账号登录-->
-            <div class="eui-form">
-                <!-- <div class="eui-input-block"> -->
-               <!-- <select id="userType" name="interest" e-filter="aihao">
-                    <option value="系统管理员">系统管理员</option>
-                    <option value="普通用户">普通用户</option>
-                </select>-->
-                <!-- </div> -->
+            <div style="margin: 10px auto; width: 300px;" class="eui-form">
+                <div class="eui-security">
+                    <input name="vrifyCode" id="vrifyCode" type="text"  placeholder="请输入验证码" autocomplete="off"
+                           class="eui-input eui-input-inline  securityCode" value="">
+                    <span class="securityImg">
+                        <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="90" alt=""></span>
+                </div>
             </div>
-            <span th:text="${msg}" class="loginTips"></span>
             <div class="loginForget"><a class="register" onclick="showSignDiv();">还没有账号？</a><a href="##">忘记密码？</a></div>
+            <div style="height: 30px;">
+                <span th:text="${msg}" class="loginTips"></span>
+            </div>
+
             <a class="loginB" href="###" onclick="login()">登 录</a>
           <!--  <div class="loginO">
                 <p>————其他登录方式————</p>
@@ -78,8 +81,8 @@
         <div  class="login1">
         <h3 style="text-align: center">注册易度系统平台</h3>
             <form id="signForm" onsubmit="return false;">
-                <p class="loginTxt"><input onblur="mobileBlur(this)" id="mobile" name="account" type="text" placeholder="手机号码" /></p>
-                <input type="hidden" value="1" name="accountType" />
+                <p class="loginTxt"><input  id="mobile" name="account" type="text" placeholder="手机号码" /></p>
+                <input type="hidden" value="1"   name="accountType" />
                 <div style="margin: 10px auto; width: 300px;" class="eui-form">
                     <div class="eui-security">
                         <input name="msgCode" type="text"  placeholder="请输入验证码" autocomplete="off"
@@ -95,8 +98,7 @@
                 <div id="errorInfo" style="height: 30px;">
 
                 </div>
-                <!--disabled="disabled" style="background: #00BCD4;"-->
-                <button  type="submit" class="loginB">注册</button>
+                <button   type="submit" class="loginB">注册</button>
             </form>
         </div>
     </div>
@@ -127,7 +129,7 @@
         var m = $("#mobile").val();
 
         $.ajax({
-            url:'/sec/user/sign/code',
+            url:'/sign/code',
             type:"post",
             data:{
                 mobile:m
@@ -151,7 +153,7 @@
         obj.userPass=md5(obj.userPass);
         obj.newPass=md5(obj.newPass);
         $.ajax({
-            url:'/sec/user/sign',
+            url:'/sign',
             type:"post",
             data:{
                 json:JSON.stringify(obj)
@@ -159,7 +161,8 @@
             dataType:"json",
             success:function(resule){
                 if (resule.code == 200){
-
+                    $("#errorInfo").html('')
+                    $("#errorInfo").append('<span style="color: green;font-size: 14px;">注册成功</span>');
                 }else {
                     $("#errorInfo").html('')
                     $("#errorInfo").append('<span style="color: red;font-size: 14px;">'+resule.message+'</span>');
@@ -186,27 +189,13 @@
         $(".sign").hide();
     }
 
-    function mobileBlur(o) {
-        var value = $(o).val();
-        if (value.length >11){
-            $(o).val(value.substring(0,11));
-        }
-        var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-        if (mobile.test(value)){
-            $("#btnSendCode").removeAttr("disabled");//启用按钮
-            $("#btnSendCode").css("background","#03a9f4");
-        }
-    }
-
     function showSignDiv() {
         $(".loginDiv").hide();
         $(".sign").show();
         $.validator.setDefaults({
             errorPlacement : function(error, element) {//error为错误提示对象，element为出错的组件对象
-                $("#errorInfo").html('')
+                $("#errorInfo").html('');
                 $("#errorInfo").append('<span style="color: red;font-size: 14px; ">'+error[0].innerHTML+'</span>');
-                $("#errorInfo span").eq(0).show();
-
             }
         });
         // 手机号码验证
@@ -247,6 +236,32 @@
                     equalTo: "两次输入密码不一致"
                 }
             },
+            showErrors : function(errorMap, errorList) {
+                // 遍历错误列表
+                for(var obj in errorMap) {
+                   if (obj == 'account'){
+                       $("#btnSendCode").attr('disabled','true');
+                       $("#btnSendCode").css("background","");
+                   }
+                }
+                // 此处注意，一定要调用默认方法，这样保证提示消息的默认效果
+                this.defaultShowErrors();
+            },
+            success:function(label) {
+
+                if (label[0].htmlFor == 'mobile'){
+                    $("#btnSendCode").removeAttr('disabled');
+                    $("#btnSendCode").css("background","#03a9f4");
+                }
+            },
+//            invalidHandler: function(form, validator){
+//                var errors = validator.numberOfInvalids();
+//                if (errors) {
+//
+//                } else {
+//                    sign();
+//                }
+//            }
             submitHandler: function() {
                 sign();
             }
@@ -264,6 +279,8 @@ function login() {
     parames.push({ name: "username", value: username});
     parames.push({ name: "password", value:password});
     parames.push({ name: "type", value:type});
+    parames.push({ name: "vrifyCode", value:$("#vrifyCode").val()});
+
     Post("/login", parames);
    };
 

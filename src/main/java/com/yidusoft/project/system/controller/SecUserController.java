@@ -37,53 +37,9 @@ public class SecUserController {
     private SecMenuMemberService secMenuMemberService;
 
 
-    /**
-     * 用户注册
-     * @param json
-     * @return
-     */
-    @PostMapping("/sign")
-    @ResponseBody
-    public Result sign(String json,HttpServletRequest request) {
 
-        SecUser secUser = JSON.parseObject(json,SecUser.class);
 
-        String code = (String) request.getSession().getAttribute("signCode");
-        if (Integer.parseInt(code) != secUser.getMsgCode()){
-            return ResultGenerator.genFailResult("验证码错误");
-        }
 
-        Result result = secUserService.addUser(JSON.toJSONString(secUser));
-        if (result.getCode() !=200){
-            return result;
-        }
-
-        return ResultGenerator.genSuccessResult("/index");
-    }
-
-    /**
-     * 发送注册手机验证码
-     * @param request
-     * @return
-     */
-    @PostMapping("/sign/code")
-    @ResponseBody
-    public Result signcode(HttpServletRequest request,String mobile) {
-
-        try{
-            String json = SendMessageCode.sendMessageCode(mobile);
-            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
-            if (smsCode.getCode() == 200){
-                request.getSession().setAttribute("signCode",smsCode.getObj());
-            }else{
-                return ResultGenerator.genFailResult("验证码发生失败");
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-            return ResultGenerator.genFailResult("验证码发生失败");
-        }
-        return ResultGenerator.genSuccessResult();
-    }
 
 
     @PostMapping("/updateUserInfoPass")

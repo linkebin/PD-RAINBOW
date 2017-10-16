@@ -56,79 +56,82 @@ public class MyShiroRealm extends AuthorizingRealm {
         }
         return info;
     }
-
-    //认证
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
-        //获取用户的输入的账号.
-        String account = upToken.getUsername();
-        String password = String.valueOf(upToken.getPassword());
-        SecUser user = secUserService.getSecUserInfo(account);
-        if(user==null) throw new UnknownAccountException();//账号删除
-        if (user.getStatus()==0) throw new LockedAccountException(); // 帐号锁定
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+        String account = token.getUsername();
+//        String password = String.valueOf(token.getPassword());
 
-        SecUser secUser = new SecUser();
-        secUser.setAccount(user.getAccount());
-        secUser.setUserPass(password);
-        PasswordHelper.encryptPassword(secUser);
-
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user, //用户
-                user.getUserPass(), //密码
-                ByteSource.Util.bytes("yidusoft"),//输入的账号
-                getName()  //realm name
-        );
-        try {
-            //将图片转换成base64
-            if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
-                user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
-            }
-        }catch (Exception e){
-            user.setHeadImg("");
-        }finally {
-            // 当验证都通过后，把用户信息放在session里
-            Session session = SecurityUtils.getSubject().getSession();
-            session.setAttribute("userSessionId", user.getId());
-            session.setAttribute("userSession", user);
-        }
-
-        if (secUser.getUserPass().equals(user.getUserPass())) {
-            LoginLog loginLog = new LoginLog();
-            loginLog.setLoginId(UUID.randomUUID().toString());
-            loginLog.setUserId(Security.getUserId());
-            loginLog.setUserName(Security.getUser().getUserName());
-
-            String ip = IpAddressUtils.getIpAddr();
-
-            loginLog.setLoginIp(ip);
-            loginLog.setLoginTime(new Date());
-            loginLog.setLoginType("网页登录");
-            loginLog.setLoginAddr("未知地点");
-            try{
-                if (!"未知IP".equals(ip)){
-                    Map<String,Object> map = IpAddressUtils.getAddress("ip="+ip, "utf-8");
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append(map.get("region").toString()+"->");
-                    if (!"".equals(map.get("city").toString())){
-                        buffer.append(map.get("city").toString());
-                    }
-                    if (!"".equals(map.get("county").toString())){
-                        buffer.append(map.get("county").toString());
-                    }
-                    loginLog.setLoginAddr(buffer.toString());
-                }
-
-                loginLogService.insertLoginInfo(loginLog);
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-        if(user != null){
-            return authenticationInfo;
-        }
-        return null;
+        // 从数据库获取对应用户名密码的用户
+        SecUser  user = secUserService.getSecUserInfo(account);
+        if(user==null) throw new UnknownAccountException("账号不存在!");//账号删除
+        if (user.getStatus()==0) throw new LockedAccountException("账号被锁定!"); // 帐号锁定
+        return new SimpleAuthenticationInfo(user, user.getUserPass(), ByteSource.Util.bytes("yidusoft"), getName());
     }
+    //认证
+//    @Override
+//    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+//        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+//        //获取用户的输入的账号.
+//        String account = upToken.getUsername();
+//        String password = String.valueOf(upToken.getPassword());
+//
+//        SecUser user = secUserService.getSecUserInfo(account);
+//
+//        if(user==null) throw new UnknownAccountException();//账号删除
+//        if (user.getStatus()==0) throw new LockedAccountException(); // 帐号锁定
+//
+////        SecUser secUser = new SecUser();
+////        secUser.setAccount(user.getAccount());
+////        secUser.setUserPass(password);
+////        PasswordHelper.encryptPassword(secUser);
+//
+//        try {
+//            //将图片转换成base64
+//            if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
+//                user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
+//            }
+//        }catch (Exception e){
+//            user.setHeadImg("");
+//        }finally {
+//            // 当验证都通过后，把用户信息放在session里
+//            Session session = SecurityUtils.getSubject().getSession();
+//            session.setAttribute("userSessionId", user.getId());
+//            session.setAttribute("userSession", user);
+//        }
+//
+////        if (secUser.getUserPass().equals(user.getUserPass())) {
+//            LoginLog loginLog = new LoginLog();
+//            loginLog.setLoginId(UUID.randomUUID().toString());
+//            loginLog.setUserId(Security.getUserId());
+//            loginLog.setUserName(Security.getUser().getUserName());
+//
+//            String ip = IpAddressUtils.getIpAddr();
+//
+//            loginLog.setLoginIp(ip);
+//            loginLog.setLoginTime(new Date());
+//            loginLog.setLoginType("网页登录");
+//            loginLog.setLoginAddr("未知地点");
+//            try{
+//                if (!"未知IP".equals(ip)){
+//                    Map<String,Object> map = IpAddressUtils.getAddress("ip="+ip, "utf-8");
+//                    StringBuffer buffer = new StringBuffer();
+//                    buffer.append(map.get("region").toString()+"->");
+//                    if (!"".equals(map.get("city").toString())){
+//                        buffer.append(map.get("city").toString());
+//                    }
+//                    if (!"".equals(map.get("county").toString())){
+//                        buffer.append(map.get("county").toString());
+//                    }
+//                    loginLog.setLoginAddr(buffer.toString());
+//                }
+//
+//                loginLogService.insertLoginInfo(loginLog);
+//
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+////        }
+//        return  new SimpleAuthenticationInfo(user, user.getUserPass(), ByteSource.Util.bytes("yidusoft"), getName());
+//    }
 }
