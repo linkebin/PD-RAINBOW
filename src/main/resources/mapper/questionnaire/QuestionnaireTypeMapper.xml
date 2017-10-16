@@ -41,5 +41,10 @@
         <if test="questionnaireTypeName != null and questionnaireTypeName != ''">
             OR QUESTIONNAIRE_TYPE_NAME LIKE '%${questionnaireTypeName}%'
         </if>
+
+        <if test="pid != null and pid = id and pid != '' and id != null and id != ''">
+            OR (PID = #{id})
+        </if>
+
     </select>
 </mapper>

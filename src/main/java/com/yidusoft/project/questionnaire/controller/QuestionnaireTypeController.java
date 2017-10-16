@@ -67,8 +67,7 @@ public class QuestionnaireTypeController {
     @ResponseBody
     public Result tree() {
         List<TreeNode> nodes = questionnaireTypeService.getTree();
-
-        //List<TreeNode> treeNodes = TreeBuilder.buildByRecursive(nodes);
+        List<TreeNode> treeNodes = TreeBuilder.buildByRecursive(nodes);
         List<TreeNode> nodeList = questionnaireTypeService.buileTree(nodes);
 
         for (TreeNode node : nodeList){
@@ -76,7 +75,7 @@ public class QuestionnaireTypeController {
         }
 
 
-        Result result = ResultGenerator.genSuccessResult(nodeList);
+        Result result = ResultGenerator.genSuccessResult(treeNodes);
         logger.info(result.toString() + nodeList.size());
         return result;
     }
@@ -88,13 +87,18 @@ public class QuestionnaireTypeController {
     public Result addMenu(String typeJson) {
         QuestionnaireType questionnaireType = JSON.parseObject(typeJson, QuestionnaireType.class);
         synchronized (this) {
-            // String parentId = questionnaireType.getPid();
+            String parentId = questionnaireType.getPid();
+            logger.info("pid = " + parentId + "==============");
             String typeId = UUID.randomUUID().toString();
             questionnaireType.setId(typeId);
             questionnaireType.setQuestionnaireTypeCode(CodeHelper.getCode("CD"));
             questionnaireType.setCreateTime(new Date());
             questionnaireType.setDeleted(0);//0为未删除
-
+//            if (questionnaireType.getPid() == null || questionnaireType.getPid().equals("")){
+//                questionnaireType.setPid("0");
+//            }else{
+//                questionnaireType.setPid(parentId);
+//            }
             logger.info(questionnaireType.getCreator() + questionnaireType.getQuestionnaireTypeName() + "==========================");
             questionnaireTypeService.save(questionnaireType);
 
