@@ -18,12 +18,12 @@
     </style>
 </head>
 <body>
-<div class="eui-row eui-padding10 eui-borderB eui-bg-white">
+<div class="eui-row eui-padding15 eui-borderB eui-bg-white">
     <div class="eui-col-md6 eui-font18 eui-lineHeight30">
         <i class='eui-icon eui-font24'>&#xe61d;</i> 修改个人信息
     </div>
 </div>
-        <div class="eui-bg-white eui-row eui-paddingT10">
+        <div class="eui-bg-white eui-row eui-padding15">
           <input type="hidden" id="userId" th:value="${session.userSession.id}" />
             <div class="eui-col-md8">
                 <form  class="eui-form" id="userForm">
@@ -88,10 +88,10 @@
                 </div>
             </div>
         </div>
-        <fieldset class="eui-elem-field eui-field-title eui-font18" style="margin-top: 20px;">
+        <fieldset class="eui-elem-field eui-field-title eui-font18 " style="margin-top: 20px;">
             <legend><i class='eui-icon eui-font24'>&#xe61d;</i>修改密码</legend>
         </fieldset>
-    <div class="eui-bg-white eui-row eui-paddingT10">
+    <div class="eui-bg-white eui-row eui-padding15">
         <div class="eui-col-md4">
                 <form id="userPassDigForm" class="eui-form eui-marginT10 eui-paddingR10"  onsubmit="return false;">
                     <div class="eui-form-item">

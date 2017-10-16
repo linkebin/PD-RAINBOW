@@ -17,14 +17,33 @@
     <div class="eui-col-md12 eui-paddingR10">
         <form class="eui-form" id="searchFrom">
             <div class="eui-input-inline eui-padding10">
+
                 <input type="text" name="channelName" e-verify="title" value=""
                        autocomplete="off" placeholder="渠道名称/关键字" class="eui-input">
             </div>
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="linkman" e-verify="title" value=""
+                       autocomplete="off" placeholder="联系人/关键字" class="eui-input">
+            </div>
+
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="channelManager" e-verify="title" value=""
+                       autocomplete="off" placeholder="渠道负责人/关键字" class="eui-input">
+            </div>
+
+
+            <div class="eui-inline">
+                <div class="eui-input-inline">
+                    <input type="text" class="eui-input" id="joinTime6" placeholder="加入时间/起始-结束">
+
+                </div>
+            </div>
+            <input name="joinStartTime" type="hidden" id="joinStartTime" />
+            <input name="joinEndTime" type="hidden" id="joinEndTime" />
             <div class="eui-input-inline">
                 <span class="eui-btn eui-btn-small eui-btn" onclick="doSearch()">查询</span>
                 <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
             </div>
-
         </form>
 
         <div class="eui-row eui-padding10 eui-borderB">
@@ -126,7 +145,7 @@
         <div class="eui-form-item">
             <label class="eui-form-label">加入时间</label>
             <div class="eui-input-block">
-                <input type="text" name="createTime" class="eui-input" id="jsonTime" placeholder="加入时间" readonly="readonly">
+                <input type="text" name="createTime" class="eui-input" id="joinTime" placeholder="加入时间" readonly="readonly">
             </div>
         </div>
 
@@ -155,10 +174,24 @@
         var laydate = eui.laydate;
         //常规用法
         laydate.render({
-            elem: '#jsonTime'
+            elem: '#joinTime'
+        });
+
+        laydate.render({
+            elem: '#joinTime6'
+            ,range: true
+            ,change: function(value, date, endDate){
+                var startTime=value.split(' - ')[0];
+                var endTime=value.split(' - ')[1];
+                $("#joinStartTime").val(startTime);
+                $("#joinEndTime").val(endTime);
+            }
         });
 
     });
+
+
+
     $(function () {
         doSearch();
 
@@ -217,7 +250,9 @@
     });
 
     function resetForm() {
-        document.getElementById('searchFrom').reset()
+        $('#searchFrom')[0].reset();
+        $("#joinStartTime").val('');
+        $("#joinEndTime").val('');
     }
 
     function addChannel() {

@@ -18,8 +18,24 @@
   </resultMap>
 
   <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">
-      SELECT cm.* FROM channel_manage cm
+      SELECT cm.* FROM channel_manage cm WHERE 1=1
 
-      ORDER BY create_time
+    <if test="channelName!='' and channelName!=null">
+      AND cm.channel_name LIKE  '%${channelName}%'
+    </if>
+
+    <if test="linkman!='' and linkman!=null">
+      AND cm.linkman LIKE  '%${linkman}%'
+    </if>
+
+    <if test="channelManager!='' and channelManager!=null">
+      AND cm.channel_manager LIKE  '%${channelManager}%'
+    </if>
+
+    <if test="joinStartTime!='' and joinEndTime!=''">
+      AND cm.create_time &gt;= #{joinStartTime} AND cm.create_time &lt;= #{joinEndTime}
+    </if>
+
+      ORDER BY cm.create_time
   </select>
 </mapper>

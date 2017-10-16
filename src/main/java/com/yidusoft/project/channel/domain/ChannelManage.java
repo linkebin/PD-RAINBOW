@@ -55,6 +55,8 @@ public class ChannelManage {
      */
     private String creator;
 
+
+
     @Column(name = "deleted")
     private Integer deleted;
 
@@ -222,5 +224,27 @@ public class ChannelManage {
      */
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    @Transient
+    private String joinStartTime;
+
+    @Transient
+    private String joinEndTime;
+
+    public String getJoinStartTime() {
+        return joinStartTime;
+    }
+
+    public void setJoinStartTime(String joinStartTime) {
+        this.joinStartTime = joinStartTime;
+    }
+
+    public String getJoinEndTime() {
+        return joinEndTime;
+    }
+
+    public void setJoinEndTime(String joinEndTime) {
+        this.joinEndTime = joinEndTime;
     }
 }
