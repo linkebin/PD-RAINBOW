@@ -1,9 +1,9 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>添加量表</title>
+    <title>修改量表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -38,7 +38,11 @@
         </div>
         <div class="eui-row"   >
             <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
-
+                    <input type="hidden"  name="id"/>
+                    <input type="hidden"  name="gaugeCode"/>
+                    <input type="hidden"  name="creator"/>
+                    <input type="hidden"  name="createTime"/>
+                    <input type="hidden"  name="deleted"/>
                     <input type="hidden" id="questionStr" name="questionStr"/>
                     <div class="eui-form-item">
                         <label class="eui-form-label">名称</label>
@@ -143,7 +147,7 @@
 
 
 
-<script>
+<script th:inline="javascript">
 //手风琴折叠
     eui.use(['element', 'layer'], function(){
         var element = eui.element;
@@ -177,7 +181,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //监听提交
     form.on('submit(demo)', function(data){
-        alert(1);
         layer.alert(JSON.stringify(data.field), {
             title: '最终的提交信息'
         });
@@ -214,13 +217,18 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
 });
 
+
 </script>
 
-<script>
-
+<script th:inline="javascript">
+    var questions=[[${questionList}]];
+    var gauge=[[${gauge}]];
+    console.info(questionList);
+    console.info(gauge);
     $(function () {
         doSearch();
-        loadGauge ()
+        loadGauge ();
+
     });
     //定义一个装id的数组
    var idArray="";
@@ -352,7 +360,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             idArray=idArray.substring(0,idArray.length-1);
         }
 
-        alert(idArray);
         doSearch();
         //加载层
         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
@@ -401,12 +408,16 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                context+="<option value='"+list[i].id+"'>"+list[i].name+" </option>";
            }
            $("#gaugeType").html(context);
+           //初始化修改页面
+           update();
            //更新
            formRender();
 
        });
 
     }
+
+
 
     //保存量表
      function saveGauge(){
@@ -427,7 +438,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
            });
            return;
        }
-         questionStr
+
         var questionId=document.getElementsByName("questionIds");
         var questionArray=new Array();
         for(var i=0;i<questionId.length;i++){
@@ -437,7 +448,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         var questionStr=questionArray.join(",");
          $("#questionStr").val(questionStr);
          var formGauge=$("#formGauge").serialize();
-        $.post("/gauge/addGauge",formGauge,function (result) {
+        $.post("/gauge/updateGauge",formGauge,function (result) {
             if(result.code==200){
                 layer.msg('添加成功', {
                     time: 2000
@@ -453,6 +464,73 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         });
      }
 
+     //修改初始化页面
+    function  update() {
+         //questionList
+        $("#formGauge [name='gaugeName']").val(gauge.gaugeName);
+        $("#formGauge [name='gaugeType']").val(gauge.gaugeType);
+        $("#formGauge [name='id']").val(gauge.id);
+        $("#formGauge [name='gaugeCode']").val(gauge.gaugeCode);
+        $("#formGauge [name='creator']").val(gauge.creator);
+        $("#formGauge [name='createTime']").val(format(gauge.createTime));
+        $("#formGauge [name='deleted']").val(gauge.deleted);
+        //$("#formGauge [name='gaugeState']").val();
+        var texts="";
+
+        for(var i=0;i<questions.length;i++){
+            texts+=questions[i].questionId+",";
+        }
+        texts=texts.substring(0,texts.length-1);
+        $("#questionStr").val(texts);
+
+
+        initializeQuestion();
+    }
+
+
+    //初始化选择的问题
+    function  initializeQuestion() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,elem=eui.elem
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+         /*   var ids="";
+            idArray=",";
+            if (ids==''){
+                $(".mycheckbox:checked").each(function(i){
+                    var id = $(this).parent().find("input[name='questionId']").val();
+                    ids += id + ',';
+                    idArray+=id+","
+                });
+            }*/
+            var ids="";
+            idArray=",";
+            for(var i in  questions){
+                ids += questions[i].questionId+ ',';
+                idArray+=questions[i].questionId +","
+            }
+
+            var item=idArray.substring(0,1);
+            if(item==','){
+                idArray=idArray.substring(1,idArray.length-1);
+            }else {
+                idArray=idArray.substring(0,idArray.length-1);
+            }
+
+            doSearch();
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+            $.post("/questionnaire/question/findQuestion",{"ids":ids},function (result) {
+                layer.closeAll();
+                var context= questionList(result.data);
+                $("#questionCollapse").append(context);
+
+            });
+        });
+    }
+
     //form表单  select,checkbox,radio 动态添加  需要更新
      function   formRender() {
          eui.use(['form'], function(){
@@ -461,6 +539,20 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          });
      }
 
+    function add0(m){return m<10?'0'+m:m }
+    function format(timestamp)
+    {
+        //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+
+        var time = new Date(timestamp);
+        var year = time.getFullYear();
+        var month = time.getMonth()+1;
+        var date = time.getDate();
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
+    }
 
 </script>
 

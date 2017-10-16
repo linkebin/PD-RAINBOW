@@ -126,6 +126,27 @@ import java.util.UUID;
 
             return ResultGenerator.genSuccessResult(questionnaireQuestions);
         }
+
+        /**
+         * 问卷或量表  添加问题 查询没有添加的问题
+         * @param params
+         * @param page
+         * @param size
+         * @return
+         */
+        @PostMapping("/findQuestionBYid")
+        @ResponseBody
+        public Result findQuestionBYid(String params, int page, int size) {
+            QuestionnaireQuestion questionnaireQuestion=JSON.parseObject(params,QuestionnaireQuestion.class);
+            PageHelper.startPage(page, size);
+            List<QuestionnaireQuestion> list =questionnaireQuestionService.findQuestionBYid(questionnaireQuestion.getId());
+            //查询所有的相关数据
+            PageInfo pageInfo = new PageInfo(list);
+            return ResultGenerator.genSuccessResult(pageInfo);
+        }
+
+
+
     /*------------------下面系统自动生成            分割--------------------------------*/
 
 

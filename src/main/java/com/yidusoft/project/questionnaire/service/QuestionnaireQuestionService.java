@@ -3,6 +3,7 @@ import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.core.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -11,4 +12,6 @@ import java.util.List;
 public interface QuestionnaireQuestionService extends Service<QuestionnaireQuestion> {
     //分页条件查询问题
    List<QuestionnaireQuestion> questionListByPage(QuestionnaireQuestion questionnaireQuestion);
+    //问卷或量表  添加问题 查询没有添加的问题
+    List<QuestionnaireQuestion> findQuestionBYid(String ids);
 }

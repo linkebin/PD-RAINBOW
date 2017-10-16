@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +21,8 @@ public class GaugeQuestionFactorServiceImpl extends AbstractService<GaugeQuestio
     @Resource
     private GaugeQuestionFactorMapper gaugeQuestionFactorMapper;
 
+    @Override
+    public List<GaugeQuestionFactor> findGaugeQuestionFactor(String id) {
+        return gaugeQuestionFactorMapper.findGaugeQuestionFactor(id);
+    }
 }

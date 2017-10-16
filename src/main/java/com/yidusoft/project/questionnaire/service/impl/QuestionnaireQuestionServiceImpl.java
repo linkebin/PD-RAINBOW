@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -25,5 +27,14 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     @Override
     public List<QuestionnaireQuestion> questionListByPage(QuestionnaireQuestion questionnaireQuestion) {
         return questionnaireQuestionMapper.questionListByPage(questionnaireQuestion);
+    }
+
+
+    //问卷或量表  添加问题 查询没有添加的问题
+    @Override
+    public List<QuestionnaireQuestion> findQuestionBYid(String ids) {
+        Map<String,Object> map=new HashMap<>();
+        map.put("ids",ids.split(","));
+        return questionnaireQuestionMapper.findQuestionBYid(map);
     }
 }

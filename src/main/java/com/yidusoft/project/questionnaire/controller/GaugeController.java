@@ -41,6 +41,38 @@ public class GaugeController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    /**
+     * 添加量表
+     * @param gauge
+     * @param questionStr
+     * @return
+     */
+    @PostMapping("/addGauge")
+    @ResponseBody
+    public Result addGauge(Gauge gauge, String questionStr) {
+        try {
+            gaugeService.addGauge(gauge,questionStr);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("操作失败");
+        }
+        return ResultGenerator.genSuccessResult();
+    }
+    /**
+     * 修改量表
+     * @param gauge
+     * @param questionStr
+     * @return
+     */
+    @PostMapping("/updateGauge")
+    @ResponseBody
+    public Result updateGauge(Gauge gauge, String questionStr) {
+        try {
+            gaugeService.updateGauge(gauge,questionStr);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("操作失败");
+        }
+        return ResultGenerator.genSuccessResult();
+    }
 
      /*------------------下面系统自动生成            分割--------------------------------*/
 

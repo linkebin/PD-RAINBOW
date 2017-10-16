@@ -38,7 +38,7 @@
                     <i class='eui-icon eui-font24'>&#xe61d;</i> 量表列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <a href="###"  onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加量表</a>
+                    <a href="/web/gauge/getAddGauge" target="_blank" class="eui-btn eui-btn-small userAdd">添加量表</a>
                     <a href="###" onclick="deleteQuestion('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
             </div>
@@ -299,7 +299,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         }else if (item == 'delete'){//删除
             deleteQuestion(id);
         }else if (item=='edit'){//编辑
-            updateQuestion(id);
+            window.open("/web/gauge/getUpdateGauge?id="+id);
         }
     }
 

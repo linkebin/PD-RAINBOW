@@ -30,4 +30,20 @@
             ORDER BY  CREATE_TIME ASC
 
   </select>
+
+  <select id="findQuestionBYid" resultMap="BaseResultMap"  parameterType="java.util.HashMap">
+    SELECT
+    *
+    FROM
+    questionnaire_question
+    WHERE deleted=0
+      AND   id_  not  in
+    <foreach item="item" index="index" collection="ids" open="("
+             separator="," close=")">
+      #{item}
+    </foreach>
+    ORDER BY  CREATE_TIME ASC
+
+  </select>
+
 </mapper>

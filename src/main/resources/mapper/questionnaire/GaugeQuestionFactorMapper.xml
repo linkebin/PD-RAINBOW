@@ -9,4 +9,10 @@
     <result column="gauge_id" jdbcType="VARCHAR" property="gaugeId" />
     <result column="question_id" jdbcType="VARCHAR" property="questionId" />
   </resultMap>
+
+  <select id="findGaugeQuestionFactor" resultMap="BaseResultMap"  parameterType="String">
+    SELECT * FROM  gauge_question_factor WHERE gauge_id=#{id}
+
+  </select>
+
 </mapper>
