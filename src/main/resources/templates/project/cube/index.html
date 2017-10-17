@@ -1,177 +1,125 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>首页</title>
-    <link rel="stylesheet"  th:href="@{/Styles/themes/default/style.css}"   media="all">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>首页</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
 </head>
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome">
-  <div class="eui-header">
-    <div class="headerIn">
-      <div class="eui-logo"><img th:src="@{/Styles/images/xymfImages/xymf/logo.png}" alt=""></div>
-      <!-- 头部区域（可配合layui已有的水平导航） -->
-      <ul class="eui-nav xymfNav">
-        <li class="eui-nav-item"><a href="">首页</a></li>
-        <li class="eui-nav-item"><a href="">分类</a></li>
-        <li class="eui-nav-item">
-          <a href="">精品内容</a>
-          <dl class="eui-nav-child">
-            <dd><a href="">问卷调查表</a></dd>
-            <dd><a href="">心理咨询书</a></dd>
-            <dd><a href="">心理课</a></dd>
-          </dl>
-        </li>
-        <li class="eui-nav-item"><a href="javascript:;">客户</a></li>
-      </ul>
-      <ul class="eui-nav personage">
-        <li class="eui-nav-item"><a href="">
-          <img th:src="@{/Styles/images/xymfImages/xymf/VIP.png}" alt="">
-          问卷VIP
-        </a></li>
-        <li class="eui-nav-item">
-          <a href="javascript:;">
-            <img th:src="@{/Styles/images/xymfImages/xymf/SNS.png}" alt=""><span class="eui-badge eui-bg-blue">9</span>
-            个人中心
-          </a>
-          <dl class="eui-nav-child">
-            <dd><a href="">基本资料</a></dd>
-            <dd><a href="">安全设置</a></dd>
-            <dd><a href="/logout">退出平台</a></dd>
-          </dl>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <div class="eui-area">
-    <div class="eui-side eui-bg-white">
-      <div class="eui-user-top">
-          <p class="eui-font18 eui-userName">杨雪</p>
-          <p class="eui-font14 eui-userJob">等级：VIP1</p>
-          <div class="eui-userImg">
-              <img th:src="@{/Styles/images/avatar.jpg}" width="60" alt="">
-          </div>
-      </div>
-      <ul class="cymfNav">
-          <li class="nav-this">我的订单</li>
-          <li>我的问卷</li>
-          <li>我的特权</li>
-          <li>个人信息</li>
-      </ul>
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area">
+        <div th:replace="project/cube/common/left :: left">sidebar</div>
+        <div class="eui-body">
+            <!-- 内容主体区域 -->
+            <div class="xymfContent">
+                <div class="contentL">
+                    <p class="activity"><img th:src="@{/Styles/images/xymfImages/xymf/activity.png}" width="676" alt="">
+                    </p>
+                    <div class="contentForm">
+                        <div class="formTop eui-row">
+                            <div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">206
+                            </div>
+                            <div class="eui-col-md1 eui-marginT10">积分</div>
+                            <div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC">127</div>
+                            <div class="eui-col-md1">问卷剩余使用量</div>
+                            <div class="eui-col-md2 eui-col-md-offset1"><span class="eui-btn eui-btn-normal eui-font16">购 买</span>
+                            </div>
+                        </div>
+                        <div class="xymfForm">
+                            <table class="eui-table eui-form" e-even e-skin="nob">
+                                <colgroup>
+                                    <col width="60">
+                                    <col>
+                                    <col>
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" e-skin="primary" title=""></th>
+                                    <th>名称</th>
+                                    <th>客户</th>
+                                    <th>时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title="" checked=""></td>
+                                    <td>心理测试《认识自己》</td>
+                                    <td>张三</td>
+                                    <td>2016-11-29</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title=""></td>
+                                    <td>心理测试及分析</td>
+                                    <td>李四</td>
+                                    <td>2017-10-22</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title=""></td>
+                                    <td>心理测试小游戏</td>
+                                    <td>王五</td>
+                                    <td>2017-09-10</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title=""></td>
+                                    <td>爱情婚姻观心理测试</td>
+                                    <td>孙剩</td>
+                                    <td>2017-09-10</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="contentR">
+                    <div class="eui-inline" id="test-n1"></div>
+                    <div class="calendarEvents">
+                        <div class="eui-overflowH eui-marginB20">
+                            <div class="eui-float-left">今日</div>
+                            <div class="eui-float-right"><i class="eui-icon eui-color-gray3">&#xe654;</i></div>
+                        </div>
+                        <div class="eui-overflowH eui-marginB10">
+                            <div class="eui-float-left eui-marginB10">09:00</div>
+                            <div class="eui-float-left eui-marginB10 eui-marginL10">患者张三来访</div>
+                        </div>
+                        <div class="eui-overflowH">
+                            <div class="eui-float-left eui-marginB10">14:30</div>
+                            <div class="eui-float-left eui-marginB10 eui-marginL10">患者王五第二次咨询</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    </div>
-    <div class="eui-body">
-      <!-- 内容主体区域 -->
-      <div class="xymfContent">
-        <div class="contentL">
-          <p class="activity"><img th:src="@{/Styles/images/xymfImages/xymf/activity.png}" width="676" alt=""></p>
-          <div class="contentForm">
-            <div class="formTop eui-row">
-              <div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">206</div>
-              <div class="eui-col-md1 eui-marginT10">积分</div>
-              <div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC">127</div>
-              <div class="eui-col-md1">问卷剩余使用量</div>
-              <div class="eui-col-md2 eui-col-md-offset1"><span class="eui-btn eui-btn-normal eui-font16">购 买</span></div>
-            </div>
-            <div class="xymfForm">
-              <table class="eui-table eui-form" e-even e-skin="nob">
-                    <colgroup>
-                        <col width="60">
-                        <col>
-                        <col>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" e-skin="primary" title=""></th>
-                            <th>名称</th>
-                            <th>客户</th>
-                            <th>时间</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox" e-skin="primary" title="" checked=""></td>
-                            <td>心理测试《认识自己》</td>
-                            <td>张三</td>
-                            <td>2016-11-29</td>
-                            <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" e-skin="primary" title=""></td>
-                            <td>心理测试及分析</td>
-                            <td>李四</td>
-                            <td>2017-10-22</td>
-                            <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" e-skin="primary" title=""></td>
-                            <td>心理测试小游戏</td>
-                            <td>王五</td>
-                            <td>2017-09-10</td>
-                            <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" e-skin="primary" title=""></td>
-                            <td>爱情婚姻观心理测试</td>
-                            <td>孙剩</td>
-                            <td>2017-09-10</td>
-                            <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
-                        </tr>
-                    </tbody>
-              </table>
-            </div>
-          </div>
         </div>
-        <div class="contentR">
-          <div class="eui-inline" id="test-n1"></div>
-          <div class="calendarEvents">
-            <div class="eui-overflowH eui-marginB20">
-              <div class="eui-float-left">今日</div>
-              <div class="eui-float-right"><i class="eui-icon eui-color-gray3">&#xe654;</i></div>
-            </div>
-            <div class="eui-overflowH eui-marginB10">
-              <div class="eui-float-left eui-marginB10">09:00</div>
-              <div class="eui-float-left eui-marginB10 eui-marginL10">患者张三来访</div>
-            </div>
-            <div class="eui-overflowH">
-              <div class="eui-float-left eui-marginB10">14:30</div>
-              <div class="eui-float-left eui-marginB10 eui-marginL10">患者王五第二次咨询</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
 
-  </div>
-
-
-  <div class="eui-footer">
-    <!-- 底部固定区域 -->
-    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
-  </div>
 </div>
 
 <script th:src="@{/Scripts/module/eui.js}"></script>
 <script type="text/javascript" th:src="@{/Scripts/jquery-1.9.0.min.js}"></script>
 
 <script>
-//表单
-eui.use(['form', 'laydate','element'], function(){
-    var form = eui.form
-    ,element = eui.element
-    ,laydate = eui.laydate;
+    //表单
+    eui.use(['form', 'laydate', 'element'], function () {
+        var form = eui.form
+            , element = eui.element
+            , laydate = eui.laydate;
 
-    // 日期
-    laydate.render({
-        elem: '#test-n1'
-        ,position: 'static'
+        // 日期
+        laydate.render({
+            elem: '#test-n1'
+            , position: 'static'
+        });
+
     });
-
-});
 </script>
 </body>
 </html>

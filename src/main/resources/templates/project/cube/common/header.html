@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<body class="eui-layout-body">
+<header  th:fragment="header">
+  <div class="eui-header">
+    <div class="headerIn">
+      <div class="eui-logo"><img th:src="@{/Styles/images/xymfImages/xymf/logo.png}" alt=""></div>
+      <!-- 头部区域（可配合layui已有的水平导航） -->
+      <ul class="eui-nav xymfNav">
+        <li class="eui-nav-item"><a href="">首页</a></li>
+        <li class="eui-nav-item"><a href="">分类</a></li>
+        <li class="eui-nav-item">
+          <a href="">精品内容</a>
+          <dl class="eui-nav-child">
+            <dd><a href="">问卷调查表</a></dd>
+            <dd><a href="">心理咨询书</a></dd>
+            <dd><a href="">心理课</a></dd>
+          </dl>
+        </li>
+        <li class="eui-nav-item"><a href="javascript:;">客户</a></li>
+      </ul>
+      <ul class="eui-nav personage">
+        <li class="eui-nav-item"><a href="">
+          <img th:src="@{/Styles/images/xymfImages/xymf/VIP.png}" alt="">
+          问卷VIP
+        </a></li>
+        <li class="eui-nav-item">
+          <a href="javascript:;">
+            <img th:src="@{/Styles/images/xymfImages/xymf/SNS.png}" alt=""><span class="eui-badge eui-bg-blue">9</span>
+            个人中心
+          </a>
+          <dl class="eui-nav-child">
+            <dd><a href="">基本资料</a></dd>
+            <dd><a href="">安全设置</a></dd>
+            <dd><a href="/logout">退出平台</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+<script th:src="@{/Scripts/module/eui.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/jquery-1.9.0.min.js}"></script>
+
+<script>
+//表单
+eui.use(['form', 'laydate','element'], function(){
+    var form = eui.form
+    ,element = eui.element
+    ,laydate = eui.laydate;
+
+    // 日期
+    laydate.render({
+        elem: '#test-n1'
+        ,position: 'static'
+    });
+
+});
+</script>
+</body>
+</html>

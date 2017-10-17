@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<body>
+    <aside th:fragment="left">
+    <div class="eui-side eui-bg-white">
+      <div class="eui-user-top">
+          <p class="eui-font18 eui-userName">杨雪</p>
+          <p class="eui-font14 eui-userJob">等级：VIP1</p>
+          <div class="eui-userImg">
+              <img th:src="@{/Styles/images/avatar.jpg}" width="60" alt="">
+          </div>
+      </div>
+      <ul class="cymfNav">
+          <li class="nav-this" onclick="window.location.href('cube/order')" >我的订单</li>
+          <li>我的问卷</li>
+          <li>我的特权</li>
+          <li>个人信息</li>
+      </ul>
+
+    </div>
+    </aside>
+  </div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>来访者咨询管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../../Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="questionHeader">
+    <div class="eui-row">
+        <h1 class="eui-col-md1 eui-marginL10"><a href="###"><img src="../../../Styles/images/xymfImages/logo.png" class="eui-marginT10" alt=""></a></h1>
+        <p class="eui-col-md2 eui-color-white eui-font20 eui-padding10 eui-display-Ib questionTitle">来访者咨询管理</p>
+    </div>
+</div>
+<div class="visitorContent">
+    <div class="eui-area">
+        <div class="visitorTitle">
+            <img src="../../../Styles/images/xymfImages/cube.png" width="24" alt=""> 个人信息卡
+        </div>
+        <div class="eui-bg-white eui-padding20 visitor">
+            <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                <div class="eui-col-md6 eui-font20">基本信息</div>
+                <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward"><i class="eui-icon">&#xe619;</i> 收起</div>
+            </div>
+             <div class="eui-bg-white eui-form visitorContent">
+                <div class="eui-form-item">
+                    <label class="eui-form-label">姓名</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="title" e-verify="title" autocomplete="off" placeholder="姓名" class="eui-input">
+                    </div>
+                    <label class="eui-form-label">性别</label>
+                    <div class="eui-input-inline">
+                        <input type="radio" name="sex" value="男" title="男" checked="">
+                        <input type="radio" name="sex" value="女" title="女">
+                    </div>
+                    <label class="eui-form-label">出生年月</label>
+                    <div class="eui-input-inline">
+                        <input type="text" class="eui-input" id="test1" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="eui-form-item">
+                    <label class="eui-form-label">身份证号</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="number" e-verify="number" placeholder="身份证" class="eui-input">
+                    </div>
+                    <label class="eui-form-label">联系方式</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="number" e-verify="number" placeholder="" class="eui-input">
+                    </div>
+                    <label class="eui-form-label">民族</label>
+                    <div class="eui-input-inline">
+                        <div class="eui-form">
+                            <select name="city" e-verify="required" e-search>
+                                <option value="">可搜索民族</option>
+                                <option value="1">汉族</option>
+                                <option value="2">回族</option>
+                                <option value="3">满族</option>
+                                <option value="4">壮族</option>
+                                <option value="6">维吾尔族</option>
+                                <option value="14">土家族</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="eui-form-item">
+                    <label class="eui-form-label">所在地</label>
+                    <div class="eui-input-inline">
+                        <select name="quiz1">
+                            <option value="">请选择省</option>
+                            <option value="浙江" selected="">浙江省</option>
+                            <option value="你的工号">江西省</option>
+                            <option value="你最喜欢的老师">福建省</option>
+                        </select>
+                    </div>
+                    <div class="eui-input-inline">
+                        <select name="quiz2">
+                            <option value="">请选择市</option>
+                            <option value="杭州">杭州</option>
+                            <option value="宁波" disabled="">宁波</option>
+                            <option value="温州">温州</option>
+                            <option value="温州">台州</option>
+                            <option value="温州">绍兴</option>
+                        </select>
+                    </div>
+                    <div class="eui-input-inline">
+                        <select name="quiz3">
+                            <option value="">请选择县/区</option>
+                            <option value="西湖区">西湖区</option>
+                            <option value="余杭区">余杭区</option>
+                            <option value="拱墅区">临安市</option>
+                        </select>
+                    </div>
+                    <div class="eui-input-inline">
+                        <input type="text" name="number" e-verify="number" class="eui-input" style="width: 210px;">
+                    </div>
+                </div>
+                <div class="eui-form-item">
+                    <label class="eui-form-label">教育程度</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="education" value="小学" title="小学" checked="">
+                        <input type="radio" name="education" value="初中" title="初中">
+                        <input type="radio" name="education" value="高中" title="高中">
+                        <input type="radio" name="education" value="专科" title="专科">
+                        <input type="radio" name="education" value="本科" title="本科">
+                        <input type="radio" name="education" value="研究生" title="研究生">
+                        <input type="radio" name="education" value="博士" title="博士">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label">宗教信仰</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="religion" value="没有" title="没有" checked="">
+                        <input type="radio" name="religion" value="基督教" title="基督教">
+                        <input type="radio" name="religion" value="佛教" title="佛教">
+                        <input type="radio" name="religion" value="道教" title="道教">
+                        <input type="radio" name="religion" value="天主教" title="天主教">
+                        <input type="radio" name="religion" value="伊斯兰教" title="伊斯兰教">
+                        <input type="radio" name="religion" value="其他" title="其他">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="eui-bg-white eui-padding20 visitor">
+            <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                <div class="eui-col-md6 eui-font20">婚姻家庭情况</div>
+                <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward"><i class="eui-icon">&#xe619;</i> 收起</div>
+            </div>
+             <div class="eui-bg-white visitorContent eui-form">
+                <div class="eui-form-item">
+                    <label class="eui-form-label">家庭人数</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="population" value="1" title="1" checked="">
+                        <input type="radio" name="population" value="2" title="2">
+                        <input type="radio" name="population" value="3" title="3">
+                        <input type="radio" name="population" value="4" title="4">
+                        <input type="radio" name="population" value="5" title="5">
+                        <input type="radio" name="population" value="6" title="6">
+                        <input type="radio" name="population" value="7" title="7">
+                    </div>
+                </div>
+                <div class="eui-form-item">
+                    <label class="eui-form-label">婚姻情况</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="marriage" value="未婚" title="未婚" checked="">
+                        <input type="radio" name="marriage" value="已婚同居" title="已婚同居">
+                        <input type="radio" name="marriage" value="已婚分居" title="已婚分居">
+                        <input type="radio" name="marriage" value="离婚同居" title="离婚同居">
+                        <input type="radio" name="marriage" value="离婚分居" title="离婚分居">
+                        <input type="radio" name="marriage" value="再婚" title="再婚">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="eui-bg-white eui-padding20 visitor">
+            <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                <div class="eui-col-md6 eui-font20">咨询情况</div>
+                <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward"><i class="eui-icon">&#xe619;</i> 收起</div>
+            </div>
+             <div class="eui-bg-white visitorContent eui-form">
+                <label class="eui-form-label">咨询效果</label>
+                <div class="eui-input-block">
+                    <input type="radio" name="population" value="没效果" title="没效果" checked="">
+                    <input type="radio" name="population" value="一般" title="一般">
+                    <input type="radio" name="population" value="良好" title="良好">
+                    <input type="radio" name="population" value="很好" title="很好">
+                </div>
+            </div>
+        </div>
+        <div class="eui-textAlignC eui-bg-white eui-padding20">
+            <span class="eui-btn eui-btn-normal eui-btn-big"><img src="../../../Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷</span>
+        </div>
+    </div>
+</div>
+<div class="xymfFooter">
+    <div class="eui-area eui-row">
+        <div class="eui-col-md2">
+            <dl class="eui-lineHeight24 eui-color-gray3">
+                <dt class="eui-darkgreen eui-font16 eui-paddingTB20">关于我们</dt>
+                <dd>关于我们</dd>
+                <dd>注册协议</dd>
+                <dd>保密协议</dd>
+                <dd>帮助中心</dd>
+            </dl>
+        </div>
+        <div class="eui-col-md3">
+            <dl>
+                <dt class="eui-darkgreen eui-font16 eui-paddingTB20">联系我们</dt>
+                <dd class="visitorPhone1 eui-marginB20">
+                    <p class="eui-darkgreen eui-font16">020-82314165</p>
+                    <p class="eui-color-gray3 eui-font12">平台全国服务热线</p>
+                </dd>
+                <dd class="visitorPhone2">
+                    <p class="eui-darkgreen eui-font16">15622183952</p>
+                    <p class="eui-color-gray3 eui-font12">24小时移动热线，实时在您的身边</p>
+                </dd>
+            </dl>
+        </div>
+        <div class="eui-col-md2 eui-col-md-offset5 eui-textAlignR">
+            <dl>
+                <dt class="eui-darkgreen eui-font16 eui-padding20">微信公众号</dt>
+                <dd><img src="../../../Styles/images/xymfImages/QRcode.png" alt=""></dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- 返回顶部按钮 -->
+<span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>
+
+<script src="../../../Scripts/module/eui.js"></script>
+<script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
+<script>
+eui.use(['form', 'layedit', 'laydate'], function(){
+    var form = eui.form
+    ,layer = eui.layer
+    ,layedit = eui.layedit
+    ,laydate = eui.laydate;
+
+    //常规用法
+    laydate.render({
+        elem: '#test1'
+    });
+
+});
+// 返回顶部
+var winH = $(window).height();
+
+$('.eui-backTop').hide();
+$(window).scroll(function(e) {
+    var winT = $(window).scrollTop();
+    if(winT>winH){
+        $('.eui-backTop').fadeIn()
+    }else{
+        $('.eui-backTop').fadeOut()
+    }
+});
+
+$('.eui-backTop').click(function(e) {
+    $('html,body').animate({scrollTop:0},500)
+});
+
+// 展开收起
+$(".upward").click(function(event) {
+    var visitorIn = $(this).parents(".visitor").children(".visitorContent");
+    if ($(visitorIn).css("display") == "none") {
+        $(this).html("<i class="+"eui-icon"+">&#xe619;</i> 收起");
+    }else{
+        $(this).html("<i class="+"eui-icon"+">&#xe61a;</i> 展开");
+    }
+    $(this).parents(".visitor").children(".visitorContent").slideToggle();
+});
+
+
+
+
+
+</script>
+
+</body>
+</html>
