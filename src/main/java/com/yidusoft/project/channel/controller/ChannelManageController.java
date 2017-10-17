@@ -31,6 +31,7 @@ public class ChannelManageController {
         channelManage.setId(UUID.randomUUID().toString());
         channelManage.setChannelCode(CodeHelper.getCode("QD"));
         channelManage.setCreator(Security.getUser().getUserName());
+        channelManage.setDeleted(0);
         channelManageService.save(channelManage);
         return ResultGenerator.genSuccessResult();
     }
