@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SceneMapper extends Mapper<Scene> {
     List<Scene> questionnaireSceneListByPage(Scene scene);
+    //查询量表相关的场景
+    List<Scene> findSceneForGauge(String gaugeId);
 }

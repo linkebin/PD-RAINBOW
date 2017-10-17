@@ -9,4 +9,9 @@
     <result column="tag_id" jdbcType="VARCHAR" property="tagId" />
     <result column="gauge_id" jdbcType="VARCHAR" property="gaugeId" />
   </resultMap>
+
+  <select id="deleteGaugeTagMiddle" resultMap="BaseResultMap" parameterType="com.yidusoft.project.questionnaire.domain.GaugeTagMiddle">
+    SELECT  * FROM  gauge_tag_middle WHERE tag_id=#{tagId} AND  gauge_id=#{gaugeId}
+
+  </select>
 </mapper>

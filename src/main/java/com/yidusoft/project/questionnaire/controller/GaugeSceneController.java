@@ -20,6 +20,34 @@ public class GaugeSceneController {
     @Resource
     private GaugeSceneService gaugeSceneService;
 
+
+    /***
+     * 删除量表选择的场景
+     * @param ids
+     * @return
+     */
+    @PostMapping("/deleteGaugeScene")
+    public Result deleteGaugeScene(String  ids,String gaugeId) {
+        GaugeScene gaugeScene=new GaugeScene();
+        gaugeScene.setGaugeId(gaugeId);
+        gaugeScene.setSceneId(ids);
+        return  gaugeSceneService.deleteGaugeScene(gaugeScene);
+    }
+
+    @PostMapping("/addGaugeScene")
+    public Result addGaugeScene(String  ids,String gaugeId) {
+
+        return  gaugeSceneService.addGaugeScene(  ids, gaugeId);
+    }
+
+
+
+
+
+
+
+
+
     @PostMapping
     public Result add(GaugeScene gaugeScene) {
         gaugeSceneService.save(gaugeScene);

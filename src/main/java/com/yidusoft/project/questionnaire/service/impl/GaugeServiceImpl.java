@@ -8,9 +8,11 @@ import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionMapper;
 import com.yidusoft.project.questionnaire.domain.Gauge;
 import com.yidusoft.project.questionnaire.domain.GaugeQuestionFactor;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
+import com.yidusoft.project.questionnaire.service.GaugeSceneService;
 import com.yidusoft.project.questionnaire.service.GaugeService;
 import com.yidusoft.core.AbstractService;
 
+import com.yidusoft.project.questionnaire.service.GaugeTagMiddleService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,10 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
 
     @Resource
     private GaugeQuestionFactorMapper gaugeQuestionFactorMapper;
-
+    @Resource
+    private GaugeTagMiddleService gaugeTagMiddleService;
+    @Resource
+    private GaugeSceneService gaugeSceneService;
 
     //分页条件查询量表
     @Override
@@ -43,7 +48,7 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
 
     // 添加量表
     @Override
-    public Result addGauge(Gauge gauge, String questionStr) {
+    public Result addGauge(Gauge gauge, String questionStr,String tagId,String sceneId) {
         try {
             //添加量表
             String gaugeId= UUID.randomUUID().toString();
@@ -62,6 +67,10 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
                 gaugeQuestionFactor.setQuestionId(questionId[i]);
                 gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
             }
+            //添加标签
+            gaugeTagMiddleService.addGaugeTagMiddle(tagId,gaugeId);
+            //添加场景
+            gaugeSceneService.addGaugeScene(sceneId,gaugeId);
         }catch (Exception e){
             return ResultGenerator.genFailResult("操作失败");
         }

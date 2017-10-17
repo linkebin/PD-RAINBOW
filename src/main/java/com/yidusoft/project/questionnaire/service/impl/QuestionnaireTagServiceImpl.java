@@ -25,4 +25,9 @@ public class QuestionnaireTagServiceImpl extends AbstractService<QuestionnaireTa
     public List<QuestionnaireTag> questionnaireTagListByPage(QuestionnaireTag questionnaireTag) {
         return questionnaireTagMapper.questionnaireTagListByPage(questionnaireTag);
     }
+    //查询量表相关的标签
+    @Override
+    public List<QuestionnaireTag> findTagForGauge(String gaugeId) {
+        return questionnaireTagMapper.findTagForGauge(gaugeId);
+    }
 }

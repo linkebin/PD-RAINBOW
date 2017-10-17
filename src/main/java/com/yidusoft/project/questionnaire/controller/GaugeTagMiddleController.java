@@ -20,6 +20,33 @@ public class GaugeTagMiddleController {
     @Resource
     private GaugeTagMiddleService gaugeTagMiddleService;
 
+
+    /***
+     * 删除量表选择的场景
+     * @param ids
+     * @return
+     */
+    @PostMapping("deleteGaugeTagMiddle")
+    public Result deleteGaugeTagMiddle(String  ids,String gaugeId) {
+        GaugeTagMiddle gaugeTagMiddle=new GaugeTagMiddle();
+        gaugeTagMiddle.setGaugeId(gaugeId);
+        gaugeTagMiddle.setTagId(ids);
+        return  gaugeTagMiddleService.deleteGaugeTagMiddle(gaugeTagMiddle);
+    }
+
+    /***
+     * 添加
+     * @param ids
+     * @param gaugeId
+     * @return
+     */
+    @PostMapping("addGaugeTagMiddle")
+    public Result addGaugeTagMiddle(String  ids,String gaugeId) {
+
+        return  gaugeTagMiddleService.addGaugeTagMiddle(ids, gaugeId);
+    }
+
+
     @PostMapping
     public Result add(GaugeTagMiddle gaugeTagMiddle) {
         gaugeTagMiddleService.save(gaugeTagMiddle);
