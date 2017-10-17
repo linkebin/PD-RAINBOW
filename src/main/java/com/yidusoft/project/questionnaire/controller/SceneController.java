@@ -92,4 +92,60 @@ public class SceneController {
 
     }
 
+    /**
+     * 分页条件查询所有的问卷场景
+     *
+     * @param params
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/questionnaireSceneListByPage")
+    @ResponseBody
+    public Result questionListByPage(String params, int page, int size) {
+        Scene scene = JSON.parseObject(params, Scene.class);
+        PageHelper.startPage(page, size);
+        List<Scene> list = sceneService.questionnaireSceneListByPage(scene);
+        //查询所有的相关数据
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+
+    /***
+     * 逻辑删除
+     * @param ids
+     * @return
+     */
+    @PostMapping("/deleteQuestionnaireScene")
+    @ResponseBody
+    public Result deleteQuestion(String ids) {
+        try {
+            String arr[] = ids.split(",");
+            for (String str : arr) {
+                Scene scene = sceneService.findById(str);
+                scene.setDeleted("1");
+                sceneService.update(scene);
+            }
+
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult("删除失败！");
+        }
+
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 修改之前 查询的问卷场景信息
+     * @param id
+     * @return
+     */
+    @PostMapping("/findQuestionnaireSceneForUpdate")
+    @ResponseBody
+    public  Result findQuestionForUpdate(String id){
+        Scene scene= sceneService.findById(id);
+
+        return ResultGenerator.genSuccessResult(scene);
+    }
+
 }

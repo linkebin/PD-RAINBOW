@@ -12,4 +12,23 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="deleted" jdbcType="VARCHAR" property="deleted" />
   </resultMap>
+
+
+  <select id="questionnaireSceneListByPage" resultMap="BaseResultMap"
+          parameterType="com.yidusoft.project.questionnaire.domain.Scene">
+    SELECT
+    *
+    FROM
+    SCENE
+    WHERE deleted=0
+    <if test="sceneCode != null and sceneCode != ''">
+      AND SCENE_CODE LIKE '%${sceneCode}%' OR SCENE_NAME LIKE '%${sceneCode}%'
+    </if>
+
+
+
+    ORDER BY CREATE_TIME ASC
+
+  </select>
+
 </mapper>
