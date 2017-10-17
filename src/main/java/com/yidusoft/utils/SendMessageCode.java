@@ -25,9 +25,9 @@ public class SendMessageCode {
             SERVER_URL="https://api.netease.im/sms/sendcode.action";
     //网易云信分配的账号，请替换你在管理后台应用下申请的Appkey
     private static final String
-            APP_KEY="fdb68592ded30a1f6dd1fc6340a30be9";
+            APP_KEY="dd59bbdd3decabef77ceea8ba9a7cf6f";
     //网易云信分配的密钥，请替换你在管理后台应用下申请的appSecret
-    private static final String APP_SECRET="5842c916d3bc";
+    private static final String APP_SECRET="0df7b2298618";
     //随机数
     private static final String NONCE="567834";
     //短信模板ID

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>渠道结算规则</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+    <style>
+        #channelAdd input + label{color: red;}
+    </style>
+</head>
+<body>
+<div class="eui-bg-white eui-row eui-padding15">
+    <div class="eui-col-md12 eui-paddingR10">
+        <form class="eui-form" id="searchFrom">
+            <div class="eui-input-inline eui-padding10">
+
+                <input type="text" name="channelName" e-verify="title" value=""
+                       autocomplete="off" placeholder="渠道名称/关键字" class="eui-input">
+            </div>
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="linkman" e-verify="title" value=""
+                       autocomplete="off" placeholder="联系人/关键字" class="eui-input">
+            </div>
+
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="channelManager" e-verify="title" value=""
+                       autocomplete="off" placeholder="渠道负责人/关键字" class="eui-input">
+            </div>
+
+
+            <div class="eui-inline">
+                <div class="eui-input-inline">
+                    <input type="text" class="eui-input" id="joinTime6" placeholder="加入时间/起始-结束">
+
+                </div>
+            </div>
+            <input name="joinStartTime" type="hidden" id="joinStartTime" />
+            <input name="joinEndTime" type="hidden" id="joinEndTime" />
+            <div class="eui-input-inline">
+                <span class="eui-btn eui-btn-small eui-btn" onclick="doSearch()">查询</span>
+                <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+            </div>
+        </form>
+
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 渠道商列表
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <a href="###" class="eui-btn eui-btn-small userAdd">添加渠道商</a>
+                <!--<a href="###" onclick="deleteUser('')" class="eui-btn eui-btn-small">批量删除</a>-->
+            </div>
+        </div>
+        <table class="eui-table eui-form" id="userTable">
+            <colgroup>
+                <col width="60">
+
+                <col width="120">
+                <col width="200">
+                <col width="100">
+                <col width="150">
+                <col width="300">
+                <col width="100">
+                <col width="150">
+                <col width="100">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                <th>规则比例</th>
+                <th>规则名称</th>
+                <th>规则开始时间</th>
+                <th>规则结束时间</th>
+
+                <th>创建时间</th>
+                <th>创建人</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+
+
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+</body>
+</html>
