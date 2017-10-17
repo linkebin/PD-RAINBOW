@@ -1,15 +1,21 @@
 package com.yidusoft.project.channel.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.channel.domain.AccountRule;
+import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.AccountRuleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -20,8 +26,13 @@ public class AccountRuleController {
     @Resource
     private AccountRuleService accountRuleService;
 
-    @PostMapping
-    public Result add(AccountRule accountRule) {
+    @PostMapping("/add")
+    public Result add(String json) {
+        AccountRule accountRule = JSON.parseObject(json,AccountRule.class);
+        accountRule.setRuleId(UUID.randomUUID().toString());
+        accountRule.setCreator(Security.getUser().getUserName());
+        accountRule.setDeleted(0);
+        accountRule.setCreateTime(new Date());
         accountRuleService.save(accountRule);
         return ResultGenerator.genSuccessResult();
     }
@@ -38,16 +49,19 @@ public class AccountRuleController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
+    @PostMapping("/detail")
+    public Result detail(String id) {
         AccountRule accountRule = accountRuleService.findById(id);
         return ResultGenerator.genSuccessResult(accountRule);
     }
 
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<AccountRule> list = accountRuleService.findAll();
+
+    @PostMapping("/listByparameter")
+    public Result list(int page, int pagesize,String json) {
+        AccountRule accountRule = JSON.parseObject(json,AccountRule.class);
+        PageHelper.startPage(page, pagesize);
+        List<AccountRule> list = accountRuleService.finndAccountRuleByParameterList(accountRule);
+
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +21,8 @@ public class AccountRuleServiceImpl extends AbstractService<AccountRule> impleme
     @Resource
     private AccountRuleMapper accountRuleMapper;
 
+    @Override
+    public List<AccountRule> finndAccountRuleByParameterList(AccountRule accountRule) {
+        return accountRuleMapper.finndAccountRuleByParameterList(accountRule);
+    }
 }

@@ -47,10 +47,10 @@
 
         <div class="eui-row eui-padding10 eui-borderB">
             <div class="eui-col-md6 eui-font18">
-                <i class='eui-icon eui-font24'>&#xe61d;</i> 渠道商列表
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 结算规则列表
             </div>
             <div class="eui-col-md6 eui-textAlignR">
-                <a href="###" class="eui-btn eui-btn-small userAdd">添加渠道商</a>
+                <a href="###" class="eui-btn eui-btn-small userAdd">添加结算规则</a>
                 <!--<a href="###" onclick="deleteUser('')" class="eui-btn eui-btn-small">批量删除</a>-->
             </div>
         </div>
@@ -59,13 +59,12 @@
                 <col width="60">
 
                 <col width="120">
+                <col width="150">
+                <col width="150">
+                <col width="150">
+                <col width="120">
                 <col width="200">
-                <col width="100">
                 <col width="150">
-                <col width="300">
-                <col width="100">
-                <col width="150">
-                <col width="100">
                 <col>
             </colgroup>
             <thead>
@@ -75,7 +74,7 @@
                 <th>规则名称</th>
                 <th>规则开始时间</th>
                 <th>规则结束时间</th>
-
+                <th>默认规则</th>
                 <th>创建时间</th>
                 <th>创建人</th>
                 <th>操作</th>
@@ -89,14 +88,299 @@
     </div>
 </div>
 
+<!-- 左滑添加规则开始 -->
+<div class="taskFiltrate">
+</div>
+<div class="filtrateIn">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe654;</i> <span class="title-add-edit">添加结算规则</span>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="channelAdd" onsubmit="return false;">
+        <input type="hidden" id="flag" value="add"/>
+
+        <input type="hidden" name="id" value="">
+        <input type="hidden" name="creator" value="">
+        <input type="hidden" name="deleted" value="">
+        <div class="eui-form-item">
+            <label class="eui-form-label">规则比例</label>
+            <div class="eui-input-block">
+                <input type="text" name="rule" e-verify="title"  autocomplete="off" placeholder="请输入规则比例" class="eui-input" />
+
+            </div>
+        </div>
+        <div class="eui-form-item eui-grade">
+            <label class="eui-form-label">规则名称</label>
+            <div class="eui-input-block">
+                <input type="text" name="ruleName" e-verify="title" autocomplete="off" placeholder="请输入规则名称" class="eui-input" >
+            </div>
+        </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">开始时间</label>
+            <div class="eui-input-block">
+                <input type="text" name="startTime" e-verify="title" id="startTime" readonly="readonly"  placeholder="请输入规则开始时间" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">结束时间</label>
+            <div class="eui-input-block">
+                <input type="text" name="endTime" e-verify="title" id="endTime" readonly="readonly"   placeholder="请输入规则结束时间" class="eui-input" >
+            </div>
+        </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">是否默认</label>
+            <div class="eui-input-block">
+                <input type="radio" value="0" name="defaultRule" title="否" >
+                <input type="radio" value="1" name="defaultRule" title="是" >
+            </div>
+        </div>
+
+        <div class="taskConfirm"><button type="submit"  class="eui-btn">确定</button>
+        </div>
+    </form>
+</div>
+<!-- 左滑添加规则商结束 -->
+
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
-
-
 <script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
 <script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
+
+<script type="text/javascript">
+
+    eui.use('laydate', function() {
+        var laydate = eui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+    });
+    $(function () {
+        doSearch();
+        jQuery.validator.methods.compareDate = function(value, element, param) {
+            var startDate = jQuery(param).val();
+            var date1 = new Date(Date.parse(startDate.replace("-", "/")));
+            var date2 = new Date(Date.parse(value.replace("-", "/")));
+            return date1 < date2;
+        };
+        $("#channelAdd").validate({
+            rules: {
+                rule: {
+                    required : true
+                },
+                ruleName:"required",
+                startTime:"required",
+                endTime:{
+                    required : true,
+                    compareDate : "#startTime"
+                }
+            },
+            messages: {
+                rule: {
+                    required : "请输入规则比例",
+                },
+                ruleName: "请输入规则名称",
+                startTime:"请输入规则开始时间",
+                endTime:{
+                    required:"请输入规则结束时间",
+                    compareDate: "结束时间必须大于开始时间!"
+                }
+            },
+            showErrors : function(errorMap, errorList) {
+                this.defaultShowErrors();
+            },
+            success:function(label) {
+
+            },
+            submitHandler: function() {
+                addAccountRule();
+            }
+        });
+    });
+
+    function loadOneData(id) {
+        $.post('/account/rule/detail',{id:id},function (result) {
+            eui.use('form', function() {
+                var form = eui.form;
+
+                $(".title-add-edit").html("编辑结算规则");
+                $('#flag').val('edit');
+                $('#channelAdd input + label').remove();
+                result.data.startTime=new Date(result.data.startTime).Format('yyyy-MM-dd');
+                result.data.endTime=new Date(result.data.endTime).Format('yyyy-MM-dd');
+                $("#channelAdd").setForm(result.data);
+                $(".taskFiltrate").show();
+                $(".filtrateIn").animate({right:'0'},400);
+
+                form.render('radio');
+            });
+        });
+    }
+
+    function addAccountRule() {
+        var obj = $("#channelAdd").serializeObject();
+        var flag = $('#flag').val();
+        if (flag == 'add'){
+            $.post('/account/rule/add',{json:JSON.stringify(obj)},function (resuslt) {
+                resultHint(resuslt);
+            });
+        }else {
+            $.post('/channel/manage/update',{json:JSON.stringify(obj)},function (resuslt) {
+                resultHint(resuslt);
+            });
+        }
+    }
+
+    function resultHint(resuslt) {
+        var msg = resuslt.message;
+        if(msg=="SUCCESS"){
+            layer.msg('添加成功', {
+                icon: 1,
+                time: 2000
+            });
+            $(".filtrateIn").animate({right:'-400px'},400);
+            $(".taskFiltrate").hide();
+            doSearch();
+        }else{
+            layer.msg(msg, {
+                icon: 2,
+                time: 2000
+            });
+        }
+    }
+
+
+    $(".taskFiltrate").hide();
+    $(".userAdd").click(function(event) {
+
+        $(".title-add-edit").html("添加结算规则");
+        $('#flag').val('add');
+
+        document.getElementById('channelAdd').reset()
+        $(".taskFiltrate").show();
+        $(".filtrateIn").animate({right:'0'},400);
+        /* Act on the event */
+    });
+
+    $(".taskClose,.taskFiltrate").click(function(event) {
+        $(".filtrateIn").animate({right:'-400px'},400);
+        $(".taskFiltrate").hide();
+    });
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/account/rule/listByparameter",
+                data: {
+                    json:JSON.stringify(params),
+                    page:1,
+                    pagesize:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/account/rule/listByparameter",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            var id = "'" + secUser.ruleId + "'";
+            var defaultRule = '否';
+
+            if (secUser.defaultRule == 1){
+                defaultRule = '是';
+            }
+
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" ' +
+                'type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.rule +'</td>' +
+                '<td>'+ secUser.ruleName +'</td>' +
+                '<td>'+ new Date(secUser.startTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>'+ new Date(secUser.endTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>'+ defaultRule +'</td>' +
+                '<td>'+ new Date(secUser.createTime).Format('yyyy-MM-dd hh:mm:ss') +'</td>' +
+                '<td>'+ secUser.creator +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="修改"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteB('+id+')" title="删除"><i class="eui-icon">&#xe640;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+</script>
 </body>
 </html>

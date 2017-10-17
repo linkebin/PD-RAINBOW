@@ -13,5 +13,12 @@
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="default_rule" jdbcType="INTEGER" property="defaultRule" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
+
+  <select id="finndAccountRuleByParameterList" parameterType="com.yidusoft.project.channel.domain.AccountRule" resultMap="BaseResultMap">
+      SELECT ar.* FROM account_rule ar WHERE ar.deleted=0
+
+	  ORDER BY ar.default_rule DESC,ar.create_time DESC
+  </select>
 </mapper>

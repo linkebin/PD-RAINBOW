@@ -49,6 +49,17 @@ public class AccountRule {
     @Column(name = "default_rule")
     private Integer defaultRule;
 
+    @Column(name = "deleted")
+    private Integer deleted;
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
     /**
      * @return rule_id
      */
