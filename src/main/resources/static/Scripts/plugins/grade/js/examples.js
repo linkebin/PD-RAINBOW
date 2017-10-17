@@ -2,11 +2,11 @@ $(function() {
     function ratingEnable() {
 
 
-        $('#example-e').barrating('show', {
+        $('.example-0').barrating('show', {
             wrapperClass: 'br-wrapper-e',
             initialRating: 'A',
             showValues: true,
-            showSelectedRating: false,
+            showSelectedRating: false
             //onSelect:function(value, text) {
             //    alert('Selected rating: ' + value);
             //}
