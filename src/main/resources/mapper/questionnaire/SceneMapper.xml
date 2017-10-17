@@ -22,7 +22,7 @@
     SCENE
     WHERE deleted=0
     <if test="sceneCode != null and sceneCode != ''">
-      AND SCENE_CODE LIKE '%${sceneCode}%' OR SCENE_NAME LIKE '%${sceneCode}%'
+      AND SCENE_CODE LIKE '%${sceneCode}%'
     </if>
 
 

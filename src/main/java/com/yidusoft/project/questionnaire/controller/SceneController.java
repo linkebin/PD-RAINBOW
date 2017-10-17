@@ -144,7 +144,6 @@ public class SceneController {
     @ResponseBody
     public  Result findQuestionForUpdate(String id){
         Scene scene= sceneService.findById(id);
-
         return ResultGenerator.genSuccessResult(scene);
     }
 

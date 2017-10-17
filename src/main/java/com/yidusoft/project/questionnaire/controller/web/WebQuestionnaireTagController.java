@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping(value = "/web/questionnaire/questionnaireTag")
-public class QuestionnaireTagDetail {
+public class WebQuestionnaireTagController {
 
     @RequestMapping(value = "/questionnaireTagDetail")
     public String questionnaireTagDetail(){
-        return "project/cube/questionnaire/questionnaireTag/questionnaireTagList";
+        return "project/questionnaire/questionnaireTag/questionnaireTagList";
     }
 }

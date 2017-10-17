@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,13 +6,13 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="/Styles/themes/default/style.css" media="all">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
     <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
 
     <style>
-        #menuDig{
+        #menuDig {
             height: 300px;
             display: none;
         }
@@ -26,7 +25,8 @@
         <div class="eui-mn1-type">
             <form class="eui-form" id="searchFrom">
                 <div class="eui-input-inline eui-padding10">
-                    <input type="text" name="sceneCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
+                    <input type="text" name="sceneCode" e-verify="title" value="" autocomplete="off" placeholder="编号"
+                           class="eui-input">
 
                 </div>
                 <div class="eui-input-inline">
@@ -39,7 +39,7 @@
                     <i class='eui-icon eui-font24'>&#xe61d;</i> 问卷场景列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <a href="###"  onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加场景</a>
+                    <a href="###" onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加场景</a>
                     <a href="###" onclick="deleteQuestionnaireScene('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
             </div>
@@ -69,16 +69,16 @@
 </div>
 
 
-
 <!--添加的界面-->
-<form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane" id="questionnaireSceneForm" onsubmit="return false;" style="display: none">
-    <input  type="hidden" name="id"/>
-    <input  type="hidden" name="createTime"/>
-    <input  type="hidden" name="creator"/>
-    <input  type="hidden" name="deleted"/>
-    <input  type="hidden" name="sceneCode"/>
+<form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane"
+      id="questionnaireSceneForm" onsubmit="return false;" style="display: none">
+    <input type="hidden" name="id"/>
+    <input type="hidden" name="createTime"/>
+    <input type="hidden" name="creator"/>
+    <input type="hidden" name="deleted"/>
+    <input type="hidden" name="sceneCode"/>
     <div class="eui-form-item" style="width: 700px">
-        <div class="eui-form-item eui-form-text" >
+        <div class="eui-form-item eui-form-text">
             <label class="eui-form-label">场景名称 </label>
             <div class="eui-input-block">
                 <input name="sceneName" placeholder="请输入名称" class="eui-input"></input>
@@ -87,11 +87,8 @@
     </div>
 
 
-
     </div>
 </form>
-
-
 
 
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
@@ -104,20 +101,19 @@
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 
 
-
 <script>
     // 表单
-    eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
         var form = eui.form
-            ,layer = eui.layer
-            ,layedit = eui.layedit
-            ,laydate = eui.laydate
-            ,laypage = eui.laypage;
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
 
         //全选
-        form.on('checkbox(allChoose)', function(data){
+        form.on('checkbox(allChoose)', function (data) {
             var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
-            child.each(function(index, item){
+            child.each(function (index, item) {
                 item.checked = data.elem.checked;
             });
             form.render('checkbox');
@@ -126,7 +122,7 @@
         //日期范围
         laydate.render({
             elem: '#test6'
-            ,range: true
+            , range: true
         });
 
 
@@ -141,38 +137,38 @@
     });
     //删除问题
     function deleteQuestionnaireScene(ids) {
-        if (ids==''){
-            $(".mycheckbox:checked").each(function(i){
+        if (ids == '') {
+            $(".mycheckbox:checked").each(function (i) {
                 var id = $(this).parent().find("input[name='questionnaireSceneId']").val();
                 ids += id + ',';
             });
         }
-        if (ids==''){
+        if (ids == '') {
             layer.msg('请选择要删除的问卷场景', {
                 time: 2000
             });
-        }else {
+        } else {
             layer.confirm('您确定删除该场景吗？', {
                 btn: ['确认', '取消'],
                 shade: 0,
-                title:'提示'
-            }, function(){
+                title: '提示'
+            }, function () {
                 //加载层
                 var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
                 $.ajax({
-                    url:"/scene/deleteQuestionnaireScene",
+                    url: "/scene/deleteQuestionnaireScene",
                     data: {
-                        ids:ids
+                        ids: ids
                     },
-                    type:"post",
-                    success:function(result){
+                    type: "post",
+                    success: function (result) {
                         layer.closeAll();
-                        if(result.code==200){
+                        if (result.code == 200) {
                             layer.msg('删除成功', {
                                 icon: 1,
                                 time: 2000
                             });
-                        }else {
+                        } else {
                             layer.msg('删除失败', {
                                 icon: 1,
                                 time: 2000
@@ -187,15 +183,13 @@
     }
 
 
-
     //工具条按钮事件
-    function itemclick(item,id)
-    {
-        if (item=='add'){//添加
+    function itemclick(item, id) {
+        if (item == 'add') {//添加
             addQuestionnaireScene();
-        }else if (item == 'delete'){//删除
+        } else if (item == 'delete') {//删除
             deleteQuestionnaireScene(id);
-        }else if (item=='edit'){//编辑
+        } else if (item == 'edit') {//编辑
             updateQuestionnaireScene(id);
         }
     }
@@ -203,40 +197,40 @@
 
     //加载数据
     function doSearch() {
-        eui.use(['form','laypage','layer'], function(){
+        eui.use(['form', 'laypage', 'layer'], function () {
             var form = eui.form
-                ,laypage = eui.laypage
-                ,layer = eui.layer,
+                , laypage = eui.laypage
+                , layer = eui.layer,
                 $ = eui.jquery;
 
             var params = $("#searchFrom").serializeObject();
             //加载层
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
             $.ajax({
-                url:"/scene/questionnaireSceneListByPage",
+                url: "/scene/questionnaireSceneListByPage",
                 data: {
-                    params:JSON.stringify(params),
-                    page:1,
-                    size:10
+                    params: JSON.stringify(params),
+                    page: 1,
+                    size: 10
                 },
-                type:"post",
-                success:function(result){
+                type: "post",
+                success: function (result) {
                     layer.closeAll();
                     // 分页
                     laypage.render({
                         elem: 'pages'
-                        ,count: result.data.total
-                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-                        ,skip: true
-                        ,jump: function(obj,first){
-                            if (first){
+                        , count: result.data.total
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
                                 //第一次，不需要查询数据
                                 var questionnaireSceneList = result.data.list;
                                 //遍历，拼接表格
                                 var tableHtml = getTable(questionnaireSceneList);
                                 $("#questionTable tbody").html(tableHtml);
                                 form.render('checkbox');
-                            }else {
+                            } else {
                                 var params = $("#searchFrom").serializeObject();
                                 //加载层
                                 var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
@@ -271,18 +265,18 @@
     function getTable(questionnaireSceneList) {
         var tableHtml = '';
 
-        for (var item in questionnaireSceneList){
-            var scene=questionnaireSceneList[item];
-            tableHtml +=  '<tr>' +
+        for (var item in questionnaireSceneList) {
+            var scene = questionnaireSceneList[item];
+            tableHtml += '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireSceneId" type="hidden" value="' + scene.id + '"></td>' +
-                '<td>'+ scene.sceneCode +'</td>' +
-                '<td>'+ scene.sceneName +'</td>' +
-                '<td>'+ scene.creator +'</td>' +
-                '<td>'+ new Date(scene.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>' + scene.sceneCode + '</td>' +
+                '<td>' + scene.sceneName + '</td>' +
+                '<td>' + scene.creator + '</td>' +
+                '<td>' + new Date(scene.createTime).Format('yyyy-MM-dd') + '</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+scene.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+scene.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick(' + "'edit','" + scene.id + '\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick(' + "'delete','" + scene.id + '\')"><i class="eui-icon">&#xe640;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';
@@ -307,28 +301,28 @@
     function addQuestionnaireScene() {
         layer.open({
             type: 1
-            ,id: 'LAY_add'
-            ,title: '添加问卷场景'
-            ,content:$('#questionnaireSceneForm')
-            ,area: ['800px', '600px']
-            ,shade: 0
-            ,moveType: 0//拖拽模式，0或者1
-            ,maxmin: true
-            ,btn: ['确定', '关闭'] //只是为了演示
-            ,yes: function(){
-                var forms= $('#questionnaireSceneForm').serializeObject();
+            , id: 'LAY_add'
+            , title: '添加问卷场景'
+            , content: $('#questionnaireSceneForm')
+            , area: ['800px', '600px']
+            , shade: 0
+            , moveType: 0//拖拽模式，0或者1
+            , maxmin: true
+            , btn: ['确定', '关闭'] //只是为了演示
+            , yes: function () {
+                var forms = $('#questionnaireSceneForm').serializeObject();
                 var param = JSON.stringify(forms);
                 //加载层
                 var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                $.post("/scene/addORupdateQuestionnaireScene",{typeJson: param},function (result) {
-                    if(result.code==200){
+                $.post("/scene/addORupdateQuestionnaireScene", {typeJson: param}, function (result) {
+                    if (result.code == 200) {
                         layer.closeAll();
                         layer.msg("添加成功！", {
                             time: 2000
                         });
                         doSearch();
                         resetAddOrUpdateForm();
-                    }else{
+                    } else {
                         layer.msg("添加失败！", {
                             time: 2000
                         });
@@ -336,15 +330,14 @@
                 });
 
             }
-            ,btn2: function(){
+            , btn2: function () {
                 layer.closeAll();
             }
-            ,zIndex: layer.zIndex //重点1
-            ,success: function(layero){
+            , zIndex: layer.zIndex //重点1
+            , success: function (layero) {
                 layer.setTop(layero); //重点2
             }
         });
-
 
 
     }
@@ -352,10 +345,10 @@
     //场景修改
     function updateQuestionnaireScene(id) {
         //查询问卷场景的信息
-        eui.use('layer', function(){ //独立版的layer无需执行这一句
-            var $ = eui.jquery, layer = eui.layer,form=eui.form;
-            $.post("/scene/findQuestionnaireSceneForUpdate",{"id":id},function (result) {
-                var scene =result.data;
+        eui.use('layer', function () { //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer, form = eui.form;
+            $.post("/scene/findQuestionnaireSceneForUpdate", {"id": id}, function (result) {
+                var scene = result.data;
                 $("[name='id']").val(scene.id);
                 $("[name='createTime']").val(format(scene.createTime));
                 $("[name='creator']").val(scene.creator);
@@ -368,28 +361,28 @@
                 //修改
                 layer.open({
                     type: 1
-                    ,id: 'LAY_update'
-                    ,title: '修改问卷场景'
-                    ,content:$('#questionnaireSceneForm')
-                    ,area: ['800px', '600px']
-                    ,shade: 0
-                    ,moveType: 0//拖拽模式，0或者1
-                    ,maxmin: true
-                    ,btn: ['确定', '关闭'] //只是为了演示
-                    ,yes: function(){
-                        var forms= $('#questionnaireSceneForm').serializeObject();
+                    , id: 'LAY_update'
+                    , title: '修改问卷场景'
+                    , content: $('#questionnaireSceneForm')
+                    , area: ['800px', '600px']
+                    , shade: 0
+                    , moveType: 0//拖拽模式，0或者1
+                    , maxmin: true
+                    , btn: ['确定', '关闭'] //只是为了演示
+                    , yes: function () {
+                        var forms = $('#questionnaireSceneForm').serializeObject();
                         var param = JSON.stringify(forms);
                         //加载层
                         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                        $.post("/scene/addORupdateQuestionnaireScene",{typeJson: param},function (result) {
-                            if(result.code==200){
+                        $.post("/scene/addORupdateQuestionnaireScene", {typeJson: param}, function (result) {
+                            if (result.code == 200) {
                                 layer.closeAll();
                                 layer.msg("修改成功！", {
                                     time: 2000
                                 });
                                 doSearch();
                                 resetAddOrUpdateForm();
-                            }else{
+                            } else {
                                 layer.msg("修改失败！", {
                                     time: 2000
                                 });
@@ -397,11 +390,11 @@
                         });
 
                     }
-                    ,btn2: function(){
+                    , btn2: function () {
                         layer.closeAll();
                     }
-                    ,zIndex: layer.zIndex //重点1
-                    ,success: function(layero){
+                    , zIndex: layer.zIndex //重点1
+                    , success: function (layero) {
                         layer.setTop(layero); //重点2
                     }
                 });
@@ -409,20 +402,21 @@
         });
 
     }
-//    function add0(m){return m<10?'0'+m:m }
-//    function format(timestamp)
-//    {
-//        //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
-//
-//        var time = new Date(timestamp);
-//        var year = time.getFullYear();
-//        var month = time.getMonth()+1;
-//        var date = time.getDate();
-//        var hours = time.getHours();
-//        var minutes = time.getMinutes();
-//        var seconds = time.getSeconds();
-//        return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
-//    }
+    function add0(m) {
+        return m < 10 ? '0' + m : m
+    }
+    function format(timestamp) {
+        //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+
+        var time = new Date(timestamp);
+        var year = time.getFullYear();
+        var month = time.getMonth() + 1;
+        var date = time.getDate();
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        return year + '-' + add0(month) + '-' + add0(date) + ' ' + add0(hours) + ':' + add0(minutes) + ':' + add0(seconds);
+    }
 </script>
 
 </body>
