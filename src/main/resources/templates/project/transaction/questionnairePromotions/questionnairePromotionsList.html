@@ -138,6 +138,11 @@
 
 
 <script type="text/javascript">
+    $(function () {
+        if($("input[name='promotionsType']:checked").val()==1){
+            $("input[name='promotionsBuySend']").attr("disabled","disabled");
+        }
+    })
     eui.use(['form'], function () {
         var form = eui.form, $ = eui.jquery;
         form.on('radio(allChoose)', function (data) {
