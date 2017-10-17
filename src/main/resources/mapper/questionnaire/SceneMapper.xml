@@ -6,6 +6,7 @@
       WARNING - @mbg.generated
     -->
     <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="scene_code" jdbcType="VARCHAR" property="sceneCode" />
     <result column="scene_name" jdbcType="VARCHAR" property="sceneName" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />

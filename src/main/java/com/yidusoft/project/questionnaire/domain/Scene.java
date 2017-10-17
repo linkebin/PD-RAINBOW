@@ -11,6 +11,15 @@ public class Scene {
     @Column(name = "id_")
     private String id;
 
+
+
+
+    /**
+     * 场景编号
+     */
+    @Column(name = "scene_code")
+    private String sceneCode;
+
     /**
      * 场景名称
      */
@@ -49,6 +58,24 @@ public class Scene {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     *获取场景编号
+     * @return scene_code 场景编号
+     */
+
+    public String getSceneCode() {
+        return sceneCode;
+    }
+
+    /**
+     * 设置场景编号
+     * @param sceneCode 场景编号
+     */
+
+    public void setSceneCode(String sceneCode) {
+        this.sceneCode = sceneCode;
     }
 
     /**

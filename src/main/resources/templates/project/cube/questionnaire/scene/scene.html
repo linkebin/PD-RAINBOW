@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>问卷场景</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+
+    <style>
+        #menuDig{
+            height: 300px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="eui-bd">
+
+    <div class="eui-mn1 eui-bg-white">
+        <div class="eui-mn1-type">
+            <form class="eui-form" id="searchFrom">
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="sceneCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
+
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 问卷场景列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                    <a href="###"  onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加场景</a>
+                    <a href="###" onclick="deleteQuestionnaireTag('')" class="eui-btn eui-btn-small">批量删除</a>
+                </div>
+            </div>
+            <table class="eui-table eui-form" id="questionTable">
+                <colgroup>
+                    <col width="60">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                    <th>场景编号</th>
+                    <th>场景名称</th>
+                    <th>创建人</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div id="pages"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!--添加的界面-->
+<form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane" id="questionnaireSceneForm" onsubmit="return false;" style="display: none">
+    <input  type="hidden" name="id"/>
+    <input  type="hidden" name="createTime"/>
+    <input  type="hidden" name="creator"/>
+    <input  type="hidden" name="deleted"/>
+    <input  type="hidden" name="sceneCode"/>
+    <div class="eui-form-item" style="width: 700px">
+        <div class="eui-form-item eui-form-text" >
+            <label class="eui-form-label">场景名称 </label>
+            <div class="eui-input-block">
+                <input name="sceneName" placeholder="请输入名称" class="eui-textarea"></input>
+            </div>
+        </div>
+    </div>
+
+
+
+    </div>
+</form>
+
+
+
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" charset="utf-8"></script>
+<script src="/date2format.js" charset="utf-8"></script>
+<script src="/Scripts/plugins/md5/md5.min.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+
+
+
+<script>
+    // 表单
+    eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,layedit = eui.layedit
+            ,laydate = eui.laydate
+            ,laypage = eui.laypage;
+
+        //全选
+        form.on('checkbox(allChoose)', function(data){
+            var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+            child.each(function(index, item){
+                item.checked = data.elem.checked;
+            });
+            form.render('checkbox');
+        });
+
+        //日期范围
+        laydate.render({
+            elem: '#test6'
+            ,range: true
+        });
+
+
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        doSearch();
+    });
+    //删除问题
+    function deleteQuestionnaireTag(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='questionnaireTagId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的问卷场景', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该场景吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                //加载层
+                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                $.ajax({
+                    url:"/questionnaire/tag/deleteQuestionnaireTag",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.closeAll();
+                        if(result.code==200){
+                            layer.msg('删除成功', {
+                                icon: 1,
+                                time: 2000
+                            });
+                        }else {
+                            layer.msg('删除失败', {
+                                icon: 1,
+                                time: 2000
+                            });
+                        }
+
+                        doSearch();
+                    }
+                });
+            });
+        }
+    }
+
+
+
+    //工具条按钮事件
+    function itemclick(item,id)
+    {
+        if (item=='add'){//添加
+            addQuestionnaireScene();
+        }else if (item == 'delete'){//删除
+            deleteQuestionnaireTag(id);
+        }else if (item=='edit'){//编辑
+            updateQuestionnaireTag(id);
+        }
+    }
+
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+
+            var params = $("#searchFrom").serializeObject();
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+            $.ajax({
+                url:"/questionnaire/tag/questionnaireTagListByPage",
+                data: {
+                    params:JSON.stringify(params),
+                    page:1,
+                    size:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var questionnaireTagList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(questionnaireTagList);
+                                $("#questionTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                //加载层
+                                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                                $.ajax({
+                                    url: "/questionnaire/tag/questionnaireTagListByPage",
+                                    data: {
+                                        params: JSON.stringify(params),
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        layer.closeAll();
+                                        var questionnaireTagList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(questionnaireTagList);
+                                        $("#questionTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(questionnaireTagList) {
+        var tableHtml = '';
+
+        for (var item in questionnaireTagList){
+            var question=questionnaireTagList[item];
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireTagId" type="hidden" value="' + question.id + '"></td>' +
+                '<td>'+ question.sceneCode +'</td>' +
+                '<td>'+ question.sceneName +'</td>' +
+                '<td>'+ question.creator +'</td>' +
+                '<td>'+ new Date(question.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+question.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+question.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+
+        return tableHtml;
+    }
+
+
+    //重置
+    function resetForm() {
+        $("[name='id']").val("");
+        document.getElementById('searchFrom').reset();
+    }
+    //添加修改form表单修改
+    function resetAddOrUpdateForm() {
+        $("[name='id']").val("");
+        document.getElementById('questionnaireSceneForm').reset();
+    }
+
+    //问卷场景添加
+    function addQuestionnaireScene() {
+        layer.open({
+            type: 1
+            ,id: 'LAY_add'
+            ,title: '添加问卷场景'
+            ,content:$('#questionnaireSceneForm')
+            ,area: ['800px', '600px']
+            ,shade: 0
+            ,moveType: 0//拖拽模式，0或者1
+            ,maxmin: true
+            ,btn: ['确定', '关闭'] //只是为了演示
+            ,yes: function(){
+                var forms= $('#questionnaireSceneForm').serializeObject();
+                var param = JSON.stringify(forms);
+                //加载层
+                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                $.post("/scene/addORupdateQuestionnaireScene",{typeJson: param},function (result) {
+                    if(result.code==200){
+                        layer.closeAll();
+                        layer.msg("添加成功！", {
+                            time: 2000
+                        });
+                        doSearch();
+                        resetAddOrUpdateForm();
+                    }else{
+                        layer.msg("添加失败！", {
+                            time: 2000
+                        });
+                    }
+                });
+
+            }
+            ,btn2: function(){
+                layer.closeAll();
+            }
+            ,zIndex: layer.zIndex //重点1
+            ,success: function(layero){
+                layer.setTop(layero); //重点2
+            }
+        });
+
+
+
+    }
+
+    //场景修改
+    function updateQuestionnaireTag(id) {
+        //查询问卷场景的信息
+        eui.use('layer', function(){ //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer,form=eui.form;
+            $.post("/questionnaire/tag/findQuestionnaireTagForUpdate",{"id":id},function (result) {
+                var question =result.data;
+                $("[name='id']").val(question.id);
+                $("[name='createTime']").val(format(question.createTime));
+                $("[name='creator']").val(question.creator);
+                $("[name='deleted']").val(question.deleted);
+                $("#questionnaireSceneForm [name='sceneCode']").val(question.sceneCode);
+                $("[name='sceneName']").val(question.sceneName);
+
+
+                form.render('select');
+                //修改
+                layer.open({
+                    type: 1
+                    ,id: 'LAY_update'
+                    ,title: '修改问卷场景'
+                    ,content:$('#questionnaireSceneForm')
+                    ,area: ['800px', '600px']
+                    ,shade: 0
+                    ,moveType: 0//拖拽模式，0或者1
+                    ,maxmin: true
+                    ,btn: ['确定', '关闭'] //只是为了演示
+                    ,yes: function(){
+                        var forms= $('#questionnaireSceneForm').serializeObject();
+                        var param = JSON.stringify(forms);
+                        //加载层
+                        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                        $.post("/questionnaire/tag/addORupdateQuestionnaireTag",{typeJson: param},function (result) {
+                            if(result.code==200){
+                                layer.closeAll();
+                                layer.msg("修改成功！", {
+                                    time: 2000
+                                });
+                                doSearch();
+                                resetAddOrUpdateForm();
+                            }else{
+                                layer.msg("修改失败！", {
+                                    time: 2000
+                                });
+                            }
+                        });
+
+                    }
+                    ,btn2: function(){
+                        layer.closeAll();
+                    }
+                    ,zIndex: layer.zIndex //重点1
+                    ,success: function(layero){
+                        layer.setTop(layero); //重点2
+                    }
+                });
+            });
+        });
+
+    }
+    function add0(m){return m<10?'0'+m:m }
+    function format(timestamp)
+    {
+        //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+
+        var time = new Date(timestamp);
+        var year = time.getFullYear();
+        var month = time.getMonth()+1;
+        var date = time.getDate();
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
+    }
+</script>
+
+</body>
+</html>
