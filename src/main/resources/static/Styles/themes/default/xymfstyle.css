@@ -47,6 +47,7 @@
 }
 .xymfHome .eui-area{
     overflow: hidden;
+    margin-bottom: 40px;
 }
 .xymfHome .eui-layout-admin .eui-side {
     position: static;
@@ -269,18 +270,31 @@
 .orderForm .orderT{
     background: transparent;
     width: 100%;
-    margin: 10px 0;
+    margin: 16px 0;
+    padding-left: 10px;
 }
-
+.orderForm .orderT th:nth-child(1){
+    padding-left: 10px;
+}
 .orderForm .eui-table tr:hover{
     background: transparent;
 }
 
 .orderForm .orderIn{
     background: #f4f9fd;
-    margin-top: 10px;
+    margin-top: 16px;
     width: 100%;
 }
+.orderForm .orderIn td:nth-child(1){
+    width: 300px;
+}
+.orderForm .orderIn td:nth-child(2){
+    width: 140px;
+}
+.orderForm .orderIn td:nth-child(5){
+    width: 120px;
+}
+
 .orderForm .orderNum{
     padding: 12px;
 }
@@ -291,6 +305,152 @@
 
 .orderForm .eui-table{
     margin: 0;
+}
+
+.orderForm .orderIn .eui-table tr:hover{
+    background-color: #ffffff!important;
+}
+
+
+/* 支付中心 */
+.xymfPay .payCentre{
+    border-left: 2px solid #ddd;
+    padding-left: 10px;
+    margin-left: 10px;
+}
+.xymfPay .eui-logo{
+     width: 250px;
+     color: #333;
+     font-size: 18px;
+}
+.xymfPay .payPerson{
+    float: left;
+    margin: 10px;
+    margin-left: 480px;
+    padding-left: 48px;
+    background: url(../../images/avatar.png) no-repeat left center;
+    background-size: 38px;
+    cursor: pointer;
+}
+
+.payLeft{
+    width: 840px;
+    float: left;
+    background: #fff;
+    box-shadow:  3px 3px 15px #ccc;
+    border-radius: 5px 5px 0 0;
+    margin: 20px 0;
+    line-height: 60px;
+}
+.payRight{
+    width: 290px;
+    background: #fff;
+    margin:0 10px 10px 0;
+    box-shadow:  3px 3px 15px #ccc;
+    border-radius: 5px 5px 0 0;
+    float: left;
+    margin: 20px 0 20px 20px;
+    min-height: 520px;
+}
+.pay-color-red{
+    color:#fd4c69;
+}
+.payTicket0{
+    padding: 16px 38px;
+    border: 1px solid #ccc;
+    text-align: center;
+    margin-right: 20px;
+    cursor: pointer;
+    position: relative;
+}
+.payTicket0{
+    border: 1px solid #cccccc;
+}
+.payTicket0 .discount{
+    color: #fff;
+    width: 0px;
+    height: 0px;
+    border-top: 50px solid #cccccc;
+    border-right: 50px solid transparent;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.payTicket0 .discountFont{
+    position: absolute;
+    left: 3px;
+    top: 4px;
+    color: #fff;
+    transform:rotate(315deg);
+}
+.payTicket0 .tick{
+    color: #fff;
+    width: 0px;
+    height: 0px;
+    border-bottom: 34px solid #cccccc;
+    border-left: 34px solid transparent;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+.payTicket0 .tickFont{
+    position: absolute;
+    right: 2px;
+    bottom: -2px;
+    color: #fff;
+    font-size: 16px;
+    z-index:2;
+}
+.payTicket1 {
+    border: 1px solid #fd4c69;
+    color: #fd4c69;
+}
+.payTicket1 .discount{
+    border-top: 50px solid #fd4c69;
+}
+
+.payTicket1 .discount{
+    border-top: 50px solid #fd4c69;
+}
+.payTicket1 .tick{
+    border-bottom: 34px solid #fd4c69;
+}
+.payLeft .send{
+    margin: -10px 0 -20px 90px;
+}
+.payTicket .wechatpay{
+    height: 38px;
+    line-height: 38px;
+}
+.payTicket .wechatpay .tickFont{
+    right: 2px;
+    bottom: -8px;
+}
+.payCode{
+    margin-left: 90px;
+    margin-top: 10px;
+}
+
+.pay-color-yellow{
+    background: #f39128;
+}
+
+
+.vipTitle{
+    width: 300px;
+    height: 84px;
+    text-align: center;
+    color: #fff;
+    line-height: 84px;
+    font-size: 24px;
+    background: url(../../../Styles/images/xymfImages/xymf/vipbg.png) no-repeat left top;
+    background-size: 290px 81px;
+    margin-bottom: 40px;
+}
+.payRight .eui-row{
+    padding:18px 30px;
+    line-height: 30px;
 }
 
 

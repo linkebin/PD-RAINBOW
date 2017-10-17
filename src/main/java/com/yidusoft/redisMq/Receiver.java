@@ -20,7 +20,7 @@ import java.util.concurrent.CountDownLatch;
  */
 @Component
 public class Receiver {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
+    private static final Logger logger = LoggerFactory.getLogger(Receiver.class);
 
     private CountDownLatch latch;
 
@@ -73,6 +73,7 @@ public class Receiver {
             }
             loginLogService.insertLoginInfo(loginLog);
         }catch (Exception e){
+            logger.info("插入登录日志失败");
             e.printStackTrace();
         }
     }
