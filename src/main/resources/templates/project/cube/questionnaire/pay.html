@@ -1,132 +1,215 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>我的订单</title>
-  <link rel="stylesheet" href="/Styles/themes/default/style.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>我的订单</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css">
+    <script th:src="@{/Scripts/date2format.js}" charset="utf-8"></script>
 </head>
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome xymfPay">
-  <div class="eui-header">
-    <div class="headerIn">
-      <div class="eui-logo"><img src="/Styles/images/xymfImages/xymf/logo.png" alt=""><span class="payCentre">支付中心</span></div>
-      <!-- 头部区域（可配合layui已有的水平导航） -->
-      <div class="payPerson">
-        <p class="eui-color-blue">杨雪</p>
-        <p class="eui-color-gray3">ID: 2017023</p>
-      </div>
-      <ul class="eui-nav personage">
-        <li class="eui-nav-item"><a href="">VIP记录</a></li>
-        <li class="eui-nav-item"><a href="">支付中心</a></li>
-        <li class="eui-nav-item"><a href="index.html">返回首页</a></li>
-      </ul>
+    <div class="eui-header">
+        <div class="headerIn">
+            <div class="eui-logo"><img src="/Styles/images/xymfImages/xymf/logo.png" alt=""><span
+                    class="payCentre">支付中心</span></div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <div class="payPerson">
+                <p class="eui-color-blue">杨雪</p>
+                <p class="eui-color-gray3">ID: 2017023</p>
+            </div>
+            <ul class="eui-nav personage">
+                <li class="eui-nav-item"><a href="">VIP记录</a></li>
+                <li class="eui-nav-item"><a href="">支付中心</a></li>
+                <li class="eui-nav-item"><a href="index.html">返回首页</a></li>
+            </ul>
+        </div>
     </div>
-  </div>
-  <div class="eui-area">
-    <div class="payLeft eui-row eui-padding20">
-      <div class="eui-col-md1 eui-marginR20">登录账号：</div>
-      <div class="eui-col-md10">杨雪<span class="eui-color-blue">（ID：2017023）</span></div>
-      <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
-      <ul class="eui-col-md10 payTicket">
-        <li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">
-          <span class="discount"></span>
-          <span class="discountFont">8折</span>
-          <span class="eui-font30">159.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 199.9元）</span>
-          <i class="eui-icon tickFont">&#xe605;</i>
-          <span class="tick"></span>
-        </li>
-        <li class="eui-float-left payTicket0 eui-lineHeight24">
-          <span class="discount"></span>
-          <span class="discountFont">8.5折</span>
-          <span class="eui-font30">69.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 89.9元）</span>
-          <i class="eui-icon tickFont">&#xe605;</i>
-          <span class="tick"></span>
-        </li>
-        <li class="eui-float-left payTicket0 eui-lineHeight24">
-          <span class="eui-font30">299.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 469.9元）</span>
-          <i class="eui-icon tickFont">&#xe605;</i>
-          <span class="tick"></span>
-        </li>
-      </ul>
-      <div class="eui-col-md12 eui-font12 send">*限时加增 <span class="eui-color-blue">10张下载券</span> ， 再省32元</div>
-      <div class="eui-col-md1 eui-marginR20">应付金额：</div>
-      <div class="eui-col-md10"><span class="pay-color-red eui-font24">159.9</span>元</div>
-      <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
-      <ul class="eui-col-md10 payTicket">
-        <li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">
-          <img src="/Styles/images/xymfImages/xymf/alipay.png" alt="">
-          <i class="eui-icon tickFont">&#xe605;</i>
-          <span class="tick"></span>
-        </li>
-        <li class="eui-float-left payTicket0 eui-lineHeight24 wechatpay">
-          <img src="/Styles/images/xymfImages/xymf/wechatpay.png" alt="">
-          <i class="eui-icon tickFont">&#xe605;</i>
-          <span class="tick"></span>
-        </li>
-      </ul>
-      <div class="eui-col-md12 payCode"><img src="/Styles/images/xymfImages/xymf/pay-code.png" alt=""></div>
-      <div class="eui-col-md12 payCode">
-        <span class="eui-btn eui-btn-big pay-color-yellow">立即支付</span>
-      </div>
+    <div class="eui-area">
+        <div class="payLeft eui-row eui-padding20">
+            <div class="eui-col-md1 eui-marginR20">登录账号：</div>
+            <div class="eui-col-md10">杨雪<span class="eui-color-blue">（ID：2017023）</span></div>
+            <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
+            <ul class="eui-col-md10 payTicket" id="pay">
+                 <!--<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">
+                     <span class="discount"></span>
+                     <span class="discountFont">8折</span>
+                     <span class="eui-font30">159.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 199.9元）</span>
+                     <i class="eui-icon tickFont">&#xe605;</i>
+                     <span class="tick"></span>
+                 </li>
+                 <li class="eui-float-left payTicket0 eui-lineHeight24">
+                   <span class="discountFont">8.5折</span>
+                   <span class="eui-font30">69.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 89.9元）</span>
+                   <i class="eui-icon tickFont">&#xe605;</i>
+                   <span class="tick"></span>
+                 </li>
+                 <li class="eui-float-left payTicket0 eui-lineHeight24">
+                   <span class="eui-font30">299.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 469.9元）</span>
+                   <i class="eui-icon tickFont">&#xe605;</i>
+                   <span class="tick"></span>
+                 </li>-->
+            </ul>
+            <div class="eui-col-md12 eui-font12 send">*限时加增 <span class="eui-color-blue">10张下载券</span> ， 再省32元</div>
+            <div class="eui-col-md1 eui-marginR20 money">应付金额：</div>
+            <div class="eui-col-md10"><span class="pay-color-red eui-font24">159.9</span>元</div>
+            <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
+            <ul class="eui-col-md10 payTicket">
+                <li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">
+                    <img src="/Styles/images/xymfImages/xymf/alipay.png" alt="">
+                    <i class="eui-icon tickFont">&#xe605;</i>
+                    <span class="tick"></span>
+                </li>
+                <li class="eui-float-left payTicket0 eui-lineHeight24 wechatpay">
+                    <img src="/Styles/images/xymfImages/xymf/wechatpay.png" alt="">
+                    <i class="eui-icon tickFont">&#xe605;</i>
+                    <span class="tick"></span>
+                </li>
+            </ul>
+            <div class="eui-col-md12 payCode"><img src="/Styles/images/xymfImages/xymf/pay-code.png" alt=""></div>
+            <div class="eui-col-md12 payCode">
+                <span class="eui-btn eui-btn-big pay-color-yellow">立即支付</span>
+            </div>
+        </div>
+        <div class="payRight">
+            <p class="vipTitle">VIP 专 享 特 权</p>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""></div>
+                <div class="eui-col-md9">享有文库VIP全部特权</div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/noadv.png" alt=""></div>
+                <div class="eui-col-md9">专属文档阅读免广告特权</div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/voucher.png" alt=""></div>
+                <div class="eui-col-md9">阅读代金券<span class="pay-color-red">6个月×10元/月</span></div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/free.png" alt=""></div>
+                <div class="eui-col-md9">海量优质文档、精品图书</div>
+            </div>
+        </div>
     </div>
-    <div class="payRight">
-      <p class="vipTitle">VIP 专 享 特 权</p>
-      <div class="eui-row">
-        <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""></div>
-        <div class="eui-col-md9">享有文库VIP全部特权</div>
-      </div>
-      <div class="eui-row">
-        <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/noadv.png" alt=""></div>
-        <div class="eui-col-md9">专属文档阅读免广告特权</div>
-      </div>
-      <div class="eui-row">
-        <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/voucher.png" alt=""></div>
-        <div class="eui-col-md9">阅读代金券<span class="pay-color-red">6个月×10元/月</span></div>
-      </div>
-      <div class="eui-row">
-        <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/free.png" alt=""></div>
-        <div class="eui-col-md9">海量优质文档、精品图书</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="eui-footer">
-    <!-- 底部固定区域 -->
-    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
-  </div>
+    <div class="eui-footer">
+        <!-- 底部固定区域 -->
+        © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+    </div>
 </div>
 
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 
 <script>
-//表单
-eui.use(['form', 'laydate','element'], function(){
-    var form = eui.form
-    ,element = eui.element
-    ,laydate = eui.laydate;
+    //表单
+    eui.use(['form', 'laydate', 'element'], function () {
+        var form = eui.form
+                , element = eui.element
+                , laydate = eui.laydate;
 
-    // 日期
-    laydate.render({
-        elem: '#test-n1'
-        ,position: 'static'
+        // 日期
+        laydate.render({
+            elem: '#test-n1'
+            , position: 'static'
+        });
+
     });
 
-});
+    /* 购买券数 */
 
-/* 购买券数 */
-$(".payTicket li").click(function(event) {
-  $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
-});
+    $(function () {
+        $.get("/questionnaire/promotions/getProductAndQuestionPro", function (result) {
+            console.log(result);
+            if (result.code = 200) {
+                var productList = result.data.productList;
+                var questionList = result.data.questionList;
+                var proList=[];
+                for (var item in productList) {
+                    var product = productList[item];
+                    //如果这个套餐有活动的话
+                    var pro={  originalPrice: product.productPrice,type:""};
+                    pro.price = product.productPrice;
+                    pro.total = product.productTotal;
+                    for (var index in questionList) {
+                        var question = questionList[index];
+                        if (product.promotionsId != "") {
+                            //找到该活动
+                            if (product.promotionsId == question.id) {
+                                //活动启用
+                                if (question.promotionsState == 0) {
+                                    //还有购买次数
+                                    if (question.buyTotal > 0) {
+                                        var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
+                                        var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
+                                        //还在活动时间内
+                                        if (new Date() > new Date(start) && new Date() < new Date(end)) {
+                                            if (question.promotionsType == 1) {
+                                                var discount=question.promotionsDiscount*100;//折扣
+                                                $('.send').html("*限时折扣"+'<span class="eui-color-blue">'+discount+"折</span>,再省"+(product.productPrice * question.promotionsDiscount)+"元");
+                                                pro.total = product.productTotal;
+                                                pro.price = product.productPrice - (product.productPrice * question.promotionsDiscount);
+                                                pro.type=discount+"折";
+                                            } else {
+                                                pro.price = product.productPrice;
+                                                pro.total = product.productTotal + question.promotionsBuySend;
+                                                pro.type="买送";
+                                                $('.send').html("*限时加赠"+'<span class="eui-color-blue">'+question.promotionsBuySend+"张问卷</span>");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    proList.push(pro);
+                }
+                var tableHtml = getTable(proList);
+                $("#pay").html(tableHtml);
+                function sub() {
+                    console.log("111");
+                }
+                $(".payTicket li").click(function (event) {
+                    $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
+                    var str=(event.delegateTarget.innerText).toString();
+                    if(str.indexOf("买送")!=-1){
+                        str=str.substring(str.indexOf("送")+1,str.indexOf("元/"));
+                    }else{
+                        str=str.substring(str.indexOf("折")+1,str.indexOf("元/"));
+                    }
+                    $('.eui-font24').html(str);
+                });
+            }
+        });
 
-
-
-
-
-
-
-
+        function getTable(payList) {
+            $('.eui-font24').html(payList[0].price);
+            console.log(payList);
+            var tableHtml = '';
+            for (var item in payList) {
+                var pay = payList[item]
+                if(item==0){
+                    tableHtml +='<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">'+
+                            '<span class="discount"></span>' +
+                            '<span class="discountFont">' + pay.type + '</span>' +
+                            '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                            '<i class="eui-icon tickFont">&#xe605;</i>' +
+                            '<span class="tick"></span></li>';
+                    continue;
+                }
+                tableHtml +='<li class="eui-float-left payTicket0 eui-lineHeight24">'+
+                        '<span class="discount"></span>' +
+                        '<span class="discountFont">' + pay.type + '</span>' +
+                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                        '<i class="eui-icon tickFont">&#xe605;</i>' +
+                        '<span class="tick"></span></li>';
+            }
+            return tableHtml
+        }
+        $(".payTicket li").click(function (event) {
+            $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
+        });
+    })
 </script>
 </body>
 </html>

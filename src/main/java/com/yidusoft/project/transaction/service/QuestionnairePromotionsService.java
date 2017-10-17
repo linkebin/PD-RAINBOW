@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface QuestionnairePromotionsService extends Service<QuestionnairePromotions> {
     List<QuestionnairePromotions> getPromotionAll();
+
+    List<QuestionnairePromotions> getProductAndQuestionPro();
 }
