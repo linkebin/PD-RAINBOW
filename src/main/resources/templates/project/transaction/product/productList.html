@@ -59,7 +59,7 @@
 
 
 <!-- 左滑新建套餐开始 -->
-<div class="productFiltrate">
+<div class="taskFiltrate">
 </div>
 <div class="filtrateIn">
     <div class="eui-row eui-padding10 eui-borderB">
@@ -91,7 +91,7 @@
 
 
 <!-- 左滑编辑套餐开始 -->
-<div class="productFiltrate2">
+<div class="taskFiltrate2">
 </div>
 <div class="filtrateIn2">
     <div class="eui-row eui-padding10 eui-borderB">
@@ -187,29 +187,29 @@
 
 
     // 新建角色
-    $(".productFiltrate").hide();
+    $(".taskFiltrate").hide();
     $(".productNew").click(function(event) {
-        $(".productFiltrate").show();
+        $(".taskFiltrate").show();
         $(".filtrateIn").animate({right:'0'},400);
         /* Act on the event */
     });
 
-    $(".productClose,.productFiltrate,.productConfirm").click(function(event) {
+    $(".productClose,.taskFiltrate,.productConfirm").click(function(event) {
         $(".filtrateIn").animate({right:'-400px'},400);
-        $(".productFiltrate").hide();
+        $(".taskFiltrate").hide();
     });
 
     // 套餐Edit
-    $(".productFiltrate2").hide();
+    $(".taskFiltrate2").hide();
     $(".proEdit").click(function(event) {
-        $(".productFiltrate2").show();
+        $(".taskFiltrate2").show();
         $(".filtrateIn2").animate({right:'0'},400);
         /* Act on the event */
     });
 
-    $(".productClose,.productFiltrate2,.productConfirm").click(function(event) {
+    $(".productClose,.taskFiltrate2,.productConfirm").click(function(event) {
         $(".filtrateIn2").animate({right:'-400px'},400);
-        $(".productFiltrate2").hide();
+        $(".taskFiltrate2").hide();
     });
 
 
@@ -382,7 +382,7 @@
         $("#total_edit").val(total);
         $("#price_edit").val(price);
         $("#id_edit").val(id);
-        $(".productFiltrate2").show();
+        $(".taskFiltrate2").show();
         $(".filtrateIn2").animate({right:'0'},400);
     }
     /**

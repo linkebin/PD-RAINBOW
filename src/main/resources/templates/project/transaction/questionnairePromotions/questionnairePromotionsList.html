@@ -62,7 +62,7 @@
 </div>
 
 <!-- 左滑新建活动开始 -->
-<div class="promotionFiltrate">
+<div class="taskFiltrate">
 </div>
 <div class="filtrateIn">
     <div class="eui-row eui-padding10 eui-borderB">
@@ -294,7 +294,7 @@
                 $("[name='buyTotal']").val("");
                 $("[name='promotionsBuySend']").val("");
                 $(".filtrateIn").animate({right: '-400px'}, 400);
-                $(".promotionFiltrate").hide();
+                $(".taskFiltrate").hide();
                 doSearch();
             } else {
                 layer.close(indexs);
@@ -307,16 +307,16 @@
     }
 
     // 新建活动
-    $(".promotion").hide();
+    $(".taskFiltrate").hide();
     $(".promotionNew").click(function (event) {
-        $(".promotion").show();
+        $(".taskFiltrate").show();
         $(".filtrateIn").animate({right: '0'}, 400);
         /* Act on the event */
     });
 
-    $(".promotionClose,.promotionFiltrate").click(function (event) {
+    $(".promotionClose,.taskFiltrate").click(function (event) {
         $(".filtrateIn").animate({right: '-400px'}, 400);
-        $(".promotionFiltrate").hide();
+        $(".taskFiltrate").hide();
     });
 </script>
 </body>
