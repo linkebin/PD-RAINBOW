@@ -18,7 +18,7 @@
   </resultMap>
 
   <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">
-      SELECT cm.* FROM channel_manage cm WHERE 1=1
+      SELECT cm.* FROM channel_manage cm WHERE cm.deleted=0
 
     <if test="channelName!='' and channelName!=null">
       AND cm.channel_name LIKE  '%${channelName}%'
