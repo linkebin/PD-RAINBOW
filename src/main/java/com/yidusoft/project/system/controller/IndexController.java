@@ -125,7 +125,7 @@ public class IndexController {
             e.printStackTrace();
             return ResultGenerator.genFailResult("验证码发生失败");
         }
-        return ResultGenerator.genSuccessResult();
+        return ResultGenerator.genSuccessResult("验证码发生成功");
     }
 
     @RequestMapping(value="/indexInfo")
