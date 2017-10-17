@@ -48,6 +48,11 @@ public class QuestionnairePromotionsController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    /**
+     * 添加活动
+     * @param promotionsJson
+     * @return
+     */
     @PostMapping("/add")
     public Result add(String promotionsJson) {
         QuestionnairePromotions promotions = JSON.parseObject(promotionsJson,QuestionnairePromotions.class);
@@ -59,14 +64,22 @@ public class QuestionnairePromotionsController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        questionnairePromotionsService.deleteById(id);
+    /**
+     * 删除活动
+     * @param id
+     * @return
+     */
+    @PostMapping("/delete")
+    public Result delete(String  id) {
+        QuestionnairePromotions questionnairePromotions=questionnairePromotionsService.findById(id);
+        questionnairePromotions.setDeleted(1);
+        questionnairePromotionsService.update(questionnairePromotions);
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(QuestionnairePromotions questionnairePromotions) {
+    @PostMapping("/update")
+    public Result update(String promotionsJson) {
+        QuestionnairePromotions questionnairePromotions=JSON.parseObject(promotionsJson,QuestionnairePromotions.class);
         questionnairePromotionsService.update(questionnairePromotions);
         return ResultGenerator.genSuccessResult();
     }

@@ -66,7 +66,7 @@
 </div>
 <div class="filtrateIn">
     <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAdd">
             <i class='eui-icon eui-font24'>&#xe654;</i> 新建活动
         </div>
         <div class="eui-col-md2 eui-textAlignR">
@@ -74,11 +74,28 @@
         </div>
     </div>
     <form class="eui-form eui-marginT10 eui-paddingR10" id="promotionForm">
+        <input type="hidden" name="id" id="questionId">
         <div class="eui-form-item">
             <label class="eui-form-label">活动类型</label>
             <div class="eui-input-block">
-                <input type="radio" name="promotionsType" value="1" title="套餐折扣" checked>
-                <input type="radio" name="promotionsType" value="2" title="多买多送">
+                <input type="radio" name="promotionsType" value="1" title="套餐折扣" checked e-filter="allChoose">
+                <input type="radio" name="promotionsType" value="2" title="多买多送" e-filter="allChoose">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">折扣</label>
+            <div class="eui-input-block">
+                <select name="promotionsDiscount" id="Discount">
+                    <option value="0.09">9折</option>
+                    <option value="0.08">8折</option>
+                    <option value="0.07">7折</option>
+                    <option value="0.06">6折</option>
+                    <option value="0.05">5折</option>
+                    <option value="0.04">4折</option>
+                    <option value="0.03">3折</option>
+                    <option value="0.02">2折</option>
+                    <option value="0.01">1折</option>
+                </select>
             </div>
         </div>
         <div class="eui-form-item">
@@ -91,12 +108,6 @@
             <label class="eui-form-label">结束时间</label>
             <div class="eui-input-inline">
                 <input type="text" class="eui-input" name="promotionsEnd" id="endTime" placeholder="年-月-日">
-            </div>
-        </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">折扣</label>
-            <div class="eui-input-block">
-                <input type="text" name="promotionsDiscount" e-verify="title" autocomplete="off" class="eui-input">
             </div>
         </div>
         <div class="eui-form-item">
@@ -120,12 +131,32 @@
         </div>
     </form>
     <div class="promotionConfirm">
-        <span onclick="addPromotion()" class="eui-btn">确认</span>
+        <span onclick="addOrUpPromotion()" class="eui-btn">确认</span>
     </div>
 </div>
 <!-- 左滑新建活动结束 -->
 
+
 <script type="text/javascript">
+    eui.use(['form'], function () {
+        var form = eui.form, $ = eui.jquery;
+        form.on('radio(allChoose)', function (data) {
+            var child = $(data.elem).parents('div').find('input[name="promotionsBuySend"]');
+            var child1 = $(data.elem).parents('div').find('select[name="promotionsDiscount"]');
+            child.each(function (index, item) {
+                child1.each(function (indexs, item1) {
+                    if (data.value == 1) {
+                        item.readOnly = 'readOnly';
+                        item1.disabled = '';
+                    } else {
+                        item.readOnly = '';
+                        item1.disabled = 'disabled';
+                    }
+                })
+            });
+            form.render();
+        });
+    });
     // 日期和时间选择
     eui.use('laydate', function () {
         var laydate = eui.laydate;
@@ -154,6 +185,7 @@
             //全选
             form.on('checkbox(allChoose)', function (data) {
                 var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                console.log(child);
                 child.each(function (index, item) {
                     item.checked = data.elem.checked;
                 });
@@ -217,10 +249,13 @@
 
             var id = "'" + promotion.id + "'";
             tableHtml += '<tr>' +
-                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + promotion.id + '"></td>' +
-                    '<td>' + promotion.promotionsType + '</td>' +
-                    '<td>' + promotion.promotionsStart + '</td>' +
-                    '<td>' + promotion.promotionsEnd + '</td>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + promotion.id + '"></td>';
+
+            promotion.promotionsType == 1 ? tableHtml += '<td>限时折扣</td>' : tableHtml += '<td>限时买送</td>';
+
+            tableHtml +=
+                    '<td>' + new Date(promotion.promotionsStart).Format('yyyy-MM-dd hh:mm:ss') + '</td>' +
+                    '<td>' + new Date(promotion.promotionsEnd).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' + promotion.promotionsDiscount + '</td>' +
                     '<td>' + promotion.buyTotal + '</td>' +
                     '<td>' + promotion.promotionsBuySend + '</td>';
@@ -232,33 +267,85 @@
                     '<td>' + new Date(promotion.createTime).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' +
                     '<div class="eui-btn-group"> ' +
-                    '' + Btns(promotion) + '' +
+                    '' + Buts(promotion) + '' +
                     '</div>' +
                     '</td>' +
                     '</tr>';
         }
         return tableHtml;
     }
-    function Btns(promotion) {
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit" title="编辑活动" onclick="promotionEdit(promotion)"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="itemclick(' + "'delete'," + promotion.id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+    function Buts(promotion) {
+        var id = "'" + promotion.id + "'";
+        var start = "'" + new Date(promotion.promotionsStart).Format('yyyy-MM-dd') + "'";
+        var end = "'" + new Date(promotion.promotionsEnd).Format('yyyy-MM-dd') + "'";
+        var discount = "'" + promotion.promotionsDiscount + "'";
+        var buyTotal = "'" + promotion.buyTotal + "'";
+        var buySend = "'" + promotion.promotionsBuySend + "'";
+        var type = "'" + promotion.promotionsType + "'";
+        var state = "'" + promotion.promotionsState + "'";
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit " title="编辑活动" onclick="promotionEdit(' + id + ',' + start + ',' + end + ',' + discount + ',' + buyTotal + ',' + buySend + ',' + type + ',' + state + ')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deletePromotion(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
     }
-    //
-    function promotionEdit(promotion) {
-        console.log('1');
+    /**
+     *
+     * 编辑活动
+     */
+    function promotionEdit(id, start, end, discount, buyTotal, buySend, type, state) {
+        $('#questionId').val(id);
+        $("#upOrAdd").text("编辑活动");
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form;
+            $("#Discount option[value='"+discount+"']").attr("selected", true);
+            console.log(type)
+            if(type==1){
+                $("input[name='promotionsType']:eq(0)").attr("checked",true);
+            }else{
+                $("input[name='promotionsType']:eq(1)").attr("checked",true);
+            }
+            $("input[name='promotionsStart']").val(start);
+            $("input[name='promotionsEnd']").val(end);
+            $("input[name='buyTotal']").val(buyTotal);
+            $("input[name='promotionsBuySend']").val(buySend);
+            $("input[name='promotionsState']").val(state);
+            form.render()
+            /*$("input[name='promotionsType']").each(function () {
+                console.log($(this).val())
+                console.log(type);
+                if($(this).val()==type){
+                    console.log("加上")
+                    $(this).attr("checked",'checked');
+                }
+            })*/
+        });
+        $('.taskFiltrate').show();
+        $(".filtrateIn").animate({right: '0'}, 400);
+    }
+    /**
+     * 删除活动
+     * @param id
+     */
 
-    }
-    //工具条按钮事件
-    function itemclick(item, id) {
-        if (item == 'edit') {//修改
-        } else {//删除
-            deleteRole(id);
-        }
+    function deletePromotion(id) {
+        var indexs = layer.load(2); //加载
+        $.post("/questionnaire/promotions/delete", {id: id}, function (result) {
+            if (result.code == 200) {
+                layer.closeAll();
+                layer.msg('删除成功！', {
+                    time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                });
+                doSearch();
+            } else {
+                layer.close(indexs);
+                layer.msg('新建失败！', {
+                    time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                });
+            }
+        })
     }
     /**
      * 新建活动
      */
-    function addPromotion() {
+    function addOrUpPromotion() {
         var params = $("#promotionForm").serializeObject();
         if (params.promotionsStart.trim() == "") {
             layer.msg('开始时间不能为空！');
@@ -276,11 +363,33 @@
             layer.msg('购买次数不能为空！');
             return;
         }
-        else if (params.promotionsBuySend.trim() == "") {
+        if (params.promotionsType.trim() == 2) {
             layer.msg('赠送数量不能为空！');
             return;
         }
+        console.log(params);
+        if($('#questionId').val()!=''){
+            $.post("/questionnaire/promotions/update", {"promotionsJson": JSON.stringify(params)}, function (result) {
+                if (result.message = 'SUCCESS') {
+                    console.log(result);
+                    layer.closeAll();
+                    doSearch();
+                    layer.msg('编辑成功！', {
+                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                    });
 
+                    $(".filtrateIn").animate({right: '-400px'}, 400);
+                    $(".taskFiltrate").hide();
+                } else {
+                    layer.close(indexs);
+                    layer.msg('编辑失败！', {
+                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                    });
+
+                }
+            });
+            return;
+        }
         $.post("/questionnaire/promotions/add", {"promotionsJson": JSON.stringify(params)}, function (result) {
             if (result.message = 'SUCCESS') {
                 //关闭
@@ -308,7 +417,12 @@
 
     // 新建活动
     $(".taskFiltrate").hide();
-    $(".promotionNew").click(function (event) {
+    $(".promotionNew,.promotionEdit").click(function (event) {
+        $("input[name='promotionsStart']").val("");
+        $("input[name='promotionsEnd']").val("");
+        $("input[name='buyTotal']").val("");
+        $("input[name='promotionsBuySend']").val("");
+        $("input[name='promotionsState']").val("");
         $(".taskFiltrate").show();
         $(".filtrateIn").animate({right: '0'}, 400);
         /* Act on the event */
@@ -318,6 +432,7 @@
         $(".filtrateIn").animate({right: '-400px'}, 400);
         $(".taskFiltrate").hide();
     });
+
 </script>
 </body>
 </html>

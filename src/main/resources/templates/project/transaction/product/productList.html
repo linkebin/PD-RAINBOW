@@ -343,7 +343,7 @@
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + prodouct.id + '"></td>' +
                     '<td>'+ prodouct.productCode +'</td>' +
                     '<td>'+ prodouct.productTotal +'</td>' +
-                    '<td>'+ prodouct.productPrice +'</td>' +
+                    '<td>'+ prodouct.productPrice +'元</td>' +
                     '<td>'+ prodouct.creator +'</td>' +
                     '<td>'+ new Date(prodouct.createTime).Format('yyyy-MM-dd') +'</td>' +
                     '<td>' +
@@ -452,11 +452,13 @@
                 if(result.message='SUCCESS'){
                     //关闭
                     //关闭
+                    $(".taskFiltrate").hide();
+                    $(".filtrateIn").animate({right:'-400px'},400);
                     layer.closeAll();
-                    doSearch();
                     layer.msg('新建成功！', {
                         time: 1500 //1秒关闭（如果不配置，默认是3秒）
                     });
+                    doSearch();
                     $("#productTotal").val("");
                     $("#productPrice").val("");
                 }else{
