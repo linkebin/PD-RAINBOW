@@ -12,7 +12,7 @@
             color: red;
         }
         .sign_dig{width: 450px;
-            height: 370px;
+            height: 420px;
             background: #ffffff;
             position: fixed;
             left: 50%;
@@ -39,13 +39,14 @@
             border: none;
         }
 
+
     </style>
 </head>
 <body>
 <div  class="Login loginDiv">
     <div class="loginIn">
         <div id="login1" class="login1">
-            <h3>心云魔方平台</h3>
+            <h3><img src="/Styles/images/xymfImages/xymf/logo.png"></h3>
             <p class="loginTxt"><input type="text" th:value="${account}" id="username" placeholder="请输入手机号"/></p>
             <p class="loginPword"><input type="password" id="password" placeholder="请输入登录密码"/></p>
             <input type="hidden" name="loginType" value="account"/><!--首选登录方式为账号登录-->
@@ -54,10 +55,10 @@
                     <input name="vrifyCode" id="vrifyCode" type="text"  placeholder="请输入验证码" autocomplete="off"
                            class="eui-input eui-input-inline  securityCode" value="">
                     <span class="securityImg">
-                        <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="90" alt=""></span>
+                        <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="95" alt=""></span>
                 </div>
             </div>
-            <div class="loginForget"><a class="register" onclick="showSignDiv();">还没有账号？</a><a href="##">忘记密码？</a></div>
+            <div class="loginForget"><a class="register" onclick="showSignDiv();">还没有账号？</a><a target="_blank" href="/sign/forgetpassword">忘记密码？</a></div>
             <div style="height: 30px;">
                 <span th:text="${msg}" class="loginTips"></span>
             </div>
@@ -79,22 +80,31 @@
 <div style="display: none;"   class="sign Login">
     <div  class="sign_dig">
         <div  class="login1">
-        <h3 style="text-align: center">心云魔方平台</h3>
+        <h3 style="text-align: center"><img src="/Styles/images/xymfImages/xymf/logo.png"></h3>
             <form id="signForm" onsubmit="return false;">
-                <p class="loginTxt"><input  id="mobile" name="account" type="text" placeholder="手机号码" /></p>
+                <p class="signTxt"><input  id="mobile" name="account" type="text" placeholder="手机号码" /></p>
                 <input type="hidden" value="1"   name="accountType" />
                 <div style="margin: 10px auto; width: 300px;" class="eui-form">
                     <div class="eui-security">
-                        <input name="msgCode" type="text"  placeholder="请输入验证码" autocomplete="off"
+                        <input name="msgCode" type="text"  placeholder="请输入手机验证码" autocomplete="off"
+                               class="eui-input  eui-input-inline  securityCode" value="">
+                        <button disabled="disabled" onclick="sendMsgCode(this)" id="btnSendCode"
+                                type="button" style="background:#7dbbfa ;color:#ce6197" class="eui-btn eui-btn-primary securityBut">点击获取</button>
+                    </div>
+                </div>
+                <div style="margin: 10px auto; width: 300px;" class="eui-form">
+                    <div class="eui-security">
+                        <input name="vrifyCode" id="vrifyCodeIn" type="text"  placeholder="请输入图形验证码" autocomplete="off"
                                class="eui-input eui-input-inline  securityCode" value="">
-                        <button disabled="disabled" onclick="sendMsgCode(this)" id="btnSendCode" type="button" style="background:#7dbbfa ;color:#ce6197" class="eui-btn eui-btn-primary">点击获取</button>
+                        <span class="securityImg">
+                        <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="95" alt=""></span>
                     </div>
                 </div>
                 <p class="loginPword"><input id="userPass" type="password" name="userPass" placeholder="密码" /></p>
                 <p class="loginPword"><input type="password" name="newPass" placeholder="确认密码" /></p>
 
                 <div class="loginForget"><a style="float: left;" class="register"  onclick="showLoginDiv();" >返回登录</a>
-                    <a href="#">收不到验证码？</a></div>
+                    <a href="#">&nbsp;</a></div>
                 <div id="errorInfo" style="height: 30px;">
 
                 </div>
@@ -161,9 +171,12 @@
                 if (resule.code == 200){
                     $("#errorInfo").html('')
                     $("#errorInfo").append('<span style="color: green;font-size: 14px;">注册成功</span>');
+
+
                 }else {
                     $("#errorInfo").html('')
                     $("#errorInfo").append('<span style="color: red;font-size: 14px;">'+resule.message+'</span>');
+                    window.open('/sign/perfact/info');
                 }
             }
         });

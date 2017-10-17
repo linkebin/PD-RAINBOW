@@ -52,9 +52,16 @@
 .loginTxt{
     background: url(images/account.png) no-repeat left center;
 }
+.signTxt{
+    background: url(images/mobile.png) no-repeat left center;
+}
 .loginPword{
     background: url(images/password.png) no-repeat left center;
 }
+.loginVerifCode{
+    background: url(images/verifcode.png) no-repeat left center;
+}
+
 
 .loginB{
     display:inline-block;
@@ -110,15 +117,17 @@
     overflow: hidden;
 }
 .eui-security .securityCode{
-    width:140px;
+    width:180px;
     float: left;
 }
 .eui-security .securityImg{
-    float: left;
-    margin-left: 10px;
+    float: right;
     cursor: pointer;
 }
 
+.securityBut{
+    float: right;
+}
 
 
 
