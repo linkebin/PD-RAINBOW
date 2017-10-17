@@ -1,10 +1,5 @@
 package com.yidusoft.utils;
 
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -13,6 +8,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -31,7 +30,7 @@ public class SendMessageCode {
     //随机数
     private static final String NONCE="567834";
     //短信模板ID
-    private static final String TEMPLATEID="3117135";
+    private static final String TEMPLATEID="3113125";
 
     //验证码长度，范围4～10，默认为4
     private static final String CODELEN="6";

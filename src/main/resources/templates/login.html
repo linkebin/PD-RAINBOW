@@ -87,7 +87,7 @@
                     <div class="eui-security">
                         <input name="msgCode" type="text"  placeholder="请输入验证码" autocomplete="off"
                                class="eui-input eui-input-inline  securityCode" value="">
-                        <button disabled="disabled" onclick="sendMsgCode(this)" id="btnSendCode" type="button"  class="eui-btn eui-btn-primary">点击获取</button>
+                        <button disabled="disabled" onclick="sendMsgCode(this)" id="btnSendCode" type="button" class="eui-btn eui-btn-primary">点击获取</button>
                     </div>
                 </div>
                 <p class="loginPword"><input id="userPass" type="password" name="userPass" placeholder="密码" /></p>
@@ -242,6 +242,7 @@
                    if (obj == 'account'){
                        $("#btnSendCode").attr('disabled','true');
                        $("#btnSendCode").css("background","");
+                       $("#btnSendCode").css("color","");
                    }
                 }
                 // 此处注意，一定要调用默认方法，这样保证提示消息的默认效果
@@ -251,7 +252,8 @@
 
                 if (label[0].htmlFor == 'mobile'){
                     $("#btnSendCode").removeAttr('disabled');
-                    $("#btnSendCode").css("background","#03a9f4");
+                    $("#btnSendCode").css("background","#7dbbfa");
+                    $("#btnSendCode").css("color","#fff");
                 }
             },
 //            invalidHandler: function(form, validator){
