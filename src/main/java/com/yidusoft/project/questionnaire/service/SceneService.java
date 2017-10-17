@@ -2,10 +2,13 @@ package com.yidusoft.project.questionnaire.service;
 import com.yidusoft.project.questionnaire.domain.Scene;
 import com.yidusoft.core.Service;
 
+import java.util.List;
+
 
 /**
  * Created by CodeGenerator on 2017/10/11.
  */
 public interface SceneService extends Service<Scene> {
 
+    List<Scene> questionnaireSceneListByPage(Scene scene);
 }
