@@ -90,10 +90,10 @@
         <input type="hidden" name="creator"/>
         <input type="hidden" name="deleted"/>
         <input type="hidden" name="sceneCode"/>
-        <div class="eui-form-item" style="width: 700px">
-            <div class="eui-form-item eui-form-text">
+        <div class="eui-form-item" >
+            <div class="eui-form-item">
                 <label class="eui-form-label">场景名称 </label>
-                <div class="eui-input-block">
+                <div class="eui-input-inline">
                     <input name="sceneName" placeholder="请输入名称" class="eui-input" />
                 </div>
             </div>
@@ -241,6 +241,9 @@
     //滑出菜单
     function openTab() {
         //滑出菜单
+
+        resetAddOrUpdateForm();
+
         $(".taskFiltrate").show();
         $(".filtrateIn").animate({right: '0'}, 400);
         $("#upOrAddTag").text("添加场景");

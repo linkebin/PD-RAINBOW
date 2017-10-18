@@ -181,7 +181,7 @@
 <!-- 左滑编辑结束 -->
 
 <script>
-
+    var isUpdate = true;
     // 表单
     eui.use(['form', 'layedit', 'laydate'], function () {
         var form = eui.form
@@ -191,6 +191,7 @@
         form.verify({});
     });
     function resetForm() {
+        $("#id").val('');
         document.getElementById('searchFrom').reset();
     }
 
@@ -280,6 +281,7 @@
                                 element.tabDelete('menuFilter', $(".eui-this").attr('e-id'));
                                 loadOrgTree();
                                 doSearch();
+                                resetForm();
                                 //itemclick('edit',result.data);
                             });
                         } else {
@@ -308,13 +310,14 @@
                             icon: 1,
                             time: 2000
                         });
-
+                        isUpdate = !isUpdate;
                         eui.use('element', function () {
                             var $ = eui.jquery
                                 , element = eui.element;
                             element.tabDelete('menuFilter', $(".eui-this").attr('e-id'));
                             loadOrgTree();
                             doSearch();
+                            resetForm();
                         });
                     }
 
@@ -322,6 +325,7 @@
 
             }
         });
+
     }
 
     //删除类型
@@ -359,11 +363,12 @@
                         });
                         doSearch();
                         loadOrgTree();
-
+                        resetForm();
                     }
                 });
             });
         }
+
     }
 
     //加载类型树
@@ -385,7 +390,7 @@
                     textFieldName: 'name',
                     onSelect: function (node) {
                         $("#id").val(node.data.id);
-                         $("#pid").val(node.data.pid);
+                        $("#pid").val(node.data.pid);
                         doSearch();
                     },
                     onError: function (node) {
@@ -535,7 +540,7 @@
 
     //修改问卷类型
     function editType(id) {
-
+        var parentid;
         $.post("/questionnaire/type/findTypeInfo", {"id": id}, function (result) {
             eui.use('element', function () {
                 var $ = eui.jquery
@@ -569,8 +574,10 @@
                 $(".eui-show input[name='account']").removeAttr("disabled");
 
                 form.render();
-
+                $("#showParentNameText").show();
                 $("#parentId").val(result.data.pid);
+                parentid = result.data.pid;
+                getParentName(parentid);
                 $("#menuNames").val(result.data.questionnaireTypeName);
                 $("#menuId").val(result.data.id);
                 $("#menuCode").val(result.data.menus.questionnaireTypeCode);
@@ -601,9 +608,19 @@
                 form.render('radio');
             });
 
-
         });
 
+
+
+
+    }
+
+    function getParentName(parentid) {
+        $.post("/questionnaire/type/findParentType", {"pid": parentid}, function (result) {
+
+
+            $("#parentNameText").val(result.data.questionnaireTypeName);
+        });
     }
 
     //保存权限
@@ -654,7 +671,9 @@
 
 
     function openTopTab() {
-        $("#showParentNameText").remove();
+        $("#id").val('');
+        $("#menuId").val('');
+        $("#showParentNameText").hide();
         $("#upOrAddMenu").text("添加顶层问卷类型");
         eui.use('element', function () {
             var $ = eui.jquery
@@ -687,13 +706,17 @@
                 time: 2000
             });
         } else {
+
             $("#upOrAddMenu").text("添加普通问卷类型");
+            $("#showParentNameText").hide();
+            $("#menuId").val('');
 //            $("#pid").val($("#id").val());
 //            alert($("#pid").val());
             eui.use('element', function () {
                 var $ = eui.jquery
                     , element = eui.element, form = eui.form;
                 var id = new Date().getTime();
+//                $("#id").val('');
                 document.getElementById('menuForm').reset();
                 $(".taskFiltrate").show();
                 $(".filtrateIn").animate({right: '0'}, 400);

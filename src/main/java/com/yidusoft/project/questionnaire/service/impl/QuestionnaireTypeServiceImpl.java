@@ -49,4 +49,14 @@ public class QuestionnaireTypeServiceImpl extends AbstractService<QuestionnaireT
 
         return treeNodes;
     }
+
+    @Override
+    public List<QuestionnaireType> findByIdOrPid(String str) {
+        return questionnaireTypeMapper.findByIdOrPid(str);
+    }
+
+    @Override
+    public QuestionnaireType findParentType(String pid) {
+        return questionnaireTypeMapper.findParentType(pid);
+    }
 }

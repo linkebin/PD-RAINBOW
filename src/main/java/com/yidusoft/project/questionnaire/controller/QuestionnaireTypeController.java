@@ -15,6 +15,7 @@ import com.yidusoft.utils.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
+import tk.mybatis.mapper.entity.Condition;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -68,15 +69,18 @@ public class QuestionnaireTypeController {
     public Result tree() {
         List<TreeNode> nodes = questionnaireTypeService.getTree();
         List<TreeNode> treeNodes = TreeBuilder.buildByRecursive(nodes);
+        if (treeNodes.size() == 0) {
+            treeNodes = nodes;
+        }
         List<TreeNode> nodeList = questionnaireTypeService.buileTree(nodes);
 
-        for (TreeNode node : nodeList){
+        for (TreeNode node : nodeList) {
             logger.info(node.toString());
         }
 
 
         Result result = ResultGenerator.genSuccessResult(treeNodes);
-        logger.info(result.toString() + nodeList.size());
+        logger.info(result.toString() + nodeList.size() + "===" + treeNodes.size() + "==" + nodes.size());
         return result;
     }
 
@@ -127,9 +131,13 @@ public class QuestionnaireTypeController {
     public Result deleteBacth(String ids) {
         String arr[] = ids.split(",");
         for (String str : arr) {
-            QuestionnaireType questionnaireType = questionnaireTypeService.findById(str);
-            questionnaireType.setDeleted(1);
-            questionnaireTypeService.update(questionnaireType);
+            // QuestionnaireType questionnaireType = questionnaireTypeService.findById(str);
+            List<QuestionnaireType> questionnaireTypes = questionnaireTypeService.findByIdOrPid(str);
+            // logger.info(questionnaireType.getQuestionnaireTypeName() + "===========-----====++++");
+            for (QuestionnaireType questionnaireType : questionnaireTypes) {
+                questionnaireType.setDeleted(1);
+                questionnaireTypeService.update(questionnaireType);
+            }
         }
         return ResultGenerator.genSuccessResult();
     }
@@ -151,6 +159,15 @@ public class QuestionnaireTypeController {
         questionnaireType.setCreateTime(new Date());
         questionnaireTypeService.update(questionnaireType);
         return ResultGenerator.genSuccessResult();
+    }
+
+
+    //查询父类型信息
+    @PostMapping("/findParentType")
+    @ResponseBody
+    public Result findParentType(String pid){
+        QuestionnaireType questionnaireType = questionnaireTypeService.findParentType(pid);
+        return ResultGenerator.genSuccessResult(questionnaireType);
     }
 
 }

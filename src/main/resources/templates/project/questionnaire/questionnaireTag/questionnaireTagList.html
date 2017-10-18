@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
     <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
-
+    <link href="/Scripts/libs/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css"/>
     <style>
         #menuDig {
             height: 300px;
@@ -93,19 +93,20 @@
         <input type="hidden" name="deleted"/>
         <input type="hidden" name="tagCode"/>
 
-        <div class="eui-form-item" style="width: 700px">
-            <label class="eui-form-label">标签名称 </label>
+        <div class="eui-form-item">
+            <label  class="eui-form-label">标签名称 </label>
             <div class="eui-input-inline">
-                <input name="tagName" placeholder="请输入名称" class="eui-input"/>
+                <input type="text" name="tagName" placeholder="请输入名称" e-verify="acount" class="eui-input"/>
             </div>
         </div>
 
 
+
         <div class="eui-form-item" style="width: 700px">
             <div class="eui-form-item eui-form-text">
-                <label class="eui-form-label">标签说明</label>
+                <label  class="eui-form-label" style="width: 110px">标签说明</label>
                 <div class="eui-input-block">
-                    <textarea name="tagExplain" placeholder="请输入标签说明" class="eui-textarea"></textarea>
+                    <textarea name="tagExplain" placeholder="请输入标签说明" class="eui-textarea" style="width:380px;height:200px;"></textarea>
                 </div>
             </div>
         </div>
@@ -365,6 +366,8 @@
 
 
     function openTab() {
+        resetAddOrUpdateForm();
+
         //滑出菜单
         $(".taskFiltrate").show();
         $(".filtrateIn").animate({right: '0'}, 400);

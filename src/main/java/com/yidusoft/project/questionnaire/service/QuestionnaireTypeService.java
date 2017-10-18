@@ -18,4 +18,8 @@ public interface QuestionnaireTypeService extends Service<QuestionnaireType> {
     List<QuestionnaireType> getQueryAll(QuestionnaireType questionnaireType);
 
     List<TreeNode> buileTree(List<TreeNode> nodes);
+
+    List<QuestionnaireType> findByIdOrPid(String str);
+
+    QuestionnaireType findParentType(String pid);
 }

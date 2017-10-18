@@ -10,4 +10,8 @@ public interface QuestionnaireTypeMapper extends Mapper<QuestionnaireType> {
     List<TreeNode> getTree();
 
     List<QuestionnaireType> getQueryAll(QuestionnaireType questionnaireType);
+
+    List<QuestionnaireType> findByIdOrPid(String str);
+
+    QuestionnaireType findParentType(String pid);
 }

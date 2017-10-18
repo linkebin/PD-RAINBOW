@@ -39,12 +39,29 @@
             AND QUESTIONNAIRE_TYPE_CODE LIKE '%${questionnaireTypeCode}%'
         </if>
         <if test="questionnaireTypeName != null and questionnaireTypeName != ''">
-            OR QUESTIONNAIRE_TYPE_NAME LIKE '%${questionnaireTypeName}%'
+            AND QUESTIONNAIRE_TYPE_NAME LIKE '%${questionnaireTypeName}%'
         </if>
 
-        <if test="pid != null and pid = id and pid != '' and id != null and id != ''">
-            OR (PID = #{id})
-        </if>
+        <!--<if test="pid != null and pid = id and pid != '' and id != null and id != ''">-->
+            <!--AND (PID = #{id})-->
+        <!--</if>-->
 
     </select>
+
+
+    <select id="findByIdOrPid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM QUESTIONNAIRE_TYPE WHERE
+        DELETED=0
+
+         AND ID_ = #{id} OR PID = #{id}
+
+    </select>
+
+
+    <select id="findParentType" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+        SELECT * FROM QUESTIONNAIRE_TYPE WHERE ID_ = #{pid}
+    </select>
+
+
 </mapper>
