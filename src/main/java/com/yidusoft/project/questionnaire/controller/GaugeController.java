@@ -49,9 +49,9 @@ public class GaugeController {
      */
     @PostMapping("/addGauge")
     @ResponseBody
-    public Result addGauge(Gauge gauge, String questionStr) {
+    public Result addGauge(Gauge gauge, String questionStr,String tagId,String sceneId) {
         try {
-            gaugeService.addGauge(gauge,questionStr);
+            gaugeService.addGauge(gauge,questionStr,tagId,sceneId);
         }catch (Exception e){
             return ResultGenerator.genFailResult("操作失败");
         }
@@ -71,6 +71,29 @@ public class GaugeController {
         }catch (Exception e){
             return ResultGenerator.genFailResult("操作失败");
         }
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /***
+     * 逻辑删除
+     * @param ids
+     * @return
+     */
+    @PostMapping("/deleteGauge")
+    @ResponseBody
+    public Result deleteGauge(String ids) {
+        try {
+            String arr[] = ids.split(",");
+            for (String str : arr) {
+                Gauge gauge = gaugeService.findById(str);
+                gauge.setDeleted(1);
+                gaugeService.update(gauge);
+            }
+
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult("删除失败！");
+        }
+
         return ResultGenerator.genSuccessResult();
     }
 

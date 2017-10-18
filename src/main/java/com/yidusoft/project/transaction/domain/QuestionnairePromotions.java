@@ -3,6 +3,7 @@ package com.yidusoft.project.transaction.domain;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -74,6 +75,10 @@ public class QuestionnairePromotions {
      */
     @Column(name = "deleted")
     private Integer deleted;
+
+    @Transient
+    private ProductSettings productSettings;
+
 
     /**
      * 获取一个套餐一个活动
@@ -271,5 +276,13 @@ public class QuestionnairePromotions {
      */
     public void setDeleted(Integer deleted) {
         this.deleted = deleted;
+    }
+
+    public ProductSettings getProductSettings() {
+        return productSettings;
+    }
+
+    public void setProductSettings(ProductSettings productSettings) {
+        this.productSettings = productSettings;
     }
 }

@@ -14,6 +14,6 @@ public class WebSceneController {
 
     @RequestMapping(value = "/getScene")
     public String getQuestionnaireScene(){
-        return "project/cube/questionnaire/scene/scene";
+        return "project/questionnaire/scene/scene";
     }
 }

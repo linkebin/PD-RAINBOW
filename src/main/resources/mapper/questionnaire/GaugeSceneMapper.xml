@@ -9,4 +9,8 @@
     <result column="scene_id" jdbcType="VARCHAR" property="sceneId" />
     <result column="gauge_id" jdbcType="VARCHAR" property="gaugeId" />
   </resultMap>
+
+  <select id="deleteGaugeScene" resultMap="BaseResultMap" parameterType="com.yidusoft.project.questionnaire.domain.GaugeScene">
+    SELECT  *  FROM gauge_scene WHERE  scene_Id=#{sceneId}  AND  gauge_Id=#{gaugeId}
+  </select>
 </mapper>

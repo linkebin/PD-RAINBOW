@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/web/questionnaire/question")
-public class QuestionnaireTypeDetail {
+public class WebQuestionnaireTypeController {
 
     @RequestMapping(value = "/questionnaireTypeDetail")
     public String questionnaireTypeDetail(){
-        return "project/cube/questionnaire/questionType/questionnaireTypeList";
+        return "project/questionnaire/questionType/questionnaireTypeList";
     }
 }

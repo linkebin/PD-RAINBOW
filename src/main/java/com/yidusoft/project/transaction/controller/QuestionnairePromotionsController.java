@@ -5,7 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.transaction.domain.ProductSettings;
 import com.yidusoft.project.transaction.domain.QuestionnairePromotions;
+import com.yidusoft.project.transaction.service.ProductSettingsService;
 import com.yidusoft.project.transaction.service.QuestionnairePromotionsService;
 import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,10 @@ import java.util.*;
 public class QuestionnairePromotionsController {
     @Resource
     private QuestionnairePromotionsService questionnairePromotionsService;
+
+    @Resource
+    private ProductSettingsService productSettingsService;
+
     /**
      * 获取活动列表
      * @return
@@ -77,11 +83,30 @@ public class QuestionnairePromotionsController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 修改活动
+     * @param promotionsJson
+     * @return
+     */
     @PostMapping("/update")
     public Result update(String promotionsJson) {
         QuestionnairePromotions questionnairePromotions=JSON.parseObject(promotionsJson,QuestionnairePromotions.class);
         questionnairePromotionsService.update(questionnairePromotions);
         return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 联表查询
+     * @return
+     */
+    @GetMapping("/getProductAndQuestionPro")
+    public Result getProductAndQuestionPro(){
+        Map<String,Object> map = new HashMap<String,Object>();
+        List<QuestionnairePromotions> questionList=questionnairePromotionsService.getPromotionAll();
+        List<ProductSettings> productList=productSettingsService.getProductAll();
+        map.put("questionList",questionList);
+        map.put("productList",productList);
+        return ResultGenerator.genSuccessResult(map);
     }
 
     @GetMapping("/{id}")

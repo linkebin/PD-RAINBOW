@@ -38,6 +38,20 @@ public class ProductSettingsController {
     }
 
     /**
+     * 数据分页
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/listByPage")
+    public Result listByPage(int page, int size) {
+        PageHelper.startPage(page, size);
+        List<ProductSettings> list = productSettingsService.getProductAll();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
      * 设置套餐
      * @param productJson
      * @return
@@ -72,12 +86,11 @@ public class ProductSettingsController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        productSettingsService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
-    }
-
+    /**
+     * 修改套餐
+     * @param productJson
+     * @return
+     */
     @PostMapping("/update")
     public Result update(String productJson) {
         ProductSettings product = JSON.parseObject(productJson,ProductSettings.class);
@@ -88,17 +101,16 @@ public class ProductSettingsController {
         return ResultGenerator.genSuccessResult(product1);
     }
 
+    @DeleteMapping("/{id}")
+    public Result delete(@PathVariable String  id) {
+        productSettingsService.deleteById(id);
+        return ResultGenerator.genSuccessResult();
+    }
+
     @GetMapping("/{id}")
     public Result detail(@PathVariable String id) {
         ProductSettings productSettings = productSettingsService.findById(id);
         return ResultGenerator.genSuccessResult(productSettings);
     }
 
-    @PostMapping("/listByPage")
-    public Result listByPage(int page, int size) {
-        PageHelper.startPage(page, size);
-        List<ProductSettings> list = productSettingsService.getProductAll();
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
 }

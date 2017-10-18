@@ -8,10 +8,7 @@ import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.redisMq.MsgGenerator;
 import com.yidusoft.redisMq.MsgSend;
-import com.yidusoft.utils.Base64ToImage;
-import com.yidusoft.utils.SMSCode;
-import com.yidusoft.utils.Security;
-import com.yidusoft.utils.SendMessageCode;
+import com.yidusoft.utils.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -62,6 +59,11 @@ public class IndexController {
     }
 
 
+    @RequestMapping("/sign/perfact/info")
+    public String signPerfactInfo(){
+        return "project/cube/perfact-Info";
+    }
+
     @RequestMapping("/403")
     public String forbidden(){
         return "/error/403";
@@ -80,6 +82,11 @@ public class IndexController {
         }
     }
 
+    @RequestMapping("/sign/forgetpassword")
+    public String forgetpassword(){
+        return "project/cube/forget-password";
+    }
+
     /**
      * 用户注册
      * @param json
@@ -91,17 +98,23 @@ public class IndexController {
 
         SecUser secUser = JSON.parseObject(json,SecUser.class);
 
-        String code = (String) request.getSession().getAttribute("signCode");
-        if (Integer.parseInt(code) != secUser.getMsgCode()){
-            return ResultGenerator.genFailResult("验证码错误");
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+
+        if (!captchaId.equals(secUser.getVrifyCode()) && !"".equals(captchaId)) {
+            return ResultGenerator.genFailResult("图形验证码错误");
         }
+//        String code = (String) request.getSession().getAttribute("signCode");
+//        if (Integer.parseInt(code) != secUser.getMsgCode()){
+//            return ResultGenerator.genFailResult("手机验证码错误");
+//        }
+
 
         Result result = secUserService.addUser(JSON.toJSONString(secUser));
         if (result.getCode() !=200){
             return result;
         }
 
-        return ResultGenerator.genSuccessResult();
+        return ResultGenerator.genSuccessResult(secUser.getAccount());
     }
 
     /**
@@ -191,60 +204,6 @@ public class IndexController {
         return  "redirect:/index";
     }
 
-    @RequestMapping(value="/login1",method= RequestMethod.POST)
-    public String login(HttpServletRequest request, String username, String password,String vrifyCode){
-//        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-//            request.setAttribute("msg", "请输入用户名和密码！");
-//            return "login";
-//        }
-//
-//        if (!"vrifyCode".equals(vrifyCode)){
-//            String captchaId = (String) request.getSession().getAttribute("vrifyCode");
-//            System.out.println(vrifyCode);
-//            if (!captchaId.equals(vrifyCode)) {
-//                request.setAttribute("msg", "错误的验证码！");
-//                return "login";
-//            }
-//        }
-//
-//        Subject subject = SecurityUtils.getSubject();
-//        UsernamePasswordToken token=new UsernamePasswordToken(username,password);
-//        try {
-//
-//            subject.login(token);
-//            return "index";
-//        } catch (LockedAccountException lae) {
-//            token.clear();
-//            request.setAttribute("msg", "账号已被锁定，请与管理员联系！");
-//            return "login";
-//        } catch (UnknownAccountException uae) {
-//            token.clear();
-//            request.setAttribute("msg", "账号不存在！");
-//            return "login";
-//        } catch (AuthenticationException ae) {
-//            //用户名和密码不匹配时，切换为手机或邮箱登录
-//            SecUser secUser = null;
-//            try{
-//                secUser = secUserService.getSecUserInfo(username);
-//            }catch (Exception e){
-//                token.clear();
-//                request.setAttribute("msg", "账号异常，请联系管理员！");
-//                return "login";
-//            }
-//            if (secUser!=null){
-//                if(!"true".equals(request.getAttribute("flag"))){
-//                    request.setAttribute("flag","true");
-//                    login(request, secUser.getAccount(), password,"passCode");
-//                }
-//            }
-//            token.clear();
-//            Session session = SecurityUtils.getSubject().getSession();
-//            session.removeAttribute("userSessionId");
-//            session.removeAttribute("userSession");
-//            request.setAttribute("msg", "密码不正确！");
-            return "login";
-//        }
-    }
 
     @RequestMapping(value="/appLogin",method= RequestMethod.POST)
     @ResponseBody
@@ -311,5 +270,34 @@ public class IndexController {
         responseOutputStream.write(captchaChallengeAsJpeg);
         responseOutputStream.flush();
         responseOutputStream.close();
+    }
+
+
+    @PostMapping("/sign/check/account")
+    @ResponseBody
+    public Result signCheckAccount(String mobile,String vrifyCode1,HttpServletRequest request){
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+        if (!captchaId.equals(vrifyCode1) && !"".equals(captchaId)) {
+            return ResultGenerator.genFailResult("验证码错误！");
+        }
+        SecUser  user = secUserService.getSecUserInfo(mobile);
+        if (user == null){
+            return ResultGenerator.genFailResult("账号不存在！");
+        }
+        return ResultGenerator.genSuccessResult(mobile);
+    }
+
+    @PostMapping("/sign/reset/password")
+    @ResponseBody
+    public Result signResetPassword(String mobile,String password){
+
+        SecUser  user = secUserService.getSecUserInfo(mobile);
+        if (user == null){
+            return ResultGenerator.genFailResult("重置密码失败");
+        }
+        user.setUserPass(password);
+        PasswordHelper.encryptPassword(user);
+        secUserService.update(user);
+        return ResultGenerator.genSuccessResult().setMessage("重置密码成功");
     }
 }

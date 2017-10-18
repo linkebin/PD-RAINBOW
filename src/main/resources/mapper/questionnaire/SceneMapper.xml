@@ -22,13 +22,23 @@
     SCENE
     WHERE deleted=0
     <if test="sceneCode != null and sceneCode != ''">
-      AND SCENE_CODE LIKE '%${sceneCode}%' OR SCENE_NAME LIKE '%${sceneCode}%'
+      AND SCENE_CODE LIKE '%${sceneCode}%'
     </if>
 
 
 
     ORDER BY CREATE_TIME ASC
 
+  </select>
+
+  <select id="findSceneForGauge" resultMap="BaseResultMap" parameterType="String">
+
+       SELECT s.*  FROM
+           gauge_scene  g
+         LEFT JOIN       scene s
+            ON    g.scene_id=s.id_
+         WHERE s.deleted=0
+           AND  g.gauge_id=#{gaugeId}
   </select>
 
 </mapper>

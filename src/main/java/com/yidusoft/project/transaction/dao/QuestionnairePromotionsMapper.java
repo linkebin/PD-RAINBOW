@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface QuestionnairePromotionsMapper extends Mapper<QuestionnairePromotions> {
     List<QuestionnairePromotions> getPromotionAll();
+
+    List<QuestionnairePromotions> getProductAndQuestionPro();
 }

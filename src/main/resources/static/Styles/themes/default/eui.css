@@ -3959,6 +3959,10 @@ body .eui-util-face .eui-layer-content {
  width: 500px!important;
 }
 
+.eui-width700{
+ width: 700px!important;
+}
+
 .eui-searchIn{
  padding-top: 10px;
  cursor: pointer;

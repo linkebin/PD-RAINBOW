@@ -13,7 +13,7 @@ public interface GaugeService extends Service<Gauge> {
     //分页条件查询量表
     List<Gauge> gaugeListByPage(Gauge gauge);
     //添加量表
-    Result addGauge(Gauge gauge, String questionStr);
+    Result addGauge(Gauge gauge, String questionStr,String tagId,String sceneId);
     //修改量表
     Result updateGauge(Gauge gauge, String questionStr);
 

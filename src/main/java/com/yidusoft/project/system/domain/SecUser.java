@@ -400,4 +400,16 @@ public class SecUser implements Serializable {
     public void setHeadImg(String headImg) {
         this.headImg = headImg;
     }
+
+    @Transient
+    private String vrifyCode;
+
+
+    public String getVrifyCode() {
+        return vrifyCode;
+    }
+
+    public void setVrifyCode(String vrifyCode) {
+        this.vrifyCode = vrifyCode;
+    }
 }
