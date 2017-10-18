@@ -53,7 +53,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/files/**")
-                .addResourceLocations("file:///C:/upload/");
+                .addResourceLocations("file:///C:/");
     }
 
     //使用阿里 FastJson 作为JSON MessageConverter

@@ -19,6 +19,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,8 +60,11 @@ public class IndexController {
     }
 
 
-    @RequestMapping("/sign/perfact/info")
-    public String signPerfactInfo(){
+    @RequestMapping(value = "/sign/perfact/info")
+    public String signPerfactInfo(String d ,Model model){
+
+        model.addAttribute("d",d);
+
         return "project/cube/perfact-Info";
     }
 
@@ -103,18 +107,39 @@ public class IndexController {
         if (!captchaId.equals(secUser.getVrifyCode()) && !"".equals(captchaId)) {
             return ResultGenerator.genFailResult("图形验证码错误");
         }
-//        String code = (String) request.getSession().getAttribute("signCode");
-//        if (Integer.parseInt(code) != secUser.getMsgCode()){
-//            return ResultGenerator.genFailResult("手机验证码错误");
-//        }
-
-
-        Result result = secUserService.addUser(JSON.toJSONString(secUser));
-        if (result.getCode() !=200){
-            return result;
+        String code = (String) request.getSession().getAttribute("signCode");
+        if (!code.equals(secUser.getMsgCode()) ){
+            return ResultGenerator.genFailResult("手机验证码错误");
         }
 
-        return ResultGenerator.genSuccessResult(secUser.getAccount());
+        secUser.setUserName(CodeHelper.getCode("心云魔方"));
+        String inviterCode = CodeHelper.randomCode(8);
+        SecUser isUser = null;
+        if (inviterCode!=null){
+             isUser = secUserService.findSecUserByInviterCode(inviterCode);
+        }
+        if (isUser != null){
+            sign(json,request);
+
+        }else {
+            secUser.setInviterCode(inviterCode);
+            Result result = secUserService.addUser(JSON.toJSONString(secUser));
+            if (result.getCode() !=200){
+                return result;
+            }
+
+            SecUser sessionUser = (SecUser) result.getData();
+
+            UsernamePasswordToken token = new UsernamePasswordToken(secUser.getAccount(), secUser.getUserPass());
+            Subject subject= SecurityUtils.getSubject();
+            subject.login(token);
+            Session session = SecurityUtils.getSubject().getSession();
+            session.setAttribute("userSessionId", sessionUser.getId());
+            session.setAttribute("userSession", sessionUser);
+
+            return ResultGenerator.genSuccessResult(result.getData());
+        }
+        return ResultGenerator.genFailResult("注册失败");
     }
 
     /**
@@ -125,20 +150,20 @@ public class IndexController {
     @PostMapping("/sign/code")
     @ResponseBody
     public Result signcode(HttpServletRequest request,String mobile) {
-
-        try{
-            String json = SendMessageCode.sendMessageCode(mobile);
-            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
-            if (smsCode.getCode() == 200){
-                request.getSession().setAttribute("signCode",smsCode.getObj());
-            }else{
-                return ResultGenerator.genFailResult("验证码发生失败");
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
-            return ResultGenerator.genFailResult("验证码发生失败");
-        }
-        return ResultGenerator.genSuccessResult("验证码发生成功");
+        request.getSession().setAttribute("signCode","1234");
+//        try{
+//            String json = SendMessageCode.sendMessageCode(mobile);
+//            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
+//            if (smsCode.getCode() == 200){
+//                request.getSession().setAttribute("signCode",smsCode.getObj());
+//            }else{
+//                return ResultGenerator.genFailResult("验证码发生失败");
+//            }
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//            return ResultGenerator.genFailResult("验证码发生失败");
+//        }
+        return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
     }
 
     @RequestMapping(value="/indexInfo")
@@ -188,14 +213,14 @@ public class IndexController {
         }
         SecUser  user = secUserService.getSecUserInfo(username);
 
-        try {
-            //将图片转换成base64
-            if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
-                user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
-            }
-        }catch (Exception e) {
-            user.setHeadImg("");
-        }
+//        try {
+//            //将图片转换成base64
+//            if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
+//                user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
+//            }
+//        }catch (Exception e) {
+//            user.setHeadImg("");
+//        }
 
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", user.getId());
@@ -299,5 +324,45 @@ public class IndexController {
         PasswordHelper.encryptPassword(user);
         secUserService.update(user);
         return ResultGenerator.genSuccessResult().setMessage("重置密码成功");
+    }
+
+    @PostMapping("/sign/check/mobileCode")
+    @ResponseBody
+    public Result signCheckMobileCode(String mobile,String vrifyCode,HttpServletRequest request){
+        if (!"".equals(vrifyCode) && !"".equals(mobile)){
+            String signCode = (String) request.getSession().getAttribute("signCode");
+            if (!signCode.equals(vrifyCode) && !"".equals(signCode)) {
+                return ResultGenerator.genFailResult("手机验证码错误！");
+            }
+            return ResultGenerator.genSuccessResult(mobile);
+        }else {
+            return ResultGenerator.genFailResult("手机验证码错误");
+        }
+    }
+
+    @PostMapping("/sign/paefactInfo")
+    @ResponseBody
+    public Result signPaefactInfo(String json){
+        SecUser userJson = JSON.parseObject(json,SecUser.class);
+
+        SecUser inviterUser = secUserService.findSecUserByInviterCode(userJson.getInviterCode());
+        if (inviterUser == null){
+            return ResultGenerator.genFailResult("邀请码不存在！");
+        }
+        SecUser secUser = secUserService.findById(userJson.getId());
+
+        secUser.setUserName(userJson.getUserName());
+        secUser.setEmail(userJson.getEmail());
+        secUser.setInviterUser(inviterUser.getId());
+        secUser.setAddr(userJson.getAddr());
+        secUser.setHeadImg(userJson.getHeadImg());
+        secUser.setChannelId(inviterUser.getChannelId());
+        secUserService.update(secUser);
+
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute("userSessionId", secUser.getId());
+        session.setAttribute("userSession", secUser);
+
+        return ResultGenerator.genSuccessResult();
     }
 }

@@ -12,6 +12,13 @@ import java.util.Map;
 public interface SecUserMapper extends Mapper<SecUser> {
 
     /**
+     * 根据邀请码查询
+     * @param inviterCode
+     * @return
+     */
+    SecUser findSecUserByInviterCode(String inviterCode);
+
+    /**
      * 根据多个用户id查询用户部门信息
      * @param ids
      * @return

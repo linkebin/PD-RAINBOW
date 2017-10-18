@@ -8,6 +8,7 @@ import com.yidusoft.project.system.dao.SecUserMapper;
 import com.yidusoft.project.system.domain.SecRole;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
+import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.PasswordHelper;
 import com.yidusoft.utils.TreeNode;
 import org.springframework.stereotype.Service;
@@ -182,8 +183,13 @@ public class SecUserServiceImpl extends AbstractService<SecUser> implements SecU
             //加密
             PasswordHelper.encryptPassword(secUser);
             save(secUser);
-            return ResultGenerator.genSuccessResult(id);
+            return ResultGenerator.genSuccessResult(secUser);
         }
+    }
+
+    @Override
+    public SecUser findSecUserByInviterCode(String inviterCode) {
+        return secUserMapper.findSecUserByInviterCode(inviterCode);
     }
 
     @Override

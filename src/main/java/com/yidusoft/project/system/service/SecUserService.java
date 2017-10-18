@@ -57,7 +57,12 @@ public interface SecUserService extends Service<SecUser> {
 
     Result addUser(String params);
 
-
+    /**
+     * 根据邀请码查询
+     * @param inviterCode
+     * @return
+     */
+    SecUser findSecUserByInviterCode(String inviterCode);
 
     /**
      * 获取用户树

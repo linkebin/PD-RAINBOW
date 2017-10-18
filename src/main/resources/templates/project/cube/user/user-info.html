@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <style>
+        .defaultDiv{width: 100%; border: 1px solid ghostwhite;}
+        .formDiv .eui-form-item label{
+            width: 80px;
+            padding: 9px 20px;
+            text-align: left;
+        }
+        .subBtn{color: white; background: #3f89ec;}
+
+        input[type="button"],[type="submit"]{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area">
+        <div th:replace="project/cube/common/left :: left">sidebar</div>
+        <div class="eui-body">
+            <!-- 内容主体区域 -->
+            <div class="xymfContent">
+                <div class="defaultDiv">
+                   <h1 class="eui-padding20">基本资料</h1>
+                    <div class="eui-padding20">
+                        <input type="hidden" name="headImg">
+                        <img id="headImg" th:src="${'/files'+session.userSession.headImg}" width="100" height="100">
+                        <button style="margin-left: 20px;" type="button"   class="eui-btn eui-btn-small" id="upFiles">
+                            <i class="eui-icon">&#xe67c;</i>上传图片
+                        </button>
+                        (只支持图片上传)
+                    </div>
+                    <p class="eui-padding10"><a style="float: right; height: 30px;"></a></p>
+                    <div class="formDiv">
+                        <input type="hidden" id="id" th:value="${session.userSession.id}">
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">账号</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="account" th:value="${session.userSession.account}" readonly="readonly" class="eui-input eui-width400">
+                            </div>
+                        </div>
+
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">用户名</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="userName" th:value="${session.userSession.userName}"  class="eui-input eui-width400">
+                            </div>
+                            <div class="eui-form-mid eui-word-aux"></div>
+                        </div>
+
+
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">手机号</label>
+                            <div class="eui-input-inline eui-width400">
+                                <input type="text" name="mobile" th:value="${session.userSession.mobile}" readonly="readonly"  class="eui-input eui-width400">
+                            </div>
+                            <div class="eui-form-mid eui-word-aux">更改</div>
+                        </div>
+
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">邮箱</label>
+                            <div class="eui-input-inline eui-width400">
+                                <input type="text" th:value="${session.userSession.email}" name="email" readonly="readonly"  class="eui-input eui-width400">
+                            </div>
+                            <div class="eui-form-mid eui-word-aux">更改</div>
+                        </div>
+
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">推广码</label>
+                            <div class="eui-input-inline">
+                                <input th:value="${session.userSession.inviterCode}" type="text" name="inviterCode" readonly="readonly"  class="eui-input eui-width400">
+                            </div>
+                            <div class="eui-form-mid eui-word-aux"></div>
+                        </div>
+
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">通讯地址</label>
+                            <div class="eui-input-inline">
+                                <input th:value="${session.userSession.addr}" type="text" name="addr"   class="eui-input eui-width400">
+                            </div>
+                            <div class="eui-form-mid eui-word-aux"></div>
+                        </div>
+
+                        <div class="eui-form-item">
+                            <label class="eui-form-label"></label>
+                            <div class="eui-input-inline">
+                                <input value="保存" type="submit"
+                                       class="eui-input eui-width100 subBtn"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+
+
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script>
+    eui.use('upload', function(){
+        var $ = eui.jquery
+            ,upload = eui.upload;
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#upFiles'
+            , method: 'post'
+            ,field:'file'
+            ,url: '/upload/uploadImglayUi'
+            ,done: function(res){
+                //如果上传失败
+                var result=eval("("+res+")");
+                if(result.code==0){
+                    $("#checkAccount input[name='headImg']").val(result.data.src);
+                    $("#headImg").attr('src','/files'+result.data.src);
+                }else{
+                    eui.use(['form', 'layedit', 'laydate'], function() {
+                        var form = eui.form
+                            , layer = eui.layer
+                            , laydate = eui.laydate;
+                        layedit = eui.layedit
+                        layer.msg("图片的格式只能是png与jpg!");
+                    });
+                }
+            }
+            ,error: function(){
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

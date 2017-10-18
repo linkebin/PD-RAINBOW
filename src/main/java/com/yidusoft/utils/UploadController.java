@@ -1,5 +1,6 @@
 package com.yidusoft.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.system.domain.SecUser;
@@ -7,10 +8,7 @@ import com.yidusoft.project.system.service.SecUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -224,6 +222,57 @@ public class UploadController {
         }
         return ResultGenerator.genSuccessResult(map).toString();
     }
+
+
+    // layui上传图片 "JPG","PNG"
+    @PostMapping("/uploadImglayUi")
+    @ResponseBody
+    public String uploadImglayUi(HttpServletRequest request, @RequestParam("file") MultipartFile file){
+        FileResponseData fileResponseData = null;
+        try {
+            String fileName = file.getOriginalFilename();// 文件原名称
+
+            String type= fileName.substring(fileName.lastIndexOf(".")).toLowerCase();;
+
+            if(type.equals(".jpg") || type.equals(".png")){
+                String realPath = request.getSession().getServletContext().getRealPath("/");
+                realPath= realPath.substring(0,2);
+                // 自定义的文件名称
+                String  trueFileName = String.valueOf(System.currentTimeMillis()) + fileName;
+                // 设置存放图片文件的路径
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String childPath="/upload/image/"+format.format(new Date());
+                String path = realPath + childPath;
+
+                File dir = new File(path);
+                if(!dir.exists()){
+                    dir.mkdirs();
+                }
+
+                file.transferTo(new File(path+"/"+trueFileName));
+
+                 fileResponseData = new FileResponseData();
+                fileResponseData.setCode(0);
+                fileResponseData.setMsg("上传成功");
+                Data data = new Data();
+                data.setSrc(childPath+"/"+trueFileName);
+                fileResponseData.setData(data);
+
+
+            }else{
+                fileResponseData.setCode(500);
+                fileResponseData.setMsg("只能上传png与jpg的文件！");
+                return JSON.toJSONString(fileResponseData);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return JSON.toJSONString(fileResponseData);
+    }
+
+
 
     //app端的图片上传
 

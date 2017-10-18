@@ -102,6 +102,39 @@ public class SecUser implements Serializable {
     @Column(name = "COMPANY_ID")
     private String companyId;
 
+    @Column(name = "inviter_code")
+    private String inviterCode;
+
+    @Column(name = "inviter_user")
+    private String inviterUser;
+
+    @Column(name = "channel_id")
+    private String channelId;
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getInviterCode() {
+        return inviterCode;
+    }
+
+    public void setInviterCode(String inviterCode) {
+        this.inviterCode = inviterCode;
+    }
+
+    public String getInviterUser() {
+        return inviterUser;
+    }
+
+    public void setInviterUser(String inviterUser) {
+        this.inviterUser = inviterUser;
+    }
+
     /**
      * 是否添加
      */
@@ -117,13 +150,13 @@ public class SecUser implements Serializable {
     private String  orgName;
 
     @Transient
-    private Integer msgCode;
+    private String msgCode;
 
-    public Integer getMsgCode() {
+    public String getMsgCode() {
         return msgCode;
     }
 
-    public void setMsgCode(Integer msgCode) {
+    public void setMsgCode(String msgCode) {
         this.msgCode = msgCode;
     }
 

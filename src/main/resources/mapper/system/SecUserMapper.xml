@@ -22,6 +22,10 @@
     <result column="COMPANY_ID" jdbcType="VARCHAR" property="companyId" />
     <result column="ACCOUNT_Type" jdbcType="VARCHAR" property="accountType" />
 
+      <result column="inviter_code" jdbcType="VARCHAR" property="inviterCode" />
+      <result column="inviter_user" jdbcType="VARCHAR" property="inviterUser" />
+      <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+
     <result column="ORG_NAME" jdbcType="INTEGER" property="orgName" />
   </resultMap>
 
@@ -31,6 +35,10 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="flag" property="flag" jdbcType="VARCHAR" />
   </resultMap>
+
+    <select id="findSecUserByInviterCode" parameterType="String" resultMap="BaseResultMap">
+        SELECT * FROM sec_user WHERE inviter_code=#{inviterCode}
+    </select>
 
     <select id="findUserInfoAndOrgInfoById" parameterType="String" resultMap="BaseResultMap">
         SELECT su.*,so.ORG_NAME FROM sec_user su LEFT JOIN sec_org so ON su.ORG_ID=so.ID_  WHERE su.ID_=#{id}
