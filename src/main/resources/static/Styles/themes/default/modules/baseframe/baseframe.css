@@ -4,8 +4,8 @@
 
 .header {
 
-	height:30px;
-	padding: 10px;
+	height:40px;
+	padding: 20px;
 	position:relative;
 	background: #f7f7f7;
 	border-bottom:2px solid #e5e5e5;
@@ -145,16 +145,17 @@
 	font-size: 16px;
 	padding: 10px 15px;
 	color: #666;
-/*	display:none;*/
+	/*	display:none;*/
 }
 #sidebar{
 	position: absolute;
 	z-index: 3;
-	top: 52px;
-	left: 0;
+	top: 82px;
+	left: 0px;
+	bottom: 0;
 	width: 200px;
 	border-right: 1px solid #ddd;
-	/* background:url(images/e-handle.gif) repeat-y; */
+	background:url(images/e-handle.gif) repeat-y;
 	background-position: right 0;
 	background:#ffffff;
 
@@ -198,7 +199,7 @@
 
 
 
- #sidebar ul.rootmenu li li a
+#sidebar ul.rootmenu li li a
 {
 	background: #ebf2fa;
 }
@@ -323,7 +324,7 @@
 
 .collapsed ul.rootmenu li  a span {
 	display: none;
- }
+}
 /* sidebar fix */
 #sidebar ul.rootmenu li a.root{
 	_background-image:url("images/arrow.gif");
@@ -420,21 +421,21 @@
 /*logo名称*/
 .nav-logo{
 
-	font-size: 18px;
+	font-size: 22px;
 	color:#555;
 }
 .nav-logo img{
-	margin-right: 10px;
+	margin-right: 20px;
 }
 
 /*头部搜索*/
 .nav-sreach input {
 	width: 200px;
-	height: 26px;
+	height: 45px;
 	padding-left: 45px;
 	background: #f7f7f7 url(images/nav-search.png) no-repeat 10px center;
-	background-size: 22px;
-	font-size: 16px;
+	background-size: 28px;
+	font-size: 18px;
 	border: none;
 	color: #333;
 }
@@ -491,7 +492,7 @@ a.nav-Arrow:hover{
 	height: 35px;
 }
 .navulBody .navul{
-/*	position: absolute;*/
+	/*	position: absolute;*/
 	margin-left: 0;
 }
 
@@ -546,7 +547,6 @@ ul.navul li a:hover, ul.navul li.current a {
 #content .eui-tab .eui-tab-title{
 	background: #eeeeee;
 	border-bottom: none;
-	height: 35px;
 }
 #content .eui-tab .eui-tab-title .eui-this{
 	background: #ffffff;
@@ -588,6 +588,75 @@ ul.navul li a:hover, ul.navul li.current a {
 .tabContextmenu a:hover {
 	background-color: #f2f2f2;
 }
+
+
+
+
+
+/* ----------------------小字号导航配置开始-------------------------- */
+/* 顶部导航-small */
+.frame-small .header{
+	height: 32px!important;
+	padding: 10px!important;
+}
+.frame-small .header .nav-logo{
+	font-size: 18px;
+}
+.frame-small .header .nav-logo img{
+	width: 100px;
+	margin-right: 10px;
+}
+.frame-small .header .nav-sreach input{
+	height: 30px!important;
+	background-size: 20px;
+	padding-left: 36px;
+}
+.frame-small .header .userImg img{
+	width: 30px;
+	margin-top: -6px;
+}
+.frame-small .header .eui-badge{
+	min-width:6px!important;
+	width: 15px;
+	height: 15px;
+	line-height: 15px;
+	padding: 0;
+	top: -12px;
+}
+.frame-small .header .navul li a{
+	font-size: 16px;
+}
+.frame-small .header .eui-nav-child{
+	top:57px;
+}
+/* tab栏标题-small */
+.frame-small .eui-tab-title{
+	height: 32px;
+}
+.frame-small .eui-tab-title li{
+	line-height: 32px;
+	padding: 0 8px;
+	font-size: 14px;
+}
+.frame-small .eui-tab-title li .eui-icon{
+	margin-left: 0;
+}
+.frame-small .eui-tab-title .eui-tab-bar{
+	top: -2px;
+	height: 32px;
+	line-height: 32px;
+}
+/* 左侧导航-small */
+.frame-small .sidebar{
+	top: 53px!important;
+}
+.frame-small .sidebar ul li a {
+	height: 35px!important;
+	line-height: 35px!important;
+	font-size: 12px!important;
+}
+/* ----------------------小字号导航配置结束-------------------------- */
+
 
 
 /*TAB页点击右边上升的动画效果，IE9+以上有效*/

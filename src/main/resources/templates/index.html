@@ -26,10 +26,10 @@
 
 <!--顶部导航-->
 <!-- <li class="active"><a href="#"><span>首　页</span></a></li> -->
-    <script id="topmenu_template" container="ul.navul" type="text/x-jsrender">
+<script id="topmenu_template" container="ul.navul" type="text/x-jsrender">
 	<li title="{{:name}}" >
 		<a href="{{:url}}" menuid="{{:id}}" data-type="tabAdd">
-        <img class="pngfix" src="{{:icon}}" alt="">
+        <!--<img class="pngfix" src="{{:icon}}" alt="">-->
 			<span>
 				{{:name}}
 			</span>
@@ -72,101 +72,96 @@
 		</span>
 	</a>
 </script>
-<body>
+<body class="frame-small">
 
-    <!-- 头部 start -->
-    <div id="header" class="header">
-        <!--logo start-->
-                    <div class="nav-logo float-left">
-                        <img src="../Styles/images/logo.png" width="100" alt="" />心云魔方
-                    </div>
-                    <!--<div class="nav-sreach float-left">-->
-                        <!--<input type="text" placeholder="Search"/>-->
-                    <!--</div>-->
-                    <div class="float-right">
-                        <ul class="eui-nav eui-nav-nobg">
+<!-- 头部 start -->
+<div id="header" class="header">
+    <!--logo start-->
+    <div class="nav-logo float-left">
+        <img src="../Styles/images/logo.png" width="100" alt="" />心云魔方
+    </div>
+    <!--<div class="nav-sreach float-left">-->
+    <!--<input type="text" placeholder="Search"/>-->
+    <!--</div>-->
+    <div class="float-right">
+        <ul class="eui-nav eui-nav-nobg">
 
-                            <li class="eui-nav-item">
-                                <a href="#" onclick="newIframe('个人信息','/web/sec/user/info','2000')">
+            <li class="eui-nav-item">
+                <a href="#" onclick="newIframe('个人信息','/web/sec/user/info','2000')">
                                     <span class="userImg">
                                         <th:block th:if="${session.userSession.headImg=='' || session.userSession.headImg==null}">
-                                        <img style="border-radius:50%;margin-right: 6px;" width="50px" height="50px"
-                                             class="userImgs" name="headImg" th:src="@{/Styles/images/ruhua.png}" alt="">
+                                            <img class="eui-borderRadiusC userImgs" name="headImg" th:src="@{/Styles/images/ruhua.png}" alt="">
                                         </th:block>
                                          <th:block th:if="${session.userSession.headImg!='' && session.userSession.headImg!=null}">
-                                            <img style="border-radius:50%;margin-right: 6px;" width="50px" height="50px"
-                                                 class="userImgs" name="headImg" th:src="${'data:image/png;base64,'+session.userSession.headImg}" alt="">
-                                        </th:block>
+                                             <img class="eui-borderRadiusC userImgs" name="headImg" th:src="${'data:image/png;base64,'+session.userSession.headImg}" alt="">
+                                         </th:block>
                                         <span id="msgCount"></span>
 
                                     </span>
 
-                                    <span id="userinfoName" th:text="${session.userSession.userName}" class="eui-font20 eui-color-gray1">超级管理员</span>
-                                    <span class="eui-nav-more"></span>
-                                </a>
-                                <dl class="eui-nav-child">
-                                    <dd><a href="#"  onclick="newIframe('消息中心','/web/msg/msgCentre','3000')">消息中心</a>
-                                    </dd>
-                                    <dd id="exit"></dd>
-                                </dl>
-                            </li>
-                        </ul>
-                    </div>
-                <!--一级导航-->
-                <div class="navBody float-right">
-                    <a href="#" class="nav-Arrow nav-leftArrow"><i class="eui-icon">&#xe603;</i></a>
-                    <div class="navulBody">
-                        <ul class="navul"></ul>
-                    </div>
-                    <a href="#" class="nav-Arrow nav-rightArrow"><i class="eui-icon">&#xe602;</i></a>
-                </div>
-
-
-        <!-- logo end -->
+                    <span id="userinfoName" th:text="${session.userSession.userName}" class="eui-font16 eui-color-gray1">超级管理员</span>
+                    <span class="eui-nav-more"></span>
+                </a>
+                <dl class="eui-nav-child">
+                    <dd><a href="#"  onclick="newIframe('消息中心','/web/msg/msgCentre','3000')">消息中心</a>
+                    </dd>
+                    <dd id="exit"></dd>
+                </dl>
+            </li>
+        </ul>
     </div>
-    <!-- 头部 end -->
-
-    <!-- 左侧导航菜单  start -->
-    <div id="sidebar" class="sidebar">
-        <h2 class="sidebar-title">
-            <span>操作菜单</span>
-        </h2> <!-- 左导航菜单标题 -->
-        <a class="Lnav-Arrow nav-upArrow" href="###"><i class="eui-icon">&#xe619;</i></a>
-        <div class="rootmenu-div">
-            <ul class="rootmenu">
-            </ul>
+    <!--一级导航-->
+    <div class="navBody float-right">
+        <a href="#" class="nav-Arrow nav-leftArrow"><i class="eui-icon">&#xe603;</i></a>
+        <div class="navulBody">
+            <ul class="navul"></ul>
         </div>
-        <a class="Lnav-Arrow nav-downArrow" href="###"><i class="eui-icon">&#xe61a;</i></a>
-        <a href="#" id="menucollapse" class="menucollapse-hide"></a> <!-- 折叠菜单按钮 -->
+        <a href="#" class="nav-Arrow nav-rightArrow"><i class="eui-icon">&#xe602;</i></a>
     </div>
-    <!-- 左边导航菜单  end-->
- <!--  <span class="localTime">系统当前时间</span>-->
-    <!-- 中间主体内容 start -->
-   <div id="content" class="content" >
-       <!-- iframe start -->
-      <div class="eui-tab" e-filter="nav-tab" e-allowclose="true">
-           <ul class="eui-tab-title">
-           </ul>
-           <div class="eui-tab-content">
-           </div>
-       </div>
 
-       <!-- iframe end -->
-   </div>
-    <!-- 中间主体内容 end -->
 
-    <!-- 脚部 start -->
-    <div id="footer">
-        <div class="text-center font">
-            Copyright @ 2017 广州市易度软件开发有限公司
+    <!-- logo end -->
+</div>
+<!-- 头部 end -->
+
+<!-- 左侧导航菜单  start -->
+<div id="sidebar" class="sidebar">
+    <h2 class="sidebar-title">
+        <span>操作菜单</span>
+    </h2> <!-- 左导航菜单标题 -->
+    <a class="Lnav-Arrow nav-upArrow" href="###"><i class="eui-icon">&#xe619;</i></a>
+    <div class="rootmenu-div">
+        <ul class="rootmenu">
+        </ul>
+    </div>
+    <a class="Lnav-Arrow nav-downArrow" href="###"><i class="eui-icon">&#xe61a;</i></a>
+    <a href="#" id="menucollapse" class="menucollapse-hide"></a> <!-- 折叠菜单按钮 -->
+</div>
+<!-- 左边导航菜单  end-->
+<!--  <span class="localTime">系统当前时间</span>-->
+<!-- 中间主体内容 start -->
+<div id="content" class="content" >
+    <!-- iframe start -->
+    <div class="eui-tab" e-filter="nav-tab" e-allowclose="true">
+        <ul class="eui-tab-title">
+        </ul>
+        <div class="eui-tab-content">
         </div>
     </div>
-    <!-- 脚部 end -->
+
+    <!-- iframe end -->
+</div>
+<!-- 中间主体内容 end -->
+
+<!-- 脚部 start -->
+<div id="footer">
+    <div class="text-center font">
+        Copyright @ 2017 广州市易度软件开发有限公司
+    </div>
+</div>
+<!-- 脚部 end -->
 
 </body>
-<div id="downApp" style="display: none">
-    <div><img style="margin-left: 10px;" th:src="@{/app/qrcode/yd-qrcode.png}" ></div>
-</div>
 
 <div id="msgData">
     <div style="height: 280px; overflow: hidden;" class="msgData_">
@@ -199,47 +194,43 @@
 
         //初始化首页
         var indexVal = $("ul.navul >li:first-child a span").text(),
-                indexUrl = $("ul.navul >li:first-child a").attr("href");
+            indexUrl = $("ul.navul >li:first-child a").attr("href");
+        indexId=$("ul.navul >li:first-child a").attr("menuid");
 
-                indexId=$("ul.navul >li:first-child a").attr("menuid");
-
-        if (indexUrl!=undefined){
+       if (indexUrl!=undefined){
             element.tabAdd("nav-tab", {
-                title:"首页"
+                title:indexVal
                 ,content: "<iframe frameborder=0 class='contentIframe' src="+indexUrl+"></iframe>"
                 ,id: indexId
             });
             element.tabChange("nav-tab", indexId);
-            bindA();
-        }
+       }
 
-
-        $("#content .eui-tab-title li").trigger("click").addClass("firstNoClose").prepend("<i class='eui-icon'>&#xe622;</i>");
+       $("#content .eui-tab-title li").trigger("click").addClass("firstNoClose").prepend("<i class='eui-icon'>&#xe622;</i>");
 
         //点击菜单生成TAB页
-       $(document).on("click","#sidebar .rootmenu>li:not([class*='submenuLi'])>a," +
-           "#sidebar .rootmenu>li[class*='submenuLi'] .submenu li>a,ul.navul >li a.noChilds",function(){
-           closeRightContent();
+        $(document).on("click","#sidebar .rootmenu>li:not([class*='submenuLi'])>a,#sidebar .rootmenu>li[class*='submenuLi'] .submenu li>a,ul.navul >li a.noChilds",function(){
+            closeRightContent();
             var othis = $(this);
             var navName = othis.text(),
-            aMenuid = othis.attr("menuid"),
-            aHref = othis.attr("href");
-           if($(".eui-tab-title li[e-id="+ aMenuid+"]").length <= 0){//如果菜单没点过
-               //新增一个Tab项
-               element.tabAdd("nav-tab", {
-                   title: navName
-                   ,content: "<iframe frameborder=0 class='contentIframe' " +
-                   " src='"+ aHref +"'></iframe>"
-                   ,id: aMenuid
-               });
-           }else{
-           }
-           element.tabChange("nav-tab", aMenuid); //切换到当前菜单
-           return false;
+                    aMenuid = othis.attr("menuid"),
+                    aHref = othis.attr("href");
+            if($(".eui-tab-title li[e-id="+ aMenuid+"]").length <= 0){//如果菜单没点过
+                //新增一个Tab项
+                element.tabAdd("nav-tab", {
+                    title: navName
+                    ,content: "<iframe frameborder=0 class='contentIframe' " +
+                    " src='"+ aHref +"'></iframe>"
+                    ,id: aMenuid
+                });
+            }else{
+            }
+            element.tabChange("nav-tab", aMenuid); //切换到当前菜单
+            return false;
         });
 
         //TAB页右键弹出关闭图层
-       $(document).on("contextmenu","#content .eui-tab .eui-tab-title li",function(){
+        $(document).on("contextmenu","#content .eui-tab .eui-tab-title li",function(){
             $(".tabContextmenu").remove();
             if($(this).attr('e-id') != indexId){   //首页右键不弹出
                 $(this).append("" +
@@ -250,7 +241,7 @@
                         "</dl>");
                 $(".tabContextmenu").addClass("eui-show");
             }
-              return false;
+            return false;
         });
 
         //点击关闭当前TAB页
@@ -273,11 +264,11 @@
 
         //点击关闭除了首页的其它TAB页面
         $(document).on("click","#closeAll",function(){
-                 $("#content .eui-tab .eui-tab-title li").each(function(){
-                     if($(this).attr("e-id") != indexId){
-                         element.tabDelete("nav-tab",$(this).attr("e-id")).init();
-                     }
-                 })
+            $("#content .eui-tab .eui-tab-title li").each(function(){
+                if($(this).attr("e-id") != indexId){
+                    element.tabDelete("nav-tab",$(this).attr("e-id")).init();
+                }
+            })
         });
 
         //点击其它区域进行关闭
@@ -296,8 +287,6 @@
     });
 
 
-
-
     //子页面调用父的方法
     function childCallParent(baseForImg) {
         $("[name='headImg']").attr("src",baseForImg)
@@ -308,23 +297,22 @@
         $("#msgCount").html('');
         eui.use(['element','layer'],function() {
             var $ = eui.jquery
-                , layer = eui.layer
-                , element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+                    , layer = eui.layer
+                    , element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
             //新增一个Tab项
             element.tabDelete("nav-tab", id);
             element.tabAdd("nav-tab", {
                 title: name
-                ,content: "<iframe frameborder=0 class='contentIframe' " +
-                " src='"+ src +"'></iframe>"
+                ,content: "<iframe frameborder=0 class='contentIframe' src='"+ src +"'></iframe>"
                 ,id: id
             });
             element.tabChange("nav-tab", id);
         });
     }
     //轮询查未读消息
-//    setInterval(function() {
-//        msgCount();
-//    }, 60000);
+    //    setInterval(function() {
+    //        msgCount();
+    //    }, 60000);
 
     function msgCount() {
         $.ajax({
@@ -337,7 +325,7 @@
                     for (var i=0;i<count.length;i++){
                         var msg = count[i].messageTitle.replace(/<br\/>/g, '&nbsp;');
                         $('#msgData .msgData_').append('<div class="test" style="text-overflow: ellipsis;">' +
-                            '<a target="_blank" href="/web/task/info?taskId='+count[i].objId+'">'+msg+'</a></div>');
+                                '<a target="_blank" href="/web/task/info?taskId='+count[i].objId+'">'+msg+'</a></div>');
                     }
                     $("#msgCount").html('<span class="eui-badge">'+count.length+'</span>');
                     eui.use('layer', function(){
@@ -369,115 +357,9 @@
         msgCount();
         // $("#sidebar ul.rootmenu>li").has("ul").addClass("plus");
 
-        x = $.get('time.php', function (date) {
-                showTime('servertime12', date, 12);
-                showTime('servertime24', date, 0);
-            }
-        );
-        showTime('localtime12', 0, 12);
-        showTime('localtime24', 0, 0);
-        //showTime('time',0,12);
-        //数字<10加 "0" 函数(避免时间显示为8点1分3秒)
-        function fillZero(v) {
-            if (v < 10) {
-                v = '0' + v;
-            }
-            return v;
-        }
 
-        function showTime(ev, date, type) {
-            var d;
-            //ev = '#'+ev;
-            var Y, M, D, W, H, I, S;
-            var Week = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-            if (date) {
-                d = new Date(date * 1000);
-            } else {
-                d = new Date();
-            }
-            Y = d.getFullYear(); ;
-            M = fillZero(d.getMonth() + 1);
-            D = fillZero(d.getDate());
-            W = Week[d.getDay()];
-            H = fillZero(d.getHours());
-            I = fillZero(d.getMinutes());
-            S = fillZero(d.getSeconds());
-            //alert(H+':'+I+':'+S);
-            //document.write(H+':'+I+':'+S);
-            if (type && type == 12) {
-                if (H < 10 && H >= 6) {
-                    H = '早晨:' + H;
-                } else if (H >= 10 && H < 12) {
-                    H = '上午:' + fillZero(H);
-                } else if (H >= 12 && H < 14) {
-                    H = '中午:' + H;
-                } else if (H >= 14 && H < 18) {
-                    H = '下午:' + H;
-                } else if (H >= 18 && H < 24) {
-                    H = '晚上:' + H;
-                } else if (H == 0) {
-                    H = '凌晨:00';
-                } else if (H > 0 && H < 6) {
-                    H = '夜晚:' + H;
-                }
-            }
-            //var showData = Y + '年' + M + '月' + D + '日' + ' ' + W + ' ' + H + '点' + I + '分' + S + '秒'
-            var showData = Y + '年' + M + '月' + D + '日' + ' ' + W;
-            $('#' + ev).html(showData);
-            if (date) {
-                date++;
-            }
-            setTimeout(function () { showTime(ev, date, type) }, 1000);
-            //setTimeout(arguments.callee,1000);
-        }
-
-        $(".dropDown").hover(function() {
-            $(this).children('.dropDown-menu').stop().fadeToggle(300);
-        });
-    });
-
-    function downApp() {
-        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
-            var $ = eui.jquery,
-                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
-            layer.open({
-                type: 1,
-                title :'app下载',
-                id:"taskTags",
-                move: false,//禁止拖拽
-                shade: 0,//不显示遮罩
-                area:['300px', '350px'],
-                content: $('#downApp'),//这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
-
-            });
-        });
-    }
-    $(function () {
-        bindA();
     });
 
 
-    function bindA() {
-        eui.use(['element','layer'],function() {
-            var $ = eui.jquery
-                , layer = eui.layer
-                , element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
-            $(".navul li a").click(function () {
-                var othis = $(this);
-                var navName = othis.text(),
-                    aMenuid = othis.attr("menuid"),
-                    aHref = othis.attr("href");
-
-                element.tabDelete('nav-tab', aMenuid);
-                element.tabAdd("nav-tab", {
-                    title:navName
-                    ,content: "<iframe frameborder=0 class='contentIframe'  src='"+ aHref +"'></iframe>"
-                    ,id: aMenuid
-                });
-                element.tabChange("nav-tab", aMenuid); //切换到当前菜单
-            });
-
-        });
-    }
 </script>

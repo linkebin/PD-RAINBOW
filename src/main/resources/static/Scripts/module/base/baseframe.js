@@ -128,14 +128,12 @@ var Index = {
 				$("#topmenu_template").render(Index.menu._cacheMenu)
 			).find("a").click(function (e) {
 					Index.menu.toRenderMenu = $(this).attr("toRenderMenu") ;
-
 					$(container).find("li").removeClass("current");
 					$(this).parents("li").addClass("current");
 					var menuid = $(this).attr('menuid');
 
 					//renderLeftMenu
 					var menu = Index.menu._findMenu(menus, menuid);
-
 					if (menu && menu.childs && menu.childs.length > 0) {
 						$("#sidebar").show();
 						//	$(".master-page").removeClass("nosidebar");
@@ -144,6 +142,10 @@ var Index = {
 						//navigation
 						var url = $(this).attr('href');
 						Index.menu._navigate(menuid, url, this);
+
+
+
+					//	alert(url+"--test");
 						return false;
 					} else {
 						$("#sidebar").hide();
@@ -211,10 +213,10 @@ var Index = {
 				$(this).parents("li").addClass("current");
 				var menuid = $(this).attr('menuid');
 
+
 				//navigation
 				var url = $(this).attr('href');
 				Index.menu._navigate(menuid, url, this);
-
 				//	return false;
 			});
 
@@ -270,17 +272,13 @@ var Index = {
 			}
 
 
-			if (url != '#' && url) {
+			if (url!='#' && url!='/null') {
 				var menu = Index.menu._findMenu(Index.menu._cacheMenu, id);
 				if( menu.target == "_blank" || jQuery.query.get("target") == "_blank" ){
-
 					window.open(  $.utils.parseUrl(url)  ) ;
 				}else{
-					//	alert(url);
 					//设置点击左侧菜单，右侧加载
 					//	$("#content iframe").attr("src", $.utils.parseUrl(url) );
-
-
 				}
 
 			}else{//查找子菜单
@@ -389,30 +387,33 @@ var Index = {
 				var windowWidth= $(window).width(),
 					navLogoOWidth= $(".nav-logo").outerWidth(),
 					navSreachOWidth= $(".nav-sreach").outerWidth(),
-					euiNavOWidth = $(".header .eui-nav").outerWidth(),
-					headerPadVal =$(".header").css("padding").replace("px","");
+					euiNavOWidth = $(".header .eui-nav").outerWidth()+1,
+					headerPadVal =$(".header").css("padding-left").replace("px","");
 
 				var navliLength = $(".navul li").length;
-				var navulH = 0;
+
+				var navliWidth = 0;
 				$(".navul li").each(function(){
-					navulH=navulH+$(this).outerWidth();
+					navliWidth=navliWidth+$(this).outerWidth();
+
 				});
 
 				var navulW=$(".navul").width();
-				var navliWidth = $(".navul li").outerWidth();
 				var liWidth = 105;
-				var navulBodyMinW = windowWidth-navLogoOWidth-navSreachOWidth-euiNavOWidth-headerPadVal*2-30; //导航最小宽度
+				var navulBodyMar = $(".navBody").css("margin-right").replace("px","");
+				var navulBodyMinW = windowWidth-navLogoOWidth-navSreachOWidth-euiNavOWidth-headerPadVal*2-navulBodyMar; //导航最小宽度
 
 				if(navulW > navulBodyMinW ){
 					$(".navulBody").width(navulBodyMinW);
 					$(".nav-Arrow").show();
-					$(".navul").width(navulH);
+					$(".navul").width(navliWidth);
 					if($(".navul").css("margin-left").replace("px","") == 0){
 						$(".nav-leftArrow").addClass("nav-Arrow-no eui-color-gray3")
 					}else{
 					}
+
 				}else{
-					$(".navulBody").width(navulW+1);
+					$(".navulBody").width(navulW);
 					$(".nav-Arrow").hide();
 				}
 
