@@ -184,7 +184,7 @@
     SELECT  *  FROM SEC_MENU WHERE
     DELETED=0
     <if test="id != null and id != ''">
-      AND  (ID_ = #{id} OR  PARENT_ID =#{id})
+      AND  PARENT_ID =#{id}
     </if>
     <if test="menuCode != null and menuCode != ''">
       AND  MENU_CODE LIKE '%${menuCode}%'
@@ -192,12 +192,13 @@
     <if test="menuName != null and menuName != ''">
       AND  MENU_NAME LIKE '%${menuName}%'
     </if>
+    ORDER BY sort
   </select>
 
   <!--树形结构-->
   <select id="getTree" resultMap="tree_map" parameterType="String">
     SELECT ID_ id,MENU_NAME name,PARENT_ID parentId FROM SEC_MENU WHERE
-     DELETED=0 AND ENABLED=1
+     DELETED=0 AND ENABLED=1 order by sort
 
   </select>
 </mapper>
