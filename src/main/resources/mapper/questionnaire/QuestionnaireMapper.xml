@@ -18,6 +18,53 @@
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="questionnaire_type" jdbcType="VARCHAR" property="questionnaireType" />
     <result column="gauge_id" jdbcType="VARCHAR" property="gaugeId" />
+    <result column="answer_model_type" jdbcType="INTEGER" property="answerModelType" />
     <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
   </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.yidusoft.project.questionnaire.domain.Questionnaire">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID_" jdbcType="VARCHAR" property="id" />
+        <result column="questionnaire_code" jdbcType="VARCHAR" property="questionnaireCode" />
+        <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName" />
+        <result column="shelf_time" jdbcType="TIMESTAMP" property="shelfTime" />
+        <result column="question_sequence" jdbcType="INTEGER" property="questionSequence" />
+        <result column="questionnaire_state" jdbcType="INTEGER" property="questionnaireState" />
+        <result column="creator" jdbcType="VARCHAR" property="creator" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="deleted" jdbcType="INTEGER" property="deleted" />
+        <result column="questionnaire_type" jdbcType="VARCHAR" property="questionnaireType" />
+        <result column="gauge_id" jdbcType="VARCHAR" property="gaugeId" />
+        <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
+        <result column="answer_model_type" jdbcType="INTEGER" property="answerModelType" />
+        <result column="gauge_name" jdbcType="VARCHAR" property="gaugeName" />
+        <result column="questionnaire_type_name" jdbcType="VARCHAR" property="questionnaireTypeName" />
+    </resultMap>
+
+    <select id="questionnaireListByPage" resultMap="BaseResultMap1" parameterType="com.yidusoft.project.questionnaire.domain.Questionnaire">
+        SELECT
+          g.*,e.gauge_name,q.questionnaire_type_name
+        FROM
+           questionnaire g
+        LEFT JOIN
+          questionnaire_type  q
+        ON g.questionnaire_type =q.id_
+        LEFT JOIN
+          gauge  e
+        ON  g.gauge_id=e.id_
+        WHERE g.deleted=0
+        <if test="questionnaireCode != null and questionnaireCode != ''">
+            AND  ( g.questionnaire_code  LIKE  '%${questionnaireCode}%'
+            OR
+            g.questionnaire_name LIKE  '%${questionnaireCode}%'
+            )
+        </if>
+
+        ORDER BY  g.CREATE_TIME DESC
+
+    </select>
 </mapper>

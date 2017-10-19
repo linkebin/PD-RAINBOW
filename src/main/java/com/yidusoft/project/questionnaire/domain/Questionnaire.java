@@ -39,6 +39,13 @@ public class Questionnaire {
     private Integer questionnaireState;
 
     /**
+     * 使用模板类型（1 横版、2 竖直版）
+     */
+    @Column(name = "answer_model_type")
+    private Integer answerModelType;
+
+
+    /**
      * 创建人
      */
     private String creator;
@@ -81,6 +88,30 @@ public class Questionnaire {
      * 注意事项
      */
     private String remarks;
+
+
+    @Transient
+    private  String questionnaireTypeName;
+
+    //量表名称
+    @Transient
+    private String gaugeName;
+
+    public String getGaugeName() {
+        return gaugeName;
+    }
+
+    public void setGaugeName(String gaugeName) {
+        this.gaugeName = gaugeName;
+    }
+
+    public String getQuestionnaireTypeName() {
+        return questionnaireTypeName;
+    }
+
+    public void setQuestionnaireTypeName(String questionnaireTypeName) {
+        this.questionnaireTypeName = questionnaireTypeName;
+    }
 
     /**
      * @return ID_
@@ -319,6 +350,14 @@ public class Questionnaire {
      */
     public String getRemarks() {
         return remarks;
+    }
+
+    public Integer getAnswerModelType() {
+        return answerModelType;
+    }
+
+    public void setAnswerModelType(Integer answerModelType) {
+        this.answerModelType = answerModelType;
     }
 
     /**
