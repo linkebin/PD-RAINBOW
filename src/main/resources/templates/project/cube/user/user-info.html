@@ -113,19 +113,11 @@
 <script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
+<script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
 <script>
-    eui.use(['form', 'laydate', 'element','upload'], function(){
+    eui.use('upload', function(){
         var $ = eui.jquery
-            ,form = eui.form
-            ,element = eui.element
-            ,laydate = eui.laydate
             ,upload = eui.upload;
-
-        // 日期
-        laydate.render({
-            elem: '#test-n1'
-            , position: 'static'
-        });
 
         //普通图片上传
         var uploadInst = upload.render({
