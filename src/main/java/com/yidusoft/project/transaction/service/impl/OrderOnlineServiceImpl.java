@@ -21,7 +21,12 @@ public class OrderOnlineServiceImpl extends AbstractService<OrderOnline> impleme
     private OrderOnlineMapper orderOnlineMapper;
 
     @Override
-    public List<OrderOnline> getUserOderById(OrderOnline orderOnline) {
-        return orderOnlineMapper.getUserOderById(orderOnline);
-    }
+    public List<OrderOnline> getUserOderById(OrderOnline orderOnline) { return orderOnlineMapper.getUserOderById(orderOnline); }
+
+    @Override
+    public void updateOrderOnline(String productId) { orderOnlineMapper.updateOrderOnline(productId); }
+
+    @Override
+    public String getOrderState(String id) { return orderOnlineMapper.getOrderState(id); }
+
 }

@@ -80,9 +80,14 @@ public class OrderOnline {
     /**
      * 活动id
      */
-
     @Transient
     private String promotionsId;
+
+    /**
+     * 套餐名称
+     */
+    @Transient
+    private String productName;
 
     /**
      * @return ID_
@@ -307,4 +312,16 @@ public class OrderOnline {
     public void setPromotionsId(String promotionsId) {
         this.promotionsId = promotionsId;
     }
+
+    /**
+     * 获取套餐名称
+     * @return
+     */
+    public String getProductName() { return productName; }
+
+    /**
+     * 设置套餐名称
+     * @param productName
+     */
+    public void setProductName(String productName) { this.productName = productName; }
 }

@@ -554,10 +554,15 @@
      */
     function deletePrpduct(id) {
         var indexs = layer.load(2); //加载
-        $.postStatus('/product/settings/deleteBacth', {ids: id}, function (data) {
-            layer.closeAll();
-            doSearch();
-        });
+        layer.confirm('您确定删除吗？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.post('/product/settings/deleteBacth', {ids: id}, function (data) {
+                layer.closeAll();
+                doSearch();
+            });
+        })
+
     }
 
     /**

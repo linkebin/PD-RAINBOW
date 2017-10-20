@@ -71,6 +71,7 @@
                         <li class="eui-this">全部订单</li>
                         <li>已支付</li>
                         <li>未支付</li>
+                        <li>已关闭</li>
                     </ul>
                     <div class="eui-tab-content">
                         <div class="eui-tab-item eui-show">
@@ -107,16 +108,16 @@
         © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
     </div>
 </div>
-
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 
 <script>
     //表单
-    eui.use(['form', 'laydate', 'element'], function () {
+    eui.use(['form', 'laydate', 'element', 'layer'], function () {
         var form = eui.form
                 , element = eui.element
-                , laydate = eui.laydate;
+                , laydate = eui.laydate
+                , layer = eui.layer;
 
         // 日期
         laydate.render({
@@ -125,14 +126,16 @@
         });
 
     });
+
+    /**
+     * 初始化数据
+     */
     $(function () {
         doSearch();
     })
 
     function doSearch(orderState) {
-        console.log(orderState);
         $.post("/order/online/list", {orderState: orderState}, function (result) {
-            console.log(result);
             if (result.code = 200) {
                 var tableHtml = getTable(result.data);
                 $(".orderIn").html(tableHtml);
@@ -152,37 +155,50 @@
             tableHtml += ' <p class="orderCode">订单编号：' + order.orderCode + '</p>' +
                     '<table class="eui-table" e-skin="nob">' +
                     ' <tr class="orderInfo">' +
-                    '<td>中学生心理健康调查问卷及报告</td>' +
+                    '<td>' + order.productName + '</td>' +
                     '<td>' + order.orderMoney + '元</td>' +
                     '<td>' + new Date(order.createTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>';
-            tableHtml += order.orderState == 1 ? '<td>已支付</td>' : '<td>未支付</td>';
             if (order.orderState == 1) {
+                tableHtml += '<td>已支付</td>';
+            } else if (order.orderState == 2) {
+                tableHtml += '<td>未支付</td>';
+            } else {
+                tableHtml += '<td>已关闭</td>';
+            }
+            if (order.orderState == 1 || order.orderState == 3) {
                 tableHtml += '<td class="eui-textAlignC">' +
-                        '<span class="eui-btn eui-btn-normal" onclick="cancelOrder(' + id + ',"")">删除订单</span>' +
+                        '<span class="eui-btn eui-btn-normal" onclick="cancelOrder(' + id + ','+"'delete'"+')">删除订单</span>' +
                         '</td>' +
                         '</tr>' +
                         '</table>';
                 continue;
             }
             tableHtml += '<td class="eui-textAlignC">' +
-                    '<span class="eui-btn eui-btn-normal" onclick="payment(' + id + ')">付款</span>' +
+                    '<span class="eui-btn eui-btn-normal" onclick="payment(' + id + ')">立即付款</span>' +
                     '<br>' +
-                    '<div class="eui-color-blue" onclick="cancelOrder(' + id + ')">取消订单</div>' +
+                    '<div class="eui-color-blue" onclick="cancelOrder(' + id + ','+"'cancel'"+')">取消订单</div>' +
                     '</td>' +
                     '</tr>' +
                     '</table>';
         }
         return tableHtml;
     }
+
+
     /**
-     * 取消订单
+     * 取消订单或者删除订单
      * @param id
      */
-    function cancelOrder(id) {
-        $.post("/order/online/delete", {id: id}, function (result) {
-            console.log(result);
-            if (result.code = 200) {
-                doSearch();
+    function cancelOrder(id,orderType) {
+        $.post("/order/online/delete", {id: id,orderType:orderType}, function (result) {
+            if (result.message = "SUCCESS") {
+                if(orderType=="cancel"){
+                    layer.msg('取消成功！',{icon:1});
+                }else{
+                    layer.msg('删除成功！',{icon:1});
+                }
+                !//刷新数据
+                getDoSearchByState();
             }
         })
     }
@@ -192,22 +208,60 @@
      * @param id
      */
     function payment(id) {
-        console.log(id);
+        $.post("/order/online/getState", {id: id}, function (result) {
+            if (result.message = "success") {
+                if (result.data == 3) {
+                    layer.msg('该套餐已下架！', {});
+                    getDoSearchByState();
+                } else {
+                    layer.confirm('确认付款', {
+                        btn: ['确认', '取消']
+                    }, function () {
+                        $.post("/order/online/payment", {id: id, orderState: 1}, function (result) {
+                            if (result.message = "success") {
+                                layer.msg('支付成功！', {icon: 1});
+                                getDoSearchByState();
+                            }
+                        })
+                    })
+                }
+            } else {
+                layer.msg(result.message, {});
+            }
+        })
     }
-
-
     /**
      * tab栏点击事件
      */
-    $('ul.eui-tab-title').click(function (event) {
+    $('ul.eui-tab-title').click(function () {
         if (event.target.innerHTML == "全部订单") {
             doSearch();
+        } else if (event.target.innerHTML == "已支付") {
+            doSearch(1);
         } else if (event.target.innerHTML == "未支付") {
             doSearch(2);
         } else {
-            doSearch(1);
+            doSearch(3)
         }
     })
+
+    /**
+     * 根据当前的tab栏来查询数据
+     * @param text
+     */
+    function getDoSearchByState() {
+        var text = $('.eui-this').text();
+        if(text=='全部订单'){
+            doSearch();
+        }else if(text=='已支付'){
+            doSearch(1);
+        }else if(text=='未支付'){
+            doSearch(2);
+        }else{
+            doSearch(3);
+        }
+    }
+
 </script>
 </body>
 </html>

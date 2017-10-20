@@ -4,12 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.domain.OrderOnline;
+import com.yidusoft.project.transaction.domain.UserQuestionnaires;
 import com.yidusoft.project.transaction.service.OrderOnlineService;
-import com.yidusoft.project.transaction.service.QuestionnairePromotionsService;
+import com.yidusoft.project.transaction.service.UserQuestionnairesService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -21,12 +24,13 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/order/online")
+@Transactional
 public class OrderOnlineController {
     @Resource
     private OrderOnlineService orderOnlineService;
 
     @Resource
-    private QuestionnairePromotionsService questionnairePromotionsService;
+    private UserQuestionnairesService userQuestionnairesService;
 
     /**
      * 添加订单
@@ -34,7 +38,6 @@ public class OrderOnlineController {
      * @param onlineJson
      * @return
      */
-    @Transactional
     @PostMapping("/add")
     public Result add(String onlineJson, String promotionId) {
         OrderOnline orderOnline = JSON.parseObject(onlineJson, OrderOnline.class);
@@ -69,27 +72,56 @@ public class OrderOnlineController {
 
     /**
      * 删除订单，逻辑删除，数据还在
-     *
      * @param id
      * @return
      */
     @PostMapping("/delete")
-    public Result delete(String id) {
+    public Result delete(String id,String orderType) {
         OrderOnline orderOnline = orderOnlineService.findById(id);
-        orderOnline.setDeleted(1);
+        if(orderType.indexOf("cancel")!=-1){
+            orderOnline.setOrderState(3);
+        }else{
+            orderOnline.setDeleted(1);
+        }
         orderOnlineService.update(orderOnline);
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(OrderOnline orderOnline) {
-        orderOnlineService.update(orderOnline);
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        OrderOnline orderOnline = orderOnlineService.findById(id);
+    /**
+     * 获取订单的状态
+     * @param id
+     * @return
+     */
+    @PostMapping("/getState")
+    public Result getState(String id) {
+        String orderOnline = orderOnlineService.getOrderState(id);
         return ResultGenerator.genSuccessResult(orderOnline);
     }
+
+    /**
+     * 付款
+     * @param id
+     * @return
+     */
+    @PostMapping("/payment")
+    public Result payment(String id,int orderState) {
+        OrderOnline orderOnline = orderOnlineService.findById(id);
+        orderOnline.setOrderState(orderState);
+        orderOnline.setPaymentTime(new Date());
+        orderOnlineService.update(orderOnline);
+        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", Security.getUserId());
+        if (userQuestionnaires != null) {
+            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()+orderOnline.getQuestionnaireTotal());
+            userQuestionnairesService.update(userQuestionnaires);
+        }else{
+            UserQuestionnaires userQuestionnaire =new UserQuestionnaires();
+            userQuestionnaire.setId(UUID.randomUUID().toString());
+            userQuestionnaire.setUserId(Security.getUserId());
+            userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
+            userQuestionnaire.setQuestionnairesCumulativeTotal(0);
+            userQuestionnairesService.save(userQuestionnaire);
+        }
+        return ResultGenerator.genSuccessResult();
+    }
+
 }

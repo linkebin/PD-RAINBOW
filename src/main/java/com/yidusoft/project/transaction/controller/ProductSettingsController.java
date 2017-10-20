@@ -6,9 +6,11 @@ import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.domain.ProductSettings;
+import com.yidusoft.project.transaction.service.OrderOnlineService;
 import com.yidusoft.project.transaction.service.ProductSettingsService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,6 +25,8 @@ public class ProductSettingsController {
     @Resource
     private ProductSettingsService productSettingsService;
 
+    @Resource
+    private OrderOnlineService orderOnlineService;
     /**
      * 获取套餐列表
      * @return
@@ -72,14 +76,15 @@ public class ProductSettingsController {
      * @param ids
      * @return
      */
+    @Transactional
     @PostMapping("/deleteBacth")
-    @ResponseBody
     public Result deleteBacth(String  ids) {
         String arr [] = ids.split(",");
         for(String str : arr){
             ProductSettings product = productSettingsService.findById(str);
             product.setDeleted(1);
             productSettingsService.update(product);
+            orderOnlineService.updateOrderOnline(str);
             //更新权限
 //            shiroService.updatePermission();
         }
