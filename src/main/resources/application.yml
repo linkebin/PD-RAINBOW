@@ -1,7 +1,7 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://192.168.1.35/pd-rainbow?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://192.168.1.35/pd_rainbow?useUnicode=true&characterEncoding=UTF-8
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password:
