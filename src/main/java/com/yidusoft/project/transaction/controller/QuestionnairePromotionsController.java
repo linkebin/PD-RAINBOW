@@ -10,14 +10,15 @@ import com.yidusoft.project.transaction.domain.QuestionnairePromotions;
 import com.yidusoft.project.transaction.service.ProductSettingsService;
 import com.yidusoft.project.transaction.service.QuestionnairePromotionsService;
 import com.yidusoft.utils.Security;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
 
 /**
-* Created by CodeGenerator on 2017/10/11.
-*/
+ * Created by CodeGenerator on 2017/10/11.
+ */
 @RestController
 @RequestMapping("/questionnaire/promotions")
 public class QuestionnairePromotionsController {
@@ -29,20 +30,22 @@ public class QuestionnairePromotionsController {
 
     /**
      * 获取活动列表
+     *
      * @return
      */
     @GetMapping("/list")
-    public Map<String,Object> list(){
-        Map<String,Object> map = new HashMap<String,Object>();
+    public Map<String, Object> list() {
+        Map<String, Object> map = new HashMap<String, Object>();
         List<QuestionnairePromotions> list = new ArrayList<>();
-        list=questionnairePromotionsService.getPromotionAll();
-        map.put("Rows",list);
-        map.put("Total",list.size());
+        list = questionnairePromotionsService.getPromotionAll();
+        map.put("Rows", list);
+        map.put("Total", list.size());
         return map;
     }
 
     /**
      * 列表数据分页
+     *
      * @param page
      * @param size
      */
@@ -55,14 +58,27 @@ public class QuestionnairePromotionsController {
     }
 
     /**
+     * 获取启用的活动
+     *
+     * @return
+     */
+    @GetMapping("/getState")
+    public Result getState() {
+        List<QuestionnairePromotions> list = questionnairePromotionsService.getPromotionState();
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    /**
      * 添加活动
+     *
      * @param promotionsJson
      * @return
      */
     @PostMapping("/add")
     public Result add(String promotionsJson) {
-        QuestionnairePromotions promotions = JSON.parseObject(promotionsJson,QuestionnairePromotions.class);
-        promotions.setId(UUID.randomUUID().toString());;
+        QuestionnairePromotions promotions = JSON.parseObject(promotionsJson, QuestionnairePromotions.class);
+        promotions.setId(UUID.randomUUID().toString());
+        ;
         promotions.setCreator(Security.getUser().getUserName());
         promotions.setCreateTime(new Date());
         promotions.setDeleted(0);
@@ -71,41 +87,53 @@ public class QuestionnairePromotionsController {
     }
 
     /**
-     * 删除活动
-     * @param id
+     * 批量删除活动
+     * @param ids
      * @return
      */
-    @PostMapping("/delete")
-    public Result delete(String  id) {
-        QuestionnairePromotions questionnairePromotions=questionnairePromotionsService.findById(id);
-        questionnairePromotions.setDeleted(1);
-        questionnairePromotionsService.update(questionnairePromotions);
+    @Transactional
+    @PostMapping("/batchDeletion")
+    public Result batchDeletion(String ids) {
+        String arr [] = ids.split(",");
+        for(String id : arr){
+            QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
+            questionnairePromotions.setDeleted(1);
+            questionnairePromotionsService.update(questionnairePromotions);
+            ProductSettings productSettings = productSettingsService.findBy("promotionsId", id);
+            if (productSettings != null) {
+                productSettings.setPromotionsId("");
+                productSettings.setPromotionsName("");
+                productSettingsService.update(productSettings);
+            }
+        }
         return ResultGenerator.genSuccessResult();
     }
 
     /**
      * 修改活动
+     *
      * @param promotionsJson
      * @return
      */
     @PostMapping("/update")
     public Result update(String promotionsJson) {
-        QuestionnairePromotions questionnairePromotions=JSON.parseObject(promotionsJson,QuestionnairePromotions.class);
+        QuestionnairePromotions questionnairePromotions = JSON.parseObject(promotionsJson, QuestionnairePromotions.class);
         questionnairePromotionsService.update(questionnairePromotions);
         return ResultGenerator.genSuccessResult();
     }
 
     /**
      * 联表查询
+     *
      * @return
      */
     @GetMapping("/getProductAndQuestionPro")
-    public Result getProductAndQuestionPro(){
-        Map<String,Object> map = new HashMap<String,Object>();
-        List<QuestionnairePromotions> questionList=questionnairePromotionsService.getPromotionAll();
-        List<ProductSettings> productList=productSettingsService.getProductAll();
-        map.put("questionList",questionList);
-        map.put("productList",productList);
+    public Result getProductAndQuestionPro() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<QuestionnairePromotions> questionList = questionnairePromotionsService.getPromotionAll();
+        List<ProductSettings> productList = productSettingsService.getProductAll();
+        map.put("questionList", questionList);
+        map.put("productList", productList);
         return ResultGenerator.genSuccessResult(map);
     }
 

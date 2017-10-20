@@ -9,4 +9,6 @@ public interface QuestionnairePromotionsMapper extends Mapper<QuestionnairePromo
     List<QuestionnairePromotions> getPromotionAll();
 
     List<QuestionnairePromotions> getProductAndQuestionPro();
+
+    List<QuestionnairePromotions> getPromotionState();
 }

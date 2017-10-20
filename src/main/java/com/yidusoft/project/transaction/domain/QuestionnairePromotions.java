@@ -76,9 +76,14 @@ public class QuestionnairePromotions {
     @Column(name = "deleted")
     private Integer deleted;
 
+    /**
+     * 活动名称
+     */
+    @Column(name = "promotions_name")
+    private String promotionsName;
+
     @Transient
     private ProductSettings productSettings;
-
 
     /**
      * 获取一个套餐一个活动
@@ -278,6 +283,18 @@ public class QuestionnairePromotions {
         this.deleted = deleted;
     }
 
+    /**
+     * 获取活动名称
+     * @return
+     */
+    public String getPromotionsName() { return promotionsName; }
+
+    /**
+     * 设置活动名称
+     * @param promotionsName
+     */
+    public void setPromotionsName(String promotionsName) { this.promotionsName = promotionsName; }
+
     public ProductSettings getProductSettings() {
         return productSettings;
     }
@@ -285,4 +302,5 @@ public class QuestionnairePromotions {
     public void setProductSettings(ProductSettings productSettings) {
         this.productSettings = productSettings;
     }
+
 }

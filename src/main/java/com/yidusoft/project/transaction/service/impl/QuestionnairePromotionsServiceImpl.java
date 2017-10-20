@@ -26,7 +26,8 @@ public class QuestionnairePromotionsServiceImpl extends AbstractService<Question
     }
 
     @Override
-    public List<QuestionnairePromotions> getProductAndQuestionPro() {
-        return questionnairePromotionsMapper.getProductAndQuestionPro();
-    }
+    public List<QuestionnairePromotions> getProductAndQuestionPro() { return questionnairePromotionsMapper.getProductAndQuestionPro(); }
+
+    @Override
+    public List<QuestionnairePromotions> getPromotionState() { return questionnairePromotionsMapper.getPromotionState(); }
 }

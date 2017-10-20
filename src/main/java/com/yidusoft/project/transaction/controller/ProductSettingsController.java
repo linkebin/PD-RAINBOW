@@ -28,13 +28,13 @@ public class ProductSettingsController {
      * @return
      */
     @GetMapping("/list")
-    public Map<String,Object> list(){
+    public Result list(){
         Map<String,Object> map = new HashMap<String,Object>();
         List<ProductSettings> list = new ArrayList<>();
         list=productSettingsService.getProductAll();
         map.put("Rows",list);
         map.put("Total",list.size());
-        return map;
+        return ResultGenerator.genSuccessResult(map);
     }
 
     /**
@@ -97,6 +97,9 @@ public class ProductSettingsController {
         ProductSettings product1 = productSettingsService.findById(product.getId());
         product1.setProductTotal(product.getProductTotal());
         product1.setProductPrice(product.getProductPrice());
+        product1.setProductName(product.getProductName());
+        product1.setPromotionsId(product.getPromotionsId());
+        product1.setPromotionsName(product.getPromotionsName());
         productSettingsService.update(product1);
         return ResultGenerator.genSuccessResult(product1);
     }

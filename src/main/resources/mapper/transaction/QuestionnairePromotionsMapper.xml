@@ -16,16 +16,24 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="promotions_state" jdbcType="INTEGER" property="promotionsState" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="promotions_name" jdbcType="VARCHAR" property="promotionsName"></result>
     <association property="productSettings" javaType="com.yidusoft.project.transaction.domain.ProductSettings">
       <result column="product_total" jdbcType="INTEGER" property="productTotal" />
       <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
     </association>
   </resultMap>
-  <select id="getPromotionAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.transaction.domain.QuestionnairePromotions">
+  <select id="getPromotionAll" resultMap="BaseResultMap">
     SELECT * FROM questionnaire_promotions WHERE deleted=0 order by CREATE_TIME desc
   </select>
 
-  <select id="getProductAndQuestionPro" resultMap="BaseResultMap">
+  <select id="getPromotionState" resultMap="BaseResultMap">
+    SELECT  id_,promotions_name
+    FROM    questionnaire_promotions
+    WHERE   deleted=0
+    AND     promotions_state=0
+    order by create_time desc
+  </select>
+ <!-- <select id="getProductAndQuestionPro" resultMap="BaseResultMap">
     SELECT	pro.product_total,
 				pro.product_price,
 				qp.promotions_type,
@@ -39,6 +47,6 @@
     AND			pro.deleted=0
     AND			qp.deleted=0
     AND			qp.promotions_state=0
-  </select>
+  </select>-->
 
 </mapper>

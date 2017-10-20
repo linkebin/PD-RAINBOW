@@ -1,8 +1,10 @@
 package com.yidusoft.project.transaction.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "product_settings")
 public class ProductSettings {
@@ -49,6 +51,17 @@ public class ProductSettings {
      */
     @Column(name = "promotions_id")
     private String promotionsId;
+
+    /**
+     * 营销名称
+     */
+    @Column(name = "promotions_name")
+    private String promotionsName;
+    /**
+     * 套餐名称
+     */
+    @Column(name = "product_name")
+    private String productName;
 
     /**
      * @return ID_
@@ -188,5 +201,35 @@ public class ProductSettings {
      */
     public void setPromotionsId(String promotionsId) {
         this.promotionsId = promotionsId;
+    }
+
+    /**
+     * 获取套餐名称
+     * @return
+     */
+    public String getProductName() { return productName; }
+
+    /**
+     * 设置套餐名称
+     * @param productName
+     */
+    public void setProductName(String productName) { this.productName = productName; }
+
+    /**
+     * 获取营销ID
+     *
+     * @return promotions_id - 营销ID
+     */
+    public String getPromotionsName() {
+        return promotionsName;
+    }
+
+    /**
+     * 设置营销ID
+     *
+     * @param promotionsName 营销ID
+     */
+    public void setPromotionsName(String promotionsName) {
+        this.promotionsName = promotionsName;
     }
 }

@@ -1,8 +1,11 @@
 package com.yidusoft.project.transaction.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "order_online")
 public class OrderOnline {
@@ -67,6 +70,19 @@ public class OrderOnline {
      */
     @Column(name = "product_id")
     private String productId;
+
+    /**
+     * 用户id
+     */
+    @Column(name = "user_id")
+    private String userId;
+
+    /**
+     * 活动id
+     */
+
+    @Transient
+    private String promotionsId;
 
     /**
      * @return ID_
@@ -260,5 +276,35 @@ public class OrderOnline {
      */
     public void setProductId(String productId) {
         this.productId = productId;
+    }
+
+    /**
+     * 设置下单人id
+     *
+     * @return
+     */
+    public String getUserId() { return userId; }
+
+    /**
+     * 获取下单人id
+     *
+     * @param userId
+     */
+    public void setUserId(String userId) { this.userId = userId; }
+
+    /**
+     * 获取活动id
+     * @return
+     */
+    public String getPromotionsId() {
+        return promotionsId;
+    }
+
+    /**
+     * 设置活动id
+     * @param promotionsId
+     */
+    public void setPromotionsId(String promotionsId) {
+        this.promotionsId = promotionsId;
     }
 }

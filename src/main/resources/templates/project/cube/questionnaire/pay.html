@@ -31,36 +31,20 @@
             <div class="eui-col-md10">杨雪<span class="eui-color-blue">（ID：2017023）</span></div>
             <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
             <ul class="eui-col-md10 payTicket" id="pay">
-                 <!--<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">
-                     <span class="discount"></span>
-                     <span class="discountFont">8折</span>
-                     <span class="eui-font30">159.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 199.9元）</span>
-                     <i class="eui-icon tickFont">&#xe605;</i>
-                     <span class="tick"></span>
-                 </li>
-                 <li class="eui-float-left payTicket0 eui-lineHeight24">
-                   <span class="discountFont">8.5折</span>
-                   <span class="eui-font30">69.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 89.9元）</span>
-                   <i class="eui-icon tickFont">&#xe605;</i>
-                   <span class="tick"></span>
-                 </li>
-                 <li class="eui-float-left payTicket0 eui-lineHeight24">
-                   <span class="eui-font30">299.9</span> 元/50张 <br> <span class="eui-color-gray3">（原价： 469.9元）</span>
-                   <i class="eui-icon tickFont">&#xe605;</i>
-                   <span class="tick"></span>
-                 </li>-->
             </ul>
             <div class="eui-col-md12 eui-font12 send">*限时加增 <span class="eui-color-blue">10张下载券</span> ， 再省32元</div>
             <div class="eui-col-md1 eui-marginR20 money">应付金额：</div>
             <div class="eui-col-md10"><span class="pay-color-red eui-font24">159.9</span>元</div>
             <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
             <ul class="eui-col-md10 payTicket">
-                <li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">
+                <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1">
+                    <input type="hidden" value="支付宝">
                     <img src="/Styles/images/xymfImages/xymf/alipay.png" alt="">
                     <i class="eui-icon tickFont">&#xe605;</i>
                     <span class="tick"></span>
                 </li>
                 <li class="eui-float-left payTicket0 eui-lineHeight24 wechatpay">
+                    <input type="hidden" value="微信">
                     <img src="/Styles/images/xymfImages/xymf/wechatpay.png" alt="">
                     <i class="eui-icon tickFont">&#xe605;</i>
                     <span class="tick"></span>
@@ -68,7 +52,7 @@
             </ul>
             <div class="eui-col-md12 payCode"><img src="/Styles/images/xymfImages/xymf/pay-code.png" alt=""></div>
             <div class="eui-col-md12 payCode">
-                <span class="eui-btn eui-btn-big pay-color-yellow">立即支付</span>
+                <span class="eui-btn eui-btn-big pay-color-yellow ImmediatePay">立即支付</span>
             </div>
         </div>
         <div class="payRight">
@@ -117,18 +101,25 @@
     });
 
     /* 购买券数 */
-
+    var price = 0;
+    var total = 0;
     $(function () {
         $.get("/questionnaire/promotions/getProductAndQuestionPro", function (result) {
             console.log(result);
             if (result.code = 200) {
                 var productList = result.data.productList;
                 var questionList = result.data.questionList;
-                var proList=[];
+                var proList = [];
                 for (var item in productList) {
                     var product = productList[item];
                     //如果这个套餐有活动的话
-                    var pro={  originalPrice: product.productPrice,type:""};
+                    var pro = {
+                        originalPrice: product.productPrice,
+                        type: "",
+                        discountContent: "",
+                        productId: product.id,
+                        promotionsId:""
+                    };
                     pro.price = product.productPrice;
                     pro.total = product.productTotal;
                     for (var index in questionList) {
@@ -145,17 +136,18 @@
                                         //还在活动时间内
                                         if (new Date() > new Date(start) && new Date() < new Date(end)) {
                                             if (question.promotionsType == 1) {
-                                                var discount=question.promotionsDiscount*100;//折扣
-                                                $('.send').html("*限时折扣"+'<span class="eui-color-blue">'+discount+"折</span>,再省"+(product.productPrice * question.promotionsDiscount)+"元");
+                                                var discount = question.promotionsDiscount * 100;//折扣
                                                 pro.total = product.productTotal;
                                                 pro.price = product.productPrice - (product.productPrice * question.promotionsDiscount);
-                                                pro.type=discount+"折";
+                                                pro.type = discount + "折";
+                                                pro.discountContent = discount + '折';
                                             } else {
                                                 pro.price = product.productPrice;
                                                 pro.total = product.productTotal + question.promotionsBuySend;
-                                                pro.type="买送";
-                                                $('.send').html("*限时加赠"+'<span class="eui-color-blue">'+question.promotionsBuySend+"张问卷</span>");
+                                                pro.type = "买送";
+                                                pro.discountContent = question.promotionsBuySend + '张问卷';
                                             }
+                                            pro.promotionsId=question.id;
                                         }
                                     }
                                 }
@@ -166,49 +158,111 @@
                 }
                 var tableHtml = getTable(proList);
                 $("#pay").html(tableHtml);
-                function sub() {
-                    console.log("111");
-                }
-                $(".payTicket li").click(function (event) {
+                $("#pay li").click(function (event) {
                     $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
-                    var str=(event.delegateTarget.innerText).toString();
-                    if(str.indexOf("买送")!=-1){
-                        str=str.substring(str.indexOf("送")+1,str.indexOf("元/"));
-                    }else{
-                        str=str.substring(str.indexOf("折")+1,str.indexOf("元/"));
+                    var str = (event.delegateTarget.innerText).toString();
+                    if (str.indexOf("买送") != -1) {
+                        str = str.substring(str.indexOf("送") + 1, str.indexOf("元/"));
+                    } else {
+                        str = str.substring(str.indexOf("折") + 1, str.indexOf("元/"));
+                    }
+                    price = parseInt(str);
+                    total = (event.delegateTarget.innerText).toString();
+                    if (total.indexOf('张') != -1) {
+                        total = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
                     }
                     $('.eui-font24').html(str);
+                    var send = event.currentTarget.children[1].value;
+                    if (send.indexOf('张') != -1) {
+                        $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
+                    } else if (send.indexOf('折') != -1) {
+                        $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
+                    } else {
+                        $('.send').html("");
+                    }
                 });
             }
         });
 
+
+        /**
+         *  拼接表格
+         *  @param payList
+         */
         function getTable(payList) {
             $('.eui-font24').html(payList[0].price);
+            price = payList[0].price;
+            total = payList[0].total;
+            console.log(payList[0].total)
+            var send = payList[0].discountContent;
+            if (send.indexOf('张') != -1) {
+                $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
+            } else if (send.indexOf('折') != -1) {
+                $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
+            } else {
+                $('.send').html("");
+            }
             console.log(payList);
             var tableHtml = '';
             for (var item in payList) {
                 var pay = payList[item]
-                if(item==0){
-                    tableHtml +='<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">'+
+                if (item == 0) {
+                    tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">' +
+                            '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
+                            '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                             '<span class="discount"></span>' +
                             '<span class="discountFont">' + pay.type + '</span>' +
                             '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                            '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>'+
                             '<i class="eui-icon tickFont">&#xe605;</i>' +
                             '<span class="tick"></span></li>';
                     continue;
                 }
-                tableHtml +='<li class="eui-float-left payTicket0 eui-lineHeight24">'+
+                tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24">' +
+                        '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
+                        '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                         '<span class="discount"></span>' +
                         '<span class="discountFont">' + pay.type + '</span>' +
                         '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                        '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>'+
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>';
             }
             return tableHtml
         }
+
+        /**
+         * 在线下单
+         */
+        $('.ImmediatePay').click(function () {
+            var orderOnline = {
+                questionnaire_total: total,//问卷购买数量
+                order_money: price//应付金额
+            }
+            var promotionId="";
+            $(".payTicket1").each(function (index) {
+                if (index == 0) {
+                    promotionId=$(this).children()[7].value;//活动id
+                    console.log($(this).children()[7].value);
+                    orderOnline.product_id = $(this).children()[0].value;//所属产品
+                } else {
+                    //支付方式
+                    orderOnline.payment_method = $(this).children()[0].value;
+                }
+            })
+            console.log(orderOnline);
+            $.post("/order/online/add",{onlineJson:JSON.stringify(orderOnline)},function (result) {
+                console.log(result);
+                if(result.code=200){
+                    window.location.href="/cube/order";
+                }
+            })
+        })
+
         $(".payTicket li").click(function (event) {
             $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
         });
+
     })
 </script>
 </body>
