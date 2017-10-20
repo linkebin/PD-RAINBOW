@@ -123,6 +123,7 @@ public class IndexController {
 
         }else {
             secUser.setInviterCode(inviterCode);
+            secUser.setMobile(secUser.getAccount());
             Result result = secUserService.addUser(JSON.toJSONString(secUser));
             if (result.getCode() !=200){
                 return result;

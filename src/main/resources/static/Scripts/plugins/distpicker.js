@@ -165,13 +165,12 @@
       $.each(data, function (i, n) {
         list.push(
           '<option' +
-        ' value="' + (n.address && n.code ? n.code : '') + '"' +
-        ' data-code="' + (n.code || '') + '"' +
-        ' data-name="' + (n.address || '') + '"' +
-        (n.selected ? ' selected' : '') +
-        '>' +
-        (n.address || '') +
-        '</option>'
+          ' value="' + (n.address && n.code ? n.address : '') + '"' +
+          ' data-code="' + (n.code || '') + '"' +
+          (n.selected ? ' selected' : '') +
+          '>' +
+            (n.address || '') +
+          '</option>'
         );
       });
 

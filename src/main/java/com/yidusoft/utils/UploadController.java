@@ -224,10 +224,10 @@ public class UploadController {
     }
 
 
-    // layui上传图片 "JPG","PNG"
+    // layui上传用户头像 "JPG","PNG"
     @PostMapping("/uploadImglayUi")
     @ResponseBody
-    public String uploadImglayUi(HttpServletRequest request, @RequestParam("file") MultipartFile file){
+    public String uploadImglayUi(HttpServletRequest request, @RequestParam("file") MultipartFile file,String userId){
         FileResponseData fileResponseData = null;
         try {
             String fileName = file.getOriginalFilename();// 文件原名称
@@ -237,27 +237,22 @@ public class UploadController {
             if(type.equals(".jpg") || type.equals(".png")){
                 String realPath = request.getSession().getServletContext().getRealPath("/");
                 realPath= realPath.substring(0,2);
-                // 自定义的文件名称
-                String  trueFileName = String.valueOf(System.currentTimeMillis()) + fileName;
-                // 设置存放图片文件的路径
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                String childPath="/upload/image/"+format.format(new Date());
-                String path = realPath + childPath;
+                String childPath="/upload/headImg";
 
+                String path = realPath + childPath;
                 File dir = new File(path);
                 if(!dir.exists()){
                     dir.mkdirs();
                 }
 
-                file.transferTo(new File(path+"/"+trueFileName));
+                file.transferTo(new File(path+"/"+userId+type));
 
-                 fileResponseData = new FileResponseData();
+                fileResponseData = new FileResponseData();
                 fileResponseData.setCode(0);
                 fileResponseData.setMsg("上传成功");
                 Data data = new Data();
-                data.setSrc(childPath+"/"+trueFileName);
+                data.setSrc(childPath+"/"+userId+type);
                 fileResponseData.setData(data);
-
 
             }else{
                 fileResponseData.setCode(500);

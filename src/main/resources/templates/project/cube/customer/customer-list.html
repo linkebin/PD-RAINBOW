@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>客户</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <style>
+        .defaultDiv{width: 100%; height: 400px;}
+        .formDiv .eui-form-item label{
+            width: 80px;
+            padding: 9px 20px;
+            text-align: left;
+        }
+        .subBtn{color: white; background: #3f89ec;}
+
+        input[type="button"],[type="submit"]{
+            cursor: pointer;
+        }
+        input[name='userName'],[name='addr']{
+            border: 1px solid #1aa194;
+        }
+        input[type='text']{height: 30px; line-height: 30px;}
+
+        .eui-form-label{padding: 5px 15px;}
+        .eui-input-inline{margin-left: 20px;}
+    </style>
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area">
+        <div th:replace="project/cube/common/left :: left">sidebar</div>
+        <div class="eui-body">
+            <!-- 内容主体区域 -->
+            <div class="xymfContent">
+                <div class="defaultDiv">
+                    <div class="eui-form">
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">客户姓名</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="title"  placeholder="" class="eui-input">
+                            </div>
+                                <label class="eui-form-label">性别</label>
+                                <div class="eui-input-inline">
+                                    <select name="quiz1">
+                                        <option value="">请选择省</option>
+                                        <option value="浙江" selected="">浙江省</option>
+                                        <option value="你的工号">江西省</option>
+                                        <option value="你最喜欢的老师">福建省</option>
+                                    </select>
+                                </div>
+
+                            <div class="eui-input-inline">
+                                <span class="eui-btn eui-btn-small" onclick="doSearch()">查询</span>
+                                <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                            </div>
+                        </div>
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">起始时间</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="title"  placeholder="" class="eui-input">
+                            </div>
+
+                            <label class="eui-form-label">结束时间</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="title"  placeholder="" class="eui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eui-row eui-padding10 eui-borderB">
+                        <div class="eui-col-md6 eui-font18">
+                           &nbsp;
+                        </div>
+                        <div class="eui-col-md6 eui-textAlignR">
+                            <a target="_blank" class="eui-btn eui-btn-small" href="/web/customer/visitorRegister">来访登记</a>
+                        </div>
+                    </div>
+
+                    <div class="xymfForm">
+                        <table class="eui-table eui-form" e-even e-skin="nob">
+                            <colgroup>
+                                <col width="60">
+                                <col width="300">
+                                <col width="200">
+                                <col >
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox" e-skin="primary" title=""></th>
+                                <th>客户姓名</th>
+                                <th>性别</th>
+                                <th>登记时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><input type="checkbox" e-skin="primary" title=""></td>
+                                <td>心理测试《认识自己》</td>
+                                <td>男</td>
+                                <td>2016-11-29</td>
+                                <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+
+
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script>
+
+    //表单
+    eui.use(['form', 'laydate', 'element'], function () {
+        var form = eui.form
+            , element = eui.element
+            , laydate = eui.laydate;
+
+        // 日期
+        laydate.render({
+            elem: '#test-n1'
+            , position: 'static'
+        });
+
+    });
+    $(function () {
+        $("#userInfoForm").validate({
+            submitHandler: function() {
+                if ($("#userInfoForm input[name='userName']").val()!=''){
+                    var obj = $("#userInfoForm").serializeObject();
+                    $.post('/user/userUpdate',{json:JSON.stringify(obj)},function (result) {
+                        $("#errcode0").html(result.message);
+                    });
+                }else {
+                    $("#error0").html('用户名称不能为空！');
+                }
+
+            }
+        });
+    });
+</script>
+</body>
+</html>
