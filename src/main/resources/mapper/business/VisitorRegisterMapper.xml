@@ -49,6 +49,18 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
+
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="district" jdbcType="VARCHAR" property="district" />
+
     <result column="treatment_condition" jdbcType="LONGVARCHAR" property="treatmentCondition" />
   </resultMap>
+
+  <select id="findViitorByCounselorId" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultMap="BaseResultMap">
+
+    SELECT ID_,visitor_name,sex,phone,province,city,district,address FROM visitor_register WHERE deleted=0 AND creator=#{creator}
+
+    ORDER BY create_time
+  </select>
 </mapper>

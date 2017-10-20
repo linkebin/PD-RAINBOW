@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -18,4 +19,8 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
     @Resource
     private VisitorRegisterMapper visitorRegisterMapper;
 
+    @Override
+    public List<VisitorRegister> findViitorByCounselorId(VisitorRegister visitorRegister) {
+        return visitorRegisterMapper.findViitorByCounselorId(visitorRegister);
+    }
 }

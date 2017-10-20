@@ -26,7 +26,11 @@
             <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 个人信息卡
         </div>
         <form id="visitorForm" onsubmit="return false;">
-            <input type="hidden" name="creator" th:value="${creator}">
+            <input type="hidden" name="id" th:value="${id}">
+            <input type="hidden" name="creator" >
+            <input type="hidden" name="createTime" >
+            <input type="hidden" name="deleted" >
+
         <div class="eui-bg-white eui-padding20 visitor">
             <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                 <div class="eui-col-md6 eui-font20">基本信息</div>
@@ -66,22 +70,22 @@
 
 
 
-            <div  data-toggle="distpicker">
+            <div id="addrs" data-toggle="distpicker">
                 <div class="eui-form-item">
                     <label class="eui-form-label">所在地</label>
                     <div id="ld" data-toggle="distpicker">
                     <div class="eui-input-inline">
-                        <select class="eui-input" e-ignore name="province">
+                        <select id="province" class="eui-input" e-ignore name="province">
 
                         </select>
                     </div>
                     <div class="eui-input-inline">
-                        <select class="eui-input" e-ignore name="city">
+                        <select id="city" class="eui-input" e-ignore name="city">
 
                         </select>
                     </div>
                     <div class="eui-input-inline">
-                        <select class="eui-input" e-ignore name="district">
+                        <select id="district" class="eui-input" e-ignore name="district">
 
                         </select>
                     </div>
@@ -587,6 +591,29 @@ eui.use(['form', 'layedit', 'laydate'], function(){
 });
 
 $(function () {
+
+    $.post('/visitor/register/detail',{id:$("#visitorForm input[name='id']").val()},function (result) {
+        console.log(result)
+
+//        $("#province [option value='广东省']").attr('selected');
+
+
+
+//        $("#city").attr('data-city',result.data.city);
+//        $("#district").attr('data-district',result.data.district);
+//        $("#addrs").distpicker();
+
+        $("#visitorForm").setForm(result.data);
+
+//        $("#addrs").distpicker({
+//            province:result.data.province,
+//            city:result.data.city
+//        });
+    });
+
+
+
+
    $("input[name='childrenTotal']").blur(function () {
        var v = $(this).val();
        if (v!=''){
@@ -771,7 +798,7 @@ $(function () {
         submitHandler: function() {
             var obj = $("#visitorForm").serializeObject();
             console.log(obj)
-            $.post('/visitor/register/add',{json:JSON.stringify(obj)},function (result) {
+            $.post('/visitor/register/add1',{json:JSON.stringify(obj)},function (result) {
                 alert(result.message);
             });
         }

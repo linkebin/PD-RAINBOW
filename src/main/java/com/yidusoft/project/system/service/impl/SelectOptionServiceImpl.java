@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +21,9 @@ public class SelectOptionServiceImpl extends AbstractService<SelectOption> imple
     @Resource
     private SelectOptionMapper selectOptionMapper;
 
+
+    @Override
+    public List<SelectOption> findSelectOptionByType(String optionCategory) {
+        return selectOptionMapper.findSelectOptionByType(optionCategory);
+    }
 }

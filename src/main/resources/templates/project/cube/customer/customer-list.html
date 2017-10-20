@@ -34,7 +34,9 @@
             <!-- 内容主体区域 -->
             <div class="xymfContent">
                 <div class="defaultDiv">
-                    <div class="eui-form">
+                    <form id="searchFrom">
+                        <input type="hidden" name="creator" th:value="${session.userSession.id}" />
+                        <div class="eui-form">
                         <div class="eui-form-item">
                             <label class="eui-form-label">客户姓名</label>
                             <div class="eui-input-inline">
@@ -67,21 +69,22 @@
                             </div>
                         </div>
                     </div>
-
+                    </form>
                     <div class="eui-row eui-padding10 eui-borderB">
                         <div class="eui-col-md6 eui-font18">
                            &nbsp;
                         </div>
                         <div class="eui-col-md6 eui-textAlignR">
-                            <a target="_blank" class="eui-btn eui-btn-small" href="/web/customer/visitorRegister">来访登记</a>
+                            <a target="_blank" class="eui-btn eui-btn-small" th:href="'/web/customer/visitorRegister?creator='+${session.userSession.id}">来访登记</a>
                         </div>
                     </div>
 
                     <div class="xymfForm">
-                        <table class="eui-table eui-form" e-even e-skin="nob">
+                        <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
                             <colgroup>
                                 <col width="60">
-                                <col width="300">
+                                <col width="150">
+                                <col width="80">
                                 <col width="200">
                                 <col >
                             </colgroup>
@@ -89,22 +92,18 @@
                             <tr>
                                 <th><input type="checkbox" e-skin="primary" title=""></th>
                                 <th>客户姓名</th>
-                                <th>性别</th>
-                                <th>登记时间</th>
-                                <th>操作</th>
+                                <th>性    别</th>
+                                <th>联系方式</th>
+                                <th>通讯地址</th>
+                                <th>操    作</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td><input type="checkbox" e-skin="primary" title=""></td>
-                                <td>心理测试《认识自己》</td>
-                                <td>男</td>
-                                <td>2016-11-29</td>
-                                <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
-                            </tr>
+
 
                             </tbody>
                         </table>
+                        <div style="margin-left: 30px;" id="pages"></div>
                     </div>
                 </div>
             </div>
@@ -140,20 +139,105 @@
 
     });
     $(function () {
-        $("#userInfoForm").validate({
-            submitHandler: function() {
-                if ($("#userInfoForm input[name='userName']").val()!=''){
-                    var obj = $("#userInfoForm").serializeObject();
-                    $.post('/user/userUpdate',{json:JSON.stringify(obj)},function (result) {
-                        $("#errcode0").html(result.message);
-                    });
-                }else {
-                    $("#error0").html('用户名称不能为空！');
-                }
-
-            }
-        });
+        doSearch();
     });
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/visitor/register/listByparameter",
+                data: {
+                    json:JSON.stringify(params),
+                    page:1,
+                    pagesize:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                console.log(userList)
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/visitor/register/listByparameter",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+
+            var id = "'" + secUser.id + "'";
+            var sex = '女';
+            if (secUser.sex == 1){
+                sex = '男';
+            }
+            var addr = secUser.province+secUser.city+secUser.district+secUser.address;
+
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+                '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.id + '">'+ secUser.visitorName +'</a></td>' +
+                '<td>'+ sex +'</td>' +
+                '<td>'+secUser.phone+'</td>' +
+                '<td>'+ addr +'</td>' +
+                '<td><i class="eui-icon">&#xe642;</i> ' +
+                '<i class="eui-icon">&#xe640;</i></td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
 </script>
 </body>
 </html>

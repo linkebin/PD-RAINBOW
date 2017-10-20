@@ -14,4 +14,9 @@
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
   </resultMap>
+
+  <select id="findSelectOptionByType" parameterType="String" resultMap="BaseResultMap">
+      SELECT * FROM select_option WHERE deleted=0 AND option_category=#{optionCategory}
+      ORDER BY option_id
+  </select>
 </mapper>
