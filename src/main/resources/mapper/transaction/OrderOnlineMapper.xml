@@ -18,11 +18,12 @@
         <result column="product_id" jdbcType="VARCHAR" property="productId"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="promotions_id" jdbcType="VARCHAR" property="promotionsId"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
     </resultMap>
 
     <select id="getUserOderById" resultMap="BaseResultMap"
             parameterType="com.yidusoft.project.transaction.domain.OrderOnline">
-        SELECT oo.*,ps.promotions_id FROM order_online oo,product_settings ps
+        SELECT oo.*,ps.promotions_id,ps.product_name FROM order_online oo,product_settings ps
         where oo.deleted=0 AND oo.user_id=#{userId}
         AND oo.product_id=ps.ID_
         <if test="orderState == null or orderState == ''">
@@ -33,4 +34,13 @@
         </if>
 
     </select>
+
+    <update id="updateOrderOnline" parameterType="String">
+        UPDATE order_online SET order_state=3 WHERE product_id=#{productId} AND order_state!=1
+    </update>
+
+    <select id="getOrderState" resultType="String" parameterType="String">
+        SELECT order_state FROM  order_online WHERE id_=#{id}
+    </select>
+
 </mapper>
