@@ -49,6 +49,7 @@
         ORDER BY  g.CREATE_TIME ASC
 
   </select>
-
-
+  <select id="findGaugeAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.questionnaire.domain.Gauge">
+      SELECT  *  FROM  gauge WHERE  deleted=0
+  </select>
 </mapper>

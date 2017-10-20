@@ -107,15 +107,15 @@
     <div class="eui-form-item"  style="width: 700px">
             <label class="eui-form-label">答案</label>
             <div class="eui-input-inline">
-                <input type="text" name="answer" required placeholder="请输入标题" autocomplete="off" class="eui-input">
+                <input type="text" name="answer" required placeholder="请输入答案" autocomplete="off" class="eui-input">
             </div>
 
             <label class="eui-form-label">答案类型</label>
             <div class="eui-input-inline">
                 <select name="questionType">
                     <option value="0" >请选择类型</option>
-                    <option value="1" >文字类型</option>
-                    <option value="2" >字母类型</option>
+                    <option value="1" >单选</option>
+                    <option value="2" >多选</option>
                 </select>
             </div>
 
@@ -403,11 +403,12 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
 //重置
     function resetForm() {
-        document.getElementById('searchFrom').reset()
+        document.getElementById('searchFrom').reset();
     }
 //添加修改form表单修改
     function resetAddOrUpdateForm() {
-        document.getElementById('questionForm').reset()
+        $("#questionForm [name='id']").val("");
+        document.getElementById('questionForm').reset();
     }
 
  //问题添加
@@ -430,10 +431,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 $.post("/questionnaire/question/addORupdateQuestion",forms,function (result) {
                       if(result.code==200){
                           layer.closeAll();
+                          doSearch();
                           layer.msg("添加成功！", {
                               time: 2000
                           });
-                          doSearch();
+
                           resetAddOrUpdateForm();
                         }else{
                           layer.msg("添加失败！", {
@@ -445,10 +447,15 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             }
             ,btn2: function(){
                 layer.closeAll();
+                resetAddOrUpdateForm();
             }
             ,zIndex: layer.zIndex //重点1
             ,success: function(layero){
                 layer.setTop(layero); //重点2
+            }
+            ,cancel: function(){
+                //右上角关闭回调
+                resetAddOrUpdateForm();
             }
         });
 
@@ -492,10 +499,10 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                         $.post("/questionnaire/question/addORupdateQuestion",forms,function (result) {
                             if(result.code==200){
                                 layer.closeAll();
+                                doSearch();
                                 layer.msg("修改成功！", {
                                     time: 2000
                                 });
-                                doSearch();
                                 resetAddOrUpdateForm();
                             }else{
                                 layer.msg("修改失败！", {
@@ -507,12 +514,17 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                     }
                     ,btn2: function(){
                         layer.closeAll();
+                       resetAddOrUpdateForm();
                     }
                     ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
                         layer.setTop(layero); //重点2
                     }
-           });
+                   ,cancel: function(){
+                       //右上角关闭回调
+                       resetAddOrUpdateForm();
+                   }
+               });
          });
         });
 

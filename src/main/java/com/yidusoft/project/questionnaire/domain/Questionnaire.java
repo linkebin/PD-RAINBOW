@@ -1,5 +1,7 @@
 package com.yidusoft.project.questionnaire.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -23,6 +25,7 @@ public class Questionnaire {
     /**
      * 上架时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "shelf_time")
     private Date shelfTime;
 
@@ -53,6 +56,7 @@ public class Questionnaire {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "create_time")
     private Date createTime;
 

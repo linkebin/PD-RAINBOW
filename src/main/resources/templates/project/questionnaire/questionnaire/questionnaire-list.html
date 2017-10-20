@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>问卷管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+
+    <style>
+        #menuDig{
+            height: 300px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="eui-bd">
+
+    <div class="eui-mn1 eui-bg-white">
+        <div class="eui-mn1-type">
+            <form class="eui-form" id="searchFrom">
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="questionnaireCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 问卷列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                    <a href="/web/questionnaire/addQuestionnaire" target="_blank" class="eui-btn eui-btn-small userAdd">添加问卷</a>
+                    <a href="###" onclick="deleteQuestion('')" class="eui-btn eui-btn-small">批量删除</a>
+                </div>
+            </div>
+            <table class="eui-table eui-form" id="questionTable">
+                <colgroup>
+                    <col width="60">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                        <th>问卷编号</th>
+                        <th>问卷名称</th>
+                        <th>问卷类型</th>
+                        <th>状态</th>
+                        <th>上架时间</th>
+                        <th>答案顺序</th>
+                        <th>量表模板</th>
+                        <th>模板类型</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div id="pages"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" charset="utf-8"></script>
+<script src="/date2format.js" charset="utf-8"></script>
+<script src="/Scripts/plugins/md5/md5.min.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+
+
+
+<script>
+// 表单
+eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
+    var form = eui.form
+    ,layer = eui.layer
+    ,layedit = eui.layedit
+    ,laydate = eui.laydate
+    ,laypage = eui.laypage;
+
+    //全选
+    form.on('checkbox(allChoose)', function(data){
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+        child.each(function(index, item){
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
+
+    //日期范围
+    laydate.render({
+        elem: '#test6'
+        ,range: true
+    });
+
+
+});
+
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        doSearch();
+    });
+
+
+
+
+    //工具条按钮事件
+    function itemclick(item,id)
+    {
+        if (item=='add'){//添加
+            addQuestion();
+        }else if (item == 'delete'){//删除
+            deleteQuestionnaire(id);
+        }else if (item=='edit'){//编辑
+            window.open("/web/questionnaire/getUpdateQuestionnaire?id="+id);
+        }
+    }
+
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+
+            var params = $("#searchFrom").serializeObject();
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+            $.ajax({
+                url:"/questionnaire/questionnaireListByPage",
+                data: {
+                    params:JSON.stringify(params),
+                    page:1,
+                    size:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var questionnaireList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(questionnaireList);
+                                $("#questionTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                //加载层
+                                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                                $.ajax({
+                                    url: "/questionnaire/questionnaireListByPage",
+                                    data: {
+                                        params: JSON.stringify(params),
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        layer.closeAll();
+                                        var questionnaireList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(questionnaireList);
+                                        $("#questionTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(questionnaireList) {
+        var tableHtml = '';
+
+        for (var item in questionnaireList){
+            var questionnaire=questionnaireList[item];
+            var questionnaireState ="";
+           if(questionnaire.questionnaireState==1){
+               questionnaireState="设计中";
+            }else if(questionnaire.questionnaireState==2){
+               questionnaireState="使用中";
+            }else {
+               questionnaireState="已失效";
+           }
+            var sequence="";
+            if(questionnaire.questionSequence==1){
+                sequence="正序";
+            }else {
+                sequence="反序";
+            }
+            var answerModel="";
+            if(questionnaire.answerModelType==1){
+                answerModel="横版";
+            }else {
+                answerModel="竖版";
+            }
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireId" type="hidden" value="' + questionnaire.id + '"></td>' +
+                '<td>'+ questionnaire.questionnaireCode +'</td>' +
+                '<td>'+ questionnaire.questionnaireName +'</td>' +
+                '<td>'+ questionnaire.questionnaireTypeName +'</td>'   +
+                '<td>'+ questionnaireState+'</td>' +
+                '<td>'+ new Date(questionnaire.shelfTime).Format('yyyy-MM-dd')  +'</td>' +
+                '<td>'+sequence+'</td>' +
+                '<td>'+questionnaire.gaugeName+'</td>' +
+                '<td>'+answerModel+'</td>' +
+                '<td>'+questionnaire.remarks+'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+questionnaire.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+questionnaire.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+
+        return tableHtml;
+    }
+
+
+//重置
+    function resetForm() {
+        document.getElementById('searchFrom').reset()
+    }
+//添加修改form表单修改
+    function resetAddOrUpdateForm() {
+        document.getElementById('questionForm').reset()
+    }
+
+    //删除问题
+    function deleteQuestionnaire(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='questionId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的问卷', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该问卷吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                //加载层
+                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                $.ajax({
+                    url:"/questionnaire/deleteQuestionnaire",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.closeAll();
+                        if(result.code==200){
+                            layer.msg('删除成功', {
+                                icon: 1,
+                                time: 2000
+                            });
+                        }else {
+                            layer.msg('删除失败', {
+                                icon: 1,
+                                time: 2000
+                            });
+                        }
+
+                        doSearch();
+                    }
+                });
+            });
+        }
+    }
+
+
+
+    function add0(m){return m<10?'0'+m:m }
+    function format(timestamp)
+    {
+        //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+
+        var time = new Date(timestamp);
+        var year = time.getFullYear();
+        var month = time.getMonth()+1;
+        var date = time.getDate();
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
+    }
+</script>
+
+</body>
+</html>

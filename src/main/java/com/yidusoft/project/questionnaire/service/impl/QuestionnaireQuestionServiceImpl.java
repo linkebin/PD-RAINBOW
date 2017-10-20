@@ -34,6 +34,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     @Override
     public List<QuestionnaireQuestion> findQuestionBYid(String ids) {
         Map<String,Object> map=new HashMap<>();
+        String [] idss=ids.split(",");
         map.put("ids",ids.split(","));
         return questionnaireQuestionMapper.findQuestionBYid(map);
     }

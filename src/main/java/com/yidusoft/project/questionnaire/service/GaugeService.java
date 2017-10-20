@@ -17,4 +17,8 @@ public interface GaugeService extends Service<Gauge> {
     //修改量表
     Result updateGauge(Gauge gauge, String questionStr);
 
+    //查询所有的量表
+    List<Gauge> findGaugeAll();
+    //查询量表 相关的 标签   场景
+    Result  getGaugeInfo(String id);
 }

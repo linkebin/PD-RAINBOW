@@ -9,4 +9,10 @@
     <result column="question_id" jdbcType="VARCHAR" property="questionId" />
     <result column="questionnaire_id" jdbcType="VARCHAR" property="questionnaireId" />
   </resultMap>
+
+  <select id="findQuestionnaireQuestionFactor" resultMap="BaseResultMap"  parameterType="String">
+        SELECT * FROM  questionnaire_question_factor WHERE questionnaire_id=#{id}
+  </select>
+
+
 </mapper>

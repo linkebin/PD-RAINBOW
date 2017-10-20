@@ -5,23 +5,17 @@ import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.dao.GaugeMapper;
 import com.yidusoft.project.questionnaire.dao.GaugeQuestionFactorMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionMapper;
-import com.yidusoft.project.questionnaire.domain.Gauge;
-import com.yidusoft.project.questionnaire.domain.GaugeQuestionFactor;
-import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
-import com.yidusoft.project.questionnaire.service.GaugeSceneService;
-import com.yidusoft.project.questionnaire.service.GaugeService;
+import com.yidusoft.project.questionnaire.domain.*;
+import com.yidusoft.project.questionnaire.service.*;
 import com.yidusoft.core.AbstractService;
 
-import com.yidusoft.project.questionnaire.service.GaugeTagMiddleService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
@@ -39,6 +33,10 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
     private GaugeTagMiddleService gaugeTagMiddleService;
     @Resource
     private GaugeSceneService gaugeSceneService;
+    @Resource
+    private QuestionnaireTagService questionnaireTagService;
+    @Resource
+    private SceneService sceneService;
 
     //分页条件查询量表
     @Override
@@ -102,4 +100,32 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
         }
         return ResultGenerator.genSuccessResult();
     }
+    //查询所有的量表
+    @Override
+    public List<Gauge> findGaugeAll() {
+        return gaugeMapper.findGaugeAll();
+    }
+
+    //查询量表 相关的 标签   场景
+    @Override
+    public Result getGaugeInfo(String id) {
+        Gauge gauge=this.findById(id);
+        List<GaugeQuestionFactor> gaugeQuestionList=gaugeQuestionFactorMapper.findGaugeQuestionFactor(id);
+        //查询量表相关的标签
+        List<QuestionnaireTag> questionnaireTagList= questionnaireTagService.findTagForGauge( id);
+        //相关联的场景
+        List<Scene> sceneList= sceneService.findSceneForGauge(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("gauge",gauge);
+        map.put("gaugeQuestionList",gaugeQuestionList);
+        map.put("questionnaireTagList",questionnaireTagList);
+        map.put("sceneList",sceneList);
+
+        return ResultGenerator.genSuccessResult(map);
+    }
+
+
+
+
+
 }

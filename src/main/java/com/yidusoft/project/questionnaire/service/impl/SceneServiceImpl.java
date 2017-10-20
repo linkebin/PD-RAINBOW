@@ -31,4 +31,9 @@ public class SceneServiceImpl extends AbstractService<Scene> implements SceneSer
     public List<Scene> findSceneForGauge(String gaugeId) {
         return sceneMapper.findSceneForGauge(gaugeId);
     }
+    //查询量表问卷的场景
+    @Override
+    public List<Scene> findSceneForQuestionnaire(String questionnaireId) {
+        return sceneMapper.findSceneForQuestionnaire(questionnaireId);
+    }
 }

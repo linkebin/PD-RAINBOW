@@ -9,4 +9,14 @@
     <result column="questionnaire_id" jdbcType="VARCHAR" property="questionnaireId" />
     <result column="questionnaire_tag_id" jdbcType="VARCHAR" property="questionnaireTagId" />
   </resultMap>
+
+
+  <select id="deleteQuestionnaireTagMiddle" resultMap="BaseResultMap" parameterType="com.yidusoft.project.questionnaire.domain.QuestionnaireTagMiddle">
+         SELECT
+            *
+            FROM questionnaire_tag_middle
+           WHERE  questionnaire_tag_id=#{questionnaireTagId}
+              AND  questionnaire_id=#{questionnaireId}
+  </select>
+
 </mapper>

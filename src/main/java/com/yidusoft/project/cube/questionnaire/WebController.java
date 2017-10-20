@@ -52,6 +52,5 @@ public class WebController {
     @RequestMapping(value ={"/visitor"})
     public String visitor(){
             return "project/cube/questionnaire/visitor";
-
     }
 }

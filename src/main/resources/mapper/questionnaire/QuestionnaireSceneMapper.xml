@@ -9,4 +9,9 @@
     <result column="scene_id" jdbcType="VARCHAR" property="sceneId" />
     <result column="questionnaire_id" jdbcType="VARCHAR" property="questionnaireId" />
   </resultMap>
+
+  <select id="deleteQuestionnaireScene" resultMap="BaseResultMap" parameterType="com.yidusoft.project.questionnaire.domain.QuestionnaireScene">
+  SELECT  *  FROM questionnaire_scene    WHERE  scene_id=#{sceneId}  AND  questionnaire_id=#{questionnaireId}
+  </select>
+
 </mapper>

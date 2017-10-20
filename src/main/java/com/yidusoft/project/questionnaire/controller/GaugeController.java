@@ -97,37 +97,23 @@ public class GaugeController {
         return ResultGenerator.genSuccessResult();
     }
 
-     /*------------------下面系统自动生成            分割--------------------------------*/
-
-    @PostMapping
-    public Result add(Gauge gauge) {
-        gaugeService.save(gauge);
-        return ResultGenerator.genSuccessResult();
+    /**
+     * 查询所有的量表
+     * @return
+     */
+    @PostMapping("/findGaugeAll")
+    @ResponseBody
+    public Result findGaugeAll() {
+       List<Gauge> gaugeList= gaugeService.findGaugeAll();
+        return ResultGenerator.genSuccessResult(gaugeList);
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        gaugeService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
+    //查询量表相关的 信息 标签  场景
+    @PostMapping("/getGaugeInfo")
+    @ResponseBody
+    public Result getGaugeInfo(String gaugeId) {
+
+        return gaugeService.getGaugeInfo(gaugeId);
     }
 
-    @PutMapping
-    public Result update(Gauge gauge) {
-        gaugeService.update(gauge);
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        Gauge gauge = gaugeService.findById(id);
-        return ResultGenerator.genSuccessResult(gauge);
-    }
-
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<Gauge> list = gaugeService.findAll();
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
 }

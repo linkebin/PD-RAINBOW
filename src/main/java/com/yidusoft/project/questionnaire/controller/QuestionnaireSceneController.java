@@ -20,35 +20,30 @@ public class QuestionnaireSceneController {
     @Resource
     private QuestionnaireSceneService questionnaireSceneService;
 
-    @PostMapping
-    public Result add(QuestionnaireScene questionnaireScene) {
-        questionnaireSceneService.save(questionnaireScene);
-        return ResultGenerator.genSuccessResult();
+
+    /**
+     *添加问卷相关联的场景
+     * @param ids
+     * @param questionnaireId
+     * @return
+     */
+    @PostMapping("/addQuestionnaireScene")
+    public Result addQuestionnaireScene(String ids,String questionnaireId) {
+        return questionnaireSceneService.addQuestionnaireScene(ids,questionnaireId);
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        questionnaireSceneService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
+    /***
+     * 删除问卷相关的场景
+     * @param
+     * @return
+     */
+    @PostMapping("/deleteQuestionnaireScene")
+    public Result  deleteQuestionnaireScene(String ids,String questionnaireId ) {
+        QuestionnaireScene  questionnaireScene =new QuestionnaireScene();
+        questionnaireScene.setSceneId(ids);
+        questionnaireScene.setQuestionnaireId(questionnaireId);
+     return    questionnaireSceneService.deleteQuestionnaireScene(questionnaireScene);
     }
 
-    @PutMapping
-    public Result update(QuestionnaireScene questionnaireScene) {
-        questionnaireSceneService.update(questionnaireScene);
-        return ResultGenerator.genSuccessResult();
-    }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        QuestionnaireScene questionnaireScene = questionnaireSceneService.findById(id);
-        return ResultGenerator.genSuccessResult(questionnaireScene);
-    }
-
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<QuestionnaireScene> list = questionnaireSceneService.findAll();
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
 }

@@ -1,10 +1,11 @@
 package com.yidusoft.project.questionnaire.domain;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.objects.annotations.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import javax.persistence.*;
-
 public class Gauge {
     @Id
     @Column(name = "ID_")

@@ -1,9 +1,9 @@
 
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>修改量表</title>
+    <title>添加问卷</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -25,10 +25,10 @@
 <div class="eui-padding15">
 
     <div>
-      <form class="eui-form " action=""  id="formGauge" >
+      <form class="eui-form " action=""  id="formQuestionnaire" >
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title1">修改量表</span>
+                <span class="eui-panels-title1">添加问卷</span>
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
@@ -38,34 +38,70 @@
         </div>
         <div class="eui-row"   >
             <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
-                    <input type="hidden"  name="id"/>
-                    <input type="hidden"  name="gaugeCode"/>
-                    <input type="hidden"  name="creator"/>
-                    <input type="hidden"  name="createTime"/>
-                    <input type="hidden"  name="deleted"/>
-
+                    <input type="hidden" id="sceneId" name="sceneId"/>
+                    <input type="hidden" id="tagId" name="tagId"/>
                     <input type="hidden" id="questionStr" name="questionStr"/>
                     <div class="eui-form-item">
                         <label class="eui-form-label">名称</label>
                         <div class="eui-input-inline">
-                            <input type="text" id="gaugeName" name="gaugeName" e-verify="gaugeName" autocomplete="off" placeholder="请输入名称" class="eui-input">
+                            <input type="text" id="questionnaireName" name="questionnaireName" e-verify="" autocomplete="off" placeholder="请输入名称" class="eui-input">
                         </div>
-                        <label class="eui-form-label">量表类型</label>
+
+                        <label class="eui-form-label">选择量表</label>
                         <div class="eui-input-inline">
-                            <select name="gaugeType" id="gaugeType" e-verify="gaugeType" >
+                            <select name="gaugeId" id="gaugeId" e-filter="gaugeId"  e-verify="" >
                             </select>
                         </div>
-                        <label class="eui-form-label">状态</label>
+
+                        <label class="eui-form-label">答案正反序</label>
                         <div class="eui-input-inline">
-                            <input id="radio1" type="radio" name="gaugeState" value="0" title="启用" checked>
-                            <input id="radio2" type="radio" name="gaugeState" value="1" title="不启用" >
+                            <input type="radio" name="questionSequence" value="0" title="正" checked>
+                            <input type="radio" name="questionSequence" value="1" title="反" >
+                        </div>
+
+                    </div>
+                   <div class="eui-form-item">
+                        <label class="eui-form-label">上架时间</label>
+                        <div class="eui-input-inline">
+                            <input type="text" class="eui-input" name="shelfTime" id="times" placeholder="请选择时间">
+                        </div>
+
+                         <label class="eui-form-label">问卷类型</label>
+                         <div class="eui-input-inline">
+                             <select name="questionnaireType" id="questionnaireType" e-verify="gaugeType" >
+                             </select>
+                         </div>
+
+                         <label class="eui-form-label">模板类型</label>
+                         <div class="eui-input-inline">
+                            <select name="answerModelType" id="answerModelType" e-verify="" >
+                                 <option value="">请选择</option>
+                                 <option value="1">横版</option>
+                                 <option value="2">竖版</option>
+                            </select>
+                         </div>
+
+
+
+
+                    </div>
+
+
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">备注</label>
+                        <div class="eui-input-block">
+                            <textarea placeholder="备注"  name="remarks" id="remarks" class="eui-textarea"></textarea>
                         </div>
                     </div>
+
+
 
             </div>
 
         </div>
       </form>
+
+
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
@@ -74,7 +110,7 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;" >
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="loadTag()">
+                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"   class="eui-btn eui-btn-small" onclick="loadTag()">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加标签</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
@@ -84,7 +120,7 @@
         <div class="eui-form-item eui-row">
             <div class="eui-col-md12" id="divtag">
                 <!--标签-->
-            </div>
+              </div>
         </div>
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
@@ -94,7 +130,7 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"  id=""  class="eui-btn eui-btn-small" onclick="loadScene()">
+                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="loadScene()">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加场景</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
@@ -106,6 +142,7 @@
                 <!--场景-->
             </div>
         </div>
+
 
 
 
@@ -191,7 +228,7 @@
 
 
 
-<script th:inline="javascript">
+<script>
 //手风琴折叠
     eui.use(['element', 'layer'], function(){
         var element = eui.element;
@@ -203,6 +240,8 @@
         });
     });
 
+
+
 // 表单
 eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     var form = eui.form
@@ -212,6 +251,10 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     ,laypage = eui.laypage;
 
 
+//常规用法
+    laydate.render({
+        elem: '#times'
+    });
 
 
     //全选
@@ -257,25 +300,24 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         elem: '#test6'
         ,range: true
     });
-
+    //select 的选择监听事件
+    form.on('select(gaugeId)', function(data){
+        console.log(data.elem); //得到select原始DOM对象
+        console.log(data.value); //得到被选中的值
+        console.log(data.othis); //得到美化后的DOM对象
+        checkGauge(data.value);
+    });
 
 });
 
-
 </script>
 
-<script th:inline="javascript">
-    var questions=[[${questionList}]];
-    var gauge=[[${gauge}]];
-    var sceneList=[[${sceneList}]];
-    var questionnaireTagList=[[${questionnaireTagList}]];
-    var gaugeId=gauge.id;
-    console.info(questionList);
-    console.info(gauge);
+<script>
+
     $(function () {
         doSearch();
+        loadGaugeType ();
         loadGauge ();
-
     });
     //定义一个装id的数组
    var idArray="";
@@ -446,7 +488,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     }
 
     //量表类型加载
-    function  loadGauge () {
+    function  loadGaugeType () {
        $.post("/questionnaire/type/typeTree",{},function(result){
            var context="";
            var list=result.data;
@@ -454,9 +496,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
            for( var i in  list){
                context+="<option value='"+list[i].id+"'>"+list[i].name+" </option>";
            }
-           $("#gaugeType").html(context);
-           //初始化修改页面
-           update();
+           $("#questionnaireType").html(context);
            //更新
            formRender();
 
@@ -464,11 +504,25 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     }
 
+    //量表模板加载
+    function  loadGauge () {
+        $.post("/gauge/findGaugeAll",{},function(result){
+            var context="";
+            var list=result.data;
+            context+=" <option value=''>请选择</option>";
+            for( var i in  list){
+                context+="<option value='"+list[i].id+"'>"+list[i].gaugeName+" </option>";
+            }
+            $("#gaugeId").html(context);
+            //更新
+            formRender();
 
+        });
 
-    //保存量表
+    }
+
+    //保存问卷
      function saveGauge(){
-
          var questionId=document.getElementsByName("questionIds");
          var questionArray=new Array();
          for(var i=0;i<questionId.length;i++){
@@ -479,13 +533,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          $("#questionStr").val(questionStr);
 
        //验证
-       if($("#gaugeName").val()==""){
+       if($("#questionnaireName").val()==""){
            layer.msg('请填写名称', {
                time: 2000
            });
            return;
-       }else if($("#gaugeType").val()==""){
-           layer.msg('请选择类型', {
+       }else if($("#times").val()==""){
+           layer.msg('请选择上架时间', {
                time: 2000
            });
            return;
@@ -493,151 +547,84 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
            layer.msg('请选择问题', {
                time: 2000
            });
+
+           return;
+       }else if($("#questionStr").val()==""){
+           layer.msg('请选择问题', {
+               time: 2000
+           });
+
+           return;
+       }else if($("#answerModelType").val()==""){
+           layer.msg('请选择模板类型', {
+               time: 2000
+           });
            return;
        }
+       //给标签设置值
+         $("#tagId").val(getTagOrSceneId("tag"));
+       //给场景设置值
+         $("#sceneId").val(getTagOrSceneId("scene"));
 
-         var formGauge=$("#formGauge").serialize();
+         var formQuestionnaire=$("#formQuestionnaire").serialize();
+         console.info("formQuestionnaire");
+         console.info(formQuestionnaire);
          //加载层
          var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-        $.post("/gauge/updateGauge",formGauge,function (result) {
+        $.post("/questionnaire/addQuestionnaire",formQuestionnaire,function (result) {
             if(result.code==200){
-                layer.msg('修改成功', {
+                layer.closeAll();
+                layer.msg('添加成功', {
                     time: 2000
                 });
-                layer.closeAll();
                     window.close();
                     window.opener.location.href=window.opener.location.href;
+
             }else {
-                layer.msg('修改成功', {
+                layer.msg('添加失败', {
                     time: 2000
                 });
             }
         });
      }
 
-     //修改初始化页面
-    function  update() {
-         //questionList
-        $("#formGauge [name='gaugeName']").val(gauge.gaugeName);
-        $("#formGauge [name='gaugeType']").val(gauge.gaugeType);
-        $("#formGauge [name='id']").val(gauge.id);
-        $("#formGauge [name='gaugeCode']").val(gauge.gaugeCode);
-        $("#formGauge [name='creator']").val(gauge.creator);
-        $("#formGauge [name='createTime']").val(format(gauge.createTime));
-        $("#formGauge [name='deleted']").val(gauge.deleted);
-        if(gauge.gaugeState==0){
-            $("#radio1").attr("checked","checked");
-            $("#radio2").removeAttr("checked");
-        }else {
-            $("#radio2").attr("checked","checked");
-            $("#radio1").removeAttr("checked");
-        }
+     //  量表的标签加载 并返回选择的标签
+     function  loadTag() {
+         var list=new Array;
+         eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+             var $ = eui.jquery,
+                 layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+             var iframeWin;//iframe对象
+             layer.open({
+                 type: 2
+                 ,id: 'checkTag'
+                 ,title: '选择标签'
+                 ,area: ['800px', '500px']
+                 ,success: function(layero, index){
 
-        //$("#formGauge [name='gaugeState']").val();
-        var texts="";
-        for(var i=0;i<questions.length;i++){
-            texts+=questions[i].questionId+",";
-        }
-        texts=texts.substring(0,texts.length-1);
-        $("#questionStr").val(texts);
+                         var body = layer.getChildFrame('body', index);
+                         iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                       //  body.find('input').val('Hi，我是从父页来的')
+                     }
+                 ,shade: 0
+                 ,moveType: 0//拖拽模式，0或者1
+                 ,maxmin: true
+                 ,content:"/web/gauge/getGaugeTag"
+                 ,btn: ['确定', '关闭'] //只是为了演示
+                 ,yes: function(){
+                     layer.closeAll();
+                   //得到设置返回的结果
+                     list=iframeWin.getCheckTag();
+                     merge("tag",list)
+                 }
+                 ,btn2: function(){
+                     layer.closeAll();
+                 }
+                 ,zIndex: layer.zIndex //重点1
+             });
+         });
 
-        initializeQuestion();
-    }
-
-
-    //初始化选择的问题
-    function  initializeQuestion() {
-        eui.use(['form','laypage','layer'], function(){
-            var form = eui.form
-                ,elem=eui.elem
-                ,laypage = eui.laypage
-                ,layer = eui.layer,
-                $ = eui.jquery;
-
-             //标签
-            var tagList=new Array;
-            for(var i in  questionnaireTagList){
-                var obj=new Object();
-                obj.id=questionnaireTagList[i].id;
-                obj.name=questionnaireTagList[i].tagName;
-                tagList.push(obj);
-            }
-            merge("tag",tagList,0);
-            //场景
-            var scenes=new Array;
-            for(var i in  sceneList){
-                var obj=new Object();
-                obj.id=sceneList[i].id;
-                obj.name=sceneList[i].sceneName;
-                scenes.push(obj);
-            }
-            merge("scene",scenes,0);
-
-            //问题
-            var ids="";
-            idArray=",";
-            for(var i in  questions){
-                ids += questions[i].questionId+ ',';
-                idArray+=questions[i].questionId +","
-            }
-
-            var item=idArray.substring(0,1);
-            if(item==','){
-                idArray=idArray.substring(1,idArray.length-1);
-            }else {
-                idArray=idArray.substring(0,idArray.length-1);
-            }
-
-            doSearch();
-            //加载层
-            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-            $.post("/questionnaire/question/findQuestion",{"ids":ids},function (result) {
-                layer.closeAll();
-                var context= questionList(result.data);
-                $("#questionCollapse").append(context);
-
-            });
-        });
-    }
-
-
-    //  量表的标签加载 并返回选择的标签
-    function  loadTag() {
-        var list=new Array;
-        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
-            var $ = eui.jquery,
-                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
-            var iframeWin;//iframe对象
-            layer.open({
-                type: 2
-                ,id: 'checkTag'
-                ,title: '选择标签'
-                ,area: ['800px', '500px']
-                ,success: function(layero, index){
-
-                    var body = layer.getChildFrame('body', index);
-                    iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
-                    //  body.find('input').val('Hi，我是从父页来的')
-                }
-                ,shade: 0
-                ,moveType: 0//拖拽模式，0或者1
-                ,maxmin: true
-                ,content:"/web/gauge/getGaugeTag"
-                ,btn: ['确定', '关闭'] //只是为了演示
-                ,yes: function(){
-                    layer.closeAll();
-                    //得到设置返回的结果
-                    list=iframeWin.getCheckTag();
-                    merge("tag",list,1)
-                }
-                ,btn2: function(){
-                    layer.closeAll();
-                }
-                ,zIndex: layer.zIndex //重点1
-            });
-        });
-
-    }
+     }
 
 
 
@@ -668,7 +655,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                     layer.closeAll();
                     //得到设置返回的结果
                     list=iframeWin.getCheckScene();
-                    merge("scene",list,1);
+                    merge("scene",list)
                 }
                 ,btn2: function(){
                     layer.closeAll();
@@ -680,88 +667,44 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     }
 
 
-    //拼接标签 或者 场景
-    function  merge(type,list,state){
-        // state 状态  数据加载是0  添加1
-        var context="";
-        var url="";
-        if(type=='tag'){
-            url=  "/gauge/tag/middle/addGaugeTagMiddle";
-        }else {
-            url=  "/gauge/scene/addGaugeScene";
-        }
-        var typeAll= $("[name='"+type+"']");
-        if(typeAll.length==0 && state==0){
-            for(var i=0;i<list.length;i++){
+     //拼接标签 或者 场景
+     function  merge(type,list){
+         var context="";
+         //得到所有的成员
+         var typeAll= $("[name='"+type+"']");
+         if(typeAll==null){
+             for(var i=0;i<list.length;i++){
+                 context+=  '<span id="'+type+list[i].id+'" name="'+type+'" style="width: 120px; margin: 0px 5px 5px 0px;" ' +
+                     'class="eui-btn eui-btn-primary" '+type+'Id='+list[i].id+'>'+list[i].name+' <i  onclick="deleteTagOrScene(\''+type+'\',\''+list[i].id+'\')" class="eui-icon" name="'+type+'">&#x1006;</i></span>';
+             }
+         }else {
+        //去掉重复的 标签或者场景
+        for(var i=0;i<list.length;i++){
+            var stast=0;
+            for(var j=0;j<typeAll.length;j++){
+                var typeId = typeAll.eq(j).attr(type+"Id");
+                if(list[i].id==typeId){
+                    stast++;
+                }
+            }
+            if(stast==0){
                 context+=  '<span id="'+type+list[i].id+'" name="'+type+'" style="width: 120px; margin: 0px 5px 5px 0px;" ' +
                     'class="eui-btn eui-btn-primary" '+type+'Id='+list[i].id+'>'+list[i].name+' <i  onclick="deleteTagOrScene(\''+type+'\',\''+list[i].id+'\')" class="eui-icon" name="'+type+'">&#x1006;</i></span>';
-            }
-        }else {
-            //去掉重复的 标签或者场景
-            for(var i=0;i<list.length;i++){
-                var stast=0;
-                for(var j=0;j<typeAll.length;j++){
-                    var typeId = typeAll.eq(j).attr(type+"Id");
-                    if(list[i].id==typeId){
-                        stast++;
-                    }
-                }
-                if(stast==0){
-                    context+=  '<span id="'+type+list[i].id+'" name="'+type+'" style="width: 120px; margin: 0px 5px 5px 0px;" ' +
-                        'class="eui-btn eui-btn-primary" '+type+'Id='+list[i].id+'>'+list[i].name+' <i  onclick="deleteTagOrScene(\''+type+'\',\''+list[i].id+'\')" class="eui-icon" name="'+type+'">&#x1006;</i></span>';
-                   //添加
-                    var  ids=list[i].id;
-                    //加载层
-                    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                    $.post(url,{"ids":ids,"gaugeId":gaugeId},function (result) {
-                        layer.closeAll();
-                        if(result.code==200){
-                            layer.msg('添加成功', {
-                                time: 2000
-                            });
-                        }else {
-                            layer.msg('添加失败', {
-                                time: 2000
-                            });
-                        }
-                    });
-
-                }else{
-                    stast=0;
-                }
+            }else{
+                stast=0;
             }
         }
-        $("#div"+type).before(context);
+         $("#div"+type).before(context);
     }
 
 
-
-    //删除场景  或者标签
+     }
+  //删除场景  或者标签
     function deleteTagOrScene(type,id){
-        $("#"+type+id).remove();
-        //加载层
-        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-        var url="";
-        if(type=='tag'){
-           url=  "/gauge/tag/middle/deleteGaugeTagMiddle";
-        }else {
-           url=  "/gauge/scene/deleteGaugeScene";
-        }
-        $.post(url,{"ids":id,"gaugeId":gaugeId},function (result) {
-            layer.closeAll();
-            if(result.code==200){
-                layer.msg('删除成功', {
-                    time: 2000
-                });
-            }else {
-                layer.msg('删除失败', {
-                    time: 2000
-                });
-            }
-        });
-    }
+       $("#"+type+id).remove();
+  }
 
-    //获得场景 或者标签的id 1,2,3
+  //获得场景 或者标签的id 1,2,3
     function getTagOrSceneId(type){
         var spanNmae= $("[name='"+type+"']");
         var list=new Array();
@@ -772,6 +715,89 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         return list.join(",");
     }
 
+   //选择量表 则查询出相关的 标签  场景
+   function checkGauge(gaugeId){
+      $.post("/gauge/getGaugeInfo",{"gaugeId":gaugeId},function (result) {
+          console.info("result");
+          console.info(result);
+         // gauge gaugeQuestionList questionnaireTagList sceneList
+          //量表的信息填充
+          var gauge=result.data.gauge;
+          $("#questionnaireName").val(gauge.gaugeName);
+          $("#questionnaireType").val(gauge.gaugeType);
+          formRender();
+
+          //问题的的信息填充
+          var questions=result.data.gaugeQuestionList;
+          var texts="";
+          for(var i=0;i<questions.length;i++){
+              texts+=questions[i].questionId+",";
+          }
+          texts=texts.substring(0,texts.length-1);
+          $("#questionStr").val(texts);
+          var questionnaireTagList=result.data.questionnaireTagList;
+          var sceneList=result.data.sceneList;
+          initializeQuestion(questions,questionnaireTagList,sceneList)
+      });
+
+   }
+
+    //初始化选择的量表
+    function  initializeQuestion(questions,questionnaireTagList,sceneList) {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,elem=eui.elem
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+
+            //标签
+            var tagList=new Array;
+            for(var i in  questionnaireTagList){
+                var obj=new Object();
+                obj.id=questionnaireTagList[i].id;
+                obj.name=questionnaireTagList[i].tagName;
+                tagList.push(obj);
+            }
+            merge("tag",tagList);
+            //场景
+            var scenes=new Array;
+            for(var i in  sceneList){
+                var obj=new Object();
+                obj.id=sceneList[i].id;
+                obj.name=sceneList[i].sceneName;
+                scenes.push(obj);
+            }
+            merge("scene",scenes);
+
+            //问题
+            var ids="";
+            idArray=",";
+            for(var i in  questions){
+                ids += questions[i].questionId+ ',';
+                idArray+=questions[i].questionId +","
+            }
+
+            var item=idArray.substring(0,1);
+            if(item==','){
+                idArray=idArray.substring(1,idArray.length-1);
+            }else {
+                idArray=idArray.substring(0,idArray.length-1);
+            }
+
+            doSearch();
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+            $.post("/questionnaire/question/findQuestion",{"ids":ids},function (result) {
+                layer.closeAll();
+                var context= questionList(result.data);
+                $("#questionCollapse").append(context);
+
+            });
+        });
+    }
+
+
 
 
     //form表单  select,checkbox,radio 动态添加  需要更新
@@ -781,27 +807,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
              form.render();
          });
      }
-
-
-
-
-
-    function add0(m){return m<10?'0'+m:m }
-    function format(timestamp)
-    {
-        //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
-
-        var time = new Date(timestamp);
-        var year = time.getFullYear();
-        var month = time.getMonth()+1;
-        var date = time.getDate();
-        var hours = time.getHours();
-        var minutes = time.getMinutes();
-        var seconds = time.getSeconds();
-        return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
-    }
-
-
 
 
 </script>

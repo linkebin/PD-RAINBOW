@@ -42,7 +42,7 @@
              separator="," close=")">
       #{item}
     </foreach>
-    ORDER BY  CREATE_TIME ASC
+
 
   </select>
 

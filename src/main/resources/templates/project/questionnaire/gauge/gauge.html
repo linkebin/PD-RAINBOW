@@ -376,12 +376,18 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
         for (var item in gaugeList){
             var gauge=gaugeList[item];
+            var state ="";
+            if(gauge.gaugeState==0){
+                state="启动";
+            }else{
+                state="不启动";
+            }
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionId" type="hidden" value="' + gauge.id + '"></td>' +
                 '<td>'+ gauge.gaugeCode +'</td>' +
                 '<td>'+ gauge.gaugeName +'</td>' +
                 '<td>'+ gauge.questionnaireTypeName +'</td>'   +
-                '<td>'+ gauge.gaugeState +'</td>' +
+                '<td>'+ state +'</td>' +
                 '<td>'+ gauge.creator +'</td>' +
                 '<td>'+ new Date(gauge.createTime).Format('yyyy-MM-dd') +'</td>' +
                 '<td>' +

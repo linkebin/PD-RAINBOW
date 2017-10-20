@@ -20,35 +20,34 @@ public class QuestionnaireTagMiddleController {
     @Resource
     private QuestionnaireTagMiddleService questionnaireTagMiddleService;
 
-    @PostMapping
-    public Result add(QuestionnaireTagMiddle questionnaireTagMiddle) {
-        questionnaireTagMiddleService.save(questionnaireTagMiddle);
-        return ResultGenerator.genSuccessResult();
+
+    /**
+     * 添加标签
+     * @param ids
+     * @param questionnaireId
+     * @return
+     */
+    @PostMapping("/addQuestionnaireTagMiddle")
+    public Result addQuestionnaireTagMiddle(String ids,String questionnaireId) {
+
+        return questionnaireTagMiddleService.addQuestionnaireTagMiddle(ids,questionnaireId);
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        questionnaireTagMiddleService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
+    /**
+     *  删除绑定的标签问卷
+     * @param ids
+     * @param questionnaireId
+     * @return
+     */
+    @PostMapping("/deleteQuestionnaireTagMiddle")
+    public  Result  deleteQuestionnaireTagMiddle(String ids,String questionnaireId){
+
+        QuestionnaireTagMiddle questionnaireTagMiddle =new QuestionnaireTagMiddle();
+        questionnaireTagMiddle.setQuestionnaireId(questionnaireId);
+        questionnaireTagMiddle.setQuestionnaireTagId(ids);
+        return  questionnaireTagMiddleService.deleteQuestionnaireTagMiddle(questionnaireTagMiddle);
     }
 
-    @PutMapping
-    public Result update(QuestionnaireTagMiddle questionnaireTagMiddle) {
-        questionnaireTagMiddleService.update(questionnaireTagMiddle);
-        return ResultGenerator.genSuccessResult();
-    }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        QuestionnaireTagMiddle questionnaireTagMiddle = questionnaireTagMiddleService.findById(id);
-        return ResultGenerator.genSuccessResult(questionnaireTagMiddle);
-    }
 
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<QuestionnaireTagMiddle> list = questionnaireTagMiddleService.findAll();
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
 }

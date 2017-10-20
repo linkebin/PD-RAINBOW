@@ -43,4 +43,15 @@
         AND g.gauge_id=#{gaugeId}
     </select>
 
+    <select id="findTagForQuestionnaire" resultMap="BaseResultMap"  parameterType="String">
+           SELECT q.*  FROM
+                questionnaire_tag_middle  g
+                LEFT JOIN
+                questionnaire_tag q
+                ON g.questionnaire_tag_id=q.id_
+                WHERE
+                  q.deleted=0
+               AND g.questionnaire_id=#{questionnaireId}
+    </select>
+
 </mapper>

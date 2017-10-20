@@ -22,4 +22,9 @@ public class QuestionnaireQuestionFactorServiceImpl extends AbstractService<Ques
     @Resource
     private QuestionnaireQuestionFactorMapper questionnaireQuestionFactorMapper;
 
+    //查询问卷相关的问题因子
+    @Override
+    public List<QuestionnaireQuestionFactor> findQuestionnaireQuestionFactor(String id) {
+        return questionnaireQuestionFactorMapper.findQuestionnaireQuestionFactor(id);
+    }
 }
