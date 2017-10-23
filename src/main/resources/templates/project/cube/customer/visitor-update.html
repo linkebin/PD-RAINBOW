@@ -484,6 +484,7 @@
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 <script src="/Scripts/plugins/distpicker.data.js"></script>
 <script src="/Scripts/plugins/distpicker.js"></script>
+<script src="/date2format.js"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <script src="/pack.ajax.js"></script>
 <script>
@@ -607,7 +608,7 @@ $(function () {
 
     $.post('/visitor/register/detail',{id:$("#visitorForm input[name='id']").val()},function (result) {
         console.log(result)
-
+        result.data.birthday=new Date(result.data.birthday).Format('yyyy-MM-dd');
         $("#visitorForm").setForm(result.data);
         var obj = result.data;
 

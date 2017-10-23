@@ -27,6 +27,8 @@ public class VisitingRecord {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "visitor_time")
+    private Date visitorTime;
     /**
      * 创建人
      */
@@ -55,10 +57,40 @@ public class VisitingRecord {
     @Column(name = "Follow_up_plan")
     private String followUpPlan;
 
+    @Transient
+    private  Integer sex;
+
+    @Transient
+    private  String visitorName;
+
+    public Integer getSex() {
+        return sex;
+    }
+
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    public String getVisitorName() {
+        return visitorName;
+    }
+
+    public void setVisitorName(String visitorName) {
+        this.visitorName = visitorName;
+    }
+
     /**
      * 备注
      */
     private String remarks;
+
+    public Date getVisitorTime() {
+        return visitorTime;
+    }
+
+    public void setVisitorTime(Date visitorTime) {
+        this.visitorTime = visitorTime;
+    }
 
     /**
      * @return ID_

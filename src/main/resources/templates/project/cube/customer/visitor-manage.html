@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>客户</title>
+    <title>来访管理</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
     <style>
         .defaultDiv{width: 100%; height: 400px;}
@@ -43,7 +43,7 @@
                             <div class="eui-input-inline">
                                 <input type="text" name="visitorName"  placeholder="关键字查询" class="eui-input">
                             </div>
-                                <label class="eui-form-label">性别</label>
+                                <label class="eui-form-label">客户性别</label>
                                 <div class="eui-input-inline">
                                     <select name="sex">
                                         <option value="">全部</option>
@@ -57,32 +57,23 @@
                                 <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
                             </div>
                         </div>
-                        <!--<div class="eui-form-item">-->
-                            <!--<label class="eui-form-label">开始时间</label>-->
-                            <!--<div class="eui-input-inline">-->
-                                <!--<input type="text" name="startTime" id="startTime"  placeholder="" class="eui-input">-->
-                            <!--</div>-->
-
-                            <!--<label class="eui-form-label">结束时间</label>-->
-                            <!--<div class="eui-input-inline">-->
-                                <!--<input type="text" name="endTime" id="endTime"  placeholder="" class="eui-input">-->
-                            <!--</div>-->
-                        <!--</div>-->
                     </div>
                     </form>
                     <div class="eui-row eui-padding10 eui-borderB">
                         <div class="eui-col-md6 eui-font18">
                            &nbsp;
                         </div>
-                        <div class="eui-col-md6 eui-textAlignR">
-                            <a target="_blank" class="eui-btn eui-btn-small" th:href="'/web/customer/visitorRegister?creator='+${session.userSession.id}">客户登记</a>
-                        </div>
+                        <!--<div class="eui-col-md6 eui-textAlignR">-->
+                            <!--<a target="_blank" class="eui-btn eui-btn-small" -->
+                               <!--th:href="'/web/customer/visitorRegister?creator='+${session.userSession.id}">客户登记</a>-->
+                        <!--</div>-->
                     </div>
 
                     <div class="xymfForm">
                         <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
                             <colgroup>
                                 <col width="60">
+                                <col width="150">
                                 <col width="150">
                                 <col width="80">
                                 <col width="200">
@@ -91,10 +82,10 @@
                             <thead>
                             <tr>
                                 <th><input type="checkbox" e-skin="primary" title=""></th>
+                                <th>来访编号</th>
                                 <th>客户姓名</th>
                                 <th>性    别</th>
-                                <th>联系方式</th>
-                                <th>通讯地址</th>
+                                <th>来访时间</th>
                                 <th>操    作</th>
                             </tr>
                             </thead>
@@ -143,38 +134,6 @@
     });
     $(function () {
         doSearch();
-//        jQuery.validator.methods.compareDate = function(value, element, param) {
-//            var startDate = jQuery(param).val();
-//            var date1 = new Date(Date.parse(startDate.replace("-", "/")));
-//            var date2 = new Date(Date.parse(value.replace("-", "/")));
-//            return date1 < date2;
-//        };
-//        $("#searchFrom1").validate({
-//            rules: {
-//
-//                startTime:"required",
-//                endTime:{
-//                    required : true,
-//                    compareDate : "#startTime"
-//                }
-//            },
-//            messages: {
-//                startTime:"请选择开始时间",
-//                endTime:{
-//                    required:"请选择结束时间",
-//                    compareDate: "结束时间必须大于开始时间!"
-//                }
-//            },
-//            showErrors : function(errorMap, errorList) {
-//                this.defaultShowErrors();
-//            },
-//            success:function(label) {
-//
-//            },
-//            submitHandler: function() {
-//                doSearch();
-//            }
-//        });
     });
 
     //加载数据
@@ -196,7 +155,7 @@
             var params = $("#searchFrom").serializeObject();
             var index = layer.load(2); //加载
             $.ajax({
-                url:"/visitor/register/listByparameter",
+                url:"/visiting/record/listByparameter",
                 data: {
                     json:JSON.stringify(params),
                     page:1,
@@ -223,7 +182,7 @@
                             }else {
                                 var params = $("#searchFrom").serializeObject();
                                 $.ajax({
-                                    url: "/visitor/register/listByparameter",
+                                    url: "/visiting/record/listByparameter",
                                     data: {
                                         json: JSON.stringify(params),
                                         page: obj.curr,
@@ -259,17 +218,16 @@
             if (secUser.sex == 1){
                 sex = '男';
             }
-            var addr = secUser.province+secUser.city+secUser.district+secUser.address;
 
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
-                '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.id + '">'+ secUser.visitorName +'</a></td>' +
+                '<td>'+ secUser.record_code +'</td>' +
+                '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.visitor_id + '">'+ secUser.visitor_name +'</a></td>' +
                 '<td>'+ sex +'</td>' +
-                '<td>'+secUser.phone+'</td>' +
-                '<td>'+ addr +'</td>' +
+                '<td>'+new Date(secUser.visitor_time).Format('yyyy-MM-dd hh:mm')+'</td>' +
                 '<td>' +
-                '<a target="_blank" href="/web/customer/visitorInfo?id=' + secUser.id + '"><i class="eui-icon tb">&#xe60e;</i></a>' +
-                '<i class="eui-icon tb">&#xe640;</i></td>' +
+                '<a target="_blank" href="/web/customer/visitorInfo?id=' + secUser.visitor_id + '"><i class="eui-icon tb">&#xe60e;</i></a>' +
+                '</td>' +
                 '</tr>';
         }
         return tableHtml;

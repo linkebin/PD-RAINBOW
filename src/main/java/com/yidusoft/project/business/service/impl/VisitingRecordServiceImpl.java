@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -19,4 +21,13 @@ public class VisitingRecordServiceImpl extends AbstractService<VisitingRecord> i
     @Resource
     private VisitingRecordMapper visitingRecordMapper;
 
+    @Override
+    public List<VisitingRecord> findVisitingRecordShaftTimeByCustomerId(VisitingRecord visitingRecord) {
+        return visitingRecordMapper.findVisitingRecordShaftTimeByCustomerId(visitingRecord);
+    }
+
+    @Override
+    public List<Map<String,Object>> findVisitingRecordByParameter(VisitingRecord visitingRecord) {
+        return visitingRecordMapper.findVisitingRecordByParameter(visitingRecord);
+    }
 }

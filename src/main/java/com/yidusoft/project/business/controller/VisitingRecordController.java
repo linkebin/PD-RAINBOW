@@ -1,15 +1,21 @@
 package com.yidusoft.project.business.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.business.domain.VisitingRecord;
 import com.yidusoft.project.business.service.VisitingRecordService;
+import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -20,10 +26,22 @@ public class VisitingRecordController {
     @Resource
     private VisitingRecordService visitingRecordService;
 
-    @PostMapping
-    public Result add(VisitingRecord visitingRecord) {
-        visitingRecordService.save(visitingRecord);
-        return ResultGenerator.genSuccessResult();
+    @PostMapping("/add")
+    public Result add(String json) {
+        VisitingRecord visitingRecord = JSON.parseObject(json,VisitingRecord.class);
+        visitingRecord.setCreateTime(new Date());
+        visitingRecord.setId(UUID.randomUUID().toString());
+        visitingRecord.setDeleted(0);
+        visitingRecord.setCreator(Security.getUserId());
+        visitingRecord.setRecordCode(CodeHelper.getCode("LF"));
+        try {
+            visitingRecordService.save(visitingRecord);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("保存失败！");
+        }
+
+        return ResultGenerator.genSuccessResult().setMessage("保存成功！");
     }
 
     @DeleteMapping("/{id}")
@@ -38,16 +56,28 @@ public class VisitingRecordController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
+    @PostMapping("/detail")
+    public Result detail(String id) {
         VisitingRecord visitingRecord = visitingRecordService.findById(id);
         return ResultGenerator.genSuccessResult(visitingRecord);
     }
 
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<VisitingRecord> list = visitingRecordService.findAll();
+    @PostMapping("/listByparameter")
+    public Result listByparameter(int page, int pagesize,String json) {
+        VisitingRecord visitingRecord = JSON.parseObject(json,VisitingRecord.class);
+
+        PageHelper.startPage(page, pagesize);
+        List<Map<String,Object>> list = visitingRecordService.findVisitingRecordByParameter(visitingRecord);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/shaftTime")
+    public Result shaftTime(String json){
+        VisitingRecord visitingRecord = JSON.parseObject(json,VisitingRecord.class);
+
+        List<VisitingRecord> list = visitingRecordService.findVisitingRecordShaftTimeByCustomerId(visitingRecord);
+
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

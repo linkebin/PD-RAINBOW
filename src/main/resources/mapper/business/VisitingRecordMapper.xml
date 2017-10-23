@@ -9,6 +9,7 @@
     <result column="record_code" jdbcType="VARCHAR" property="recordCode" />
     <result column="Visiting_purpose" jdbcType="VARCHAR" property="visitingPurpose" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="visitor_time" jdbcType="TIMESTAMP" property="visitorTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="visitor_id" jdbcType="VARCHAR" property="visitorId" />
@@ -16,4 +17,29 @@
     <result column="Follow_up_plan" jdbcType="LONGVARCHAR" property="followUpPlan" />
     <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
   </resultMap>
+  <!--AND visitor_time &gt;=#{startTime} AND visitor_time &lt;=#{endTime}-->
+  <select id="findVisitingRecordShaftTimeByCustomerId" parameterType="com.yidusoft.project.business.domain.VisitingRecord"
+          resultMap="BaseResultMap">
+
+    SELECT ID_,visitor_time FROM visiting_record WHERE deleted=0 AND visitor_id=#{visitorId}
+
+  </select>
+
+  <select id="findVisitingRecordByParameter" parameterType="com.yidusoft.project.business.domain.VisitingRecord"
+         resultType="java.util.HashMap">
+
+     SELECT vr2.visitor_name,vr.* FROM visiting_record vr
+      LEFT JOIN visitor_register vr2 ON vr.visitor_id=vr2.ID_
+
+    WHERE vr.deleted=0 AND vr.creator=#{creator}
+
+    <if test="sex!=null and sex!=''">
+      AND vr2.sex= #{sex}
+    </if>
+
+    <if test="visitorName!=null and visitorName!=''">
+      AND vr2.visitor_name LIKE '%${visitorName}%'
+    </if>
+
+  </select>
 </mapper>

@@ -43,4 +43,13 @@ public class WebCustomerController {
 
         return "project/cube/customer/visitor-update";
     }
+
+    @RequestMapping("/visitorInfo")
+    public String visitorInfo(Model model,String id){
+
+        model.addAttribute("id",id);
+
+
+        return "project/cube/customer/consultant";
+    }
 }
