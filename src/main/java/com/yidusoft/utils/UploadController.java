@@ -108,7 +108,7 @@ public class UploadController {
                     }
                     if (typeFlag) {
                         // 项目在容器中实际发布运行的根路径
-                        String realPath = request.getSession().getServletContext().getRealPath("/");
+                        String realPath = System.getProperty("user.dir");
                         // 自定义的文件名称
                         trueFileName = String.valueOf(System.currentTimeMillis()) + fileName;
                         // 设置存放图片文件的路径
@@ -194,8 +194,7 @@ public class UploadController {
 
             String type= fileName.substring(fileName.lastIndexOf(".")).toLowerCase();;
            if(type.equals(".jpg") || type.equals(".png")){
-               String realPath = request.getSession().getServletContext().getRealPath("/");
-               realPath= realPath.substring(0,2);
+               String realPath = System.getProperty("user.dir");
                // 自定义的文件名称
                String  trueFileName = String.valueOf(System.currentTimeMillis()) + fileName;
                // 设置存放图片文件的路径
@@ -235,8 +234,7 @@ public class UploadController {
             String type= fileName.substring(fileName.lastIndexOf(".")).toLowerCase();;
 
             if(type.equals(".jpg") || type.equals(".png")){
-                String realPath = request.getSession().getServletContext().getRealPath("/");
-                realPath= realPath.substring(0,2);
+                String realPath = System.getProperty("user.dir");
                 String childPath="/upload/headImg";
 
                 String path = realPath + childPath;
@@ -279,8 +277,7 @@ public class UploadController {
 
             String type= fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
             if(type.equals(".jpg") || type.equals(".png")){
-                String realPath = request.getSession().getServletContext().getRealPath("/");
-                realPath= realPath.substring(0,2);
+                String realPath = System.getProperty("user.dir");
                 // 自定义的文件名称
                 String  trueFileName = String.valueOf(System.currentTimeMillis()) + fileName;
                 // 设置存放图片文件的路径
@@ -318,7 +315,8 @@ public class UploadController {
     public Result getFilePath(HttpServletRequest request, @RequestParam("file") MultipartFile files){
         Result result=new Result();
         // 项目在容器中实际发布运行的根路径
-        String realPath = request.getSession().getServletContext().getRealPath("/");
+        String realPath = System.getProperty("user.dir");
+
         // 设置存放图片文件的路径
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String childPath = "/upFile/upload/"+format.format(new Date());
