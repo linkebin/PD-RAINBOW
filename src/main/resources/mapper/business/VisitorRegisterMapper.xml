@@ -61,6 +61,14 @@
 
     SELECT ID_,visitor_name,sex,phone,province,city,district,address FROM visitor_register WHERE deleted=0 AND creator=#{creator}
 
+    <if test="sex!=null and sex!=''">
+      AND sex= #{sex}
+    </if>
+
+      <if test="visitorName!=null and visitorName!=''">
+        AND visitor_name LIKE '%${visitorName}%'
+      </if>
+
     ORDER BY create_time
   </select>
 </mapper>

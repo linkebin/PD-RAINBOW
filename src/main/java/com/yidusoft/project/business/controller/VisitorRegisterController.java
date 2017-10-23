@@ -42,17 +42,26 @@ public class VisitorRegisterController {
         return ResultGenerator.genSuccessResult().setMessage("登记成功");
     }
 
+    @PostMapping("/update")
+    public Result update(String json) {
+        VisitorRegister visitorRegister = JSON.parseObject(json,VisitorRegister.class);
+
+        try {
+            visitorRegisterService.deleteById(visitorRegister.getId());
+            visitorRegisterService.save(visitorRegister);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("保存失败");
+        }
+        return ResultGenerator.genSuccessResult().setMessage("保存成功");
+    }
+
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable String  id) {
         visitorRegisterService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(VisitorRegister visitorRegister) {
-        visitorRegisterService.update(visitorRegister);
-        return ResultGenerator.genSuccessResult();
-    }
+
 
     @PostMapping("/detail")
     public Result detail(String id) {
