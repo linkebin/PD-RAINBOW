@@ -1,20 +1,19 @@
 package com.yidusoft.project.questionnaire.service.impl;
 
+import com.yidusoft.core.AbstractService;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionFactorMapper;
-import com.yidusoft.project.questionnaire.dao.QuestionnaireSceneMapper;
-import com.yidusoft.project.questionnaire.dao.QuestionnaireTagMiddleMapper;
-import com.yidusoft.project.questionnaire.domain.*;
+import com.yidusoft.project.questionnaire.domain.Questionnaire;
+import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestionFactor;
+import com.yidusoft.project.questionnaire.domain.QuestionnaireTag;
+import com.yidusoft.project.questionnaire.domain.Scene;
 import com.yidusoft.project.questionnaire.service.*;
-import com.yidusoft.core.AbstractService;
-
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.plugin.util.UIUtil;
 
 import javax.annotation.Resource;
 import java.util.*;

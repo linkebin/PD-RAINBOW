@@ -4,11 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.monitor.domain.LoginLog;
+import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.redisMq.MsgGenerator;
 import com.yidusoft.redisMq.MsgSend;
-import com.yidusoft.utils.*;
+import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.IpAddressUtils;
+import com.yidusoft.utils.PasswordHelper;
+import com.yidusoft.utils.Security;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -17,6 +21,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +38,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.yidusoft.utils.Security.getUser;
 
@@ -42,6 +51,9 @@ import static com.yidusoft.utils.Security.getUser;
 public class IndexController {
     @Autowired
     SecUserService secUserService;
+    @Autowired
+    LoginLogService loginLogService;
+    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
     /**
      * 跳转到主页
      * @return
@@ -226,7 +238,8 @@ public class IndexController {
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", user.getId());
         session.setAttribute("userSession", user);
-        msgSend.send(MsgGenerator.genLoginLogMessage(user));
+        //记录登录日志
+        loginLog(user,session);
         return  "redirect:/index";
     }
 
@@ -365,5 +378,40 @@ public class IndexController {
         session.setAttribute("userSession", secUser);
 
         return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 记录登录 日志
+     */
+    public  void loginLog(SecUser  user,Session session){
+        LoginLog loginLog = new LoginLog();
+        loginLog.setLoginId(UUID.randomUUID().toString());
+        loginLog.setUserId(user.getId());
+        loginLog.setUserName(user.getUserName());
+        loginLog.setUserAccount(user.getAccount());
+        loginLog.setAccountType(user.getAccountType());
+        String IP = session.getHost();
+        loginLog.setLoginIp(IP);
+        loginLog.setLoginTime(new Date());
+        loginLog.setLoginType("网页登录");
+        loginLog.setLoginAddr("未知地点");
+        try{
+            if (!"未知IP".equals(IP)){
+                Map<String,Object> map = IpAddressUtils.getAddress("ip="+IP, "utf-8");
+                StringBuffer buffer = new StringBuffer();
+                buffer.append(map.get("region").toString()+"->");
+                if (!"".equals(map.get("city").toString())){
+                    buffer.append(map.get("city").toString());
+                }
+                if (!"".equals(map.get("county").toString())){
+                    buffer.append(map.get("county").toString());
+                }
+                loginLog.setLoginAddr(buffer.toString());
+            }
+            loginLogService.insertLoginInfo(loginLog);
+        }catch (Exception e){
+            logger.info("插入登录日志失败");
+            e.printStackTrace();
+        }
     }
 }
