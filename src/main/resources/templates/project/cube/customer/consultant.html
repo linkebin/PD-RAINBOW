@@ -77,10 +77,10 @@
                     <!--</div>-->
                 </form>
              <div class="DivInfo">
-                <!--<p><i class="eui-icon">&#xe60e;</i>-->
-                    <!--<span class="eui-font16">记录时间</span>-->
-                    <!--<span  class="eui-marginL15 createTime"></span></p>-->
-                 <!---->
+                <p><i class="eui-icon">&#xe60e;</i>
+                    <span class="eui-font16">记录时间</span>
+                    <span  class="eui-marginL15 createTime"></span></p>
+
                 <p class="eui-marginT10"><i class="eui-icon">&#xe606;</i>
                     <span class="eui-font16">来访时间</span>
                     <span  class="eui-marginL15 visitorTime"></span>
@@ -122,13 +122,14 @@
                 <form id="DivAddForm">
                     <input type="hidden" name="visitorId" th:value="${id}" />
                     <div style="display: none;" class="DivAdd">
-                        <p><i class="eui-icon">&#xe60e;</i>
-                            <span class="eui-font16">记录时间</span>
-                            <span id="datecre" style="margin-left: 24px;"></span></p>
-                        <p style="float: left;" class="eui-marginT10">
+                        <!--<p><i class="eui-icon">&#xe60e;</i>-->
+                            <!--<span class="eui-font16">记录时间</span>-->
+                            <!--<span id="datecre" style="margin-left: 24px;"></span></p>-->
+
+                        <p style="float: left;" class="">
                             <i class="eui-icon">&#xe606;</i>
                             <span class="eui-font16">来访时间</span>
-                            <div style=" float: left; margin-left: 12px; padding: 5px;">
+                            <div style=" float: left; margin-left: 12px; margin-top: -5px; ">
                                 <input type="text" readonly="readonly" name="visitorTime" id="visitorTime"
                                        class="eui-input eui-width200">
                             </div>
@@ -139,9 +140,9 @@
                             <!--<div class="eui-col-md3 consultSheet eui-marginR20">症状自评量表-SCL90-->
                                 <!--<i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe621;</i><i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe7d0;</i>-->
                             <!--</div>-->
-                            <div class="eui-col-md2">
-                                <span class="eui-btn eui-btn-small"><i class="eui-icon">&#xe654;</i> 新增问卷</span>
-                            </div>
+                            <!--<div class="eui-col-md2">-->
+                                <!--<span class="eui-btn eui-btn-small"><i class="eui-icon">&#xe654;</i> 新增问卷</span>-->
+                            <!--</div>-->
                         </div>
                         <div class="eui-marginT20 eui-form">
                             <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访目的</p>
@@ -235,24 +236,133 @@
 <!-- 右滑高级筛选开始 -->
 <div class="eui-slipBg">
 </div>
-<div class="eui-slipContent-left">
+<div style="overflow: scroll" class="eui-slipContent-left">
     <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md2 eui-marginT10">按预约</div>
+        <div class="eui-col-md2 eui-marginT5">客户姓名</div>
         <div class="eui-col-md10">
-            <input type="text" name="title" e-verify="title" autocomplete="off" placeholder="输入来访者姓名搜索" class="eui-input">
+            <input type="text" name="title" e-verify="title" autocomplete="off" placeholder="输入来客户姓名搜索" class="eui-input">
         </div>
     </div>
 
     <div class="eui-row eui-marginT10 eui-padding10">
-        <div class="eui-col-md2 ">
-            <!--<img src="/Styles/images/avatar.jpg" class="eui-borderRadius" width="50" alt="">-->
-        </div>
         <div class="eui-col-md8 eui-lineHeight24">
             <p> <span class="eui-font16">雪小鱼</span></p>
             <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
         </div>
-        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="24" alt=""></div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
     </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div><div class="eui-row eui-marginT10 eui-padding10">
+    <div class="eui-col-md8 eui-lineHeight24">
+        <p> <span class="eui-font16">雪小鱼</span></p>
+        <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+    </div>
+    <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+</div><div class="eui-row eui-marginT10 eui-padding10">
+    <div class="eui-col-md8 eui-lineHeight24">
+        <p> <span class="eui-font16">雪小鱼</span></p>
+        <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+    </div>
+    <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+</div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+    <div class="eui-row eui-marginT10 eui-padding10">
+        <div class="eui-col-md8 eui-lineHeight24">
+            <p> <span class="eui-font16">雪小鱼</span></p>
+            <p class="eui-color-gray2"><span class="eui-color-gray3">预约时间：</span>2017-09-20 10：00</p>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR"><img src="/Styles/images/xymfImages/woman.png" width="40" alt=""></div>
+    </div>
+
+
 </div>
 <!-- 右滑高级筛选结束 -->
 
@@ -402,6 +512,7 @@ function loadShaftTime() {
         loadVisitorRecordDetail(list[0].id);
         $("#shaftTime li").find('i').eq(0).html('&#xe617;');
         $("#shaftTime li").click(function () {
+            $('#resetDiv').hide();
             var id = $(this).attr('visitorId');
             loadVisitorRecordDetail(id);
             $("#shaftTime li").find('i').html('&#xe63f;');

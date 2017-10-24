@@ -178,21 +178,21 @@
                          <input type="radio" e-filter="Have_children" name="Have_children" id="Have_children1"  value="1" title="有">
                          <input type="radio" e-filter="Have_children" name="Have_children" value="0" title="无" checked="checked">
                          </div>
-                     <div style="display:none;" class="Have_children">
-                         <label class="eui-form-label">有几个孩子</label>
-                         <div class="eui-input-inline">
-                             <input type="text" name="childrenTotal"   placeholder="有几个孩子" class="eui-input">
-                         </div>
-                     </div>
+                     <!--<div style="display:none;" class="Have_children">-->
+                         <!--<label class="eui-form-label">有几个孩子</label>-->
+                         <!--<div class="eui-input-inline">-->
+                             <!--<input type="text" name="childrenTotal"   placeholder="有几个孩子" class="eui-input">-->
+                         <!--</div>-->
+                     <!--</div>-->
                  </div>
 
                  <div style="display: none;" class="eui-form-item children_info">
-                     <label class="eui-form-label">孩子性别</label>
+                     <label class="eui-form-label">第一个孩子性别</label>
                      <div class="eui-input-inline">
                          <input type="radio" name="childSex" value="1" title="男" checked="checked">
                          <input type="radio" name="childSex" value="0" title="女">
                      </div>
-                     <label class="eui-form-label">孩子年龄</label>
+                     <label class="eui-form-label">第一个孩子年龄</label>
                      <div class="eui-input-inline">
                          <input type="text" name="childAge"   placeholder="孩子年龄" class="eui-input">
                      </div>
@@ -242,7 +242,16 @@
 
                          <label class="eui-form-label">父亲学历</label>
                          <div class="eui-input-inline">
-                             <input type="text" name="fatherEducation"   placeholder="父亲学历" class="eui-input">
+                             <!--<input type="text" name="fatherEducation"   placeholder="父亲学历" class="eui-input">-->
+                             <select name="fatherEducation"   class="eui-input">
+                                 <option value="小学">小学</option>
+                                 <option value="初中">初中</option>
+                                 <option value="高中">高中</option>
+                                 <option value="专科">专科</option>
+                                 <option value="本科">本科</option>
+                                 <option value="研究生">研究生</option>
+                                 <option value="博士">博士</option>
+                             </select>
                          </div>
                      </div>
 
@@ -282,7 +291,16 @@
 
                          <label class="eui-form-label">母亲学历</label>
                          <div class="eui-input-inline">
-                             <input type="text" name="motherEducation"   placeholder="母亲学历" class="eui-input">
+                             <!--<input type="text" name="motherEducation"   placeholder="母亲学历" class="eui-input">-->
+                             <select name="motherEducation" class="eui-input">
+                                 <option value="小学">小学</option>
+                                 <option value="初中">初中</option>
+                                 <option value="高中">高中</option>
+                                 <option value="专科">专科</option>
+                                 <option value="本科">本科</option>
+                                 <option value="研究生">研究生</option>
+                                 <option value="博士">博士</option>
+                             </select>
                          </div>
 
                      </div>
@@ -349,20 +367,26 @@
                          <input type="radio" e-filter="psychologicalCounseling" name="psychologicalCounseling" value="1" title="有">
                      </div>
 
-                     <div style="display: none" class="consult_info">
+                 </div>
+
+                 <div style="display: none;" class="consult_info">
+                     <div class="eui-form-item">
+
                          <label style="width: 240px;" class="eui-form-label">做过几次咨询</label>
                          <div class="eui-input-inline">
                              <input type="text" name="counselingTotal"   placeholder="做过几次咨询" class="eui-input">
                          </div>
+
+                         <label style="width: 240px;" class="eui-form-label">最近一次咨询距现在多少天</label>
+                         <div class="eui-input-inline">
+                             <input type="text" name="awayNowTotal"   placeholder="最近一次咨询距现在多少天" class="eui-input">
+                         </div>
+
                      </div>
                  </div>
 
                  <div style="display: none;" class="consult_info">
                      <div class="eui-form-item">
-                         <label style="width: 240px;" class="eui-form-label">最近一次咨询距现在多少天</label>
-                         <div class="eui-input-inline">
-                             <input type="text" name="awayNowTotal"   placeholder="最近一次咨询距现在多少天" class="eui-input">
-                         </div>
 
                          <label style="width: 240px;" class="eui-form-label">最近一次咨询的地址</label>
                          <div class="eui-input-inline">
@@ -370,20 +394,19 @@
                          </div>
 
 
-                     </div>
-                 </div>
-
-                 <div style="display: none;" class="consult_info">
-                     <div class="eui-form-item">
                          <label style="width: 240px;" class="eui-form-label">是否因心理问题就医</label>
                          <div class="eui-input-inline">
-                             <input type="radio" name="medicalTreatment" value="0" title="没有">
-                             <input type="radio" name="medicalTreatment" value="1" title="有">
+                             <input type="radio" name="medicalTreatment" value="0" title="否">
+                             <input type="radio" name="medicalTreatment" value="1" title="是">
                          </div>
 
+                     </div>
+                 </div>
+                 <div style="display: none;" class="consult_info">
+                     <div class="eui-form-item">
                          <label style="width: 240px;" class="eui-form-label">最近一次诊断结果</label>
                          <div class="eui-input-inline">
-                             <input type="text" name="diagnosisResult"   placeholder="最近一次诊断结果" class="eui-input">
+                             <input type="text" name="diagnosisResult"   placeholder="最近一次诊断结果" class="eui-input eui-width700">
                          </div>
                      </div>
                  </div>
@@ -487,6 +510,7 @@
 <script src="/date2format.js"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <script src="/pack.ajax.js"></script>
+<script src="/card.js"></script>
 <script>
 
 eui.use(['form', 'layedit', 'laydate'], function(){
@@ -512,13 +536,11 @@ eui.use(['form', 'layedit', 'laydate'], function(){
 
     form.on('radio(Have_children)', function(data){
         if (data.value =='1'){
-            $('.Have_children').show();
-            $('.Have_children input').removeAttr('disabled');
+            $('.children_info').show();
+            $('.children_info input').removeAttr('disabled');
         }else {
-            $('.Have_children').hide();
-            $(".children_info").hide();
-            $("input[name='childrenTotal']").val('');
-            $('.Have_children input').attr('disabled','disabled');
+            $('.children_info').hide();
+            $('.children_info input').attr('disabled','disabled');
         }
     });
     form.on('radio(father_is_alive)', function(data){
@@ -612,6 +634,15 @@ $(function () {
         $("#visitorForm").setForm(result.data);
         var obj = result.data;
 
+        $('#province').val(obj.province);
+        $('#province').trigger("change");
+
+        $('#city').val(obj.city);
+        $('#city').trigger("change");
+
+        $('#district').val(obj.district);
+        $('#district').trigger("change");
+
         $("#visitorForm select[name='motherOccupation'] option").each(function(){
             if($(this).text() === result.data.motherOccupation){
                 $(this).attr('selected', 'selected');
@@ -637,6 +668,17 @@ $(function () {
             $('.children_info').show();
             $('#Have_children1').attr('checked','checked');
         }
+
+        $("#visitorForm select[name='motherEducation'] option").each(function(){
+            if($(this).text() === result.data.motherEducation){
+                $(this).attr('selected', 'selected');
+            }
+        });
+        $("#visitorForm select[name='fatherEducation'] option").each(function(){
+            if($(this).text() === result.data.fatherEducation){
+                $(this).attr('selected', 'selected');
+            }
+        });
 
         if (obj.maritalStatus !='1'){
             $('.marital').show();
@@ -703,7 +745,10 @@ $(function () {
         var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
         return this.optional(element) || (length == 11 && mobile.test(value));
     }, "请正确填写您的手机号码");
-
+// 身份证号码验证
+    jQuery.validator.addMethod("isIdCardNo", function(value, element) {
+        return this.optional(element) || idCardNoUtil.checkIdCardNo(value);
+    }, "请正确输入您的身份证号码");
 
     $("#visitorForm").validate({
         rules: {
@@ -715,6 +760,7 @@ $(function () {
             },
             idCard:{
                 required : true,
+                isIdCardNo:true
             },
             phone:{
                 required : true,
@@ -737,16 +783,12 @@ $(function () {
                 required : true,
                 digits:true
             },
-            fatherEducation:{
-                required : true,
-            },
+
             motherDeathYourAge:{
                 required : true,
                 digits:true
             },
-            motherEducation:{
-                required : true,
-            },
+
             parentalSeparationYourAge:{
                 required : true,
                 digits:true
@@ -805,6 +847,7 @@ $(function () {
             },
             idCard:{
                 required : '请输入身份证号码',
+                isIdCardNo:'请输入正确的身份证号'
             },
             phone:{
                 required : '请输入手机号码',
@@ -827,16 +870,9 @@ $(function () {
                 required: '请输入父亲去世时你的年龄',
                 digits:'只能输入整数'
             },
-            fatherEducation:{
-                required : '请输入父亲学历',
-                digits:'只能输入整数'
-            },
+
             motherDeathYourAge:{
                 required : '请输入母亲去世时你的年龄',
-                digits:'只能输入整数'
-            },
-            motherEducation:{
-                required : '请输入母亲学历',
                 digits:'只能输入整数'
             },
             parentalSeparationYourAge:{

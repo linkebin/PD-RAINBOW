@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -18,4 +19,8 @@ public class ScheduleServiceImpl extends AbstractService<Schedule> implements Sc
     @Resource
     private ScheduleMapper scheduleMapper;
 
+    @Override
+    public List<Schedule> findScheduleDataTimeOrEvent(Schedule schedule) {
+        return scheduleMapper.findScheduleDataTimeOrEvent(schedule);
+    }
 }

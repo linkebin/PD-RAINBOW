@@ -15,4 +15,13 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
+
+  <select id="findScheduleDataTimeOrEvent" parameterType="com.yidusoft.project.business.domain.Schedule" resultMap="BaseResultMap">
+      SELECT * FROM `schedule` WHERE deleted=0 AND consultant_id=#{consultantId}
+
+      <if test="visitorTimeStr!=null and visitorTimeStr!=''">
+        AND visitor_time LIKE '%${visitorTimeStr}%'
+      </if>
+
+  </select>
 </mapper>

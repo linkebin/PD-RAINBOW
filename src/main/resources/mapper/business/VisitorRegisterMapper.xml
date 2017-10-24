@@ -59,7 +59,7 @@
 
   <select id="findViitorByCounselorId" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultMap="BaseResultMap">
 
-    SELECT ID_,visitor_name,sex,phone,province,city,district,address FROM visitor_register WHERE deleted=0 AND creator=#{creator}
+    SELECT ID_,visitor_name,visitor_code,sex,phone,province,city,district,address FROM visitor_register WHERE deleted=0 AND creator=#{creator}
 
     <if test="sex!=null and sex!=''">
       AND sex= #{sex}

@@ -173,21 +173,21 @@
                          <input type="radio" e-filter="Have_children" name="Have_children" value="1" title="有">
                          <input type="radio" e-filter="Have_children" name="Have_children" value="0" title="无" checked="checked">
                          </div>
-                     <div style="display:none;" class="Have_children">
-                         <label class="eui-form-label">有几个孩子</label>
-                         <div class="eui-input-inline">
-                             <input type="text" name="childrenTotal"   placeholder="有几个孩子" class="eui-input">
-                         </div>
-                     </div>
+                     <!--<div style="display:none;" class="Have_children">-->
+                         <!--<label class="eui-form-label">有几个孩子</label>-->
+                         <!--<div class="eui-input-inline">-->
+                             <!--<input type="text" name="childrenTotal"   placeholder="有几个孩子" class="eui-input">-->
+                         <!--</div>-->
+                     <!--</div>-->
                  </div>
 
                  <div style="display: none;" class="eui-form-item children_info">
-                     <label class="eui-form-label">孩子性别</label>
+                     <label class="eui-form-label">第一个孩子性别</label>
                      <div class="eui-input-inline">
                          <input type="radio" name="maritalStatus1" value="1" title="男" checked="checked">
                          <input type="radio" name="maritalStatus1" value="0" title="女">
                      </div>
-                     <label class="eui-form-label">孩子年龄</label>
+                     <label class="eui-form-label">第一个孩子年龄</label>
                      <div class="eui-input-inline">
                          <input type="text" name="childAge"   placeholder="孩子年龄" class="eui-input">
                      </div>
@@ -245,7 +245,6 @@
 
                          <label class="eui-form-label">父亲学历</label>
                          <div class="eui-input-inline">
-                             <!--<input type="text" name="fatherEducation"   placeholder="父亲学历" class="eui-input">-->
                              <select name="fatherEducation"   class="eui-input">
                                  <option value="小学">小学</option>
                                  <option value="初中">初中</option>
@@ -366,24 +365,31 @@
                  <div class="eui-form-item">
                      <label class="eui-form-label" style="width: 240px;">以前进行过心里咨询吗？</label>
                      <div class="eui-input-inline">
-                         <input type="radio" e-filter="psychologicalCounseling" name="psychologicalCounseling" value="0" title="没有">
+                         <input type="radio" e-filter="psychologicalCounseling" name="psychologicalCounseling" value="0" title="没有" checked="checked">
                          <input type="radio" e-filter="psychologicalCounseling" name="psychologicalCounseling" value="1" title="有">
                      </div>
 
-                     <div style="display: none" class="consult_info">
+
+                 </div>
+
+                 <div style="display: none;" class="consult_info">
+                     <div class="eui-form-item">
+
                          <label style="width: 240px;" class="eui-form-label">做过几次咨询</label>
                          <div class="eui-input-inline">
                              <input type="text" name="counselingTotal"   placeholder="做过几次咨询" class="eui-input">
                          </div>
+
+                         <label style="width: 240px;" class="eui-form-label">最近一次咨询距现在多少天</label>
+                         <div class="eui-input-inline">
+                             <input type="text" name="awayNowTotal"   placeholder="最近一次咨询距现在多少天" class="eui-input">
+                         </div>
+
                      </div>
                  </div>
 
                  <div style="display: none;" class="consult_info">
                      <div class="eui-form-item">
-                         <label style="width: 240px;" class="eui-form-label">最近一次咨询距现在多少天</label>
-                         <div class="eui-input-inline">
-                             <input type="text" name="awayNowTotal"   placeholder="最近一次咨询距现在多少天" class="eui-input">
-                         </div>
 
                          <label style="width: 240px;" class="eui-form-label">最近一次咨询的地址</label>
                          <div class="eui-input-inline">
@@ -391,20 +397,19 @@
                          </div>
 
 
-                     </div>
-                 </div>
-
-                 <div style="display: none;" class="consult_info">
-                     <div class="eui-form-item">
                          <label style="width: 240px;" class="eui-form-label">是否因心理问题就医</label>
                          <div class="eui-input-inline">
                              <input type="radio" name="medicalTreatment" value="0" title="否">
                              <input type="radio" name="medicalTreatment" value="1" title="是">
                          </div>
 
+                     </div>
+                 </div>
+                 <div style="display: none;" class="consult_info">
+                     <div class="eui-form-item">
                          <label style="width: 240px;" class="eui-form-label">最近一次诊断结果</label>
                          <div class="eui-input-inline">
-                             <input type="text" name="diagnosisResult"   placeholder="最近一次诊断结果" class="eui-input">
+                             <input type="text" name="diagnosisResult"   placeholder="最近一次诊断结果" class="eui-input eui-width700">
                          </div>
                      </div>
                  </div>
@@ -413,7 +418,7 @@
 
                      <label class="eui-form-label" style="width: 240px;">是否慢性疾病,家族病史和过敏史</label>
                      <div class="eui-input-inline">
-                         <input type="radio" e-filter="medicalHistory" name="medicalHistory" value="0" title="没有">
+                         <input type="radio" e-filter="medicalHistory" name="medicalHistory" value="0" title="没有" checked="checked">
                          <input type="radio" e-filter="medicalHistory" name="medicalHistory" value="1" title="有">
                      </div>
                     <div style="display: none" class="medicalHistory">
@@ -428,7 +433,7 @@
 
                      <label class="eui-form-label" style="width: 240px;">曾长期服用过何种药物?</label>
                      <div class="eui-input-inline">
-                         <input type="radio" e-filter="LongMedication" name="LongMedication" value="0" title="没有">
+                         <input type="radio" e-filter="LongMedication" name="LongMedication" value="0" title="没有" checked="checked">
                          <input type="radio" e-filter="LongMedication"  name="LongMedication" value="1" title="有">
                      </div>
                      <div style="display: none" class="LongMedication">
@@ -442,7 +447,8 @@
                  <div class="eui-form-item">
                      <label style="width: 240px;" class="eui-form-label">目前与健康有关的疾病及所接受的治疗</label>
                      <div class="eui-input-inline">
-                         <input type="text" name="treatmentCondition"   placeholder="目前与健康有关的疾病及所接收的治疗" class="eui-input eui-width700">
+                         <input type="text" name="treatmentCondition"
+                                placeholder="目前与健康有关的疾病及所接收的治疗" class="eui-input eui-width700">
                      </div>
                  </div>
 
@@ -507,6 +513,7 @@
 <script src="/Scripts/plugins/distpicker.js"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <script src="/pack.ajax.js"></script>
+<script src="/card.js"></script>
 <script>
 
 eui.use(['form', 'layedit', 'laydate'], function(){
@@ -532,13 +539,11 @@ eui.use(['form', 'layedit', 'laydate'], function(){
 
     form.on('radio(Have_children)', function(data){
         if (data.value =='1'){
-            $('.Have_children').show();
-            $('.Have_children input').removeAttr('disabled');
+            $('.children_info').show();
+            $('.children_info input').removeAttr('disabled');
         }else {
-            $('.Have_children').hide();
-            $(".children_info").hide();
-            $("input[name='childrenTotal']").val('');
-            $('.Have_children input').attr('disabled','disabled');
+            $('.children_info').hide();
+            $('.children_info input').attr('disabled','disabled');
         }
     });
     form.on('radio(father_is_alive)', function(data){
@@ -638,7 +643,10 @@ $(function () {
         var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
         return this.optional(element) || (length == 11 && mobile.test(value));
     }, "请正确填写您的手机号码");
-
+// 身份证号码验证
+    jQuery.validator.addMethod("isIdCardNo", function(value, element) {
+        return this.optional(element) || idCardNoUtil.checkIdCardNo(value);
+    }, "请正确输入您的身份证号码");
 
     $("#visitorForm").validate({
         rules: {
@@ -650,6 +658,7 @@ $(function () {
             },
             idCard:{
                 required : true,
+                isIdCardNo:true
             },
             phone:{
                 required : true,
@@ -731,13 +740,14 @@ $(function () {
         },
         messages: {
             visitorName: {
-                required : "请输入客户名称",
+                required : "请输入姓名",
             },
             birthday:{
                 required : '请选择出生日期',
             },
             idCard:{
                 required : '请输入身份证号码',
+                isIdCardNo:"请输入正确的身份证号"
             },
             phone:{
                 required : '请输入手机号码',
@@ -812,11 +822,11 @@ $(function () {
                 required : '请输入民族',
             },
             motherAge:{
-                required : '请输入父亲的年龄',
+                required : '请输入母亲的年龄',
                 digits:'只能输入整数'
             },
             fatherAge:{
-                required : '请输入母亲的年龄',
+                required : '请输入父亲的年龄',
                 digits:'只能输入整数'
             }
         },

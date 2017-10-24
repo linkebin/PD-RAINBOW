@@ -63,10 +63,9 @@
                         <div class="eui-col-md6 eui-font18">
                            &nbsp;
                         </div>
-                        <!--<div class="eui-col-md6 eui-textAlignR">-->
-                            <!--<a target="_blank" class="eui-btn eui-btn-small" -->
-                               <!--th:href="'/web/customer/visitorRegister?creator='+${session.userSession.id}">客户登记</a>-->
-                        <!--</div>-->
+                        <div class="eui-col-md6 eui-textAlignR">
+                            <a onclick="openSchrdule()" class="eui-btn eui-btn-small">来访预约</a>
+                        </div>
                     </div>
 
                     <div class="xymfForm">
@@ -135,6 +134,22 @@
     $(function () {
         doSearch();
     });
+    
+    function openSchrdule() {
+        var index = layer.open({
+            title: '预约登记'
+            , type: 2
+            , area: ['600px', '400px']
+            , content: '/web/schedule/visitor/schedule'
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                //按钮【按钮一】的回调
+            }
+            ,btn2: function(index, layero){
+
+            }
+        });
+    }
 
     //加载数据
     function doSearch() {

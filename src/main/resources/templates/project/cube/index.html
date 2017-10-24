@@ -81,18 +81,15 @@
                 <div class="contentR">
                     <div class="eui-inline" id="test-n1"></div>
                     <div class="calendarEvents">
-                        <div class="eui-overflowH eui-marginB20">
-                            <div class="eui-float-left">今日</div>
+                        <div class="eui-overflowH eui-marginB10">
+                            <div id="selectDate" class="eui-float-left">今日</div>
                             <div class="eui-float-right"><i class="eui-icon eui-color-gray3">&#xe654;</i></div>
                         </div>
-                        <div class="eui-overflowH eui-marginB10">
-                            <div class="eui-float-left eui-marginB10">09:00</div>
-                            <div class="eui-float-left eui-marginB10 eui-marginL10">患者张三来访</div>
+                        <div id="scheduleData">
+
+
                         </div>
-                        <div class="eui-overflowH">
-                            <div class="eui-float-left eui-marginB10">14:30</div>
-                            <div class="eui-float-left eui-marginB10 eui-marginL10">患者王五第二次咨询</div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -105,6 +102,7 @@
 
 <script th:src="@{/Scripts/module/eui.js}"></script>
 <script type="text/javascript" th:src="@{/Scripts/jquery-1.9.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/date2format.js}"></script>
 <script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
 <script>
 

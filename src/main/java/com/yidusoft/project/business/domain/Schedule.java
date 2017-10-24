@@ -1,5 +1,7 @@
 package com.yidusoft.project.business.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -25,6 +27,16 @@ public class Schedule {
      */
     @Column(name = "visitor_time")
     private Date visitorTime;
+
+    private String visitorTimeStr;
+
+    public String getVisitorTimeStr() {
+        return visitorTimeStr;
+    }
+
+    public void setVisitorTimeStr(String visitorTimeStr) {
+        this.visitorTimeStr = visitorTimeStr;
+    }
 
     /**
      * 来访者姓名
