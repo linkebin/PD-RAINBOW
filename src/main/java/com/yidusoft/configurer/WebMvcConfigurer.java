@@ -52,8 +52,10 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String realPath = System.getProperty("user.dir");
+        String path = realPath.replace("\\","/");
         registry.addResourceHandler("/files/**")
-                .addResourceLocations("file:///C:/");
+                .addResourceLocations("file:///" + path+"/");
     }
 
     //使用阿里 FastJson 作为JSON MessageConverter

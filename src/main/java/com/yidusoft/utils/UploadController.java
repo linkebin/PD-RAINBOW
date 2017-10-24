@@ -234,6 +234,8 @@ public class UploadController {
             String type= fileName.substring(fileName.lastIndexOf(".")).toLowerCase();;
 
             if(type.equals(".jpg") || type.equals(".png")){
+//                String realPath = request.getSession().getServletContext().getRealPath("/");
+//                realPath= realPath.substring(0,2);
                 String realPath = System.getProperty("user.dir");
                 String childPath="/upload/headImg";
 

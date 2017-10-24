@@ -148,7 +148,7 @@
                 console.log(result)
                 if(result.code==0){
                     $("#userInfoForm input[name='headImg']").val(result.data.src);
-                    $("#headImg").attr('src','/files'+result.data.src);
+                    $("#headImg").attr('src','/files'+result.data.src+'?t='+ Math.random());
                 }else{
                     eui.use(['form', 'layedit', 'laydate'], function() {
                         var form = eui.form
