@@ -38,6 +38,12 @@ public class QuestionnaireAnswer {
     private Integer answerScore;
 
     /**
+     * 答案评分
+     */
+    @Column(name = "answer")
+    private String answer;
+
+    /**
      * 来访人id 或者  参与活动人id
      */
     @Column(name = "user_id")
@@ -48,6 +54,14 @@ public class QuestionnaireAnswer {
      */
     @Column(name = "acquisition_id")
     private String acquisitionId;
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 
     /**
      * @return ID_

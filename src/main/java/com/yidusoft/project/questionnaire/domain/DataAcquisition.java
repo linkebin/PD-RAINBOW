@@ -10,7 +10,7 @@ public class DataAcquisition {
     private String id;
 
     /**
-     * 数据编号
+     * 编号
      */
     @Column(name = "data_code")
     private String dataCode;
@@ -22,7 +22,7 @@ public class DataAcquisition {
     private String dataUser;
 
     /**
-     * 数据内容
+     * 问卷 id
      */
     @Column(name = "data_question")
     private String dataQuestion;
@@ -49,6 +49,36 @@ public class DataAcquisition {
      */
     @Column(name = "activity_id")
     private String activityId;
+
+
+    /**
+     * 结果
+     */
+    @Column(name = "data_result")
+    private String dataResult;
+
+    /**
+     * 总分
+     */
+    @Column(name = "total_score")
+    private Integer totalScore;
+
+
+    public String getDataResult() {
+        return dataResult;
+    }
+
+    public void setDataResult(String dataResult) {
+        this.dataResult = dataResult;
+    }
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
 
     /**
      * @return ID_

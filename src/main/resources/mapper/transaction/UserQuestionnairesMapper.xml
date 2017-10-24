@@ -10,4 +10,8 @@
     <result column="questionnaires_total" jdbcType="INTEGER" property="questionnairesTotal" />
     <result column="questionnaires_cumulative_total" jdbcType="INTEGER" property="questionnairesCumulativeTotal" />
   </resultMap>
+
+   <select id="flgBalance" resultMap="BaseResultMap" parameterType="String">
+         SELECT  *  FROM user_questionnaires WHERE user_id=#{userId}
+   </select>
 </mapper>

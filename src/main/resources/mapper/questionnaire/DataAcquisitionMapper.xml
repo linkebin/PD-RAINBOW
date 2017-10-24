@@ -13,5 +13,8 @@
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="total_score" jdbcType="INTEGER" property="totalScore" />
+    <result column="data_result" jdbcType="VARCHAR" property="dataResult" />
+
   </resultMap>
 </mapper>

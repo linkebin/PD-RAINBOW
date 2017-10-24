@@ -13,6 +13,8 @@
     <result column="answer_score" jdbcType="INTEGER" property="answerScore" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="acquisition_id" jdbcType="VARCHAR" property="acquisitionId" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+
   </resultMap>
 
 

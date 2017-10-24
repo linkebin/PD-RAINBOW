@@ -46,4 +46,17 @@
 
   </select>
 
+
+  <select id="findQuestionForQuestionnaire" resultMap="BaseResultMap"  parameterType="String">
+                  SELECT
+                    q.*
+                    FROM
+                      questionnaire_question_factor  f
+                    LEFT JOIN
+                       questionnaire_question  q
+                    ON f.question_id=q.id_
+                    WHERE f.questionnaire_id =#{id}
+
+  </select>
+
 </mapper>

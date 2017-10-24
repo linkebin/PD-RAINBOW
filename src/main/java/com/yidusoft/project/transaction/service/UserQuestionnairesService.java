@@ -9,4 +9,8 @@ import com.yidusoft.project.transaction.domain.UserQuestionnaires;
  */
 public interface UserQuestionnairesService extends Service<UserQuestionnaires> {
 
+    //判断余额是否不等于0
+      boolean   flgBalance();
+    //消费扣除问卷
+      void   deduction();
 }

@@ -11,5 +11,6 @@ public interface QuestionnaireQuestionMapper extends Mapper<QuestionnaireQuestio
     List<QuestionnaireQuestion> questionListByPage(QuestionnaireQuestion questionnaireQuestion);
    //问卷或量表  添加问题 查询没有添加的问题
     List<QuestionnaireQuestion> findQuestionBYid(  Map<String,Object> map);
-
+    //查询问卷相关的问题
+    List<QuestionnaireQuestion> findQuestionForQuestionnaire(String id);
 }
