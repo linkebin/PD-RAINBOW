@@ -11,58 +11,9 @@
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome">
     <div class="eui-header">
-        <div class="headerIn">
-            <div class="eui-logo"><img src="/Styles/images/xymfImages/xymf/logo.png" alt=""></div>
-            <!-- 头部区域（可配合layui已有的水平导航） -->
-            <ul class="eui-nav xymfNav">
-                <li class="eui-nav-item"><a href="">首页</a></li>
-                <li class="eui-nav-item"><a href="">分类</a></li>
-                <li class="eui-nav-item">
-                    <a href="">精品内容</a>
-                    <dl class="eui-nav-child">
-                        <dd><a href="">问卷调查表</a></dd>
-                        <dd><a href="">心理咨询书</a></dd>
-                        <dd><a href="">心理课</a></dd>
-                    </dl>
-                </li>
-                <li class="eui-nav-item"><a href="javascript:;">客户</a></li>
-            </ul>
-            <ul class="eui-nav personage">
-                <li class="eui-nav-item"><a href="">
-                    <img src="/Styles/images/xymfImages/xymf/VIP.png" alt="">
-                    问卷VIP
-                </a></li>
-                <li class="eui-nav-item">
-                    <a href="javascript:;">
-                        <img src="/Styles/images/xymfImages/xymf/SNS.png" alt=""><span
-                            class="eui-badge eui-bg-blue">9</span>
-                        个人中心
-                    </a>
-                    <dl class="eui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">安全设置</a></dd>
-                    </dl>
-                </li>
-            </ul>
-        </div>
-    </div>
-    <div class="eui-area">
-        <div class="eui-side eui-bg-white">
-            <div class="eui-user-top">
-                <p class="eui-font18 eui-userName">杨雪</p>
-                <p class="eui-font14 eui-userJob">等级：VIP1</p>
-                <div class="eui-userImg">
-                    <img src="/Styles/images/avatar.jpg" width="60" alt="">
-                </div>
-            </div>
-            <ul class="cymfNav">
-                <li class="nav-this">我的订单</li>
-                <li>我的问卷</li>
-                <li>我的特权</li>
-                <li>个人信息</li>
-            </ul>
-
-        </div>
+        <div th:replace="project/cube/common/header :: header">Header</div>
+        <div class="eui-area">
+            <div th:replace="project/cube/common/left :: left">sidebar</div>
         <div class="eui-body">
             <!-- 内容主体区域 -->
             <div class="orderContent">
@@ -95,6 +46,7 @@
                                 <div class="orderIn">
                                 </div>
                             </div>
+                            <div style="margin-left: 30px;" id="pages"></div>
                         </div>
                     </div>
                 </div>
@@ -135,11 +87,54 @@
     })
 
     function doSearch(orderState) {
-        $.post("/order/online/list", {orderState: orderState}, function (result) {
-            if (result.code = 200) {
-                var tableHtml = getTable(result.data);
-                $(".orderIn").html(tableHtml);
-            }
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer;
+            $.post("/order/online/list", {orderState: orderState,page:1,size:5}, function (result) {
+                if (result.code = 200) {
+                    laypage.render({
+                        elem: 'pages'
+                        ,pages: result.data.pages
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , limit: 5
+                        , limits: [5,10,15]
+                        , skip: true
+                        , jump: function (obj, first) {
+                            //第一次，不需要查询数据
+                            if(first){
+                                var orderList = result.data.list;
+                                console.log(orderList);
+                                //遍历，拼接表格
+                                var tableHtml = getTable(orderList);
+                                $(".orderIn").html(tableHtml);
+                            }else{
+                                $.ajax({
+                                    url: "/order/online/list",
+                                    data: {
+                                        orderState: orderState,
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var orderList = result.data.list;
+                                        console.log(orderList);
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(orderList);
+                                        $(".orderIn").html(tableHtml);
+                                    }
+                                })
+                            }
+                        }
+                    });
+                }
+                /*if (result.code = 200) {
+                    var tableHtml = getTable(result.data);
+                    $(".orderIn").html(tableHtml);
+                }*/
+            })
         })
     }
     /**
@@ -190,16 +185,24 @@
      * @param id
      */
     function cancelOrder(id,orderType) {
-        $.post("/order/online/delete", {id: id,orderType:orderType}, function (result) {
-            if (result.message = "SUCCESS") {
-                if(orderType=="cancel"){
-                    layer.msg('取消成功！',{icon:1});
-                }else{
-                    layer.msg('删除成功！',{icon:1});
+        var confirm="确认删除订单吗？删除后不可恢复";
+        if(orderType=="cancel"){
+            confirm="确定取消订单吗？";
+        }
+        layer.confirm(confirm,{
+            btn:['确认','取消']
+        },function () {
+            $.post("/order/online/delete", {id: id,orderType:orderType}, function (result) {
+                if (result.message = "SUCCESS") {
+                    if(orderType=="cancel"){
+                        layer.msg('取消成功！',{icon:1});
+                    }else{
+                        layer.msg('删除成功！',{icon:1});
+                    }
+                    !//刷新数据
+                            getDoSearchByState();
                 }
-                !//刷新数据
-                getDoSearchByState();
-            }
+            })
         })
     }
 

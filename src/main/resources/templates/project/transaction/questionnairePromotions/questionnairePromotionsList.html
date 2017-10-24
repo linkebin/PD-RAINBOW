@@ -94,7 +94,7 @@
             <label class="eui-form-label">活动折扣</label>
             <div class="eui-input-block">
                 <input type="text" name="promotionsDiscount" e-verify="title" autocomplete="off" class="eui-input"
-                       placeholder="请输入折扣，例如:输入0.08=8折;">
+                       placeholder="请输入折扣，例如:输入0.8=8折;">
             </div>
         </div>
         <div class="eui-form-item">
@@ -123,7 +123,7 @@
             </div>
         </div>
     </form>
-    <div class="promotionConfirm">
+    <div class="taskConfirm">
         <span onclick="addOrUpPromotion()" class="eui-btn">确认</span>
     </div>
 </div>
@@ -136,7 +136,7 @@
         form.on('radio(allChoose)', function (data) {
             console.log(data.elem.value);
             if (data.elem.value == 1) {
-                $("input[name='promotionsDiscount']").attr("placeholder", "请输入折扣，例如:输入0.08=8折;");
+                $("input[name='promotionsDiscount']").attr("placeholder", "请输入折扣，例如:输入0.8=8折;");
                 $("input[name='promotionsBuySend']").attr("placeholder", "已禁用");
                 $("input[name='promotionsBuySend']").attr("disabled", "disabled");
                 $('input[name="promotionsDiscount"]').removeAttr("disabled");
@@ -213,9 +213,14 @@
                             } else {
                                 var params = $("#searchFrom").serializeObject();
                                 $.ajax({
-                                    url: "/questionnaire/promotions/list",
+                                    url: "/questionnaire/promotions/listByPage",
+                                    data: {
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
                                     type: "post",
                                     success: function (result) {
+                                        console.log(result);
                                         var promotionList = result.data.list;
                                         //遍历，拼接表格
                                         var tableHtml = getTable(promotionList);
@@ -328,7 +333,7 @@
             }, function (result) {
                 var indexs = layer.load(2); //加载
                 $.post("/questionnaire/promotions/batchDeletion", {ids: id}, function (result) {
-                    if (result.code == 200) {
+                    if (result.message == "SUCCESS") {
                         layer.closeAll();
                         layer.msg('删除成功！', {
                             icon: 1,

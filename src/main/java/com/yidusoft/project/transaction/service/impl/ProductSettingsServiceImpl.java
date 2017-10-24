@@ -24,4 +24,9 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
     public List<ProductSettings> getProductAll() {
         return productSettingsMapper.getProductAll();
     }
+
+    @Override
+    public Integer getUnitPriceByTotal() {
+        return productSettingsMapper.getUnitPriceByTotal();
+    }
 }

@@ -17,8 +17,8 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
-* Created by CodeGenerator on 2017/10/11.
-*/
+ * Created by CodeGenerator on 2017/10/11.
+ */
 @RestController
 @RequestMapping("/product/settings")
 public class ProductSettingsController {
@@ -27,22 +27,22 @@ public class ProductSettingsController {
 
     @Resource
     private OrderOnlineService orderOnlineService;
+
     /**
      * 获取套餐列表
+     *
      * @return
      */
     @GetMapping("/list")
-    public Result list(){
-        Map<String,Object> map = new HashMap<String,Object>();
+    public Result list() {
         List<ProductSettings> list = new ArrayList<>();
-        list=productSettingsService.getProductAll();
-        map.put("Rows",list);
-        map.put("Total",list.size());
-        return ResultGenerator.genSuccessResult(map);
+        list = productSettingsService.getProductAll();
+        return ResultGenerator.genSuccessResult(list);
     }
 
     /**
      * 数据分页
+     *
      * @param page
      * @param size
      * @return
@@ -57,12 +57,13 @@ public class ProductSettingsController {
 
     /**
      * 设置套餐
+     *
      * @param productJson
      * @return
      */
     @PostMapping("/add")
     public Result add(String productJson) {
-        ProductSettings product = JSON.parseObject(productJson,ProductSettings.class);
+        ProductSettings product = JSON.parseObject(productJson, ProductSettings.class);
         product.setId(UUID.randomUUID().toString());
         product.setProductCode(CodeHelper.getCode("P"));
         product.setCreator(Security.getUser().getUserName());
@@ -71,16 +72,18 @@ public class ProductSettingsController {
         productSettingsService.save(product);
         return ResultGenerator.genSuccessResult();
     }
+
     /**
      * 套餐批量删除
+     *
      * @param ids
      * @return
      */
     @Transactional
     @PostMapping("/deleteBacth")
-    public Result deleteBacth(String  ids) {
-        String arr [] = ids.split(",");
-        for(String str : arr){
+    public Result deleteBacth(String ids) {
+        String arr[] = ids.split(",");
+        for (String str : arr) {
             ProductSettings product = productSettingsService.findById(str);
             product.setDeleted(1);
             productSettingsService.update(product);
@@ -93,12 +96,13 @@ public class ProductSettingsController {
 
     /**
      * 修改套餐
+     *
      * @param productJson
      * @return
      */
     @PostMapping("/update")
     public Result update(String productJson) {
-        ProductSettings product = JSON.parseObject(productJson,ProductSettings.class);
+        ProductSettings product = JSON.parseObject(productJson, ProductSettings.class);
         ProductSettings product1 = productSettingsService.findById(product.getId());
         product1.setProductTotal(product.getProductTotal());
         product1.setProductPrice(product.getProductPrice());
@@ -109,8 +113,19 @@ public class ProductSettingsController {
         return ResultGenerator.genSuccessResult(product1);
     }
 
+    /**
+     * 获取问卷单价
+     *
+     * @return
+     */
+    @GetMapping("/getUnitPriceByTotal")
+    public Result getUnitPriceByTotal() {
+        Integer price = productSettingsService.getUnitPriceByTotal();
+        return ResultGenerator.genSuccessResult(price);
+    }
+
     @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
+    public Result delete(@PathVariable String id) {
         productSettingsService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }

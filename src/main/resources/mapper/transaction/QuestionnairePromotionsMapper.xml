@@ -18,35 +18,36 @@
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="promotions_name" jdbcType="VARCHAR" property="promotionsName"></result>
     <association property="productSettings" javaType="com.yidusoft.project.transaction.domain.ProductSettings">
+      <id column="ID_" jdbcType="VARCHAR" property="id" />
       <result column="product_total" jdbcType="INTEGER" property="productTotal" />
       <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
+      <result column="product_name" jdbcType="VARCHAR" property="productName"></result>
     </association>
   </resultMap>
+  <!--获取所有的活动-->
   <select id="getPromotionAll" resultMap="BaseResultMap">
     SELECT * FROM questionnaire_promotions WHERE deleted=0 order by CREATE_TIME desc
   </select>
 
+  <!--获取活动启用并还在活动时间范围内的活动-->
   <select id="getPromotionState" resultMap="BaseResultMap">
-    SELECT  id_,promotions_name
+    SELECT  id_,promotions_name,promotions_start,promotions_end
     FROM    questionnaire_promotions
     WHERE   deleted=0
     AND     promotions_state=0
+		AND now() BETWEEN promotions_start AND promotions_end
     order by create_time desc
   </select>
- <!-- <select id="getProductAndQuestionPro" resultMap="BaseResultMap">
-    SELECT	pro.product_total,
-				pro.product_price,
-				qp.promotions_type,
-				qp.promotions_start,
-				qp.promotions_end,
-				qp.promotions_discount,
-				qp.promotions_buy_send,
-				qp.buy_total
-    FROM		product_settings pro,questionnaire_promotions qp
-    where 	    pro.promotions_id=qp.ID_
-    AND			pro.deleted=0
-    AND			qp.deleted=0
-    AND			qp.promotions_state=0
-  </select>-->
+
+  <!--获取参与某个活动的所有套餐-->
+  <select id="getActivityProduct" resultMap="BaseResultMap" parameterType="String">
+    SELECT	ps.id_,ps.product_name,ps.product_total,ps.product_price,
+			pro.promotions_type,pro.promotions_start,pro.promotions_state,
+			pro.promotions_end,pro.promotions_discount,pro.promotions_buy_send
+    FROM    product_settings ps JOIN questionnaire_promotions pro
+    WHERE 	ps.deleted=0 AND pro.deleted=0
+    AND		ps.promotions_id=pro.id_
+    AND 	pro.id_=#{id}
+  </select>
 
 </mapper>

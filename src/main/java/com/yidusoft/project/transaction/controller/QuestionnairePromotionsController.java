@@ -29,23 +29,7 @@ public class QuestionnairePromotionsController {
     private ProductSettingsService productSettingsService;
 
     /**
-     * 获取活动列表
-     *
-     * @return
-     */
-    @GetMapping("/list")
-    public Map<String, Object> list() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        List<QuestionnairePromotions> list = new ArrayList<>();
-        list = questionnairePromotionsService.getPromotionAll();
-        map.put("Rows", list);
-        map.put("Total", list.size());
-        return map;
-    }
-
-    /**
      * 列表数据分页
-     *
      * @param page
      * @param size
      */
@@ -59,7 +43,6 @@ public class QuestionnairePromotionsController {
 
     /**
      * 获取启用的活动
-     *
      * @return
      */
     @GetMapping("/getState")
@@ -70,7 +53,6 @@ public class QuestionnairePromotionsController {
 
     /**
      * 添加活动
-     *
      * @param promotionsJson
      * @return
      */
@@ -111,7 +93,6 @@ public class QuestionnairePromotionsController {
 
     /**
      * 修改活动
-     *
      * @param promotionsJson
      * @return
      */
@@ -123,8 +104,7 @@ public class QuestionnairePromotionsController {
     }
 
     /**
-     * 联表查询
-     *
+     * 获取活动和套餐
      * @return
      */
     @GetMapping("/getProductAndQuestionPro")
@@ -137,10 +117,14 @@ public class QuestionnairePromotionsController {
         return ResultGenerator.genSuccessResult(map);
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
-        return ResultGenerator.genSuccessResult(questionnairePromotions);
+    /**
+     * 获取参与某个活动的所有套餐
+     * @param id
+     * @return
+     */
+    @PostMapping("/getActivityProduct")
+    public Result getActivityProduct(String id){
+        List<QuestionnairePromotions> list=questionnairePromotionsService.getActivityProduct(id);
+        return ResultGenerator.genSuccessResult(list);
     }
-
 }

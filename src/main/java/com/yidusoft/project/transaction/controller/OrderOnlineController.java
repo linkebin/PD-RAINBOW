@@ -1,6 +1,8 @@
 package com.yidusoft.project.transaction.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.domain.OrderOnline;
@@ -34,7 +36,6 @@ public class OrderOnlineController {
 
     /**
      * 添加订单
-     *
      * @param onlineJson
      * @return
      */
@@ -46,7 +47,7 @@ public class OrderOnlineController {
         orderOnline.setCreateTime(new Date());
         orderOnline.setCreator(Security.getUser().getUserName());
         orderOnline.setDeleted(0);
-        orderOnline.setOrderState(1);
+        orderOnline.setOrderState(2);
         orderOnline.setUserId(Security.getUserId());
         orderOnlineService.save(orderOnline);
         return ResultGenerator.genSuccessResult();
@@ -54,12 +55,12 @@ public class OrderOnlineController {
 
     /**
      * 根据订单状态获取订单信息
-     *
      * @param orderState
      * @return
      */
     @PostMapping("/list")
-    public Result list(String orderState) {
+    public Result list(String orderState,int page, int size) {
+        PageHelper.startPage(page,size);
         OrderOnline orderOnline = new OrderOnline();
         orderOnline.setUserId(Security.getUser().getId());
         if (orderState != null && orderState != "") {
@@ -67,7 +68,8 @@ public class OrderOnlineController {
             orderOnline.setOrderState(state);
         }
         List<OrderOnline> list = orderOnlineService.getUserOderById(orderOnline);
-        return ResultGenerator.genSuccessResult(list);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 
     /**

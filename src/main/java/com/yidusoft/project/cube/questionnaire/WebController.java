@@ -1,6 +1,8 @@
 package com.yidusoft.project.cube.questionnaire;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -52,5 +54,17 @@ public class WebController {
     @RequestMapping(value ={"/visitor"})
     public String visitor(){
             return "project/cube/questionnaire/visitor";
+    }
+
+    /**
+     * 跳转到活动页面
+     * @param model
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = {"/activity/{id}"})
+    public String activity(Model model,@PathVariable String id){
+        model.addAttribute("id",id);
+        return "project/cube/questionnaire/activity";
     }
 }

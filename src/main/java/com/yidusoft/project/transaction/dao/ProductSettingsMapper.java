@@ -8,4 +8,6 @@ import java.util.List;
 public interface ProductSettingsMapper extends Mapper<ProductSettings> {
 
     List<ProductSettings> getProductAll();
+
+    Integer getUnitPriceByTotal();
 }

@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface ProductSettingsService extends Service<ProductSettings> {
     List<ProductSettings> getProductAll();
+
+    Integer getUnitPriceByTotal();
 }

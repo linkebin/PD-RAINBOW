@@ -20,14 +20,26 @@ public class QuestionnairePromotionsServiceImpl extends AbstractService<Question
     @Resource
     private QuestionnairePromotionsMapper questionnairePromotionsMapper;
 
+    /**
+     * 获取所有的活动
+     * @return
+     */
     @Override
     public List<QuestionnairePromotions> getPromotionAll() {
         return questionnairePromotionsMapper.getPromotionAll();
     }
 
+    /**
+     * 获取参与某个活动的所有套餐
+     * @return
+     */
     @Override
-    public List<QuestionnairePromotions> getProductAndQuestionPro() { return questionnairePromotionsMapper.getProductAndQuestionPro(); }
+    public List<QuestionnairePromotions> getActivityProduct(String id) { return questionnairePromotionsMapper.getActivityProduct(id); }
 
+    /**
+     * 获取活动启用并还在活动时间范围内的活动
+     * @return
+     */
     @Override
     public List<QuestionnairePromotions> getPromotionState() { return questionnairePromotionsMapper.getPromotionState(); }
 }
