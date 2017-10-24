@@ -34,7 +34,7 @@
 <div class="eui-bd">
     <div class="eui-sd1 eui-sd1-type3">
         <div class="eui-col-md3 etree">
-            <p>组织结构树</p>
+            <p>结构树</p>
             <ul id="menuTree"></ul>
         </div>
     </div>
@@ -238,10 +238,32 @@
                 layer.msg('类型名称不能为空！');
                 return;
             }
-            addOrUpdate();
+            //addOrUpdate();
+            checkForAddQuestionnaireType();
         });
 
     }
+
+
+    //新增是检查类型是否已经存在
+    function checkForAddQuestionnaireType() {
+        var questionnaireTypeName = $("#menuNames").val();
+        $.post("/questionnaire/type/findSameType", {questionnaireTypeName: questionnaireTypeName}, function (result) {
+            if (result.code == 200) {
+                if (result.data != null) {
+
+                    layer.msg("该类型已存在，请重新输入！", {
+                        time: 2000
+                    });
+                    return;
+                }
+
+                addOrUpdate();
+            }
+
+        });
+    }
+
 
     //新增或修改类型
     function addOrUpdate() {
@@ -438,7 +460,9 @@
             });
 
             $('#questionnaireTypeCode').val($('#questionnaireTypeName').val());
+            $('#questionnaireTypeName').val('');
             var params = $("#searchFrom").serializeObject();
+
             $.ajax({
                 url: "/questionnaire/type/listByPages",
                 data: {
@@ -490,6 +514,7 @@
             });
 
         });
+
     }
 
     //渲染数据，拼接表格
@@ -609,8 +634,6 @@
             });
 
         });
-
-
 
 
     }

@@ -59,4 +59,9 @@ public class QuestionnaireTypeServiceImpl extends AbstractService<QuestionnaireT
     public QuestionnaireType findParentType(String pid) {
         return questionnaireTypeMapper.findParentType(pid);
     }
+
+    @Override
+    public QuestionnaireType findSameType(String questionnaireTypeName) {
+        return questionnaireTypeMapper.findSameType(questionnaireTypeName);
+    }
 }

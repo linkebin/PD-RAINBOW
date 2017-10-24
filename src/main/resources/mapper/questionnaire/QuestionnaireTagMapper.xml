@@ -54,4 +54,16 @@
                AND g.questionnaire_id=#{questionnaireId}
     </select>
 
+
+    <select id="findSameTag" parameterType="String" resultMap="BaseResultMap">
+         SELECT
+        *
+        FROM
+        QUESTIONNAIRE_TAG
+        WHERE deleted=0
+        AND TAG_NAME = #{tagName}
+
+    </select>
+
+
 </mapper>

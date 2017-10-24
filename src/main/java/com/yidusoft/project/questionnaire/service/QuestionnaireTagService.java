@@ -16,4 +16,6 @@ public interface QuestionnaireTagService extends Service<QuestionnaireTag> {
     List<QuestionnaireTag>  findTagForGauge(String gaugeId);
     //查询问卷相关的标签
     List<QuestionnaireTag>   findTagForQuestionnaire(String questionnaireId);
+    //查询是否有相同的标签
+    QuestionnaireTag findSameTag(String tagName);
 }

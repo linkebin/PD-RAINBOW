@@ -152,4 +152,16 @@ public class QuestionnaireTagController {
         return ResultGenerator.genSuccessResult(questionnaireTag);
     }
 
+    /**
+     * 增加前查询是否有重复的标签名
+     * @param tagName
+     * @return
+     */
+    @PostMapping("/findSameTag")
+    @ResponseBody
+    public Result findSameTag(String tagName){
+        QuestionnaireTag questionnaireTag = questionnaireTagService.findSameTag(tagName);
+        return ResultGenerator.genSuccessResult(questionnaireTag);
+    }
+
 }

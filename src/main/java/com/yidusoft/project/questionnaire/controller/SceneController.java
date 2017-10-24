@@ -147,4 +147,11 @@ public class SceneController {
         return ResultGenerator.genSuccessResult(scene);
     }
 
+    @PostMapping("/findSameSceneName")
+    @ResponseBody
+    public Result findSameSceneName(String sceneName){
+        Scene scene = sceneService.findSameSceneName(sceneName);
+        return ResultGenerator.genSuccessResult(scene);
+    }
+
 }

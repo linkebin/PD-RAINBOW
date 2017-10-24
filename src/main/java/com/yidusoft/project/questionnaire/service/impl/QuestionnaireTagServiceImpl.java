@@ -35,4 +35,9 @@ public class QuestionnaireTagServiceImpl extends AbstractService<QuestionnaireTa
     public List<QuestionnaireTag> findTagForQuestionnaire(String questionnaireId) {
         return questionnaireTagMapper.findTagForQuestionnaire(questionnaireId);
     }
+
+    @Override
+    public QuestionnaireTag findSameTag(String tagName) {
+        return questionnaireTagMapper.findSameTag(tagName);
+    }
 }

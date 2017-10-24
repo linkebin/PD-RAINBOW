@@ -14,4 +14,29 @@
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="acquisition_id" jdbcType="VARCHAR" property="acquisitionId" />
   </resultMap>
+
+
+  <resultMap id="QuestionResultMap" type="com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion">
+
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="question_code" jdbcType="VARCHAR" property="questionCode" />
+    <result column="answer" jdbcType="VARCHAR" property="answer" />
+    <result column="option_answer" jdbcType="VARCHAR" property="optionAnswer" />
+    <result column="option_score" jdbcType="VARCHAR" property="optionScore" />
+    <result column="question_type" jdbcType="INTEGER" property="questionType" />
+    <result column="question_content" jdbcType="LONGVARCHAR" property="questionContent" />
+  </resultMap>
+
+
+  <select id="questionList" parameterType="java.lang.String" resultMap="QuestionResultMap">
+    SELECT * FROM questionnaire_question qq
+    LEFT JOIN questionnaire_question_factor qqf
+    ON qq.ID_ = qqf.question_id
+    WHERE qqf.questionnaire_id = #{questionnaire}
+
+  </select>
+
 </mapper>

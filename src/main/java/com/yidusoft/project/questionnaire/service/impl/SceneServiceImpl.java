@@ -36,4 +36,10 @@ public class SceneServiceImpl extends AbstractService<Scene> implements SceneSer
     public List<Scene> findSceneForQuestionnaire(String questionnaireId) {
         return sceneMapper.findSceneForQuestionnaire(questionnaireId);
     }
+
+    //查询是否有重复的场景
+    @Override
+    public Scene findSameSceneName(String sceneName) {
+        return sceneMapper.findSameSceneName(sceneName);
+    }
 }

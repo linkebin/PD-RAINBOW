@@ -22,4 +22,7 @@ public interface QuestionnaireTypeService extends Service<QuestionnaireType> {
     List<QuestionnaireType> findByIdOrPid(String str);
 
     QuestionnaireType findParentType(String pid);
+
+    //增加时检查是否类型已经存在
+    QuestionnaireType findSameType(String questionnaireTypeName);
 }

@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yidusoft.project.questionnaire.dao.SceneMapper">
-  <resultMap id="BaseResultMap" type="com.yidusoft.project.questionnaire.domain.Scene">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id_" jdbcType="VARCHAR" property="id" />
-    <result column="scene_code" jdbcType="VARCHAR" property="sceneCode" />
-    <result column="scene_name" jdbcType="VARCHAR" property="sceneName" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="deleted" jdbcType="VARCHAR" property="deleted" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.yidusoft.project.questionnaire.domain.Scene">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id_" jdbcType="VARCHAR" property="id"/>
+        <result column="scene_code" jdbcType="VARCHAR" property="sceneCode"/>
+        <result column="scene_name" jdbcType="VARCHAR" property="sceneName"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="deleted" jdbcType="VARCHAR" property="deleted"/>
+    </resultMap>
 
 
-  <select id="questionnaireSceneListByPage" resultMap="BaseResultMap"
-          parameterType="com.yidusoft.project.questionnaire.domain.Scene">
-    SELECT
-    *
-    FROM
-    SCENE
-    WHERE deleted=0
-    <if test="sceneCode != null and sceneCode != ''">
-      AND SCENE_CODE LIKE '%${sceneCode}%'
-    </if>
+    <select id="questionnaireSceneListByPage" resultMap="BaseResultMap"
+            parameterType="com.yidusoft.project.questionnaire.domain.Scene">
+        SELECT
+        *
+        FROM
+        SCENE
+        WHERE deleted=0
+
+        <!--<if test="sceneCode != null and sceneCode != ''">-->
+        <!--AND SCENE_CODE LIKE '%${sceneCode}%'-->
+        <!--</if>-->
+
+        <if test="sceneCode != null and sceneCode != ''">
+            AND SCENE_NAME LIKE '%${sceneCode}%'
+        </if>
 
 
+        ORDER BY CREATE_TIME ASC
 
-    ORDER BY CREATE_TIME ASC
+    </select>
 
-  </select>
-
-  <select id="findSceneForGauge" resultMap="BaseResultMap" parameterType="String">
+    <select id="findSceneForGauge" resultMap="BaseResultMap" parameterType="String">
 
        SELECT s.*  FROM
            gauge_scene  g
@@ -40,7 +44,7 @@
          WHERE s.deleted=0
            AND  g.gauge_id=#{gaugeId}
   </select>
-   <select id="findSceneForQuestionnaire" resultMap="BaseResultMap" parameterType="String">
+    <select id="findSceneForQuestionnaire" resultMap="BaseResultMap" parameterType="String">
 
                                 SELECT s.*  FROM
 								    questionnaire_scene  g
@@ -49,4 +53,15 @@
 								    WHERE s.deleted=0
                               AND  g.questionnaire_id=#{questionnaireId}
   </select>
+
+
+    <select id="findSameSceneName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+     *
+      FROM
+    SCENE
+    WHERE deleted=0
+    AND SCENE_NAME = #{sceneName}
+  </select>
+
 </mapper>

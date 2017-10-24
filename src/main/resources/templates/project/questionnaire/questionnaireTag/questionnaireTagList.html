@@ -168,6 +168,37 @@
     $(function () {
         doSearch();
     });
+
+
+    //增加前判断是否重复和为空
+    function checkForAddQuestionnaireTag() {
+        if($("[name='tagName']").val() == ''){
+            layer.msg('请填写标签名称！',{
+                time: 2000
+            });
+            return;
+        }
+
+        //判断标签是否重复
+        var tagName = $("[name='tagName']").val();
+
+        $.post("/questionnaire/tag/findSameTag", {tagName: tagName}, function (result) {
+            if (result.code == 200) {
+                if (result.data != null) {
+
+                    layer.msg("该标签名已存在，请重新输入！", {
+                        time: 2000
+                    });
+                    return;
+                }
+
+              addQuestionnaireTag();
+
+            }
+
+        });
+    }
+
     //删除问题
     function deleteQuestionnaireTag(ids) {
         if (ids == '') {
@@ -219,7 +250,8 @@
     //工具条按钮事件
     function itemclick(item, id) {
         if (item == 'add') {//添加
-            addQuestionnaireTag();
+           // addQuestionnaireTag();
+            checkForAddQuestionnaireTag();
         } else if (item == 'delete') {//删除
             deleteQuestionnaireTag(id);
         } else if (item == 'edit') {//编辑
@@ -231,7 +263,8 @@
 
     function addOrUpdateTag() {
         if ($("[name='id']").val() == ''){
-            addQuestionnaireTag();
+           // addQuestionnaireTag();
+            checkForAddQuestionnaireTag();
         }else{
             updateTag();
         }

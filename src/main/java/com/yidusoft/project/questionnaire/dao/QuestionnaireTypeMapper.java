@@ -14,4 +14,6 @@ public interface QuestionnaireTypeMapper extends Mapper<QuestionnaireType> {
     List<QuestionnaireType> findByIdOrPid(String str);
 
     QuestionnaireType findParentType(String pid);
+
+    QuestionnaireType findSameType(String questionnaireTypeName);
 }

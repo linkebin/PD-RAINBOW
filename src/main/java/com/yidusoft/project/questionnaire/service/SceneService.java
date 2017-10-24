@@ -15,4 +15,6 @@ public interface SceneService extends Service<Scene> {
     List<Scene> findSceneForGauge(String gaugeId);
     //查询问卷相关的场景
     List<Scene>  findSceneForQuestionnaire(String questionnaireId);
+
+    Scene findSameSceneName(String sceneName);
 }

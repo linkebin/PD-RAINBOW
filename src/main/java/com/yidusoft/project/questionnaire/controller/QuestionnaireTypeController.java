@@ -170,4 +170,11 @@ public class QuestionnaireTypeController {
         return ResultGenerator.genSuccessResult(questionnaireType);
     }
 
+    @PostMapping("/findSameType")
+    @ResponseBody
+    public Result findSameType(String questionnaireTypeName){
+        QuestionnaireType questionnaireType = questionnaireTypeService.findSameType(questionnaireTypeName);
+        return ResultGenerator.genSuccessResult(questionnaireType);
+    }
+
 }
