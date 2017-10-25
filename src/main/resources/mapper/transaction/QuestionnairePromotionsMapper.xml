@@ -17,6 +17,7 @@
     <result column="promotions_state" jdbcType="INTEGER" property="promotionsState" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="promotions_name" jdbcType="VARCHAR" property="promotionsName"></result>
+    <result column="image_path" jdbcType="VARCHAR" property="imagePath"></result>
     <association property="productSettings" javaType="com.yidusoft.project.transaction.domain.ProductSettings">
       <id column="ID_" jdbcType="VARCHAR" property="id" />
       <result column="product_total" jdbcType="INTEGER" property="productTotal" />

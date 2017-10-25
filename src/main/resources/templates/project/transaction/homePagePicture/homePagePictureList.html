@@ -73,47 +73,41 @@
         </div>
     </div>
     <form class="eui-form eui-marginT10 eui-paddingR10" id="productNewForm">
+
         <div class="eui-form-item">
-            <label class="eui-form-label">套餐名称</label>
+            <label class="eui-form-label">展示的活动</label>
             <div class="eui-input-block">
-                <select name="productId" id="productId" e-filter="selected">
-                    <option value="">请选择套餐</option>
-                </select>
-            </div>
-        </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">参与的促销</label>
-            <div class="eui-input-block">
-                <select name="promotionId" id="promotionsId" e-filter="allChoose">
+                <select id="promotionsId" e-filter="allSelected">
                     <option value="">请选择活动</option>
                 </select>
             </div>
         </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">首页图片</label>
+            <div class="eui-input-block">
+                <button type="button" class="eui-btn" id="test1">
+                    <i class="eui-icon">&#xe67c;</i>上传图片
+                </button>
+                <div class="eui-upload-list">
+                    <img class="eui-upload-img" id="demo1">
+                    <p id="demoText"></p>
+                </div>
+            </div>
+        </div>
     </form>
-    <div class="taskConfirm"><span onclick="addProduct()" class="eui-btn">确认</span></div>
+    <div class="taskConfirm"><span onclick="addPromotionPicture()" class="eui-btn">确认</span></div>
 </div>
 <!-- 左滑新建套餐结束 -->
 
 
 <script type="text/javascript">
+    var imgPath="";//图片路径
+
     $(".taskFiltrate").hide();
     eui.use('form', function () { //独立版的layer无需执行这一句
         var form = eui.form; //独立版的layer无需执行这一句
         // 新建图片
         $('.pictureNew').click(function () {
-            $.get("/product/settings//list", function (result) {
-                console.log(result.data);
-                if (result.message == "SUCCESS") {
-                    var product = result.data;
-                    for (var index in product) {
-                        if(product[index].productTotal!=1){
-                            $('#productId').append('<option value="' + product[index].id + '">' + product[index].productName + '</option>');
-                        }
-                        continue;
-                    }
-                    form.render();
-                }
-            })
             $.get("/questionnaire/promotions/getState", function (result) {
                 console.log(result.data);
                 if (result.message == "SUCCESS") {
@@ -128,16 +122,91 @@
             $(".taskFiltrate").show();
             $(".filtrateIn").animate({right: '0'}, 400);
         })
-        form.on('select(selected)',function (data) {
 
-
+        form.on('select(allSelected)',function (data) {
+            $.post("/questionnaire/promotions/getActivityProduct",{id:data.value},function (result) {
+                if(result.message=="SUCCESS"){
+                    if(result.data.length<=0){
+                        return layer.msg('您选择的活动没有套餐参与！');
+                    }
+                }
+            })
         })
     });
 
-    $(".pictureClose,.taskFiltrate,.taskConfirm").click(function (event) {
+
+    $(".pictureClose,.taskFiltrate").click(function (event) {
+        $('#promotionsId').html("");
         $(".filtrateIn").animate({right: '-400px'}, 400);
         $(".taskFiltrate").hide();
     });
+
+    /**
+     * 图片上传
+     */
+    eui.use('upload', function(){
+        var $ = eui.jquery
+                ,upload = eui.upload;
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            ,url: '/upload/uploadImg'
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                var result=JSON.parse(res);
+                //如果上传失败
+                if(result.code != 200){
+                    return layer.msg('上传失败');
+                }
+                imgPath=result.data.imgPath;
+                return layer.msg('上传成功');
+                //上传成功
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="eui-btn eui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+
+    });
+
+    /**
+     * 添加活动照片
+     */
+    function addPromotionPicture() {
+        console.log($('#promotionsId').val())
+        $.post("/questionnaire/promotions/getActivityProduct",{id:$('#promotionsId').val()},function (result) {
+            if(result.message=="SUCCESS"){
+                console.log(result.data)
+                if(result.data.length<=0){
+                    return layer.msg('您选择的活动没有套餐参与！');
+                }else{
+                    if(imgPath==""){
+                        return layer.msg('请上传图片');
+                    }
+                    $.post("/questionnaire/promotions/addImage",{id:$('#promotionsId').val(),imgPath:imgPath},function (result) {
+                        if(result.message=="SUCCESS"){
+                            console.log(result);
+                            $(".filtrateIn").animate({right: '-400px'}, 400);
+                            $(".taskFiltrate").hide();
+                            return layer.msg('添加成功');
+                        }
+                    })
+                }
+            }
+        })
+    }
+
 </script>
 </body>
 </html>

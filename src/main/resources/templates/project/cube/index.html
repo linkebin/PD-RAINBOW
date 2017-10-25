@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>首页</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/shutter.css}" media="all">
+
 </head>
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome">
@@ -16,71 +18,79 @@
             <!-- 内容主体区域 -->
             <div class="xymfContent">
                 <div class="contentL">
-                    <p class="activity"><img th:src="@{/Styles/images/xymfImages/xymf/activity.png}" width="676" alt="">
-                    </p>
+                    <div class="shutter">
+                        <div class="shutter-img">
+                        </div>
+                        <ul class="shutter-btn">
+                            <li class="prev"></li>
+                            <li class="next"></li>
+                        </ul>
+                        <div class="shutter-desc">
+                            <p>今日活动</p>
+                        </div>
+                    </div>
                     <div class="contentForm">
-                <div class="formTop eui-row">
-                    <div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">206
-                    </div>
-                    <div class="eui-col-md1 eui-marginT10">积分</div>
-                    <div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC">127</div>
-                    <div class="eui-col-md1">问卷剩余使用量</div>
-                    <div class="eui-col-md2 eui-col-md-offset1"><span class="eui-btn eui-btn-normal eui-font16 purchase" onclick="window.location.href='/cube/pay'">购 买</span>
+                        <div class="formTop eui-row">
+                            <div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">206
+                            </div>
+                            <div class="eui-col-md1 eui-marginT10">积分</div>
+                            <div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC">127</div>
+                            <div class="eui-col-md1">问卷剩余使用量</div>
+                            <div class="eui-col-md2 eui-col-md-offset1"><span
+                                    class="eui-btn eui-btn-normal eui-font16 purchase"
+                                    onclick="window.location.href='/cube/pay'">购 买</span>
+                            </div>
+                        </div>
+                        <div class="xymfForm">
+                            <table class="eui-table eui-form" e-even e-skin="nob">
+                                <colgroup>
+                                    <col width="60">
+                                    <col>
+                                    <col>
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" e-skin="primary" title=""></th>
+                                    <th>名称</th>
+                                    <th>客户</th>
+                                    <th>时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title="" checked=""></td>
+                                    <td>心理测试《认识自己》</td>
+                                    <td>张三</td>
+                                    <td>2016-11-29</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title=""></td>
+                                    <td>心理测试及分析</td>
+                                    <td>李四</td>
+                                    <td>2017-10-22</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title=""></td>
+                                    <td>心理测试小游戏</td>
+                                    <td>王五</td>
+                                    <td>2017-09-10</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" e-skin="primary" title=""></td>
+                                    <td>爱情婚姻观心理测试</td>
+                                    <td>孙剩</td>
+                                    <td>2017-09-10</td>
+                                    <td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-                <div class="xymfForm">
-                    <table class="eui-table eui-form" e-even e-skin="nob" id="questionnaireUseInfo">
-                        <colgroup>
-                            <col width="60">
-                            <col>
-                            <col>
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th><input type="checkbox" e-skin="primary" title="" e-filter="allChoose"></th>
-                            <th>名称</th>
-                            <th>客户</th>
-                            <th>时间</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!--<tr>-->
-                            <!--<td><input type="checkbox" e-skin="primary" title="" checked=""></td>-->
-                            <!--<td>心理测试《认识自己》</td>-->
-                            <!--<td>张三</td>-->
-                            <!--<td>2016-11-29</td>-->
-                            <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                            <!--<td>心理测试及分析</td>-->
-                            <!--<td>李四</td>-->
-                            <!--<td>2017-10-22</td>-->
-                            <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                            <!--<td>心理测试小游戏</td>-->
-                            <!--<td>王五</td>-->
-                            <!--<td>2017-09-10</td>-->
-                            <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                            <!--<td>爱情婚姻观心理测试</td>-->
-                            <!--<td>孙剩</td>-->
-                            <!--<td>2017-09-10</td>-->
-                            <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                        <!--</tr>-->
-                        </tbody>
-                    </table>
-                    <!--<div id="pages"></div>-->
-
-                <!--</div>-->
-                </div>
-            </div>
-            </div>
                 <div class="contentR">
                     <div class="eui-inline" id="test-n1"></div>
                     <div class="calendarEvents">
@@ -107,10 +117,45 @@
 <script type="text/javascript" th:src="@{/Scripts/jquery-1.9.0.min.js}"></script>
 <script type="text/javascript" th:src="@{/date2format.js}"></script>
 <script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
-
+<script type="text/javascript" th:src="@{/Scripts/shutter.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/velocity.js}"></script>
 <script>
+    $(function () {
+        eui.use('form', function () {
+            var form = eui.form; //独立版的layer无需执行这一句
+            $.get("/questionnaire/promotions/list", function (result) {
+                console.log(result);
+                if (result.message == "SUCCESS") {
+                    var promotionList = result.data;
+                    for (var index in promotionList) {
+                        var promotion = promotionList[index];
+                        if (promotion.imagePath != "") {
+                            var imgPath = promotion.imagePath;
+                            imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
+                            $('.shutter-img').append('<a href="/cube/activity/' + promotion.id + '" data-shutter-title="加量不加价">' +
+                                    '<img src="/files' + imgPath + '"></a>');
+                        }
+                    }
+                }
+                form.render();
+                $('.shutter').shutter({
+                    shutterW: 676, // 容器宽度
+                    shutterH: 128, // 容器高度
+                    isAutoPlay: true, // 是否自动播放
+                    playInterval: 3000, // 自动播放时间
+                    curDisplay: 1, // 当前显示页
+                    fullPage: false // 是否全屏展示
+                });
+            })
+            form.render();
+        })
+    });
 
-
+    $('.activity').click(function () {
+        window.location.href = "/cube/activity/ad991a4e-693f-4955-a23a-d8d3d13cebf4";
+    })
+</script>
+<script>
 
     $(function () {
         doSearch();
@@ -223,14 +268,6 @@
 
             return tableHtml;
         }
-
-
-</script>
-
-<script>
-    $('.activity').click(function () {
-        window.location.href="/cube/activity/ad991a4e-693f-4955-a23a-d8d3d13cebf4";
-    })
 </script>
 </body>
 </html>

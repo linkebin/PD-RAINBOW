@@ -129,9 +129,10 @@
                         if (promotion.promotionsType == 1) {//活动类型是折扣
                             var discount = promotion.promotionsDiscount * 10;//折扣
                             pro.total = product.productTotal;
-                            pro.price = product.productPrice * product.promotionsDiscount;
+                            pro.price = product.productPrice * promotion.promotionsDiscount;
                             pro.type = discount + "折";
                             pro.discountContent = discount + '折';
+                            console.log(pro.price);
                         } else {//活动类型是买送
                             pro.price = product.productPrice;
                             pro.total = product.productTotal + promotion.promotionsBuySend;

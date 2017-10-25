@@ -42,6 +42,15 @@ public class QuestionnairePromotionsController {
     }
 
     /**
+     * 列表数据
+     */
+    @GetMapping("/list")
+    public Result list() {
+        List<QuestionnairePromotions> list = questionnairePromotionsService.getPromotionAll();
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    /**
      * 获取启用的活动
      * @return
      */
@@ -126,5 +135,19 @@ public class QuestionnairePromotionsController {
     public Result getActivityProduct(String id){
         List<QuestionnairePromotions> list=questionnairePromotionsService.getActivityProduct(id);
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    /**
+     * 添加促销活动的图片
+     * @param id
+     * @param imgPath
+     * @return
+     */
+    @PostMapping("/addImage")
+    public Result addImage(String id,String imgPath){
+        QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
+        questionnairePromotions.setImagePath(imgPath);
+        questionnairePromotionsService.update(questionnairePromotions);
+        return ResultGenerator.genSuccessResult();
     }
 }

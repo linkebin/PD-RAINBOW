@@ -30,7 +30,6 @@ public class ProductSettingsController {
 
     /**
      * 获取套餐列表
-     *
      * @return
      */
     @GetMapping("/list")
@@ -42,7 +41,6 @@ public class ProductSettingsController {
 
     /**
      * 数据分页
-     *
      * @param page
      * @param size
      * @return
@@ -57,7 +55,6 @@ public class ProductSettingsController {
 
     /**
      * 设置套餐
-     *
      * @param productJson
      * @return
      */
@@ -75,7 +72,6 @@ public class ProductSettingsController {
 
     /**
      * 套餐批量删除
-     *
      * @param ids
      * @return
      */

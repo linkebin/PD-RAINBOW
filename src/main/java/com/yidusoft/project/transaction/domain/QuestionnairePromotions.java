@@ -82,6 +82,9 @@ public class QuestionnairePromotions {
     @Column(name = "promotions_name")
     private String promotionsName;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @Transient
     private ProductSettings productSettings;
 
@@ -294,6 +297,19 @@ public class QuestionnairePromotions {
      * @param promotionsName
      */
     public void setPromotionsName(String promotionsName) { this.promotionsName = promotionsName; }
+
+    /**
+     * 获取图片路径
+     * @return
+     */
+    public String getImagePath() { return imagePath; }
+
+    /**
+     * 设置图片路径
+     * @param imagePath
+     */
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+
 
     public ProductSettings getProductSettings() {
         return productSettings;
