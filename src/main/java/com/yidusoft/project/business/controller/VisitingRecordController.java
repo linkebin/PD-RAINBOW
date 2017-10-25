@@ -5,17 +5,17 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.project.business.domain.Schedule;
 import com.yidusoft.project.business.domain.VisitingRecord;
+import com.yidusoft.project.business.service.ScheduleService;
 import com.yidusoft.project.business.service.VisitingRecordService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -62,12 +62,16 @@ public class VisitingRecordController {
         return ResultGenerator.genSuccessResult(visitingRecord);
     }
 
+    @Autowired
+    private ScheduleService scheduleService;
+
     @PostMapping("/listByparameter")
     public Result listByparameter(int page, int pagesize,String json) {
-        VisitingRecord visitingRecord = JSON.parseObject(json,VisitingRecord.class);
-
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+        map.put("consultantId",Security.getUserId());
         PageHelper.startPage(page, pagesize);
-        List<Map<String,Object>> list = visitingRecordService.findVisitingRecordByParameter(visitingRecord);
+        List<Map<String,Object>> list = visitingRecordService.findVisitorAndScheduleByParameter(map);
+
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

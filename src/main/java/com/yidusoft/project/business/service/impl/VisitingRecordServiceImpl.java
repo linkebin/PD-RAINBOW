@@ -30,4 +30,9 @@ public class VisitingRecordServiceImpl extends AbstractService<VisitingRecord> i
     public List<Map<String,Object>> findVisitingRecordByParameter(VisitingRecord visitingRecord) {
         return visitingRecordMapper.findVisitingRecordByParameter(visitingRecord);
     }
+
+    @Override
+    public List<Map<String, Object>> findVisitorAndScheduleByParameter(Map<String, Object> map) {
+        return visitingRecordMapper.findVisitorAndScheduleByParameter(map);
+    }
 }

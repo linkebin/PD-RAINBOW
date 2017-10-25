@@ -13,10 +13,7 @@ import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -27,10 +24,21 @@ public class ScheduleController {
     @Resource
     private ScheduleService scheduleService;
 
-    @PostMapping
-    public Result add(Schedule schedule) {
-        scheduleService.save(schedule);
-        return ResultGenerator.genSuccessResult();
+    @PostMapping("/add")
+    public Result add(String json) {
+        Schedule schedule = JSON.parseObject(json,Schedule.class);
+        schedule.setId(UUID.randomUUID().toString());
+        schedule.setCreateTime(new Date());
+        schedule.setDeleted(0);
+        schedule.setConsultantId(Security.getUserId());
+        schedule.setCreator(Security.getUserId());
+        try {
+            scheduleService.save(schedule);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("保存失败");
+        }
+        return ResultGenerator.genSuccessResult().setMessage("保存成功");
     }
 
     @DeleteMapping("/{id}")

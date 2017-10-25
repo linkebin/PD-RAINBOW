@@ -360,6 +360,7 @@ public class IndexController {
         SecUser userJson = JSON.parseObject(json,SecUser.class);
 
         SecUser inviterUser = secUserService.findSecUserByInviterCode(userJson.getInviterCode());
+
         if (inviterUser == null){
             return ResultGenerator.genFailResult("邀请码不存在！");
         }

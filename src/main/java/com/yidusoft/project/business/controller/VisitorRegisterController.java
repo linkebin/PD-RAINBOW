@@ -33,10 +33,10 @@ public class VisitorRegisterController {
         visitorRegister.setVisitorCode(CodeHelper.getCode("DJ"));
         visitorRegister.setCreateTime(new Date());
         visitorRegister.setDeleted(0);
-
         try {
             visitorRegisterService.save(visitorRegister);
         }catch (Exception e){
+            e.printStackTrace();
             return ResultGenerator.genFailResult("登记失败");
         }
         return ResultGenerator.genSuccessResult().setMessage("登记成功");
@@ -50,6 +50,7 @@ public class VisitorRegisterController {
             visitorRegisterService.deleteById(visitorRegister.getId());
             visitorRegisterService.save(visitorRegister);
         }catch (Exception e){
+            e.printStackTrace();
             return ResultGenerator.genFailResult("保存失败");
         }
         return ResultGenerator.genSuccessResult().setMessage("保存成功");

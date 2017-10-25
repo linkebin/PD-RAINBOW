@@ -61,7 +61,7 @@
                         </div>
                         <div>
                             <input type="text" name="inviterCode" e-verify="title" autocomplete="off"
-                                   placeholder="请输入邀请码/选填" class="eui-input eui-width400">
+                                   placeholder="请输入邀请码" class="eui-input eui-width400">
                         </div>
 
                         <div>
@@ -140,6 +140,9 @@
                 userName: {
                     required : true
                 },
+                inviterCode: {
+                    required : true
+                },
                 email: {
                     required: true,
                     email:true
@@ -149,10 +152,12 @@
                 userName: {
                     required : "请输入用户名/昵称"
                 },
+                inviterCode: {
+                    required : '请输入邀请码'
+                },
                 email: {
                     required: '请输入电子邮件',
                     email: '请检查电子邮件的格式'
-
                 }
             },
             submitHandler: function() {

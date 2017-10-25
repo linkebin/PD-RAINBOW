@@ -5,7 +5,7 @@
     <title>来访管理</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
     <style>
-        .defaultDiv{width: 100%; height: 400px;}
+        .defaultDiv{width: 100%;}
         .formDiv .eui-form-item label{
             width: 80px;
             padding: 9px 20px;
@@ -37,27 +37,23 @@
                 <div class="defaultDiv">
                     <form id="searchFrom" onsubmit="return false;">
                         <input type="hidden" name="creator" th:value="${session.userSession.id}" />
-                        <div class="eui-form">
-                        <div class="eui-form-item">
-                            <label class="eui-form-label">客户姓名</label>
-                            <div class="eui-input-inline">
-                                <input type="text" name="visitorName"  placeholder="关键字查询" class="eui-input">
-                            </div>
-                                <label class="eui-form-label">客户性别</label>
-                                <div class="eui-input-inline">
-                                    <select name="sex">
-                                        <option value="">全部</option>
-                                        <option value="1">男</option>
-                                        <option value="0">女</option>
-                                    </select>
-                                </div>
+                            <div class="eui-form">
+                                <div class="eui-form-item">
+                                    <label class="eui-form-label">客户姓名</label>
+                                    <div class="eui-input-inline">
+                                        <input type="text" name="visitorName"  placeholder="关键字查询" class="eui-input">
+                                    </div>
+                                        <label class="eui-form-label">联系方式</label>
+                                        <div class="eui-input-inline">
+                                            <input type="text" name="phone"  placeholder="" class="eui-input">
+                                        </div>
 
-                            <div class="eui-input-inline">
-                                <span  class="eui-btn eui-btn-small" onclick="doSearch()"  >查询</span>
-                                <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                                    <div class="eui-input-inline">
+                                        <span  class="eui-btn eui-btn-small" onclick="doSearch()"  >查询</span>
+                                        <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
                     </form>
                     <div class="eui-row eui-padding10 eui-borderB">
                         <div class="eui-col-md6 eui-font18">
@@ -73,18 +69,20 @@
                             <colgroup>
                                 <col width="60">
                                 <col width="150">
-                                <col width="150">
                                 <col width="80">
-                                <col width="200">
+                                <col width="100">
+                                <col width="100">
+                                <col width="350">
                                 <col >
                             </colgroup>
                             <thead>
                             <tr>
                                 <th><input type="checkbox" e-skin="primary" title=""></th>
-                                <th>来访编号</th>
+                                <th>时间</th>
+                                <th>类型</th>
                                 <th>客户姓名</th>
-                                <th>性    别</th>
-                                <th>来访时间</th>
+                                <th>联系方式</th>
+                                <th>描述</th>
                                 <th>操    作</th>
                             </tr>
                             </thead>
@@ -97,13 +95,11 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <div th:replace="project/cube/common/footer :: footer">footer</div>
-
 </div>
-
+</body>
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
@@ -139,14 +135,24 @@
         var index = layer.open({
             title: '预约登记'
             , type: 2
-            , area: ['600px', '400px']
+            , area: ['600px', '500px']
             , content: '/web/schedule/visitor/schedule'
             ,btn: ['保存', '取消']
             ,yes: function(index, layero){
-                //按钮【按钮一】的回调
+                $('#eui-layer-iframe2').contents().find("#submitBtn").click();
             }
             ,btn2: function(index, layero){
+            }
+        });
+    }
 
+    function SchrduleSave() {
+        var obj = $('#eui-layer-iframe2').contents().find("#scheduleForm").serializeObject();
+        $.post('/schedule/add',{json:JSON.stringify(obj)},function (result) {
+            if (result.code==200){
+                layer.closeAll();
+            }else {
+                layer.msg(result.message);
             }
         });
     }
@@ -229,17 +235,17 @@
             var secUser = userList[item];
 
             var id = "'" + secUser.id + "'";
-            var sex = '女';
-            if (secUser.sex == 1){
-                sex = '男';
+            var type = '来访';
+            if (secUser.type == 2){
+                type = '预约';
             }
-
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
-                '<td>'+ secUser.record_code +'</td>' +
+                '<td>'+ new Date(secUser.visitor_time).Format('yyyy-MM-dd hh:mm') +'</td>' +
+                '<td>'+type+'</td>' +
                 '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.visitor_id + '">'+ secUser.visitor_name +'</a></td>' +
-                '<td>'+ sex +'</td>' +
-                '<td>'+new Date(secUser.visitor_time).Format('yyyy-MM-dd hh:mm')+'</td>' +
+                '<td>'+secUser.phone+'</td>' +
+                '<td>'+secUser.Visiting_purpose.substring(0,20)+'</td>' +
                 '<td>' +
                 '<a target="_blank" href="/web/customer/visitorInfo?id=' + secUser.visitor_id + '"><i class="eui-icon tb">&#xe60e;</i></a>' +
                 '</td>' +
@@ -248,5 +254,5 @@
         return tableHtml;
     }
 </script>
-</body>
+
 </html>

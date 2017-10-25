@@ -928,7 +928,11 @@ $(function () {
             var obj = $("#visitorForm").serializeObject();
             console.log(obj)
             $.post('/visitor/register/update',{json:JSON.stringify(obj)},function (result) {
-                alert(result.message);
+                if (result.code==200){
+                    layer.msg(result.message);
+                }else {
+                    layer.msg(result.message);
+                }
             });
         }
     });

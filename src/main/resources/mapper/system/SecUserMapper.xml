@@ -37,6 +37,7 @@
   </resultMap>
 
     <select id="findSecUserByInviterCode" parameterType="String" resultMap="BaseResultMap">
+
         SELECT * FROM sec_user WHERE inviter_code=#{inviterCode}
     </select>
 

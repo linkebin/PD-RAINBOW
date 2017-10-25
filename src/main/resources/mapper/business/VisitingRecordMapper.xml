@@ -23,23 +23,46 @@
 
     SELECT ID_,visitor_time FROM visiting_record WHERE deleted=0 AND visitor_id=#{visitorId}
 
+    ORDER BY visitor_time DESC
+
   </select>
 
   <select id="findVisitingRecordByParameter" parameterType="com.yidusoft.project.business.domain.VisitingRecord"
          resultType="java.util.HashMap">
 
-     SELECT vr2.visitor_name,vr.* FROM visiting_record vr
+     SELECT vr2.visitor_name, vr2.phone ,vr.*,1 type FROM visiting_record vr
       LEFT JOIN visitor_register vr2 ON vr.visitor_id=vr2.ID_
 
     WHERE vr.deleted=0 AND vr.creator=#{creator}
-
-    <if test="sex!=null and sex!=''">
-      AND vr2.sex= #{sex}
-    </if>
 
     <if test="visitorName!=null and visitorName!=''">
       AND vr2.visitor_name LIKE '%${visitorName}%'
     </if>
 
+  </select>
+
+  <select id="findVisitorAndScheduleByParameter" parameterType="Map" resultType="java.util.HashMap">
+    SELECT b.* FROM (
+    SELECT vr2.visitor_name, vr2.phone ,vr.ID_,vr.Visiting_purpose,vr.visitor_time,
+					1 type FROM visiting_record vr
+					LEFT JOIN visitor_register vr2 ON vr.visitor_id=vr2.ID_
+					WHERE vr.deleted=0 AND vr.creator=#{creator}
+
+
+    UNION ALL
+
+    SELECT s.visitor_name,s.phone,s.ID_,  s.describes Visiting_purpose,s.visitor_time,
+				2 type FROM schedule s
+				WHERE s.deleted=0 AND s.consultant_id=#{consultantId}
+    ) b WHERE  1=1
+
+    <if test="visitorName!=null and visitorName!=''">
+      AND b.visitor_name LIKE '%${visitorName}%'
+    </if>
+
+
+    <if test="phone!=null and phone!=''">
+      AND b.phone LIKE '%${phone}%'
+    </if>
   </select>
 </mapper>

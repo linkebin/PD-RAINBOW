@@ -11,26 +11,37 @@
 </head>
 <body>
     <div class="eui-bg-white eui-form visitorContent eui-padding20">
+        <form id="scheduleForm" onsubmit="return false;">
+            <input type="hidden" name="visitorId" id="visitorId">
         <div class="eui-form-item">
             <label class="eui-form-label">预约客户</label>
             <div class="eui-input-inline">
-                <input type="text" name="visitorName"  id="visitorName"  placeholder="请选择预约客户" class="eui-input eui-width400">
-                <input type="hidden" id="visitorId">
+                <input type="text" name="visitorName" onblur="checkCustomerValidity(this)"  id="visitorName"  placeholder="搜索" class="eui-input eui-width400"/>
+                <span class="infos"></span>
             </div>
         </div>
+            <div class="eui-form-item">
+                <label class="eui-form-label">联系方式</label>
+                <div class="eui-input-inline">
+                    <input type="text" name="phone"   class="eui-input eui-width400"/>
+                </div>
+            </div>
+
         <div class="eui-form-item">
             <label class="eui-form-label">预约时间</label>
             <div class="eui-input-inline">
-                <input type="text" name="visitorTime"   placeholder="请选择预约时间" class="eui-input eui-width400">
+                <input type="text" name="visitorTime" id="visitorTime" readonly="readonly"  placeholder="请选择预约时间"
+                       class="eui-input eui-width400"/>
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">预约描述</label>
             <div class="eui-input-inline">
-                <input type="text" name="describe"   placeholder="请输入预约描述 15个字以内" class="eui-input eui-width400">
+                <input type="text" name="describes"   placeholder="请输入预约描述" class="eui-input eui-width400"/>
             </div>
         </div>
-
+            <input style="display: none;" type="submit" id="submitBtn" />
+        </form>
     </div>
     <input type="hidden" id="creator" th:value="${session.userSession.id}" />
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
@@ -45,8 +56,64 @@
     <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
     <script>
+        eui.use(['form', 'laydate', 'element'], function () {
+            var form = eui.form
+                , element = eui.element
+                , laydate = eui.laydate;
+            laydate.render({
+                elem: '#visitorTime'
+                ,type: 'datetime'
+            });
+        });
+
 
         $(function() {
+            // 手机号码验证
+            jQuery.validator.addMethod("isMobile", function(value, element) {
+                var length = value.length;
+                var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+                return this.optional(element) || (length == 11 && mobile.test(value));
+            }, "请正确填写您的手机号码");
+
+            $("#scheduleForm").validate({
+                rules: {
+                    visitorName: {
+                        required : true,
+
+                    },
+                    visitorTime: {
+                        required: true,
+                    },
+                    describe: {
+                        required: true,
+                    },
+                    phone: {
+                        required: true,
+                        isMobile:true,
+                        minlength : 11,
+                    }
+                },
+                messages: {
+                    visitorName: {
+                        required : "请输入预约客户",
+                    },
+                    visitorTime: {
+                        required: "请选择预约时间",
+                    },
+                    describe: {
+                        required: "请输入预约描述",
+                    },
+                    phone: {
+                        required : "请输入手机号",
+                        minlength : "确认手机不能小于11个字符",
+                        isMobile : "请正确填写您的手机号码"
+                    }
+                },
+                submitHandler: function() {
+                    parent.SchrduleSave();
+                }
+            });
+
             $('#visitorName').bind('input propertychange', function() {
                 var textValue = $(this).val();
                 var params = new Object();
@@ -57,30 +124,55 @@
                     pagesize:100},function (result) {
                     var arr = new Array();
                     var projects1 = result.data.list;
-                    for (var i=0;i<projects1.length;i++){
-                        var obj = new Object();
-                        obj.value=projects1[i].visitorName;
-                        obj.visitorId=projects1[i].id;
-                        arr.push(obj);
-                    }
-                    $( "#visitorName" ).autocomplete({
-                        minLength: 0,
-                        source: arr,
-                        focus: function( event, ui ) {
-                            return false;
-                        },
-                        select: function( event, ui ) {
-                            $( "#visitorName" ).val( ui.item.value );
-                            $( "#visitorId" ).val( ui.item.visitorId );
-                            return false;
+                    if (result.data.list.length>0){
+                        for (var i=0;i<projects1.length;i++){
+                            var obj = new Object();
+                            obj.value=projects1[i].visitorName;
+                            obj.visitorId=projects1[i].id;
+                            obj.phone=projects1[i].phone;
+                            arr.push(obj);
                         }
-                    });
+                        $( "#visitorName" ).autocomplete({
+                            minLength: 0,
+                            source: arr,
+                            focus: function( event, ui ) {
+                                $( "#visitorName" ).val( ui.item.value );
+                                $( "#visitorId" ).val( ui.item.visitorId );
+                                $("#scheduleForm input[name='phone']").val(ui.item.phone );
+                                return false;
+                            },
+                            select: function( event, ui ) {
+                                $( "#visitorName" ).val( ui.item.value );
+                                $( "#visitorId" ).val( ui.item.visitorId );
+                                $("#scheduleForm input[name='phone']").val(ui.item.phone );
+                                return false;
+                            }
+                        });
+                    }
+
                 });
             });
-
-
-
         });
+        
+        function checkCustomerValidity(obj) {
+            var params = new Object();
+            params.visitorName=$(obj).val();
+            params.creator=$('#creator').val();
+            $.post('/visitor/register/listByparameter',{json:JSON.stringify(params),
+                page:1,
+                pagesize:11},function (result) {
+                if (result.data.list.length == 0){
+                    $('.infos').html('<label>没有 '+params.visitorName+' 这个客户</label>');
+                    $(obj).val('');
+                }else {
+                    $('.infos').html('')
+                    $( "#visitorName" ).val( result.data.list[0].visitorName );
+                    $( "#visitorId" ).val(result.data.list[0].id );
+                    $("#scheduleForm input[name='phone']").val(result.data.list[0].phone );
+                }
+            });
+        }
+
     </script>
 </body>
 </html>

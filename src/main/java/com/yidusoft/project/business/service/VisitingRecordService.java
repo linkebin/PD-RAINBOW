@@ -26,4 +26,11 @@ public interface VisitingRecordService extends Service<VisitingRecord> {
      */
     List<Map<String,Object>> findVisitingRecordByParameter(VisitingRecord visitingRecord);
 
+    /**
+     * 咨询师查询来访表和预约表集合-合并
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> findVisitorAndScheduleByParameter(Map<String,Object> map);
+
 }

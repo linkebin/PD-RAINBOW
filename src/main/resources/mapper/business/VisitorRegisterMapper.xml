@@ -61,8 +61,8 @@
 
     SELECT ID_,visitor_name,visitor_code,sex,phone,province,city,district,address FROM visitor_register WHERE deleted=0 AND creator=#{creator}
 
-    <if test="sex!=null and sex!=''">
-      AND sex= #{sex}
+    <if test="phone!=null and phone!=''">
+      AND phone LIKE '%${phone}%'
     </if>
 
       <if test="visitorName!=null and visitorName!=''">

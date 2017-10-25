@@ -1,5 +1,7 @@
 package com.yidusoft.project.cube.customer.web;
 
+import com.yidusoft.project.business.domain.VisitorRegister;
+import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.project.system.domain.SelectOption;
 import com.yidusoft.project.system.service.SelectOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ import java.util.List;
 public class WebCustomerController {
     @Autowired
     private SelectOptionService selectOptionService;
+
+    @Autowired
+    private VisitorRegisterService visitorRegisterService;
 
     @RequestMapping("/customerList")
     public String customerList(){
@@ -48,7 +53,8 @@ public class WebCustomerController {
     public String visitorInfo(Model model,String id){
 
         model.addAttribute("id",id);
-
+        VisitorRegister visitorRegister = visitorRegisterService.findById(id);
+        model.addAttribute("visitorRegister",visitorRegister);
 
         return "project/cube/customer/consultant";
     }

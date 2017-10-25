@@ -64,10 +64,6 @@
             </div>
 
             <a class="loginB" href="###" onclick="login()">登 录</a>
-          <!--  <div class="loginO">
-                <p>————其他登录方式————</p>
-                <div class="loginOther"><a href="##"></a> <a href="##"></a> <a href="##"></a></div>
-            </div>-->
         </div>
         <div id="login2" class="login2">
             <!--<img th:src="@{/Styles/themes/default/module/login/login-base/images/code.png}" alt="">-->
@@ -140,6 +136,7 @@
         curCount = count;
         $(o).attr('disabled','true');
         InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+
         $.ajax({
             url:'/sign/code',
             type:"post",
@@ -258,7 +255,6 @@
                 this.defaultShowErrors();
             },
             success:function(label) {
-
                 if (label[0].htmlFor == 'mobile'){
                     $("#btnSendCode").removeAttr('disabled');
                     $("#btnSendCode").css("background","#7dbbfa");

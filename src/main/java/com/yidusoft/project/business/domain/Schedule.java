@@ -61,10 +61,32 @@ public class Schedule {
      */
     private String creator;
 
+    @Column(name = "phone")
+    private String phone;
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     /**
      * 是否删除
      */
     private Integer deleted;
+
+    @Column(name = "describes")
+    private String describes;
+
+    public String getDescribes() {
+        return describes;
+    }
+
+    public void setDescribes(String describes) {
+        this.describes = describes;
+    }
 
     /**
      * @return ID_

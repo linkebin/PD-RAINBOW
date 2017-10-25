@@ -16,9 +16,16 @@ public interface VisitingRecordMapper extends Mapper<VisitingRecord> {
     List<VisitingRecord> findVisitingRecordShaftTimeByCustomerId(VisitingRecord visitingRecord);
 
     /**
-     * 来访管理sql
+     * 来访管理列表sql
      * @param visitingRecord
      * @return
      */
     List<Map<String,Object>> findVisitingRecordByParameter(VisitingRecord visitingRecord);
+
+    /**
+     * 咨询师查询来访表和预约表集合-合并
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> findVisitorAndScheduleByParameter(Map<String,Object> map);
 }
