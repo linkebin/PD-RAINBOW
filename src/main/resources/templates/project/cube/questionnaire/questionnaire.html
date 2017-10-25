@@ -15,7 +15,8 @@
 </head>
 <body>
 <div class="questionHeader">
-    <span th:text="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireid">666</span>
+    <span th:text="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireid"></span>
+    <input type="hidden" th:value="${userId}"  id="userId"/>
     <div class="eui-row">
         <h1 class="eui-col-md1 eui-marginL10"><a href="###"><img src="/Styles/images/xymfImages/logo.png"
                                                                  class="eui-marginT10" alt=""></a></h1>
@@ -33,7 +34,7 @@
                     <div class="eui-row eui-marginB20">
                         <div class="eui-col-md4 contentBar">
                             <div class="eui-progress" e-showpercent="yes" e-filter="questionProgress">
-                                <div class="eui-progress-bar" e-percent="20%"></div>
+                                <div class="eui-progress-bar" e-percent="0%"></div>
                             </div>
                         </div>
                         <div class="eui-col-md7 eui-font16 eui-marginT20 eui-col-md-offset1">
@@ -90,8 +91,21 @@
 <script>
     var pageIndex = 0;
     var pageSize = $('.subject>ul>li').length;
-    var element = eui.element;
-    var progress = 0;
+    //注意进度条依赖 element 模块，否则无法进行正常渲染和功能性操作
+    var element = null;
+    eui.use('element', function () {
+        element = eui.element;
+        element.progress('questionProgress','50%');
+    });
+
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer','element'], function () {
+        var form = eui.form
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
+    });
+
     // 焦点图---------------------------------------------
     ;(function () {
         $(function () {
@@ -157,6 +171,8 @@
 
                 pageIndex++;
                 num++;
+                alert(num/pageSize*100+'%');
+                element.progress('questionProgress', num/pageSize*100+'%');
                 if (num > pageSize) {
                     num = 0;
                     pageIndex = 0;
@@ -170,11 +186,6 @@
         })
     })();
 
-
-    //注意进度条依赖 element 模块，否则无法进行正常渲染和功能性操作
-    eui.use('element', function () {
-
-    });
 
     //判断当前页面是否答完题目
     function isSelected(num) {
@@ -206,7 +217,7 @@
                 return;
             }
         }
-
+        element.progress('questionProgress', '100%');
         var score = 0;
         var selectOption = $('.subject>ul>li .rating');
         for (var i = 0; i < selectOption.length; i++) {
@@ -218,13 +229,7 @@
 </script>
 
 <script>
-    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
-        var form = eui.form
-            , layer = eui.layer
-            , layedit = eui.layedit
-            , laydate = eui.laydate
-            , laypage = eui.laypage;
-    });
+
 
 </script>
 

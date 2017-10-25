@@ -1,5 +1,7 @@
 package com.yidusoft.project.questionnaire.domain;
 
+
+import java.beans.Transient;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -63,6 +65,36 @@ public class DataAcquisition {
     @Column(name = "total_score")
     private Integer totalScore;
 
+    @Transient
+    public String getVisitorName() {
+        return visitorName;
+    }
+    @Transient
+    public void setVisitorName(String visitorName) {
+        this.visitorName = visitorName;
+    }
+
+    /**
+     * 来访者姓名
+     */
+    @Column(name = "visitor_name")
+     private String visitorName;
+
+    /**
+     * 来访者使用过的问卷名称
+     */
+    @Column(name = "questionnaire_name")
+    private String questionnaireName;
+
+    @Transient
+    public String getQuestionnaireName() {
+        return questionnaireName;
+    }
+
+    @Transient
+    public void setQuestionnaireName(String questionnaireName) {
+        this.questionnaireName = questionnaireName;
+    }
 
     public String getDataResult() {
         return dataResult;

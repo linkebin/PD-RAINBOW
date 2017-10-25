@@ -1,20 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yidusoft.project.questionnaire.dao.DataAcquisitionMapper">
-  <resultMap id="BaseResultMap" type="com.yidusoft.project.questionnaire.domain.DataAcquisition">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="ID_" jdbcType="VARCHAR" property="id" />
-    <result column="data_code" jdbcType="VARCHAR" property="dataCode" />
-    <result column="data_user" jdbcType="VARCHAR" property="dataUser" />
-    <result column="data_question" jdbcType="VARCHAR" property="dataQuestion" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="deleted" jdbcType="INTEGER" property="deleted" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
-    <result column="total_score" jdbcType="INTEGER" property="totalScore" />
-    <result column="data_result" jdbcType="VARCHAR" property="dataResult" />
+    <resultMap id="BaseResultMap" type="com.yidusoft.project.questionnaire.domain.DataAcquisition">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID_" jdbcType="VARCHAR" property="id"/>
+        <result column="data_code" jdbcType="VARCHAR" property="dataCode"/>
+        <result column="data_user" jdbcType="VARCHAR" property="dataUser"/>
+        <result column="data_question" jdbcType="VARCHAR" property="dataQuestion"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="deleted" jdbcType="INTEGER" property="deleted"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="activity_id" jdbcType="VARCHAR" property="activityId"/>
+        <result column="total_score" jdbcType="INTEGER" property="totalScore"/>
+        <result column="data_result" jdbcType="VARCHAR" property="dataResult"/>
 
-  </resultMap>
+    </resultMap>
+
+
+    <resultMap id="QuestionnaireUseInfoResultMap" type="com.yidusoft.project.questionnaire.domain.DataAcquisition">
+
+        <id column="ID_" jdbcType="VARCHAR" property="id"/>
+        <result column="data_code" jdbcType="VARCHAR" property="dataCode"/>
+        <result column="data_user" jdbcType="VARCHAR" property="dataUser"/>
+        <result column="data_question" jdbcType="VARCHAR" property="dataQuestion"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="deleted" jdbcType="INTEGER" property="deleted"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="activity_id" jdbcType="VARCHAR" property="activityId"/>
+        <result column="total_score" jdbcType="INTEGER" property="totalScore"/>
+        <result column="data_result" jdbcType="VARCHAR" property="dataResult"/>
+        <result column="visitor_name" jdbcType="VARCHAR" property="visitorName"/>
+        <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName"/>
+    </resultMap>
+
+
+    <select id="questionnaireUseInfoListByPage" resultMap="QuestionnaireUseInfoResultMap">
+   SELECT d.*, q.questionnaire_name, v.visitor_name
+     FROM questionnaire q, data_acquisition d, visitor_register v
+      WHERE d.deleted = 0
+          AND q.ID_ IN (SELECT d.data_question FROM data_acquisition WHERE DELETED = 0)
+          AND v.ID_ IN (SELECT d.user_id FROM data_acquisition WHERE deleted = 0)
+  </select>
 </mapper>

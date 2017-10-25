@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -20,4 +21,9 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
     @Resource
     private DataAcquisitionMapper dataAcquisitionMapper;
 
+    @Override
+    public List<DataAcquisition> questionnaireUseInfoListByPage() {
+        List<DataAcquisition> list = dataAcquisitionMapper.questionnaireUseInfoListByPage();
+        return list;
+    }
 }
