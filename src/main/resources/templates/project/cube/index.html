@@ -60,15 +60,14 @@
                             </div>
                         </div>
                         <div class="xymfForm">
-                            <table class="eui-table eui-form" e-even e-skin="nob">
+                            <table class="eui-table eui-form" e-even e-skin="nob" id="questionnaireUseInfo">
                                 <colgroup>
-                                    <col width="60">
+                                    <col>
                                     <col>
                                     <col>
                                 </colgroup>
                                 <thead>
                                 <tr>
-                                    <th><input type="checkbox" e-skin="primary" title=""></th>
                                     <th>名称</th>
                                     <th>客户</th>
                                     <th>时间</th>
@@ -115,7 +114,7 @@
                     <div class="calendarEvents">
                         <div class="eui-overflowH eui-marginB10">
                             <div id="selectDate" class="eui-float-left">今日</div>
-                            <div class="eui-float-right"><i class="eui-icon eui-color-gray3">&#xe654;</i></div>
+                            <div class="eui-float-right"><i style="cursor: pointer;" onclick="openSchrdule('add','')" class="eui-icon eui-color-gray3">&#xe654;</i></div>
                         </div>
                         <div id="scheduleData">
 
@@ -142,10 +141,23 @@
     $(function () {
         doSearch();
     });
-
+    function openSchrdule(type,id) {
+        var index = layer.open({
+            title: '预约登记'
+            , type: 2
+            , area: ['600px', '500px']
+            , content: '/web/schedule/visitor/schedule?type='+type+'&id='+id
+        });
+    }
     $('.activity').click(function () {
         window.location.href = "/cube/activity/ad991a4e-693f-4955-a23a-d8d3d13cebf4";
-    })
+    });
+    function layuiAlertClose(o) {
+        layer.closeAll();
+        if (o){
+            doSearch();
+        }
+    }
     // 表单
     eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
         var form = eui.form
@@ -243,8 +255,8 @@
                                         //遍历，拼接表格
                                         var tableHtml = getTable(questionnaireUseInfoList);
                                         $("#questionnaireUseInfo tbody").html(tableHtml);
-                                        //重新加载复选框
-                                        form.render('checkbox');
+//                                        //重新加载复选框
+//                                        form.render('checkbox');
                                     }
                                 });
                             }
@@ -264,7 +276,6 @@
         for (var item in questionnaireUseInfoList) {
             var info = questionnaireUseInfoList[item];
             tableHtml += '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireSceneId" type="hidden" value="' + info.id + '"></td>' +
                 '<td>' + info.questionnaireName + '</td>' +
                 '<td>' + info.visitorName + '</td>' +
                 '<td>' + new Date(info.createTime).Format('yyyy-MM-dd') + '</td>' +
