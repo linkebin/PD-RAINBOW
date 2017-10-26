@@ -42,15 +42,14 @@
                             </div>
                         </div>
                         <div class="xymfForm">
-                            <table class="eui-table eui-form" e-even e-skin="nob">
+                            <table class="eui-table eui-form" e-even e-skin="nob" id="questionnaireUseInfo">
                                 <colgroup>
-                                    <col width="60">
+                                    <col>
                                     <col>
                                     <col>
                                 </colgroup>
                                 <thead>
                                 <tr>
-                                    <th><input type="checkbox" e-skin="primary" title=""></th>
                                     <th>名称</th>
                                     <th>客户</th>
                                     <th>时间</th>
@@ -235,8 +234,8 @@
                                         //遍历，拼接表格
                                         var tableHtml = getTable(questionnaireUseInfoList);
                                         $("#questionnaireUseInfo tbody").html(tableHtml);
-                                        //重新加载复选框
-                                        form.render('checkbox');
+//                                        //重新加载复选框
+//                                        form.render('checkbox');
                                     }
                                 });
                             }
@@ -256,7 +255,6 @@
         for (var item in questionnaireUseInfoList) {
             var info = questionnaireUseInfoList[item];
             tableHtml += '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireSceneId" type="hidden" value="' + info.id + '"></td>' +
                 '<td>' + info.questionnaireName + '</td>' +
                 '<td>' + info.visitorName + '</td>' +
                 '<td>' + new Date(info.createTime).Format('yyyy-MM-dd') + '</td>' +
