@@ -4,12 +4,10 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.domain.UserQuestionnaires;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -19,6 +17,16 @@ import java.util.List;
 public class UserQuestionnairesController {
     @Resource
     private UserQuestionnairesService userQuestionnairesService;
+
+    /**
+     * 获取用户的问卷账号
+     * @return
+     */
+    @GetMapping("/list")
+    public Result list() {
+        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", Security.getUserId());
+        return ResultGenerator.genSuccessResult(userQuestionnaires);
+    }
 
     @PostMapping
     public Result add(UserQuestionnaires userQuestionnaires) {
@@ -44,11 +52,4 @@ public class UserQuestionnairesController {
         return ResultGenerator.genSuccessResult(userQuestionnaires);
     }
 
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<UserQuestionnaires> list = userQuestionnairesService.findAll();
-        PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
 }

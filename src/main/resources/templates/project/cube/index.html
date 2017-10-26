@@ -37,22 +37,22 @@
             <div class="xymfContent">
                 <div class="contentL">
                     <div class="shutter">
-                            <div class="shutter-img">
-                            </div>
-                            <ul class="shutter-btn">
-                                <li class="prev"></li>
-                                <li class="next"></li>
-                            </ul>
-                            <div class="shutter-desc">
-                    <p>今日活动</p>
-                </div>
-            </div>
-                    <div class="contentForm eui-marginT20">
+                        <div class="shutter-img">
+                        </div>
+                        <ul class="shutter-btn">
+                            <li class="prev"></li>
+                            <li class="next"></li>
+                        </ul>
+                        <div class="shutter-desc">
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="contentForm">
                         <div class="formTop eui-row">
                             <div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">206
                             </div>
                             <div class="eui-col-md1 eui-marginT10">积分</div>
-                            <div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC">127</div>
+                            <div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC questionnairesTotal"></div>
                             <div class="eui-col-md1">问卷剩余使用量</div>
                             <div class="eui-col-md2 eui-col-md-offset1"><span
                                     class="eui-btn eui-btn-normal eui-font16 purchase"
@@ -139,6 +139,75 @@
 <script type="text/javascript" th:src="@{/Scripts/velocity.js}"></script>
 <script>
     $(function () {
+        $.get("/user/questionnaires/list", function (result) {
+            if (result.data != null) {
+                $('.questionnairesTotal').html(result.data.questionnairesTotal);
+            } else {
+                $('.questionnairesTotal').html(0);
+            }
+        })
+
+        init();
+    });
+    function init() {
+        $.ajax({
+            url:"/index/img/list",
+            async:false,
+            type:"get",
+            success:function (result) {
+                console.log(result);
+                if (result.message == "SUCCESS") {
+                    var imgList = result.data;
+                    for (var index in imgList) {
+                        var img = imgList[index];
+                        var imgPath = img.imgPath;
+                        imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
+                        if (img.state == 0) {
+                            if (img.imgType == 1) {
+                                $.ajax({
+                                    url:"/questionnaire/promotions/getActivityProduct",
+                                    async:false,
+                                    data:{id:img.objectId},
+                                    type:"post",
+                                    success:function (result) {
+                                        if(result.message == "SUCCESS"){
+                                            var promotionsList =result.data;
+                                            for(var index in promotionsList){
+                                                console.log(index);
+                                                var promotions =promotionsList[index];
+                                                $('.shutter-img').append('<a href="/cube/activity/' + img.objectId + '" data-shutter-title="'+promotions.promotionsName+'">' +
+                                                        '<img src="/files' + imgPath + '"></a>');
+                                            }
+                                        }
+                                    }
+                                })
+                            } else {
+                                $('.shutter-img').append('<a href="#" data-shutter-title="其他">' +
+                                        '<img src="/files' + imgPath + '"></a>');
+                            }
+                        }
+                    }
+                    shutter();
+                }
+            }
+        })
+    }
+    /**
+     * 图片轮播
+     */
+    function shutter() {
+        $('.shutter').shutter({
+            shutterW: 676, // 容器宽度
+            shutterH: 128, // 容器高度
+            isAutoPlay: true, // 是否自动播放
+            playInterval: 4000, // 自动播放时间
+            curDisplay: 1, // 当前显示页
+            fullPage: false // 是否全屏展示
+        })
+    }
+</script>
+<script>
+    $(function () {
         doSearch();
     });
     function openSchrdule(type,id) {
@@ -149,9 +218,6 @@
             , content: '/web/schedule/visitor/schedule?type='+type+'&id='+id
         });
     }
-    $('.activity').click(function () {
-        window.location.href = "/cube/activity/ad991a4e-693f-4955-a23a-d8d3d13cebf4";
-    });
     function layuiAlertClose(o) {
         layer.closeAll();
         if (o){
@@ -165,30 +231,6 @@
             , layedit = eui.layedit
             , laydate = eui.laydate
             , laypage = eui.laypage;
-        $.get("/questionnaire/promotions/list", function (result) {
-            console.log(result);
-            if (result.message == "SUCCESS") {
-                var promotionList = result.data;
-                for (var index in promotionList) {
-                    var promotion = promotionList[index];
-                    if (promotion.imagePath != "") {
-                        var imgPath = promotion.imagePath;
-                        imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
-                        $('.shutter-img').append('<a href="/cube/activity/' + promotion.id + '" data-shutter-title="加量不加价">' +
-                            '<img src="/files' + imgPath + '"></a>');
-                    }
-                }
-            }
-            form.render();
-            $('.shutter').shutter({
-                shutterW: 676, // 容器宽度
-                shutterH: 128, // 容器高度
-                isAutoPlay: true, // 是否自动播放
-                playInterval: 3000, // 自动播放时间
-                curDisplay: 1, // 当前显示页
-                fullPage: false // 是否全屏展示
-            });
-        })
         form.render();
         //全选
         form.on('checkbox(allChoose)', function (data) {

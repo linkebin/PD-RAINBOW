@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
+</head>
+<body>
+<div class="eui-bg-white eui-row eui-paddingT10">
+    <div class="eui-col-md12 eui-paddingR10">
+
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 图片
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <a href="###" class="eui-btn eui-btn-small pictureNew"><i class='eui-icon eui-font24'>&#xe654;</i> 设置图片</a>
+                <a href="###" class="eui-btn eui-btn-small pictureDelete"><i class='eui-icon eui-font24'>&#xe640;</i>
+                    批量删除</a>
+            </div>
+        </div>
+        <table class="eui-table eui-form" id="promotionTable">
+            <colgroup>
+                <col width="60">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                <th>活动类型</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>是否启用</th>
+                <th>活动图片</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+<!-- 左滑新建图片开始 -->
+<div class="taskFiltrate">
+</div>
+<div class="filtrateIn">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe654;</i> 新建首页图片
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 pictureClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="imageNewForm">
+        <input type="hidden" id="indexImgId"/>
+        <div class="eui-form-item">
+            <label class="eui-form-label">图片类型</label>
+            <div class="eui-input-block">
+                <select name="imgType" e-filter="allSelected">
+                    <option value="">请选择图片类型</option>
+                    <option value="1">活动图片</option>
+                    <option value="0">其他图片</option>
+                </select>
+            </div>
+        </div>
+        <div class="eui-form-item promotions">
+            <label class="eui-form-label">展示的活动</label>
+            <div class="eui-input-block">
+                <select name="objectId" id="promotionsId" e-filter="selected">
+                    <option value="">请选择活动</option>
+                </select>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">首页图片</label>
+            <div class="eui-input-block">
+                <button type="button" class="eui-btn" id="test1">
+                    <i class="eui-icon">&#xe67c;</i>上传图片
+                </button>
+                <div class="eui-upload-list">
+                    <img class="eui-upload-img" id="demo1">
+                    <p id="demoText"></p>
+                </div>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">是否启用</label>
+            <div class="eui-input-block">
+                <input type="radio" name="state" value="0" title="是" checked/>
+                <input type="radio" name="state" value="1" title="否"/>
+            </div>
+        </div>
+    </form>
+    <div class="taskConfirm"><span onclick="addIndexImg()" class="eui-btn">确认</span></div>
+</div>
+<!-- 左滑新建图片结束 -->
+
+
+<script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        doSearch();
+    });
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer,
+                    $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                console.log(child);
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            /*var params = $("#searchFrom").serializeObject();
+             var index = layer.load(2); //加载*/
+            $.ajax({
+                url: "/index/img/listByPage",
+                data: {
+                    page: 1,
+                    size: 10
+                },
+                type: "post",
+                success: function (result) {
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+//                        ,pages: result.data.pages
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
+                                console.log(result);
+                                //第一次，不需要查询数据
+                                var promotionList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(promotionList);
+                                $("#promotionTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                /*var params = $("#searchFrom").serializeObject();*/
+                                $.ajax({
+                                    url: "/index/img/listByPage",
+                                    data: {
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        console.log(result);
+                                        var promotionList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(promotionList);
+                                        $("#promotionTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        console.log(userList);
+        var tableHtml = '';
+        for (var item in userList) {
+
+            var indexImg = userList[item];
+            console.log(indexImg);
+            var id = "'" + indexImg.id + "'";
+            tableHtml += '<tr>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="indexImgId" type="hidden" value="' + indexImg.id + '"></td>';
+            indexImg.imgType == 1 ? tableHtml += '<td>活动图片</td>' : tableHtml += '<td>其他图片</td>';
+
+            tableHtml += '<td>' + indexImg.creator + '</td>' +
+                    '<td>' + new Date(indexImg.createTime).Format('yyyy-MM-dd') + '</td>';
+
+            indexImg.state == 0 ? tableHtml += '<td>是</td>' : tableHtml += '<td>否</td>';
+            var imgPath = indexImg.imgPath;
+            imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
+            console.log(imgPath)
+            tableHtml += '<td><img src="/files' + imgPath + '"></td>' +
+                    '<td>' +
+                    '<div class="eui-btn-group"> ' +
+                    '' + Buts(indexImg) + '' +
+                    '</div>' +
+                    '</td>' +
+                    '</tr>';
+        }
+        return tableHtml;
+    }
+    function Buts(indexImg) {
+        var id = "'" + indexImg.id + "'";
+        var imgType = "'" + indexImg.imgType + "'";
+        var state = "'" + indexImg.state + "'";
+        var imgPath = "'" + indexImg.imgPath + "'";
+        var objectId="'" + indexImg.objectId + "'";
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="imageEdit(' + id + ',' + imgType + ',' + state + ',' + imgPath + ','+objectId+')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteIndexImg(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+    }
+
+    var imgPath = "";//图片路径
+    // 新建图片
+    $(".taskFiltrate").hide();
+    $('.pictureNew').click(function () {
+        $('#indexImgId').val("");
+        $(".taskFiltrate").show();
+        $(".filtrateIn").animate({right: '0'}, 400);
+        /* Act on the event */
+    })
+    $('.promotions').hide();
+    eui.use('form', function () { //独立版的layer无需执行这一句
+        var form = eui.form; //独立版的layer无需执行这一句
+        form.on('select(allSelected)', function (data) {
+            console.log(data.value);
+            if (data.value == 1) {
+                $.get("/questionnaire/promotions/getState", function (result) {
+                    console.log(result.data);
+                    if (result.message == "SUCCESS") {
+                        var promotions = result.data;
+                        for (var index in promotions) {
+                            $('#promotionsId').append('<option value="' + promotions[index].id + '">' + promotions[index].promotionsName + '</option>')
+                        }
+                        form.render();
+                        $('.promotions').show();
+                    }
+                })
+            } else {
+                $('.promotions').hide();
+                $('#promotionsId').html('<option value="">请选择活动</option>');
+            }
+        })
+
+        form.on('select(selected)', function (data) {
+            $.post("/questionnaire/promotions/getActivityProduct", {id: data.value}, function (result) {
+                if (result.message == "SUCCESS") {
+                    if (result.data.length <= 0) {
+                        return layer.msg('您选择的活动没有套餐参与！');
+                    }
+                }
+            })
+        })
+
+        $(".pictureClose,.taskFiltrate").click(function (event) {
+            $('select[name="imgType"] option')[0].selected = true;
+            $('input[name="state"]')[0].checked = true;
+            $('.promotions').hide();
+            $('#promotionsId').html('<option value="">请选择活动</option>');
+            $('#demo1').removeAttr("src");
+            imgPath = "";
+            $(".filtrateIn").animate({right: '-400px'}, 400);
+            $(".taskFiltrate").hide();
+            form.render();
+        });
+    });
+
+
+    /**
+     * 图片上传
+     */
+    eui.use('upload', function () {
+        var $ = eui.jquery
+                , upload = eui.upload;
+
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            , url: '/upload/uploadImg'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                var result = JSON.parse(res);
+                //如果上传失败
+                if (result.code != 200) {
+                    return layer.msg('上传失败');
+                }
+                imgPath = result.data.imgPath;
+                return layer.msg('上传成功');
+                //上传成功
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="eui-btn eui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+    });
+
+    /**
+     * 添加活动照片
+     */
+    function addIndexImg() {
+        var params = $("#imageNewForm").serializeObject();
+        delete params.file;
+        params.imgPath = imgPath;
+        if ($('#indexImgId').val() == "") {
+            if ($('#promotionsId').val() != "") {
+                $.post("/questionnaire/promotions/getActivityProduct", {id: $('#promotionsId').val()}, function (result) {
+                    if (result.message == "SUCCESS") {
+                        console.log(result.data)
+                        if (result.data.length <= 0) {
+                            return layer.msg('您选择的活动没有套餐参与！');
+                        } else {
+                            if (imgPath == "") {
+                                return layer.msg('请上传图片');
+                            }
+                            add(params);
+                        }
+                    }
+                })
+            } else {
+                if (imgPath == "") {
+                    return layer.msg('请上传图片');
+                }
+                add(params);
+            }
+        } else {
+            params.id = $('#indexImgId').val();
+            $.post("/index/img/update",{indexImgJson: JSON.stringify(params)}, function (result){
+                console.log(result);
+                layer.closeAll();
+                doSearch();
+                layer.msg('编辑成功！', {
+                    time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                });
+
+                $(".filtrateIn").animate({right: '-400px'}, 400);
+                $(".taskFiltrate").hide();
+            })
+        }
+    }
+    /**
+     * 添加图片
+     */
+    function add(data) {
+        eui.use(['form'], function () {
+            var form = eui.form;
+            $.post("/index/img/add", {indexImgJson: JSON.stringify(data)}, function (result) {
+                if (result.message == "SUCCESS") {
+                    $('select[name="imgType"] option')[0].selected = true;
+                    $('input[name="state"]')[0].checked = true;
+                    $('.promotions').hide();
+                    $('#promotionsId').html('<option value="">请选择活动</option>');
+                    $('#demo1').removeAttr("src");
+                    imgPath = "";
+                    form.render();
+                    layer.closeAll();
+                    layer.msg('删除成功！', {
+                        icon: 1,
+                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                    });
+                    doSearch();
+                }
+            })
+        })
+    }
+
+    function imageEdit(id, imgType, state, Path,objectId) {
+        eui.use(['form'], function () {
+            var form = eui.form
+            $('#indexImgId').val(id);//设置隐藏的id，用来判断是添加还是修改
+            $('select[name="imgType"] option').each(function (index, data) {
+                if (data.value == imgType) {
+                    data.selected = true;
+                }
+            })
+            $('input[name="state"]').each(function (index, data) {
+                if (data.value == state) {
+                    data.checked = true;
+                }
+            })
+            if(imgType==1){
+                $.get("/questionnaire/promotions/getState", function (result) {
+                    console.log(result.data);
+                    if (result.message == "SUCCESS") {
+                        var promotions = result.data;
+                        for (var index in promotions) {
+                            $('#promotionsId').append('<option value="' + promotions[index].id + '">' + promotions[index].promotionsName + '</option>')
+                        }
+                        form.render('select');
+                        $('select[name="objectId"] option').each(function (index,data) {
+                            if(data.value == objectId){
+                                data.selected = true;
+
+                            }
+                        })
+                        form.render('select');
+                        $('.promotions').show();
+                    }
+                })
+            }
+            Path = Path.substring(Path.indexOf("/upload"), Path.length);
+            Path = "file/"+Path;
+            imgPath = Path;
+            form.render();
+            $(".taskFiltrate").show();
+            $(".filtrateIn").animate({right: '0'}, 400);
+            /* Act on the event */
+        })
+    }
+
+    /**
+     * 批量删除
+     */
+    $('.pictureDelete').click(function () {
+        var ids = "";
+        if (ids == "") {
+            var idArray = new Array();
+            var s = 0;
+            $(".mycheckbox:checked").each(function (i) {
+                var id = $(this).parent().find("input[name='indexImgId']").val();
+                idArray[s] = id;
+                s++;
+            });
+            ids = idArray.join(",");
+            console.log(ids);
+        }
+        if (ids == "") {
+            layer.msg('请选择要删除的活动', {
+                icon: 2,
+                time: 2000
+            });
+        } else {
+            deleteIndexImg(ids);
+        }
+    })
+
+    /**
+     * 删除
+     * @param id
+     */
+    function deleteIndexImg(id) {
+        layer.confirm('您确定删除吗？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.post("/index/img/batchDeletion", {"ids": id}, function (result) {
+                if (result.message = "SUCCESS") {
+                    layer.msg('删除成功', {
+                        icon: 1,
+                        time: 2000
+                    });
+                    doSearch();
+                } else {
+                    layer.msg(result.message, {
+                        icon: 1,
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
+</script>
+</body>
+</html>

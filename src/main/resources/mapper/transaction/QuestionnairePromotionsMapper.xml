@@ -42,7 +42,7 @@
 
   <!--获取参与某个活动的所有套餐-->
   <select id="getActivityProduct" resultMap="BaseResultMap" parameterType="String">
-    SELECT	ps.id_,ps.product_name,ps.product_total,ps.product_price,
+    SELECT	ps.id_,ps.product_name,ps.product_total,ps.product_price,pro.promotions_name,
 			pro.promotions_type,pro.promotions_start,pro.promotions_state,
 			pro.promotions_end,pro.promotions_discount,pro.promotions_buy_send
     FROM    product_settings ps JOIN questionnaire_promotions pro

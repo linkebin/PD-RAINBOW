@@ -243,8 +243,8 @@
         var tableHtml = '';
         for (var item in userList) {
             var promotion = userList[item];
-
-            var id = "'" + promotion.id + "'";
+            /*var id = "'" + promotion.id + "'";*/
+            var discount = (promotion.promotionsDiscount*10)+"折";
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="promotionsId" type="hidden" value="' + promotion.id + '"></td>' +
                     '<td>' + promotion.promotionsName + '</td>'
@@ -254,7 +254,7 @@
             tableHtml +=
                     '<td>' + new Date(promotion.promotionsStart).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' + new Date(promotion.promotionsEnd).Format('yyyy-MM-dd') + '</td>' +
-                    '<td>' + promotion.promotionsDiscount + '</td>' +
+                    '<td>' + discount + '</td>' +
                     '<td>' + promotion.promotionsBuySend + '</td>';
 
             promotion.promotionsState == 0 ? tableHtml += '<td>是</td>' : tableHtml += '<td>否</td>'

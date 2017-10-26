@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Created by L on 2017/10/24.
  */
 @Controller
-@RequestMapping("/web/homePage")
-public class WebHomePagePicture {
+@RequestMapping("/web/indexImg")
+public class WebIndexImgController {
     @RequestMapping("/linkList")
     public String linkList(){
-        return "project/transaction/homePagePicture/homePagePictureList";
+        return "project/transaction/indexImg/indexImgList";
     }
 }
