@@ -9,10 +9,7 @@ import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.redisMq.MsgSend;
-import com.yidusoft.utils.CodeHelper;
-import com.yidusoft.utils.IpAddressUtils;
-import com.yidusoft.utils.PasswordHelper;
-import com.yidusoft.utils.Security;
+import com.yidusoft.utils.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -163,19 +160,19 @@ public class IndexController {
     @PostMapping("/sign/code")
     @ResponseBody
     public Result signcode(HttpServletRequest request,String mobile) {
-        request.getSession().setAttribute("signCode","1234");
-//        try{
-//            String json = SendMessageCode.sendMessageCode(mobile);
-//            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
-//            if (smsCode.getCode() == 200){
-//                request.getSession().setAttribute("signCode",smsCode.getObj());
-//            }else{
-//                return ResultGenerator.genFailResult("验证码发生失败");
-//            }
-//        }catch (Exception e) {
-//            e.printStackTrace();
-//            return ResultGenerator.genFailResult("验证码发生失败");
-//        }
+//        request.getSession().setAttribute("signCode","1234");
+        try{
+            String json = SendMessageCode.sendMessageCode(mobile);
+            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
+            if (smsCode.getCode() == 200){
+                request.getSession().setAttribute("signCode",smsCode.getObj());
+            }else{
+                return ResultGenerator.genFailResult("验证码发生失败");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("验证码发生失败");
+        }
         return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
     }
 
@@ -225,16 +222,17 @@ public class IndexController {
             return "login";
         }
         SecUser  user = secUserService.getSecUserInfo(username);
+        if(0==user.getAccountType()){
+            try {
+                //将图片转换成base64
+                if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
+                    user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
+                }
+            }catch (Exception e) {
+                user.setHeadImg("");
+            }
 
-//        try {
-//            //将图片转换成base64
-//            if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
-//                user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
-//            }
-//        }catch (Exception e) {
-//            user.setHeadImg("");
-//        }
-
+        }
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", user.getId());
         session.setAttribute("userSession", user);
