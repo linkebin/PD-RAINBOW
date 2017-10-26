@@ -59,38 +59,37 @@
                                 </thead>
                                 <tbody>
                                 <!--<tr>-->
-                                    <!--<td><input type="checkbox" e-skin="primary" title="" checked=""></td>-->
-                                    <!--<td>心理测试《认识自己》</td>-->
-                                    <!--<td>张三</td>-->
-                                    <!--<td>2016-11-29</td>-->
-                                    <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
+                                <!--<td><input type="checkbox" e-skin="primary" title="" checked=""></td>-->
+                                <!--<td>心理测试《认识自己》</td>-->
+                                <!--<td>张三</td>-->
+                                <!--<td>2016-11-29</td>-->
+                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
                                 <!--</tr>-->
                                 <!--<tr>-->
-                                    <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                                    <!--<td>心理测试及分析</td>-->
-                                    <!--<td>李四</td>-->
-                                    <!--<td>2017-10-22</td>-->
-                                    <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
+                                <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
+                                <!--<td>心理测试及分析</td>-->
+                                <!--<td>李四</td>-->
+                                <!--<td>2017-10-22</td>-->
+                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
                                 <!--</tr>-->
                                 <!--<tr>-->
-                                    <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                                    <!--<td>心理测试小游戏</td>-->
-                                    <!--<td>王五</td>-->
-                                    <!--<td>2017-09-10</td>-->
-                                    <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
+                                <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
+                                <!--<td>心理测试小游戏</td>-->
+                                <!--<td>王五</td>-->
+                                <!--<td>2017-09-10</td>-->
+                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
                                 <!--</tr>-->
                                 <!--<tr>-->
-                                    <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                                    <!--<td>爱情婚姻观心理测试</td>-->
-                                    <!--<td>孙剩</td>-->
-                                    <!--<td>2017-09-10</td>-->
-                                    <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
+                                <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
+                                <!--<td>爱情婚姻观心理测试</td>-->
+                                <!--<td>孙剩</td>-->
+                                <!--<td>2017-09-10</td>-->
+                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
                                 <!--</tr>-->
                                 </tbody>
                             </table>
                             <div id="pages"></div>
 
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -109,11 +108,11 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
     <div th:replace="project/cube/common/footer :: footer">footer</div>
-
+</div>
 </div>
 
 <script th:src="@{/Scripts/module/eui.js}"></script>
@@ -136,7 +135,7 @@
                             var imgPath = promotion.imagePath;
                             imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
                             $('.shutter-img').append('<a href="/cube/activity/' + promotion.id + '" data-shutter-title="加量不加价">' +
-                                    '<img src="/files' + imgPath + '"></a>');
+                                '<img src="/files' + imgPath + '"></a>');
                         }
                     }
                 }
@@ -182,95 +181,95 @@
         });
 
     });
-        //加载数据
-        function doSearch() {
-            var limits = new Array(5,10,15);
+    //加载数据
+    function doSearch() {
+        var limits = new Array(5, 10, 15);
 
-            eui.use(['form', 'laypage', 'layer'], function () {
-                var form = eui.form
-                    , laypage = eui.laypage
-                    , layer = eui.layer,
-                    $ = eui.jquery;
-                //加载层
-                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                , laypage = eui.laypage
+                , layer = eui.layer,
+                $ = eui.jquery;
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
 
-                $.ajax({
-                    url: "/cube/questionnaire//findQuestionnaireUseInfoListByPage",
-                    data: {
-                        page: 1,
-                        size: 5
-                    },
-                    type: "post",
-                    success: function (result) {
-                        layer.closeAll();
-                        // 分页
-                        laypage.render({
-                            elem: 'pages'
-                            , count: result.data.total
-                            ,limit: 5
-                            ,limits: limits
-                            , layout: ['count', 'prev', 'page', 'next', 'limit','limits','skip']
-                            , skip: true
-                            , jump: function (obj, first) {
-                                if (first) {
-                                    //第一次，不需要查询数据
-                                    var questionnaireUseInfoList = result.data.list;
+            $.ajax({
+                url: "/cube/questionnaire//findQuestionnaireUseInfoListByPage",
+                data: {
+                    page: 1,
+                    size: 5
+                },
+                type: "post",
+                success: function (result) {
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        , count: result.data.total
+                        , limit: 5
+                        , limits: limits
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'limits', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var questionnaireUseInfoList = result.data.list;
 
-                                    //遍历，拼接表格
-                                    var tableHtml = getTable(questionnaireUseInfoList);
-                                    $("#questionnaireUseInfo tbody").html(tableHtml);
-                                    form.render('checkbox');
-                                } else {
-                                    //加载层
-                                    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                                    $.ajax({
-                                        url: "/cube/questionnaire//findQuestionnaireUseInfoListByPage",
-                                        data: {
-                                            page: obj.curr,
-                                            size: obj.limit
-                                        },
-                                        type: "post",
-                                        success: function (result) {
-                                            layer.closeAll();
-                                            var questionnaireUseInfoList = result.data.list;
-                                            //遍历，拼接表格
-                                            var tableHtml = getTable(questionnaireUseInfoList);
-                                            $("#questionnaireUseInfo tbody").html(tableHtml);
-                                            //重新加载复选框
-                                            form.render('checkbox');
-                                        }
-                                    });
-                                }
+                                //遍历，拼接表格
+                                var tableHtml = getTable(questionnaireUseInfoList);
+                                $("#questionnaireUseInfo tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                //加载层
+                                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                                $.ajax({
+                                    url: "/cube/questionnaire//findQuestionnaireUseInfoListByPage",
+                                    data: {
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        layer.closeAll();
+                                        var questionnaireUseInfoList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(questionnaireUseInfoList);
+                                        $("#questionnaireUseInfo tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
                             }
-                        });
-                    }
-                });
-
+                        }
+                    });
+                }
             });
+
+        });
+    }
+
+
+    //渲染数据，拼接表格
+    function getTable(questionnaireUseInfoList) {
+        var tableHtml = '';
+
+        for (var item in questionnaireUseInfoList) {
+            var info = questionnaireUseInfoList[item];
+            tableHtml += '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireSceneId" type="hidden" value="' + info.id + '"></td>' +
+                '<td>' + info.questionnaireName + '</td>' +
+                '<td>' + info.visitorName + '</td>' +
+                '<td>' + new Date(info.createTime).Format('yyyy-MM-dd') + '</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick(' + "'edit','" + info.id + '\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
         }
 
-
-        //渲染数据，拼接表格
-        function getTable(questionnaireUseInfoList) {
-            var tableHtml = '';
-
-            for (var item in questionnaireUseInfoList) {
-                var info = questionnaireUseInfoList[item];
-                tableHtml += '<tr>' +
-                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireSceneId" type="hidden" value="' + info.id + '"></td>' +
-                    '<td>' + info.questionnaireName + '</td>' +
-                    '<td>' + info.visitorName + '</td>' +
-                    '<td>' + new Date(info.createTime).Format('yyyy-MM-dd') + '</td>' +
-                    '<td>' +
-                    '<div class="eui-btn-group"> ' +
-                    '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick(' + "'edit','" + info.id + '\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                    '</div>' +
-                    '</td>' +
-                    '</tr>';
-            }
-
-            return tableHtml;
-        }
+        return tableHtml;
+    }
 </script>
 </body>
 </html>
