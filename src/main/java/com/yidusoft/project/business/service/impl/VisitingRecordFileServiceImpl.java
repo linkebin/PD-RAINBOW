@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -18,4 +19,8 @@ public class VisitingRecordFileServiceImpl extends AbstractService<VisitingRecor
     @Resource
     private VisitingRecordFileMapper visitingRecordFileMapper;
 
+    @Override
+    public List<VisitingRecordFile> findVisitingRecordFileByVisitorId(VisitingRecordFile visitingRecordFile) {
+        return visitingRecordFileMapper.findVisitingRecordFileByVisitorId(visitingRecordFile);
+    }
 }

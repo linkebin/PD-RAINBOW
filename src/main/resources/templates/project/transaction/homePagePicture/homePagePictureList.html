@@ -109,7 +109,6 @@
         // 新建图片
         $('.pictureNew').click(function () {
             $.get("/questionnaire/promotions/getState", function (result) {
-                console.log(result.data);
                 if (result.message == "SUCCESS") {
                     var promotions = result.data;
                     for (var index in promotions) {
@@ -187,7 +186,6 @@
         console.log($('#promotionsId').val())
         $.post("/questionnaire/promotions/getActivityProduct",{id:$('#promotionsId').val()},function (result) {
             if(result.message=="SUCCESS"){
-                console.log(result.data)
                 if(result.data.length<=0){
                     return layer.msg('您选择的活动没有套餐参与！');
                 }else{

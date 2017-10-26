@@ -56,9 +56,16 @@ public class VisitorRegisterController {
         return ResultGenerator.genSuccessResult().setMessage("保存成功");
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        visitorRegisterService.deleteById(id);
+    @PostMapping("/delete")
+    public Result delete(String  id) {
+       VisitorRegister visitorRegister = visitorRegisterService.findById(id);
+        visitorRegister.setDeleted(1);
+        try {
+            visitorRegisterService.update(visitorRegister);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("文件删除失败");
+        }
         return ResultGenerator.genSuccessResult();
     }
 

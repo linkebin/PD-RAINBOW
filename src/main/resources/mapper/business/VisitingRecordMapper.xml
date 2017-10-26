@@ -44,7 +44,7 @@
   <select id="findVisitorAndScheduleByParameter" parameterType="Map" resultType="java.util.HashMap">
     SELECT b.* FROM (
     SELECT vr2.visitor_name, vr2.phone ,vr.ID_,vr.Visiting_purpose,vr.visitor_time,
-					1 type FROM visiting_record vr
+					1 type,vr.visitor_id FROM visiting_record vr
 					LEFT JOIN visitor_register vr2 ON vr.visitor_id=vr2.ID_
 					WHERE vr.deleted=0 AND vr.creator=#{creator}
 
@@ -52,7 +52,7 @@
     UNION ALL
 
     SELECT s.visitor_name,s.phone,s.ID_,  s.describes Visiting_purpose,s.visitor_time,
-				2 type FROM schedule s
+				2 type, s.visitor_id FROM schedule s
 				WHERE s.deleted=0 AND s.consultant_id=#{consultantId}
     ) b WHERE  1=1
 

@@ -27,6 +27,7 @@
         }
 
         #DivAddForm textarea + label{color: red;}
+        .tb{cursor: pointer;margin-left: 15px;}
 
     </style>
 </head>
@@ -47,7 +48,13 @@
             </div>
         </div>
         <div class="eui-col-md3 eui-paddingT10">
-            <img src="/Styles/images/xymfImages/woman.png" width="30" alt="">&nbsp;&nbsp;
+            <th:block th:if="${visitorRegister.sex==0}">
+                <img src="/Styles/images/xymfImages/woman.png" width="30" alt="">&nbsp;&nbsp;
+            </th:block>
+            <th:block th:if="${visitorRegister.sex==1}">
+                <img src="/Styles/images/xymfImages/man.png" width="30" alt="">&nbsp;&nbsp;
+            </th:block>
+
             <a target="_blank"  th:text="${visitorRegister.visitorName}"
                th:href="'/web/customer/visitorUpdate?id='+${visitorRegister.id}"></a>
         </div>
@@ -183,7 +190,7 @@
                         <input type="submit" style="display: none;" id="DivAddFormSub"/>
                     </div>
                 </form>
-                
+                <input type="hidden" id="recordId" />
                 <div id="fileDiv" style="display: none;" class="eui-marginT20 eui-form">
                     <p class="eui-font16 eui-paddingB10 eui-borderB eui-marginB20"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 附件上传</p>
                     <button type="button" class="eui-btn eui-btn-small" id="test1">
@@ -194,11 +201,12 @@
                             <thead>
                             <tr>
                                 <th>文件名</th>
-                                <th>大小</th>
+                                <th>上传时间</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
-                            <tbody id="demoList"></tbody>
+                            <tbody id="demoList">
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -289,68 +297,7 @@
             ,type: 'datetime'
         });
     })
-eui.use('upload', function(){
-  var $ = eui.jquery
-  ,upload = eui.upload;
 
-
-  //多文件列表示例
-  var demoListView = $('#demoList')
-  ,uploadListIns = upload.render({
-    elem: '#testList'
-    ,url: '/upload/'
-    ,accept: 'file'
-    ,multiple: true
-    ,auto: false
-    ,bindAction: '#testListAction'
-    ,choose: function(obj){
-      var files = obj.pushFile(); //将每次选择的文件追加到文件队列
-      //读取本地文件
-      obj.preview(function(index, file, result){
-        var tr = $(['<tr id="upload-'+ index +'">'
-          ,'<td>'+ file.name +'</td>'
-          ,'<td>'+ (file.size/1014).toFixed(1) +'kb</td>'
-          ,'<td>等待上传</td>'
-          ,'<td>'
-            ,'<button class="eui-btn eui-btn-mini demo-reload eui-hide">重传</button>'
-            ,'<button class="eui-btn eui-btn-mini eui-btn-danger demo-delete">删除</button>'
-          ,'</td>'
-        ,'</tr>'].join(''));
-
-        //单个重传
-        tr.find('.demo-reload').on('click', function(){
-          obj.upload(index, file);
-        });
-
-        //删除
-        tr.find('.demo-delete').on('click', function(){
-          delete files[index]; //删除对应的文件
-          tr.remove();
-        });
-
-        demoListView.append(tr);
-      });
-    }
-    ,done: function(res, index, upload){
-      if(res.code == 0){ //上传成功
-        var tr = demoListView.find('tr#upload-'+ index)
-        ,tds = tr.children();
-        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-        tds.eq(3).html(''); //清空操作
-        delete files[index]; //删除文件队列已经上传成功的文件
-        return;
-      }
-      this.error(index, upload);
-    }
-    ,error: function(index, upload){
-      var tr = demoListView.find('tr#upload-'+ index)
-      ,tds = tr.children();
-      tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-      tds.eq(3).find('.demo-reload').removeClass('eui-hide'); //显示重传
-    }
-  });
-
-});
 // 返回顶部
 var winH = $(window).height();
 
@@ -454,13 +401,18 @@ function loadCustomerList(params) {
         var list = result.data.list;
         $.each(list,function (index,item) {
 
+            var img = '/Styles/images/xymfImages/woman.png';
+            if (item.sex == 1){
+                img='/Styles/images/xymfImages/man.png'
+            }
+
             $(".customerList").append('<div visitorId="'+item.id+'" class="eui-row  eui-padding10 line"> ' +
                 '<div class="eui-col-md8 eui-lineHeight24"> ' +
                 '<p> <span class="eui-font16">'+item.visitorName+'</span></p> ' +
                 '' +
                 '</div> ' +
                 '<div class="eui-col-md2 eui-textAlignR">' +
-                '<img src="/Styles/images/xymfImages/woman.png" width="20" alt=""></div> ' +
+                '<img src="'+img+'" width="20" alt=""></div> ' +
                 '</div>')
         });
         $(".customerList .line").click(function () {
@@ -472,7 +424,6 @@ function loadCustomerList(params) {
 function loadShaftTime() {
     var obj = $("#searchFrom").serializeObject();
     $.post('/visiting/record/shaftTime',{json:JSON.stringify(obj)},function (result) {
-        console.log(result)
         var list = result.data.list;
         $.each(list, function (index, item) {
             $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
@@ -497,11 +448,14 @@ function loadShaftTime() {
 }
 
 function loadVisitorRecordDetail(id) {
+
     $("#fileDiv").show();
     $("#searchFrom").show();
     $(".DivInfo").show();
     $(".DivAdd").hide();
+    $("#recordId").val(id);
     $.post('/visiting/record/detail',{id:id},function (result) {
+
         var obj = result.data;
         $(".DivInfo #visitingPurpose").html(obj.visitingPurpose);
         $(".DivInfo #processLog").html(obj.processLog);
@@ -512,10 +466,61 @@ function loadVisitorRecordDetail(id) {
 
         $(".DivInfo .visitorTime").html(new Date(obj.visitorTime)
             .Format('yyyy-MM-dd hh:mm:ss'));
+        var visitingRecordFileList = obj.visitingRecordFileList;
+        $("#demoList").html('');
+        $.each(visitingRecordFileList,function (index,item) {
+            $("#demoList").append(' <tr> <th>'+item.fileName+'</th> <th>'
+                +new Date(item.createTime).Format('yyyy-MM-dd hh:mm:ss')+'</th>' +
+                '<th class="icons"><i path="'+item.fileUri+'" title="下载" class="eui-icon tb">&#xe61e;</i>' +
+                '<i path="'+item.id+'" title="删除" class="eui-icon tb">&#xe640;</i></th></tr>');
+        });
 
+        eui.use('upload', function(){
+            var $ = eui.jquery
+                ,upload = eui.upload;
+            var uploadInst = upload.render({
+                elem: '#test1'
+                ,url: '/upload/upFile'
+                ,accept: 'file'
+                ,data: {fileTable:'visiting_record_file',
+                    recordId:$("#recordId").val()}
+                ,done: function(res){
+                    var obj = JSON.parse(res);
+                    $("#demoList").append(' <tr> <th>'+obj.fileName+'</th> <th>'
+                        +new Date().Format('yyyy-MM-dd hh:mm:ss')+'</th>' +
+                        '<th class="icons"><i path="'+obj.data.src+'" title="下载" class="eui-icon tb">&#xe61e;</i>' +
+                        '<i path="'+obj.id+'" title="删除" class="eui-icon tb">&#xe640;</i></th></tr>');
+
+                    $('.icons i').click(function () {
+                        if ($(this).index() == 0){
+                            window.open('/files'+$(this).attr('path'));
+                        }else {
+                            deletefile($(this).attr('path'),$(this));
+                        }
+                    });
+                    }
+                ,error: function(){
+                }
+            });
+        });
+        $('.icons i').click(function () {
+            if ($(this).index() == 0){
+                window.open('/files'+$(this).attr('path'));
+            }else {
+                deletefile($(this).attr('path'),$(this));
+            }
+        });
     });
 }
-
+function deletefile(id,dom) {
+    $.post('/visiting/record/file/delete',{id:id},function (result) {
+        if (result.code == 200) {
+            $(dom).parent('.icons').parent('tr').remove();
+        }else {
+            layer.msg(result.message);
+        }
+    });
+}
 function addVisitorRecord() {
     $("#fileDiv").hide();
     $("#resetDiv").show();
@@ -523,7 +528,8 @@ function addVisitorRecord() {
     $(".DivInfo").hide();
     $(".DivAdd").show();
     $(".DivAdd input[name='visitorTime']").val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
-    $("#datecre").html(new Date().Format('yyyy-MM-dd hh:mm:ss'))
+    $("#datecre").html(new Date().Format('yyyy-MM-dd hh:mm:ss'));
+    $("#shaftTime li").find('i').html('&#xe63f;');
 }
 
 function saveData() {

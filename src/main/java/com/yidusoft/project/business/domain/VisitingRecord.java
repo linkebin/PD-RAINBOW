@@ -1,6 +1,7 @@
 package com.yidusoft.project.business.domain;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 @Table(name = "visiting_record")
@@ -62,6 +63,17 @@ public class VisitingRecord {
 
     @Transient
     private  String visitorName;
+
+    @Transient
+    private List<VisitingRecordFile> visitingRecordFileList;
+
+    public List<VisitingRecordFile> getVisitingRecordFileList() {
+        return visitingRecordFileList;
+    }
+
+    public void setVisitingRecordFileList(List<VisitingRecordFile> visitingRecordFileList) {
+        this.visitingRecordFileList = visitingRecordFileList;
+    }
 
     public Integer getSex() {
         return sex;

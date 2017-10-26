@@ -36,23 +36,10 @@ function loadEvends(obj) {
                 '<div class="eui-float-left eui-marginB5">无事件</div> ');
         }else {
             $.each(v,function (index,item) {
-                var count = '';
-                if (item.visitorTotal >0){
-                    count='第'+item.visitorTotal+'次咨询';
-                }else {
-                    count='首次来访';
-                }
                 $("#scheduleData").append('<div class="eui-overflowH"> ' +
                     '<div class="eui-float-left eui-marginB5">'+new Date(item.visitorTime).Format('hh:mm')+'</div> ' +
-                    '<div class="eui-float-left eui-marginB10 eui-marginL10">'+item.visitorName+''+count+'</div></div>')
+                    '<div title="'+item.describes+'"  style="text-overflow: ellipsis;" class="eui-float-left eui-marginB10 eui-marginL10 test">'+item.visitorName+'  '+item.describes+'</div></div>')
             });
         }
     });
 }
-
-//
-// $("ul#cymfNav").on("click","li",function(){
-//     $(this).addClass("nav-this");
-//     $(this).siblings().removeClass("nav-this")
-// });
-

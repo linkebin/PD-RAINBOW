@@ -7,16 +7,28 @@
     <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
     <style>
         #ui-id-1{height: 200px; overflow: scroll;}
+        .btns{position:fixed; right:20px; bottom:20px;}
     </style>
 </head>
 <body>
+
+    <input type="hidden" th:value="${type}" id="type" />
+    <input type="hidden" th:value="${id}" id="idold" />
     <div class="eui-bg-white eui-form visitorContent eui-padding20">
         <form id="scheduleForm" onsubmit="return false;">
             <input type="hidden" name="visitorId" id="visitorId">
+
+            <input type="hidden" name="id">
+            <input type="hidden" name="consultantId">
+            <input type="hidden" name="visitorTotal">
+            <input type="hidden" name="createTime">
+            <input type="hidden" name="creator">
+            <input type="hidden" name="deleted">
+
         <div class="eui-form-item">
             <label class="eui-form-label">预约客户</label>
             <div class="eui-input-inline">
-                <input type="text" name="visitorName" onblur="checkCustomerValidity(this)"  id="visitorName"  placeholder="搜索" class="eui-input eui-width400"/>
+                <input type="text" name="visitorName" onfocus="defaultData()" onblur="checkCustomerValidity(this)"  id="visitorName"  placeholder="搜索" class="eui-input eui-width400"/>
                 <span class="infos"></span>
             </div>
         </div>
@@ -37,11 +49,17 @@
         <div class="eui-form-item">
             <label class="eui-form-label">预约描述</label>
             <div class="eui-input-inline">
-                <input type="text" name="describes"   placeholder="请输入预约描述" class="eui-input eui-width400"/>
+                <!--<input type="text" name="describes"   placeholder="请输入预约描述" class="eui-input eui-width400"/>-->
+                <textarea class="eui-textarea eui-width400" name="describes" placeholder="请输入预约描述"></textarea>
             </div>
         </div>
             <input style="display: none;" type="submit" id="submitBtn" />
         </form>
+
+        <div class="eui-col-md6 eui-textAlignR btns">
+            <a class="eui-btn eui-btn-small eui-btn-normal" onclick="save()" >保存</a>
+            <a class="eui-btn eui-btn-small eui-btn-primary" onclick="parent.layuiAlertClose();">取消</a>
+        </div>
     </div>
     <input type="hidden" id="creator" th:value="${session.userSession.id}" />
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
@@ -66,6 +84,9 @@
             });
         });
 
+        function save() {
+           return $("#submitBtn").click();
+        }
 
         $(function() {
             // 手机号码验证
@@ -84,7 +105,7 @@
                     visitorTime: {
                         required: true,
                     },
-                    describe: {
+                    describes: {
                         required: true,
                     },
                     phone: {
@@ -100,7 +121,7 @@
                     visitorTime: {
                         required: "请选择预约时间",
                     },
-                    describe: {
+                    describes: {
                         required: "请输入预约描述",
                     },
                     phone: {
@@ -110,7 +131,24 @@
                     }
                 },
                 submitHandler: function() {
-                    parent.SchrduleSave();
+                        var obj = $("#scheduleForm").serializeObject();
+                    if ($("#type").val()=='update'){
+                        $.post('/schedule/update',{json:JSON.stringify(obj)},function (result) {
+                            if (result.code==200){
+                                parent.layuiAlertClose(true);
+                            }else {
+                                layer.msg(result.message);
+                            }
+                        });
+                    }else {
+                        $.post('/schedule/add',{json:JSON.stringify(obj)},function (result) {
+                            if (result.code==200){
+                                parent.layuiAlertClose(true);
+                            }else {
+                                layer.msg(result.message);
+                            }
+                        });
+                    }
                 }
             });
 
@@ -149,29 +187,41 @@
                             }
                         });
                     }
-
                 });
             });
+
+
+            if ($("#type").val()=='update'){
+                $.post('/schedule/detail',{id:$("#idold").val()},function (result) {
+                    result.data.visitorTime=new Date(result.data.visitorTime).Format('yyyy-MM-dd hh:mm:ss');
+                    $("#scheduleForm").setForm(result.data);
+                    $("#scheduleForm textarea[name='describes']").val( result.data.describes)
+                });
+            }
+
         });
         
         function checkCustomerValidity(obj) {
             var params = new Object();
             params.visitorName=$(obj).val();
             params.creator=$('#creator').val();
-            $.post('/visitor/register/listByparameter',{json:JSON.stringify(params),
-                page:1,
-                pagesize:11},function (result) {
-                if (result.data.list.length == 0){
-                    $('.infos').html('<label>没有 '+params.visitorName+' 这个客户</label>');
-                    $(obj).val('');
-                }else {
-                    $('.infos').html('')
-                    $( "#visitorName" ).val( result.data.list[0].visitorName );
-                    $( "#visitorId" ).val(result.data.list[0].id );
-                    $("#scheduleForm input[name='phone']").val(result.data.list[0].phone );
-                }
-            });
+            if (params.visitorName!=''){
+                $.post('/visitor/register/listByparameter',{json:JSON.stringify(params),
+                    page:1,
+                    pagesize:11},function (result) {
+                    if (result.data.list.length == 0){
+                        $('.infos').html('<label>没有 '+params.visitorName+' 这个客户</label>');
+                        $(obj).val('');
+                    }else {
+                        $('.infos').html('')
+                        $( "#visitorName" ).val( result.data.list[0].visitorName );
+                        $( "#visitorId" ).val(result.data.list[0].id );
+                        $("#scheduleForm input[name='phone']").val(result.data.list[0].phone );
+                    }
+                });
+            }
         }
+
 
     </script>
 </body>

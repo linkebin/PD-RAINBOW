@@ -26,9 +26,16 @@ public class VisitingRecordFileController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        visitingRecordFileService.deleteById(id);
+    @PostMapping("/delete")
+    public Result delete(String  id) {
+        VisitingRecordFile visitingRecordFile = visitingRecordFileService.findById(id);
+        visitingRecordFile.setDeleted(1);
+        try {
+            visitingRecordFileService.update(visitingRecordFile);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("文件删除失败");
+        }
         return ResultGenerator.genSuccessResult();
     }
 

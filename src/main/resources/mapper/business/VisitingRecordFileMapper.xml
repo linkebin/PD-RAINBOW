@@ -13,4 +13,9 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
   </resultMap>
+
+  <select id="findVisitingRecordFileByVisitorId" parameterType="com.yidusoft.project.business.domain.VisitingRecordFile"
+          resultMap="BaseResultMap">
+      SELECT * FROM visiting_record_file WHERE deleted=0 AND creator=#{creator} AND record_id=#{recordId}
+  </select>
 </mapper>
