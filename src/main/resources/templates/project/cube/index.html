@@ -7,7 +7,17 @@
     <title>首页</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
     <link rel="stylesheet" th:href="@{/Styles/themes/default/shutter.css}" media="all">
+    <style>
+     #pages{
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+      }
+    .contentForm{
+        position: relative;
+    }
 
+    </style>
 </head>
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome">
@@ -19,17 +29,17 @@
             <div class="xymfContent">
                 <div class="contentL">
                     <div class="shutter">
-                        <div class="shutter-img">
-                        </div>
-                        <ul class="shutter-btn">
-                            <li class="prev"></li>
-                            <li class="next"></li>
-                        </ul>
-                        <div class="shutter-desc">
-                            <p>今日活动</p>
-                        </div>
-                    </div>
-                    <div class="contentForm">
+                            <div class="shutter-img">
+                            </div>
+                            <ul class="shutter-btn">
+                                <li class="prev"></li>
+                                <li class="next"></li>
+                            </ul>
+                            <div class="shutter-desc">
+                    <p>今日活动</p>
+                </div>
+            </div>
+                    <div class="contentForm eui-marginT20">
                         <div class="formTop eui-row">
                             <div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">206
                             </div>
@@ -88,9 +98,8 @@
                                 <!--</tr>-->
                                 </tbody>
                             </table>
-                            <div id="pages"></div>
-
                         </div>
+                        <div id="pages"></div>
                     </div>
                 </div>
                 <div class="contentR">
@@ -123,46 +132,12 @@
 <script type="text/javascript" th:src="@{/Scripts/velocity.js}"></script>
 <script>
     $(function () {
-        eui.use('form', function () {
-            var form = eui.form; //独立版的layer无需执行这一句
-            $.get("/questionnaire/promotions/list", function (result) {
-                console.log(result);
-                if (result.message == "SUCCESS") {
-                    var promotionList = result.data;
-                    for (var index in promotionList) {
-                        var promotion = promotionList[index];
-                        if (promotion.imagePath != "") {
-                            var imgPath = promotion.imagePath;
-                            imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
-                            $('.shutter-img').append('<a href="/cube/activity/' + promotion.id + '" data-shutter-title="加量不加价">' +
-                                '<img src="/files' + imgPath + '"></a>');
-                        }
-                    }
-                }
-                form.render();
-                $('.shutter').shutter({
-                    shutterW: 676, // 容器宽度
-                    shutterH: 128, // 容器高度
-                    isAutoPlay: true, // 是否自动播放
-                    playInterval: 3000, // 自动播放时间
-                    curDisplay: 1, // 当前显示页
-                    fullPage: false // 是否全屏展示
-                });
-            })
-            form.render();
-        })
+        doSearch();
     });
 
     $('.activity').click(function () {
         window.location.href = "/cube/activity/ad991a4e-693f-4955-a23a-d8d3d13cebf4";
     })
-</script>
-<script>
-
-    $(function () {
-        doSearch();
-    });
-
     // 表单
     eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
         var form = eui.form
@@ -170,7 +145,31 @@
             , layedit = eui.layedit
             , laydate = eui.laydate
             , laypage = eui.laypage;
-
+        $.get("/questionnaire/promotions/list", function (result) {
+            console.log(result);
+            if (result.message == "SUCCESS") {
+                var promotionList = result.data;
+                for (var index in promotionList) {
+                    var promotion = promotionList[index];
+                    if (promotion.imagePath != "") {
+                        var imgPath = promotion.imagePath;
+                        imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
+                        $('.shutter-img').append('<a href="/cube/activity/' + promotion.id + '" data-shutter-title="加量不加价">' +
+                            '<img src="/files' + imgPath + '"></a>');
+                    }
+                }
+            }
+            form.render();
+            $('.shutter').shutter({
+                shutterW: 676, // 容器宽度
+                shutterH: 128, // 容器高度
+                isAutoPlay: true, // 是否自动播放
+                playInterval: 3000, // 自动播放时间
+                curDisplay: 1, // 当前显示页
+                fullPage: false // 是否全屏展示
+            });
+        })
+        form.render();
         //全选
         form.on('checkbox(allChoose)', function (data) {
             var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
