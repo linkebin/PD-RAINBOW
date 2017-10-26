@@ -115,7 +115,7 @@
                     <div class="calendarEvents">
                         <div class="eui-overflowH eui-marginB10">
                             <div id="selectDate" class="eui-float-left">今日</div>
-                            <div class="eui-float-right"><i class="eui-icon eui-color-gray3">&#xe654;</i></div>
+                            <div class="eui-float-right"><i style="cursor: pointer;" onclick="openSchrdule('add','')" class="eui-icon eui-color-gray3">&#xe654;</i></div>
                         </div>
                         <div id="scheduleData">
 
@@ -142,10 +142,23 @@
     $(function () {
         doSearch();
     });
-
+    function openSchrdule(type,id) {
+        var index = layer.open({
+            title: '预约登记'
+            , type: 2
+            , area: ['600px', '500px']
+            , content: '/web/schedule/visitor/schedule?type='+type+'&id='+id
+        });
+    }
     $('.activity').click(function () {
         window.location.href = "/cube/activity/ad991a4e-693f-4955-a23a-d8d3d13cebf4";
-    })
+    });
+    function layuiAlertClose(o) {
+        layer.closeAll();
+        if (o){
+            doSearch();
+        }
+    }
     // 表单
     eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
         var form = eui.form
