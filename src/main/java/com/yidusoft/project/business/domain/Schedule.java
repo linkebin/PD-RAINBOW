@@ -28,6 +28,7 @@ public class Schedule {
     @Column(name = "visitor_time")
     private Date visitorTime;
 
+    @Transient
     private String visitorTimeStr;
 
     public String getVisitorTimeStr() {

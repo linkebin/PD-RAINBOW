@@ -24,6 +24,10 @@
         .eui-form-label{padding: 5px 15px;}
         .eui-input-inline{margin-left: 20px;}
         .tb{cursor: pointer;margin-left: 5px;}
+
+        table { table-layout: fixed;}
+        td { white-space: nowrap;overflow: hidden;
+            text-overflow: ellipsis;}
     </style>
 </head>
 <body class="eui-layout-body">
@@ -49,7 +53,7 @@
                                         </div>
 
                                     <div class="eui-input-inline">
-                                        <span  class="eui-btn eui-btn-small" onclick="doSearch()"  >查询</span>
+                                        <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>
                                         <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
                                     </div>
                                 </div>
@@ -60,7 +64,7 @@
                            &nbsp;
                         </div>
                         <div class="eui-col-md6 eui-textAlignR">
-                            <a onclick="openSchrdule()" class="eui-btn eui-btn-small">来访预约</a>
+                            <a onclick="openSchrdule('add','')" class="eui-btn eui-btn-small eui-btn-normal">来访预约</a>
                         </div>
                     </div>
 
@@ -71,7 +75,7 @@
                                 <col width="150">
                                 <col width="80">
                                 <col width="100">
-                                <col width="100">
+                                <col width="120">
                                 <col width="350">
                                 <col >
                             </colgroup>
@@ -131,30 +135,20 @@
         doSearch();
     });
     
-    function openSchrdule() {
+    function openSchrdule(type,id) {
         var index = layer.open({
             title: '预约登记'
             , type: 2
             , area: ['600px', '500px']
-            , content: '/web/schedule/visitor/schedule'
-            ,btn: ['保存', '取消']
-            ,yes: function(index, layero){
-                $('#eui-layer-iframe2').contents().find("#submitBtn").click();
-            }
-            ,btn2: function(index, layero){
-            }
+            , content: '/web/schedule/visitor/schedule?type='+type+'&id='+id
         });
     }
 
-    function SchrduleSave() {
-        var obj = $('#eui-layer-iframe2').contents().find("#scheduleForm").serializeObject();
-        $.post('/schedule/add',{json:JSON.stringify(obj)},function (result) {
-            if (result.code==200){
-                layer.closeAll();
-            }else {
-                layer.msg(result.message);
-            }
-        });
+    function layuiAlertClose(o) {
+        layer.closeAll();
+        if (o){
+            doSearch();
+        }
     }
 
     //加载数据
@@ -230,13 +224,18 @@
 
     //渲染数据，拼接表格
     function getTable(userList) {
+        console.log(userList)
         var tableHtml = '';
         for (var item in userList){
             var secUser = userList[item];
 
-            var id = "'" + secUser.id + "'";
+            var id = "'" + secUser.ID_ + "'";
             var type = '来访';
+            var aicon = '<a title="来访记录" target="_blank" href="/web/customer/visitorInfo?id='
+                + secUser.visitor_id + '"><i class="eui-icon tb">&#xe60e;</i></a>';
+                var update = "'update'";
             if (secUser.type == 2){
+                aicon='<a title="预约详情" onclick="openSchrdule('+update+','+id+')"  href="javasrcipt:void;"><i class="eui-icon tb">&#xe60e;</i></a>';
                 type = '预约';
             }
             tableHtml +=  '<tr>' +
@@ -245,10 +244,8 @@
                 '<td>'+type+'</td>' +
                 '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.visitor_id + '">'+ secUser.visitor_name +'</a></td>' +
                 '<td>'+secUser.phone+'</td>' +
-                '<td>'+secUser.Visiting_purpose.substring(0,20)+'</td>' +
-                '<td>' +
-                '<a target="_blank" href="/web/customer/visitorInfo?id=' + secUser.visitor_id + '"><i class="eui-icon tb">&#xe60e;</i></a>' +
-                '</td>' +
+                '<td title="'+secUser.Visiting_purpose+'">'+secUser.Visiting_purpose+'</td>' +
+                '<td>'+aicon+'</td>' +
                 '</tr>';
         }
         return tableHtml;

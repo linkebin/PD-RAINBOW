@@ -7,7 +7,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.business.domain.Schedule;
 import com.yidusoft.project.business.domain.VisitingRecord;
+import com.yidusoft.project.business.domain.VisitingRecordFile;
 import com.yidusoft.project.business.service.ScheduleService;
+import com.yidusoft.project.business.service.VisitingRecordFileService;
 import com.yidusoft.project.business.service.VisitingRecordService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
@@ -25,6 +27,9 @@ import java.util.*;
 public class VisitingRecordController {
     @Resource
     private VisitingRecordService visitingRecordService;
+
+    @Autowired
+    private VisitingRecordFileService visitingRecordFileService;
 
     @PostMapping("/add")
     public Result add(String json) {
@@ -59,6 +64,12 @@ public class VisitingRecordController {
     @PostMapping("/detail")
     public Result detail(String id) {
         VisitingRecord visitingRecord = visitingRecordService.findById(id);
+        VisitingRecordFile visitingRecordFile = new VisitingRecordFile();
+        visitingRecordFile.setCreator(Security.getUserId());
+
+        visitingRecordFile.setRecordId(visitingRecord.getId());
+        List<VisitingRecordFile> visitingRecordFiles = visitingRecordFileService.findVisitingRecordFileByVisitorId(visitingRecordFile);
+        visitingRecord.setVisitingRecordFileList(visitingRecordFiles);
         return ResultGenerator.genSuccessResult(visitingRecord);
     }
 

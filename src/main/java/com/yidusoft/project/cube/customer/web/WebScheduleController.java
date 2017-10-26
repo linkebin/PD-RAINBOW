@@ -17,7 +17,10 @@ import java.util.List;
 public class WebScheduleController {
 
     @RequestMapping("/visitor/schedule")
-    public String customerList(){
+    public String customerList(String type,Model model,String id){
+
+        model.addAttribute("type",type);
+        model.addAttribute("id",id);
 
         return "project/cube/customer/visitor-schedule";
     }

@@ -23,7 +23,7 @@
 
         .eui-form-label{padding: 5px 15px;}
         .eui-input-inline{margin-left: 20px;}
-        .tb{cursor: pointer;margin-left: 5px;}
+        .tb{cursor: pointer;margin-left: 10px;}
     </style>
 </head>
 <body class="eui-layout-body">
@@ -269,10 +269,20 @@
                 '<td>' +
                 '<a title="编辑" target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.id + '"><i class="eui-icon tb">&#xe642;</i></a>' +
                 '<a title="来访记录" target="_blank" href="/web/customer/visitorInfo?id=' + secUser.id + '"><i class="eui-icon tb">&#xe60e;</i></a>' +
-                '<i title="删除" class="eui-icon tb">&#xe640;</i></td>' +
+                '<i title="删除" onclick="deleteCustomer('+id+')" class="eui-icon tb">&#xe640;</i></td>' +
                 '</tr>';
         }
         return tableHtml;
+    }
+
+    function deleteCustomer(id) {
+        $.post('/visitor/register/delete',{id:id},function (result) {
+            if (result.code == 200) {
+                doSearch();
+            }else {
+                layer.msg(result.message);
+            }
+        });
     }
 </script>
 </body>

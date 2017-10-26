@@ -124,7 +124,7 @@ public class IndexController {
             return ResultGenerator.genFailResult("手机验证码错误");
         }
 
-        secUser.setUserName(CodeHelper.getCode("心云魔方"));
+        secUser.setUserName(CodeHelper.getCode("yxmf"));
         String inviterCode = CodeHelper.randomCode(8);
         SecUser isUser = null;
         if (inviterCode!=null){
@@ -358,26 +358,27 @@ public class IndexController {
     @ResponseBody
     public Result signPaefactInfo(String json){
         SecUser userJson = JSON.parseObject(json,SecUser.class);
-
-        SecUser inviterUser = secUserService.findSecUserByInviterCode(userJson.getInviterCode());
-
-        if (inviterUser == null){
-            return ResultGenerator.genFailResult("邀请码不存在！");
-        }
         SecUser secUser = secUserService.findById(userJson.getId());
+
+        if (!"".equals(userJson.getInviterCode())){
+            SecUser inviterUser = secUserService.findSecUserByInviterCode(userJson.getInviterCode());
+            if (inviterUser == null){
+                return ResultGenerator.genFailResult("邀请码不存在！");
+            }
+            secUser.setInviterUser(inviterUser.getId());
+            secUser.setChannelId(inviterUser.getChannelId());
+        }
 
         secUser.setUserName(userJson.getUserName());
         secUser.setEmail(userJson.getEmail());
-        secUser.setInviterUser(inviterUser.getId());
-        secUser.setAddr(userJson.getAddr());
         secUser.setHeadImg(userJson.getHeadImg());
-        secUser.setChannelId(inviterUser.getChannelId());
+        secUser.setAddr(userJson.getAddr());
+
         secUserService.update(secUser);
 
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", secUser.getId());
         session.setAttribute("userSession", secUser);
-
         return ResultGenerator.genSuccessResult();
     }
 

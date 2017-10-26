@@ -7,10 +7,28 @@ import java.util.Map;
  * Created by smy on 2017/9/24.
  */
 public class FileResponseData {
-
+    private String id;
     private Integer code;
     private String msg;
     private Data data;
+
+    private String fileName;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     private Map<String,Object> map;
 

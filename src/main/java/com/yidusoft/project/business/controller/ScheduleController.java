@@ -47,14 +47,20 @@ public class ScheduleController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(Schedule schedule) {
-        scheduleService.update(schedule);
-        return ResultGenerator.genSuccessResult();
+    @PostMapping("/update")
+    public Result update(String json) {
+        Schedule schedule = JSON.parseObject(json,Schedule.class);
+        try {
+            scheduleService.update(schedule);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("保存失败");
+        }
+        return ResultGenerator.genSuccessResult().setMessage("保存成功");
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
+    @PostMapping("/detail")
+    public Result detail(String id) {
         Schedule schedule = scheduleService.findById(id);
         return ResultGenerator.genSuccessResult(schedule);
     }
