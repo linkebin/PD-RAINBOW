@@ -7,9 +7,9 @@
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
 
     <style>
-        .eui-col-md7 .degree li {
-            margin-right: 20px;
-        }
+        /*.eui-col-md7 .degree li {*/
+            /*margin-right: 20px;*/
+        /*}*/
     </style>
 
 </head>
@@ -17,12 +17,15 @@
 <div class="questionHeader">
     <input type="hidden" th:value="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireId"/>
     <input type="hidden" th:value="${userId}" id="userId"/>
-    <div class="eui-row">
-        <h1 class="eui-col-md1 eui-marginL10"><a href="###"><img src="/Styles/images/xymfImages/logo.png"
-                                                                 class="eui-marginT10" alt=""></a></h1>
-        <p class="eui-col-md1 eui-color-white eui-font20 eui-padding10 eui-display-Ib questionTitle">问卷填写</p>
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">问卷填写</span>
+        </div>
     </div>
 </div>
+
+
 <div class="questionContent">
     <div class="eui-area">
         <p class="eui-lineHeight24 conetentHint eui-font14">
@@ -31,13 +34,13 @@
         <div class="subject">
             <ul id="questionUl">
                 <li th:each="questions : ${questionlist}">
-                    <div class="eui-row eui-marginB20">
+                    <div class="eui-row eui-marginB20 questionbg">
                         <div class="eui-col-md4 contentBar">
                             <div class="eui-progress" e-showpercent="yes" e-filter="questionProgress">
-                                <div class="eui-progress-bar"></div>
+                                <div class="eui-progress-bar" e-percent="20%"></div>
                             </div>
                         </div>
-                        <div class="eui-col-md7 eui-font16 eui-marginT20 eui-col-md-offset1">
+                        <div class="eui-col-md7 eui-font16 eui-marginT15 eui-col-md-offset1">
                             <ul class="degree">
                                 <li th:each="answer : ${optionAnswers}" th:text="${answer}"></li>
 

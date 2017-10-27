@@ -319,7 +319,7 @@
     margin-left: 10px;
 }
 .xymfPay .eui-logo{
-     width: 250px;
+     width: 200px;
      color: #333;
      font-size: 18px;
 }
@@ -356,12 +356,13 @@
     color:#fd4c69;
 }
 .payTicket0{
-    padding: 16px 38px;
+    padding: 16px 0;
     border: 1px solid #ccc;
     text-align: center;
     margin-right: 20px;
     cursor: pointer;
     position: relative;
+    width: 210px;
 }
 .payTicket0{
     border: 1px solid #cccccc;
@@ -405,6 +406,11 @@
 .payTicket1 {
     border: 1px solid #fd4c69;
     color: #fd4c69;
+    width: 180px;
+}
+
+.payTicket .payTicket0{
+    width: 210px;
 }
 .payTicket1 .discount{
     border-top: 50px solid #fd4c69;
@@ -417,11 +423,12 @@
     border-bottom: 34px solid #fd4c69;
 }
 .payLeft .send{
-    margin: -10px 0 -20px 90px;
+    margin: -40px 0 -10px 90px;
 }
 .payTicket .wechatpay{
     height: 38px;
     line-height: 38px;
+    width: 180px;
 }
 .payTicket .wechatpay .tickFont{
     right: 2px;
@@ -466,18 +473,19 @@
 /* 问卷填写 */
 .eui-area{width: 1200px;margin: 0 auto;}
 .eui-display-Ib{display:inline-block;}
-.questionHeader{width: 100%;height: 50px;background:#3a6ba6 url(../../images/xymfImages/headerbg.png) no-repeat center top;background-size: 100%;}
-.questionTitle{margin-left: 48px;}
-.questionContent{width: 100%;height: auto;background:#f0f0f0 url(../../images/xymfImages/map.png) no-repeat center center;}
-.contentBar{padding: 30px 0 0 30px;}
-.subject{width: 100%;height: 100px;background: url(../../images/xymfImages/contentbg.png) no-repeat center center;}
+.questionHeader{width: 100%;height: 60px;background:#ffffff; background-size: 100%;box-shadow: 0 0 20px #68a8d7;margin-bottom: 20px;}
+.xymfLogo{color: #333;font-size: 18px;padding-top: 14px;}
+.xymfLogo .payCentre{display:inline-block; border-left: 2px solid #ddd; padding-left: 10px; margin-left: 10px; }
+.questionContent{width: 100%;height: auto;}
+.contentBar{padding: 24px 0 0 24px;}
+.subject{width: 100%;height: 100px;background:#ffffff;}
 .subject { width: 992px; height: 600px; margin: 20px auto; position: relative; }
 .subject>ul{ position:relative; z-index:1;display:block;width: 100%;height: 100%;}
 .subject>ul>li {display: none; position: absolute; left: 0; top: 0;width: 100%;height: 100%;}
 /*这里的li必须是定位元素，这样所有的li才能重叠在一起*/
 .subject>ul .current { display: block; }
-.subject>ol { position: absolute; bottom: -66px;left: 0; z-index:2;}
-.subject>ol>li { float: left; width: 24px; height: 24px;background:#adadad; border-radius: 50%; line-height: 24px; margin-left: 10px; text-align:center; cursor:pointer;color: #fff;font-size: 16px;}
+.subject>ol { position: absolute; bottom: -62px;left: 0; z-index:2;}
+.subject>ol>li { float: left; width: 20px; height: 20px;background:#adadad; border-radius: 50%; line-height: 24px; margin-left: 10px; text-align:center; cursor:pointer;color: #fff;font-size: 16px;}
 .subject>ol>.current{ background:#666666;}
 .subject .sliderLeft,.sliderRight{position: absolute; z-index:3; width: 36px; height: 100px;background:url(../../images/xymfImages/arr12.png) no-repeat 0 0; top: 50%; left:-100px; margin-top: -40px; cursor:pointer;opacity: 0.8;}
 .subject .sliderLeft,.sliderRight:hover{opacity: 0.6;}
@@ -515,10 +523,10 @@
     background: linear-gradient(to right, #2c96ed, #0f84e3); /* 标准的语法 */
 }
 .gradeSubject{line-height: 30px;font-size: 16px;}
-.degree{width: 100%; height: 30px;margin-left: 42px;}
-.degree li{float: left;margin-right: 76px;}
-.questionSubmit{background: rgba(0,0,0,0.1);}
-.submitBtn{display:inline-block; margin-right: 106px;width: 150px; height: 58px;line-height: 58px;text-align: center; background: #0f88eb;color:#ffffff;font-size: 16px;margin-left: 20px; cursor: pointer;}
+.degree{width: 100%; height: 30px; font-size: 14px;color: #1e9eff;}
+.degree li{float: left;width: 110px;text-align: center;}
+.questionSubmit{background: #ececec;}
+.submitBtn{display:inline-block; margin-right: 106px;width: 150px; height: 58px;line-height: 58px;text-align: center; background: #1e9eff;color:#ffffff;font-size: 16px;margin-left: 20px; cursor: pointer;}
 .submitBtn img{margin-right: 10px;}
 .conetentHint{margin-left: 98px;padding-top:10px;}
 /* 常用投影 */
@@ -526,16 +534,29 @@
 
 
 /* 来访者咨询管理 */
-.visitorContent{background: #f0f0f0;}
-.visitorContent .eui-area{box-shadow: 5px 5px 20px #eee;padding-top:20px;}
-.visitorContent .visitorTitle{font-size: 18px;padding:14px;background: #eeeeee;}
+.visitorContent .eui-area{box-shadow: 5px 5px 20px #eee;}
+.visitorContent .visitorTitle{font-size: 18px;padding:16px;background: #f4f9fd;border-bottom: 1px solid #1e9eff;color: #1e9eff; }
 .visitorContent .visitorIn{background: #ffffff;}
 .visitorPhone1{padding-left: 34px;background: url(../../images/xymfImages/phone.png) no-repeat left center;background-size: 26px;}
 .visitorPhone2{padding-left: 34px;background: url(../../images/xymfImages/mobile-phone.png) no-repeat left center;background-size: 22px;}
-.xymfFooter{background: #e5e5e5; padding-bottom: 20px;}
 
 /* 来访者记录 */
 .consuletTop{height: 58px; border-bottom: 1px solid #eee; box-shadow: 0 10px 10px #ccc;}
-.consuletContent{background: #f0f0f0;}
+
 .consultSheet{width: 198px; padding: 5px;background: #f2f2f2;}
 .consultSheet .eui-icon{padding: 6px;background: #e5e5e5;margin-right: 2px;}
+
+
+.xymfFooter{width: 100%;height: 40px; background: #eeeeee;position: fixed;left: 0; bottom: 0; line-height: 40px; text-align: center;margin-top: 20px;}
+.xymfContent{background: #ffffff;}
+.questionbg{background: #f4f9fd;border-bottom: 1px solid #1e9eff;height: 60px;}
+.xymfMargin{margin-bottom: 60px;}
+
+
+
+
+
+
+
+
+

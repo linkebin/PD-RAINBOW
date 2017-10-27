@@ -2851,7 +2851,7 @@ body .eui-table-tips .eui-layer-content {
  width: 18px;
  height: 18px;
  line-height: 20px;
- margin-left: 8px;
+ margin-left: 0px;
  top: 1px;
  text-align: center;
  font-size: 14px;
@@ -3017,17 +3017,20 @@ body .eui-table-tips .eui-layer-content {
 }
 .userImg{
  position: relative;
+ display: inline-block;
 }
 .userImg img{
  width: 55px;
 }
 .userImg .eui-badge{
  position: absolute;
- top: -16px;
+ top: 10px!important;
  right: 0px;
 }
 .eui-nav .eui-badge,.eui-nav .eui-badge-dot {
  position: absolute;
+ top: 50%;
+ margin-top: -9px;
 }
 
 .eui-tab-title .eui-badge,.eui-tab-title .eui-badge-dot {
@@ -3716,7 +3719,7 @@ body .eui-util-face .eui-layer-content {
 
 /* 常用样式 */
 .eui-border0{
- border: 0;
+ border: 0!important;
 }
 .eui-border{
  border: 1px solid #eee!important;
@@ -3737,10 +3740,12 @@ body .eui-util-face .eui-layer-content {
  padding: 5px!important;
 }
 .eui-paddingLR5{
- padding: 0 5px!important;
+ padding-left: 5px!important;
+ padding-right: 5px!important;
 }
 .eui-paddingTB5{
- padding: 5px 0!important;
+ padding-top: 5px!important;
+ padding-bottom: 5px!important;
 }
 .eui-paddingT5{
  padding-top: 5px!important;
@@ -3761,7 +3766,8 @@ body .eui-util-face .eui-layer-content {
  padding: 0 10px!important;
 }
 .eui-paddingTB10{
- padding: 10px 0!important;
+ padding-top: 10px!important;
+ padding-bottom: 10px!important;
 }
 .eui-paddingT10{
  padding-top: 10px!important;
@@ -3779,10 +3785,12 @@ body .eui-util-face .eui-layer-content {
  padding: 15px!important;
 }
 .eui-paddingLR15{
- padding: 0 15px!important;
+ padding-left:15px!important;
+ padding-right:15px!important;
 }
 .eui-paddingTB15{
- padding: 15px 0!important;
+ padding-top: 15px!important;
+ padding-bottom: 15px!important;
 }
 .eui-paddingT15{
  padding-top: 15px!important;
@@ -3800,10 +3808,12 @@ body .eui-util-face .eui-layer-content {
  padding: 20px!important;
 }
 .eui-paddingLR20{
- padding: 0 20px!important;
+ padding-left: 20px!important;
+ padding-right: 20px!important;
 }
 .eui-paddingTB20{
- padding: 20px 0!important;
+ padding-top: 20px!important;
+ padding-bottom: 20px!important;
 }
 .eui-paddingT20{
  padding-top: 20px!important;
@@ -3821,10 +3831,12 @@ body .eui-util-face .eui-layer-content {
  margin: 10px!important;
 }
 .eui-marginLR10{
- margin: 0 10px!important;
+ margin-left: 10px!important;
+ margin-right: 10px!important;
 }
 .eui-marginTB10{
- margin: 10px 0!important;
+ margin-top: 10px!important;
+ margin-bottom: 10px!important;
 }
 .eui-marginT10{
  margin-top: 10px!important;
@@ -3845,7 +3857,8 @@ body .eui-util-face .eui-layer-content {
  margin: 0 15px!important;
 }
 .eui-marginTB15{
- margin: 15px 0!important;
+ margin-top: 15px!important;
+ margin-bottom: 15px!important;
 }
 .eui-marginT15{
  margin-top: 15px!important;
@@ -3863,10 +3876,12 @@ body .eui-util-face .eui-layer-content {
  margin: 20px!important;
 }
 .eui-marginLR20{
- margin: 0 20px!important;
+ margin-left: 20px!important;
+ margin-right: 20px!important;
 }
 .eui-marginTB20{
- margin: 20px 0!important;
+ margin-top: 20px!important;
+ margin-bottom: 20px!important;
 }
 .eui-marginT20{
  margin-top: 20px!important;
@@ -3959,10 +3974,6 @@ body .eui-util-face .eui-layer-content {
  width: 500px!important;
 }
 
-.eui-width700{
- width: 700px!important;
-}
-
 .eui-searchIn{
  padding-top: 10px;
  cursor: pointer;
@@ -3990,9 +4001,6 @@ body .eui-util-face .eui-layer-content {
 }
 .eui-btn-duplicate{
  background-color: #767676!important;
-}
-.eui-btn-enhancement{
- background-color: #f2711c!important;
 }
 .eui-btn-feature{
  background-color: #b5cc18!important;
@@ -4196,13 +4204,11 @@ body .eui-util-face .eui-layer-content {
 }
 /* 组织树 */
 .etree p{
- width: 260px;
  font-size: 14px;
  padding:10px;
  background: #eeeeee;
 }
 .etree .ztree{
- width: 270px;
  border: 1px solid #eeeeee;
 }
 
@@ -4216,6 +4222,7 @@ body .eui-util-face .eui-layer-content {
  right:0;
  top: 0;
  background: rgba(0,0,0,0.3);
+ z-index: 10;
 }
 .eui-slipContent{
  width: 400px;
@@ -4224,6 +4231,8 @@ body .eui-util-face .eui-layer-content {
  right: -400px;
  top: 0;
  background: #ffffff;
+ overflow-y: auto;
+ z-index: 11;
 }
 .eui-slipConfirm{
  width: 360px;
@@ -4234,6 +4243,14 @@ body .eui-util-face .eui-layer-content {
  margin:0 20px;
 }
 .eui-slipConfirm .eui-btn{
+ width: 100%;
+}
+/* 同上的按钮 */
+.eui-ensure{
+ padding: 10px;
+ text-align: center;
+}
+.eui-ensure .eui-btn{
  width: 100%;
 }
 .eui-iconClose{
@@ -4413,6 +4430,131 @@ body .eui-util-face .eui-layer-content {
  width: 100%;
  height:280px;
 }
+
+
+/* 消息中心页面 */
+.eui-noticeIcon{
+ width: 60px;
+ height: 56px;
+ background: url('../../../Styles/images/pagesImg/icons.png') no-repeat left -67px;
+ margin-right: 10px;
+}
+.eui-noticeIcon2{
+ background-position: 0px -8px;
+}
+.eui-noticeIcon3{
+ background-position: 0px -128px;
+}
+.eui-noticeNav{
+ background: #fff;
+}
+.eui-noticeNav li{
+ padding:6px;
+ border-left:4px solid #fff;
+ cursor: pointer;
+}
+.eui-noticeNav li.eui-noticeChoose{
+ border-left:4px solid #009688;
+ background: #eee;
+}
+.eui-noticeDetail li{
+ margin-bottom: 10px;
+ padding: 10px;
+}
+.eui-noticeDetail li:hover{
+ background: #eee;
+}
+.eui-noticeT .eui-noticeTitle{
+ font-size: 16px;
+ margin: 4px 0 10px 0;
+ font-weight: bold;
+}
+.eui-noticeTime{
+ text-align: center;
+}
+
+.eui-noticeCheck{
+ text-align: right;
+ color:#009688;
+}
+#MenuNew{
+ padding: 10px 20px;
+ display:none;
+}
+.eui-titleMini{
+ padding:16px 0 16px 14px;
+ font-size: 20px;
+ border-left: 5px solid #009688;
+ background: #f9f9f9;
+}
+.eui-width158{
+ width: 158px;
+}
+
+.eui-message-btn{
+ padding-bottom: 10px;
+ border-bottom: 1px solid #e2e2e2;
+ text-align: right;
+}
+
+
+/* 系统设置内容 */
+.treeIn div{
+ width: 280px;
+}
+.treeIn #treeDemo{
+ width:100%;
+ border: 0;
+}
+
+.eui-displayNone{
+ display: none;
+}
+
+.headPortrait{
+ margin: 20px;
+}
+.headPortrait .eui-upload-img{
+ width: 120px;
+ height: 120px;
+}
+/* 权限批量配置 */
+
+.batch2 p{
+ width: auto;
+}
+.batch2 .ztree{
+ border: 0;
+}
+.imageBg .eui-user-top{
+ height: 150px;
+}
+.imageBg .eui-user-top .eui-userName{
+ padding:80px 0 0 20px;
+}
+.imageBg .information{
+ margin-top: 40px;
+}
+
+.userIn .eui-btn+.eui-btn{
+ margin-left: 2px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
