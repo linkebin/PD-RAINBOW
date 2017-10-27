@@ -84,14 +84,14 @@
             <label class="eui-form-label">问卷数量</label>
             <div class="eui-input-block">
                 <input type="text" name="productTotal" e-verify="title" autocomplete="off" placeholder="请输入套餐数量"
-                       class="eui-input" oninput="totalChange(this)">
+                       class="eui-input"  oninput="totalChange(this)">
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">套餐价格</label>
             <div class="eui-input-block">
                 <input type="text" name="productPrice" e-verify="title" autocomplete="off" placeholder="请输入套餐价格"
-                       class="eui-input">
+                       class="eui-input" oninput="priceChange(this)">
             </div>
         </div>
         <div class="eui-form-item">
@@ -137,7 +137,8 @@
         <div class="eui-form-item">
             <label class="eui-form-label">套餐价格</label>
             <div class="eui-input-block">
-                <input type="text" id="price_edit" e-verify="title" autocomplete="off" class="eui-input">
+                <input type="text" id="price_edit" e-verify="title" autocomplete="off" class="eui-input"
+                        oninput="priceChange(this)">
             </div>
         </div>
         <div class="eui-form-item promotionHide">
@@ -251,7 +252,7 @@
             /* Act on the event */
         });
 
-        $(".productClose,.taskFiltrate2,.taskConfirm").click(function (event) {
+        $(".productClose,.taskFiltrate2").click(function (event) {
             $(".filtrateIn2").animate({right: '-400px'}, 400);
             $(".taskFiltrate2").hide();
         });
@@ -301,18 +302,46 @@
     });
 
     /**
+     * 套餐价格文本框的监听事件
+     * @param total
+     */
+    function priceChange(e){
+        if(e.value==0){
+            layer.msg("套餐价格不能为0", {
+                icon: 2,
+                time: 2000
+            });
+        }
+        if (e.value != "") {
+            validationNumber(e,1,"请输入大于0的数字");
+        }
+    }
+
+    /**
      * 问卷数量文本框的监听事件
      * @param total
      */
-    function totalChange(total) {
-        console.log(total.value);
-        if (total.value != "") {
-            $('input[name="productPrice"]').val(total.value * unitPrice);
-            $('#price_edit').val(total.value * unitPrice);
-        } else {
-            $('input[name="productPrice"]').val("");
-            $('#price_edit').val("");
+    function totalChange(e) {
+        if(parseInt(e.value)==0){
+            layer.msg("问卷数量不能为0", {
+                icon: 2,
+                time: 2000
+            });
+            e.value = e.value.substring(0, e.value.length - 1);
+            e.focus();
+        }else{
+            validationNumber(e,0,"请输入大于0的整数");
+            if (e.value != "") {
+                console.log(unitPrice);
+                console.log(e.value * unitPrice);
+                $('input[name="productPrice"]').val((e.value * unitPrice).toFixed(1));
+                $('#price_edit').val(e.value * unitPrice);
+            } else {
+                $('input[name="productPrice"]').val("");
+                $('#price_edit').val("");
+            }
         }
+
     }
 
     function resetForm() {
@@ -324,6 +353,7 @@
         $.get("/product/settings/getUnitPriceByTotal", function (result) {
             console.log(result);
             if (result.message = "SUCCESS") {
+                console.log(result.data);
                 unitPrice = result.data;
             }
         })
@@ -437,6 +467,8 @@
     }
 
 
+
+
     //显示编辑套餐的表单
     function productEdit(id, total, price, name, proName) {
         eui.use(['form'], function () {
@@ -493,7 +525,11 @@
         var name = $.trim($("#name_edit").val());
         var promotionId = $.trim($("#product_edit").val());
         console.log($("#product_edit").val())
+        console.log()
         if (total != '' && price != '' && name != "") {
+            if(price==0){
+                return layer.msg("套餐价格不能为0")
+            }
             var indexs = layer.load(2); //加载
             var obj = new Object();
             obj.productTotal = total;
@@ -505,15 +541,16 @@
             $.post("/product/settings/update", {"productJson": JSON.stringify(obj)}, function (result) {
                 if (result.message = 'SUCCESS') {
                     //关闭
-                    layer.closeAll();
                     doSearch();
                     layer.msg('编辑成功！', {
-                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
                     });
+                    $(".filtrateIn2").animate({right: '-400px'}, 400);
+                    $(".taskFiltrate2").hide();
                 } else {
                     layer.close(indexs);
-                    layer.msg('添加失败！', {
-                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                    layer.msg('编辑失败！', {
+                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
                     });
 
                 }
@@ -524,8 +561,10 @@
             });
         }
     }
+
+
     /**
-     * 添加活动
+     * 添加套餐
      */
     function addProduct() {
         var params = $('#productNewForm').serializeObject();
@@ -534,9 +573,13 @@
                 layer.msg('问卷单价已设置,问卷数量不能低于2', {});
                 return;
             }
+            validate(params.productTotal,"问卷数量不能小于或等于0","问卷数量只能数字！！！");//验证信息
         }
         params.promotionsName = promotionName;
         if (params.productTotal != '' && params.productPrice != '' && params.productName != '') {
+
+            validate(params.productPrice,"套餐价格不能小于或等于0","套餐价格只能数字！！！");//验证信息
+
             var indexs = layer.load(2); //加载
             var obj = new Object();
             $.post("/product/settings/add", {"productJson": JSON.stringify(params)}, function (result) {
@@ -638,6 +681,60 @@
             });
         }
     })
+
+    /**
+     * 验证是否为数字
+     * 验证数字是否大于0
+     * @param value
+     * @param msg
+     * @param message
+     * @returns {*}
+     */
+    function validate(value,msg,message) {
+        if(parseInt(value)<=0){
+            return layer.msg(msg);
+        }
+        var reNum=/^\d*$/;
+        // 如果验证失败给出警告
+        if(!reNum.test(value)){
+            return layer.msg(message);
+        }
+    }
+    /**
+     * 验证是否为数字，包括小数点
+     * @param e
+     * @param num //保留几位小数点
+     */
+    function validationNumber(e, num ,message) {
+        var regu = /^[0-9]+\.?[0-9]*$/;
+        if (e.value != "") {
+            if (!regu.test(e.value)) {
+                layer.msg(message, {
+                    icon: 2,
+                    time: 2000
+                });
+                e.value = e.value.substring(0, e.value.length - 1);
+                e.focus();
+            } else {
+                if (num == 0) {
+                    if (e.value.indexOf('.') > -1) {
+                        e.value = e.value.substring(0, e.value.length - 1);
+                        e.focus();
+                    }
+                }
+                if (e.value.indexOf('.') > -1) {
+                    layer.msg("最多保留1位小数点", {
+                        icon: 2,
+                        time: 2000
+                    });
+                    if (e.value.split('.')[1].length > num) {
+                        e.value = e.value.substring(0, e.value.length - 1);
+                        e.focus();
+                    }
+                }
+            }
+        }
+    }
 </script>
 </body>
 </html>

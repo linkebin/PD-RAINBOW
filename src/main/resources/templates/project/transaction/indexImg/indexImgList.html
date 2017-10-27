@@ -305,6 +305,7 @@
             , before: function (obj) {
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
+                    console.log(result);
                     $('#demo1').attr('src', result); //图片链接（base64）
                 });
             }
@@ -407,7 +408,7 @@
      * @param Path
      * @param objectId
      */
-    function imageEdit(id, imgType, state, Path,objectId) {
+    function imageEdit(id, imgType, state, path,objectId) {
         eui.use(['form'], function () {
             var form = eui.form
             $('#indexImgId').val(id);//设置隐藏的id，用来判断是添加还是修改
@@ -421,6 +422,11 @@
                     data.checked = true;
                 }
             })
+            path = path.substring(path.indexOf("/upload"), path.length);
+            path = "/files"+path;
+            imgPath = path;
+            $('#demo1').attr("src",path);
+            console.log($('#demo1').attr("src",path));
             if(imgType==1){
                 $.get("/questionnaire/promotions/getState", function (result) {
                     console.log(result.data);
@@ -441,9 +447,6 @@
                     }
                 })
             }
-            Path = Path.substring(Path.indexOf("/upload"), Path.length);
-            Path = "file/"+Path;
-            imgPath = Path;
             $('.newOrEdit').html("编辑首页图片")
             form.render();
             $(".taskFiltrate").show();

@@ -14,7 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by CodeGenerator on 2017/10/11.
@@ -116,7 +120,7 @@ public class ProductSettingsController {
      */
     @GetMapping("/getUnitPriceByTotal")
     public Result getUnitPriceByTotal() {
-        Integer price = productSettingsService.getUnitPriceByTotal();
+        BigDecimal price = productSettingsService.getUnitPriceByTotal();
         return ResultGenerator.genSuccessResult(price);
     }
 

@@ -3,6 +3,7 @@ package com.yidusoft.project.transaction.service;
 import com.yidusoft.core.Service;
 import com.yidusoft.project.transaction.domain.ProductSettings;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -12,5 +13,5 @@ import java.util.List;
 public interface ProductSettingsService extends Service<ProductSettings> {
     List<ProductSettings> getProductAll();
 
-    Integer getUnitPriceByTotal();
+    BigDecimal getUnitPriceByTotal();
 }

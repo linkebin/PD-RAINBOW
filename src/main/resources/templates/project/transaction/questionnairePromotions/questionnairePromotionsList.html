@@ -94,7 +94,7 @@
             <label class="eui-form-label">活动折扣</label>
             <div class="eui-input-block">
                 <input type="text" name="promotionsDiscount" e-verify="title" autocomplete="off" class="eui-input"
-                       placeholder="请输入折扣，例如:输入0.8=8折;">
+                       placeholder="请输入折扣，例如:输入0.8=8折;" oninput="validationNumber(this,1,'请输入大于0的小数或整数')">
             </div>
         </div>
         <div class="eui-form-item">
@@ -138,11 +138,13 @@
             if (data.elem.value == 1) {
                 $("input[name='promotionsDiscount']").attr("placeholder", "请输入折扣，例如:输入0.8=8折;");
                 $("input[name='promotionsBuySend']").attr("placeholder", "已禁用");
+                $("input[name='promotionsBuySend']").val("");
                 $("input[name='promotionsBuySend']").attr("disabled", "disabled");
                 $('input[name="promotionsDiscount"]').removeAttr("disabled");
             } else {
                 $("input[name='promotionsBuySend']").attr("placeholder", "请输入数量");
                 $("input[name='promotionsDiscount']").attr("placeholder", "已禁用");
+                $("input[name='promotionsDiscount']").val("");
                 $('input[name="promotionsDiscount"]').attr("disabled", "disabled");
                 $('input[name="promotionsBuySend"]').removeAttr("disabled");
             }
@@ -356,26 +358,53 @@
     function addOrUpPromotion() {
         var params = $("#promotionsForm").serializeObject();
         if (params.promotionsType.trim() == 2 && params.promotionsBuySend.trim() == "") {
-            layer.msg('赠送数量不能为空！');
+            layer.msg('赠送数量不能为空！', {
+                icon: 2,
+                time: 2000
+            });
             return;
         } else if (params.promotionsType.trim() == 1 && params.promotionsDiscount.trim() == "") {
-            layer.msg('套餐折扣不能为空！');
+            layer.msg('套餐折扣不能为空！', {
+                icon: 2,
+                time: 2000
+            });
             return;
         }
         if (params.promotionsName.trim() == "") {
-            layer.msg('活动名称不能为空！');
+            layer.msg('活动名称不能为空！', {
+                icon: 2,
+                time: 2000
+            });
             return;
         } else if (params.promotionsStart.trim() == "") {
-            layer.msg('开始时间不能为空！');
+            layer.msg('开始时间不能为空！', {
+                icon: 2,
+                time: 2000
+            });
             return;
         } else if (params.promotionsEnd.trim() == "") {
-            layer.msg('结束时间不能为空！');
+            layer.msg('结束时间不能为空！', {
+                icon: 2,
+                time: 2000
+            });
             return;
         }
         if(params.promotionsStart>params.promotionsEnd){
-            layer.msg('开始时间不能大于结束时间');
+            layer.msg('开始时间不能大于结束时间', {
+                icon: 2,
+                time: 2000
+            });
           return;
         }
+        if (params.promotionsType.trim() == 1){
+            if(params.promotionsDiscount==0){
+                return layer.msg("折扣不能为0", {
+                    icon: 2,
+                    time: 2000
+                });
+            }
+        }
+
         console.log(params);
         if ($('#questionId').val() != '') {
             $.post("/questionnaire/promotions/update", {"promotionsJson": JSON.stringify(params)}, function (result) {
@@ -428,6 +457,7 @@
     $(".taskFiltrate").hide();
     $(".promotionNew,.promotionEdit").click(function (event) {
         if ($("input[name='promotionsType']:checked").val() == 1) {
+            $("input[name='promotionsDiscount']").attr("placeholder", "请输入折扣，例如:输入0.8=8折;")
             $("input[name='promotionsBuySend']").attr("disabled", "disabled");
             $("input[name='promotionsBuySend']").attr("placeholder", "已被禁用")
             $('input[name="promotionsDiscount"]').removeAttr("disabled");
@@ -494,6 +524,75 @@
         $(".taskFiltrate").hide();
     });
 
+    /**
+     * 验证是否为数字
+     * 验证数字是否大于0
+     * @param value
+     * @param msg
+     * @param message
+     * @returns {*}
+     */
+    function validate(value,msg,message) {
+        if(parseInt(value)<=0){
+            return layer.msg(msg);
+        }
+        var reNum=/^\d*$/;
+        // 如果验证失败给出警告
+        if(!reNum.test(value)){
+            return layer.msg(message);
+        }
+    }
+
+    /**
+     * 验证是否为数字，包括小数点
+     * @param e
+     * @param num //保留几位小数点
+     */
+    function validationNumber(e, num ,message) {
+        console.log(message);
+        if(e.value>1){
+            layer.msg("折扣不能大于1", {
+                icon: 2,
+                time: 2000
+            });
+            e.value = e.value.substring(0, e.value.length - 1);
+            e.focus();
+        }
+        if(e.value==0){
+            layer.msg("折扣不能为0", {
+                icon: 2,
+                time: 2000
+            });
+        }
+        var regu = /^[0-9]+\.?[0-9]*$/;
+        if (e.value != "") {
+            if (!regu.test(e.value)) {
+                layer.msg(message, {
+                    icon: 2,
+                    time: 2000
+                });
+                e.value = e.value.substring(0, e.value.length - 1);
+                e.focus();
+            } else {
+                if (num == 0) {
+                    if (e.value.indexOf('.') > -1) {
+                        e.value = e.value.substring(0, e.value.length - 1);
+                        e.focus();
+                    }
+                }
+                if (e.value.indexOf('.') > -1) {
+                    layer.msg("最多保留1位小数点", {
+                        icon: 2,
+                        time: 2000
+                    });
+                    if (e.value.split('.')[1].length > num) {
+                        e.value = e.value.substring(0, e.value.length - 1);
+                        e.focus();
+                    }
+                }
+            }
+        }
+    }
 </script>
 </body>
 </html>

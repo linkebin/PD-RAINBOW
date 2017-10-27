@@ -24,7 +24,7 @@
         FROM product_settings where deleted=0 order by product_price ASC
     </select>
 
-    <select id="getUnitPriceByTotal" resultType="INTEGER">
+    <select id="getUnitPriceByTotal" resultType="DECIMAL">
         SELECT product_price FROM product_settings where deleted=0 AND product_total=1
     </select>
 </mapper>
