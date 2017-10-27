@@ -150,4 +150,15 @@ public class QuestionnairePromotionsController {
         questionnairePromotionsService.update(questionnairePromotions);
         return ResultGenerator.genSuccessResult();
     }
+
+    /**
+     * 获取单个活动
+     * @param id
+     * @return
+     */
+    @PostMapping("/getOne")
+    public Result getOne(String id){
+        QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
+        return ResultGenerator.genSuccessResult(questionnairePromotions);
+    }
 }

@@ -165,17 +165,16 @@
                         if (img.state == 0) {
                             if (img.imgType == 1) {
                                 $.ajax({
-                                    url:"/questionnaire/promotions/getActivityProduct",
+                                    url:"/questionnaire/promotions/getOne",
                                     async:false,
                                     data:{id:img.objectId},
                                     type:"post",
                                     success:function (result) {
                                         if(result.message == "SUCCESS"){
-                                            var promotionsList =result.data;
-                                            for(var index in promotionsList){
-                                                console.log(index);
-                                                var promotions =promotionsList[index];
-                                                $('.shutter-img').append('<a href="/cube/activity/' + img.objectId + '" data-shutter-title="'+promotions.promotionsName+'">' +
+                                            console.log(result);
+                                            var promotion =result.data;
+                                            if(promotion!=null){
+                                                $('.shutter-img').append('<a href="/cube/activity/' + img.objectId + '" data-shutter-title="'+promotion.promotionsName+'">' +
                                                         '<img src="/files' + imgPath + '"></a>');
                                             }
                                         }
