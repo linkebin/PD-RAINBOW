@@ -36,8 +36,11 @@
                 <li th:each="questions : ${questionlist}">
                     <div class="eui-row eui-marginB20 questionbg">
                         <div class="eui-col-md4 contentBar">
-                            <div class="eui-progress" e-showpercent="yes" e-filter="questionProgress">
-                                <div class="eui-progress-bar" e-percent="20%"></div>
+                            <!--<div class="eui-progress" e-showpercent="yes" e-filter="questionProgress">-->
+                                <!--<div class="eui-progress-bar" e-percent="20%"></div>-->
+                            <!--</div>-->
+                            <div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="demo">
+                                <div class="eui-progress-bar eui-bg-blue" e-percent="0%"></div>
                             </div>
                         </div>
                         <div class="eui-col-md7 eui-font16 eui-marginT15 eui-col-md-offset1">
@@ -98,14 +101,8 @@
 <script>
     var pageIndex = 0;
     var pageSize = $('.subject>ul>li').length;
+    var progress = 0;
 
-    //注意进度条依赖 element 模块，否则无法进行正常渲染和功能性操作
-    var element = null;
-    eui.use('element', function () {
-        element = eui.element;
-        element.init(); //这样element对动态生成的元素才会重新有效
-
-    });
 
     eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
         var form = eui.form
@@ -170,8 +167,12 @@
                 $('.subject>ol>li').eq(num).addClass('current').siblings().removeClass();
             });
 
+            eui.use('element', function () {
+                var element =  element = eui.element;
+                element.init(); //这样element对动态生成的元素才会重新有效
 
-            //右侧点击
+
+                //右侧点击
             $('.subject .sliderRight').click(function (e) {
 
                 //判断当前页面是否答完题目
@@ -182,6 +183,10 @@
 
                 pageIndex++;
                 num++;
+                progress++;
+                if (progress / pageSize * 100 <= 100){
+                    element.progress('demo', Math.floor(num / pageSize * 100) + '%');
+                }
                 element.progress('questionProgress', num / pageSize * 100 + '%');
                 if (num > pageSize) {
                     num = 0;
@@ -191,7 +196,7 @@
                 $('.subject>ol>li').eq(num).addClass('current').siblings().removeClass();
             });
 
-
+            });
         })
     })();
 
