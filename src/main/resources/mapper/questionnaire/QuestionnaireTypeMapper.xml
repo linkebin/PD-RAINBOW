@@ -33,23 +33,11 @@
         SELECT * FROM QUESTIONNAIRE_TYPE WHERE
         DELETED=0
         <if test="id != null and id != ''">
-            AND (ID_ = #{id})
+            AND (ID_ = #{id} OR PID = #{id})
         </if>
         <if test="questionnaireTypeCode != null and questionnaireTypeCode != ''">
             AND QUESTIONNAIRE_TYPE_CODE LIKE '%${questionnaireTypeCode}%' OR QUESTIONNAIRE_TYPE_NAME LIKE
             '%${questionnaireTypeCode}%'
-        </if>
-        <!--<if test="questionnaireTypeName != null and questionnaireTypeName != ''">-->
-        <!--AND QUESTIONNAIRE_TYPE_NAME LIKE '%${questionnaireTypeName}%'-->
-        <!--</if>-->
-
-        <!--<if test="pid != null and pid = id and pid != '' and id != null and id != ''">-->
-        <!--AND (PID = #{id})-->
-        <!--</if>-->
-        UNION SELECT * FROM QUESTIONNAIRE_TYPE WHERE
-        DELETED=0
-        <if test="id != null and id != ''">
-            AND (PID = #{id})
         </if>
     </select>
 
