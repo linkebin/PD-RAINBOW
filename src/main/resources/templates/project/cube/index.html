@@ -285,7 +285,7 @@
                                 //加载层
                                 var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
                                 $.ajax({
-                                    url: "/cube/questionnaire//findQuestionnaireUseInfoListByPage",
+                                    url: "/cube/questionnaire/findQuestionnaireUseInfoListByPage",
                                     data: {
                                         page: obj.curr,
                                         size: obj.limit
@@ -323,7 +323,7 @@
                 '<td>' + new Date(info.createTime).Format('yyyy-MM-dd') + '</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="查看" onclick="itemclick(' + "'edit','" + info.id + '\')"><i class="eui-icon">&#xe63c;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="查看" onclick="selQuestionnaireForVisitor(\''+info.id+'\',\''+info.dataQuestion+'\',\''+info.userId+'\')"><i class="eui-icon">&#xe63c;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';
@@ -331,6 +331,12 @@
 
         return tableHtml;
     }
+    //查看来访者填写的问卷
+    function selQuestionnaireForVisitor(acquisitionId,questionnaireId,userId){
+        window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+questionnaireId+"&userId="+userId+"&acquisitionId="+acquisitionId);
+    }
+
+
 </script>
 </body>
 </html>

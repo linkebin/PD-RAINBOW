@@ -58,4 +58,10 @@ public class WebCustomerController {
 
         return "project/cube/customer/consultant";
     }
+
+    //跳转选择问卷页面
+    @RequestMapping("/getCheckQuestionnaire")
+    public String getCheckQuestionnaire(){
+        return "project/cube/customer/check-questionnaire";
+    }
 }

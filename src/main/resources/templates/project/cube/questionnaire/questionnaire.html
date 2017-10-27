@@ -47,8 +47,9 @@
                     <div class="eui-row " th:each="question ,iterStat : ${questions}">
                         <div class="eui-col-md5 eui-textAlignR gradeSubject eui-paddingR20"
                              th:text="${iterStat.index+1} + '.' +${question.questionContent}"
-                             th:attr="questionId=${question.id}" name="questionContent"
-                        th:attr="questionType=${question.questionType}"
+                             name="questionContent"
+                             th:value="${question.questionType}"
+                             th:attr="questionId=${question.id}"
                         >
                             1.头痛
                         </div>
@@ -178,7 +179,6 @@
 
                 pageIndex++;
                 num++;
-                alert(num / pageSize * 100 + '%');
                 element.progress('questionProgress', num / pageSize * 100 + '%');
                 if (num > pageSize) {
                     num = 0;
@@ -235,7 +235,7 @@
             //问题
             obj.questionId = questionContent[i].getAttribute("questionid");
             obj.answer = $('.degree li:eq(' + selectOption[i].selectedIndex + ')').text();
-            obj.questionType = questionContent[i].getAttribute("questiontype");
+            obj.questionType = questionContent[i].getAttribute("value");
             array.push(obj);
         }
         var questionnaireId = $("#questionnaireId").val();
@@ -246,7 +246,7 @@
             "userId": userId
         }, function (result) {
             if (result.code == 200) {
-                alert("sucess");
+                window.location.href="/web/cube/getSuccess";
             }
         });
     }

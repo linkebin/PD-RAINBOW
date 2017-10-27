@@ -1,7 +1,8 @@
 package com.yidusoft.project.questionnaire.domain;
 
 
-import java.beans.Transient;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -32,6 +33,7 @@ public class DataAcquisition {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "create_time")
     private Date createTime;
 
@@ -65,11 +67,11 @@ public class DataAcquisition {
     @Column(name = "total_score")
     private Integer totalScore;
 
-    @Transient
+
     public String getVisitorName() {
         return visitorName;
     }
-    @Transient
+
     public void setVisitorName(String visitorName) {
         this.visitorName = visitorName;
     }
@@ -77,21 +79,20 @@ public class DataAcquisition {
     /**
      * 来访者姓名
      */
-    @Column(name = "visitor_name")
+     @Transient
      private String visitorName;
 
     /**
      * 来访者使用过的问卷名称
      */
-    @Column(name = "questionnaire_name")
+    @Transient
     private String questionnaireName;
 
-    @Transient
+
     public String getQuestionnaireName() {
         return questionnaireName;
     }
 
-    @Transient
     public void setQuestionnaireName(String questionnaireName) {
         this.questionnaireName = questionnaireName;
     }

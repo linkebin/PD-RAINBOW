@@ -67,4 +67,20 @@
         ORDER BY  g.CREATE_TIME DESC
 
     </select>
+    <select id="findQuestionnaireType" parameterType="String" resultMap="BaseResultMap1">
+          SELECT
+          g.*,e.gauge_name,q.questionnaire_type_name
+        FROM
+           questionnaire g
+        LEFT JOIN
+          questionnaire_type  q
+        ON g.questionnaire_type =q.id_
+        LEFT JOIN
+          gauge  e
+        ON  g.gauge_id=e.id_
+        WHERE g.deleted=0
+        AND  g.ID_=#{id}
+
+    </select>
+
 </mapper>

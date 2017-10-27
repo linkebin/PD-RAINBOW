@@ -20,6 +20,17 @@ public class DataAcquisitionController {
     @Resource
     private DataAcquisitionService dataAcquisitionService;
 
+
+
+    //根据日期查询来访者使用的问卷
+    @PostMapping("/findQuestionnaireForVisitor")
+    public Result  findQuestionnaireForVisitor(DataAcquisition dataAcquisition) {
+        List<DataAcquisition> list=dataAcquisitionService.findQuestionnaireForVisitor(dataAcquisition);
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+
+
     @PostMapping
     public Result add(DataAcquisition dataAcquisition) {
         dataAcquisitionService.save(dataAcquisition);

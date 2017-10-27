@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>问卷填写</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .eui-col-md7 .degree li {
+            margin-right: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="questionHeader">
+
+</div>
+<div class="questionContent">
+    <div class="eui-area">
+
+        <div class="subject" align="center" style="display:table-cell; vertical-align:middle;">
+              亲爱的客户，您已经答题成功！
+        </div>
+    </div>
+
+
+     <div class="questionSubmit">
+            <div class="eui-area eui-textAlignR">
+            <img src="/Styles/images/xymfImages/QRcode.png" width="50" alt="">
+        </div>
+
+    </div>
+
+</div>
+
+<script src="/Scripts/module/eui.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!-- 评分 -->
+<script src="/Scripts/plugins/grade/js/jquery.barrating.js"></script>
+<script src="/Scripts/plugins/grade/js/examples.js"></script>
+<script>
+    var pageIndex = 0;
+    var pageSize = $('.subject>ul>li').length;
+
+    //注意进度条依赖 element 模块，否则无法进行正常渲染和功能性操作
+    var element = null;
+    eui.use('element', function () {
+        element = eui.element;
+        element.init(); //这样element对动态生成的元素才会重新有效
+
+    });
+
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
+        var form = eui.form
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
+    });
+
+    // 焦点图---------------------------------------------
+    ;(function () {
+        $(function () {
+
+
+            //初始化中执行
+            //自动播放
+            var timer = null;
+            var num = 0;
+
+
+            var selectOption = $('.subject>ul>li .rating');
+            for (var i = 0; i < selectOption.length; i++) {
+                selectOption[i].value = '0';
+            }
+
+
+            function go() {
+                clearInterval(timer);
+                timer = setInterval(function () {
+                    num++;
+                    if (num > pageSize) {
+                        num = 0;
+                    }
+                    $('.subject>ul>li').eq(num).fadeIn().siblings().hide();
+                    $('.subject>ol>li').eq(num).addClass('current').siblings().removeClass();
+                }, 1000);
+            }
+
+            //事件中执行
+            //清除动画与左右切换显示
+            $('.subject').hover(function (e) {
+                //清除动画
+                clearInterval(timer);
+                //左右切换图标显示
+            });
+            //角标与左右切换
+            $('.subject>ol>li').mouseover(function (e) {
+                var index = $(this).index();
+                num = index;
+                $('.subject>ul>li').eq(index).fadeIn().siblings().hide();
+                $(this).addClass('current').siblings().removeClass();
+            });
+            //左侧点击
+            $('.subject .sliderLeft').click(function (e) {
+                num--;
+                pageIndex--;
+                if (num < 0) {
+                    num = pageSize;
+                    pageIndex = pageSize;
+                }
+                $('.subject>ul>li').eq(num).fadeIn().siblings().hide();
+                $('.subject>ol>li').eq(num).addClass('current').siblings().removeClass();
+            });
+
+
+            //右侧点击
+            $('.subject .sliderRight').click(function (e) {
+
+                //判断当前页面是否答完题目
+                if (!isSelected(num)) {
+                    return;
+                }
+
+
+                pageIndex++;
+                num++;
+                element.progress('questionProgress', num / pageSize * 100 + '%');
+                if (num > pageSize) {
+                    num = 0;
+                    pageIndex = 0;
+                }
+                $('.subject>ul>li').eq(num).fadeIn().siblings().hide();
+                $('.subject>ol>li').eq(num).addClass('current').siblings().removeClass();
+            });
+
+
+        })
+    })();
+
+
+
+</script>
+
+<script>
+
+
+</script>
+
+
+<script type="text/javascript">
+
+    $('#questionUl li').eq(0).addClass('current');
+    $('#sliderOl li').eq(0).addClass('current');
+</script>
+
+</body>
+</html>

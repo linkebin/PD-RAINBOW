@@ -114,8 +114,10 @@
             <div class="eui-input-inline">
                 <select name="questionType">
                     <option value="0" >请选择类型</option>
-                    <option value="1" >单选</option>
-                    <option value="2" >多选</option>
+                    <option value="1" >单选答案型</option>
+                    <option value="2" >多选答案型</option>
+                    <option value="3" >单选非答案型</option>
+                    <option value="4" >多选非答案型</option>
                 </select>
             </div>
 
@@ -378,6 +380,16 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
         for (var item in questionList){
             var question=questionList[item];
+            var type="";
+            if(question.questionType=='1'){
+                type="单选答案型";
+            }else if(question.questionType=='2'){
+                type="多选答案型";
+            }else if(question.questionType=='3'){
+                type="单选非答案型";
+            }else if(question.questionType=='4'){
+                type="多选非答案型";
+            }
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionId" type="hidden" value="' + question.id + '"></td>' +
                 '<td>'+ question.questionCode +'</td>' +
@@ -385,7 +397,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+ question.optionAnswer +'</td>'   +
                 '<td>'+ question.optionScore +'</td>' +
                 '<td>'+ question.answer +'</td>' +
-                '<td>'+ question.questionType +'</td>' +
+                '<td>'+ type +'</td>' +
                 '<td>'+ question.creator +'</td>' +
                 '<td>'+ new Date(question.createTime).Format('yyyy-MM-dd') +'</td>' +
                 '<td>' +

@@ -41,4 +41,8 @@
 
   </select>
 
+  <select id="findAnswerForAcquisition" resultMap="BaseResultMap" parameterType="com.yidusoft.project.questionnaire.domain.QuestionnaireAnswer">
+    SELECT  * FROM questionnaire_answer WHERE user_id =#{userId} AND acquisition_id=#{acquisitionId}
+  </select>
+
 </mapper>

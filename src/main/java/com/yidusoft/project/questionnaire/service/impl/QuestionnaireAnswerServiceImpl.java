@@ -68,6 +68,7 @@ public class QuestionnaireAnswerServiceImpl extends AbstractService<Questionnair
             List<QuestionnaireQuestion> questions = new ArrayList<>();
             for (int i = 0; i < questionSize; i++) {
                 questions.add(questionnaireQuestions.get(index));
+                index++;
             }
             questionListList.add(questions);
         }
@@ -84,6 +85,11 @@ public class QuestionnaireAnswerServiceImpl extends AbstractService<Questionnair
             answerList.add(answers[i]);
         }
         return answerList;
+    }
+    //查询来访者填写问卷的答案 相关
+    @Override
+    public List<QuestionnaireAnswer> findAnswerForAcquisition(QuestionnaireAnswer questionnaireAnswer) {
+        return questionnaireAnswerMapper.findAnswerForAcquisition(questionnaireAnswer);
     }
 
 }

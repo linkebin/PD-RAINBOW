@@ -17,4 +17,7 @@ public interface QuestionnaireAnswerService extends Service<QuestionnaireAnswer>
     List<List<QuestionnaireQuestion>> getQuestionnaireByPage(List<QuestionnaireQuestion> questionnaireQuestions);
 
     List<String> getAnswers(List<QuestionnaireQuestion> questionnaireQuestions);
+    //查询来访者填写问卷的答案 相关
+    List<QuestionnaireAnswer>  findAnswerForAcquisition(QuestionnaireAnswer questionnaireAnswer);
+
 }

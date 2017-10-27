@@ -1,5 +1,6 @@
 package com.yidusoft.project.business.service;
 
+import com.yidusoft.core.Result;
 import com.yidusoft.core.Service;
 import com.yidusoft.project.business.domain.VisitorRegister;
 
@@ -17,5 +18,6 @@ public interface VisitorRegisterService extends Service<VisitorRegister> {
      * @return
      */
     List<VisitorRegister> findViitorByCounselorId(VisitorRegister visitorRegister);
-
+    //为来访者使用问卷
+    Result getCheckQuestionnaireForVisitor();
 }

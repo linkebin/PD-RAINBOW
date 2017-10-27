@@ -28,7 +28,7 @@
       <form class="eui-form " action=""  id="formQuestionnaire" >
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title1">添加问卷</span>
+                <span class="eui-panels-title1">修改问卷</span>
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
@@ -60,18 +60,13 @@
                             </select>
                         </div>
 
-                        <label class="eui-form-label">答案正反序</label>
-                        <div class="eui-input-inline">
-                            <input type="radio" id="questionSequence1" name="questionSequence" value="0" title="正" checked>
-                            <input type="radio" id="questionSequence2" name="questionSequence" value="1" title="反" >
-                        </div>
-
-                    </div>
-                   <div class="eui-form-item">
                         <label class="eui-form-label">上架时间</label>
                         <div class="eui-input-inline">
                             <input type="text" class="eui-input" name="shelfTime" id="times" placeholder="请选择时间">
                         </div>
+
+                    </div>
+                   <div class="eui-form-item">
 
                          <label class="eui-form-label">问卷类型</label>
                          <div class="eui-input-inline">
@@ -88,7 +83,11 @@
                             </select>
                          </div>
 
-
+                      <!-- <label class="eui-form-label">答案正反序</label>-->
+                       <div class="eui-input-inline" style="display: none">
+                           <input type="radio" id="questionSequence1" name="questionSequence" value="0" title="正" checked>
+                           <input type="radio" id="questionSequence2" name="questionSequence" value="1" title="反" >
+                       </div>
 
 
                     </div>
