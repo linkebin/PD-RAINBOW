@@ -170,10 +170,32 @@ public class QuestionnaireTypeController {
         return ResultGenerator.genSuccessResult(questionnaireType);
     }
 
+    /**
+     * 判断类型是否存在
+     * @param questionnaireTypeName
+     * @return
+     */
     @PostMapping("/findSameType")
     @ResponseBody
     public Result findSameType(String questionnaireTypeName){
         QuestionnaireType questionnaireType = questionnaireTypeService.findSameType(questionnaireTypeName);
+        return ResultGenerator.genSuccessResult(questionnaireType);
+    }
+
+    /**
+     * 判断类型是否含有子类型
+     */
+    @PostMapping("/findDeleteIsContainChild")
+    @ResponseBody
+    public Result findDeleteIsContainChild(String ids){
+        String arr[] = ids.split(",");
+        QuestionnaireType questionnaireType = null;
+        for(String id : arr){
+            QuestionnaireType type = questionnaireTypeService.findDeleteIsContainChild(id);
+            if (type != null){
+                return ResultGenerator.genSuccessResult(type);
+            }
+        }
         return ResultGenerator.genSuccessResult(questionnaireType);
     }
 

@@ -64,4 +64,10 @@ public class QuestionnaireTypeServiceImpl extends AbstractService<QuestionnaireT
     public QuestionnaireType findSameType(String questionnaireTypeName) {
         return questionnaireTypeMapper.findSameType(questionnaireTypeName);
     }
+
+    //删除时检查所要删除的是否包含子类型
+    @Override
+    public QuestionnaireType findDeleteIsContainChild(String id) {
+        return questionnaireTypeMapper.findDeleteIsContainChild(id);
+    }
 }

@@ -172,7 +172,8 @@
 
     //增加前判断是否重复和为空
     function checkForAddQuestionnaireTag() {
-        if($("[name='tagName']").val() == ''){
+        var tagName = trim($("[name='tagName']").val());
+        if( tagName == ''){
             layer.msg('请填写标签名称！',{
                 time: 2000
             });
@@ -191,12 +192,17 @@
                     });
                     return;
                 }
-
+                $("[name='tagName']").val('');
               addQuestionnaireTag();
 
             }
 
         });
+    }
+
+    //清除空格
+    function trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
     }
 
     //删除问题
@@ -255,6 +261,7 @@
         } else if (item == 'delete') {//删除
             deleteQuestionnaireTag(id);
         } else if (item == 'edit') {//编辑
+            $('#upOrAddbnt').attr("disabled", false);
             updateQuestionnaireTag(id);
 
         }
@@ -264,8 +271,10 @@
     function addOrUpdateTag() {
         if ($("[name='id']").val() == ''){
            // addQuestionnaireTag();
+            $('#upOrAddbnt').attr("disabled", true);
             checkForAddQuestionnaireTag();
         }else{
+            $('#upOrAddbnt').attr("disabled", true);
             updateTag();
         }
     }
@@ -399,6 +408,7 @@
 
 
     function openTab() {
+        $('#upOrAddbnt').attr("disabled", false);
         resetAddOrUpdateForm();
 
         //滑出菜单

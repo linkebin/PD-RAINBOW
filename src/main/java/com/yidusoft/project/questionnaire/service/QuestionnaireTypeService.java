@@ -25,4 +25,7 @@ public interface QuestionnaireTypeService extends Service<QuestionnaireType> {
 
     //增加时检查是否类型已经存在
     QuestionnaireType findSameType(String questionnaireTypeName);
+
+    //删除是检查所要删除的是否包含子类型
+    QuestionnaireType findDeleteIsContainChild(String id);
 }

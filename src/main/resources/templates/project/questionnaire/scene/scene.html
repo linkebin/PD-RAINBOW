@@ -209,6 +209,28 @@
             //addQuestionnaireScene();
             checkForAddQuestionnaireScene();
         } else {
+            var sceneName = trim($("[name='sceneName']").val());
+            if (sceneName == '') {
+                layer.msg("场景名称不能为空！", {
+                    time: 2000
+                });
+                return;
+            }
+
+            //判断场景是否重复
+            var sceneName = $("[name='sceneName']").val();
+            $.post("/scene/findSameSceneName", {sceneName: sceneName}, function (result) {
+                if (result.code == 200) {
+                    if (result.data != null) {
+
+                        layer.msg("该场景已存在，请重新输入！", {
+                            time: 2000
+                        });
+                        return;
+                    }
+                }
+
+            });
             updateScene();
         }
     }
@@ -369,7 +391,8 @@
     }
 
     function checkForAddQuestionnaireScene() {
-        if ($("[name='sceneName']").val() == '') {
+       var sceneName = trim($("[name='sceneName']").val());
+        if (sceneName == '') {
             layer.msg("场景名称不能为空！", {
                 time: 2000
             });
@@ -395,6 +418,11 @@
 
         });
 
+    }
+
+    //清除空格
+    function trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
     }
 
     //问卷场景添加

@@ -75,4 +75,12 @@
 
     </select>
 
+
+    <!--查找子类型-->
+    <select id="findDeleteIsContainChild" parameterType="java.lang.String" resultMap="BaseResultMap">
+         SELECT * FROM QUESTIONNAIRE_TYPE WHERE
+        DELETED=0
+        AND PID = #{id}
+    </select>
+
 </mapper>

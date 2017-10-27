@@ -198,6 +198,7 @@
     // 高级筛选左滑
     $(".taskFiltrate").hide();
     $(".menuEdit").click(function (event) {
+        $('#upOrAddbnt').attr("disabled", false);
         $(".taskFiltrate").show();
         $(".filtrateIn").animate({right: '0'}, 400);
         /* Act on the event */
@@ -222,13 +223,14 @@
 
     //保存
     function save() {
+        $('#upOrAddbnt').attr("disabled", true);
         eui.use(['form', 'layedit', 'laydate'], function () {
             var form = eui.form
                 , layer = eui.layer
                 , laydate = eui.laydate;
 
             //url不能为空和/   name不能为空
-            var menuNames = $("#menuNames").val();
+            var menuNames = trim($("#menuNames").val());
             //  var url = $("[name='url']").val();
 //            if (url == "" || url == "/") {
 //                layer.msg('输入正确的url！');
@@ -239,12 +241,16 @@
                 return;
             }
             //addOrUpdate();
+            $("#menuNames").val('');
             checkForAddQuestionnaireType();
         });
 
     }
 
-
+    //清除空格
+    function trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
     //新增是检查类型是否已经存在
     function checkForAddQuestionnaireType() {
         var questionnaireTypeName = $("#menuNames").val();
@@ -369,6 +375,38 @@
                 time: 2000
             });
         } else {
+            //删除前检查所要删除的是否包含子类型
+            $.post("/questionnaire/type/findDeleteIsContainChild", {ids: ids}, function (result) {
+                if (result.code == 200) {
+                    if (result.data != null) {
+
+                        layer.confirm('您确定删除吗？所要删除的包含子类型，会一同删除！', {
+                            btn: ['确认', '取消']
+                        }, function () {
+                            $.ajax({
+                                url: "/questionnaire/type/deleteBacth",
+                                data: {
+                                    ids: ids
+                                },
+                                type: "post",
+                                success: function (result) {
+                                    layer.msg('删除成功', {
+                                        icon: 1,
+                                        time: 2000
+                                    });
+                                    doSearch();
+                                    loadOrgTree();
+                                    resetForm();
+                                }
+                            });
+                        });
+                        return;
+                    }
+
+                }
+
+            });
+
             layer.confirm('您确定删除吗？', {
                 btn: ['确认', '取消']
             }, function () {
@@ -458,7 +496,7 @@
                 });
                 form.render('checkbox');
             });
-
+            $("#pid").val(node.data.pid);
             $('#questionnaireTypeCode').val($('#questionnaireTypeName').val());
             $('#questionnaireTypeName').val('');
             var params = $("#searchFrom").serializeObject();
@@ -694,6 +732,7 @@
 
 
     function openTopTab() {
+
         $("#id").val('');
         $("#menuId").val('');
         $("#showParentNameText").hide();
@@ -705,7 +744,7 @@
             document.getElementById('menuForm').reset();
             $(".taskFiltrate").show();
             $(".filtrateIn").animate({right: '0'}, 400);
-
+            $('#upOrAddbnt').attr("disabled", false);
             element.tabChange('menuFilter', id);
             $(".eui-show input[name='account']").removeAttr("disabled");
             //排序
@@ -724,6 +763,7 @@
     }
     //打开tab
     function openTab() {
+
         if ($("#id").val() == '') {
             layer.msg('请选择左侧菜单', {
                 time: 2000
@@ -743,7 +783,7 @@
                 document.getElementById('menuForm').reset();
                 $(".taskFiltrate").show();
                 $(".filtrateIn").animate({right: '0'}, 400);
-
+                $('#upOrAddbnt').attr("disabled", false);
                 $("#parentNameText").val($("#parentName").val());
                 element.tabChange('menuFilter', id);
                 $(".eui-show input[name='account']").removeAttr("disabled");
