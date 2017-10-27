@@ -112,8 +112,8 @@
 
 
                             <div class="eui-col-md2 eui-marginL20" id="addQuestionnaire" onclick="loadQuestionnaire()">
-                        <span class="eui-btn eui-btn-small eui-btn-normal">
-                            <i class="eui-icon">&#xe654;</i> 新增问卷
+                             <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
+                                    <i class="eui-icon">&#xe654;</i> 新增问卷
                         </span>
                             </div>
                         </div>
@@ -290,7 +290,7 @@
 
 
                     <div class="eui-col-md2 eui-marginL20" id="addQuestionnaire" onclick="loadQuestionnaire()">
-                        <span class="eui-btn eui-btn-small eui-btn-normal">
+                        <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
                             <i class="eui-icon">&#xe654;</i> 新增问卷
                         </span>
                     </div>
@@ -594,25 +594,29 @@ function loadShaftTime() {
     var obj = $("#searchFrom").serializeObject();
     $.post('/visiting/record/shaftTime',{json:JSON.stringify(obj)},function (result) {
         var list = result.data.list;
-        $.each(list, function (index, item) {
-            $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
-                '<div class="eui-timeline-content eui-text"> ' +
-                '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'</div> ' +
-                '</div> ' +
-                '<i class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
-                '</li>');
-        });
-        loadVisitorRecordDetail(list[0].id);
+        if (list.length>0){
+            $.each(list, function (index, item) {
+                $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
+                    '<div class="eui-timeline-content eui-text"> ' +
+                    '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'</div> ' +
+                    '</div> ' +
+                    '<i class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
+                    '</li>');
+            });
+            loadVisitorRecordDetail(list[0].id);
 
-        $("#shaftTime li").find('i').eq(0).html('&#xe617;');
+            $("#shaftTime li").find('i').eq(0).html('&#xe617;');
 
-        $("#shaftTime li").click(function () {
-            $('#resetDiv').hide();
-            var id = $(this).attr('visitorId');
-            loadVisitorRecordDetail(id);
-            $("#shaftTime li").find('i').html('&#xe63f;');
-            $(this).find('i').html('&#xe617;')
-        });
+            $("#shaftTime li").click(function () {
+                $('#resetDiv').hide();
+                var id = $(this).attr('visitorId');
+                loadVisitorRecordDetail(id);
+                $("#shaftTime li").find('i').html('&#xe63f;');
+                $(this).find('i').html('&#xe617;')
+            });
+        }else {
+            $('#noData').hide();
+        }
     });
 }
 

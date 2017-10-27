@@ -14,9 +14,15 @@
 </head>
 <body>
 <div class="questionHeader">
-    <div class="eui-row">
-        <h1 class="eui-col-md1 eui-marginL10"><a href="###"><img src="/Styles/images/xymfImages/logo.png" class="eui-marginT10" alt=""></a></h1>
-        <p class="eui-col-md2 eui-color-white eui-font20 eui-padding10 eui-display-Ib questionTitle">来访者咨询管理</p>
+    <!--<div class="eui-row">-->
+        <!--<h1 class="eui-col-md1 eui-marginL10"><a href="###"><img src="/Styles/images/xymfImages/logo.png" class="eui-marginT10" alt=""></a></h1>-->
+        <!--<p class="eui-col-md2 eui-color-white eui-font20 eui-padding10 eui-display-Ib questionTitle">来访者咨询管理</p>-->
+    <!--</div>-->
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">来访登记</span>
+        </div>
     </div>
 </div>
 
@@ -930,6 +936,7 @@ $(function () {
             $.post('/visitor/register/update',{json:JSON.stringify(obj)},function (result) {
                 if (result.code==200){
                     layer.msg(result.message);
+                    self.opener.location.reload();
                 }else {
                     layer.msg(result.message);
                 }

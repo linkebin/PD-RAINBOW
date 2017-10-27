@@ -175,6 +175,7 @@ public class SecUserServiceImpl extends AbstractService<SecUser> implements SecU
         secUser.setDeleted(0);
         secUser.setId(id);
         secUser.setCreateTime(new Date());
+        secUser.setAccountType(0);
         //判断账号是否存在
         SecUser secUser1=isSecUser(secUser.getAccount());
         if(secUser1!=null){

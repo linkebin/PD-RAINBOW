@@ -78,16 +78,9 @@
         <div  class="login1">
         <h3 style="text-align: center"><img src="/Styles/images/xymfImages/xymf/logo.png"></h3>
             <form id="signForm" onsubmit="return false;">
-                <p class="signTxt"><input  id="mobile" name="account" type="text" placeholder="手机号码" /></p>
+                <p class="signTxt"><input  id="mobile" name="account" type="text" placeholder="手机号码" />
+                </p>
                 <input type="hidden" value="1"   name="accountType" />
-                <div style="margin: 10px auto; width: 300px;" class="eui-form">
-                    <div class="eui-security">
-                        <input name="msgCode" type="text"  placeholder="请输入手机验证码" autocomplete="off"
-                               class="eui-input  eui-input-inline  securityCode" value="">
-                        <button disabled="disabled" onclick="sendMsgCode(this)" id="btnSendCode"
-                                type="button" style="background:#7dbbfa ;color:#ce6197" class="eui-btn eui-btn-primary securityBut">点击获取</button>
-                    </div>
-                </div>
                 <div style="margin: 10px auto; width: 300px;" class="eui-form">
                     <div class="eui-security">
                         <input name="vrifyCode" id="vrifyCodeIn" type="text"  placeholder="请输入图形验证码" autocomplete="off"
@@ -96,6 +89,16 @@
                         <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="95" alt=""></span>
                     </div>
                 </div>
+
+                <div style="margin: 10px auto; width: 300px;" class="eui-form">
+                    <div class="eui-security">
+                        <input name="msgCode" type="text"  placeholder="请输入手机验证码" autocomplete="off"
+                               class="eui-input  eui-input-inline  securityCode" value="">
+                        <button disabled="disabled"  onclick="sendMsgCode(this)" id="btnSendCode"
+                                type="button"  class="eui-btn eui-btn-primary  securityBut eui-btn-disabled">点击获取</button>
+                    </div>
+                </div>
+
                 <p class="loginPword"><input id="userPass" type="password" name="userPass" placeholder="密码" /></p>
                 <p class="loginPword"><input type="password" name="newPass" placeholder="确认密码" /></p>
 
@@ -120,10 +123,11 @@
 <script type="text/javascript">
 
     var InterValObj; //timer变量，控制时间
-    var count = 60; //间隔函数，1秒执行
+    var count = 100; //间隔函数，1秒执行
     var curCount;//当前剩余秒数
 
     $(function () {
+
         $("#password,#username,#vrifyCode").keydown(function(e) {
             if (e.keyCode == 13) {
                 login();
@@ -132,25 +136,35 @@
     });
 
     function sendMsgCode(o) {
-        var m = $("#mobile").val();
-        curCount = count;
-        $(o).attr('disabled','true');
-        InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+        if ($("#vrifyCodeIn").val()!=''){
+            var m = $("#mobile").val();
+            curCount = count;
+            $(o).attr('disabled','true');
 
-        $.ajax({
-            url:'/sign/code',
-            type:"post",
-            data:{
-                mobile:m
-            },
-            dataType:"json",
-            success:function(data){
-                if(data.code!=undefined) {
-                    $("#errorInfo").html('');
-                    $("#errorInfo").append('<span style="color: red;font-size: 14px; ">'+data.message+'</span>');
+            $.ajax({
+                url:'/sign/code',
+                type:"post",
+                data:{
+                    mobile:m,
+                    vrifyCode:$("#vrifyCodeIn").val()
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.code ==200) {
+                        $("#errorInfo").html('');
+                        $("#errorInfo").append('<span style="color: red;font-size: 14px; ">'+data.message+'</span>');
+                        InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+                    }else {
+                        $("#errorInfo").html('');
+                        $("#errorInfo").append('<span style="color: red;font-size: 14px; ">'+data.message+'</span>');
+                        $(o).removeAttr('disabled');
+                    }
                 }
-            }
-        });
+            });
+        }else {
+            layer.msg('请填写图形验证码');
+        }
+
     }
 
     function sign() {
@@ -246,9 +260,9 @@
                 // 遍历错误列表
                 for(var obj in errorMap) {
                    if (obj == 'account'){
-                       $("#btnSendCode").attr('disabled','true');
-                       $("#btnSendCode").css("background","#7dbbfa");
-                       $("#btnSendCode").css("color","#ce6197");
+                       $("#btnSendCode").attr('disabled','true')
+                           .css("background","")
+                           .css("color","#ce6197").addClass('eui-btn-disabled');
                    }
                 }
                 // 此处注意，一定要调用默认方法，这样保证提示消息的默认效果
@@ -256,9 +270,17 @@
             },
             success:function(label) {
                 if (label[0].htmlFor == 'mobile'){
-                    $("#btnSendCode").removeAttr('disabled');
-                    $("#btnSendCode").css("background","#7dbbfa");
-                    $("#btnSendCode").css("color","#fff");
+                    $.post('/sign/check/phone',{mobile:$("#mobile").val()},function (resule) {
+                        if (resule.code == 200){
+                            $("#btnSendCode").removeAttr('disabled')
+                                .css("background","#7dbbfa").css("color","#fff").removeClass('eui-btn-disabled');
+                        }else {
+                            layer.msg("该手机号码已存在，请换一个试试！");
+                            $("#btnSendCode").attr('disabled','true')
+                                .css("background","")
+                                .addClass('eui-btn-disabled');
+                        }
+                    });
                 }
             },
             submitHandler: function() {
@@ -275,10 +297,10 @@ function login() {
     $("#password").val(md5($("#password").val()));
     var password = document.getElementById("password").value;
     var parames = new Array();
-    parames.push({ name: "username", value: username});
-    parames.push({ name: "password", value:password});
-    parames.push({ name: "type", value:type});
-    parames.push({ name: "vrifyCode", value:$("#vrifyCode").val()});
+    parames.push({ name: "username", value: username.trim()});
+    parames.push({ name: "password", value:password.trim()});
+    parames.push({ name: "type", value:type.trim()});
+    parames.push({ name: "vrifyCode", value:$("#vrifyCode").val().trim()});
 
     Post("/login", parames);
    };

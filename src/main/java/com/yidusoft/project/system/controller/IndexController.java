@@ -116,7 +116,12 @@ public class IndexController {
         if (!captchaId.equals(secUser.getVrifyCode()) && !"".equals(captchaId)) {
             return ResultGenerator.genFailResult("图形验证码错误");
         }
+
+        if(request.getSession().getAttribute("signCode")==null || request.getSession().getAttribute("signCode")==""){
+            return ResultGenerator.genFailResult("请获取手机验证码");
+        }
         String code = (String) request.getSession().getAttribute("signCode");
+
         if (!code.equals(secUser.getMsgCode()) ){
             return ResultGenerator.genFailResult("手机验证码错误");
         }
@@ -133,6 +138,7 @@ public class IndexController {
         }else {
             secUser.setInviterCode(inviterCode);
             secUser.setMobile(secUser.getAccount());
+            secUser.setHeadImg("/upload/headImg/default-pic.png");
             Result result = secUserService.addUser(JSON.toJSONString(secUser));
             if (result.getCode() !=200){
                 return result;
@@ -159,19 +165,24 @@ public class IndexController {
      */
     @PostMapping("/sign/code")
     @ResponseBody
-    public Result signcode(HttpServletRequest request,String mobile) {
-//        request.getSession().setAttribute("signCode","1234");
+    public Result signcode(HttpServletRequest request,String mobile,String vrifyCode) {
+
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+        if (!captchaId.equals(vrifyCode) && !"".equals(captchaId)) {
+            return ResultGenerator.genFailResult("图形验证码错误");
+        }
+
         try{
             String json = SendMessageCode.sendMessageCode(mobile);
             SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
             if (smsCode.getCode() == 200){
                 request.getSession().setAttribute("signCode",smsCode.getObj());
             }else{
-                return ResultGenerator.genFailResult("验证码发生失败");
+                return ResultGenerator.genFailResult("验证码发送失败");
             }
         }catch (Exception e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult("验证码发生失败");
+            return ResultGenerator.genFailResult("验证码发送失败");
         }
         return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
     }
@@ -309,6 +320,16 @@ public class IndexController {
         responseOutputStream.close();
     }
 
+    @PostMapping("/sign/check/phone")
+    @ResponseBody
+    public Result signCheckPhone(String mobile){
+
+        SecUser  user = secUserService.getSecUserInfo(mobile);
+        if (user == null){
+            return ResultGenerator.genSuccessResult(mobile);
+        }
+        return ResultGenerator.genFailResult(mobile);
+    }
 
     @PostMapping("/sign/check/account")
     @ResponseBody

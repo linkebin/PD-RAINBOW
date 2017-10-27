@@ -4,15 +4,10 @@
     <aside th:fragment="left">
     <div class="eui-side eui-bg-white">
       <div class="eui-user-top">
-          <p th:text="${session.userSession.userName}" class="eui-font18 eui-userName"></p>
+          <p id="userName" th:text="${session.userSession.userName}" class="eui-font18 eui-userName"></p>
           <p class="eui-font14 eui-userJob"></p>
           <div class="eui-userImg">
-              <th:block th:if="${session.userSession.headImg!='' || session.userSession.headImg!=null}">
-                  <img th:src="${'/files'+session.userSession.headImg}" width="60" alt="" id="left_img_head">
-              </th:block>
-              <th:block th:if="${session.userSession.headImg=='' || session.userSession.headImg==null}">
-                  <img src="/Styles/images/default-pic.png" width="60" alt="">
-              </th:block>
+                  <img th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" width="60" alt="" id="left_img_head">
           </div>
       </div>
       <ul class="cymfNav" id="cymfNav">

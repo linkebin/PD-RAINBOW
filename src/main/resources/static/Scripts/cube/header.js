@@ -2,14 +2,20 @@
  * Created by linkb on 2017/10/19.
  */
 //表单
+var laydate;
+
 eui.use(['form', 'laydate', 'element'], function () {
     var form = eui.form
-        , element = eui.element
-        , laydate = eui.laydate;
+        , element = eui.element;
+    laydate = eui.laydate
     var obj = new Object();
+    initLaydateTest_n1(obj);
+});
+
+function initLaydateTest_n1(obj) {
     $.post('/schedule/scheduleTimeOrEvent',{type:'1',json:JSON.stringify(obj)},function (result) {
         // 日期
-        var ins1 =  laydate.render({
+        laydate.render({
             elem: '#test-n1'
             , position: 'static'
             ,mark: result.data
@@ -24,9 +30,10 @@ eui.use(['form', 'laydate', 'element'], function () {
         obj.visitorTimeStr=new Date().Format('yyyy-MM-dd');
         loadEvends(obj);
     });
-});
+}
 
 function loadEvends(obj) {
+    layer.load(2);
     $("#scheduleData").html('');
     $.post('/schedule/scheduleTimeOrEvent',{type:'2',json:JSON.stringify(obj)},function (result) {
         var v = result.data;
@@ -40,5 +47,6 @@ function loadEvends(obj) {
                     '<div title="'+item.describes+'"  style="text-overflow: ellipsis;" class="eui-float-left eui-marginB10 eui-marginL10 test">'+item.visitorName+'  '+item.describes+'</div></div>')
             });
         }
+        layer.closeAll();
     });
 }

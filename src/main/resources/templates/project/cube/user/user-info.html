@@ -37,8 +37,9 @@
 
                         <div style="height: 90px;" class="eui-padding20">
                             <div style="width: 90px; height: 90px; float: left;">
-                                <img id="headImg" th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" width="90" height="90">
+                                    <img id="headImg" th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" width="90" height="90">
                             </div>
+
 
                             <button  style="margin-left: 40px; " type="button"   class="eui-btn eui-btn-small eui-btn-normal" id="upFiles">
                                 <i class="eui-icon">&#xe67c;</i>上传图片
@@ -171,13 +172,17 @@
     $(function () {
         $("#userInfoForm").validate({
             submitHandler: function() {
+                $("#error0").html('');
                 if ($("#userInfoForm input[name='userName']").val()!=''){
                     var obj = $("#userInfoForm").serializeObject();
                     $.post('/user/userUpdate',{json:JSON.stringify(obj)},function (result) {
-                        $("#errcode0").html(result.message);
+                        if (result.code ==200){
+                            $("#userName").html(obj.userName)
+                        }
+                        layer.msg(result.message);
                     });
                 }else {
-                    $("#error0").html('用户名称不能为空！');
+                    layer.msg('用户名不能为空')
                 }
 
             }
