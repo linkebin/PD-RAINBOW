@@ -36,12 +36,14 @@
     </resultMap>
 
 
-    <select id="questionnaireUseInfoListByPage" resultMap="QuestionnaireUseInfoResultMap">
+    <select id="questionnaireUseInfoListByPage" resultMap="QuestionnaireUseInfoResultMap" parameterType="String">
    SELECT d.*, q.questionnaire_name, v.visitor_name
      FROM questionnaire q, data_acquisition d, visitor_register v
       WHERE d.deleted = 0
           AND q.ID_ IN (SELECT d.data_question FROM data_acquisition WHERE DELETED = 0)
           AND v.ID_ IN (SELECT d.user_id FROM data_acquisition WHERE deleted = 0)
+           AND v.creator=#{creator}
+           order by     d.create_time  desc
   </select>
     <select id="findQuestionnaireForVisitor" resultMap="QuestionnaireUseInfoResultMap" parameterType="com.yidusoft.project.questionnaire.domain.DataAcquisition">
         SELECT d.*,q.questionnaire_name  from

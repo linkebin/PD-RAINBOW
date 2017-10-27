@@ -8,7 +8,7 @@ import java.util.List;
 public interface DataAcquisitionMapper extends Mapper<DataAcquisition> {
 
     //首页查询问卷使用信息
-    List<DataAcquisition> questionnaireUseInfoListByPage();
+    List<DataAcquisition> questionnaireUseInfoListByPage(String creator);
     //根据日期查询来访者使用的问卷
     List<DataAcquisition> findQuestionnaireForVisitor (DataAcquisition dataAcquisition);
 }

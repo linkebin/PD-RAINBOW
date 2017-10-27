@@ -8,6 +8,7 @@ import com.yidusoft.project.questionnaire.service.DataAcquisitionService;
 import com.yidusoft.core.AbstractService;
 
 import com.yidusoft.utils.MyException;
+import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -231,7 +232,8 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
 
     @Override
     public List<DataAcquisition> questionnaireUseInfoListByPage() {
-        List<DataAcquisition> list = dataAcquisitionMapper.questionnaireUseInfoListByPage();
+
+        List<DataAcquisition> list = dataAcquisitionMapper.questionnaireUseInfoListByPage(Security.getUserId());
         return list;
     }
 }
