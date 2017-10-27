@@ -51,8 +51,8 @@
 </div>
 <div class="filtrateIn">
     <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
-            <i class='eui-icon eui-font24'>&#xe654;</i> 新建首页图片
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30 newOrEdit">
+            <i class='eui-icon eui-font24'>&#xe654;</i>
         </div>
         <div class="eui-col-md2 eui-textAlignR">
             <i class='eui-icon eui-font24 pictureClose'>&#x1006;</i>
@@ -88,6 +88,7 @@
                     <img class="eui-upload-img" id="demo1">
                     <p id="demoText"></p>
                 </div>
+                <div>推荐图片格式为676 x 128左右</div>
             </div>
         </div>
         <div class="eui-form-item">
@@ -203,7 +204,8 @@
             var imgPath = indexImg.imgPath;
             imgPath = imgPath.substring(imgPath.indexOf("/upload"), imgPath.length);
             console.log(imgPath)
-            tableHtml += '<td><img src="/files' + imgPath + '"></td>' +
+
+            tableHtml += '<td><img onclick="checkImg('+"'"+imgPath+"'"+')" style="width:100px;height:18.63px" src="/files' + imgPath + '"></td>' +
                     '<td>' +
                     '<div class="eui-btn-group"> ' +
                     '' + Buts(indexImg) + '' +
@@ -213,6 +215,15 @@
         }
         return tableHtml;
     }
+    /**
+     * 查看图片大图
+     * @param imgPath
+     */
+    function checkImg(imgPath) {
+        window.open('/files'+imgPath);
+
+    }
+
     function Buts(indexImg) {
         var id = "'" + indexImg.id + "'";
         var imgType = "'" + indexImg.imgType + "'";
@@ -227,6 +238,7 @@
     // 新建图片
     $(".taskFiltrate").hide();
     $('.pictureNew').click(function () {
+        $('.newOrEdit').html("新建首页图片");
         $('#indexImgId').val("");
         $(".taskFiltrate").show();
         $(".filtrateIn").animate({right: '0'}, 400);
@@ -376,17 +388,25 @@
                     $('#demo1').removeAttr("src");
                     imgPath = "";
                     form.render();
-                    layer.closeAll();
-                    layer.msg('删除成功！', {
+                    layer.msg('添加成功！', {
                         icon: 1,
                         time: 2000 //1秒关闭（如果不配置，默认是3秒）
                     });
+                    $(".filtrateIn").animate({right: '-400px'}, 400);
+                    $(".taskFiltrate").hide();
                     doSearch();
                 }
             })
         })
     }
-
+    /**
+     * 编辑活动图片
+     * @param id
+     * @param imgType
+     * @param state
+     * @param Path
+     * @param objectId
+     */
     function imageEdit(id, imgType, state, Path,objectId) {
         eui.use(['form'], function () {
             var form = eui.form
@@ -424,6 +444,7 @@
             Path = Path.substring(Path.indexOf("/upload"), Path.length);
             Path = "file/"+Path;
             imgPath = Path;
+            $('.newOrEdit').html("编辑首页图片")
             form.render();
             $(".taskFiltrate").show();
             $(".filtrateIn").animate({right: '0'}, 400);
