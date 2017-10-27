@@ -9,7 +9,6 @@
 </head>
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome xymfPay">
-    <div>
         <div th:replace="project/cube/common/header :: header">Header</div>
         <div class="eui-area">
             <div class="payLeft eui-row eui-padding20">
@@ -62,12 +61,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="eui-footer">
-            <!-- 底部固定区域 -->
-            © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
-        </div>
-    </div>
+        <div th:replace="project/cube/common/footer :: footer">footer</div>
 </div>
 
 <script src="/Scripts/module/eui.js"></script>
