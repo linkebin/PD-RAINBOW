@@ -28,7 +28,8 @@
         <div class="eui-form-item">
             <label class="eui-form-label">预约客户</label>
             <div class="eui-input-inline">
-                <input type="text" name="visitorName" onfocus="defaultData()" onblur="checkCustomerValidity(this)"  id="visitorName"  placeholder="搜索" class="eui-input eui-width400"/>
+                <input type="text" name="visitorName" onfocus="defaultData()"
+                       onblur="checkCustomerValidity(this)"  id="visitorName"  placeholder="搜索" class="eui-input eui-width400"/>
                 <span class="infos"></span>
             </div>
         </div>
@@ -157,39 +158,8 @@
                 var params = new Object();
                 params.visitorName=textValue;
                 params.creator=$('#creator').val();
-                $.post('/visitor/register/listByparameter',{json:JSON.stringify(params),
-                    page:1,
-                    pagesize:100},function (result) {
-                    var arr = new Array();
-                    var projects1 = result.data.list;
-                    if (result.data.list.length>0){
-                        for (var i=0;i<projects1.length;i++){
-                            var obj = new Object();
-                            obj.value=projects1[i].visitorName;
-                            obj.visitorId=projects1[i].id;
-                            obj.phone=projects1[i].phone;
-                            arr.push(obj);
-                        }
-                        $( "#visitorName" ).autocomplete({
-                            minLength: 0,
-                            source: arr,
-                            focus: function( event, ui ) {
-                                $( "#visitorName" ).val( ui.item.value );
-                                $( "#visitorId" ).val( ui.item.visitorId );
-                                $("#scheduleForm input[name='phone']").val(ui.item.phone );
-                                return false;
-                            },
-                            select: function( event, ui ) {
-                                $( "#visitorName" ).val( ui.item.value );
-                                $( "#visitorId" ).val( ui.item.visitorId );
-                                $("#scheduleForm input[name='phone']").val(ui.item.phone );
-                                return false;
-                            }
-                        });
-                    }
-                });
+                loadList(params);
             });
-
 
             if ($("#type").val()=='update'){
                 $.post('/schedule/detail',{id:$("#idold").val()},function (result) {
@@ -200,7 +170,49 @@
             }
 
         });
-        
+        function defaultData() {
+            var params = new Object();
+            params.visitorName='';
+            params.creator=$('#creator').val();
+            loadList(params)
+        }
+        function loadList(params) {
+            $.post('/visitor/register/listByparameter',{json:JSON.stringify(params),
+                page:1,
+                pagesize:100},function (result) {
+                var arr = new Array();
+                var projects1 = result.data.list;
+                if (result.data.list.length>0){
+                    for (var i=0;i<projects1.length;i++){
+                        var obj = new Object();
+                        obj.value=projects1[i].visitorName;
+                        obj.visitorId=projects1[i].id;
+                        obj.phone=projects1[i].phone;
+                        arr.push(obj);
+                    }
+                    fuzzyInput(arr)
+                }
+            });
+        }
+
+        function fuzzyInput(arr) {
+            $( "#visitorName" ).autocomplete({
+                minLength: 0,
+                source: arr,
+                focus: function( event, ui ) {
+                    $( "#visitorName" ).val( ui.item.value );
+                    $( "#visitorId" ).val( ui.item.visitorId );
+                    $("#scheduleForm input[name='phone']").val(ui.item.phone );
+                    return false;
+                },
+                select: function( event, ui ) {
+                    $( "#visitorName" ).val( ui.item.value );
+                    $( "#visitorId" ).val( ui.item.visitorId );
+                    $("#scheduleForm input[name='phone']").val(ui.item.phone );
+                    return false;
+                }
+            });
+        }
         function checkCustomerValidity(obj) {
             var params = new Object();
             params.visitorName=$(obj).val();

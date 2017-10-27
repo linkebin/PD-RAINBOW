@@ -147,7 +147,7 @@
     function layuiAlertClose(o) {
         layer.closeAll();
         if (o){
-            doSearch();
+
         }
     }
 
@@ -185,6 +185,7 @@
                         ,count: result.data.total //数据总数
                         ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
                         ,skip: true
+                        ,theme: '#1E9FFF'
                         ,jump: function(obj,first){
                             if (first){
                                 //第一次，不需要查询数据

@@ -29,7 +29,6 @@ eui.use(['form', 'laydate', 'element'], function () {
 function loadEvends(obj) {
     $("#scheduleData").html('');
     $.post('/schedule/scheduleTimeOrEvent',{type:'2',json:JSON.stringify(obj)},function (result) {
-        console.log(result.data)
         var v = result.data;
         if (result.data.length ==0){
             $("#scheduleData").append('<div class="eui-overflowH"> ' +

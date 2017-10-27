@@ -49,7 +49,7 @@
                                 </div>
 
                             <div class="eui-input-inline">
-                                <span  class="eui-btn eui-btn-small" onclick="doSearch()"  >查询</span>
+                                <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>
                                 <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                            &nbsp;
                         </div>
                         <div class="eui-col-md6 eui-textAlignR">
-                            <a target="_blank" class="eui-btn eui-btn-small" th:href="'/web/customer/visitorRegister?creator='+${session.userSession.id}">客户登记</a>
+                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal" th:href="'/web/customer/visitorRegister?creator='+${session.userSession.id}">客户登记</a>
                         </div>
                     </div>
 
@@ -209,6 +209,7 @@
                         ,count: result.data.total //数据总数
                         ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
                         ,skip: true
+                        ,theme: '#1E9FFF'
                         ,jump: function(obj,first){
                             if (first){
                                 //第一次，不需要查询数据
