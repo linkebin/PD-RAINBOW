@@ -72,7 +72,22 @@ public class QuestionnaireQuestion {
     @Column(name = "question_content")
     private String questionContent;
 
+
     /**
+     * 答案正反序 1 正 2反
+     */
+    @Column(name = "answer_sequence")
+    private Integer answerSequence;
+
+        public Integer getAnswerSequence() {
+            return answerSequence;
+        }
+
+        public void setAnswerSequence(Integer answerSequence) {
+            this.answerSequence = answerSequence;
+        }
+
+        /**
      * @return ID_
      */
     public String getId() {

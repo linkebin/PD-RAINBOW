@@ -175,6 +175,7 @@ function  getTable(list) {
     //答案
     var answerList=list.answerList;
     var context="";
+    console.info(answerList);
    for(var i in questionList){
     context+='<div questionType="'+questionList[i].questionType+'" radioNmae="answer'+questionList[i].id+'" correctAnswer="'+questionList[i].answer+'" questionId="'+questionList[i].id+'"  class="eui-form-item eui-padding20" name="divQuestion">';
     context+='<div class="eui-font18">';
@@ -182,14 +183,22 @@ function  getTable(list) {
     context+='</div>';
     var optionAnswer=questionList[i].optionAnswer.split("||");
     var optionScore=questionList[i].optionScore.split("||");
+
        for( var t in answerList){
            if(answerList[t].questionId==questionList[i].id){
+               //截取填写的答案
+               var answers= answerList[t].answer.split("||");
                for(var j in optionAnswer){
-                   if(answerList[t].answer==optionAnswer[j]){
-                   context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" checked>';
-                   }else {
-                   context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" >';
-                }
+                   var num=0;
+                   for( var a in answers){
+                       if(answers[a]==optionAnswer[j] ){
+                           context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" checked disabled>';
+                           num++;
+                       }
+                   }
+                   if(num==0){
+                       context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" disabled>';
+                   }
                }
            }
        }

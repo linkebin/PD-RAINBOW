@@ -619,7 +619,7 @@ function loadShaftTime() {
         }
     });
 }
-
+    var visitorTimes="";
 function loadVisitorRecordDetail(id) {
 
     $("#fileDiv").show();
@@ -647,7 +647,8 @@ function loadVisitorRecordDetail(id) {
                 '<th class="icons"><i path="'+item.fileUri+'" title="下载" class="eui-icon tb">&#xe61e;</i>' +
                 '<i path="'+item.id+'" title="删除" class="eui-icon tb">&#xe640;</i></th></tr>');
         });
-        var  createTime=new Date(obj.createTime).Format('yyyy-MM-dd');
+        var  createTime=new Date(obj.visitorTime).Format('yyyy-MM-dd');
+        visitorTimes=createTime;
         var userId=$("[name='visitorId']").val();
 
         $.post("/data/acquisition/findQuestionnaireForVisitor",{"userId":userId,"createTime":createTime},function (result) {
@@ -796,7 +797,7 @@ function  loadQuestionnaire() {
     }
 
    function startAnswer(questionnaireId,userId) {
-       window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId;
+       window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes;
    }
 </script>
 

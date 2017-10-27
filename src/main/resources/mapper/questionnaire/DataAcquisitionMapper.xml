@@ -51,7 +51,7 @@
         LEFT JOIN
         questionnaire   q
         ON  q.ID_=d.data_question
-        WHERE  (d.create_time>#{createTime} OR   d.create_time=#{createTime})    AND d.user_id=#{userId}
+        WHERE  (d.create_time>#{createTime}   OR   d.create_time=#{createTime})    AND d.user_id=#{userId}
     </select>
 
 

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -68,7 +69,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
     //提交问卷
     @Override
-    public Result submitQuestionnaire(String param, String questionnaireId,String userId) {
+    public Result submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes) {
         try {
             List<Map<String,Object>> mapList= (List<Map<String,Object>>)JSON.parse(param);
            //问卷使用的id
@@ -129,8 +130,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                questionnaireAnswer.setCreator(Security.getUser().getUserName());
                questionnaireAnswer.setDeleted(0);
                questionnaireAnswer.setUserId(userId);
-               //判断  1 ,2有答案类型  3,4 无答案类型
-               if(questionType.equals("3") || questionType.equals("4")) {
+               //判断  1  单选  2多选  3评分单选
+               if(!questionType.equals("3")) {
                  //答案正确
                  if (answerArray.length == state) {
                      int scores = 0;
@@ -155,15 +156,6 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                      scores += Integer.valueOf(scoreArray[i]);
                  }
                    questionnaireAnswer.setAnswerScore(scores);
-                 /*QuestionnaireAnswer questionnaireAnswer = new QuestionnaireAnswer();
-                 questionnaireAnswer.setId(UUID.randomUUID().toString());
-                 questionnaireAnswer.setAcquisitionId(dataAcquisitionId);
-                 questionnaireAnswer.setAnswer(answer);
-                 questionnaireAnswer.setQuestionId(questionId);
-                 questionnaireAnswer.setCreateTime(new Date());
-                 questionnaireAnswer.setCreator(Security.getUser().getUserName());
-                 questionnaireAnswer.setDeleted(0);
-                 questionnaireAnswer.setUserId(userId);*/
                  questionnaireAnswerMapper.insert(questionnaireAnswer);
 
              }
@@ -191,7 +183,9 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setUserId(userId);
             dataAcquisition.setDeleted(0);
             dataAcquisition.setDataUser(Security.getUser().getUserName());
-            dataAcquisition.setCreateTime(new Date());
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+            java.util.Date date=sdf.parse(visitorTimes);
+            dataAcquisition.setCreateTime(date);
             dataAcquisitionMapper.insert(dataAcquisition);
 
         //扣除余额

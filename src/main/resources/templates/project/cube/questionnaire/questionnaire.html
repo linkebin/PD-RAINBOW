@@ -17,6 +17,8 @@
 <div class="questionHeader">
     <input type="hidden" th:value="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireId"/>
     <input type="hidden" th:value="${userId}" id="userId"/>
+    <input type="hidden" th:value="${visitorTimes}" id="visitorTimes"/>
+
     <div class="eui-row eui-area">
         <div class="xymfLogo">
             <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
@@ -62,9 +64,11 @@
                         <div class="eui-col-md7">
                             <div style="height: 50px;" class="grade">
                                 <select class="example-0 rating" name="rating">
+
                                     <option th:each="an : ${answers}" th:value="${an}"></option>
 
                                 </select>
+
                             </div>
                         </div>
                     </div>
@@ -98,7 +102,9 @@
 <!-- 评分 -->
 <script src="/Scripts/plugins/grade/js/jquery.barrating.js"></script>
 <script src="/Scripts/plugins/grade/js/examples.js"></script>
-<script>
+
+<script th:inline="javascript">
+
     var pageIndex = 0;
     var pageSize = $('.subject>ul>li').length;
     var progress = 0;
@@ -248,10 +254,12 @@
         }
         var questionnaireId = $("#questionnaireId").val();
         var userId = $("#userId").val();
+        var visitorTimes= $("#visitorTimes").val();
         $.post("/cube/questionnaire/submitQuestionnaire", {
             "param": JSON.stringify(array),
             "questionnaireId": questionnaireId,
-            "userId": userId
+            "userId": userId,
+            "visitorTimes":visitorTimes
         }, function (result) {
             if (result.code == 200) {
                 window.location.href="/web/cube/getSuccess";

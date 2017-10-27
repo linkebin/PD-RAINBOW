@@ -28,9 +28,10 @@ public class WebCubeQuestionnaireController {
      * @return
      */
     @RequestMapping(value ={"/getQuestionnaireFillIn"})
-    public String getQuestionnaireFillIn(String questionnaireId,String userId, Model model){
+    public String getQuestionnaireFillIn(String questionnaireId,String userId,String visitorTimes, Model model){
         model.addAttribute("questionnaireId",questionnaireId);
         model.addAttribute("userId",userId);
+        model.addAttribute("visitorTimes",visitorTimes);
         Questionnaire questionnaire= questionnaireService.findById(questionnaireId);
         //判断问卷的类型 1 左右滑动 2  平铺
         if(questionnaire.getAnswerModelType()==1){
