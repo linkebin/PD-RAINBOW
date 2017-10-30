@@ -160,7 +160,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //全选
     form.on('select', function(data){
-        if(data.elem.value!='3'){
+        if(data.elem.value!='3' && data.elem.value!='0'){
             $("[name='answer1']").show();
         }else {
             $("[name='answer1']").hide();
@@ -375,6 +375,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             ,title: '添加问题'
             ,content:$('#questionForm')
             ,area: ['800px', '600px']
+            ,btnAlign: 'c'
             ,shade: 0
             ,moveType: 0//拖拽模式，0或者1
             ,maxmin: true
@@ -501,6 +502,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                     ,content:$('#questionForm')
                     ,area: ['800px', '600px']
                     ,shade: 0
+                    ,btnAlign: 'c'
                     ,moveType: 0//拖拽模式，0或者1
                     ,maxmin: true
                     ,btn: ['确定', '关闭'] //只是为了演示
