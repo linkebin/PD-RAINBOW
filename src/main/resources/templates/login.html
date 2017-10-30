@@ -127,7 +127,9 @@
     var curCount;//当前剩余秒数
 
     $(function () {
-
+        if(top.location!==self.location){
+            top.location.href=self.location.href;
+        }
         $("#password,#username,#vrifyCode").keydown(function(e) {
             if (e.keyCode == 13) {
                 login();

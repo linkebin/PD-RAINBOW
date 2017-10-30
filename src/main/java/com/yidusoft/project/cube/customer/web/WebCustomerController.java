@@ -64,4 +64,12 @@ public class WebCustomerController {
     public String getCheckQuestionnaire(){
         return "project/cube/customer/check-questionnaire";
     }
+
+
+    @RequestMapping("/dna")
+    public String dna(){
+        return "project/cube/customer/costomer-dna";
+    }
+
+
 }

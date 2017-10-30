@@ -598,10 +598,20 @@
 
             }
         });
-
+        var index = layer.open({
+            title: '阅读保密协议'
+            , type: 2
+            , area: ['600px', '500px']
+            ,closeBtn: 0
+            , content: '/web/customer/dna'
+        });
     });
 
+    function timeout() {
+        layer.closeAll()
+    }
     $(function () {
+
         $("input[name='childrenTotal']").blur(function () {
             var v = $(this).val();
             if (v!=''){
