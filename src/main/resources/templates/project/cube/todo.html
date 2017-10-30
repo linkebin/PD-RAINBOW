@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>建设中...</title>
+
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/shutter.css}" media="all">
+    <script th:src="@{/Scripts/module/eui.js}"></script>
+    <script type="text/javascript" th:src="@{/Scripts/jquery-1.9.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area" style="text-align: center">
+     <img src="../Styles/images/todo.png"></img>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+</div>
+</body>
+</html>

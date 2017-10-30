@@ -67,4 +67,12 @@ public class WebController {
         model.addAttribute("id",id);
         return "project/cube/questionnaire/activity";
     }
+    /**
+     * 跳转到建设中页面
+     * @return
+     */
+    @RequestMapping(value = {"/todo"})
+    public String todo(){
+        return "project/cube/todo";
+    }
 }

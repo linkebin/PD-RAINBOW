@@ -296,8 +296,8 @@ function login() {
     //var type = document.getElementById("userType").value;
     var type = "系统管理员";
     var username = document.getElementById("username").value;
-    $("#password").val(md5($("#password").val()));
-    var password = document.getElementById("password").value;
+//    $("#password").val(md5($("#password").val()));
+    var password = md5(document.getElementById("password").value);
     var parames = new Array();
     parames.push({ name: "username", value: username.trim()});
     parames.push({ name: "password", value:password.trim()});
