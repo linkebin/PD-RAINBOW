@@ -192,7 +192,6 @@
                     });
                     return;
                 }
-                $("[name='tagName']").val('');
               addQuestionnaireTag();
 
             }
@@ -261,7 +260,6 @@
         } else if (item == 'delete') {//删除
             deleteQuestionnaireTag(id);
         } else if (item == 'edit') {//编辑
-            $('#upOrAddbnt').attr("disabled", false);
             updateQuestionnaireTag(id);
 
         }
@@ -271,10 +269,8 @@
     function addOrUpdateTag() {
         if ($("[name='id']").val() == ''){
            // addQuestionnaireTag();
-            $('#upOrAddbnt').attr("disabled", true);
             checkForAddQuestionnaireTag();
         }else{
-            $('#upOrAddbnt').attr("disabled", true);
             updateTag();
         }
     }
@@ -408,7 +404,6 @@
 
 
     function openTab() {
-        $('#upOrAddbnt').attr("disabled", false);
         resetAddOrUpdateForm();
 
         //滑出菜单
