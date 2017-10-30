@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -77,5 +78,17 @@ public class ChannelManageController {
         PageInfo pageInfo = new PageInfo(list);
 
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/listByaccounts")
+    public Result listByaccounts(Integer page,  Integer limit,String json) {
+
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+
+        PageHelper.startPage(page, limit);
+        List<Map<String,Object>> list = channelManageService.findChannelAccountListByChannelId(map);
+        PageInfo pageInfo = new PageInfo(list);
+
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
     }
 }

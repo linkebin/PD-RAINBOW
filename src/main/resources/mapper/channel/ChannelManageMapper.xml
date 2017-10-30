@@ -38,4 +38,8 @@
 
       ORDER BY cm.create_time
   </select>
+
+  <select id="findChannelAccountListByChannelId" parameterType="Map" resultType="java.util.Map">
+      SELECT * FROM sec_user WHERE DELETED=0 AND channel_id=#{channel_id}
+  </select>
 </mapper>

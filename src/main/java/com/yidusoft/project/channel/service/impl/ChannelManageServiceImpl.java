@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -24,5 +25,10 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     @Override
     public List<ChannelManage> finndChannelByParameterList(ChannelManage channelManage) {
         return channelManageMapper.finndChannelByParameterList(channelManage);
+    }
+
+    @Override
+    public List<Map<String, Object>> findChannelAccountListByChannelId(Map<String, Object> map) {
+        return channelManageMapper.findChannelAccountListByChannelId(map);
     }
 }

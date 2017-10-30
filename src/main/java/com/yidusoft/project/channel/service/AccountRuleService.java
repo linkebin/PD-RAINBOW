@@ -17,4 +17,9 @@ public interface AccountRuleService extends Service<AccountRule> {
      */
     List<AccountRule> finndAccountRuleByParameterList(AccountRule accountRule);
 
+    /**
+     * 删除全部默认规则
+     */
+    void deleteDefaultRuleAll();
+
 }

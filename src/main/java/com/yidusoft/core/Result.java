@@ -10,6 +10,17 @@ public class Result {
     private String message;
     private Object data;
 
+    private long count;
+
+    public long getCount() {
+        return count;
+    }
+
+    public Result setCount(long count) {
+        this.count = count;
+        return this;
+    }
+
     public Result setCode(ResultCode resultCode) {
         this.code = resultCode.code;
         return this;

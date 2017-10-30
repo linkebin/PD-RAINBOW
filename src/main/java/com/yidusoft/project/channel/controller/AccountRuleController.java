@@ -33,6 +33,11 @@ public class AccountRuleController {
         accountRule.setCreator(Security.getUser().getUserName());
         accountRule.setDeleted(0);
         accountRule.setCreateTime(new Date());
+
+        if (accountRule.getDefaultRule() ==1){
+            accountRuleService.deleteDefaultRuleAll();
+        }
+
         accountRuleService.save(accountRule);
         return ResultGenerator.genSuccessResult();
     }
@@ -43,12 +48,32 @@ public class AccountRuleController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(AccountRule accountRule) {
-        accountRuleService.update(accountRule);
+    @PostMapping("/update")
+    public Result update(String json) {
+        AccountRule accountRule = JSON.parseObject(json,AccountRule.class);
+        try {
+            accountRuleService.update(accountRule);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("更新失败！");
+        }
+
         return ResultGenerator.genSuccessResult();
     }
-
+    @PostMapping("/deleteBacth")
+    public Result deleteBacth(String ids) {
+        String arr [] = ids.split(",");
+        for(String str : arr){
+            AccountRule accountRule = accountRuleService.findById(str);
+            if (accountRule!=null){
+                if (accountRule.getDefaultRule()!=1){
+                    accountRule.setDeleted(1);
+                }
+                accountRuleService.update(accountRule);
+            }
+        }
+        return ResultGenerator.genSuccessResult("删除成功！");
+    }
     @PostMapping("/detail")
     public Result detail(String id) {
         AccountRule accountRule = accountRuleService.findById(id);
@@ -65,4 +90,5 @@ public class AccountRuleController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
 }
