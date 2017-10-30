@@ -129,7 +129,7 @@
                         if (promotion.promotionsType == 1) {//活动类型是折扣
                             var discount = promotion.promotionsDiscount * 10;//折扣
                             pro.total = product.productTotal;
-                            pro.price = product.productPrice * promotion.promotionsDiscount;
+                            pro.price = (product.productPrice * promotion.promotionsDiscount).toFixed(1);
                             pro.type = discount + "折";
                             pro.discountContent = discount + '折';
                             console.log(pro.price);
