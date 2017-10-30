@@ -30,6 +30,7 @@ public class QuestionnairePromotionsController {
 
     /**
      * 列表数据分页
+     *
      * @param page
      * @param size
      */
@@ -52,6 +53,7 @@ public class QuestionnairePromotionsController {
 
     /**
      * 获取启用的活动
+     *
      * @return
      */
     @GetMapping("/getState")
@@ -62,6 +64,7 @@ public class QuestionnairePromotionsController {
 
     /**
      * 添加活动
+     *
      * @param promotionsJson
      * @return
      */
@@ -79,14 +82,15 @@ public class QuestionnairePromotionsController {
 
     /**
      * 批量删除活动
+     *
      * @param ids
      * @return
      */
     @Transactional
     @PostMapping("/batchDeletion")
     public Result batchDeletion(String ids) {
-        String arr [] = ids.split(",");
-        for(String id : arr){
+        String arr[] = ids.split(",");
+        for (String id : arr) {
             QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
             questionnairePromotions.setDeleted(1);
             questionnairePromotionsService.update(questionnairePromotions);
@@ -102,18 +106,26 @@ public class QuestionnairePromotionsController {
 
     /**
      * 修改活动
+     *
      * @param promotionsJson
      * @return
      */
     @PostMapping("/update")
     public Result update(String promotionsJson) {
         QuestionnairePromotions questionnairePromotions = JSON.parseObject(promotionsJson, QuestionnairePromotions.class);
+        List<QuestionnairePromotions> list = questionnairePromotionsService.getActivityProduct(questionnairePromotions.getId());
+        for(QuestionnairePromotions qp:list){
+            ProductSettings productSettings=qp.getProductSettings();
+            productSettings.setPromotionsName(questionnairePromotions.getPromotionsName());
+            productSettingsService.update(productSettings);
+        }
         questionnairePromotionsService.update(questionnairePromotions);
         return ResultGenerator.genSuccessResult();
     }
 
     /**
      * 获取活动和套餐
+     *
      * @return
      */
     @GetMapping("/getProductAndQuestionPro")
@@ -128,23 +140,25 @@ public class QuestionnairePromotionsController {
 
     /**
      * 获取参与某个活动的所有套餐
+     *
      * @param id
      * @return
      */
     @PostMapping("/getActivityProduct")
-    public Result getActivityProduct(String id){
-        List<QuestionnairePromotions> list=questionnairePromotionsService.getActivityProduct(id);
+    public Result getActivityProduct(String id) {
+        List<QuestionnairePromotions> list = questionnairePromotionsService.getActivityProduct(id);
         return ResultGenerator.genSuccessResult(list);
     }
 
     /**
      * 添加促销活动的图片
+     *
      * @param id
      * @param imgPath
      * @return
      */
     @PostMapping("/addImage")
-    public Result addImage(String id,String imgPath){
+    public Result addImage(String id, String imgPath) {
         QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
         questionnairePromotions.setImagePath(imgPath);
         questionnairePromotionsService.update(questionnairePromotions);
@@ -153,11 +167,12 @@ public class QuestionnairePromotionsController {
 
     /**
      * 获取单个活动
+     *
      * @param id
      * @return
      */
     @PostMapping("/getOne")
-    public Result getOne(String id){
+    public Result getOne(String id) {
         QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
         return ResultGenerator.genSuccessResult(questionnairePromotions);
     }
