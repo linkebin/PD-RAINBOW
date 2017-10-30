@@ -134,7 +134,7 @@
                                 <th>问题编号</th>
                                 <th>问题内容</th>
                                 <th>选项</th>
-                                <th>对答案应分数</th>
+                                <th>答案对应分数</th>
                                 <th>答案</th>
                                 <th>答案类型</th>
                             </tr>
@@ -343,6 +343,14 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
              for (var item in questionList){
             var question=questionList[item];
+                 var  questionType="";
+                 if(question.questionType=='1'){
+                     questionType="单选";
+                 }else if(question.questionType=='2'){
+                     questionType="多选";
+                 }else {
+                     questionType="评分单选";
+                 }
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionId" type="hidden" value="' + question.id + '"></td>' +
                 '<td>'+ question.questionCode +'</td>' +
@@ -350,7 +358,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+ question.optionAnswer +'</td>'   +
                 '<td>'+ question.optionScore +'</td>' +
                 '<td>'+ question.answer +'</td>' +
-                '<td>'+ question.questionType +'</td>' +
+                '<td>'+ questionType +'</td>' +
                 '</tr>';
         }
 
@@ -366,6 +374,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         idArray=idArray.replace(id,"");
         $("#"+ids).remove();
         doSearch();
+        spanSequence();
     }
     //选择问题
     function chageQuestion() {
@@ -405,7 +414,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 layer.closeAll();
             var context= questionList(result.data);
             $("#questionCollapse").append(context);
-
+            spanSequence();
         });
       });
     }
@@ -416,7 +425,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         for(var item in questionList){
          var  question=  questionList[item];
              context+='<div name="questionIds"  question="'+question.id+'" id="div'+question.id+'" class="eui-colla-item ">';
-             context+='  <h2  class="eui-colla-title">'+question.questionContent;
+             context+='  <h2  class="eui-colla-title"><span name="spanNumber"></span>'+question.questionContent;
              context+='  <i  title="删除" onclick="deleteQuestion(\''+question.id+'\')" class="eui-icon eui-icon-rigth" >&#xe640;</i> ';
              context+='  </h2> ';
              context+=' <div class="eui-colla-content eui-show"> ';
@@ -633,7 +642,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         return list.join(",");
     }
 
-
+    //对问题的排序
+    function  spanSequence() {
+        var spanNumber=  $("[name='spanNumber']");
+        for(var i=0;i<spanNumber.length;i++){
+            spanNumber.eq(i).text(i+1+".");
+        }
+    }
     //form表单  select,checkbox,radio 动态添加  需要更新
      function   formRender() {
          eui.use(['form'], function(){

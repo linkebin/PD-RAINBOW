@@ -158,7 +158,7 @@
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
-                    <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe60a;</i> 确定</button>
+                    <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe60a;</i> 选择</button>
                 </div>
             </div>
         </div>
@@ -178,7 +178,7 @@
                                 <th>问题编号</th>
                                 <th>问题内容</th>
                                 <th>选项</th>
-                                <th>对答案应分数</th>
+                                <th>答案对应分数</th>
                                 <th>答案</th>
                                 <th>答案类型</th>
                             </tr>
@@ -199,16 +199,19 @@
                 <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>选择的问题列表</span>
             </div>
         </div>
-        <div class="eui-collapse" e-filter="test" id="questionCollapse">
-           <!-- <div class="eui-colla-item ">
-                <h2 class="eui-colla-title">为什么前端工程师多不愿意用 Bootstrap 框架？
-                    <i  title="删除" onclick="deleteQuestion()" class="eui-icon eui-icon-rigth" >&#xe640;</i>
-                </h2>
-                <div class="eui-colla-content eui-show">
-                    <p>因为不适合。如果希望开发长期的项目或者制作产品类网站，那么就需要实现特定的设计，为了在维护项目中可以方便地按设计师要求快速修改样式，
-                        肯定会逐步编写出各种业务组件、工具类，相当于为项目自行开发一套框架。——来自知乎@Kayo</p>
+        <div class="eui-collapse" e-filter="test" >
+            <div class="eui-colla-item">
+                <h2 class="eui-colla-title">选择量表的问题</h2>
+                <div class="eui-colla-content eui-show" id="questionCollapse">
+                    <!--  这里放选择的量表问题-->
                 </div>
-            </div>-->
+            </div>
+            <div class="eui-colla-item">
+                <h2 class="eui-colla-title">新增的问题</h2>
+                <div class="eui-colla-content" id="addQuestionCollapse">
+                    <!--这里放新添加的问题-->
+                </div>
+            </div>
         </div>
 
 
@@ -321,9 +324,15 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 <script th:inline="javascript">
     //初始化数据
   var questionnaireQuestionFactorList=[[${questionnaireQuestionFactorList}]];
+  //新加问题的id
+  var newQuestion=[[${newQuestion}]];
+  //有选择量表的id
+  var gaugeQuestionIds=[[${gaugeQuestionIds}]];
+
   var questionnaireTagList=[[${questionnaireTagList}]];
   var sceneList=[[${sceneList}]];
   var questionnaires=[[${questionnaire}]];
+
   var questionnaireId=questionnaires.id;
     console.info("数据");
     console.info(questionnaireQuestionFactorList);
@@ -411,6 +420,14 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
              for (var item in questionList){
             var question=questionList[item];
+                 var  questionType="";
+                 if(question.questionType=='1'){
+                     questionType="单选";
+                 }else if(question.questionType=='2'){
+                     questionType="多选";
+                 }else {
+                     questionType="评分单选";
+                 }
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionId" type="hidden" value="' + question.id + '"></td>' +
                 '<td>'+ question.questionCode +'</td>' +
@@ -418,7 +435,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+ question.optionAnswer +'</td>'   +
                 '<td>'+ question.optionScore +'</td>' +
                 '<td>'+ question.answer +'</td>' +
-                '<td>'+ question.questionType +'</td>' +
+                '<td>'+ questionType +'</td>' +
                 '</tr>';
         }
 
@@ -434,6 +451,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         idArray=idArray.replace(id,"");
         $("#"+ids).remove();
         doSearch();
+        spanSequence();
     }
     //选择问题
     function chageQuestion() {
@@ -471,21 +489,24 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
         $.post("/questionnaire/question/findQuestion",{"ids":ids},function (result) {
                 layer.closeAll();
-            var context= questionList(result.data);
-            $("#questionCollapse").append(context);
-
+            var context= questionList(result.data,"show");
+            $("#addQuestionCollapse").append(context);
+            spanSequence();
         });
       });
     }
 
     //拼接问题列表
-    function  questionList(questionList){
+    function  questionList(questionList,type){
+        //type show选择的问题能删除   hide选择的量表不能删除
         var context="";
         for(var item in questionList){
          var  question=  questionList[item];
              context+='<div name="questionIds"  question="'+question.id+'" id="div'+question.id+'" class="eui-colla-item ">';
-             context+='  <h2  class="eui-colla-title">'+question.questionContent;
-             context+='  <i  title="删除" onclick="deleteQuestion(\''+question.id+'\')" class="eui-icon eui-icon-rigth" >&#xe640;</i> ';
+             context+='  <h2  class="eui-colla-title"><span name="spanNumber"></span>'+question.questionContent;
+            if(type=='show'){
+               context+='  <i  title="删除" onclick="deleteQuestion(\''+question.id+'\')" class="eui-icon eui-icon-rigth" >&#xe640;</i> ';
+             }
              context+='  </h2> ';
              context+=' <div class="eui-colla-content eui-show"> ';
              var optionScore=question.optionScore+"";
@@ -528,7 +549,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             var list=result.data;
             context+=" <option value=''>请选择</option>";
             for( var i in  list){
-                context+="<option value='"+list[i].id+"'>"+list[i].gaugeName+" </option>";
+                if(list[i].gaugeState==0){
+                  context+="<option value='"+list[i].id+"'>"+list[i].gaugeName+" </option>";
+                }
             }
             $("#gaugeId").html(context);
             //更新
@@ -777,33 +800,39 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //选择量表 则查询出相关的 标签  场景
      function checkGauge(gaugeId){
-      $.post("/gauge/getGaugeInfo",{"gaugeId":gaugeId},function (result) {
-          console.info("result");
-          console.info(result);
-         // gauge gaugeQuestionList questionnaireTagList sceneList
-          //量表的信息填充
-          var gauge=result.data.gauge;
-          $("#questionnaireName").val(gauge.gaugeName);
-          $("#questionnaireType").val(gauge.gaugeType);
-          formRender();
+         if(gaugeId==''){
+             idArray="";
+             doSearch();
+             $("#questionCollapse").children().remove();
 
-          //问题的的信息填充
-          var questions=result.data.gaugeQuestionList;
-          var texts="";
-          for(var i=0;i<questions.length;i++){
-              texts+=questions[i].questionId+",";
-          }
-          texts=texts.substring(0,texts.length-1);
-          $("#questionStr").val(texts);
-          var questionnaireTagList=result.data.questionnaireTagList;
-          var sceneList=result.data.sceneList;
-          initializeQuestion(questions,questionnaireTagList,sceneList)
-      });
+         }else {
+          $.post("/gauge/getGaugeInfo",{"gaugeId":gaugeId},function (result) {
+              console.info("result");
+              console.info(result);
+             // gauge gaugeQuestionList questionnaireTagList sceneList
+              //量表的信息填充
+              var gauge=result.data.gauge;
+              $("#questionnaireName").val(gauge.gaugeName);
+              $("#questionnaireType").val(gauge.gaugeType);
+              formRender();
 
+              //问题的的信息填充
+              var questions=result.data.gaugeQuestionList;
+              var texts="";
+              for(var i=0;i<questions.length;i++){
+                  texts+=questions[i].questionId+",";
+              }
+              texts=texts.substring(0,texts.length-1);
+              $("#questionStr").val(texts);
+              var questionnaireTagList=result.data.questionnaireTagList;
+              var sceneList=result.data.sceneList;
+              initializeQuestion(questions,questionnaireTagList,sceneList,1)
+          });
+         }
    }
 
      //初始化选择的量表
-     function  initializeQuestion(questions,questionnaireTagList,sceneList) {
+     function  initializeQuestion(questions,questionnaireTagList,sceneList,type) {
         eui.use(['form','laypage','layer'], function(){
             var form = eui.form
                 ,elem=eui.elem
@@ -837,23 +866,44 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 ids += questions[i].questionId+ ',';
                 idArray+=questions[i].questionId +","
             }
-
             var item=idArray.substring(0,1);
             if(item==','){
                 idArray=idArray.substring(1,idArray.length-1);
             }else {
                 idArray=idArray.substring(0,idArray.length-1);
             }
-
             doSearch();
-            //加载层
-            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-            $.post("/questionnaire/question/findQuestion",{"ids":ids},function (result) {
-                layer.closeAll();
-                var context= questionList(result.data);
-                $("#questionCollapse").append(context);
+            if(type==0){
+                ids="";
+                for(var i in  gaugeQuestionIds){
+                    ids += gaugeQuestionIds[i]+ ',';
+                }
+                var ids1="";
+                for(var i in  newQuestion){
+                    ids1 += newQuestion[i]+ ',';
+                }
+                //新增加的问题
+                findQuestion(ids1,'show');
+            }
+                //量表的里的问题 不能删除
+                findQuestion(ids,'hide');
+        });
+    }
 
-            });
+    //通过问题id 查询问题  填充已选择的问题
+    function findQuestion(ids,type){
+        //加载层
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("/questionnaire/question/findQuestion",{"ids":ids},function (result) {
+            layer.closeAll();
+           // var context= questionList(result.data,"hide");
+            var context= questionList(result.data,type);
+            if(type=='hide'){
+              $("#questionCollapse").append(context);
+            }else {
+                $("#addQuestionCollapse").append(context);
+            }
+            spanSequence();
         });
     }
 
@@ -885,7 +935,15 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         texts=texts.substring(0,texts.length-1);
         $("#questionStr").val(texts);
 
-        initializeQuestion(questionnaireQuestionFactorList,questionnaireTagList,sceneList);
+        initializeQuestion(questionnaireQuestionFactorList,questionnaireTagList,sceneList,0);
+    }
+
+    //对问题的排序
+    function  spanSequence() {
+        var spanNumber=  $("[name='spanNumber']");
+        for(var i=0;i<spanNumber.length;i++){
+            spanNumber.eq(i).text(i+1+".");
+        }
     }
 
     //form表单  select,checkbox,radio 动态添加  需要更新

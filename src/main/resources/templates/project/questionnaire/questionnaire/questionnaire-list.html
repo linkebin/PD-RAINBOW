@@ -135,6 +135,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             deleteQuestionnaire(id);
         }else if (item=='edit'){//编辑
             window.open("/web/questionnaire/getUpdateQuestionnaire?id="+id);
+        }else if (item == 'state'){
+            //设置状态
+           // setState(id);
         }
     }
 
@@ -237,8 +240,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+questionnaire.remarks+'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+questionnaire.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+questionnaire.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑" onclick="itemclick('+"'edit','"+questionnaire.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="itemclick('+"'delete','"+questionnaire.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+               /* '<button class="eui-btn eui-btn-primary eui-btn-mini" title="状态" onclick="itemclick('+"'state','"+questionnaire.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +*/
                 '</div>' +
                 '</td>' +
                 '</tr>';
@@ -304,7 +308,10 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         }
     }
 
+    //设置 问卷的状态
+    function setState(id,state){
 
+    }
 
     function add0(m){return m<10?'0'+m:m }
     function format(timestamp)
