@@ -310,12 +310,11 @@
             }
             , done: function (res) {
                 var result = JSON.parse(res);
-                console.log(result);
                 //如果上传失败
                 if (result.code != 200) {
                     return layer.msg('上传失败');
                 }
-                imgPath = result.data.imgPath;
+                imgPath = result.data;
                 return layer.msg('上传成功');
                 //上传成功
             }
