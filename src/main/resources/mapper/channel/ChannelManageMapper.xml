@@ -42,4 +42,40 @@
   <select id="findChannelAccountListByChannelId" parameterType="Map" resultType="java.util.Map">
       SELECT * FROM sec_user WHERE DELETED=0 AND channel_id=#{channel_id}
   </select>
+
+  <select id="findChannelAccountTree" resultType="java.util.Map">
+        SELECT  cm.id_ id,  cm.channel_name name, 0 parentId FROM channel_manage cm WHERE cm.deleted=0
+        UNION ALL
+
+        SELECT su.ID_ id , su.ACCOUNT name, cc.id_ parentId FROM   channel_manage cc
+
+        LEFT JOIN sec_user su  on cc.id_=su.channel_id WHERE su.DELETED=0 AND cc.deleted=0
+  </select>
+
+  <select id="findChannelOrAccountCounselorListByParameter" parameterType="Map" resultType="java.util.Map">
+     <if test="type == 1">
+       SELECT su.ACCOUNT,su.USER_NAME,su.MOBILE,
+       (SELECT su1.USER_NAME FROM sec_user su1
+       WHERE su1.DELETED=0 AND su1.ID_=#{inviter_user}) inviter_user
+       FROM sec_user su
+       WHERE su.DELETED=0 AND su.inviter_user=#{inviter_user}
+     </if>
+
+    <if test="type == 2">
+
+      SELECT su.ACCOUNT,su.USER_NAME,su.MOBILE,
+      (
+      SELECT su1.USER_NAME FROM sec_user su1
+      WHERE su1.DELETED=0 AND su1.ID_
+      in (SELECT su2.ID_ FROM sec_user su2 WHERE su2.DELETED=0 AND su2.channel_id=#{channel_id} AND su.inviter_user=su2.ID_)
+      ) inviter_user
+
+      FROM sec_user su
+      WHERE su.DELETED=0 AND su.inviter_user
+
+      in (SELECT su.ID_ FROM sec_user su WHERE su.DELETED=0 AND su.channel_id=#{channel_id})
+    </if>
+
+
+  </select>
 </mapper>

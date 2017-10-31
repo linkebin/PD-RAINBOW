@@ -8,8 +8,10 @@ import com.yidusoft.project.channel.service.ChannelManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.system.domain.SecUser;
+import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -87,6 +89,62 @@ public class ChannelManageController {
 
         PageHelper.startPage(page, limit);
         List<Map<String,Object>> list = channelManageService.findChannelAccountListByChannelId(map);
+        PageInfo pageInfo = new PageInfo(list);
+
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
+    }
+    @Autowired
+    private SecUserService secUserService;
+
+    @PostMapping("/channelAccountAdd")
+    public Result channelAccountAdd(String params) {
+        SecUser secUser = JSON.parseObject(params,SecUser.class);
+        secUser.setCreator(Security.getUser().getUserName());
+        secUser.setHeadImg("/upload/headImg/default-pic.png");
+        String inviterCode = CodeHelper.randomCode(8);
+        SecUser isUser = null;
+        if (inviterCode!=null){
+            isUser = secUserService.findSecUserByInviterCode(inviterCode);
+        }
+        if (isUser != null){
+            channelAccountAdd(params);
+        }else {
+            secUser.setInviterCode(inviterCode);
+            return  secUserService.addUser(JSON.toJSONString(secUser));
+        }
+        return ResultGenerator.genFailResult("添加失败");
+    }
+
+    @PostMapping("/accountInfo")
+    public Result accountInfo(String id) {
+        SecUser secUser = secUserService.findById(id);
+        return ResultGenerator.genSuccessResult(secUser);
+    }
+
+    @PostMapping("/updateaccountInfo")
+    public Result updateaccountInfo(String json) {
+        SecUser secUser = JSON.parseObject(json,SecUser.class);
+        try {
+            secUserService.update(secUser);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("编辑失败！");
+        }
+        return ResultGenerator.genSuccessResult();
+    }
+
+    @PostMapping("/accounttree")
+    public Result accounttree() {
+        return ResultGenerator.genSuccessResult(channelManageService.findChannelAccountTree());
+    }
+
+    @PostMapping("/listByAccountCounselor")
+    public Result listByAC(Integer page,  Integer limit,String json) {
+
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+
+        PageHelper.startPage(page, limit);
+        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(map);
         PageInfo pageInfo = new PageInfo(list);
 
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);

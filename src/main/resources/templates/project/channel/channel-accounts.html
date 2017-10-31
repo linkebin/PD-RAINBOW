@@ -8,9 +8,43 @@
 <body class="eui-bg-white">
 <div class="eui-margin20">
     <input th:value="${channelId}" type="hidden" id="channel_id" />
+    <div class="eui-col-md6 eui-textAlignR">
+        <a class="eui-btn eui-btn-small" onclick="addAccount()">添加账号</a>
+    </div>
     <table id="test2"></table>
 </div>
-
+<div id="channelAccountAdd" style="display: none" class="eui-margin20 eui-form">
+    <form id="channelAccountAddForm" onsubmit="return false;">
+        <input  type="hidden" name="id"  />
+        <input th:value="${channelId}" type="hidden" name="channelId"  />
+        <div class="eui-form-item">
+            <label class="eui-form-label">账号</label>
+            <div class="eui-input-block">
+                <input type="text" name="account"  placeholder="请输入手机号码" class="eui-input" />
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">姓名</label>
+            <div class="eui-input-block">
+                <input type="text" name="userName"  placeholder="请输入姓名" class="eui-input" />
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">密码</label>
+            <div class="eui-input-block">
+                <input type="password" name="userPass"  placeholder="请输入密码" class="eui-input" />
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">状态</label>
+            <div class="eui-input-block eui-checkSmall">
+                <input type="radio" name="status" value="1" title="可用" checked>
+                <input type="radio" name="status" value="0" title="不可用">
+            </div>
+        </div>
+        <input type="submit" style="display: none;">
+    </form>
+</div>
 
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
@@ -19,25 +53,28 @@
 <script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
+<script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
 <script>
+    var table;
     eui.use('table', function(){
-        var table = eui.table;
+        table = eui.table;
 
         var obj = new Object();
         obj.channel_id=$("#channel_id").val();
         //展示已知数据
         table.render({
-            elem: '#test2'
+            id: 'idTest'
+            ,elem: '#test2'
             ,url:'/channel/manage/listByaccounts'
             ,method:'post'
             ,where: {json: JSON.stringify(obj)}
             ,height: 300
             ,cols: [[ //标题栏
                 {checkbox: true}
-                ,{field: 'ACCOUNT', title: '登录账号', width: 150}
-                ,{field: 'USER_NAME', title: '姓名', width: 150}
-                ,{field: 'MOBILE', title: '联系方式', width: 150}
-                ,{fixed: 'right', width:150,  toolbar: '#barDemo1'}
+                ,{field: 'ACCOUNT', title: '登录账号', width: 180}
+                ,{field: 'USER_NAME', title: '姓名', width: 180}
+                ,{field: 'MOBILE', title: '联系方式', width: 196}
+                ,{fixed: 'right', width:150,  toolbar: '#barDemo'}
             ]]
             ,response: {
                 statusName: 'code' //数据状态的字段名称，默认：code
@@ -56,15 +93,166 @@
 
             }
         });
+
+        //监听工具条
+        table.on('tool(idTest)', function(obj){
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+           if(layEvent === 'del'){ //删除
+               deleteUser(data.ID_)
+            } else if(layEvent === 'edit'){ //编辑
+               updateAccount(data.ID_);
+            }
+        });
+
+        jQuery.validator.addMethod("isMobile", function(value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "请正确填写您的手机号码");
+        $("#channelAccountAddForm").validate({
+            rules: {
+                account: {
+                    required : true,
+                    minlength : 11,
+                    isMobile : true
+                },
+                userPass: {
+                    required: true,
+                },
+                userName: {
+                    required: true,
+                }
+            },
+            messages: {
+                account: {
+                    required : "请输入手机号",
+                    minlength : "确认手机不能小于11个字符",
+                    isMobile : "请正确填写您的手机号码"
+                },
+                userPass: {
+                    required: "请输入密码",
+                },
+                userName: {
+                    required: "请输入姓名",
+                }
+            },
+            submitHandler: function() {
+                var obj = $("#channelAccountAdd form").serializeObject();
+                if ($("#channelAccountAddForm input[name='id']").val()==''){
+                    obj.userPass=md5(obj.userPass);
+                    obj.mobile=obj.account;
+                    obj.accountType=1;
+                    obj.sex=0;
+                    $.post('/channel/manage/channelAccountAdd',{params:JSON.stringify(obj)},function (result) {
+                        if (result.code==200){
+                            layer.closeAll();
+                            location.reload();
+                        }else {
+                            layer.msg(result.message);
+                        }
+                    });
+                }else {
+                    if (obj.userPass=='1234'){
+                        obj.userPass=null;
+                    }
+                    $.post('/channel/manage/updateaccountInfo',{json:JSON.stringify(obj)},function (result) {
+                        if (result.code==200){
+                            layer.closeAll();
+                            location.reload();
+                        }else {
+                            layer.msg(result.message);
+                        }
+                    });
+                }
+            }
+        });
     });
+
+    function deleteUser(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='userId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的账号', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该账号吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                $.ajax({
+                    url:"/sec/user/deleteBacth",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                        location.reload();
+                    }
+                });
+            });
+        }
+    }
+    function addAccount() {
+        $("#channelAccountAddForm input[name='id']").val('')
+        var index = layer.open({
+            title: '添加渠道商账号'
+            , type: 1
+            , area: ['600px', '400px']
+            , content: $("#channelAccountAdd")
+            ,offset: 't'
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                $("#channelAccountAdd form").submit();
+            }
+            ,btn2: function(index, layero){
+                $('#channelAccountAddForm')[0].reset();
+            }
+        });
+    }
+    function updateAccount(id) {
+        var index = layer.open({
+            title: '编辑渠道商账号'
+            , type: 1
+            , area: ['600px', '400px']
+            , content: $("#channelAccountAdd")
+            ,offset: 't'
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                $("#channelAccountAdd form").submit();
+            }
+            ,btn2: function(index, layero){
+                $('#channelAccountAddForm')[0].reset();
+            }
+        });
+        $.post('/channel/manage/accountInfo',{id:id},function (result) {
+            result.data.userPass='1234';
+            $("#channelAccountAdd").setForm(result.data)
+        });
+
+    }
 </script>
 <div>
 
 </div>
-<script type="text/html" id="barDemo1">
+
+<script type="text/html" id="barDemo">
     <div class="eui-btn-group">
-        <button class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="修改密码"
-                onclick=""><i class="eui-icon"></i></button>
+        <button e-event="edit" class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="修改账号">
+            <i class="eui-icon">&#xe642;</i></button>
+        <button e-event="del"  class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="删除账号">
+            <i class="eui-icon">&#xe640;</i></button>
     </div>
 </script>
 </body>

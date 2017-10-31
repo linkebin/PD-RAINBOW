@@ -428,6 +428,7 @@ eui.use('layer', function(){ //独立版的layer无需执行这一句
                 $("#password").val(md5($("#userPass").val()));
                 var params = $("#userInfoAdd").serializeObject();
                 params.orgId = $("#orgId").val();
+                params.accountType=0;
                 $.ajax({
                     url:"/sec/user/add",
                     data: {

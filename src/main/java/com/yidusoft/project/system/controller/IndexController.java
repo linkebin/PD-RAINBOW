@@ -139,6 +139,7 @@ public class IndexController {
             secUser.setInviterCode(inviterCode);
             secUser.setMobile(secUser.getAccount());
             secUser.setHeadImg("/upload/headImg/default-pic.png");
+            secUser.setAccountType(1);
             Result result = secUserService.addUser(JSON.toJSONString(secUser));
             if (result.getCode() !=200){
                 return result;

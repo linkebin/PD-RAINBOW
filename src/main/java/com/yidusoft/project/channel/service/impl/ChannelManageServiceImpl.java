@@ -31,4 +31,14 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     public List<Map<String, Object>> findChannelAccountListByChannelId(Map<String, Object> map) {
         return channelManageMapper.findChannelAccountListByChannelId(map);
     }
+
+    @Override
+    public List<Map<String, Object>> findChannelAccountTree() {
+        return channelManageMapper.findChannelAccountTree();
+    }
+
+    @Override
+    public List<Map<String, Object>> findChannelOrAccountCounselorListByParameter(Map<String, Object> map) {
+        return channelManageMapper.findChannelOrAccountCounselorListByParameter(map);
+    }
 }

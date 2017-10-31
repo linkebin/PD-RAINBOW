@@ -34,4 +34,10 @@ public class WebChannelManageController {
         return "project/channel/channel-accounts";
     }
 
+    @RequestMapping("/counselor")
+    public String counselor() {
+
+        return "project/channel/channel-counselor";
+    }
+
 }
