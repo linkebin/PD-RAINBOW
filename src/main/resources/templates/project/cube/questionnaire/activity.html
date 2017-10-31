@@ -216,9 +216,13 @@
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>' ;
-                if ((item + 1) % 3 == 0) {
+                if ((parseInt(item) + 1) % 3 == 0) {
                     tableHtml += '<br><br>';
                 }
+                if((parseInt(item) + 1)==payList.length){
+                    tableHtml += '<br><br>';
+                }
+                console.log(payList.length);
             }
             return tableHtml;
         }
