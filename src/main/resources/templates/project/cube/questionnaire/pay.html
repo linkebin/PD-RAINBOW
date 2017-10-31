@@ -214,9 +214,9 @@
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>' ;
                 if ((parseInt(item) + 1) % 3 == 0) {
-                    tableHtml += '<br><br>';
+                    tableHtml += '</br><br>';
                 }
-                if((parseInt(item) + 1)==payList.length){
+                if((parseInt(item) + 1)==payList.length && !((parseInt(item) + 1) % 3 == 0)){
                     tableHtml += '<br><br>';
                 }
             }

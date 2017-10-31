@@ -219,10 +219,9 @@
                 if ((parseInt(item) + 1) % 3 == 0) {
                     tableHtml += '<br><br>';
                 }
-                if((parseInt(item) + 1)==payList.length){
+                if((parseInt(item) + 1)==payList.length && !((parseInt(item) + 1) % 3 == 0)){
                     tableHtml += '<br><br>';
                 }
-                console.log(payList.length);
             }
             return tableHtml;
         }
