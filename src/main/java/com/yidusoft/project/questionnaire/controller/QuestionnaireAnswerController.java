@@ -83,12 +83,11 @@ public class QuestionnaireAnswerController {
         int questionnaireQuestionSize = questionnaireQuestions.size();
 
         //获取问题答案
-        List<String> answers = questionnaireAnswerService.getAnswers(questionnaireQuestions);
-
+        List<List<String>> answers = questionnaireAnswerService.getAnswers(questionnaireQuestions);
         model.addAttribute("optionAnswers", optionAnswers);
         model.addAttribute("questionlist", questionlist);
         model.addAttribute("questionnaireQuestionSize", questionnaireQuestionSize);
-        model.addAttribute("answers", answers);
+        model.addAttribute("scoreList", answers);
         return "project/cube/questionnaire/questionnaire";
     }
 }

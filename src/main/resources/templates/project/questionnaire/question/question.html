@@ -373,6 +373,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         layer.open({
             type: 1
             ,title: '添加问题'
+            ,zIndex: -1000
             ,content:$('#questionForm')
             ,area: ['800px', '600px']
             ,btnAlign: 'c'
@@ -389,35 +390,45 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 var msgs="";
                 if(questionContent==""){
                     msgs="请输入问题内容";
-                    layer.msg(msgs, {
-                        time: 3000
+                    layer.tips(msgs, $("[name='questionContent']"), {
+                        tips: [1, '#3595CC'],
+                        zIndex: layer.zIndex, //重点1
                     });
+                    layer.setTop(layero); //重点2
                     return;
                 }else if(optionAnswer==""){
                     msgs="请输入选项";
-                    layer.msg(msgs, {
-                        time: 3000
+                    layer.tips(msgs, $("[name='optionAnswer']"), {
+                        tips: [1, '#3595CC'],
+                        zIndex: layer.zIndex, //重点1
                     });
+                    layer.setTop(layero); //重点2
                     return;
                 }else if(optionScore==""){
                     msgs="请输入选项对应分数";
-                    layer.msg(msgs, {
-                        time: 3000
+                    layer.tips(msgs, $("[name='optionScore']"), {
+                        tips: [1, '#3595CC'],
+                        zIndex: layer.zIndex, //重点1
                     });
+                    layer.setTop(layero); //重点2
                     return;
                 }else if(questionType==""){
                     msgs="请选择类型";
-                    layer.msg(msgs, {
-                        time: 3000
+                    layer.tips(msgs, $("[name='questionType']"), {
+                        tips: [1, '#3595CC'],
+                        zIndex: layer.zIndex, //重点1
                     });
+                    layer.setTop(layero); //重点2
                     return;
                 }
                 else if(questionType!='3'){
                     if(answer==""){
                         msgs="请输入答案";
-                        layer.msg(msgs, {
-                            time: 3000
+                        layer.tips(msgs, $("[name='answer']"), {
+                            tips: [1, '#3595CC'],
+                            zIndex: layer.zIndex, //重点1
                         });
+                        layer.setTop(layero); //重点2
                         return;
                     }
                 }else {

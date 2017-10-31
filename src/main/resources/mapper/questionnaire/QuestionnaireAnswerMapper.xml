@@ -30,6 +30,7 @@
     <result column="option_score" jdbcType="VARCHAR" property="optionScore" />
     <result column="question_type" jdbcType="INTEGER" property="questionType" />
     <result column="question_content" jdbcType="LONGVARCHAR" property="questionContent" />
+    <result column="answer_sequence" jdbcType="INTEGER" property="answerSequence"/>
   </resultMap>
 
 

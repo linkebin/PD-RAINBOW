@@ -8,7 +8,7 @@
 
     <style>
         /*.eui-col-md7 .degree li {*/
-            /*margin-right: 20px;*/
+        /*margin-right: 20px;*/
         /*}*/
     </style>
 
@@ -35,46 +35,6 @@
         </p>
         <div class="subject">
             <ul id="questionUl">
-                <li th:each="questions : ${questionlist}">
-                    <div class="eui-row eui-marginB20 questionbg">
-                        <div class="eui-col-md4 contentBar">
-                            <!--<div class="eui-progress" e-showpercent="yes" e-filter="questionProgress">-->
-                                <!--<div class="eui-progress-bar" e-percent="20%"></div>-->
-                            <!--</div>-->
-                            <div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="demo">
-                                <div class="eui-progress-bar eui-bg-blue" e-percent="0%"></div>
-                            </div>
-                        </div>
-                        <div class="eui-col-md7 eui-font16 eui-marginT15 eui-col-md-offset1">
-                            <ul class="degree">
-                                <li th:each="answer : ${optionAnswers}" th:text="${answer}"></li>
-
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="eui-row " th:each="question ,iterStat : ${questions}">
-                        <div class="eui-col-md5 eui-textAlignR gradeSubject eui-paddingR20"
-                             th:text="${iterStat.index+1} + '.' +${question.questionContent}"
-                             name="questionContent"
-                             th:value="${question.questionType}"
-                             th:attr="questionId=${question.id}"
-                        >
-                            1.头痛
-                        </div>
-                        <div class="eui-col-md7">
-                            <div style="height: 50px;" class="grade">
-                                <select class="example-0 rating" name="rating">
-
-                                    <option th:each="an : ${answers}" th:value="${an}"></option>
-
-                                </select>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                </li>
             </ul>
             <span class="sliderLeft"></span>
             <span class="sliderRight"></span>
@@ -105,6 +65,9 @@
 
 <script th:inline="javascript">
 
+    getQuestionsList();
+
+
     var pageIndex = 0;
     var pageSize = $('.subject>ul>li').length;
     var progress = 0;
@@ -121,17 +84,19 @@
     // 焦点图---------------------------------------------
     ;(function () {
         $(function () {
+
+
             //初始化中执行
             //自动播放
             var timer = null;
             var num = 0;
 
 
-            var selectOption = $('.subject>ul>li .rating');
-            for (var i = 0; i < selectOption.length; i++) {
-                selectOption[i].value = '0';
-            }
 
+            var selectOption = $('.subject>ul>li .rating');
+            for (var a = 0; a < selectOption.length; a++) {
+                selectOption[a].value = '';
+            }
 
             function go() {
                 clearInterval(timer);
@@ -172,44 +137,112 @@
             });
 
             eui.use('element', function () {
-                var element =  element = eui.element;
+                var element = element = eui.element;
                 element.init(); //这样element对动态生成的元素才会重新有效
 
 
                 //右侧点击
-            $('.subject .sliderRight').click(function (e) {
+                $('.subject .sliderRight').click(function (e) {
 
-                //判断当前页面是否答完题目
-                if (!isSelected(num)) {
-                    return;
-                }
+                    //判断当前页面是否答完题目
+                    if (!isSelected(num)) {
+                        return;
+                    }
+
+                    pageIndex++;
+                    num++;
+                    progress++;
 
 
-                pageIndex++;
-                num++;
-                progress++;
-                if (progress / pageSize * 100 <= 100){
-                    element.progress('demo', Math.floor(num / pageSize * 100) + '%');
-                }
 
-                if (num > pageSize) {
-                    num = 0;
-                    pageIndex = 0;
-                }
-                $('.subject>ul>li').eq(num).fadeIn().siblings().hide();
-                $('.subject>ol>li').eq(num).addClass('current').siblings().removeClass();
-            });
+                    if (progress / pageSize * 100 <= 100) {
+                        element.progress('demo', Math.floor(num / pageSize * 100) + '%');
+                    }
+
+                    if (progress == pageSize-1){
+                        element.progress('demo', '100%');
+                    }
+                    if (num > pageSize-1) {
+                        num = 0;
+                        pageIndex = 0;
+                    }
+                    $('.subject>ul>li').eq(num).fadeIn().siblings().hide();
+                    $('.subject>ol>li').eq(num).addClass('current').siblings().removeClass();
+                });
 
             });
         })
     })();
+
+
+    // 拼接问题
+    function getQuestionsList() {
+        var questionsList = [[${questionlist}]];
+        var optionAnswer = [[${optionAnswers}]];
+        var scoreList = [[${scoreList}]];
+        var contentHtml = '';
+
+        for (var i =0; i < questionsList.length; i++) {
+
+            contentHtml +=
+                '<li>' +
+                '<div class="eui-row eui-marginB20">' +
+                '<div class="eui-col-md4 contentBar">' +
+                '<div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="demo">' +
+                '<div class="eui-progress-bar eui-bg-blue" e-percent="0%"></div>' +
+                ' </div>' +
+                ' </div>' +
+                '<div class="eui-col-md7 eui-font16 eui-marginT20 eui-col-md-offset1">' +
+                '<ul class="degree">';
+            for (var y in optionAnswer) {
+                contentHtml += '<li>' + optionAnswer[y]+'</li>';
+
+            }
+
+            contentHtml += '</ul>' +
+                '</div>' +
+                '</div>';
+            var questions = questionsList[i];
+            var scoreIndex = i;
+            for (var z = 0; z < questions.length; z++) {
+                var scores = scoreList[(scoreIndex * 10 + z)];
+                contentHtml += '<div class="eui-row">' +
+                    '<div class="eui-col-md5 eui-textAlignR gradeSubject eui-paddingR20" name="questionContent" questionType="'+questions[z].questionType+'" questionId="'+questions[z].id+'">' +
+                    (z+1) +'.' + questions[z].questionContent+
+                    '</div>' +
+                    '<div class="eui-col-md7">' +
+                    '<div style="height: 50px;" class="grade">' +
+                    '<select class="example-0 rating" name="rating">' ;
+                for (var s in scores) {
+                    contentHtml += '<option value="' + scores[s] + '"></option>';
+                }
+
+                contentHtml += '</select>';
+                contentHtml += '</div>' +
+                    '</div>' +
+                    '</div>' +
+
+                    '</div>';
+            }
+
+            contentHtml += '</li>';
+
+        }
+        $("#questionUl").append(contentHtml);
+        $('#questionUl li').eq(0).addClass('current');
+        $('#sliderOl li').eq(0).addClass('current');
+
+
+    }
+
+
     //判断当前页面是否答完题目
     function isSelected(num) {
+
         var selectOption = $('.subject>ul>li:eq(' + num + ') .rating');
         for (var i = 0; i < selectOption.length; i++) {
-
             if (selectOption[i].selectedIndex == -1) {
-                layer.msg('您还有题目没完成！', {
+                layer.msg('第' + (num+1) + '页' + ',第' + (i+1) + '题还没回答'+ '，请完成答题！', {
                     time: 2000
                 });
                 return false;
@@ -241,29 +274,28 @@
             var obj = new Object();
             score = parseInt(selectOption[i].value);
             //分数
-            obj.score = score+'';
+            obj.score = score + '';
             //问题
-            obj.questionId = questionContent[i].getAttribute("questionid");
+            obj.questionId = questionContent[i].getAttribute("questionId");
             obj.answer = $('.degree li:eq(' + selectOption[i].selectedIndex + ')').text();
-            obj.questionType = questionContent[i].getAttribute("value");
+            obj.questionType = questionContent[i].getAttribute("questionType");
             array.push(obj);
         }
         var questionnaireId = $("#questionnaireId").val();
         var userId = $("#userId").val();
-        var visitorTimes= $("#visitorTimes").val();
+        var visitorTimes = $("#visitorTimes").val();
         $.post("/cube/questionnaire/submitQuestionnaire", {
             "param": JSON.stringify(array),
             "questionnaireId": questionnaireId,
             "userId": userId,
-            "visitorTimes":visitorTimes
+            "visitorTimes": visitorTimes
         }, function (result) {
             if (result.code == 200) {
-                window.location.href="/web/cube/getSuccess";
+                window.location.href = "/web/cube/getSuccess";
             }
         });
     }
-    $('#questionUl li').eq(0).addClass('current');
-    $('#sliderOl li').eq(0).addClass('current');
+
 </script>
 
 </body>

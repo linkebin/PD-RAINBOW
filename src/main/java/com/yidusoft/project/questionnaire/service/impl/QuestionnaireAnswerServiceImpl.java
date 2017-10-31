@@ -76,15 +76,27 @@ public class QuestionnaireAnswerServiceImpl extends AbstractService<Questionnair
     }
 
     @Override
-    public List<String> getAnswers(List<QuestionnaireQuestion> questionnaireQuestions) {
-        QuestionnaireQuestion questionnaireQuestion = questionnaireQuestions.get(0);
-        String[] answers = questionnaireQuestion.getOptionScore().split("\\|\\|");
+    public List<List<String>> getAnswers(List<QuestionnaireQuestion> questionnaireQuestions) {
+        List<List<String>> scoreList = new ArrayList<>();
+        for (QuestionnaireQuestion questionnaireQuestion : questionnaireQuestions){
+            List<String> answerList = new ArrayList<>();
+            String[] scores = questionnaireQuestion.getOptionScore().split("\\|\\|");
 
-        List<String> answerList = new ArrayList<>();
-        for (int i = 0; i < answers.length; i++) {
-            answerList.add(answers[i]);
+            if (questionnaireQuestion.getAnswerSequence() == 1){
+                for (int i = 0; i < scores.length; i++) {
+                    answerList.add(scores[i]);
+                }
+            }else{
+                for (int i = scores.length - 1 ; i >= 0; i--) {
+                    answerList.add(scores[i]);
+                }
+            }
+            scoreList.add(answerList);
         }
-        return answerList;
+
+
+
+        return scoreList;
     }
     //查询来访者填写问卷的答案 相关
     @Override
