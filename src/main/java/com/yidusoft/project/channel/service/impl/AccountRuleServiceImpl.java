@@ -25,4 +25,9 @@ public class AccountRuleServiceImpl extends AbstractService<AccountRule> impleme
     public List<AccountRule> finndAccountRuleByParameterList(AccountRule accountRule) {
         return accountRuleMapper.finndAccountRuleByParameterList(accountRule);
     }
+
+    @Override
+    public void deleteDefaultRuleAll() {
+        accountRuleMapper.deleteDefaultRuleAll();
+    }
 }

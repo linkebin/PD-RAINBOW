@@ -19,6 +19,18 @@
   <select id="finndAccountRuleByParameterList" parameterType="com.yidusoft.project.channel.domain.AccountRule" resultMap="BaseResultMap">
       SELECT ar.* FROM account_rule ar WHERE ar.deleted=0
 
+    <if test="ruleName!='' and ruleName!=null">
+      AND ar.rule_name LIKE  '%${ruleName}%'
+    </if>
+
+    <if test="startTime!=null and endTime!=null">
+      AND ar.start_time &gt;= #{startTime} AND ar.end_time &lt;= #{endTime}
+    </if>
+
 	  ORDER BY ar.default_rule DESC,ar.create_time DESC
   </select>
+
+  <delete id="deleteDefaultRuleAll">
+      DELETE FROM `account_rule` WHERE default_rule=1
+  </delete>
 </mapper>

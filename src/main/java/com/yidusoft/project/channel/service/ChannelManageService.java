@@ -3,6 +3,7 @@ import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.core.Service;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -16,5 +17,11 @@ public interface ChannelManageService extends Service<ChannelManage> {
      * @return
      */
     List<ChannelManage> finndChannelByParameterList(ChannelManage channelManage);
+
+    /**
+     * 查询渠道商下的账号
+     * @return
+     */
+    List<Map<String,Object>> findChannelAccountListByChannelId(Map<String,Object> map);
 
 }

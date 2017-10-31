@@ -84,6 +84,26 @@ public class QuestionnaireController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /***
+     * 问卷失效
+     * @param id
+     * @return
+     */
+    @PostMapping("/invalidQuestionnaire")
+    @ResponseBody
+    public Result invalidQuestionnaire(String id) {
+        try {
+                Questionnaire questionnaire = questionnaireService.findById(id);
+                questionnaire.setQuestionnaireState(3);
+                questionnaireService.update(questionnaire);
+
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult("操作失败");
+        }
+
+        return ResultGenerator.genSuccessResult();
+    }
+
 
     /***
      * 逻辑删除

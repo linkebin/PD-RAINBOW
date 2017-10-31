@@ -198,7 +198,6 @@
     // 高级筛选左滑
     $(".taskFiltrate").hide();
     $(".menuEdit").click(function (event) {
-        $('#upOrAddbnt').attr("disabled", false);
         $(".taskFiltrate").show();
         $(".filtrateIn").animate({right: '0'}, 400);
         /* Act on the event */
@@ -223,7 +222,6 @@
 
     //保存
     function save() {
-        $('#upOrAddbnt').attr("disabled", true);
         eui.use(['form', 'layedit', 'laydate'], function () {
             var form = eui.form
                 , layer = eui.layer
@@ -241,7 +239,7 @@
                 return;
             }
             //addOrUpdate();
-            $("#menuNames").val('');
+
             checkForAddQuestionnaireType();
         });
 
@@ -783,7 +781,6 @@
                 document.getElementById('menuForm').reset();
                 $(".taskFiltrate").show();
                 $(".filtrateIn").animate({right: '0'}, 400);
-                $('#upOrAddbnt').attr("disabled", false);
                 $("#parentNameText").val($("#parentName").val());
                 element.tabChange('menuFilter', id);
                 $(".eui-show input[name='account']").removeAttr("disabled");

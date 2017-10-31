@@ -13,4 +13,6 @@ public interface AccountRuleMapper extends Mapper<AccountRule> {
      * @return
      */
     List<AccountRule> finndAccountRuleByParameterList(AccountRule accountRule);
+
+    void deleteDefaultRuleAll();
 }

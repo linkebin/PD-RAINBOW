@@ -7,6 +7,7 @@ import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,6 +26,12 @@ public class WebChannelManageController {
     public String openlist() {
 
         return "project/channel/channel-list";
+    }
+
+    @RequestMapping("/openaccounts")
+    public String openaccounts(String id, Model model) {
+        model.addAttribute("channelId",id);
+        return "project/channel/channel-accounts";
     }
 
 }

@@ -95,7 +95,6 @@ $.fn.setForm = function(jsonValue) {
                     if($(this).val()==ival){
                         $(this).attr("checked", "checked");
                     }
-
                 }
             });
         }else if($oinput.attr("type")== "textarea"){//多行文本框

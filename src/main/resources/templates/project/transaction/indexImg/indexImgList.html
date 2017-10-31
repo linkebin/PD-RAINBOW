@@ -301,7 +301,7 @@
         //普通图片上传
         var uploadInst = upload.render({
             elem: '#test1'
-            , url: '/upload/uploadImg'
+            , url: '/upload/comUploadImg'
             , before: function (obj) {
                 //预读本地文件示例，不支持ie8
                 obj.preview(function (index, file, result) {
@@ -315,7 +315,7 @@
                 if (result.code != 200) {
                     return layer.msg('上传失败');
                 }
-                imgPath = result.data.imgPath;
+                imgPath = result.data;
                 return layer.msg('上传成功');
                 //上传成功
             }

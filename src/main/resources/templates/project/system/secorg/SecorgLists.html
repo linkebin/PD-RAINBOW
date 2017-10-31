@@ -40,17 +40,17 @@
                     <i class='eui-icon eui-font24'>&#xe61d;</i> 部门列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <a href="javasrcipt:void;" onclick="deleteOrg('')" class="eui-btn eui-btn-small">批量删除</a>
+                    <!--<a href="javasrcipt:void;" onclick="deleteOrg('')" class="eui-btn eui-btn-small">批量删除</a>-->
                 </div>
             </div>
             <table class="eui-table eui-form" id="userTable">
                 <colgroup>
-                    <col width="60">
+                    <!--<col width="60">-->
                     <col>
                 </colgroup>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                        <!--<th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>-->
                         <th>部门编号</th>
                         <th>部门名称</th>
                         <th>创建人</th>
@@ -282,9 +282,9 @@ function getTable(orgList) {
     var tableHtml = '';
     for (var item in orgList){
         var secOrg = orgList[item];
-
+//'<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secOrg.id + '"></td>' +
         tableHtml +=  '<tr>' +
-            '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secOrg.id + '"></td>' +
+
             '<td>'+ secOrg.orgCode +'</td>' +
             '<td>'+ secOrg.orgName +'</td>' +
             '<td>'+secOrg.creator +'</td>' +
@@ -292,13 +292,19 @@ function getTable(orgList) {
             '<td>' +
             '<div class="eui-btn-group"> ' +
             '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑组织" onclick="itemclick('+"'edit',"+"'"+secOrg.id+"','"+secOrg.orgName +"'"+')"><i class="eui-icon">&#xe642;</i></button> ' +
-            '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除组织" onclick="itemclick('+"'delete',"+"'"+secOrg.id+"','"+secOrg.orgName +"'"+')"><i class="eui-icon">&#xe640;</i></button> ' +
+            forDeleted(secOrg) +
             '<button class="eui-btn eui-btn-primary eui-btn-mini" title="添加组织" onclick="itemclick('+"'add',"+"'"+secOrg.id+"','"+secOrg.orgName +"'"+')"><i class="eui-icon">&#xe654;</i></button> ' +
             '</div>' +
             '</td>' +
             '</tr>';
     }
     return tableHtml;
+}
+function forDeleted(secOrg) {
+    if (secOrg.parentId!='0'){
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除组织" onclick="itemclick('+"'delete',"+"'"+secOrg.id+"','"+secOrg.orgName +"'"+')"><i class="eui-icon">&#xe640;</i></button> '
+    }
+
 }
 //工具条按钮事件
 function itemclick(item,id,orgName)
@@ -434,7 +440,6 @@ function deleteOrg(ids) {
     }
     if (ids==''){
         layer.msg('请选择要删除的组织', {
-            icon: 2,
             time: 2000
         });
     }else {
