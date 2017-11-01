@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>问卷填写</title>
+    <title>问卷预览</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
 
@@ -22,7 +22,7 @@
     <div class="eui-row eui-area">
         <div class="xymfLogo">
             <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
-            <span class="payCentre">问卷填写</span>
+            <span class="payCentre">问卷预览</span>
         </div>
     </div>
 </div>
@@ -49,8 +49,8 @@
     <div class="questionSubmit">
         <div class="eui-area eui-textAlignR">
             <img src="/Styles/images/xymfImages/QRcode.png" width="50" alt="">
-            <span class="submitBtn" id="submitBtn" onclick="calScore();"><img src="/Styles/images/xymfImages/submit.png"
-                                                                              width="30" alt="">提交问卷</span>
+            <span class="submitBtn" id="submitBtn"><img src="/Styles/images/xymfImages/submit.png"
+                                                        width="30" alt="">提交问卷</span>
         </div>
 
     </div>
@@ -65,14 +65,13 @@
 
 <script th:inline="javascript">
 
-
+    //获取问题列表
     getQuestionsList();
-
 
     var pageIndex = 0;
     var pageSize = $('.subject>ul>li').length;
     var progress = 0;
-
+    var isFirstEnter = true;
 
     eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
         var form = eui.form
@@ -80,35 +79,33 @@
             , layedit = eui.layedit
             , laydate = eui.laydate
             , laypage = eui.laypage;
+        //全屏模式询问框
+        layer.confirm('是否进入全屏模式？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            launchFullscreen(document.documentElement);
+            layer.closeAll();
+        }, function () {
 
-            //全屏模式询问框
-            layer.confirm('是否进入全屏模式？', {
-                btn: ['确定', '取消'] //按钮
-            }, function () {
-                launchFullscreen(document.documentElement);
-                layer.closeAll();
-            }, function () {
+        });
 
-            });
     });
 
     // 焦点图---------------------------------------------
     ;(function () {
         $(function () {
 
-
             //初始化中执行
             //自动播放
             var timer = null;
             var num = 0;
-
-
 
             var selectOption = $('.subject>ul>li .rating');
             for (var a = 0; a < selectOption.length; a++) {
                 selectOption[a].value = '';
             }
 
+            isFirstEnter = false;
             function go() {
                 clearInterval(timer);
                 timer = setInterval(function () {
@@ -155,25 +152,18 @@
                 //右侧点击
                 $('.subject .sliderRight').click(function (e) {
 
-                    //判断当前页面是否答完题目
-                    if (!isSelected(num)) {
-                        return;
-                    }
-
                     pageIndex++;
                     num++;
                     progress++;
-
-
 
                     if (progress / pageSize * 100 <= 100) {
                         element.progress('demo', Math.floor(num / pageSize * 100) + '%');
                     }
 
-                    if (progress == pageSize-1){
+                    if (progress == pageSize - 1) {
                         element.progress('demo', '100%');
                     }
-                    if (num > pageSize-1) {
+                    if (num > pageSize - 1) {
                         num = 0;
                         pageIndex = 0;
                     }
@@ -193,7 +183,7 @@
         var scoreList = [[${scoreList}]];
         var contentHtml = '';
 
-        for (var i =0; i < questionsList.length; i++) {
+        for (var i = 0; i < questionsList.length; i++) {
 
             contentHtml +=
                 '<li>' +
@@ -206,7 +196,7 @@
                 '<div class="eui-col-md7 eui-font16 eui-marginT20 eui-col-md-offset1">' +
                 '<ul class="degree">';
             for (var y in optionAnswer) {
-                contentHtml += '<li>' + optionAnswer[y]+'</li>';
+                contentHtml += '<li>' + optionAnswer[y] + '</li>';
 
             }
 
@@ -218,12 +208,12 @@
             for (var z = 0; z < questions.length; z++) {
                 var scores = scoreList[(scoreIndex * 10 + z)];
                 contentHtml += '<div class="eui-row">' +
-                    '<div class="eui-col-md5 eui-textAlignR gradeSubject eui-paddingR20" name="questionContent" questionType="'+questions[z].questionType+'" questionId="'+questions[z].id+'">' +
-                    (z+1) +'.' + questions[z].questionContent+
+                    '<div class="eui-col-md5 eui-textAlignR gradeSubject eui-paddingR20" name="questionContent" questionType="' + questions[z].questionType + '" questionId="' + questions[z].id + '">' +
+                    (z + 1) + '.' + questions[z].questionContent +
                     '</div>' +
                     '<div class="eui-col-md7">' +
                     '<div style="height: 50px;" class="grade">' +
-                    '<select class="example-0 rating" name="rating">' ;
+                    '<select class="example-0 rating" name="rating">';
                 for (var s in scores) {
                     contentHtml += '<option value="' + scores[s] + '"></option>';
                 }
@@ -246,78 +236,19 @@
 
     }
 
-
-    //判断当前页面是否答完题目
-    function isSelected(num) {
-
-        var selectOption = $('.subject>ul>li:eq(' + num + ') .rating');
-        for (var i = 0; i < selectOption.length; i++) {
-            if (selectOption[i].selectedIndex == -1) {
-                layer.msg('第' + (num+1) + '页' + ',第' + (i+1) + '题还没回答'+ '，请完成答题！', {
-                    time: 2000
-                });
-                return false;
-            }
-        }
-        return true;
-    }
-
-    //分数计算
-    function calScore() {
-
-        //判断当前页面是否答完题目
-
-        if (!isSelected(pageIndex)) {
-            return;
-        }
-
-        //判断是否已经全部完成答题
-        for (var i = 0; i < pageSize; i++) {
-            if (!isSelected(i)) {
-                return;
-            }
-        }
-        var score = 0;
-        var selectOption = $('.subject>ul>li .rating');
-        var questionContent = $('div[name="questionContent"]');
-        var array = new Array;
-        for (var i = 0; i < selectOption.length; i++) {
-            var obj = new Object();
-            score = parseInt(selectOption[i].value);
-            //分数
-            obj.score = score + '';
-            //问题
-            obj.questionId = questionContent[i].getAttribute("questionId");
-            obj.answer = $('.degree li:eq(' + selectOption[i].selectedIndex + ')').text();
-            obj.questionType = questionContent[i].getAttribute("questionType");
-            array.push(obj);
-        }
-        var questionnaireId = $("#questionnaireId").val();
-        var userId = $("#userId").val();
-        var visitorTimes = $("#visitorTimes").val();
-        $.post("/cube/questionnaire/submitQuestionnaire", {
-            "param": JSON.stringify(array),
-            "questionnaireId": questionnaireId,
-            "userId": userId,
-            "visitorTimes": visitorTimes
-        }, function (result) {
-            if (result.code == 200) {
-                window.location.href = "/web/cube/getSuccess";
-            }
-        });
-    }
-
     // 判断各种浏览器，找到正确的方法
     function launchFullscreen(element) {
-        if(element.requestFullscreen) {
-            element.requestFullscreen();
-        } else if(element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        } else if(element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen();
-        } else if(element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-        }
+
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+
     }
 
     //全屏
@@ -335,6 +266,5 @@
     }
 
 </script>
-
 </body>
 </html>

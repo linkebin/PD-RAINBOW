@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>问卷预览</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="questionHeader">
+    <input type="hidden" th:value="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireId"/>
+    <input type="hidden" th:value="${userId}" id="userId"/>
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">问卷预览</span>
+        </div>
+    </div>
+</div>
+
+<div class="visitorContent xymfMargin">
+    <div class="eui-area" style="width: 800px">
+        <div class="visitorTitle">
+            问题卡
+        </div>
+        <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
+            <form>
+                <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
+                <input type="hidden" th:value="${userId}"  id="userId"/>
+                <input type="hidden" th:value="${visitorTimes}"  id="visitorTimes"/>
+
+                <div class="eui-bg-white eui-form visitorContent" id="divTable" >
+
+                </div>
+            </form>
+        </div>
+        <div class="eui-textAlignC eui-bg-white eui-padding20" id="submitBnt">
+            <span class="eui-btn eui-btn-normal eui-btn-big"><img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷</span>
+        </div>
+    </div>
+</div>
+
+<div class="xymfFooter">
+    <!-- 底部固定区域 -->
+    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+</div>
+
+
+
+
+
+<!-- 返回顶部按钮 -->
+<span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>
+
+<script src="/Scripts/module/eui.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script>
+    eui.use(['form', 'layedit', 'laydate'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,layedit = eui.layedit
+            ,laydate = eui.laydate;
+
+        //常规用法
+        laydate.render({
+            elem: '#test1'
+        });
+
+//radio的事件监听
+        form.on('radio(filter)',function(data){
+            console.log(data.elem); //得到radio原始DOM对象
+
+            if(data.elem.attributes.states.value=='0'){
+                data.elem.checked=true;
+                form.render();
+                data.elem.attributes.states.value='1';
+            }else {
+                data.elem.checked=false;
+                form.render();
+                data.elem.attributes.states.value='0';
+            }
+
+        });
+
+    });
+    // 返回顶部
+    var winH = $(window).height();
+
+    $('.eui-backTop').hide();
+    $(window).scroll(function(e) {
+        var winT = $(window).scrollTop();
+        if(winT>winH){
+            $('.eui-backTop').fadeIn()
+        }else{
+            $('.eui-backTop').fadeOut()
+        }
+    });
+
+    $('.eui-backTop').click(function(e) {
+        $('html,body').animate({scrollTop:0},500)
+    });
+
+    $(function () {
+        loadQuestion();
+
+    });
+
+    //问卷id
+    var  questionnaireId=$("#questionnaireId").val();
+
+    //加载问卷
+    function  loadQuestion() {
+        // var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("/cube/questionnaire/question/findQuestionForQuestionnaire",{"id":questionnaireId},function (result) {
+            //    layer.closeAll();
+            console.info(result);
+            var context=  getTable(result.data);
+            $("#divTable").html(context);
+            formRender();
+        });
+
+
+    }
+
+    //拼接问题
+    function  getTable(questionList) {
+        var context="";
+        for(var i in questionList){
+            context+='<div questionType="'+questionList[i].questionType+'" ' +
+                'radioNmae="answer'+questionList[i].id+'" ' +
+                'correctAnswer="'+questionList[i].answer+'" ' +
+                'questionId="'+questionList[i].id+'"  ' +
+                'class="eui-form-item eui-padding20" name="divQuestion">';
+            context+='<div class="eui-font18">';
+            if(questionList[i].questionType==2){
+                context+=(parseInt(i)+1)+"."+questionList[i].questionContent+"（多选）";
+            }else {
+                context+=(parseInt(i)+1)+"."+questionList[i].questionContent+"（单选）";
+            }
+            context+='</div>';
+            var optionAnswer=questionList[i].optionAnswer.split("||");
+            var optionScore=questionList[i].optionScore.split("||");
+            for(var j in optionAnswer){
+                //判断问题答案的正反序 1 正 2反
+                var sequence=0;
+                if(questionList[i].answerSequence==1){
+                    sequence=parseInt(j);
+                }else {
+                    sequence=optionAnswer.length-parseInt(j)-1;
+                }
+                //判断问题是单选还是多选 2多选
+                var radioName="";
+                if(questionList[i].questionType==2){
+                    radioName='answer'+questionList[i].id+j;
+                    context+='  <input e-filter="filter" type="radio" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
+                }else {
+                    radioName='answer'+questionList[i].id;
+                    context+='  <input type="radio" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
+                }
+
+
+                context+= '  name="'+radioName+'"';
+                context+=  ' value="'+optionAnswer[j]+'" ' ;
+                context+=  ' title="'+optionAnswer[j]+'" />';
+
+            }
+            context+=' </div>';
+        }
+        return context;
+    }
+
+    //form表单  select,checkbox,radio 动态添加  需要更新
+    function   formRender() {
+        eui.use(['form'], function(){
+            var form = eui.form;
+            form.render();
+        });
+    }
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
