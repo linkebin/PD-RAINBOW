@@ -83,4 +83,10 @@
 
     </select>
 
+    <select id="getQuestionnaireByState" resultMap="BaseResultMap1">
+        SELECT ID_,questionnaire_name
+        FROM questionnaire
+        WHERE deleted=0
+        AND questionnaire_state=2
+    </select>
 </mapper>

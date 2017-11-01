@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>活动管理</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <style>
+        .defaultDiv{width: 100%;}
+        .formDiv .eui-form-item label{
+            width: 80px;
+            padding: 9px 20px;
+            text-align: left;
+        }
+        .subBtn{color: white; background: #3f89ec;}
+
+        input[type="button"],[type="submit"]{
+            cursor: pointer;
+        }
+        input[name='userName'],[name='addr']{
+            border: 1px solid #1aa194;
+        }
+        input[type='text']{height: 30px; line-height: 30px;}
+
+        .eui-form-label{padding: 5px 15px;}
+        .eui-input-inline{margin-left: 20px;}
+        .tb{cursor: pointer;margin-left: 10px;}
+    </style>
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area">
+        <div th:replace="project/cube/common/left :: left">sidebar</div>
+        <div class="eui-body">
+            <!-- 内容主体区域 -->
+            <div class="xymfContent">
+                <div class="defaultDiv">
+                    <form id="searchFrom" onsubmit="return false;">
+                        <input type="hidden" name="creator" th:value="${session.userSession.id}"/>
+                        <div class="eui-form eui-margin10">
+                            <div class="eui-form-item">
+                                <label class="eui-form-label">活动名称</label>
+                                <div class="eui-input-inline">
+                                    <input type="text" name="activityName" placeholder="" class="eui-input">
+                                </div>
+
+                                <div class="eui-input-inline">
+                                    <span class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()">查询</span>
+                                    <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="eui-row eui-padding10 eui-borderB">
+                        <div class="eui-col-md6 eui-font18">
+                            &nbsp;
+                        </div>
+                        <div class="eui-col-md6 eui-textAlignR">
+                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"
+                               onclick="activities()">发起活动</a>
+                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal activityDelete">批量删除</a>
+                        </div>
+                    </div>
+
+                    <div class="xymfForm">
+                        <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
+                            <colgroup>
+                                <col width="60">
+                                <col width="100">
+                                <col width="100">
+                                <col width="100">
+                                <col width="140">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox" e-skin="primary" title=""></th>
+                                <th>活动编号</th>
+                                <th>活动名称</th>
+                                <th>活动目的</th>
+                                <th>参与方</th>
+                                <th>活动地址</th>
+                                <th>操 作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+
+                            </tbody>
+                        </table>
+                        <div style="margin-left: 30px;" id="pages"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+
+</div>
+<script src="/Scripts/module/eui.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/pack.ajax.js"></script>
+
+<script type="text/javascript">
+    function resetForm() {
+        document.getElementById('searchFrom').reset()
+    }
+    $(function () {
+        doSearch();
+    })
+    //加载数据
+    function doSearch() {
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer,
+                    $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            console.log(params);
+            var index = layer.load(2); //加载
+            $.ajax({
+                url: "/launch/activities/listByParam",
+                data: {
+                    json: JSON.stringify(params),
+                    page: 1,
+                    size: 10
+                },
+                type: "post",
+                success: function (result) {
+                    console.log(result);
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , theme: '#1E9FFF'
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var activityList = result.data.list;
+                                console.log(activityList)
+                                //遍历，拼接表格
+                                var tableHtml = getTable(activityList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/launch/activities/listByParam",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var activityList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(activityList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(activityList) {
+        var tableHtml = '';
+        for (var item in activityList) {
+            var activity = activityList[item];
+
+            var id = "'" + activity.id + "'";
+
+            tableHtml += '<tr>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
+                    '<td>' + activity.activityCode + '</td>' +
+                    '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + activity.id + '">' + activity.activityName + '</a></td>' +
+                    '<td>' + activity.activityAim + '</td>' +
+                    '<td>' + activity.participant + '</td>' +
+                    '<td>' + activity.activityAddr + '</td>' +
+                    '<td>' +
+                    '<a title="编辑" target="_blank" onclick="activities('+id+')"><i class="eui-icon tb">&#xe642;</i></a>' +
+                    '<i title="删除" onclick="deleteActivity(' + id + ')" class="eui-icon tb">&#xe640;</i></td>' +
+                    '</tr>';
+        }
+        return tableHtml;
+    }
+    /**
+     * 添加活动
+     */
+    function activities(id) {
+        var winObj;
+        if(typeof id!='undefined' && id!=''){
+            winObj = window.open("/web/activities/activitiesUpdate?id="+id);
+        }else{
+            winObj = window.open("/web/activities/initiatingActivities");
+        }
+        var loop = setInterval(function () {
+            if (winObj.closed) {
+                clearInterval(loop);
+                //alert('closed');
+                doSearch();
+            }
+        }, 1);
+    }
+
+    $('.activityDelete').click(function () {
+        var ids = "";
+        if (ids == "") {
+            var idArray = new Array();
+            var s = 0;
+            $(".mycheckbox:checked").each(function (i) {
+                var id = $(this).parent().find("input[name='activityId']").val();
+                idArray[s] = id;
+                s++;
+            });
+            ids = idArray.join(",");
+            console.log(ids);
+        }
+        if (ids == "") {
+            layer.msg('请选择要删除的活动', {
+                icon: 2,
+                time: 2000
+            });
+        } else {
+            deleteActivity(ids);
+        }
+    })
+
+    /**
+     * 删除活动
+     */
+    function deleteActivity(id) {
+            layer.confirm('您确定删除吗？', {
+                btn: ['确认', '取消']
+            }, function () {
+                $.post("/launch/activities/delete",{ids:id},function (res) {
+                    if (result.message = "SUCCESS") {
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                        doSearch();
+                    } else {
+                        layer.msg(result.message, {
+                            icon: 1,
+                            time: 2000
+                        });
+                    }
+                })
+            })
+    }
+
+</script>
+</body>
+</html>

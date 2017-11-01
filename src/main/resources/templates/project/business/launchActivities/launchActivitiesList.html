@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商业活动管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
+    <style>
+        .filtrateIn{
+            width: 700px;
+            height: 100%;
+            position: fixed;
+            right: -700px;
+            top: 0;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="eui-bg-white eui-row eui-paddingT10">
+    <div class="eui-col-md12 eui-paddingR10">
+        <form class="eui-form" id="searchFrom">
+            <input type="hidden" value="1" name="initiatorType"/>
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="activityName" e-verify="title" autocomplete="off" placeholder="活动名称/关键字"
+                       class="eui-input">
+            </div>
+            <div class="eui-input-inline">
+                <span class="eui-btn" onclick="doSearch()">查询</span>
+                <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+            </div>
+        </form>
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 图片
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <a href="###" class="eui-btn eui-btn-small activityNew"><i class='eui-icon eui-font24'>&#xe654;</i> 添加活动</a>
+                <a href="###" class="eui-btn eui-btn-small activityDelete"><i class='eui-icon eui-font24'>&#xe640;</i>
+                    批量删除</a>
+            </div>
+        </div>
+        <table class="eui-table eui-form" id="activitiesTable">
+            <colgroup>
+                <col width="60">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th><input type="checkbox" e-skin="primary" title=""></th>
+                <th>活动编号</th>
+                <th>活动名称</th>
+                <th>联系人</th>
+                <th>联系电话</th>
+                <th>人数</th>
+                <th>问卷名</th>
+                <th>创建人</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>审批状态</th>
+                <th>操 作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+<!-- 左滑新建图片开始 -->
+<div class="taskFiltrate">
+</div>
+<div class="filtrateIn">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30 newOrEdit">
+            <i class='eui-icon eui-font24'>&#xe654;</i>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 activityClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="activityNewForm">
+        <input type="hidden" id="activityId" name="id"/>
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动名称</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="activityName" placeholder="请输入活动名称" e-verify="title" autocomplete="off">
+            </div>
+            <label class="eui-form-label">活动目的</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="activityAim" placeholder="请输入活动目的" e-verify="title" autocomplete="off">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">参与方</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="participant" placeholder="请输入参与方" e-verify="title" autocomplete="off">
+            </div>
+            <label class="eui-form-label">联系人</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="contacts" placeholder="请输入联系人" e-verify="title" autocomplete="off">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">联系电话</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="phone" placeholder="请输入联系电话" e-verify="title" autocomplete="off">
+            </div>
+            <label class="eui-form-label">活动人数</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="activityTotal" placeholder="请输入活动人数" e-verify="title" autocomplete="off">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">问卷名</label>
+            <div class="eui-input-inline">
+                <select name="uestionnaireId">
+
+                </select>
+            </div>
+            <label class="eui-form-label">开始时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" id="activityStart" name="activityStart" placeholder="请选择开始时间">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">结束时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" id="activityEnd" name="activityEnd" placeholder="请选择结束时间">
+            </div>
+            <label class="eui-form-label">活动地点</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="activityAddr" placeholder="请输入活动地点">
+            </div>
+        </div>
+        <input type="submit" id="sub" style="display: none;" value="提交"/>
+    </form>
+    <div class="taskConfirm" style="width: 100%;"><span onclick="formSub()" class="eui-btn" >确认</span></div>
+</div>
+<!-- 左滑新建图片结束 -->
+
+
+<script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script type="text/javascript">
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+    }
+    $(function () {
+        doSearch();
+        jQuery.validator.addMethod("isMobile", function (value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "请正确填写您的手机号码");
+        $("#activityNewForm").validate({
+            rules: {
+                activityName: {
+                    required: true,
+                },
+                activityAim: {
+                    required: true,
+                },
+                participant: {
+                    required: true,
+                },
+                phone: {
+                    required: true,
+                    minlength: 11,
+                    isMobile: true
+                },
+                activityAddr: {
+                    required: true,
+                },
+                contacts: {
+                    required: true,
+                },
+                activityTotal: {
+                    required: true,
+                    digits: true
+                },
+                activityStart: {
+                    required: true,
+                },
+                activityEnd: {
+                    required: true,
+                }
+            },
+            messages: {
+                activityName: {
+                    required: "请输入活动名称",
+                },
+                activityAim: {
+                    required: '请输入活动目的',
+                },
+                participant: {
+                    required: '请输入参与方',
+                },
+                phone: {
+                    required: '请输入手机号码',
+                    minlength: "联系电话不能小于11个字符",
+                    isMobile: "请正确填写手机号码"
+                },
+                activityAddr: {
+                    required: '请输入地址',
+                },
+                contacts: {
+                    required: '请输入联系人',
+                },
+                activityTotal: {
+                    required: '请输入活动人数',
+                    digits: '只能输入整数'
+                },
+                activityStart: {
+                    required: '请输入活动开始时间',
+                },
+                activityEnd: {
+                    required: '请输入活动结束时间',
+                }
+            },
+
+            submitHandler: function () {
+                var obj = $("#activityNewForm").serializeObject();
+                obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                console.log(obj);
+                if(obj.activityStart>obj.activityEnd){
+                    layer.msg('开始时间不能大于结束时间', {
+                        icon: 2,
+                        time: 2000
+                    });
+                    return;
+                }
+                var url='/launch/activities/add';
+                if(typeof $('#activityId').val()!='undefined' && $('#activityId').val()!=''){
+                    url='/launch/activities/update';
+                }
+                $.post(url, {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+                    console.log(result);
+                    if (result.code == 200) {
+                        $(".taskFiltrate").hide();
+                        $(".filtrateIn").animate({right: '-800px'}, 800);
+                        doSearch();
+                    } else {
+                        layer.msg(result.message);
+                    }
+                });
+            }
+        });
+    });
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form', 'laypage', 'layer','laydate'], function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer
+                    , laydate =  eui.laydate
+                    , $ = eui.jquery;
+
+            //常规用法
+            laydate.render({
+                elem: '#activityStart',
+                type: 'datetime'
+            });
+            laydate.render({
+                elem: '#activityEnd',
+                type: 'datetime'
+            });
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+//            console.log(params);
+            var index = layer.load(2); //加载
+            $.ajax({
+                url: "/launch/activities/listByParam",
+                data: {
+                    json: JSON.stringify(params),
+                    page: 1,
+                    size: 10
+                },
+                type: "post",
+                success: function (result) {
+//                    console.log(result);
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , theme: '#1E9FFF'
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var activityList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(activityList);
+                                $("#activitiesTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/launch/activities/listByParam",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var activityList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(activityList);
+                                        $("#activitiesTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+    //渲染数据，拼接表格
+    function getTable(activityList) {
+        var tableHtml = '';
+        for (var item in activityList) {
+            var activity = activityList[item];
+            var status="";
+            console.log("状态"+activity.activityStatus)
+            if(activity.activityStatus==0 && activity.initiatorType==1){
+                status="待审批"
+            }else if(activity.activityStatus==1){
+                status="审批通过"
+            }else{
+                status="不用审批"
+            }
+            tableHtml += '<tr>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
+                    '<td>' + activity.activityCode + '</td>' +
+                    '<td>' + activity.activityName + '</td>' +
+                    '<td>' + activity.contacts + '</td>' +
+                    '<td>' + activity.phone + '</td>' +
+                    '<td>' + activity.activityTotal + '</td>' +
+                    '<td>' + activity.uestionnaireName + '</td>' +
+                    '<td>' + activity.creator + '</td>' +
+                    '<td>' + new Date(activity.activityStart).Format("yyyy-mm-dd") + '</td>' +
+                    '<td>' + new Date(activity.activityEnd).Format("yyyy-mm-dd")+ '</td>' +
+                    '<td>' + status + '</td>' +
+                    '<td>' +
+                    '<div class="eui-btn-group"> ' +
+                    '' + Buts(activity) + '' +
+                    '</div>' +
+                    '</td>' +
+                    '</tr>';
+        }
+        return tableHtml;
+    }
+
+    function Buts(activity) {
+        var id = "'" + activity.id + "'";
+        var name = "'" + activity.activityName + "'";
+        var aim = "'" + activity.activityAim + "'";
+        var addr = "'" + activity.activityAddr + "'";
+        var participant = "'" + activity.participant + "'";
+        var contacts = "'" + activity.contacts + "'";
+        var total = "'" + activity.activityTotal + "'";
+        var start = "'" + new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss")  + "'";
+        var end = "'" + new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss") + "'";
+        var uestionnaireId = "'" + activity.uestionnaireId + "'";
+        var phone = "'"+ activity.phone +"'";
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="activityEdit(' + id + ',' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ','+phone+')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+    }
+
+    function formSub() {
+        return $("#sub").click();
+    }
+    var form
+    eui.use('form', function () { //独立版的layer无需执行这一句
+        form = eui.form; //独立版的layer无需执行这一句
+        $(".taskFiltrate").hide();
+        $('.activityNew').click(function () {
+            $('#activityId').val("");
+            $.get("/questionnaire/getQuestionnaireByState", function (result) {
+                if (result.code == 200) {
+                    for (var i in result.data) {
+                        var questionnaire = result.data[i];
+                        $('select[name="uestionnaireId"]').append('<option value="' + questionnaire.id + '">' + questionnaire.questionnaireName + '</option>')
+                    }
+                }
+                form.render('select');
+                $(".taskFiltrate").show();
+                $(".filtrateIn").animate({right: '0'}, 800);
+            })
+            /* Act on the event */
+        })
+        //关闭
+        $(".activityClose,.taskFiltrate").click(function (event) {
+            $('select[name="uestionnaireId"]').html("");
+            $('input[name="activityName"]').val("");
+            $('input[name="activityAim"]').val("");
+            $('input[name="participant"]').val("");
+            $('input[name="contacts"]').val("");
+            $('input[name="phone"]').val("");
+            $('input[name="activityTotal"]').val("");
+            $('input[name="activityStart"]').val("");
+            $('input[name="activityEnd"]').val("");
+            $('input[name="activityAddr"]').val("");
+            $(".filtrateIn").animate({right: '-800px'}, 800);
+            $(".taskFiltrate").hide();
+            form.render();
+        });
+        //编辑活动
+    });
+
+    function activityEdit(id,name,aim,addr,participant,contacts,total,start,end,uestionnaireId,phone) {
+        $('#activityId').val(id);
+        $('input[name="activityName"]').val(name);
+        $('input[name="activityAim"]').val(aim);
+        $('input[name="participant"]').val(participant);
+        $('input[name="contacts"]').val(contacts);
+        $('input[name="phone"]').val(phone);
+        $('input[name="activityTotal"]').val(total);
+        $('input[name="activityStart"]').val(start);
+        $('input[name="activityEnd"]').val(end);
+        $('input[name="activityAddr"]').val(addr);
+        $.get("/questionnaire/getQuestionnaireByState", function (result) {
+            if (result.code == 200) {
+                for (var i in result.data) {
+                    var questionnaire = result.data[i];
+                    $('select[name="uestionnaireId"]').append('<option value="' + questionnaire.id + '">' + questionnaire.questionnaireName + '</option>')
+                }
+                form.render('select');
+            }
+            $('select[name="uestionnaireId"]').children().each(function (index,data) {
+                if(data.value==uestionnaireId){
+                    $(this).attr("selected",true);
+                }
+            })
+            form.render('select');
+            $(".taskFiltrate").show();
+            $(".filtrateIn").animate({right: '0'}, 800);
+        })
+    }
+
+    /**
+     * 批量删除
+     */
+    $('.activityDelete').click(function () {
+        var ids = "";
+        if (ids == "") {
+            var idArray = new Array();
+            var s = 0;
+            $(".mycheckbox:checked").each(function (i) {
+                var id = $(this).parent().find("input[name='activityId']").val();
+                idArray[s] = id;
+                s++;
+            });
+            ids = idArray.join(",");
+        }
+        if (ids == "") {
+            layer.msg('请选择要删除的活动', {
+                icon: 2,
+                time: 2000
+            });
+        } else {
+            deleteActivity(ids);
+        }
+    })
+
+    /**
+     * 删除
+     * @param id
+     */
+    function deleteActivity(id) {
+        layer.confirm('您确定删除吗？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.post("/launch/activities/delete", {"ids": id}, function (result) {
+                if (result.message = "SUCCESS") {
+                    layer.msg('删除成功', {
+                        icon: 1,
+                        time: 2000
+                    });
+                    doSearch();
+                } else {
+                    layer.msg(result.message, {
+                        icon: 1,
+                        time: 2000
+                    });
+                }
+            })
+        })
+    }
+</script>
+</body>
+</html>

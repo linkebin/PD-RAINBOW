@@ -124,4 +124,9 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
 
         return null;
     }
+
+    //查询使用中的问卷
+    public List<Questionnaire> getQuestionnaireByState(){
+        return questionnaireMapper.getQuestionnaireByState();
+    }
 }

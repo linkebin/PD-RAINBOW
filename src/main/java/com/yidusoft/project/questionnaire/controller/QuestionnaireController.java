@@ -128,4 +128,13 @@ public class QuestionnaireController {
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 获取正在使用中的问卷
+     * @return
+     */
+    @GetMapping("/getQuestionnaireByState")
+    public Result getQuestionnaireByState(){
+        List<Questionnaire> list=questionnaireService.getQuestionnaireByState();
+        return ResultGenerator.genSuccessResult(list);
+    }
 }

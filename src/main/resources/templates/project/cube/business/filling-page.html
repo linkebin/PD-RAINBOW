@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>填报验证</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <style>
+        .titleSize{font-family: "微软雅黑", "宋体", Arial, sans-serif;
+            color: black;font-size: 18px;}
+        .mod-sub-nav {
+            height: 34px;
+            background: url(/Styles/images/mod_sub_nav.png) no-repeat 0 0;
+            margin: 30px 0;
+            line-height: 34px;
+            color: #666;
+            font-size: 16px;
+            font-family: "Microsoft Yahei",\5fae\8f6f\96c5\9ed1,\9ed1\4f53;
+        }
+        .mod-sub-nav li {
+            float: left;
+            padding-left: 66px;
+        }
+        .mod-sub-list1 {
+            width: 175px;
+        }
+        .mod-sub-list2 {
+            width: 163px;
+        }
+        .mod-sub-nav li.list1-active {
+            background: url(/Styles/images/sub_nav_1.png) no-repeat 0 0;
+            color: #2e82ff;
+        }
+        .mod-sub-nav li.list2-active {
+            background: url(/Styles/images/sub_nav_2.png) no-repeat 0 0;
+            color: #2e82ff;
+            margin-left: -12px;
+            padding-left: 78px;
+        }
+        .mod-sub-nav li.list3-active {
+            background: url(/Styles/images/sub_nav_3.png) no-repeat 0 0;
+            color: #2e82ff;
+            margin-left: -12px;
+            padding-left: 78px;
+            width: 163px;
+        }
+        #checkAccount input + label{color: red; float: left; line-height: 38px;}
+        #resetPassword input + label{color: red; float: left; line-height: 38px;}
+
+        .subBtn{color: white; background: #3f89ec;}
+
+        .formDiv{width: 700px;}
+
+        .formDiv div{padding: 10px; width: 100%; height: 38px;}
+
+        .formDiv div input{float: left; }
+        .securityImg{margin-left: 100px;}
+
+        input[type="button"],[type="submit"]{
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <header >
+        <div class="eui-header">
+            <div class="headerIn">
+                <div class="eui-logo"><img th:src="@{/Styles/images/xymfImages/xymf/logo.png}" alt=""></div>
+                <!-- 头部区域（可配合layui已有的水平导航） -->
+                <ul class="eui-nav xymfNav">
+                    <li class="eui-nav-item"><h1 class="titleSize">填报验证</h1></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="eui-area">
+        <div class="eui-body">
+            <!-- 内容主体区域 -->
+            <div class="xymfContent">
+                <div class="formDiv">
+                    <form id="mobileSendCode" onsubmit="return false;">
+                        <div>
+                            <label class="eui-form-label">手机:</label>
+                            <input type="text" name="mobile" e-verify="title" autocomplete="off"
+                                   class="eui-input eui-width400" placeholder="请输入手机">
+                        </div>
+                        <div>
+                            <label class="eui-form-label">验证码:</label>
+                            <input type="text" name="vrifyCode1" e-verify="title" autocomplete="off"
+                                   placeholder="请输入手机验证码" class="eui-input eui-width200">
+                            <button  onclick="sendMsgCode(this)" id="btnSendCode"
+                                     type="button" style="background:#3f89ec ;color:#fff" class="eui-btn eui-btn-primary securityBut securityImg">点击获取</button>
+
+                            <label id="errcode2" style="color: red;"></label>
+                        </div>
+                        <div>
+                            <label class="eui-form-label">邀请码:</label>
+                            <input type="text" name="mobile" e-verify="title" autocomplete="off"
+                                   class="eui-input eui-width400" placeholder="请输入活动邀请码">
+                        </div>
+                        <div>
+                            <label class="eui-form-label"></label>
+                            <input value="下一步" onclick="mobileSendCode();" type="submit"
+                                   class="eui-input eui-width400 subBtn"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+
+
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
+
+<script>
+    var InterValObj; //timer变量，控制时间
+    var count = 60; //间隔函数，1秒执行
+    var curCount;//当前剩余秒数
+
+    function sendMsgCode(o) {
+        var m = $("#mobileSendCode input[name='mobile']").val();
+        curCount = count;
+        $(o).attr('disabled','true');
+        InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+        $.ajax({
+            url:'/sign/code',
+            type:"post",
+            data:{
+                mobile:m
+            },
+            dataType:"json",
+            success:function(data){
+                if(data.code!=undefined) {
+                    $("#errcode2").html(data.message);
+                }
+            }
+        });
+    }
+    //timer处理函数
+    function SetRemainTime() {
+        if (curCount == 0) {
+            window.clearInterval(InterValObj);//停止计时器
+            $("#btnSendCode").removeAttr("disabled");//启用按钮
+            $("#btnSendCode").html("点击获取");
+        }
+        else {
+            curCount--;
+            $("#btnSendCode").html('倒计'+curCount+'秒');
+        }
+    }
+    function mobileSendCode() {
+        var obj = $("#mobileSendCode").serializeObject();
+
+        $.post('/sign/check/mobileCode',{mobile:obj.mobile,vrifyCode:obj.vrifyCode1},function (result) {
+            if (result.code == 200){
+                $('.mod-sub-list2').removeClass('list2-active');
+                $('.mod-sub-list3').addClass('list3-active');
+                $("#mobileSendCode").hide();
+                $("#resetPassword input[name='mobile']").val($("#mobileSendCode input[name='mobile']").val());
+                $("#resetPassword").show();
+                $("#resetPassword").validate({
+                    rules: {
+                        password: {
+                            required : true
+                        },
+                        password1: {
+                            required: true,
+                            equalTo: "#password"
+                        }
+                    },
+                    messages: {
+                        password: {
+                            required : "请输入密码"
+                        },
+                        password1: {
+                            required: "请输入确认密码",
+                            equalTo: "两次输入密码不一致"
+                        }
+                    },
+                    submitHandler: function() {
+                        var obj = $("#resetPassword").serializeObject();
+                        obj.password=md5(obj.password);
+                        obj.password1='';
+                        $.post('/sign/reset/password',{mobile:obj.mobile,password:obj.password},function (result) {
+                            $(".successMsg").html(result.message)
+                        });
+                    }
+                });
+            }else {
+                $('#errcode2').html(result.message);
+            }
+        });
+
+
+    }
+    $(function () {
+        jQuery.validator.addMethod("isMobile", function(value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "请正确填写您的手机号码");
+
+        $("#checkAccount").validate({
+            rules: {
+                mobile: {
+                    required : true,
+                    minlength : 11,
+                    isMobile : true
+                }
+            },
+            messages: {
+                mobile: {
+                    required : "请输入手机号",
+                    minlength : "确认手机不能小于11个字符",
+                    isMobile : "请正确填写您的手机号码"
+                }
+            },
+            submitHandler: function() {
+
+                var vrifyCode1 = $("#checkAccount input[name='vrifyCode1']").val();
+                if(vrifyCode1!=''){
+                    $.post('/sign/check/account',{mobile:$("#checkAccount input[name='mobile']").val()
+                        ,vrifyCode1:$("#checkAccount input[name='vrifyCode1']").val()},function (result) {
+                        if (result.code == 200){
+                            $('.mod-sub-list1').removeClass('list1-active');
+                            $('.mod-sub-list2').addClass('list2-active');
+                            $("#checkAccount").hide();
+                            $("#mobileSendCode input[name='mobile']").val(result.data)
+                            $("#mobileSendCode").show();
+                        }else {
+                            $("#errcode0").html(result.message);
+                        }
+                    });
+                }else {
+                    $("#errcode1").html("验证码不能为空！");
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

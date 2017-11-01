@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>活动发起</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .default_hide {
+            display: none;
+        }
+
+        .eui-form-label {
+            width: 100px;
+            text-align: left;
+        }
+
+        #promotionsForm input + label {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="questionHeader">
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">发起活动</span>
+        </div>
+    </div>
+</div>
+
+<div class="activityContent xymfMargin">
+    <div class="eui-area">
+        <div class="activityTitle">
+            <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
+        </div>
+        <form id="activitiesForm" onsubmit="return false;">
+            <input type="hidden" th:value="${id}" id="id" name="id"/>
+            <div class="eui-bg-white eui-padding20 activity">
+                <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                    <div class="eui-col-md6 eui-font20">基本信息</div>
+                    <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward eui-cursorp"><i class="eui-icon">
+                        &#xe619;</i> 收起
+                    </div>
+                </div>
+                <!--基本-->
+                <div class="eui-bg-white eui-form activityContent">
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">活动名称</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="activityName" placeholder="活动名称" class="eui-input">
+                        </div>
+                        <label class="eui-form-label">活动目的</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="activityAim" placeholder="活动目的" class="eui-input">
+                        </div>
+                        <label class="eui-form-label">参与方</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="participant" placeholder="参与方" class="eui-input">
+                        </div>
+                    </div>
+                    <div data-toggle="distpicker">
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">联系人</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="contacts" placeholder="联系人" class="eui-input">
+                            </div>
+                            <label class="eui-form-label">联系电话</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="phone" placeholder="联系电话" class="eui-input">
+                            </div>
+                            <label class="eui-form-label">活动地点</label>
+                            <div class="eui-input-inline">
+                                <input type="text" name="activityAddr" placeholder="具体地址" class="eui-input"
+                                    style="width:250px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">活动人数</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="activityTotal" placeholder="活动人数" class="eui-input">
+                        </div>
+                        <label class="eui-form-label">问卷名称</label>
+                        <div class="eui-input-inline">
+                            <select e-filter="uestionnaireId" name="uestionnaireId">
+
+                            </select>
+                        </div>
+                        <label class="eui-form-label">活动开始时间</label>
+                        <div class="eui-input-inline">
+                            <input type="text" class="eui-input" readonly="readonly" id="activityStart"
+                                   name="activityStart" placeholder="活动开始时间">
+                        </div>
+                    </div>
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">活动结束时间</label>
+                        <div class="eui-input-inline">
+                            <input type="text" class="eui-input" readonly="readonly" id="activityEnd" name="activityEnd"
+                                   placeholder="活动结束时间">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="eui-textAlignC eui-bg-white eui-padding20">
+            <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">
+                <img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 保存信息</span>
+            </div>
+
+            <input type="submit" id="sub" style="display: none;" value="提交"/>
+        </form>
+    </div>
+</div>
+
+<div class="xymfFooter">
+    <!-- 底部固定区域 -->
+    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+</div>
+
+
+<!-- 返回顶部按钮 -->
+<span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>
+
+<script src="/Scripts/module/eui.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/plugins/distpicker.data.js"></script>
+<script src="/Scripts/plugins/distpicker.js"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/pack.ajax.js"></script>
+<script src="/card.js"></script>
+<script>
+
+    $(function () {
+        eui.use(['form', 'layedit', 'laydate'], function () {
+            var form = eui.form
+                    , layer = eui.layer
+                    , layedit = eui.layedit
+                    , laydate = eui.laydate;
+
+            //常规用法
+            laydate.render({
+                elem: '#activityStart',
+                type: 'datetime'
+            });
+            laydate.render({
+                elem: '#activityEnd',
+                type: 'datetime'
+            });
+            getQuestions(form);//获取问卷名称
+            jQuery.validator.addMethod("isMobile", function (value, element) {
+                var length = value.length;
+                var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+                return this.optional(element) || (length == 11 && mobile.test(value));
+            }, "请正确填写您的手机号码");
+            $("#activitiesForm").validate({
+                rules: {
+                    activityName: {
+                        required: true,
+                    },
+                    activityAim: {
+                        required: true,
+                    },
+                    participant: {
+                        required: true,
+                    },
+                    phone: {
+                        required: true,
+                        minlength: 11,
+                        isMobile: true
+                    },
+                    activityAddr: {
+                        required: true,
+                    },
+                    contacts: {
+                        required: true,
+                    },
+                    activityTotal: {
+                        required: true,
+                        digits: true
+                    },
+                    activityStart: {
+                        required: true,
+                    },
+                    activityEnd: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    activityName: {
+                        required: "请输入活动名称",
+                    },
+                    activityAim: {
+                        required: '请输入活动目的',
+                    },
+                    participant: {
+                        required: '请输入参与方',
+                    },
+                    phone: {
+                        required: '请输入手机号码',
+                        minlength: "联系电话不能小于11个字符",
+                        isMobile: "请正确填写手机号码"
+                    },
+                    activityAddr: {
+                        required: '请输入地址',
+                    },
+                    contacts: {
+                        required: '请输入联系人',
+                    },
+                    activityTotal: {
+                        required: '请输入活动人数',
+                        digits: '只能输入整数'
+                    },
+                    activityStart: {
+                        required: '请输入活动开始时间',
+                    },
+                    activityEnd: {
+                        required: '请输入活动结束时间',
+                    }
+                },
+
+                submitHandler: function () {
+                    var obj = $("#activitiesForm").serializeObject();
+                    delete obj.province;
+                    delete obj.city;
+                    delete obj.district;
+                    obj.uestionnaireName=$('select[name="uestionnaireId"]').find("option:selected").text();
+                    console.log(obj);
+                    $.get("/user/questionnaires/list", function (result) {
+                        console.log(result);
+                        if (result.code = 200) {
+                            var total = 0;
+                            if (result.data != null) {
+                                total = result.data.questionnairesTotal;
+                            }
+                            if (obj.activityTotal > total) {
+                                layer.confirm('你的使用卷不足!!', {
+                                    btn: ['继续添加', '前往购买']
+                                }, function () {
+                                    $.post('/launch/activities/update', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+                                        if (result.code == 200) {
+                                            window.close();
+                                        } else {
+                                            layer.msg(result.message);
+                                        }
+                                    });
+                                })
+                            }
+                        }
+                    })
+                }
+            });
+        });
+    });
+
+    function detail(form) {
+        console.log(form);
+        $.post("/launch/activities/detail",{id:$('#id').val()},function (res) {
+            if(res.code==200){
+                var activity=res.data;
+                $('input[name="activityName"]').val(activity.activityName);
+                $('input[name="activityAim"]').val(activity.activityAim);
+                $('input[name="participant"]').val(activity.participant);
+                $('input[name="contacts"]').val(activity.contacts);
+                $('input[name="phone"]').val(activity.phone);
+                $('input[name="activityTotal"]').val(activity.activityTotal);
+                $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
+                $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));
+                $('input[name="activityAddr"]').val(activity.activityAddr);
+                $('select[name="uestionnaireId"]').children().each(function (i,data) {
+                    if(data.value==activity.uestionnaireId){
+                        return $(this).attr("selected",true);
+                    }
+                })
+                form.render('select');
+            }
+        })
+    }
+    // 返回顶部
+    var winH = $(window).height();
+
+    function formSub() {
+        return $("#sub").click();
+    }
+
+    $('.eui-backTop').hide();
+    $(window).scroll(function (e) {
+        var winT = $(window).scrollTop();
+        if (winT > winH) {
+            $('.eui-backTop').fadeIn()
+        } else {
+            $('.eui-backTop').fadeOut()
+        }
+    });
+
+    $('.eui-backTop').click(function (e) {
+        $('html,body').animate({scrollTop: 0}, 500)
+    });
+
+    // 展开收起
+    $(".upward").click(function (event) {
+        var activityIn = $(this).parents(".activity").children(".activityContent");
+        if ($(activityIn).css("display") == "none") {
+            $(this).html("<i class=" + "eui-icon" + ">&#xe619;</i> 收起");
+        } else {
+            $(this).html("<i class=" + "eui-icon" + ">&#xe61a;</i> 展开");
+        }
+        $(this).parents(".activity").children(".activityContent").slideToggle();
+    });
+
+
+    /**
+     * 获取问卷名称
+     * @param form
+     */
+    function getQuestions(form) {
+        $.get("/questionnaire/getQuestionnaireByState", function (result) {
+            if (result.code == 200) {
+                for (var i in result.data) {
+                    var questionnaire = result.data[i];
+                    $('select[name="uestionnaireId"]').append('<option value="' + questionnaire.id + '">' + questionnaire.questionnaireName + '</option>')
+                }
+                form.render('select');
+                detail(form);
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

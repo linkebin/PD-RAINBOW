@@ -11,4 +11,6 @@ public interface QuestionnaireMapper extends Mapper<Questionnaire> {
     List<Questionnaire> questionnaireListByPage(Questionnaire questionnaire);
     //查询问卷的类型
     Questionnaire findQuestionnaireType(String id);
+    //查询使用中的问卷
+    List<Questionnaire> getQuestionnaireByState();
 }

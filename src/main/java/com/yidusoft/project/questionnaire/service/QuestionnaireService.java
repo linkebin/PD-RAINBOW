@@ -19,4 +19,6 @@ public interface QuestionnaireService extends Service<Questionnaire> {
     Result  getQuestionnaireInfo(String id);
     //修改问卷信息
     Result updateQuestionnaire(Questionnaire questionnaire, String questionStr);
+    //查询使用中的问卷
+    List<Questionnaire> getQuestionnaireByState();
 }

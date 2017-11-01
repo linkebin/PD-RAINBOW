@@ -1,7 +1,9 @@
 package com.yidusoft.project.business.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "launch_activities")
 public class LaunchActivities {
@@ -35,8 +37,8 @@ public class LaunchActivities {
     /**
      * 活动地址
      */
-    @Column(name = "activity_adress")
-    private String activityAdress;
+    @Column(name = "activity_addr")
+    private String activityAddr;
 
     /**
      * 联系人
@@ -116,7 +118,14 @@ public class LaunchActivities {
     /**
      * 创建人
      */
+    @Column(name = "creator")
     private String creator;
+
+    /**
+     * 创建人Id
+     */
+    @Column(name = "user_id")
+    private String userId;
 
     /**
      * @return ID_
@@ -209,17 +218,17 @@ public class LaunchActivities {
      *
      * @return activity_adress - 活动地址
      */
-    public String getActivityAdress() {
-        return activityAdress;
+    public String getActivityAddr() {
+        return activityAddr;
     }
 
     /**
      * 设置活动地址
      *
-     * @param activityAdress 活动地址
+     * @param activityAddr 活动地址
      */
-    public void setActivityAdress(String activityAdress) {
-        this.activityAdress = activityAdress;
+    public void setActivityAddr(String activityAddr) {
+        this.activityAddr = activityAddr;
     }
 
     /**
@@ -472,5 +481,23 @@ public class LaunchActivities {
      */
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    /**
+     * 获取创建人id
+     *
+     * @return userId - 创建人id
+     */
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * 设置创建人id
+     *
+     * @param userId 创建人id
+     */
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
