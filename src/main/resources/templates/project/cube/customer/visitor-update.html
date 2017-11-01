@@ -9,15 +9,12 @@
         .default_hide{display: none;}
         .eui-form-label{width: 100px;
             text-align: left;}
-        #visitorForm input + label{color: red;}
+        /*#visitorForm input + label{color: red;}*/
+        .error{color: red;font-size: 12px;}
     </style>
 </head>
 <body>
 <div class="questionHeader">
-    <!--<div class="eui-row">-->
-        <!--<h1 class="eui-col-md1 eui-marginL10"><a href="###"><img src="/Styles/images/xymfImages/logo.png" class="eui-marginT10" alt=""></a></h1>-->
-        <!--<p class="eui-col-md2 eui-color-white eui-font20 eui-padding10 eui-display-Ib questionTitle">来访者咨询管理</p>-->
-    <!--</div>-->
     <div class="eui-row eui-area">
         <div class="xymfLogo">
             <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
@@ -50,31 +47,47 @@
                     <div class="eui-input-inline">
                         <input type="text" name="visitorName"   placeholder="姓名" class="eui-input">
                     </div>
+                    <label class="eui-form-label">身份证号</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="idCard"  placeholder="身份证" readonly="readonly" class="eui-input">
+                    </div>
+
+                    <label class="eui-form-label">出生年月</label>
+                    <div class="eui-input-inline">
+                        <input type="text" class="eui-input" readonly="readonly" readonly="readonly" name="birthday" placeholder="出生日期">
+                    </div>
+                </div>
+                <div class="eui-form-item">
+                    <label class="eui-form-label">籍贯</label>
+                    <div class="eui-input-inline">
+                        <input type="text" readonly="readonly" name="nativePlace" readonly="readonly"  placeholder="" class="eui-input">
+                    </div>
                     <label class="eui-form-label">性别</label>
                     <div class="eui-input-inline">
                         <input type="radio" name="sex" value="1" title="男" checked="checked">
                         <input type="radio" name="sex" value="0" title="女">
                     </div>
-                    <label class="eui-form-label">出生年月</label>
+                    <label class="eui-form-label">年龄</label>
                     <div class="eui-input-inline">
-                        <input type="text" class="eui-input" readonly="readonly" id="test1" name="birthday" placeholder="出生日期">
+                        <input type="text" disabled="disabled" name="age"  readonly="readonly" class="eui-input">
                     </div>
-                </div>
-                <div class="eui-form-item">
-                    <label class="eui-form-label">身份证号</label>
-                    <div class="eui-input-inline">
-                        <input type="text" name="idCard"  placeholder="身份证" class="eui-input">
-                    </div>
-                    <label class="eui-form-label">联系方式</label>
-                    <div class="eui-input-inline">
-                        <input type="text" name="phone"  placeholder="联系方式" class="eui-input">
-                    </div>
-                    <label class="eui-form-label">民族</label>
-                    <div class="eui-input-inline">
-                        <input type="text" name="nation"  placeholder="请输入民族" class="eui-input">
-                    </div>
-                </div>
 
+                </div>
+                 <div class="eui-form-item">
+
+                     <label class="eui-form-label">民族</label>
+                     <div class="eui-input-inline">
+                         <input type="text" name="nation" readonly="readonly"  class="eui-input">
+                     </div>
+                     <label class="eui-form-label">手机号码</label>
+                     <div class="eui-input-inline">
+                         <input type="text" name="phone"   placeholder="请输入手机号码" class="eui-input">
+                     </div>
+                     <label class="eui-form-label">Email地址</label>
+                     <div class="eui-input-inline">
+                         <input type="email" name="email"  placeholder="请输入Email地址" class="eui-input">
+                     </div>
+                 </div>
 
 
             <div id="addrs" data-toggle="distpicker">
@@ -102,19 +115,32 @@
                     </div>
                 </div>
             </div>
-
                  <div class="eui-form-item">
                      <label class="eui-form-label">职业</label>
                      <div class="eui-input-inline">
                          <select  class="eui-input" e-ignore1 name="occupation">
+                             <option value="">请选择</option>
                              <option th:each="category:${selectOptionList}" th:value="${category.optionName}"
                                      th:text="${category.optionName}"  ></option>
                          </select>
                      </div>
+                     <label class="eui-form-label">收入水平</label>
+                     <div class="eui-input-inline">
+                         <select  class="eui-input" name="income">
+                             <option value="">请选择</option>
+                             <option value="3000元以下">3000元以下</option>
+                             <option value="3000 - 6000元">3000 - 6000元</option>
+                             <option value="6000 - 10000元">6000 - 10000元</option>
+                             <option value="10000元以上">10000元以上</option>
+                         </select>
+                     </div>
 
+                 </div>
+                 <div class="eui-form-item">
                      <label class="eui-form-label">紧急联系人关系</label>
                      <div class="eui-input-inline">
-                         <select  class="eui-input" name="exigenceContacts">
+                         <select  class="eui-input" e-ignore name="exigenceContacts">
+                             <option value="">请选择</option>
                              <option value="父子">父子</option>
                              <option value="母子">母子</option>
                              <option value="兄弟姐妹">兄弟姐妹</option>
@@ -127,6 +153,7 @@
                      </div>
                  </div>
 
+
                  <div class="eui-form-item">
                      <label class="eui-form-label">血型</label>
                      <div class="eui-input-block">
@@ -134,6 +161,7 @@
                          <input type="radio" name="bloodType" value="B型" title="B型">
                          <input type="radio" name="bloodType" value="AB型" title="AB型">
                          <input type="radio" name="bloodType" value="O型" title="O型">
+                         <input type="radio" name="bloodType" value="不知道" title="不知道">
                      </div>
                  </div>
 
@@ -640,6 +668,9 @@ $(function () {
         $("#visitorForm").setForm(result.data);
         var obj = result.data;
 
+        var infos = idCardNoUtil.getBirthDaySexAge(obj.idCard);
+        $("#visitorForm").setForm(infos);
+
         $('#province').val(obj.province);
         $('#province').trigger("change");
 
@@ -682,6 +713,12 @@ $(function () {
         });
         $("#visitorForm select[name='fatherEducation'] option").each(function(){
             if($(this).text() === result.data.fatherEducation){
+                $(this).attr('selected', 'selected');
+            }
+        });
+
+        $("#visitorForm select[name='income'] option").each(function(){
+            if($(this).text() === result.data.income){
                 $(this).attr('selected', 'selected');
             }
         });
@@ -759,10 +796,7 @@ $(function () {
     $("#visitorForm").validate({
         rules: {
             visitorName: {
-                required : true,
-            },
-            birthday:{
-                required : true,
+                required : true
             },
             idCard:{
                 required : true,
@@ -774,7 +808,7 @@ $(function () {
                 isMobile : true
             },
             address:{
-                required : true,
+                required : true
             },
             exigencePhone:{
                 required : true,
@@ -820,40 +854,45 @@ $(function () {
                 digits:true
             },
             counselingAddress:{
-                required : true,
+                required : true
             },
             diagnosisResult:{
-                required : true,
+                required : true
             },
             specificCircumstances:{
-                required : true,
+                required : true
             },
 
             nation:{
-                required : true,
+                required : true
             },
-            motherAge:{
+
+            email:{
                 required : true,
-                digits:true
+                email:true
             },
-            fatherAge:{
-                required : true,
-                digits:true
+            exigenceContacts:{
+                required:true
+            },
+            occupation:{
+                required:true,
             }
-
-
 
         },
         messages: {
-            visitorName: {
-                required : "请输入客户名称",
+
+            exigenceContacts:{
+                required:'请选择紧急联系人关系'
             },
-            birthday:{
-                required : '请选择出生日期',
+            occupation:{
+                required:'请选择职业',
+            },
+            visitorName: {
+                required : "请输入姓名"
             },
             idCard:{
                 required : '请输入身份证号码',
-                isIdCardNo:'请输入正确的身份证号'
+                isIdCardNo:"请输入正确的身份证号"
             },
             phone:{
                 required : '请输入手机号码',
@@ -861,7 +900,7 @@ $(function () {
                 isMobile : "请正确填写您的手机号码"
             },
             address:{
-                required : '请输入地址',
+                required : '请输入通讯具体地址'
             },
             exigencePhone:{
                 required : '请输入紧急联系人电话',
@@ -876,7 +915,6 @@ $(function () {
                 required: '请输入父亲去世时你的年龄',
                 digits:'只能输入整数'
             },
-
             motherDeathYourAge:{
                 required : '请输入母亲去世时你的年龄',
                 digits:'只能输入整数'
@@ -906,27 +944,21 @@ $(function () {
                 digits:'只能输入整数'
             },
             counselingAddress:{
-                required : '最近一次咨询的地址',
+                required : '最近一次咨询的地址'
             },
             diagnosisResult:{
-                required : '最近一次诊断结果',
+                required : '最近一次诊断结果'
             },
             specificCircumstances:{
-                required : '请输入具体情况',
-            },
-            specificCircumstances:{
-                required : '请输入药物不良症状/无',
+                required : '请输入具体情况'
             },
             nation:{
-                required : '请输入民族',
+                required : '请输入民族'
             },
-            motherAge:{
-                required : '请输入父亲的年龄',
-                digits:'只能输入整数'
-            },
-            fatherAge:{
-                required : '请输入母亲的年龄',
-                digits:'只能输入整数'
+
+            email:{
+                required : '请输入Email地址',
+                email:'请输入正确Email地址'
             }
         },
 

@@ -82,7 +82,7 @@ public class ScheduleController {
         if (type.equals("1")) {
             Map<String,Object> map = new HashMap<String,Object>();
             for (Schedule s:scheduleList) {
-                map.put(DateUtils.format(s.getVisitorTime(),DateUtils.FORMAT_SHORT),"预约");
+                map.put(DateUtils.format(s.getVisitorTime(),DateUtils.FORMAT_SHORT),"");
             }
             return ResultGenerator.genSuccessResult(map);
         }else {

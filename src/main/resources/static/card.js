@@ -19,6 +19,36 @@ var idCardNoUtil = {
             return false;
         }
     },
+    getBirthDaySexAge:function (UUserCard) {
+        var obj = new Object();
+        var birthday = UUserCard.substring(6, 10) + "-" + UUserCard.substring(10, 12) + "-" + UUserCard.substring(12, 14);
+        var sex =0;
+        if (parseInt(UUserCard.substr(16, 1)) % 2 == 1) {
+            sex=1;
+        }
+        //获取年龄
+        var myDate = new Date();
+        var month = myDate.getMonth() + 1;
+        var day = myDate.getDate();
+        var age = myDate.getFullYear() - UUserCard.substring(6, 10) - 1;
+        if (UUserCard.substring(10, 12) < month || UUserCard.substring(10, 12) == month && UUserCard.substring(12, 14) <= day) {
+            age++;
+        }
+        obj.birthday=birthday;
+        obj.sex=sex;
+        obj.age=age;
+
+        return obj;
+    },
+    //验证身份证号并获取籍贯
+    getProvinceNameByIdNo:function (idcard) {
+        var provinceName = "";
+        var provinceNo = idcard.substr(0, 2);
+        if (idCardNoUtil.provinceAndCitys[parseInt(provinceNo)] != null) {
+            provinceName = idCardNoUtil.provinceAndCitys[parseInt(provinceNo)];
+        }
+        return provinceName;
+    },
     checkBirthDayCode: function(birDayCode){
         var check = /^[1-9]\d{3}((0[1-9])|(1[0-2]))((0[1-9])|([1-2][0-9])|(3[0-1]))$/.test(birDayCode);
         if(!check) return false;

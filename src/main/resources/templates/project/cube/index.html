@@ -75,34 +75,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--<tr>-->
-                                <!--<td><input type="checkbox" e-skin="primary" title="" checked=""></td>-->
-                                <!--<td>心理测试《认识自己》</td>-->
-                                <!--<td>张三</td>-->
-                                <!--<td>2016-11-29</td>-->
-                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                                <!--<td>心理测试及分析</td>-->
-                                <!--<td>李四</td>-->
-                                <!--<td>2017-10-22</td>-->
-                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                                <!--<td>心理测试小游戏</td>-->
-                                <!--<td>王五</td>-->
-                                <!--<td>2017-09-10</td>-->
-                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                <!--<td><input type="checkbox" e-skin="primary" title=""></td>-->
-                                <!--<td>爱情婚姻观心理测试</td>-->
-                                <!--<td>孙剩</td>-->
-                                <!--<td>2017-09-10</td>-->
-                                <!--<td><i class="eui-icon">&#xe642;</i> <i class="eui-icon">&#xe640;</i></td>-->
-                                <!--</tr>-->
+
                                 </tbody>
                             </table>
                         </div>
@@ -155,7 +128,6 @@
             async:false,
             type:"get",
             success:function (result) {
-                console.log(result);
                 if (result.message == "SUCCESS") {
                     var imgList = result.data;
                     for (var index in imgList) {

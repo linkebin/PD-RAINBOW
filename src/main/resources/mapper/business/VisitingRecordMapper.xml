@@ -20,10 +20,19 @@
   <!--AND visitor_time &gt;=#{startTime} AND visitor_time &lt;=#{endTime}-->
   <select id="findVisitingRecordShaftTimeByCustomerId" parameterType="com.yidusoft.project.business.domain.VisitingRecord"
           resultMap="BaseResultMap">
+    SELECT vv.ID_,vv.visitor_time,
+    (
+        SELECT count(*)  from
+            data_acquisition  d
+            LEFT JOIN
+            questionnaire   q
+            ON  q.ID_=d.data_question
+            WHERE   d.create_time = DATE_FORMAT(vv.visitor_time,'%Y-%m-%d')  AND d.user_id=#{visitorId}
+    ) flag
 
-    SELECT ID_,visitor_time FROM visiting_record WHERE deleted=0 AND visitor_id=#{visitorId}
+     FROM visiting_record vv WHERE vv.deleted=0 AND vv.visitor_id=#{visitorId}
 
-    ORDER BY visitor_time DESC
+    ORDER BY vv.visitor_time DESC
 
   </select>
 
@@ -47,13 +56,12 @@
 					1 type,vr.visitor_id FROM visiting_record vr
 					LEFT JOIN visitor_register vr2 ON vr.visitor_id=vr2.ID_
 					WHERE vr.deleted=0 AND vr.creator=#{creator}
-
-
     UNION ALL
 
     SELECT s.visitor_name,s.phone,s.ID_,  s.describes Visiting_purpose,s.visitor_time,
 				2 type, s.visitor_id FROM schedule s
 				WHERE s.deleted=0 AND s.consultant_id=#{consultantId}
+
     ) b WHERE  1=1
 
     <if test="visitorName!=null and visitorName!=''">
@@ -64,5 +72,15 @@
     <if test="phone!=null and phone!=''">
       AND b.phone LIKE '%${phone}%'
     </if>
+
+    <if test="visitor_time!=null and visitor_time!=''">
+      AND b.visitor_time &gt;= #{start} AND b.visitor_time &lt;= #{end}
+    </if>
+
+    <if test="type!=null and type!=''">
+      AND b.type=#{type}
+    </if>
+
+
   </select>
 </mapper>

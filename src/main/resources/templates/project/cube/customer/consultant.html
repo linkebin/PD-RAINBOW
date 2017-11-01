@@ -14,6 +14,7 @@
             padding: 0 10px;
             font-size: 12px;
         }
+        .error{color: red;font-size: 12px;}
         .consultSheet .eui-icon {
            background: none;
         }
@@ -143,27 +144,16 @@
                     <form id="DivAddForm" onsubmit="return false;">
                         <input type="hidden" name="visitorId" th:value="${id}" />
                         <div style="display: none;" class="DivAdd">
-                            <!--<p><i class="eui-icon">&#xe60e;</i>-->
-                            <!--<span class="eui-font16">记录时间</span>-->
-                            <!--<span id="datecre" style="margin-left: 24px;"></span></p>-->
 
                             <p style="float: left;" class="">
                                 <i class="eui-icon">&#xe606;</i>
                                 <span class="eui-font16">来访时间</span>
                             <div style=" float: left; margin-left: 12px; margin-top: -5px; ">
-                                <input type="text" readonly="readonly" name="visitorTime" id="visitorTime"
+                                <input placeholder="请选择来访时间" type="text" readonly="readonly" name="visitorTime" id="visitorTime"
                                        class="eui-input eui-width200">
                             </div>
                             </p>
                             <div class="eui-marginT10 eui-row">
-                                <!-- <div class="eui-col-md1 eui-marginT5 eui-font16 eui-marginR15"><i class="eui-icon">&#xe63c;</i> 问卷填写 </div>
-                                 &lt;!&ndash;<div class="eui-col-md3 consultSheet eui-marginR10">症状自评量表-SCL90 <i class="eui-icon eui-cursorp eui-bg-gray3">&#xe621;</i><i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe7d0;</i></div>&ndash;&gt;
-                                 &lt;!&ndash;<div class="eui-col-md3 consultSheet eui-marginR20">症状自评量表-SCL90&ndash;&gt;
-                                     &lt;!&ndash;<i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe621;</i><i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe7d0;</i>&ndash;&gt;
-                                 &lt;!&ndash;</div>&ndash;&gt;
-                                 <div class="eui-col-md2" onclick="loadQuestionnaire()">
-                                     <span class="eui-btn eui-btn-small"><i class="eui-icon">&#xe654;</i> 新增问卷</span>
-                                 </div>-->
                             </div>
                             <div class="eui-marginT20 eui-form">
                                 <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访目的</p>
@@ -224,177 +214,6 @@
 </div>
 
 
-<!--<div class="consuletant eui-bg-white">
-    <div class="eui-area eui-row">
-        <div class="eui-col-md3 eui-paddingT10">
-            <th:block th:if="${visitorRegister.sex==0}">
-                <img src="/Styles/images/xymfImages/woman.png" width="30" alt="">&nbsp;&nbsp;
-            </th:block>
-            <th:block th:if="${visitorRegister.sex==1}">
-                <img src="/Styles/images/xymfImages/man.png" width="30" alt="">&nbsp;&nbsp;
-            </th:block>
-
-            <a target="_blank"  th:text="${visitorRegister.visitorName}"
-               th:href="'/web/customer/visitorUpdate?id='+${visitorRegister.id}"></a>
-        </div>
-        <div class="eui-col-md1 eui-paddingT20 eui-color-gray3"></div>
-        <div style="display: none;" id="resetDiv" onclick="saveData();" class="eui-col-md2 eui-col-md-offset4 eui-textAlignR">
-            <span class="submitBtn eui-margin0"><img src="/Styles/images/xymfImages/submit.png" width="30" alt="">提交保存</span>
-        </div>
-    </div>
-</div>-->
-
-<!--<div class="consuletContent eui-padding20">
-    <div class="eui-area eui-bd">
-        <div style="width: 120px;" class="eui-sd1 eui-sd1-type1">
-            <span class="eui-btn eui-btn-small eui-btn-normal" onclick="addVisitorRecord()">
-                <i style="cursor: pointer;" class="eui-icon eui-font12"> &#xe654; </i>来访记录 </span>
-            <ul id="shaftTime" class="eui-timeline eui-font14 eui-marginT10">
-
-            </ul>
-        </div>
-        <div style="width: 98%;" class="eui-mn1">
-            <div class="eui-mn1-type1 eui-padding20 eui-bg-white eui-box-shadow">
-                <form  id="searchFrom">
-                    <input type="hidden" name="visitorId" th:value="${id}" />
-                    &lt;!&ndash;<div class="eui-form">&ndash;&gt;
-                        &lt;!&ndash;<div class="eui-form-item">&ndash;&gt;
-                            &lt;!&ndash;<label class="eui-form-label">开始时间</label>&ndash;&gt;
-                            &lt;!&ndash;<div class="eui-input-inline">&ndash;&gt;
-                                &lt;!&ndash;<input type="text" name="startTime" id="startTime" readonly="readonly"  placeholder="" class="eui-input">&ndash;&gt;
-                            &lt;!&ndash;</div>&ndash;&gt;
-
-                            &lt;!&ndash;<label class="eui-form-label">截至时间</label>&ndash;&gt;
-                            &lt;!&ndash;<div class="eui-input-inline">&ndash;&gt;
-                                &lt;!&ndash;<input type="text" name="endTime" id="endTime" readonly="readonly"  placeholder="" class="eui-input">&ndash;&gt;
-                            &lt;!&ndash;</div>&ndash;&gt;
-                            &lt;!&ndash;<div class="eui-input-inline">&ndash;&gt;
-                                &lt;!&ndash;<span class="eui-btn eui-btn-small" onclick="doSearch()">查询</span>&ndash;&gt;
-                                &lt;!&ndash;<span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>&ndash;&gt;
-                            &lt;!&ndash;</div>&ndash;&gt;
-                        &lt;!&ndash;</div>&ndash;&gt;
-
-                    &lt;!&ndash;</div>&ndash;&gt;
-                </form>
-             <div class="DivInfo">
-                <p><i class="eui-icon">&#xe60e;</i>
-                    <span class="eui-font16">记录时间</span>
-                    <span  class="eui-marginL15 createTime"></span></p>
-
-                <p class="eui-marginT10"><i class="eui-icon">&#xe606;</i>
-                    <span class="eui-font16">来访时间</span>
-                    <span  class="eui-marginL15 visitorTime"></span>
-                </p>
-                <div class="eui-marginT10 eui-row">
-                    <div class="eui-col-md1 eui-marginT5 eui-font16 eui-marginR15"><i class="eui-icon">&#xe63c;</i> 问卷填写 </div>
-
-
-                    <div class="eui-col-md2 eui-marginL20" id="addQuestionnaire" onclick="loadQuestionnaire()">
-                        <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
-                            <i class="eui-icon">&#xe654;</i> 新增问卷
-                        </span>
-                    </div>
-                </div>
-                <div class="eui-marginT20 eui-form">
-                    <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访目的</p>
-                    <p id="visitingPurpose" class="eui-marginT20 eui-lineHeight24">
-                    </p>
-                </div>
-                <div class="eui-marginT20 eui-form">
-                    <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 过程记录</p>
-                    <p id="processLog" class="eui-marginT20 eui-lineHeight24">
-                    </p>
-                </div>
-                <div class="eui-marginT20 eui-form">
-                    <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 后续计划</p>
-                    <p id="followUpPlan" class="eui-marginT20 eui-lineHeight24">
-                    </p>
-                </div>
-                <div class="eui-marginT20 eui-form">
-                    <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 备注</p>
-                    <p id="remarks" class="eui-marginT20 eui-lineHeight24">
-                    </p>
-                </div>
-
-             </div>
-
-                <form id="DivAddForm" onsubmit="return false;">
-                    <input type="hidden" name="visitorId" th:value="${id}" />
-                    <div style="display: none;" class="DivAdd">
-                        &lt;!&ndash;<p><i class="eui-icon">&#xe60e;</i>&ndash;&gt;
-                            &lt;!&ndash;<span class="eui-font16">记录时间</span>&ndash;&gt;
-                            &lt;!&ndash;<span id="datecre" style="margin-left: 24px;"></span></p>&ndash;&gt;
-
-                        <p style="float: left;" class="">
-                            <i class="eui-icon">&#xe606;</i>
-                            <span class="eui-font16">来访时间</span>
-                            <div style=" float: left; margin-left: 12px; margin-top: -5px; ">
-                                <input type="text" readonly="readonly" name="visitorTime" id="visitorTime"
-                                       class="eui-input eui-width200">
-                            </div>
-                        </p>
-                        <div class="eui-marginT10 eui-row">
-                           &lt;!&ndash; <div class="eui-col-md1 eui-marginT5 eui-font16 eui-marginR15"><i class="eui-icon">&#xe63c;</i> 问卷填写 </div>
-                            &lt;!&ndash;<div class="eui-col-md3 consultSheet eui-marginR10">症状自评量表-SCL90 <i class="eui-icon eui-cursorp eui-bg-gray3">&#xe621;</i><i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe7d0;</i></div>&ndash;&gt;
-                            &lt;!&ndash;<div class="eui-col-md3 consultSheet eui-marginR20">症状自评量表-SCL90&ndash;&gt;
-                                &lt;!&ndash;<i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe621;</i><i class="eui-icon eui-bg-gray3 eui-cursorp">&#xe7d0;</i>&ndash;&gt;
-                            &lt;!&ndash;</div>&ndash;&gt;
-                            <div class="eui-col-md2" onclick="loadQuestionnaire()">
-                                <span class="eui-btn eui-btn-small"><i class="eui-icon">&#xe654;</i> 新增问卷</span>
-                            </div>&ndash;&gt;
-                        </div>
-                        <div class="eui-marginT20 eui-form">
-                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访目的</p>
-                            <p class="eui-marginT20 eui-lineHeight24">
-                                <textarea name="visitingPurpose" placeholder="来访目的" class="eui-textarea"></textarea>
-                            </p>
-                        </div>
-                        <div class="eui-marginT20 eui-form">
-                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 过程记录</p>
-                            <p class="eui-marginT20 eui-lineHeight24">
-                                <textarea name="processLog" placeholder="过程记录" class="eui-textarea"></textarea>
-                            </p>
-                        </div>
-                        <div class="eui-marginT20 eui-form">
-                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 后续计划</p>
-                            <p class="eui-marginT20 eui-lineHeight24">
-                                <textarea name="followUpPlan" placeholder="后续计划" class="eui-textarea"></textarea>
-                            </p>
-                        </div>
-                        <div class="eui-marginT20 eui-form">
-                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 备注</p>
-                            <p class="eui-marginT20 eui-lineHeight24">
-                                <textarea name="remarks" placeholder="备注" class="eui-textarea"></textarea>
-                            </p>
-                        </div>
-                        <input type="submit" style="display: none;" id="DivAddFormSub"/>
-                    </div>
-                </form>
-                <input type="hidden" id="recordId" />
-                <div id="fileDiv" style="display: none;" class="eui-marginT20 eui-form">
-                    <p class="eui-font16 eui-paddingB10 eui-borderB eui-marginB20"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 附件上传</p>
-                    <button type="button" class="eui-btn eui-btn-small eui-btn-normal" id="test1">
-                        <i class="eui-icon">&#xe67c;</i>上传附件
-                    </button>
-                    <div class="eui-upload-list">
-                        <table class="eui-table">
-                            <thead>
-                            <tr>
-                                <th>文件名</th>
-                                <th>上传时间</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody id="demoList">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>-->
 
 <div class="xymfFooter">
     <!-- 底部固定区域 -->
@@ -470,17 +289,6 @@ $('.eui-backTop').click(function(e) {
 
 
 
-// 高级筛选左滑
-//$(".eui-slipBg").hide();
-//$(".switch").click(function(event) {
-//    $(".eui-slipBg").show();
-//    $(".eui-slipContent-left").animate({right:'0'},400);
-//});
-//
-//$(".eui-iconClose,.eui-slipBg,.eui-slipConfirm").click(function(event) {
-//    $(".eui-slipContent-left").animate({right:'-400px'},400);
-//    $(".eui-slipBg").hide();
-//});
 
     $(".eui-slipBg").hide();
     $(".switch").click(function(event) {
@@ -616,6 +424,10 @@ function loadShaftTime() {
             });
         }else {
             $('#noData').hide();
+            $(".DivInfo").hide();
+            $(".DivAdd").show();
+            $("#resetDiv").show();
+
         }
     });
 }

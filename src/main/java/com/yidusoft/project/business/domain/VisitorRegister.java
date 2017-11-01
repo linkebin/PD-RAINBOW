@@ -269,6 +269,38 @@ public class VisitorRegister {
      */
     private Integer deleted;
 
+    @Column(name = "income")
+    private String income;
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "native_place")
+    private String nativePlace;
+
+    public String getIncome() {
+        return income;
+    }
+
+    public void setIncome(String income) {
+        this.income = income;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNativePlace() {
+        return nativePlace;
+    }
+
+    public void setNativePlace(String nativePlace) {
+        this.nativePlace = nativePlace;
+    }
+
     /**
      * 目前与健康有关的疾病及所接收的治疗
      */

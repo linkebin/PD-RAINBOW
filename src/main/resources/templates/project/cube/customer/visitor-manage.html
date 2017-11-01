@@ -44,17 +44,33 @@
                             <div class="eui-form eui-margin10">
                                 <div class="eui-form-item">
                                     <label class="eui-form-label">客户姓名</label>
-                                    <div class="eui-input-inline">
-                                        <input type="text" name="visitorName"  placeholder="关键字查询" class="eui-input">
+                                    <div class="eui-input-inline eui-width200">
+                                        <input type="text" name="visitorName"  placeholder="关键字查询" class="eui-input eui-width200">
                                     </div>
                                         <label class="eui-form-label">联系方式</label>
-                                        <div class="eui-input-inline">
-                                            <input type="text" name="phone"  placeholder="" class="eui-input">
+                                        <div  class="eui-input-inline eui-width200">
+                                            <input  type="text" name="phone"  placeholder="手机" class="eui-input eui-width200">
                                         </div>
 
-                                    <div class="eui-input-inline">
+                                    <div class="eui-input-inline eui-width200">
                                         <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>
                                         <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                                    </div>
+                                </div>
+
+                                <div class="eui-form-item">
+                                    <label class="eui-form-label">类型</label>
+                                    <div class="eui-input-inline eui-width200">
+                                        <select e-filter="type" name="type">
+                                            <option value="">全部</option>
+                                            <option value="2">预约</option>
+                                            <option value="1">来访</option>
+
+                                        </select>
+                                    </div>
+                                    <label class="eui-form-label">时间区间</label>
+                                    <div class="eui-input-inline eui-width200">
+                                        <input  type="text" name="visitor_time" id="visitor_time"  placeholder="请选择" class="eui-input ">
                                     </div>
                                 </div>
                             </div>
@@ -123,13 +139,16 @@
             , element = eui.element
             , laydate = eui.laydate;
 
+
         laydate.render({
-            elem: '#startTime'
-        });
-        laydate.render({
-            elem: '#endTime'
+            elem: '#visitor_time'
+            ,type: 'datetime'
+            ,range: true
         });
 
+        form.on('select(type)', function(data){
+            doSearch()
+        });
     });
     $(function () {
         doSearch();
@@ -168,6 +187,11 @@
             });
 
             var params = $("#searchFrom").serializeObject();
+            if (params.visitor_time!=''){
+                var time = params.visitor_time.split(' - ');
+                params.start=time[0];
+                params.end=time[1];
+            }
             var index = layer.load(2); //加载
             $.ajax({
                 url:"/visiting/record/listByparameter",
