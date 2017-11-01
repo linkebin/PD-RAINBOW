@@ -63,7 +63,9 @@
             g.questionnaire_name LIKE  '%${questionnaireCode}%'
             )
         </if>
-
+        <if test="questionnaireState != null and questionnaireState != ''">
+            AND   g.questionnaire_state=#{questionnaireState}
+        </if>
         ORDER BY  g.CREATE_TIME DESC
 
     </select>
@@ -80,6 +82,15 @@
         ON  g.gauge_id=e.id_
         WHERE g.deleted=0
         AND  g.ID_=#{id}
+
+    </select>
+    <select id="findQuestionnaireAll"  resultMap="BaseResultMap">
+        SELECT
+          *
+        FROM
+          questionnaire
+        WHERE  deleted=0
+
 
     </select>
 

@@ -15,7 +15,7 @@
         <result column="activity_id" jdbcType="VARCHAR" property="activityId"/>
         <result column="total_score" jdbcType="INTEGER" property="totalScore"/>
         <result column="data_result" jdbcType="VARCHAR" property="dataResult"/>
-
+        <result column="time_consuming" jdbcType="VARCHAR" property="timeConsuming"/>
     </resultMap>
 
 
@@ -33,6 +33,7 @@
         <result column="data_result" jdbcType="VARCHAR" property="dataResult"/>
         <result column="visitor_name" jdbcType="VARCHAR" property="visitorName"/>
         <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName"/>
+        <result column="time_consuming" jdbcType="VARCHAR" property="timeConsuming"/>
     </resultMap>
 
 

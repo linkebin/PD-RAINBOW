@@ -12,6 +12,7 @@ import com.yidusoft.project.questionnaire.domain.Scene;
 import com.yidusoft.project.questionnaire.service.*;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
+import com.yidusoft.utils.TimeStampDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,10 +120,29 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
                }
          }
         }catch (Exception e){
-
+            return ResultGenerator.genFailResult("操作失败");
         }
 
-        return null;
+        return ResultGenerator.genSuccessResult();
+    }
+    //查询问卷即将要上架的 修改状态
+    @Override
+    public Result setQuestionnaireState() {
+        try {
+            List<Questionnaire> questionnaireList=questionnaireMapper.findQuestionnaireAll();
+            for(Questionnaire questionnaire :questionnaireList){
+                String shelfTime = TimeStampDate.dateToStr(questionnaire.getShelfTime(),"yyyy-MM-dd");
+                String nowTime= TimeStampDate.dateToStr(new Date(),"yyyy-MM-dd");
+                if(nowTime.equals(shelfTime)){
+                    questionnaire.setQuestionnaireState(2);
+                    questionnaireMapper.updateByPrimaryKey(questionnaire);
+                }
+            }
+        }catch (Exception e){
+            return   ResultGenerator.genFailResult(e.getMessage());
+        }
+
+        return ResultGenerator.genSuccessResult();
     }
 
     //查询使用中的问卷

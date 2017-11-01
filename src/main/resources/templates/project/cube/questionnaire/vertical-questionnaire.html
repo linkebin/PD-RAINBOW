@@ -21,9 +21,15 @@
 
 <div class="visitorContent xymfMargin">
     <div class="eui-area" style="width: 800px">
-        <div class="visitorTitle">
-            问题卡
+        <div class="eui-row visitorTitle">
+            <div class="eui-col-xs9">
+                <div> 问题卡</div>
+            </div>
+            <div class="eui-col-xs3">
+                <div id="timer">00:00:00</div>
+            </div>
         </div>
+
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
            <form>
                <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
@@ -286,14 +292,20 @@ function  getTable(questionList) {
                   obj.questionType=divQuestions.eq(i).attr("questionType");
                   array.push(obj);
               }
-
+              //耗时
                var visitorTimes=$("#visitorTimes").val();
                var questionnaireId=$("#questionnaireId").val();
                var userId=$("#userId").val();
+               var timeConsuming=$("#timer").text();
               //加载层
                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
                $.post("/cube/questionnaire/submitQuestionnaire",
-                   {"param":JSON.stringify(array),"questionnaireId":questionnaireId,"userId":userId,"visitorTimes":visitorTimes},function (result) {
+                   {"param":JSON.stringify(array),
+                       "questionnaireId":questionnaireId,
+                       "userId":userId,
+                       "visitorTimes":visitorTimes,
+                       "timeConsuming":timeConsuming
+                       },function (result) {
                        layer.closeAll();
                    if(result.code=200){
                        window.location.href="/web/cube/getSuccess";
@@ -317,11 +329,62 @@ function   formRender() {
 }
 
 
+//计时器
+
+var ele_timer = $("#timer");
+var n_sec = 0; //秒
+var n_min = 0; //分
+var n_hour = 0; //时
+
+//60秒 === 1分
+//60分 === 1小时
+function timer() {
+    return setInterval(function () {
+
+        var str_sec = n_sec;
+        var str_min = n_min;
+        var str_hour = n_hour;
+        if ( n_sec < 10) {
+            str_sec = "0" + n_sec;
+        }
+        if ( n_min < 10 ) {
+            str_min = "0" + n_min;
+        }
+
+        if ( n_hour < 10 ) {
+            str_hour = "0" + n_hour;
+        }
+
+        var time = str_hour + ":" + str_min + ":" + str_sec;
+        ele_timer.text(time);
+        n_sec++;
+        if (n_sec > 59){
+            n_sec = 0;
+            n_min++;
+        }
+        if (n_min > 59) {
+            n_sec = 0;
+            n_hour++;
+        }
 
 
+    }, 1000);
+}
+var n_timer = timer();
 
-
-
+//暂停和继续
+function pause(self) {
+    var state = self.getAttribute("state");
+    if (state === "on") {
+        clearInterval(n_timer);
+        self.textContent = "继续";
+        self.setAttribute("state", "off");
+    } else {
+        n_timer = timer();
+        self.textContent = "暂停";
+        self.setAttribute("state", "on");
+    }
+}
 
 
 </script>

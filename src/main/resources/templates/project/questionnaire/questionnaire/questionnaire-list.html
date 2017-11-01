@@ -70,9 +70,16 @@
         </div>
     </div>
 </div>
+<!--修改状态-->
+<div class="eui-form" id="questionnaireStateDiv" style="display: none">
+    <div class="eui-input-block">
+        <input type="radio" name="questionnaireState" value="1" title="设计中" checked="">
+        <input type="radio" name="questionnaireState" value="2" title="使用中" >
+        <input type="radio" name="questionnaireState" value="3" title="已失效">
+    </div>
+</div>
 
-
-
+<!--修改状态end-->
 
 
 
@@ -135,9 +142,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             deleteQuestionnaire(id);
         }else if (item=='edit'){//编辑
             window.open("/web/questionnaire/getUpdateQuestionnaire?id="+id);
-        }else if (item == 'state'){
-            //设置状态
-           // setState(id);
         }
     }
 
@@ -215,12 +219,17 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         for (var item in questionnaireList){
             var questionnaire=questionnaireList[item];
             var questionnaireState ="";
-           if(questionnaire.questionnaireState==1){
+            var context='<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑" onclick="itemclick('+"'edit','"+questionnaire.id+'\')"><i class="eui-icon">&#xe642;</i></button> '+
+            '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="itemclick('+"'delete','"+questionnaire.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' ;
+
+            if(questionnaire.questionnaireState==1){
                questionnaireState="设计中";
             }else if(questionnaire.questionnaireState==2){
                questionnaireState="使用中";
+                context="";
             }else {
                questionnaireState="已失效";
+
            }
             var answerModel="";
             if(questionnaire.answerModelType==1){
@@ -239,10 +248,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+answerModel+'</td>' +
                 '<td>'+questionnaire.remarks+'</td>' +
                 '<td>' +
-                '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑" onclick="itemclick('+"'edit','"+questionnaire.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="itemclick('+"'delete','"+questionnaire.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
-               /* '<button class="eui-btn eui-btn-primary eui-btn-mini" title="状态" onclick="itemclick('+"'state','"+questionnaire.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +*/
+                '<div class="eui-btn-group"> ' +context+
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="状态" onclick="setState('+questionnaire.questionnaireState+",'"+questionnaire.id+'\')"><i class="eui-icon">&#xe631;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';
@@ -254,11 +261,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
 //重置
     function resetForm() {
-        document.getElementById('searchFrom').reset()
+        document.getElementById('searchFrom').reset();
     }
 //添加修改form表单修改
     function resetAddOrUpdateForm() {
-        document.getElementById('questionForm').reset()
+        document.getElementById('questionForm').reset();
     }
 
     //删除问卷
@@ -309,8 +316,51 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     }
 
     //设置 问卷的状态
-    function setState(id,state){
+    function setState(state,id){
+        var questionnaireState=$("[name='questionnaireState']");
+        for(var i=0;i<questionnaireState.length;i++){
 
+            if(questionnaireState.eq(i).val()==state+""){
+                questionnaireState.eq(i).prop("checked",true);
+                formRender();
+            }
+        }
+        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+            layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+            layer.open({
+                type: 1
+                ,title: '修改状态'
+                ,content:$('#questionnaireStateDiv')
+                ,area: ['470px', '180px']
+                ,btnAlign: 'c'
+                ,shade: 0
+                ,moveType: 0//拖拽
+                ,btn: ['确定', '关闭'] //只是为了演示
+                ,yes: function(){
+                    state=  $("input[type='radio']:checked").val();
+                    $.post("/questionnaire/invalidQuestionnaire/",{"id":id,"state":state},function (result) {
+                        layer.closeAll();
+                        if(result.code==200){
+                            doSearch();
+                            layer.msg('修改成功', {
+                                icon: 1,
+                                time: 3000
+                            });
+                        }else {
+                            layer.msg('修改失败', {
+                                icon: 1,
+                                time: 3000
+                            });
+                        }
+                    });
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+                ,zIndex: layer.zIndex //重点1
+              });
+        });
     }
 
     function add0(m){return m<10?'0'+m:m }
@@ -326,6 +376,14 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         var minutes = time.getMinutes();
         var seconds = time.getSeconds();
         return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
+    }
+
+    //form表单  select,checkbox,radio 动态添加  需要更新
+    function   formRender() {
+        eui.use(['form'], function(){
+            var form = eui.form;
+            form.render();
+        });
     }
 </script>
 

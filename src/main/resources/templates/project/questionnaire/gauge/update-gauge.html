@@ -111,7 +111,7 @@
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>选择问题</span>
+                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>可选的问题</span>
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
@@ -122,7 +122,27 @@
         <div class="eui-row"   >
             <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
                 <form class="eui-form " id="searchFrom" action=""   >
-                    <input type="hidden" id="id" name="id"/>
+                    <blockquote class="eui-elem-quote eui-quote-search">
+                        <input type="hidden" id="id" name="id"/>
+                        <div class="eui-input-inline eui-padding10">
+                            <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
+                        </div>
+                        <div class="eui-input-inline eui-padding10">
+                            <input type="text" name="questionContent" e-verify="title" value="" autocomplete="off" placeholder="问题内容" class="eui-input">
+                        </div>
+                        <div class="eui-input-inline eui-padding10">
+                            <select name="questionType">
+                                <option value="" >答案类型</option>
+                                <option value="1" >单选</option>
+                                <option value="2" >多选</option>
+                                <option value="3" >评分单选</option>
+                            </select>
+                        </div>
+                        <div class="eui-input-inline">
+                            <span class="eui-btn" onclick="doSearch()">查询</span>
+                            <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                        </div>
+                    </blockquote>
                     <div class="eui-form-item">
                         <table class="eui-table eui-form" id="questionTable">
                             <colgroup>
@@ -153,7 +173,7 @@
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>选择的问题列表</span>
+                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>已选择的问题</span>
             </div>
         </div>
         <div class="eui-collapse" e-filter="test" id="questionCollapse">
@@ -797,8 +817,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             spanNumber.eq(i).text(i+1+".");
         }
     }
-
-
+    //重置
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+        doSearch();
+    }
 
     function add0(m){return m<10?'0'+m:m }
     function format(timestamp)

@@ -31,8 +31,8 @@ public class CubeQuestionnaireController {
      */
     @PostMapping("/submitQuestionnaire")
     @ResponseBody
-    public  Result submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes){
-        return ResultGenerator.genSuccessResult(questionnaireQuestionService.submitQuestionnaire(param,questionnaireId,userId,visitorTimes));
+    public  Result submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming){
+        return ResultGenerator.genSuccessResult(questionnaireQuestionService.submitQuestionnaire(param,questionnaireId,userId,visitorTimes,timeConsuming));
     }
 
 

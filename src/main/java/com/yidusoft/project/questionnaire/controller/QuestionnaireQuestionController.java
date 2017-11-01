@@ -70,7 +70,7 @@ import java.util.UUID;
                   }catch (Exception e){
                       return ResultGenerator.genFailResult("操作失败");
                   }
-                return ResultGenerator.genSuccessResult();
+                return ResultGenerator.genSuccessResult(questionnaireQuestion);
             }
 
         /**
@@ -139,7 +139,7 @@ import java.util.UUID;
         public Result findQuestionBYid(String params, int page, int size) {
             QuestionnaireQuestion questionnaireQuestion=JSON.parseObject(params,QuestionnaireQuestion.class);
             PageHelper.startPage(page, size);
-            List<QuestionnaireQuestion> list =questionnaireQuestionService.findQuestionBYid(questionnaireQuestion.getId());
+            List<QuestionnaireQuestion> list =questionnaireQuestionService.findQuestionBYid(questionnaireQuestion);
             //查询所有的相关数据
             PageInfo pageInfo = new PageInfo(list);
             return ResultGenerator.genSuccessResult(pageInfo);

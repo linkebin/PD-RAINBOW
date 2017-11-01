@@ -28,6 +28,17 @@
                 <div class="eui-input-inline eui-padding10">
                     <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
                 </div>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="questionContent" e-verify="title" value="" autocomplete="off" placeholder="问题内容" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <select name="questionType">
+                        <option value="" >答案类型</option>
+                        <option value="1" >单选</option>
+                        <option value="2" >多选</option>
+                        <option value="3" >评分单选</option>
+                    </select>
+                </div>
                 <div class="eui-input-inline">
                     <span class="eui-btn" onclick="doSearch()">查询</span>
                     <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
@@ -413,7 +424,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                     layer.setTop(layero); //重点2
                     return;
                 }else if(questionType==""){
-                    msgs="请选择类型";
                     layer.tips(msgs, $("[name='questionType']"), {
                         tips: [1, '#3595CC'],
                         zIndex: layer.zIndex, //重点1

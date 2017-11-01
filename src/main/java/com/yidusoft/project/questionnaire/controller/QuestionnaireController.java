@@ -91,10 +91,10 @@ public class QuestionnaireController {
      */
     @PostMapping("/invalidQuestionnaire")
     @ResponseBody
-    public Result invalidQuestionnaire(String id) {
+    public Result invalidQuestionnaire(String id,String state) {
         try {
                 Questionnaire questionnaire = questionnaireService.findById(id);
-                questionnaire.setQuestionnaireState(3);
+                questionnaire.setQuestionnaireState(Integer.valueOf(state));
                 questionnaireService.update(questionnaire);
 
         } catch (Exception e) {

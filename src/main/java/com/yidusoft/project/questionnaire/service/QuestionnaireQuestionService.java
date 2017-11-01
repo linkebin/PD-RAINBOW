@@ -14,10 +14,10 @@ public interface QuestionnaireQuestionService extends Service<QuestionnaireQuest
     //分页条件查询问题
    List<QuestionnaireQuestion> questionListByPage(QuestionnaireQuestion questionnaireQuestion);
     //问卷或量表  添加问题 查询没有添加的问题
-    List<QuestionnaireQuestion> findQuestionBYid(String ids);
+    List<QuestionnaireQuestion> findQuestionBYid(QuestionnaireQuestion questionnaireQuestion);
     //查询问卷相关的问题
     List<QuestionnaireQuestion> findQuestionForQuestionnaire(String id);
     //提交问卷
-    Result  submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes);
+    Result  submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming);
 
 }

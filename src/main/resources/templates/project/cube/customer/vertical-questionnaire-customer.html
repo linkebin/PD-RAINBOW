@@ -2,9 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>问卷详情</title>
+    <title>问卷填写详情</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../static/pack.ajax.js"></script>
 </head>
 <body>
 <div class="questionHeader">
@@ -28,9 +29,17 @@
                         问卷名称：<span id="questionnaireName"></span>
                     </div>
                     <div class="eui-font16 eui-input-inline">
-                        总分：<span id="totalScore"></span>
+                        填写日期：<span id="createTime"></span>
                     </div>
 
+                </div>
+                <div class="eui-form-item eui-padding20">
+                    <div class="eui-font16 eui-input-inline">
+                        总分：<span id="totalScore"></span>
+                    </div>
+                    <div class="eui-font16 eui-input-inline">
+                        耗时：<span id="timeConsuming"></span>
+                    </div>
                 </div>
 
             </div>
@@ -98,6 +107,7 @@
 <span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>
 
 <script src="/Scripts/module/eui.js"></script>
+<script src="/date2format.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 <script>
 eui.use(['form', 'layedit', 'laydate'], function(){
@@ -160,6 +170,20 @@ function  getTable(list) {
     $("#visitorName").text(list.visitorRegister.visitorName);
     $("#questionnaireName").text(list.questionnaire.questionnaireName);
     $("#totalScore").text(list.dataAcquisition.totalScore);
+    var timeConsuming=list.dataAcquisition.timeConsuming;
+    var array=timeConsuming.split(":");
+    var  timeStr='';
+    for(var i in array){
+        if(array[i]=="00"){
+            array[i]="0";
+        }
+    }
+         timeStr+= array[0]+"时";
+         timeStr+= array[1]+"分";
+         timeStr+= array[2]+"秒";
+    $("#timeConsuming").text(timeStr);
+    $("#createTime").text(new Date(list.dataAcquisition.createTime).Format("yyyy-MM-dd"));
+
     var dataResult=list.dataAcquisition.dataResult.split("#");
     var context="";
     for(var i in dataResult){

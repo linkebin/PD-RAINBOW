@@ -70,7 +70,7 @@ public class SceneController {
      */
     @PostMapping("/addORupdateQuestionnaireScene")
     @ResponseBody
-    public Result addORupdateQuestion(String typeJson) {
+    public Result addORupdateQuestionnaireScene(String typeJson) {
 
         Scene scene = JSON.parseObject(typeJson, Scene.class);
         logger.info("scenename" + scene.getSceneName() + "=========");

@@ -67,6 +67,19 @@ public class DataAcquisition {
     @Column(name = "total_score")
     private Integer totalScore;
 
+    /**
+     *耗时
+     */
+    @Column(name = "time_consuming")
+    private String timeConsuming;
+
+    public String getTimeConsuming() {
+        return timeConsuming;
+    }
+
+    public void setTimeConsuming(String timeConsuming) {
+        this.timeConsuming = timeConsuming;
+    }
 
     public String getVisitorName() {
         return visitorName;

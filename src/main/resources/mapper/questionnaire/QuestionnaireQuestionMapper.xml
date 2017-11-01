@@ -29,6 +29,12 @@
             <if test="questionCode != null and questionCode != ''">
               AND   question_code  LIKE  '%${questionCode}%'
             </if>
+            <if test="questionContent != null and questionContent != ''">
+              AND   question_content  LIKE  '%${questionContent}%'
+            </if>
+            <if test="questionType != null and questionType != ''">
+              AND   question_type =${questionType}
+            </if>
             ORDER BY  CREATE_TIME ASC
 
   </select>
@@ -44,7 +50,16 @@
              separator="," close=")">
       #{item}
     </foreach>
-
+      <if test="questionCode != null and questionCode != ''">
+        AND   question_code  LIKE  '%${questionCode}%'
+      </if>
+      <if test="questionContent != null and questionContent != ''">
+        AND   question_content  LIKE  '%${questionContent}%'
+      </if>
+      <if test="questionType != null and questionType != ''">
+        AND   question_type =${questionType}
+      </if>
+      ORDER BY  CREATE_TIME ASC
 
   </select>
 

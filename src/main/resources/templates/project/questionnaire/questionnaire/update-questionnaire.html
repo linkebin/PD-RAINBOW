@@ -154,18 +154,38 @@
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>选择问题</span>
+                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>可选的问题</span>
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
-                    <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe60a;</i> 选择</button>
+                    <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe610;</i> 选择</button>
                 </div>
             </div>
         </div>
         <div class="eui-row"   >
             <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
                 <form class="eui-form " id="searchFrom" action=""   >
-                    <input type="hidden" id="id" name="id"/>
+                    <blockquote class="eui-elem-quote eui-quote-search">
+                        <input type="hidden" id="id" name="id"/>
+                        <div class="eui-input-inline eui-padding10">
+                            <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
+                        </div>
+                        <div class="eui-input-inline eui-padding10">
+                            <input type="text" name="questionContent" e-verify="title" value="" autocomplete="off" placeholder="问题内容" class="eui-input">
+                        </div>
+                        <div class="eui-input-inline eui-padding10">
+                            <select name="questionType">
+                                <option value="" >答案类型</option>
+                                <option value="1" >单选</option>
+                                <option value="2" >多选</option>
+                                <option value="3" >评分单选</option>
+                            </select>
+                        </div>
+                        <div class="eui-input-inline">
+                            <span class="eui-btn" onclick="doSearch()">查询</span>
+                            <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                        </div>
+                    </blockquote>
                     <div class="eui-form-item">
                         <table class="eui-table eui-form" id="questionTable">
                             <colgroup>
@@ -196,7 +216,16 @@
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>选择的问题列表</span>
+                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>已选的问题</span>
+            </div>
+            <div class="eui-col-md6">
+                <div class="eui-btn-group eui-panelsIn">
+                    <div class="eui-input-block " style="margin-left: 120px;">
+                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
+                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>自定义问题</p>
+                        <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
+                    </div>
+                </div>
             </div>
         </div>
         <div class="eui-collapse" e-filter="test" >
@@ -213,13 +242,64 @@
                 </div>
             </div>
         </div>
-
-
-
     </div>
-
 </div>
 
+<!--添加问题的界面-->
+<form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane" id="questionForm"  style="display: none">
+    <input  type="hidden" name="id"/>
+    <input  type="hidden" name="createTime"/>
+    <input  type="hidden" name="creator"/>
+    <input  type="hidden" name="deleted"/>
+    <input  type="hidden" name="questionCode"/>
+    <div class="eui-form-item" style="width: 700px">
+        <div class="eui-form-item eui-form-text" >
+            <label class="eui-form-label">问题内容 </label>
+            <div class="eui-input-block">
+                <textarea name="questionContent" placeholder="请输入内容" class="eui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="eui-form-item" style="width: 700px">
+        <div class="eui-form-item eui-form-text">
+            <label class="eui-form-label">选项</label>
+            <div class="eui-input-block">
+                <textarea name="optionAnswer"  placeholder="例:A:一般||B:好||C:非常好" class="eui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="eui-form-item"  style="width: 700px">
+        <div class="eui-form-item eui-form-text">
+            <label class="eui-form-label">选项对应分数</label>
+            <div class="eui-input-block">
+                <textarea name="optionScore" placeholder="例:10||20||30" class="eui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="eui-form-item"  style="width: 700px">
+
+        <label class="eui-form-label">答案顺序</label>
+        <div class="eui-input-inline" >
+            <input type="radio" id="answerSequence1" name="answerSequence" value="1" title="正" checked>
+            <input type="radio" id="answerSequence2" name="answerSequence" value="2" title="反" >
+        </div>
+
+        <label class="eui-form-label">答案类型</label>
+        <div class="eui-input-inline">
+            <select name="questionType">
+                <option value="0" >请选择类型</option>
+                <option value="1" >单选</option>
+                <option value="2" >多选</option>
+                <option value="3" >评分单选</option>
+            </select>
+        </div>
+        <label name="answer1" class="eui-form-label">答案</label>
+        <div class="eui-input-inline" name="answer1">
+            <input type="text" name="answer" required placeholder="例:A:一般||B:好" autocomplete="off" class="eui-input">
+        </div>
+    </div>
+</form>
+<!--添加问题的界面end-->
 
 
 
@@ -265,6 +345,14 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         elem: '#times'
     });
 
+    //问题类型
+    form.on('select', function(data){
+        if(data.elem.value!='3' && data.elem.value!='0'){
+            $("[name='answer1']").show();
+        }else {
+            $("[name='answer1']").hide();
+        }
+    });
 
     //全选
     form.on('checkbox(allChoose)', function(data){
@@ -343,7 +431,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     $(function () {
         doSearch();
         loadGauge ();
-
+        //答案隐藏
+        $("[name='answer1']").hide();
     });
     //定义一个装id的数组
    var idArray="";
@@ -938,6 +1027,119 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         initializeQuestion(questionnaireQuestionFactorList,questionnaireTagList,sceneList,0);
     }
 
+
+    //自定义添加问题
+    function addQuestion() {
+        eui.use('layer', function(){ //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer,form=eui.form;
+            layer.open({
+                type: 1
+                ,title: '添加问题'
+                ,zIndex: -1000
+                ,content:$('#questionForm')
+                ,area: ['800px', '700px']
+                ,btnAlign: 'c'
+                ,shade: 0
+                ,moveType: 0//拖拽模式，0或者1
+                ,maxmin: true
+                ,btn: ['确定', '关闭'] //只是为了演示
+                ,yes: function(){
+                    var questionContent=$("[name='questionContent']").val().trim();
+                    var optionAnswer= $("[name='optionAnswer']").val().trim();
+                    var optionScore= $("[name='optionScore']").val().trim();
+                    var questionType= $("[name='questionType']").val().trim();
+                    var answer= $("[name='answer']").val().trim();
+                    var msgs="";
+                    if(questionContent==""){
+                        msgs="请输入问题内容";
+                        layer.tips(msgs, $("[name='questionContent']"), {
+                            tips: [1, '#3595CC'],
+                            zIndex: layer.zIndex, //重点1
+                        });
+                        layer.setTop(layero); //重点2
+                        return;
+                    }else if(optionAnswer==""){
+                        msgs="请输入选项";
+                        layer.tips(msgs, $("[name='optionAnswer']"), {
+                            tips: [1, '#3595CC'],
+                            zIndex: layer.zIndex, //重点1
+                        });
+                        layer.setTop(layero); //重点2
+                        return;
+                    }else if(optionScore==""){
+                        msgs="请输入选项对应分数";
+                        layer.tips(msgs, $("[name='optionScore']"), {
+                            tips: [1, '#3595CC'],
+                            zIndex: layer.zIndex, //重点1
+                        });
+                        layer.setTop(layero); //重点2
+                        return;
+                    }else if(questionType==""){
+                        msgs="请选择类型";
+                        layer.tips(msgs, $("[name='questionType']"), {
+                            tips: [1, '#3595CC'],
+                            zIndex: layer.zIndex, //重点1
+                        });
+                        layer.setTop(layero); //重点2
+                        return;
+                    }
+                    else if(questionType!='3'){
+                        if(answer==""){
+                            msgs="请输入答案";
+                            layer.tips(msgs, $("[name='answer']"), {
+                                tips: [1, '#3595CC'],
+                                zIndex: layer.zIndex, //重点1
+                            });
+                            layer.setTop(layero); //重点2
+                            return;
+                        }
+                    }else {
+                        var forms= $('#questionForm').serialize();
+                        //加载层
+                        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                        $.post("/questionnaire/question/addORupdateQuestion",forms,function (result) {
+                            if(result.code==200){
+                                layer.closeAll();
+                                var array=new Array;
+                                array[0]=result.data;
+                                var context= questionList(array,"show");
+                                $("#addQuestionCollapse").append(context);
+                                idArray+=","+result.data.id;
+                                spanSequence();
+                                layer.msg("添加成功！", {
+                                    time: 2000
+                                });
+                                resetAddOrUpdateForm();
+                            }else{
+                                layer.msg("添加失败！", {
+                                    time: 2000
+                                });
+                            }
+                        });
+                    }
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                    resetAddOrUpdateForm();
+                }
+                ,zIndex: layer.zIndex //重点1
+                ,success: function(layero){
+                    layer.setTop(layero); //重点2
+                }
+                ,cancel: function(){
+                    //右上角关闭回调
+                    resetAddOrUpdateForm();
+                }
+            });
+
+        });
+
+    }
+    //添加修改form表单修改
+    function resetAddOrUpdateForm() {
+        $("#questionForm [name='id']").val("");
+        document.getElementById('questionForm').reset();
+    }
     //对问题的排序
     function  spanSequence() {
         var spanNumber=  $("[name='spanNumber']");
@@ -953,7 +1155,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
              form.render();
          });
      }
-
+    //重置
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+        doSearch();
+    }
     function add0(m){return m<10?'0'+m:m }
     function format(timestamp)
     {

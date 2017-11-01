@@ -92,7 +92,7 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"  id=""  class="eui-btn eui-btn-small" onclick="loadScene()">
+                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="loadScene()">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加场景</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
@@ -110,18 +110,38 @@
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>选择问题</span>
+                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>可选的问题</span>
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
-                    <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe60a;</i> 确定</button>
+                    <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe610;</i> 选择</button>
                 </div>
             </div>
         </div>
         <div class="eui-row"   >
             <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
                 <form class="eui-form " id="searchFrom" action=""   >
-                    <input type="hidden" id="id" name="id"/>
+                    <blockquote class="eui-elem-quote eui-quote-search">
+                        <input type="hidden" id="id" name="id"/>
+                        <div class="eui-input-inline eui-padding10">
+                            <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
+                        </div>
+                        <div class="eui-input-inline eui-padding10">
+                            <input type="text" name="questionContent" e-verify="title" value="" autocomplete="off" placeholder="问题内容" class="eui-input">
+                        </div>
+                        <div class="eui-input-inline eui-padding10">
+                            <select name="questionType">
+                                <option value="" >答案类型</option>
+                                <option value="1" >单选</option>
+                                <option value="2" >多选</option>
+                                <option value="3" >评分单选</option>
+                            </select>
+                        </div>
+                        <div class="eui-input-inline">
+                            <span class="eui-btn" onclick="doSearch()">查询</span>
+                            <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                        </div>
+                    </blockquote>
                     <div class="eui-form-item">
                         <table class="eui-table eui-form" id="questionTable">
                             <colgroup>
@@ -152,9 +172,10 @@
 
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>选择的问题列表</span>
+                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>已选的问题</span>
             </div>
         </div>
+
         <div class="eui-collapse" e-filter="test" id="questionCollapse">
            <!-- <div class="eui-colla-item ">
                 <h2 class="eui-colla-title">为什么前端工程师多不愿意用 Bootstrap 框架？
@@ -166,12 +187,10 @@
                 </div>
             </div>-->
         </div>
-
-
-
     </div>
-
 </div>
+
+
 
 
 
@@ -515,7 +534,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         });
      }
 
-     //  量表的标签加载 并返回选择的标签
+     //量表的标签加载 并返回选择的标签
      function  loadTag() {
          var list=new Array;
          eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
@@ -555,8 +574,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
 
 
-    //  量表的场景加载 并返回选择的场景
-    function  loadScene() {
+     //量表的场景加载 并返回选择的场景
+     function  loadScene() {
         var list=new Array;
         eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
             var $ = eui.jquery,
@@ -594,7 +613,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     }
 
 
-     //拼接标签 或者 场景
+      //拼接标签 或者 场景
      function  merge(type,list){
          var context="";
          //得到所有的成员
@@ -626,13 +645,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
 
      }
-  //删除场景  或者标签
-    function deleteTagOrScene(type,id){
+     //删除场景  或者标签
+     function deleteTagOrScene(type,id){
        $("#"+type+id).remove();
   }
 
-  //获得场景 或者标签的id 1,2,3
-    function getTagOrSceneId(type){
+     //获得场景 或者标签的id 1,2,3
+      function getTagOrSceneId(type){
         var spanNmae= $("[name='"+type+"']");
         var list=new Array();
         for(var i=0;i<spanNmae.length;i++){
@@ -642,21 +661,25 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         return list.join(",");
     }
 
-    //对问题的排序
-    function  spanSequence() {
-        var spanNumber=  $("[name='spanNumber']");
-        for(var i=0;i<spanNumber.length;i++){
-            spanNumber.eq(i).text(i+1+".");
-        }
+     //对问题的排序
+      function  spanSequence() {
+    var spanNumber=  $("[name='spanNumber']");
+    for(var i=0;i<spanNumber.length;i++){
+        spanNumber.eq(i).text(i+1+".");
     }
-    //form表单  select,checkbox,radio 动态添加  需要更新
-     function   formRender() {
-         eui.use(['form'], function(){
-             var form = eui.form;
-             form.render();
-         });
+  }
+     //form表单  select,checkbox,radio 动态添加  需要更新
+      function   formRender() {
+     eui.use(['form'], function(){
+         var form = eui.form;
+         form.render();
+     });
      }
-
+     //重置
+      function resetForm() {
+        document.getElementById('searchFrom').reset();
+        doSearch();
+    }
 
 </script>
 

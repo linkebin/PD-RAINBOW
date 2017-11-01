@@ -55,10 +55,12 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
     //问卷或量表  添加问题 查询没有添加的问题
     @Override
-    public List<QuestionnaireQuestion> findQuestionBYid(String ids) {
+    public List<QuestionnaireQuestion> findQuestionBYid(QuestionnaireQuestion questionnaireQuestion) {
         Map<String,Object> map=new HashMap<>();
-        String [] idss=ids.split(",");
-        map.put("ids",ids.split(","));
+        map.put("ids",questionnaireQuestion.getId().split(","));
+        map.put("questionCode",questionnaireQuestion.getQuestionCode());
+        map.put("questionContent",questionnaireQuestion.getQuestionContent());
+        map.put("questionType",questionnaireQuestion.getQuestionType());
         return questionnaireQuestionMapper.findQuestionBYid(map);
     }
     // 查询问卷相关的问题
@@ -69,7 +71,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
     //提交问卷
     @Override
-    public Result submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes) {
+    public Result submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming) {
         try {
             List<Map<String,Object>> mapList= (List<Map<String,Object>>)JSON.parse(param);
            //问卷使用的id
@@ -177,6 +179,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setId(dataAcquisitionId);
             //dataAcquisition.setActivityId();
             dataAcquisition.setDataResult(result);
+            dataAcquisition.setTimeConsuming(timeConsuming);
             dataAcquisition.setDataQuestion(questionnaireId);
             dataAcquisition.setDataCode(CodeHelper.getCode("SY"));
             dataAcquisition.setTotalScore(totalScore);
