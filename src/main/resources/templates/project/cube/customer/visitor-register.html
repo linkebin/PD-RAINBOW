@@ -12,7 +12,9 @@
         #ui-id-1{height: 200px; overflow: scroll;}
         .eui-form-label{width: 100px;
             text-align: left;}
-
+        .eui-width700{
+            width: 700px!important;
+        }
         /*#visitorForm input + label{color: red; font-size: 12px;}*/
 
         /*#visitorForm select +label{color: red;font-size: 12px;}*/
@@ -96,18 +98,15 @@
                             <label class="eui-form-label">所在地</label>
                             <div id="ld" data-toggle="distpicker">
                                 <div class="eui-input-inline">
-                                    <select class="eui-input" e-ignore name="province">
-
+                                    <select data-province="" class="eui-input" e-ignore name="province">
                                     </select>
                                 </div>
                                 <div class="eui-input-inline">
-                                    <select class="eui-input" e-ignore name="city">
-
+                                    <select data-city="" class="eui-input" e-ignore name="city">
                                     </select>
                                 </div>
                                 <div class="eui-input-inline">
-                                    <select class="eui-input" e-ignore name="district">
-
+                                    <select data-district="" class="eui-input" e-ignore name="district">
                                     </select>
                                 </div>
                             </div>
@@ -151,7 +150,7 @@
                         </div>
                         <label class="eui-form-label">紧急联系人电话</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="exigencePhone" placeholder="紧急联系人电话"  class="eui-input">
+                            <input type="text" name="exigencePhone" placeholder="请输入紧急联系人电话"  class="eui-input">
                         </div>
                     </div>
 
@@ -205,7 +204,7 @@
                         <div class="eui-form-item">
                             <label class="eui-form-label">结婚年数</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="marryTotal"   placeholder="结婚年数" class="eui-input">
+                                <input type="text" name="marryTotal"   placeholder="请输入结婚年数" class="eui-input">
                             </div>
 
                             <label class="eui-form-label">是否有孩子</label>
@@ -223,7 +222,7 @@
                             </div>
                             <label class="eui-form-label">第一个孩子年龄</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="childAge"   placeholder="孩子年龄" class="eui-input">
+                                <input type="text" name="childAge"   placeholder="请输入孩子年龄" class="eui-input">
                             </div>
                         </div>
                     </div>
@@ -251,7 +250,7 @@
                         <div style="display: none;" class="father_leave">
                             <label style="width: 150px" class="eui-form-label">父亲去世时你的年龄</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="fatherDeathYourAge"   placeholder="父亲去世时你的年龄" class="eui-input">
+                                <input type="text" name="fatherDeathYourAge"   placeholder="请输入父亲去世时你的年龄" class="eui-input">
                             </div>
                         </div>
 
@@ -267,7 +266,7 @@
 
                             <label class="eui-form-label">父亲年龄</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="fatherAge"   placeholder="父亲年龄" class="eui-input">
+                                <input type="text" name="fatherAge"   placeholder="请输入父亲年龄" class="eui-input">
                             </div>
 
                             <label class="eui-form-label">父亲学历</label>
@@ -301,7 +300,7 @@
                         <div style="display: none;" class="mother_leave">
                             <label  style="width: 150px" class="eui-form-label">母亲去世时你的年龄</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="motherDeathYourAge"   placeholder="母亲去世时你的年龄" class="eui-input">
+                                <input type="text" name="motherDeathYourAge"   placeholder="请输入母亲去世时你的年龄" class="eui-input">
                             </div>
                         </div>
 
@@ -317,12 +316,11 @@
 
                             <label class="eui-form-label">母亲年龄</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="motherAge"   placeholder="母亲年龄" class="eui-input">
+                                <input type="text" name="motherAge"   placeholder="请输入母亲年龄" class="eui-input">
                             </div>
 
                             <label class="eui-form-label">母亲学历</label>
                             <div class="eui-input-inline">
-                                <!--<input type="text" name="motherEducation"   placeholder="母亲学历" class="eui-input">-->
                                 <select name="motherEducation" class="eui-input">
                                     <option value="">请选择</option>
                                     <option value="小学">小学</option>
@@ -348,7 +346,7 @@
                         <div style="display: none" class="parentalSeparationYourAge">
                             <label style="width: 150px;" class="eui-form-label">父母分居时你的年龄</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="parentalSeparationYourAge"   placeholder="父母分居时你的年龄" class="eui-input">
+                                <input type="text" name="parentalSeparationYourAge"   placeholder="请输入父母分居时你的年龄" class="eui-input">
                             </div>
                         </div>
                     </div>
@@ -363,7 +361,7 @@
                         <div style="display: none;" class="divorce">
                             <label style="width: 150px;" class="eui-form-label">父母离婚时你的年龄</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="parentalDivorceYourAge"   placeholder="父母离婚时你的年龄" class="eui-input">
+                                <input type="text" name="parentalDivorceYourAge"   placeholder="请输入父母离婚时你的年龄" class="eui-input">
                             </div>
                         </div>
                     </div>
@@ -371,13 +369,13 @@
                     <div class="eui-form-item">
                         <label class="eui-form-label">兄弟姐妹人数</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="brothersSistersTotal" class="eui-input" placeholder="兄弟姐妹人数">
+                            <input type="text" name="brothersSistersTotal" class="eui-input" placeholder="请输入兄弟姐妹人数">
                         </div>
 
                         <div class="default_show">
                             <label class="eui-form-label">排行第几</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="brothersSistersRanking"   placeholder="排行第几" class="eui-input">
+                                <input type="text" name="brothersSistersRanking"   placeholder="请输入排行第几" class="eui-input">
                             </div>
                         </div>
                     </div>
@@ -407,12 +405,12 @@
 
                             <label style="width: 240px;" class="eui-form-label">做过几次咨询</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="counselingTotal"   placeholder="做过几次咨询" class="eui-input">
+                                <input type="text" name="counselingTotal"   placeholder="请输入做过几次咨询" class="eui-input">
                             </div>
 
                             <label style="width: 240px;" class="eui-form-label">最近一次咨询距现在多少天</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="awayNowTotal"   placeholder="最近一次咨询距现在多少天" class="eui-input">
+                                <input type="text" name="awayNowTotal"   placeholder="请输入最近一次咨询距现在多少天" class="eui-input">
                             </div>
 
                         </div>
@@ -423,7 +421,7 @@
 
                             <label style="width: 240px;" class="eui-form-label">最近一次咨询的地址</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="counselingAddress"   placeholder="最近一次咨询的地址" class="eui-input">
+                                <input type="text" name="counselingAddress"   placeholder="请输入最近一次咨询的地址" class="eui-input">
                             </div>
 
 
@@ -439,7 +437,7 @@
                         <div class="eui-form-item">
                             <label style="width: 240px;" class="eui-form-label">最近一次诊断结果</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="diagnosisResult"   placeholder="最近一次诊断结果" class="eui-input eui-width700">
+                                <input type="text" name="diagnosisResult"   placeholder="请输入最近一次诊断结果" class="eui-input eui-width700">
                             </div>
                         </div>
                     </div>
@@ -454,7 +452,7 @@
                         <div style="display: none" class="medicalHistory">
                             <label class="eui-form-label">具体情况</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="specificCircumstances" style="width: 370px"  placeholder="具体情况" class="eui-input">
+                                <input type="text" name="specificCircumstances" style="width: 370px"  placeholder="请输入具体情况" class="eui-input">
                             </div>
                         </div>
                     </div>
@@ -469,7 +467,7 @@
                         <div style="display: none" class="LongMedication">
                             <label class="eui-form-label">药物不良症状</label>
                             <div class="eui-input-inline">
-                                <input type="text" name="adverseDrugSymptoms" style="width: 370px"  placeholder="药物不良症状" class="eui-input">
+                                <input type="text" name="adverseDrugSymptoms" style="width: 370px"  placeholder="请输入药物不良症状" class="eui-input">
                             </div>
                         </div>
                     </div>
@@ -478,7 +476,7 @@
                         <label style="width: 240px;" class="eui-form-label">目前与健康有关的疾病及所接受的治疗</label>
                         <div class="eui-input-inline">
                             <input type="text" name="treatmentCondition"
-                                   placeholder="接受的治疗" class="eui-input eui-width700">
+                                   placeholder="请输入目前与健康有关的疾病及所接受的治疗" class="eui-input eui-width700">
                         </div>
                     </div>
 
@@ -631,7 +629,7 @@
         var index = layer.open({
             title: '阅读保密协议'
             , type: 2
-            , area: ['600px', '500px']
+            , area: ['1000px', '650px']
             ,closeBtn: 0
             , content: '/web/customer/dna'
         });
@@ -677,7 +675,9 @@
             return this.optional(element) || idCardNoUtil.checkIdCardNo(value);
         }, "请正确输入您的身份证号码");
 
-
+        jQuery.validator.addMethod("isProvincePNo", function(value, element) {
+            return this.optional(element) || value!='—— 省 ——';
+        }, "请选择省份");
 
         $("#visitorForm").validate({
             rules: {
@@ -762,11 +762,18 @@
                 },
                 occupation:{
                     required:true,
+                },
+                province:{
+                    required:true,
+                    isProvincePNo:true
                 }
 
             },
             messages: {
-
+                province:{
+                    required:'请选择选择省',
+                    isProvincePNo:'请选择省份'
+                },
                 exigenceContacts:{
                     required:'请选择紧急联系人关系'
                 },
@@ -858,6 +865,19 @@
             },
             submitHandler: function() {
                 var obj = $("#visitorForm").serializeObject();
+                console.log(obj)
+                var names = {'bloodType':'请勾选血型选项','educationLevel':'请勾选教育程度选项',
+                    'religiousBelief':'请勾选宗教信仰选项','maritalStatus':'请勾选婚姻情况选项',
+                    'psychologicalCounseling':'请勾选以前进行过心里咨询吗选项','medicalTreatment':'请勾选是否因心理问题就医选项',
+                    'medicalHistory':'请勾选是否慢性疾病,家族病史和过敏史选项','LongMedication':'请勾选曾长期服用过何种药物选项'}
+
+
+              var checkNull =   nationUtil.checkObjectFieldNoNull(obj,names);
+                if (checkNull!=''){
+                    layer.msg(checkNull);
+                    return;
+                }
+
                 $.post('/visitor/register/add',{json:JSON.stringify(obj)},function (result) {
                     if (result.code==200){
                         self.opener.location.reload();

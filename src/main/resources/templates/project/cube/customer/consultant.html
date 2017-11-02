@@ -30,6 +30,22 @@
         #DivAddForm textarea + label{color: red;}
         .tb{cursor: pointer;margin-left: 15px;}
 
+        .ci-count {
+            position: absolute;
+            top: -5px;
+            left: 100px;
+            right: auto;
+            display: inline-block;
+            padding: 1px;
+            font-size: 12px;
+            line-height: 12px;
+            color: #fff;
+            background-color: #35a9ff;
+            -moz-border-radius: 7px;
+            border-radius: 7px;
+            min-width: 12px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -40,7 +56,7 @@
             <span class="payCentre">来访者咨询管理</span>
         </div>
         <div class="eui-col-md6 eui-textAlignR">
-            <span onclick="resetCustomer()" class="eui-btn switch eui-btn-big eui-btn-normal eui-marginT5">切换来访者</span>
+            <span onclick="resetCustomer()" class="eui-btn switch eui-btn-big eui-btn-normal eui-btn-small eui-marginT15 eui-marginR15"><i class="eui-icon">&#x1002;</i>切换来访者</span>
         </div>
     </div>
 </div>
@@ -62,7 +78,7 @@
                 </div>
                 <div class="eui-col-md1 eui-paddingT20 eui-color-gray3"></div>
                 <div class="eui-col-md8 eui-textAlignR">
-                    <span class="eui-btn eui-btn-normal" onclick="addVisitorRecord()">
+                    <span class="eui-btn eui-btn-normal eui-btn-small" onclick="addVisitorRecord()">
                 <i style="cursor: pointer;" class="eui-icon eui-font12"> &#xe654; </i>来访记录 </span>
                 </div>
             </div>
@@ -119,20 +135,47 @@
                             </div>
                         </div>
                         <div class="eui-marginT20 eui-form">
-                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访目的</p>
-                            <p id="visitingPurpose" class="eui-marginT20 eui-lineHeight24">
+                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 面询印象简录（含躯体、心理、行为和社会支持系统的情况）</p>
+                            <p id="interview" class="eui-marginT20 eui-lineHeight24">
                             </p>
                         </div>
+
                         <div class="eui-marginT20 eui-form">
-                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 过程记录</p>
+                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访者初诊</p>
+                            <p id="VisitingPurpose" class="eui-marginT20 eui-lineHeight24">
+                            </p>
+                        </div>
+
+                        <div class="eui-marginT20 eui-form">
+                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 已解决的问题</p>
+                            <p id="resolved" class="eui-marginT20 eui-lineHeight24">
+                            </p>
+                        </div>
+
+                        <div class="eui-marginT20 eui-form">
+                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 本次咨询内容</p>
+                            <p id="thisTime" class="eui-marginT20 eui-lineHeight24">
+                            </p>
+                        </div>
+
+                        <div class="eui-marginT20 eui-form">
+                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 咨询效果评价</p>
+                            <p id="evaluate" class="eui-marginT20 eui-lineHeight24">
+                            </p>
+                        </div>
+
+                        <div class="eui-marginT20 eui-form">
+                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 咨询中所运用的心理学方法与技术</p>
+                            <p id="FollowUpPlan" class="eui-marginT20 eui-lineHeight24">
+                            </p>
+                        </div>
+
+                        <div class="eui-marginT20 eui-form">
+                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 咨询过程记录</p>
                             <p id="processLog" class="eui-marginT20 eui-lineHeight24">
                             </p>
                         </div>
-                        <div class="eui-marginT20 eui-form">
-                            <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 后续计划</p>
-                            <p id="followUpPlan" class="eui-marginT20 eui-lineHeight24">
-                            </p>
-                        </div>
+
                         <div class="eui-marginT20 eui-form">
                             <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 备注</p>
                             <p id="remarks" class="eui-marginT20 eui-lineHeight24">
@@ -156,29 +199,61 @@
                             <div class="eui-marginT10 eui-row">
                             </div>
                             <div class="eui-marginT20 eui-form">
-                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访目的</p>
+                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 面询印象简录（含躯体、心理、行为和社会支持系统的情况）</p>
                                 <p class="eui-marginT20 eui-lineHeight24">
-                                    <textarea name="visitingPurpose" placeholder="来访目的" class="eui-textarea"></textarea>
+                                    <textarea name="interview" placeholder="面询印象简录（含躯体、心理、行为和社会支持系统的情况）" class="eui-textarea"></textarea>
                                 </p>
                             </div>
+
                             <div class="eui-marginT20 eui-form">
-                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 过程记录</p>
+                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 来访者初诊</p>
                                 <p class="eui-marginT20 eui-lineHeight24">
-                                    <textarea name="processLog" placeholder="过程记录" class="eui-textarea"></textarea>
+                                    <textarea name="VisitingPurpose" placeholder="来访者初诊" class="eui-textarea"></textarea>
                                 </p>
                             </div>
+
                             <div class="eui-marginT20 eui-form">
-                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 后续计划</p>
+                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 已解决的问题</p>
                                 <p class="eui-marginT20 eui-lineHeight24">
-                                    <textarea name="followUpPlan" placeholder="后续计划" class="eui-textarea"></textarea>
+                                    <textarea name="resolved" placeholder="已解决的问题" class="eui-textarea"></textarea>
                                 </p>
                             </div>
+
+                            <div class="eui-marginT20 eui-form">
+                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 本次咨询内容</p>
+                                <p class="eui-marginT20 eui-lineHeight24">
+                                    <textarea name="thisTime" placeholder="本次咨询内容" class="eui-textarea"></textarea>
+                                </p>
+                            </div>
+
+                            <div class="eui-marginT20 eui-form">
+                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 咨询效果评价</p>
+                                <p class="eui-marginT20 eui-lineHeight24">
+                                    <textarea name="evaluate" placeholder="咨询效果评价" class="eui-textarea"></textarea>
+                                </p>
+                            </div>
+
+                            <div class="eui-marginT20 eui-form">
+                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 咨询中所运用的心理学方法与技术</p>
+                                <p class="eui-marginT20 eui-lineHeight24">
+                                    <textarea name="FollowUpPlan" placeholder="咨询中所运用的心理学方法与技术" class="eui-textarea"></textarea>
+                                </p>
+                            </div>
+
+                            <div class="eui-marginT20 eui-form">
+                                <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 咨询过程记录</p>
+                                <p class="eui-marginT20 eui-lineHeight24">
+                                    <textarea id="processLogA" name="processLog" placeholder="咨询过程记录" class="eui-textarea"></textarea>
+                                </p>
+                            </div>
+
                             <div class="eui-marginT20 eui-form">
                                 <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 备注</p>
                                 <p class="eui-marginT20 eui-lineHeight24">
-                                    <textarea name="remarks" placeholder="备注" class="eui-textarea"></textarea>
+                                    <textarea id="remarksA" name="remarks" placeholder="备注" class="eui-textarea"></textarea>
                                 </p>
                             </div>
+
                             <input type="submit" style="display: none;" id="DivAddFormSub"/>
                         </div>
                     </form>
@@ -258,37 +333,64 @@
             ,layedit = eui.layedit
             ,laydate = eui.laydate;
 
-        laydate.render({
-            elem: '#startTime'
-        });
-        laydate.render({
-            elem: '#endTime'
-        });
+//        laydate.render({
+//            elem: '#startTime'
+//        });
+//        laydate.render({
+//            elem: '#endTime'
+//        });
+
         laydate.render({
             elem: '#visitorTime'
             ,type: 'datetime'
         });
+
+        layedit.build('processLogA',{
+            tool: [
+                'strong' //加粗
+                ,'italic' //斜体
+                ,'underline' //下划线
+                ,'del' //删除线
+                ,'|' //分割线
+                ,'left' //左对齐
+                ,'center' //居中对齐
+                ,'right' //右对齐
+                ,'link' //超链接
+                ,'unlink' //清除链接
+            ]
+        });
+        layedit.build('remarksA', {
+            tool: [
+                'strong' //加粗
+                ,'italic' //斜体
+                ,'underline' //下划线
+                ,'del' //删除线
+                ,'|' //分割线
+                ,'left' //左对齐
+                ,'center' //居中对齐
+                ,'right' //右对齐
+                ,'link' //超链接
+                ,'unlink' //清除链接
+            ]
+        });
     })
 
-// 返回顶部
-var winH = $(window).height();
+    // 返回顶部
+    var winH = $(window).height();
 
-$('.eui-backTop').hide();
-$(window).scroll(function(e) {
-    var winT = $(window).scrollTop();
-    if(winT>winH){
-        $('.eui-backTop').fadeIn()
-    }else{
-        $('.eui-backTop').fadeOut()
-    }
-});
+    $('.eui-backTop').hide();
+    $(window).scroll(function(e) {
+        var winT = $(window).scrollTop();
+        if(winT>winH){
+            $('.eui-backTop').fadeIn()
+        }else{
+            $('.eui-backTop').fadeOut()
+        }
+    });
 
-$('.eui-backTop').click(function(e) {
-    $('html,body').animate({scrollTop:0},500)
-});
-
-
-
+    $('.eui-backTop').click(function(e) {
+        $('html,body').animate({scrollTop:0},500)
+    });
 
     $(".eui-slipBg").hide();
     $(".switch").click(function(event) {
@@ -307,15 +409,15 @@ $('.eui-backTop').click(function(e) {
     });
 
 
-$(function () {
-    loadShaftTime();
-    $('#visitorName').bind('input propertychange', function() {
-        var textValue = $(this).val();
-        var params = new Object();
-        params.creator=$("#creator").val();
-        params.visitorName=textValue;
-        loadCustomerList(params);
-    });
+    $(function () {
+        loadShaftTime();
+        $('#visitorName').bind('input propertychange', function() {
+            var textValue = $(this).val();
+            var params = new Object();
+            params.creator=$("#creator").val();
+            params.visitorName=textValue;
+            loadCustomerList(params);
+        });
 
 
 
@@ -324,13 +426,25 @@ $(function () {
             visitorTime: {
                 required : true,
             },
-            visitingPurpose:{
+            interview:{
                 required : true,
             },
-            processLog: {
+            VisitingPurpose: {
                 required: true,
             },
-            followUpPlan: {
+            resolved: {
+                required: true,
+            },
+            thisTime:{
+                required : true,
+            },
+            evaluate: {
+                required: true,
+            },
+            FollowUpPlan: {
+                required: true,
+            },
+            processLog: {
                 required: true,
             }
         },
@@ -338,14 +452,26 @@ $(function () {
             visitorTime: {
                 required : "请选择来访时间",
             },
-            visitingPurpose:{
-                required : '请输入来访目的',
+            interview:{
+                required : '请输入面询印象简录',
+            },
+            VisitingPurpose: {
+                required: '请输入来访者初诊',
+            },
+            resolved: {
+                required: '请输入已解决的问题',
+            },
+            thisTime:{
+                required : '请输入本次咨询内容',
+            },
+            evaluate: {
+                required: '请输入咨询效果评价',
+            },
+            FollowUpPlan: {
+                required: '请输入咨询中所运用的心理学方法与技术',
             },
             processLog: {
-                required: '请输入过程记录',
-            },
-            followUpPlan: {
-                required: '请输入后续计划',
+                required: '请输入咨询过程记录',
             }
         },
         submitHandler: function() {
@@ -359,251 +485,262 @@ $(function () {
             });
         }
     });
-
-});
-function resetCustomer() {
-    var params = new Object();
-    params.creator=$("#creator").val();
-    params.visitorName='';
-    loadCustomerList(params);
-}
-function loadCustomerList(params) {
-    $.post('/visitor/register/listByparameter',{
-        json:JSON.stringify(params),
-        page:1,
-        pagesize:100000
-    },function (result) {
-        $(".customerList").html('');
-        console.log(result.data.list)
-        var list = result.data.list;
-        $.each(list,function (index,item) {
-
-            var img = '/Styles/images/xymfImages/woman.png';
-            if (item.sex == 1){
-                img='/Styles/images/xymfImages/man.png'
-            }
-
-            $(".customerList").append('<div visitorId="'+item.id+'" class="eui-row  eui-padding10 line"> ' +
-                '<div class="eui-col-md8 eui-lineHeight24"> ' +
-                '<p> <span class="eui-font16">'+item.visitorName+'</span></p> ' +
-                '' +
-                '</div> ' +
-                '<div class="eui-col-md2 eui-textAlignR">' +
-                '<img src="'+img+'" width="20" alt=""></div> ' +
-                '</div>')
-        });
-        $(".customerList .line").click(function () {
-            location.href='/web/customer/visitorInfo?id='+$(this).attr('visitorId');
-        });
     });
-}
 
-function loadShaftTime() {
-    var obj = $("#searchFrom").serializeObject();
-    $.post('/visiting/record/shaftTime',{json:JSON.stringify(obj)},function (result) {
-        var list = result.data.list;
-        if (list.length>0){
-            $.each(list, function (index, item) {
-                $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
-                    '<div class="eui-timeline-content eui-text"> ' +
-                    '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'</div> ' +
-                    '</div> ' +
-                    '<i class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
-                    '</li>');
-            });
-            loadVisitorRecordDetail(list[0].id);
-
-            $("#shaftTime li").find('i').eq(0).html('&#xe617;');
-
-            $("#shaftTime li").click(function () {
-                $('#resetDiv').hide();
-                var id = $(this).attr('visitorId');
-                loadVisitorRecordDetail(id);
-                $("#shaftTime li").find('i').html('&#xe63f;');
-                $(this).find('i').html('&#xe617;')
-            });
-        }else {
-            $('#noData').hide();
-            $(".DivInfo").hide();
-            $(".DivAdd").show();
-            $("#resetDiv").show();
-
-        }
-    });
-}
-    var visitorTimes="";
-function loadVisitorRecordDetail(id) {
-
-    $("#fileDiv").show();
-    $("#searchFrom").show();
-    $(".DivInfo").show();
-    $(".DivAdd").hide();
-    $("#recordId").val(id);
-    $.post('/visiting/record/detail',{id:id},function (result) {
-
-        var obj = result.data;
-        $(".DivInfo #visitingPurpose").html(obj.visitingPurpose);
-        $(".DivInfo #processLog").html(obj.processLog);
-        $(".DivInfo #followUpPlan").html(obj.followUpPlan);
-        $(".DivInfo #remarks").html(obj.remarks);
-        $(".DivInfo .createTime").html(new Date(obj.createTime)
-            .Format('yyyy-MM-dd hh:mm:ss'));
-
-        $(".DivInfo .visitorTime").html(new Date(obj.visitorTime)
-            .Format('yyyy-MM-dd hh:mm:ss'));
-        var visitingRecordFileList = obj.visitingRecordFileList;
-        $("#demoList").html('');
-        $.each(visitingRecordFileList,function (index,item) {
-            $("#demoList").append(' <tr> <th>'+item.fileName+'</th> <th>'
-                +new Date(item.createTime).Format('yyyy-MM-dd hh:mm:ss')+'</th>' +
-                '<th class="icons"><i path="'+item.fileUri+'" title="下载" class="eui-icon tb">&#xe61e;</i>' +
-                '<i path="'+item.id+'" title="删除" class="eui-icon tb">&#xe640;</i></th></tr>');
-        });
-        var  createTime=new Date(obj.visitorTime).Format('yyyy-MM-dd');
-        visitorTimes=createTime;
-        var userId=$("[name='visitorId']").val();
-
-        $.post("/data/acquisition/findQuestionnaireForVisitor",{"userId":userId,"createTime":createTime},function (result) {
-           var list=result.data;
-            var coontext="";
-            for(var i in list){
-                coontext+='<div  name="startAnswer" acquisitionId="'+list[i].id+'" questionnaireId="'+list[i].dataQuestion+'" class="eui-col-md3 consultSheet eui-marginR10">'+list[i].questionnaireName;
-                coontext+='    <i class="eui-icon">&#xe621;</i>';
-                coontext+=' </div> ';
-            }
-            $("[name='startAnswer']").remove();
-            $('#addQuestionnaire').before(coontext);
-            $("[name='startAnswer']").on("click",function () {
-                 var questionnaireId = $(this).attr("questionnaireId");
-                 var acquisitionId = $(this).attr("acquisitionId");
-                 selQuestionnaireForVisitor(questionnaireId,userId,acquisitionId);
-            });
-
-
-        });
-        eui.use('upload', function(){
-            var $ = eui.jquery
-                ,upload = eui.upload;
-            var uploadInst = upload.render({
-                elem: '#test1'
-                ,url: '/upload/upFile'
-                ,accept: 'file'
-                ,data: {fileTable:'visiting_record_file',
-                    recordId:$("#recordId").val()}
-                ,done: function(res){
-                    var obj = JSON.parse(res);
-                    $("#demoList").append(' <tr> <th>'+obj.fileName+'</th> <th>'
-                        +new Date().Format('yyyy-MM-dd hh:mm:ss')+'</th>' +
-                        '<th class="icons"><i path="'+obj.data.src+'" title="下载" class="eui-icon tb">&#xe61e;</i>' +
-                        '<i path="'+obj.id+'" title="删除" class="eui-icon tb">&#xe640;</i></th></tr>');
-
-                    $('.icons i').click(function () {
-                        if ($(this).index() == 0){
-                            window.open('/files'+$(this).attr('path'));
-                        }else {
-                            deletefile($(this).attr('path'),$(this));
-                        }
-                    });
-                    }
-                ,error: function(){
-                }
-            });
-        });
-        $('.icons i').click(function () {
-            if ($(this).index() == 0){
-                window.open('/files'+$(this).attr('path'));
-            }else {
-                deletefile($(this).attr('path'),$(this));
-            }
-        });
-    });
-}
-function deletefile(id,dom) {
-    $.post('/visiting/record/file/delete',{id:id},function (result) {
-        if (result.code == 200) {
-            $(dom).parent('.icons').parent('tr').remove();
-        }else {
-            layer.msg(result.message);
-        }
-    });
-}
-function addVisitorRecord() {
-    $("#fileDiv").hide();
-    $("#resetDiv").show();
-    $("#searchFrom").hide();
-    $(".DivInfo").hide();
-    $(".DivAdd").show();
-    $(".DivAdd input[name='visitorTime']").val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
-    $("#datecre").html(new Date().Format('yyyy-MM-dd hh:mm:ss'));
-    $("#shaftTime li").find('i').html('&#xe63f;');
-}
-
-function saveData() {
-    return $("#DivAddFormSub").click();
-}
-//  加载问卷
-function  loadQuestionnaire() {
-        var userId=$("[name='visitorId']").val();
-        var list=new Array;
-        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
-            var $ = eui.jquery,
-                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
-            var iframeWin;//iframe对象
-            layer.open({
-                type: 2
-                ,id: 'checkQuestionnaire'
-                ,title: '选择问卷'
-                ,area: ['800px', '500px']
-                ,success: function(layero, index){
-                    var body = layer.getChildFrame('body', index);
-                    iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
-                }
-                ,shade: 0
-                ,moveType: 0//拖拽模式，0或者1
-                ,maxmin: true
-                ,content:"/web/customer/getCheckQuestionnaire"
-                ,btn: ['确定', '关闭'] //只是为了演示
-                ,yes: function(){
-                    //得到设置返回的结果
-                    list=iframeWin.checkQuestionnaire();
-                    //加载层
-                    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                    //添加问卷使用
-                    $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
-                        layer.closeAll();
-                        if(result.code!=200){
-                           // 账号余额不足
-                            layer.open({
-                                title:"充值",
-                                type: 1,
-                                content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
-                            });
-                           /* layer.msg("您的可用余额不足，请及时充值！" ,{
-                                time: 6000
-                            });*/
-                        }else {
-                            layer.closeAll();
-                            console.info("  console.info(list);");
-                            console.info(list);
-                            for(var i in list){
-                                var questionnaireId=list[i].id;
-                                startAnswer(questionnaireId,userId);
-                            }
-                        }
-                    });
-
-                }
-                ,btn2: function(){
-                    layer.closeAll();
-                },cancel: function(){
-                    layer.closeAll();
-                }
-                ,zIndex: layer.zIndex //重点1
-            });
-        });
-
+    function resetCustomer() {
+        var params = new Object();
+        params.creator=$("#creator").val();
+        params.visitorName='';
+        loadCustomerList(params);
     }
-//查看来访者填写的问卷
+    function loadCustomerList(params) {
+        $.post('/visitor/register/listByparameter',{
+            json:JSON.stringify(params),
+            page:1,
+            pagesize:100000
+        },function (result) {
+            $(".customerList").html('');
+            console.log(result.data.list)
+            var list = result.data.list;
+            $.each(list,function (index,item) {
+
+                var img = '/Styles/images/xymfImages/woman.png';
+                if (item.sex == 1){
+                    img='/Styles/images/xymfImages/man.png'
+                }
+
+                $(".customerList").append('<div visitorId="'+item.id+'" class="eui-row  eui-padding10 line"> ' +
+                    '<div class="eui-col-md8 eui-lineHeight24"> ' +
+                    '<p> <span class="eui-font16">'+item.visitorName+'</span></p> ' +
+                    '' +
+                    '</div> ' +
+                    '<div class="eui-col-md2 eui-textAlignR">' +
+                    '<img src="'+img+'" width="20" alt=""></div> ' +
+                    '</div>')
+            });
+            $(".customerList .line").click(function () {
+                location.href='/web/customer/visitorInfo?id='+$(this).attr('visitorId');
+            });
+        });
+    }
+
+    function loadShaftTime() {
+        var obj = $("#searchFrom").serializeObject();
+        $.post('/visiting/record/shaftTime',{json:JSON.stringify(obj)},function (result) {
+            var list = result.data.list;
+            if (list.length>0){
+                $.each(list, function (index, item) {
+                    var icon = '';
+                    if (item.flag>0){
+                        icon = '<span class="ci-count">'+item.flag+'</span>'
+                    }
+                    $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
+                        '<div class="eui-timeline-content eui-text"> ' +
+                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'</div> ' +
+                        '</div> ' +icon+
+                        '<i style="color: #35a9ff;" class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
+                        '</li>');
+                });
+                loadVisitorRecordDetail(list[0].id);
+
+                $("#shaftTime li").find('i').eq(0).html('&#xe617;');
+
+                $("#shaftTime li").click(function () {
+                    $('#resetDiv').hide();
+                    var id = $(this).attr('visitorId');
+                    loadVisitorRecordDetail(id);
+                    $("#shaftTime li").find('i').html('&#xe63f;');
+                    $(this).find('i').html('&#xe617;')
+                });
+            }else {
+                $('#noData').hide();
+                $(".DivInfo").hide();
+                $(".DivAdd").show();
+                $("#resetDiv").show();
+
+            }
+        });
+    }
+    var visitorTimes="";
+    function loadVisitorRecordDetail(id) {
+
+        $("#fileDiv").show();
+        $("#searchFrom").show();
+        $(".DivInfo").show();
+        $(".DivAdd").hide();
+        $("#recordId").val(id);
+        $.post('/visiting/record/detail',{id:id},function (result) {
+
+            var obj = result.data;
+            $(".DivInfo #interview").html(obj.interview);
+
+            $(".DivInfo #resolved").html(obj.resolved);
+            $(".DivInfo #thisTime").html(obj.thisTime);
+            $(".DivInfo #evaluate").html(obj.evaluate);
+
+            $(".DivInfo #VisitingPurpose").html(obj.visitingPurpose);
+            $(".DivInfo #processLog").html(obj.processLog);
+            $(".DivInfo #FollowUpPlan").html(obj.followUpPlan);
+            $(".DivInfo #remarks").html(obj.remarks);
+            $(".DivInfo .createTime").html(new Date(obj.createTime)
+                .Format('yyyy-MM-dd hh:mm:ss'));
+
+            $(".DivInfo .visitorTime").html(new Date(obj.visitorTime)
+                .Format('yyyy-MM-dd hh:mm:ss'));
+
+            var visitingRecordFileList = obj.visitingRecordFileList;
+            $("#demoList").html('');
+            $.each(visitingRecordFileList,function (index,item) {
+                $("#demoList").append(' <tr> <th>'+item.fileName+'</th> <th>'
+                    +new Date(item.createTime).Format('yyyy-MM-dd hh:mm:ss')+'</th>' +
+                    '<th class="icons"><i path="'+item.fileUri+'" title="下载" class="eui-icon tb">&#xe61e;</i>' +
+                    '<i path="'+item.id+'" title="删除" class="eui-icon tb">&#xe640;</i></th></tr>');
+            });
+            var  createTime=new Date(obj.visitorTime).Format('yyyy-MM-dd');
+            visitorTimes=createTime;
+            var userId=$("[name='visitorId']").val();
+
+            $.post("/data/acquisition/findQuestionnaireForVisitor",{"userId":userId,"createTime":createTime},function (result) {
+               var list=result.data;
+                var coontext="";
+                for(var i in list){
+                    coontext+='<div  name="startAnswer" acquisitionId="'+list[i].id+'" questionnaireId="'+list[i].dataQuestion+'" class="eui-col-md3 consultSheet eui-marginR10">'+list[i].questionnaireName;
+                    coontext+='    <i class="eui-icon">&#xe621;</i>';
+                    coontext+=' </div> ';
+                }
+                $("[name='startAnswer']").remove();
+                $('#addQuestionnaire').before(coontext);
+                $("[name='startAnswer']").on("click",function () {
+                     var questionnaireId = $(this).attr("questionnaireId");
+                     var acquisitionId = $(this).attr("acquisitionId");
+                     selQuestionnaireForVisitor(questionnaireId,userId,acquisitionId);
+                });
+
+
+            });
+            eui.use('upload', function(){
+                var $ = eui.jquery
+                    ,upload = eui.upload;
+                var uploadInst = upload.render({
+                    elem: '#test1'
+                    ,url: '/upload/upFile'
+                    ,accept: 'file'
+                    ,data: {fileTable:'visiting_record_file',
+                        recordId:$("#recordId").val()}
+                    ,done: function(res){
+                        var obj = JSON.parse(res);
+                        $("#demoList").append(' <tr> <th>'+obj.fileName+'</th> <th>'
+                            +new Date().Format('yyyy-MM-dd hh:mm:ss')+'</th>' +
+                            '<th class="icons"><i path="'+obj.data.src+'" title="下载" class="eui-icon tb">&#xe61e;</i>' +
+                            '<i path="'+obj.id+'" title="删除" class="eui-icon tb">&#xe640;</i></th></tr>');
+
+                        $('.icons i').click(function () {
+                            if ($(this).index() == 0){
+                                window.open('/files'+$(this).attr('path'));
+                            }else {
+                                deletefile($(this).attr('path'),$(this));
+                            }
+                        });
+                        }
+                    ,error: function(){
+                    }
+                });
+            });
+            $('.icons i').click(function () {
+                if ($(this).index() == 0){
+                    window.open('/files'+$(this).attr('path'));
+                }else {
+                    deletefile($(this).attr('path'),$(this));
+                }
+            });
+        });
+    }
+    function deletefile(id,dom) {
+        $.post('/visiting/record/file/delete',{id:id},function (result) {
+            if (result.code == 200) {
+                $(dom).parent('.icons').parent('tr').remove();
+            }else {
+                layer.msg(result.message);
+            }
+        });
+    }
+    function addVisitorRecord() {
+        $("#fileDiv").hide();
+        $("#resetDiv").show();
+        $("#searchFrom").hide();
+        $(".DivInfo").hide();
+        $(".DivAdd").show();
+        $(".DivAdd input[name='visitorTime']").val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
+        $("#datecre").html(new Date().Format('yyyy-MM-dd hh:mm:ss'));
+        $("#shaftTime li").find('i').html('&#xe63f;');
+    }
+
+    function saveData() {
+        return $("#DivAddFormSub").click();
+    }
+    //  加载问卷
+    function  loadQuestionnaire() {
+            var userId=$("[name='visitorId']").val();
+            var list=new Array;
+            eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+                var $ = eui.jquery,
+                    layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+                var iframeWin;//iframe对象
+                layer.open({
+                    type: 2
+                    ,id: 'checkQuestionnaire'
+                    ,title: '选择问卷'
+                    ,area: ['800px', '500px']
+                    ,success: function(layero, index){
+                        var body = layer.getChildFrame('body', index);
+                        iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                    }
+                    ,shade: 0
+                    ,moveType: 0//拖拽模式，0或者1
+                    ,maxmin: true
+                    ,content:"/web/customer/getCheckQuestionnaire"
+                    ,btn: ['确定', '关闭'] //只是为了演示
+                    ,yes: function(){
+                        //得到设置返回的结果
+                        list=iframeWin.checkQuestionnaire();
+                        //加载层
+                        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                        //添加问卷使用
+                        $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
+                            layer.closeAll();
+                            if(result.code!=200){
+                               // 账号余额不足
+                                layer.open({
+                                    title:"充值",
+                                    type: 1,
+                                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
+                                });
+                               /* layer.msg("您的可用余额不足，请及时充值！" ,{
+                                    time: 6000
+                                });*/
+                            }else {
+                                layer.closeAll();
+                                console.info("  console.info(list);");
+                                console.info(list);
+                                for(var i in list){
+                                    var questionnaireId=list[i].id;
+                                    startAnswer(questionnaireId,userId);
+                                }
+                            }
+                        });
+
+                    }
+                    ,btn2: function(){
+                        layer.closeAll();
+                    },cancel: function(){
+                        layer.closeAll();
+                    }
+                    ,zIndex: layer.zIndex //重点1
+                });
+            });
+
+        }
+    //查看来访者填写的问卷
     function selQuestionnaireForVisitor(questionnaireId,userId,acquisitionId){
        window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+questionnaireId+"&userId="+userId+"&acquisitionId="+acquisitionId);
     }

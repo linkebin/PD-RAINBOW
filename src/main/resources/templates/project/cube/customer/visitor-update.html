@@ -11,6 +11,9 @@
             text-align: left;}
         /*#visitorForm input + label{color: red;}*/
         .error{color: red;font-size: 12px;}
+        .eui-width700{
+            width: 700px!important;
+        }
     </style>
 </head>
 <body>
@@ -754,14 +757,14 @@ $(function () {
             $('.divorce').show();
         }
 
-        if (obj.counselingTotal!=''){
+        if (obj.psychologicalCounseling==1){
             $('.consult_info').show();
         }
 
-        if (obj.specificCircumstances!=''){
+        if (obj.medicalHistory==1){
             $('.medicalHistory').show();
         }
-        if (obj.adverseDrugSymptoms!=''){
+        if (obj.LongMedication==1){
             $('.LongMedication').show();
         }
 
@@ -847,7 +850,7 @@ $(function () {
             },
             counselingTotal:{
                 required : true,
-                digits:true
+                digits:true,
             },
             awayNowTotal:{
                 required : true,
@@ -937,7 +940,7 @@ $(function () {
             },
             counselingTotal:{
                 required : '做过几次咨询',
-                digits:'只能输入整数'
+                digits:'只能输入整数',
             },
             awayNowTotal:{
                 required : '最近一次咨询距现在多少天',

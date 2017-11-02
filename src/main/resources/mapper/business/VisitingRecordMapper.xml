@@ -16,6 +16,12 @@
     <result column="process_log" jdbcType="LONGVARCHAR" property="processLog" />
     <result column="Follow_up_plan" jdbcType="LONGVARCHAR" property="followUpPlan" />
     <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
+
+    <result column="interview" jdbcType="VARCHAR" property="interview" />
+    <result column="evaluate" jdbcType="VARCHAR" property="evaluate" />
+    <result column="this_time" jdbcType="VARCHAR" property="thisTime" />
+    <result column="resolved" jdbcType="VARCHAR" property="resolved" />
+
   </resultMap>
   <!--AND visitor_time &gt;=#{startTime} AND visitor_time &lt;=#{endTime}-->
   <select id="findVisitingRecordShaftTimeByCustomerId" parameterType="com.yidusoft.project.business.domain.VisitingRecord"

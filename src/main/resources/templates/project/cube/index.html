@@ -25,6 +25,40 @@
          cursor: pointer;
      }
 
+     .contentR {
+         position: absolute;
+     }
+     .one{
+         transform:rotateY(200deg) translateX(0px);
+     }
+
+     .to{
+         transform: translateY(0px);
+     }
+
+     @keyframes cube-spin {
+         from { transform: rotateY(0); }
+         to { transform: rotateY(360deg); }
+     }
+
+
+     @keyframes spin-vertical {
+         from { transform: rotateX(0); }
+         to { transform: rotateX(-360deg); }
+     }
+
+
+     .vv{
+
+     }
+     .ww {
+         position: relative;
+         margin: 0 auto;
+         /*transform-style: preserve-3d;*/
+         /*animation: cube-spin 3s infinite linear;*/
+     }
+
+
     </style>
 </head>
 <body class="eui-layout-body">
@@ -82,19 +116,24 @@
                         <div id="pages"></div>
                     </div>
                 </div>
-                <div class="contentR">
-                    <div class="eui-inline" id="test-n1"></div>
-                    <div class="calendarEvents">
-                        <div class="eui-overflowH eui-marginB10">
-                            <div id="selectDate" class="eui-float-left">今日</div>
-                            <div class="eui-float-right"><i style="cursor: pointer;" onclick="openSchrdule('add','')" class="eui-icon eui-color-gray3">&#xe654;</i></div>
-                        </div>
-                        <div id="scheduleData">
 
-
-                        </div>
-
+                <div class="ww">
+                    <div class="contentR">
+                        qwwww
                     </div>
+                <div id="ppp" class="contentR">
+                        <div class="eui-inline" id="test-n1"></div>
+                        <div class="calendarEvents">
+                            <div class="eui-overflowH eui-marginB10">
+                                <div id="selectDate" class="eui-float-left">今日</div>
+                                <div class="eui-float-right"><i style="cursor: pointer;" onclick="openSchrdule('add','')" class="eui-icon eui-color-gray3">&#xe654;</i></div>
+                            </div>
+                            <div id="scheduleData">
+                            </div>
+                            <a onclick="cccc()">切换</a>
+                        </div>
+                </div>
+
                 </div>
             </div>
         </div>
@@ -215,6 +254,10 @@
         });
 
     });
+    function cccc() {
+        $("#ppp").addClass('vv');
+
+    }
     //加载数据
     function doSearch() {
         var limits = new Array(5, 10, 15);

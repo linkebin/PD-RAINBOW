@@ -58,6 +58,51 @@ public class VisitingRecord {
     @Column(name = "Follow_up_plan")
     private String followUpPlan;
 
+    @Column(name = "interview")
+    private String interview;
+
+    @Column(name = "evaluate")
+    private String evaluate;
+
+    @Column(name = "this_time")
+    private String thisTime;
+
+    @Column(name = "resolved")
+    private String resolved;
+
+
+    public String getInterview() {
+        return interview;
+    }
+
+    public void setInterview(String interview) {
+        this.interview = interview;
+    }
+
+    public String getEvaluate() {
+        return evaluate;
+    }
+
+    public void setEvaluate(String evaluate) {
+        this.evaluate = evaluate;
+    }
+
+    public String getThisTime() {
+        return thisTime;
+    }
+
+    public void setThisTime(String thisTime) {
+        this.thisTime = thisTime;
+    }
+
+    public String getResolved() {
+        return resolved;
+    }
+
+    public void setResolved(String resolved) {
+        this.resolved = resolved;
+    }
+
     @Transient
     private  Integer sex;
 
@@ -95,6 +140,17 @@ public class VisitingRecord {
      * 备注
      */
     private String remarks;
+
+    @Transient
+    private Integer flag;
+
+    public Integer getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Integer flag) {
+        this.flag = flag;
+    }
 
     public Date getVisitorTime() {
         return visitorTime;

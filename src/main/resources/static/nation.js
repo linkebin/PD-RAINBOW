@@ -2,6 +2,17 @@
  * Created by smy on 2017/11/1.
  */
 var nationUtil = {
+    checkObjectFieldNoNull : function(obj,names) {
+        var ival ='';
+        $.each(names,function (key,val) {
+
+            if (obj[key] == undefined || obj[key] == '' ){
+                ival=val;
+                return false;
+            }
+        });
+        return ival;
+    },
     nations: [
         {
             label: "H",
