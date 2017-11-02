@@ -24,6 +24,9 @@
             <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
             <span class="payCentre">问卷填写</span>
         </div>
+        <div class="eui-col-xs3" style="float:right;color:#1E9FFF ">
+            <div id="timer">00:00:00</div>
+        </div>
     </div>
 </div>
 
@@ -295,11 +298,13 @@
         var questionnaireId = $("#questionnaireId").val();
         var userId = $("#userId").val();
         var visitorTimes = $("#visitorTimes").val();
+        var timeConsuming=$("#timer").text();
         $.post("/cube/questionnaire/submitQuestionnaire", {
             "param": JSON.stringify(array),
             "questionnaireId": questionnaireId,
             "userId": userId,
-            "visitorTimes": visitorTimes
+            "visitorTimes": visitorTimes,
+            "timeConsuming":timeConsuming
         }, function (result) {
             if (result.code == 200) {
                 window.location.href = "/web/cube/getSuccess";
@@ -333,6 +338,65 @@
         }
         window.parent.hideTopBottom();
     }
+
+
+    //计时器
+
+    var ele_timer = $("#timer");
+    var n_sec = 0; //秒
+    var n_min = 0; //分
+    var n_hour = 0; //时
+
+    //60秒 === 1分
+    //60分 === 1小时
+    function timer() {
+        return setInterval(function () {
+
+            var str_sec = n_sec;
+            var str_min = n_min;
+            var str_hour = n_hour;
+            if ( n_sec < 10) {
+                str_sec = "0" + n_sec;
+            }
+            if ( n_min < 10 ) {
+                str_min = "0" + n_min;
+            }
+
+            if ( n_hour < 10 ) {
+                str_hour = "0" + n_hour;
+            }
+
+            var time = str_hour + ":" + str_min + ":" + str_sec;
+            ele_timer.text(time);
+            n_sec++;
+            if (n_sec > 59){
+                n_sec = 0;
+                n_min++;
+            }
+            if (n_min > 59) {
+                n_sec = 0;
+                n_hour++;
+            }
+
+
+        }, 1000);
+    }
+    var n_timer = timer();
+
+    //暂停和继续
+    function pause(self) {
+        var state = self.getAttribute("state");
+        if (state === "on") {
+            clearInterval(n_timer);
+            self.textContent = "继续";
+            self.setAttribute("state", "off");
+        } else {
+            n_timer = timer();
+            self.textContent = "暂停";
+            self.setAttribute("state", "on");
+        }
+    }
+
 
 </script>
 

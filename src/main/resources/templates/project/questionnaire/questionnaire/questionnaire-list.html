@@ -142,6 +142,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             deleteQuestionnaire(id);
         }else if (item=='edit'){//编辑
             window.open("/web/questionnaire/getUpdateQuestionnaire?id="+id);
+        }else if (item=='preview'){//预览问卷
+            window.open("/web/questionnaire/question_horizontal_or_vertital_preview?questionnaireId=" + id);
         }
     }
 
@@ -250,6 +252,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>' +
                 '<div class="eui-btn-group"> ' +context+
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" title="状态" onclick="setState('+questionnaire.questionnaireState+",'"+questionnaire.id+'\')"><i class="eui-icon">&#xe631;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="预览" onclick="itemclick('+"'preview','"+questionnaire.id+'\')"><i class="eui-icon">&#xe63c;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';
