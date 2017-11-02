@@ -264,7 +264,17 @@
                                             layer.msg(result.message);
                                         }
                                     });
+                                },function () {
+                                    window.open("/cube/pay");
                                 })
+                            }else{
+                                $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+                                    if (result.code == 200) {
+                                        window.close();
+                                    } else {
+                                        layer.msg(result.message);
+                                    }
+                                });
                             }
                         }
                     })

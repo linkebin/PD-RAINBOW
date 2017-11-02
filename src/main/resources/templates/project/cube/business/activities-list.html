@@ -36,7 +36,7 @@
             <div class="xymfContent">
                 <div class="defaultDiv">
                     <form id="searchFrom" onsubmit="return false;">
-                        <input type="hidden" name="creator" th:value="${session.userSession.id}"/>
+                        <input type="hidden" name="userId" th:value="${session.userSession.id}"/>
                         <div class="eui-form eui-margin10">
                             <div class="eui-form-item">
                                 <label class="eui-form-label">活动名称</label>
@@ -79,7 +79,7 @@
                                 <th>活动名称</th>
                                 <th>活动目的</th>
                                 <th>参与方</th>
-                                <th>活动地址</th>
+                                <th>访问网址</th>
                                 <th>操 作</th>
                             </tr>
                             </thead>
@@ -197,7 +197,7 @@
                     '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + activity.id + '">' + activity.activityName + '</a></td>' +
                     '<td>' + activity.activityAim + '</td>' +
                     '<td>' + activity.participant + '</td>' +
-                    '<td>' + activity.activityAddr + '</td>' +
+                    '<td><a href="'+activity.uestionnaireUri +'" target="_blank">' + activity.uestionnaireUri + '</a></td>' +
                     '<td>' +
                     '<a title="编辑" target="_blank" onclick="activities('+id+')"><i class="eui-icon tb">&#xe642;</i></a>' +
                     '<i title="删除" onclick="deleteActivity(' + id + ')" class="eui-icon tb">&#xe640;</i></td>' +
@@ -254,7 +254,7 @@
             layer.confirm('您确定删除吗？', {
                 btn: ['确认', '取消']
             }, function () {
-                $.post("/launch/activities/delete",{ids:id},function (res) {
+                $.post("/launch/activities/delete",{ids:id},function (result) {
                     if (result.message = "SUCCESS") {
                         layer.msg('删除成功', {
                             icon: 1,

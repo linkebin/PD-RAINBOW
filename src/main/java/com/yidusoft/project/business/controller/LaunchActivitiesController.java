@@ -9,7 +9,6 @@ import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.utils.CodeHelper;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.apache.shiro.session.Session;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,8 +36,8 @@ public class LaunchActivitiesController {
      * @return
      */
     @PostMapping("/add")
-    public Result add(String launchActivitiesJson, Session session) {
-        return launchActivitiesService.addActivites(launchActivitiesJson,session);
+    public Result add(String launchActivitiesJson, HttpServletRequest request) throws UnknownHostException {
+        return launchActivitiesService.addActivites(launchActivitiesJson,request);
     }
 
     /**

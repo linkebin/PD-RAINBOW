@@ -155,10 +155,18 @@
                     } else {
                         str = str.substring(str.indexOf("折") + 1, str.indexOf("元/"));
                     }
-                    price = parseInt(str);
+                    price = parseFloat(str);
                     total = (event.delegateTarget.innerText).toString();
                     if (total.indexOf('张') != -1) {
-                        total = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
+                        var strTotal;
+                        strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
+                        if(strTotal.indexOf('+') != -1){
+                            total = strTotal.substring(strTotal.indexOf("+")+1, total.length);
+                            total=parseInt(total)+parseInt(strTotal.substring(0,strTotal.indexOf("+")));
+                        }else{
+                            total=strTotal;
+                        }
+                        console.log(total);
                     }
                     $('.eui-font24').html(str);
                     var send = event.currentTarget.children[1].value;

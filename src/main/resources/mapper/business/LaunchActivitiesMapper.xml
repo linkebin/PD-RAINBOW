@@ -30,8 +30,8 @@
 
     <select id="getActivityAll" resultMap="BaseResultMap" parameterType="String">
         SELECT * FROM launch_activities WHERE deleted=0
-        <if test="creator!=null and creator!=''">
-            AND creator LIKE '%${creator}%'
+        <if test="userId!=null and userId!=''">
+            AND user_id LIKE '%${userId}%'
         </if>
         <if test="activityName!=null and activityName!=''">
             AND activity_name LIKE '%${activityName}%'

@@ -87,6 +87,14 @@
                                    class="eui-input eui-width400" placeholder="请输入手机">
                         </div>
                         <div>
+                            <label class="eui-form-label eui">图形验证码:</label>
+                            <input name="vrifyCode" id="vrifyCodeIn" type="text"  placeholder="请输入图形验证码" autocomplete="off"
+                                   class="eui-input eui-width200 securityCode" value="">
+                            <span class="securityImg">
+                                <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="95" alt=""></span>
+
+                        </div>
+                        <div>
                             <label class="eui-form-label">验证码:</label>
                             <input type="text" name="vrifyCode1" e-verify="title" autocomplete="off"
                                    placeholder="请输入手机验证码" class="eui-input eui-width200">

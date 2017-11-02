@@ -10,14 +10,17 @@ import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
-import org.apache.shiro.session.Session;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import static java.net.InetAddress.getLocalHost;
 
 
 /**
@@ -37,7 +40,7 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
      * @return
      */
     @Override
-    public Result addActivites(String launchActivitiesJson,Session session) {
+    public Result addActivites(String launchActivitiesJson,HttpServletRequest request) throws UnknownHostException {
         LaunchActivities launchActivities= JSON.parseObject(launchActivitiesJson,LaunchActivities.class);
         launchActivities.setActivityCode(CodeHelper.getCode("LA"));
         launchActivities.setDeleted(0);
@@ -47,11 +50,13 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
         launchActivities.setCreateTime(new Date());
         if(Security.getUser().getAccountType()==0){
             launchActivities.setInitiatorType(1);
-            launchActivities.setUestionnaireUri(session.getHost());
-            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-        }else{
-            launchActivities.setInitiatorType(0);
             launchActivities.setActivityStatus(0);
+        }else{
+            int port = request.getServerPort();//获取服务器IP
+            String addr = getLocalHost().getHostAddress();//获取服务器端口
+            launchActivities.setInitiatorType(0);
+            launchActivities.setUestionnaireUri("http://"+addr+":"+port+"/web/activities/fillingPage");
+            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
         }
         launchActivitiesService.save(launchActivities);
         return ResultGenerator.genSuccessResult();

@@ -3,8 +3,9 @@ package com.yidusoft.project.business.service;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.Service;
 import com.yidusoft.project.business.domain.LaunchActivities;
-import org.apache.shiro.session.Session;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 
+import java.net.UnknownHostException;
 import java.util.List;
 
 
@@ -17,7 +18,7 @@ public interface LaunchActivitiesService extends Service<LaunchActivities> {
      * @param launchActivitiesJson
      * @return
      */
-    Result addActivites(String launchActivitiesJson,Session session);
+    Result addActivites(String launchActivitiesJson,HttpServletRequest request) throws UnknownHostException;
 
     /**
      * 获取用户的所有活动
