@@ -55,5 +55,26 @@
         WHERE   d.create_time=#{createTime}  AND d.user_id=#{userId}
     </select>
 
+    <!--查找我的问卷-->
+    <select id="findMyQuestionnaireListByPage" resultMap="QuestionnaireUseInfoResultMap" parameterType="com.yidusoft.project.questionnaire.domain.DataAcquisition">
+        SELECT d.*, q.questionnaire_name, v.visitor_name
+        FROM questionnaire q, data_acquisition d, visitor_register v
+        WHERE d.deleted = 0
+
+        AND q.ID_ IN (SELECT d.data_question FROM data_acquisition WHERE DELETED = 0)
+        AND v.ID_ IN (SELECT d.user_id FROM data_acquisition WHERE deleted = 0)
+        AND v.creator = #{dataUser}
+        <if test="createTime != null">
+            AND (d.create_time = #{createTime})
+        </if>
+        <if test="visitorName != null and visitorName != ''">
+            AND (v.visitor_name = #{visitorName})
+        </if>
+        <if test="questionnaireName != null and questionnaireName != ''">
+            AND (q.questionnaire_name = #{questionnaireName})
+        </if>
+        order by     d.create_time  desc
+    </select>
+
 
 </mapper>

@@ -19,5 +19,5 @@ public interface DataAcquisitionService extends Service<DataAcquisition> {
     //根据日期查询来访者使用的问卷
     List<DataAcquisition> findQuestionnaireForVisitor (DataAcquisition dataAcquisition);
 
-
+    List<DataAcquisition> findMyQuestionnaireListByPage(DataAcquisition dataAcquisition);
 }

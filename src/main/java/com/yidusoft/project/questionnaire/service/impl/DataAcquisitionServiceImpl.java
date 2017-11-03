@@ -223,6 +223,11 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
         return dataAcquisitionMapper.findQuestionnaireForVisitor(dataAcquisition);
     }
 
+    @Override
+    public List<DataAcquisition> findMyQuestionnaireListByPage(DataAcquisition dataAcquisition) {
+        return dataAcquisitionMapper.findMyQuestionnaireListByPage(dataAcquisition);
+    }
+
     //保留两位小数 不四舍五入
     public  double decimal(double f){
         BigDecimal b=new BigDecimal(f);

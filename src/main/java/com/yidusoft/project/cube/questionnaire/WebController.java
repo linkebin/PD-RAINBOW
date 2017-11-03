@@ -75,4 +75,13 @@ public class WebController {
     public String todo(){
         return "project/cube/todo";
     }
+
+    /**
+     * 跳转到我的问卷页面
+     * @return
+     */
+    @RequestMapping(value = {"/userQuestionnaire"})
+    public String userQuestionnaire(){
+        return "project/cube/questionnaire/user-questionnaire";
+    }
 }

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>我的问卷</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area">
+        <div th:replace="project/cube/common/left :: left">sidebar</div>
+        <div class="eui-body">
+            <!-- 内容主体区域 -->
+            <div class="xymfContent">
+                <form class="eui-form" id="searchFrom">
+                    <input type="hidden" id="creator" th:value="${session.userSession.id}"/>
+                    <div class="eui-input-inline eui-padding10">
+                        <label class="eui-form-label">客户：</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="visitorName" id="visitorName" onfocus="defaultData('visitorName');"
+                                   placeholder="客户名称" class="eui-input" onchange="doSearch()">
+                        </div>
+                    </div>
+                    <div class="eui-input-inline eui-padding10">
+                        <label class="eui-form-label">使用问卷：</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="questionnaireName" id="questionnaireName" e-verify="title"
+                                   onfocus="defaultData('questionnaireName')" placeholder="问卷名称" class="eui-input" onchange="doSearch()">
+                        </div>
+                    </div>
+                    <div class="eui-form-item eui-padding10">
+                        <label class="eui-form-label">时间：</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="" id="createTime"  placeholder="时间"
+                                   class="eui-input eui-width160" onchange="doSearch()" readonly="readonly"/>
+                        </div>
+                    </div>
+                </form>
+                <div class="contentForm eui-marginT20">
+                    <div class="xymfForm">
+                        <table class="eui-table eui-form" e-even e-skin="nob" id="myQuestionnaire">
+                            <colgroup>
+                                <col>
+                                <col>
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>问卷名称</th>
+                                <th>客户</th>
+                                <th>时间</th>
+                                <th>填写耗时</th>
+                                <th>总分</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="pages"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+
+</div>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+
+
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script>
+    // 表单
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
+        var form = eui.form
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
+
+        laydate.render({
+            elem: '#createTime'
+            , type: 'datetime'
+            , done: function (value, date, endDate) {
+                doSearch();
+            }
+        });
+    });
+
+
+    $(function () {
+        doSearch();
+
+    });
+    //加载数据
+    function doSearch() {
+        var limits = new Array(5, 10, 15);
+
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                , laypage = eui.laypage
+                , layer = eui.layer,
+                $ = eui.jquery;
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+            var params = $("#searchFrom").serializeObject();
+
+
+            var createTime = $('#createTime').val();
+
+            $.ajax({
+                url: "/cube/questionnaire/findMyQuestionnaireListByPage",
+                data: {
+                    params: JSON.stringify(params),
+                    page: 1,
+                    size: 5,
+                    createTime: createTime
+                },
+                type: "post",
+                success: function (result) {
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        , theme: '#1E9FFF'
+                        , groups: 1
+                        , count: result.data.total
+                        , limit: 5
+                        , limits: limits
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'limits', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var myQuestionnaireList = result.data.list;
+
+                                //遍历，拼接表格
+                                var tableHtml = getTable(myQuestionnaireList);
+                                $("#myQuestionnaire tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                //加载层
+                                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                                $.ajax({
+                                    url: "/cube/questionnaire/findMyQuestionnaireListByPage",
+                                    data: {
+                                        params: JSON.stringify(params),
+                                        page: obj.curr,
+                                        size: obj.limit,
+                                        createTime: createTime
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        layer.closeAll();
+                                        var myQuestionnaireList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(myQuestionnaireList);
+                                        $("#myQuestionnaire tbody").html(tableHtml);
+//                                        //重新加载复选框
+//                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+
+    //渲染数据，拼接表格
+    function getTable(myQuestionnaireList) {
+        var tableHtml = '';
+
+        for (var item in myQuestionnaireList) {
+            var info = myQuestionnaireList[item];
+            tableHtml += '<tr>' +
+                '<td>' + info.questionnaireName + '</td>' +
+                '<td>' + info.visitorName + '</td>' +
+                '<td>' + new Date(info.createTime).Format('yyyy-MM-dd') + '</td>' +
+                '<td>' + info.timeConsuming + '</td>' +
+                '<td>' + info.totalScore + '</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="查看" onclick="selQuestionnaireForVisitor(\'' + info.id + '\',\'' + info.dataQuestion + '\',\'' + info.userId + '\')"><i class="eui-icon">&#xe63c;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="itemclick(' + "'delete','" + info.id + '\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+
+        return tableHtml;
+    }
+
+    function defaultData(item) {
+        var params = new Object();
+        params.visitorName = '';
+        params.creator = $('#creator').val();
+        loadList(params, item);
+    }
+
+    function loadList(params, item) {
+        var url = '';
+        if (item == 'visitorName') {
+            //客户
+            url = '/visitor/register/listByparameter';
+            $.post(url, {
+                json: JSON.stringify(params),
+                page: 1,
+                pagesize: 100
+            }, function (result) {
+                var arr = new Array();
+                var projects1 = result.data.list;
+                if (result.data.list.length > 0) {
+                    for (var i = 0; i < projects1.length; i++) {
+                        var obj = new Object();
+                        obj.value = projects1[i].visitorName;
+                        arr.push(obj);
+                    }
+                    fuzzyInput(arr, item);
+                }
+            });
+        } else {
+            //问卷名称
+            url = '/questionnaire/questionnaireListByPage';
+            $.post(url, {
+                json: JSON.stringify(params),
+                page: 1,
+                size: 100
+            }, function (result) {
+                var arr = new Array();
+                var projects1 = result.data.list;
+                if (result.data.list.length > 0) {
+                    for (var i = 0; i < projects1.length; i++) {
+                        var obj = new Object();
+                        obj.value = projects1[i].questionnaireName;
+                        arr.push(obj);
+                    }
+                    fuzzyInput(arr, item);
+                }
+            });
+        }
+
+    }
+
+    function fuzzyInput(arr, item) {
+        if (item == 'visitorName') {
+            $("#visitorName").autocomplete({
+                minLength: 0,
+                source: arr,
+                focus: function (event, ui) {
+                    $("#visitorName").val(ui.item.value);
+                    doSearch();
+                    return false;
+                },
+                select: function (event, ui) {
+                    $("#visitorName").val(ui.item.value);
+                    doSearch();
+                    return false;
+                }
+            });
+        } else {
+            $("#questionnaireName").autocomplete({
+                minLength: 0,
+                source: arr,
+                focus: function (event, ui) {
+                    $("#questionnaireName").val(ui.item.value);
+                    doSearch();
+                    return false;
+                },
+                select: function (event, ui) {
+                    $("#questionnaireName").val(ui.item.value);
+                    doSearch();
+                    return false;
+                }
+            });
+        }
+    }
+
+        //工具条按钮事件
+        function itemclick(item, id) {
+
+         if (item == 'delete') {//删除
+               deleteMyQuestionnaire(id)
+            }
+        }
+
+    // 删除来访者填写的问卷
+    function deleteMyQuestionnaire(id) {
+
+        layer.confirm('您确定删除该问卷吗？', {
+            btn: ['确认', '取消'],
+            shade: 0,
+            title: '提示'
+        }, function () {
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+            $.ajax({
+                url: "/cube/questionnaire/deleteMyQuestionnaire",
+                data: {
+                    id: id
+                },
+                type: "post",
+                success: function (result) {
+                    layer.closeAll();
+                    if (result.code == 200) {
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                    } else {
+                        layer.msg('删除失败', {
+                            icon: 1,
+                            time: 2000
+                        });
+                    }
+
+                    doSearch();
+                }
+            });
+        });
+    }
+
+    //查看来访者填写的问卷
+    function selQuestionnaireForVisitor(acquisitionId, questionnaireId, userId) {
+        window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId=" + questionnaireId + "&userId=" + userId + "&acquisitionId=" + acquisitionId);
+    }
+</script>
+</body>
+</html>

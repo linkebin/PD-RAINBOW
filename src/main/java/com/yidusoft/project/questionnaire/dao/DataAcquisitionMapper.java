@@ -11,4 +11,5 @@ public interface DataAcquisitionMapper extends Mapper<DataAcquisition> {
     List<DataAcquisition> questionnaireUseInfoListByPage(String creator);
     //根据日期查询来访者使用的问卷
     List<DataAcquisition> findQuestionnaireForVisitor (DataAcquisition dataAcquisition);
+    List<DataAcquisition> findMyQuestionnaireListByPage(DataAcquisition dataAcquisition);
 }
