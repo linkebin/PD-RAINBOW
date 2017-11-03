@@ -578,18 +578,21 @@
         })
     }
 
-    /*//查看活动详情
-    function checkActivity(id,name,aim,addr,participant,contacts,total,start,end,uestionnaireId,phone) {
+    $('.taskFiltrate1').hide()
+    //查看活动详情
+    function checkActivity(name,aim,addr,participant,contacts,total,start,end,uestionnaireId,phone) {
         $('#activityName').val(name);
-        $('input[name="activityAim"]').val(aim);
-        $('input[name="participant"]').val(participant);
-        $('input[name="contacts"]').val(contacts);
-        $('input[name="phone"]').val(phone);
-        $('input[name="activityTotal"]').val(total);
-        $('input[name="activityStart"]').val(start);
-        $('input[name="activityEnd"]').val(end);
-        $('input[name="activityAddr"]').val(addr);
-    }*/
+        $('#activityAim').val(aim);
+        $('#participant').val(participant);
+        $('#contacts').val(contacts);
+        $('#phone').val(phone);
+        $('#activityTotal').val(total);
+        $('#activityStart').val(start);
+        $('#activityEnd').val(end);
+        $('#activityAddr').val(addr);
+        $('.taskFiltrate1').show();
+        $('.filtrateIn1').animate({right: '-0px'},800)
+    }
 </script>
 </body>
 </html>

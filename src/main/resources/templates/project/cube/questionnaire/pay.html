@@ -250,15 +250,15 @@
                     orderOnline.payment_method = $(this).children()[0].value;
                 }
             })
-            $.post("/order/online/add", {onlineJson: JSON.stringify(orderOnline)}, function (result) {
+            var orderCode=new Date().Format("yyyy-MM-dd-hh-mm-ss");
+            orderCode=orderCode.replace(/-/g,"")+parseInt(Math.random()*100000);
+            $.post("/order/online/add", {onlineJson: JSON.stringify(orderOnline),orderCode:orderCode}, function (result) {
                 console.log(result);
                 if (result.code = 200) {
                     $.post("/product/settings/detail", {id: orderOnline.product_id}, function (res) {
                         if (res.code == 200) {
                             var product = res.data;
                             var obj = new Object();
-                            var orderCode=new Date().Format("yyyy-MM-dd-hh-mm-ss");
-                            orderCode=orderCode.replace(/-/g,"")+parseInt(Math.random()*100000);
                             obj.orderCode=orderCode;
                             obj.total_amount = price;//金额
                             obj.subject = product.productName;

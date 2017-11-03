@@ -9,7 +9,6 @@ import com.yidusoft.project.transaction.domain.OrderOnline;
 import com.yidusoft.project.transaction.domain.UserQuestionnaires;
 import com.yidusoft.project.transaction.service.OrderOnlineService;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
-import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,10 +39,10 @@ public class OrderOnlineController {
      * @return
      */
     @PostMapping("/add")
-    public Result add(String onlineJson, String promotionId) {
+    public Result add(String onlineJson, String orderCode) {
         OrderOnline orderOnline = JSON.parseObject(onlineJson, OrderOnline.class);
         orderOnline.setId(UUID.randomUUID().toString());
-        orderOnline.setOrderCode(CodeHelper.getCode("OD"));
+        orderOnline.setOrderCode(orderCode);
         orderOnline.setCreateTime(new Date());
         orderOnline.setCreator(Security.getUser().getUserName());
         orderOnline.setDeleted(0);
