@@ -161,8 +161,6 @@ function  loadQuestion() {
         $("#divTable").html(context);
         formRender();
     });
-
-
 }
 
 //拼接问题
@@ -174,7 +172,7 @@ function  getTable(list) {
     var array=timeConsuming.split(":");
     var  timeStr='';
     for(var i in array){
-        if(array[i]=="00"){
+        if(array[i]=="00" || array[i]==""){
             array[i]="0";
         }
     }
@@ -216,7 +214,7 @@ function  getTable(list) {
                    var num=0;
                    for( var a in answers){
                        if(answers[a]==optionAnswer[j] ){
-                           context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" checked disabled>';
+                           context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" checked >';
                            num++;
                        }
                    }

@@ -158,7 +158,7 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
         double standard=totalScore*1.25;
         int  standardPoints=(int)standard;
         StringBuffer stringBuffer=new StringBuffer();
-        stringBuffer.append("您的总分为"+totalScore+"分，总均分为"+totalScore/90+"分，标准分为"+standardPoints+"分#");
+        stringBuffer.append("您的总分为"+totalScore+"分，总均分为"+decimal(totalScore/90)+"分，标准分为"+standardPoints+"分#");
         stringBuffer.append("因子分：均分±标准差：#");
         stringBuffer.append("躯体化分: "+factor.get("1").get("factorTotalScore")+"分，均分"+factor.get("1").get("factorMean")+" （1.37±0.48）#");
         stringBuffer.append("强迫症状: "+factor.get("2").get("factorTotalScore")+"分，均分"+factor.get("2").get("factorMean")+" （1.62±0.58）#");

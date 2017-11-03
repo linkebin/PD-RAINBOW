@@ -133,13 +133,10 @@
                     <option value="3" >评分单选</option>
                 </select>
             </div>
-            <label name="answer1" class="eui-form-label">答案</label>
-            <div class="eui-input-inline" name="answer1">
-                <input type="text" name="answer" required placeholder="请输入答案" autocomplete="off" class="eui-input">
+            <label name="answer1" class="eui-form-label eui-form-pane">答案</label>
+            <div class="eui-input-inline  eui-input-block" name="answer1">
+                <input type="text" name="answer" required placeholder="例:A:一般||B:好" autocomplete="off" class="eui-input">
             </div>
-
-
-
 
 
     </div>
@@ -393,10 +390,10 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             ,maxmin: true
             ,btn: ['确定', '关闭'] //只是为了演示
             ,yes: function(){
-                var questionContent=$("[name='questionContent']").val().trim();
-                var optionAnswer= $("[name='optionAnswer']").val().trim();
-                var optionScore= $("[name='optionScore']").val().trim();
-                var questionType= $("[name='questionType']").val().trim();
+                var questionContent=$("#questionForm [name='questionContent']").val().trim();
+                var optionAnswer= $("#questionForm [name='optionAnswer']").val().trim();
+                var optionScore= $("#questionForm [name='optionScore']").val().trim();
+                var questionType= $("#questionForm [name='questionType']").val().trim();
                 var answer= $("[name='answer']").val().trim();
                 var msgs="";
                 if(questionContent==""){
@@ -496,11 +493,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             $("[name='creator']").val(question.creator);
             $("[name='deleted']").val(question.deleted);
             $("#questionForm [name='questionCode']").val(question.questionCode);
-            $("[name='questionContent']").val(question.questionContent);
-            $("[name='optionAnswer']").val(question.optionAnswer);
-            $("[name='optionScore']").val(question.optionScore);
+            $("#questionForm [name='questionContent']").val(question.questionContent);
+            $("#questionForm [name='optionAnswer']").val(question.optionAnswer);
+            $("#questionForm [name='optionScore']").val(question.optionScore);
             $("[name='answer']").val(question.answer);
-            $("[name='questionType']").val(question.questionType);
+            $("#questionForm [name='questionType']").val(question.questionType);
             if(question.questionType!='3'){
                 $("[name='answer1']").show();
             }else {

@@ -33,6 +33,7 @@ public class WebCubeQuestionnaireController {
         model.addAttribute("userId",userId);
         model.addAttribute("visitorTimes",visitorTimes);
         Questionnaire questionnaire= questionnaireService.findById(questionnaireId);
+        model.addAttribute("questionnaire",questionnaire);
         //判断问卷的类型 1 左右滑动 2  平铺
         if(questionnaire.getAnswerModelType()==1){
             List<QuestionnaireQuestion> questionnaireQuestions = null;

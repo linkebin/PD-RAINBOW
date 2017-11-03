@@ -52,7 +52,13 @@ public class CubeQuestionnaireQuestionController {
         return ResultGenerator.genSuccessResult(questionnaireQuestionList);
     }
 
-
+    /**
+     * 查询来访者使用的问卷问题
+     * @param questionnaireId
+     * @param userId
+     * @param acquisitionId
+     * @return
+     */
     @PostMapping("/findQuestionForVisitor")
     @ResponseBody
     public  Result findQuestionForVisitor(String questionnaireId,String userId,String acquisitionId){
@@ -67,7 +73,6 @@ public class CubeQuestionnaireQuestionController {
         Map<String,Object> map=new HashMap<>();
         map.put("questionList",questionnaireQuestionList);
         map.put("answerList",questionnaireAnswerList);
-
         map.put("dataAcquisition",dataAcquisition);
         map.put("questionnaire",questionnaire);
         map.put("visitorRegister",visitorRegister);

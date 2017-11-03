@@ -22,11 +22,14 @@
 <div class="visitorContent xymfMargin">
     <div class="eui-area" style="width: 800px">
         <div class="eui-row visitorTitle">
-            <div class="eui-col-xs9">
+            <div class="eui-col-xs7">
                 <div> 问题卡</div>
             </div>
+            <div class="eui-col-xs2">
+                <div style="float: right"> 计时:</div>
+            </div>
             <div class="eui-col-xs3">
-                <div id="timer">00:00:00</div>
+               <div id="timer" eui-input-inline>00:00:00</div>
             </div>
         </div>
 
@@ -35,18 +38,14 @@
                <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
                <input type="hidden" th:value="${userId}"  id="userId"/>
                <input type="hidden" th:value="${visitorTimes}"  id="visitorTimes"/>
-
+               <div class="eui-form-item eui-padding20">
+                  <span id="remarks">
+                      下面列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。
+                 </span>
+                 <hr/>
+               </div>
              <div class="eui-bg-white eui-form visitorContent" id="divTable" >
-                 <div class="eui-form-item eui-padding20">
-                    <div class="eui-font18">
-                        1.你经常头痛吗？
-                    </div>
-                    <input type="radio" name="sex" value="男" title="男" >
-                    <input type="radio" name="sex" value="女" title="女">
-                    <input type="radio" name="sex" value="男" title="男" >
-                    <input type="radio" name="sex" value="女" title="女">
-                </div>
-
+                  <!--  问题内容-->
              </div>
            </form>
         </div>
@@ -102,7 +101,7 @@
 
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
-<script>
+<script th:inline="javascript">
 eui.use(['form', 'layedit', 'laydate'], function(){
     var form = eui.form
     ,layer = eui.layer
@@ -150,10 +149,15 @@ $(window).scroll(function(e) {
 $('.eui-backTop').click(function(e) {
     $('html,body').animate({scrollTop:0},500)
 });
-
+//初始化数据
+var questionnaire=[[${questionnaire}]];
+console.info("questionnaire");
+console.info(questionnaire);
 $(function () {
     loadQuestion();
-
+   if(questionnaire.remarks!=""){
+       $("#remarks").text(questionnaire.remarks);
+}
 });
 
 //问卷id
@@ -161,15 +165,19 @@ var  questionnaireId=$("#questionnaireId").val();
 
 //加载问卷
 function  loadQuestion() {
-   // var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+    eui.use(['form','laypage','layer'], function(){
+        var form = eui.form
+            ,laypage = eui.laypage
+            ,layer = eui.layer,
+            $ = eui.jquery;
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
     $.post("/cube/questionnaire/question/findQuestionForQuestionnaire",{"id":questionnaireId},function (result) {
-    //    layer.closeAll();
-        console.info(result);
+         layer.closeAll();
         var context=  getTable(result.data);
         $("#divTable").html(context);
         formRender();
     });
-
+    });
 
 }
 
