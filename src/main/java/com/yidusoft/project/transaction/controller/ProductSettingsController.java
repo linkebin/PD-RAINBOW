@@ -124,16 +124,22 @@ public class ProductSettingsController {
         return ResultGenerator.genSuccessResult(price);
     }
 
+    /**
+     *  查看详情
+     * @param id
+     * @return
+     */
+    @PostMapping("/detail")
+    public Result detail(String id) {
+        ProductSettings productSettings = productSettingsService.findById(id);
+        return ResultGenerator.genSuccessResult(productSettings);
+    }
+
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable String id) {
         productSettingsService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        ProductSettings productSettings = productSettingsService.findById(id);
-        return ResultGenerator.genSuccessResult(productSettings);
-    }
 
 }

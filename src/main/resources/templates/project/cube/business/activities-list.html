@@ -78,7 +78,7 @@
                                 <th>活动编号</th>
                                 <th>活动名称</th>
                                 <th>活动目的</th>
-                                <th>参与方</th>
+                                <th>活动邀请码</th>
                                 <th>访问网址</th>
                                 <th>操 作</th>
                             </tr>
@@ -194,9 +194,9 @@
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
                     '<td>' + activity.activityCode + '</td>' +
-                    '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + activity.id + '">' + activity.activityName + '</a></td>' +
+                    '<td>' + activity.activityName + '</td>' +
                     '<td>' + activity.activityAim + '</td>' +
-                    '<td>' + activity.participant + '</td>' +
+                    '<td>' + activity.activityPorn + '</td>' +
                     '<td><a href="'+activity.uestionnaireUri +'" target="_blank">' + activity.uestionnaireUri + '</a></td>' +
                     '<td>' +
                     '<a title="编辑" target="_blank" onclick="activities('+id+')"><i class="eui-icon tb">&#xe642;</i></a>' +

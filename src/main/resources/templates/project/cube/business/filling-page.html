@@ -87,14 +87,6 @@
                                    class="eui-input eui-width400" placeholder="请输入手机">
                         </div>
                         <div>
-                            <label class="eui-form-label eui">图形验证码:</label>
-                            <input name="vrifyCode" id="vrifyCodeIn" type="text"  placeholder="请输入图形验证码" autocomplete="off"
-                                   class="eui-input eui-width200 securityCode" value="">
-                            <span class="securityImg">
-                                <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="95" alt=""></span>
-
-                        </div>
-                        <div>
                             <label class="eui-form-label">验证码:</label>
                             <input type="text" name="vrifyCode1" e-verify="title" autocomplete="off"
                                    placeholder="请输入手机验证码" class="eui-input eui-width200">
@@ -105,7 +97,7 @@
                         </div>
                         <div>
                             <label class="eui-form-label">邀请码:</label>
-                            <input type="text" name="mobile" e-verify="title" autocomplete="off"
+                            <input type="text" name="activityPorn" e-verify="title" autocomplete="off"
                                    class="eui-input eui-width400" placeholder="请输入活动邀请码">
                         </div>
                         <div>
@@ -137,17 +129,19 @@
 
     function sendMsgCode(o) {
         var m = $("#mobileSendCode input[name='mobile']").val();
+        var vrifyCode = $("#vrifyCodeIn").val();
         curCount = count;
         $(o).attr('disabled','true');
         InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
         $.ajax({
-            url:'/sign/code',
+            url:'/launch/activities/code',
             type:"post",
             data:{
                 mobile:m
             },
             dataType:"json",
             success:function(data){
+                console.log(data);
                 if(data.code!=undefined) {
                     $("#errcode2").html(data.message);
                 }
@@ -168,48 +162,13 @@
     }
     function mobileSendCode() {
         var obj = $("#mobileSendCode").serializeObject();
-
-        $.post('/sign/check/mobileCode',{mobile:obj.mobile,vrifyCode:obj.vrifyCode1},function (result) {
+        console.log(obj);
+        /*$.post('/sign/check/mobileCode',{mobile:obj.mobile,vrifyCode:obj.vrifyCode1},function (result) {
             if (result.code == 200){
-                $('.mod-sub-list2').removeClass('list2-active');
-                $('.mod-sub-list3').addClass('list3-active');
-                $("#mobileSendCode").hide();
-                $("#resetPassword input[name='mobile']").val($("#mobileSendCode input[name='mobile']").val());
-                $("#resetPassword").show();
-                $("#resetPassword").validate({
-                    rules: {
-                        password: {
-                            required : true
-                        },
-                        password1: {
-                            required: true,
-                            equalTo: "#password"
-                        }
-                    },
-                    messages: {
-                        password: {
-                            required : "请输入密码"
-                        },
-                        password1: {
-                            required: "请输入确认密码",
-                            equalTo: "两次输入密码不一致"
-                        }
-                    },
-                    submitHandler: function() {
-                        var obj = $("#resetPassword").serializeObject();
-                        obj.password=md5(obj.password);
-                        obj.password1='';
-                        $.post('/sign/reset/password',{mobile:obj.mobile,password:obj.password},function (result) {
-                            $(".successMsg").html(result.message)
-                        });
-                    }
-                });
             }else {
                 $('#errcode2').html(result.message);
             }
-        });
-
-
+        });*/
     }
     $(function () {
         jQuery.validator.addMethod("isMobile", function(value, element) {
@@ -218,7 +177,7 @@
             return this.optional(element) || (length == 11 && mobile.test(value));
         }, "请正确填写您的手机号码");
 
-        $("#checkAccount").validate({
+        $("#mobileSendCode").validate({
             rules: {
                 mobile: {
                     required : true,
@@ -234,24 +193,6 @@
                 }
             },
             submitHandler: function() {
-
-                var vrifyCode1 = $("#checkAccount input[name='vrifyCode1']").val();
-                if(vrifyCode1!=''){
-                    $.post('/sign/check/account',{mobile:$("#checkAccount input[name='mobile']").val()
-                        ,vrifyCode1:$("#checkAccount input[name='vrifyCode1']").val()},function (result) {
-                        if (result.code == 200){
-                            $('.mod-sub-list1').removeClass('list1-active');
-                            $('.mod-sub-list2').addClass('list2-active');
-                            $("#checkAccount").hide();
-                            $("#mobileSendCode input[name='mobile']").val(result.data)
-                            $("#mobileSendCode").show();
-                        }else {
-                            $("#errcode0").html(result.message);
-                        }
-                    });
-                }else {
-                    $("#errcode1").html("验证码不能为空！");
-                }
             }
         });
     });

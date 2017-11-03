@@ -9,59 +9,59 @@
 </head>
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome xymfPay">
-        <div th:replace="project/cube/common/header :: header">Header</div>
-        <div class="eui-area">
-            <div class="payLeft eui-row eui-padding20">
-                <div class="eui-col-md1 eui-marginR20">登录账号：</div>
-                <div class="eui-col-md10" th:text="${session.userSession.userName}"><span class="eui-color-blue">（ID：2017023）</span>
-                </div>
-                <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
-                <ul class="eui-col-md10 payTicket" id="pay">
-                </ul>
-                <div class="eui-col-md12 eui-font12 send"><span class="eui-color-blue"></span></div>
-                <div class="eui-col-md1 eui-marginR20 money">应付金额：</div>
-                <div class="eui-col-md10"><span class="pay-color-red eui-font24"></span>元</div>
-                <div class="eui-col-md1 eui-marginR20 eui-marginT15">支付方式：</div>
-                <ul class="eui-col-md10 payTicket">
-                    <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1">
-                        <input type="hidden" value="支付宝">
-                        <img src="/Styles/images/xymfImages/xymf/alipay.png" alt="">
-                        <i class="eui-icon tickFont">&#xe605;</i>
-                        <span class="tick"></span>
-                    </li>
-                    <li class="eui-float-left payTicket0 eui-lineHeight24 wechatpay">
-                        <input type="hidden" value="微信">
-                        <img src="/Styles/images/xymfImages/xymf/wechatpay.png" alt="">
-                        <i class="eui-icon tickFont">&#xe605;</i>
-                        <span class="tick"></span>
-                    </li>
-                </ul>
-                <!--<div class="eui-col-md12 payCode"><img src="/Styles/images/xymfImages/xymf/pay-code.png" alt=""></div>-->
-                <div class="eui-col-md12 payCode">
-                    <span class="eui-btn eui-btn-big pay-color-yellow ImmediatePay">立即支付</span>
-                </div>
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area">
+        <div class="payLeft eui-row eui-padding20">
+            <div class="eui-col-md1 eui-marginR20">登录账号：</div>
+            <div class="eui-col-md10" th:text="${session.userSession.userName}"><span class="eui-color-blue">（ID：2017023）</span>
             </div>
-            <div class="payRight">
-                <p class="vipTitle">VIP 专 享 特 权</p>
-                <div class="eui-row">
-                    <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""></div>
-                    <div class="eui-col-md9">享有文库VIP全部特权</div>
-                </div>
-                <div class="eui-row">
-                    <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/noadv.png" alt=""></div>
-                    <div class="eui-col-md9">专属文档阅读免广告特权</div>
-                </div>
-                <div class="eui-row">
-                    <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/voucher.png" alt=""></div>
-                    <div class="eui-col-md9">阅读代金券<span class="pay-color-red">6个月×10元/月</span></div>
-                </div>
-                <div class="eui-row">
-                    <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/free.png" alt=""></div>
-                    <div class="eui-col-md9">海量优质文档、精品图书</div>
-                </div>
+            <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
+            <ul class="eui-col-md10 payTicket" id="pay">
+            </ul>
+            <div class="eui-col-md12 eui-font12 send"><span class="eui-color-blue"></span></div>
+            <div class="eui-col-md1 eui-marginR20 money">应付金额：</div>
+            <div class="eui-col-md10"><span class="pay-color-red eui-font24"></span>元</div>
+            <div class="eui-col-md1 eui-marginR20 eui-marginT15">支付方式：</div>
+            <ul class="eui-col-md10 payTicket">
+                <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1">
+                    <input type="hidden" value="支付宝">
+                    <img src="/Styles/images/xymfImages/xymf/alipay.png" alt="">
+                    <i class="eui-icon tickFont">&#xe605;</i>
+                    <span class="tick"></span>
+                </li>
+                <li class="eui-float-left payTicket0 eui-lineHeight24 wechatpay">
+                    <input type="hidden" value="微信">
+                    <img src="/Styles/images/xymfImages/xymf/wechatpay.png" alt="">
+                    <i class="eui-icon tickFont">&#xe605;</i>
+                    <span class="tick"></span>
+                </li>
+            </ul>
+            <!--<div class="eui-col-md12 payCode"><img src="/Styles/images/xymfImages/xymf/pay-code.png" alt=""></div>-->
+            <div class="eui-col-md12 payCode">
+                <span class="eui-btn eui-btn-big pay-color-yellow ImmediatePay">立即支付</span>
             </div>
         </div>
-        <div th:replace="project/cube/common/footer :: footer">footer</div>
+        <div class="payRight">
+            <p class="vipTitle">VIP 专 享 特 权</p>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""></div>
+                <div class="eui-col-md9">享有文库VIP全部特权</div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/noadv.png" alt=""></div>
+                <div class="eui-col-md9">专属文档阅读免广告特权</div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/voucher.png" alt=""></div>
+                <div class="eui-col-md9">阅读代金券<span class="pay-color-red">6个月×10元/月</span></div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/free.png" alt=""></div>
+                <div class="eui-col-md9">海量优质文档、精品图书</div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
 </div>
 
 <script src="/Scripts/module/eui.js"></script>
@@ -127,11 +127,11 @@
                                             pro.discountContent = discount + '折';
                                         } else {//活动类型是买送
                                             pro.price = product.productPrice;
-                                            pro.total = product.productTotal.toString() + "+" +question.promotionsBuySend.toString()+"";
+                                            pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
                                             pro.type = "买送";
                                             pro.discountContent = question.promotionsBuySend + '张问卷';
                                             //原价
-                                            pro.originalPrice = parseInt(product.productPrice)+parseFloat((unitPrice*question.promotionsBuySend));
+                                            pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
                                         }
                                         pro.promotionsId = question.id;
                                     }
@@ -156,11 +156,11 @@
                     if (total.indexOf('张') != -1) {
                         var strTotal;
                         strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
-                        if(strTotal.indexOf('+') != -1){
-                            total = strTotal.substring(strTotal.indexOf("+")+1, total.length);
-                            total=parseInt(total)+parseInt(strTotal.substring(0,strTotal.indexOf("+")));
-                        }else{
-                            total=strTotal;
+                        if (strTotal.indexOf('+') != -1) {
+                            total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
+                            total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
+                        } else {
+                            total = strTotal;
                         }
                         console.log(total);
                     }
@@ -220,11 +220,11 @@
                         '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
-                        '<span class="tick"></span></li>' ;
+                        '<span class="tick"></span></li>';
                 if ((parseInt(item) + 1) % 3 == 0) {
                     tableHtml += '</br><br>';
                 }
-                if((parseInt(item) + 1)==payList.length && !((parseInt(item) + 1) % 3 == 0)){
+                if ((parseInt(item) + 1) == payList.length && !((parseInt(item) + 1) % 3 == 0)) {
                     tableHtml += '<br><br>';
                 }
             }
@@ -250,11 +250,22 @@
                     orderOnline.payment_method = $(this).children()[0].value;
                 }
             })
-            console.log(orderOnline);
             $.post("/order/online/add", {onlineJson: JSON.stringify(orderOnline)}, function (result) {
                 console.log(result);
                 if (result.code = 200) {
-                    window.location.href = "/cube/order";
+                    $.post("/product/settings/detail", {id: orderOnline.product_id}, function (res) {
+                        if (res.code == 200) {
+                            var product = res.data;
+                            var obj = new Object();
+                            var orderCode=new Date().Format("yyyy-MM-dd-hh-mm-ss");
+                            orderCode=orderCode.replace(/-/g,"")+parseInt(Math.random()*100000);
+                            obj.orderCode=orderCode;
+                            obj.total_amount = price;//金额
+                            obj.subject = product.productName;
+                            obj.body = "";
+                            /*window.location.href = "/cube/order";*/
+                        }
+                    })
                 }
             })
         })

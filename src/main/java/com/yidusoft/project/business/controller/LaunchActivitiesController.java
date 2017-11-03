@@ -8,9 +8,12 @@ import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.SMSCode;
+import com.yidusoft.utils.SendMessageCode;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -115,5 +118,28 @@ public class LaunchActivitiesController {
         launchActivities.setUestionnaireUri("http://"+addr+":"+port+"/web/activities/fillingPage");
         launchActivitiesService.update(launchActivities);
         return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 发送注册手机验证码
+     * @param httpServletRequest
+     * @return
+     */
+    @PostMapping("/code")
+    @ResponseBody
+    public Result signcode(HttpServletRequest httpServletRequest,String mobile){
+        try{
+            String json = SendMessageCode.sendMessageCode(mobile);
+            SMSCode code = JSON.parseObject(json,SMSCode.class);
+            if (code.getCode() == 200){
+                httpServletRequest.getSession().setAttribute("signCode",code.getObj());
+            }else{
+                return ResultGenerator.genFailResult("验证码发送失败");
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("验证码发送失败");
+        }
+        return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
     }
 }
