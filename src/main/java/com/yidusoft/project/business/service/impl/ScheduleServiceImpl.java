@@ -23,4 +23,9 @@ public class ScheduleServiceImpl extends AbstractService<Schedule> implements Sc
     public List<Schedule> findScheduleDataTimeOrEvent(Schedule schedule) {
         return scheduleMapper.findScheduleDataTimeOrEvent(schedule);
     }
+
+    @Override
+    public List<Schedule> findScheduleToBackDay30(Schedule schedule) {
+        return scheduleMapper.findScheduleToBackDay30(schedule);
+    }
 }

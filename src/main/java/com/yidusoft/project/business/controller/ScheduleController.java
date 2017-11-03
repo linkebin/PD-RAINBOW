@@ -89,4 +89,12 @@ public class ScheduleController {
             return ResultGenerator.genSuccessResult(scheduleList);
         }
     }
+
+    @PostMapping("/backToday30")
+    public Result backToday30(String json) {
+        Schedule schedule = JSON.parseObject(json,Schedule.class);
+        schedule.setConsultantId(Security.getUserId());
+        List<Schedule> scheduleList = scheduleService.findScheduleToBackDay30(schedule);
+        return ResultGenerator.genSuccessResult(scheduleList);
+    }
 }

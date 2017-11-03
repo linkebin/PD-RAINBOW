@@ -35,19 +35,7 @@
                             <h1 style="display: inline; font-size: 20px;">基本资料</h1>
                         </div>
 
-                        <div style="height: 90px;" class="eui-padding20">
-                            <div style="width: 90px; height: 90px; float: left;">
-                                    <img id="headImg" th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" width="90" height="90">
-                            </div>
-
-
-                            <button  style="margin-left: 40px; " type="button"   class="eui-btn eui-btn-small eui-btn-normal" id="upFiles">
-                                <i class="eui-icon">&#xe67c;</i>上传图片
-                            </button>
-                            (只支持图片上传)
-                        </div>
-                    <!--<p class="eui-padding10"><a style="float: right; height: 30px;"></a></p>-->
-                    <form id="userInfoForm" onsubmit="return false;">
+                    <form style="width: 60%;float: left;" id="userInfoForm" class="eui-padding20" onsubmit="return false;">
                         <input type="hidden" th:value="${session.userSession.headImg}" name="headImg">
                         <div class="formDiv">
                             <input type="hidden" id="id" name="id" th:value="${session.userSession.id}">
@@ -113,6 +101,18 @@
                             </div>
                         </div>
                     </form>
+
+                    <div style="width: 30%;float: right;" class="eui-padding20">
+                        <div style="width: 90px; height: 90px; float: left;">
+                            <img id="headImg" th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" width="90" height="90">
+                        </div>
+
+
+                        <button  style="margin-left: 20px; " type="button"   class="eui-btn eui-btn-small eui-btn-normal" id="upFiles">
+                            <i class="eui-icon">&#xe67c;</i>上传图片
+                        </button><br/>
+                        <span style="font-size: 12px; margin-left: 20px;">(只支持图片上传,支持jpg,png)</span>
+                    </div>
                 </div>
             </div>
 

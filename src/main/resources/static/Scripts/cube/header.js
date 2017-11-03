@@ -30,6 +30,28 @@ function initLaydateTest_n1(obj) {
         obj.visitorTimeStr=new Date().Format('yyyy-MM-dd');
         loadEvends(obj);
     });
+
+    $.post('/schedule/backToday30',{json:JSON.stringify(obj)},function (result) {
+        console.log(result)
+        $.each(result.data,function (index,item) {
+            var dateFormat = new Date(item.visitorTime).Format('yyyy-MM-dd');
+            if(!$("#Z"+dateFormat)[0]){
+                $("#classify").append(' <div id="Z'+dateFormat+'" class="eui-margin10"> <div class="eui-overflowH eui-marginB10"> ' +
+                    '<div class="eui-float-left">'+new Date(item.visitorTime).Format('MM-dd')+'</div> </div> ' +
+                    '<div id="list'+dateFormat+'"> </div> ' +
+                    '</div>');
+            }
+        });
+
+        $.each(result.data,function (index,item) {
+            var dateFormat = new Date(item.visitorTime).Format('yyyy-MM-dd');
+            if($("#list"+dateFormat)[0]){
+                $("#list"+dateFormat).append(' <div class="eui-overflowH"> <div class="eui-float-left eui-marginB5">'+ new Date(item.visitorTime).Format('hh:mm')+'</div> ' +
+                    '<div title="'+item.describes+'" style="text-overflow: ellipsis;" class="eui-float-left eui-marginB10 eui-marginL10 test">'+item.visitorName+'  '+item.describes+'</div> ' +
+                    '</div>');
+            }
+        });
+    });
 }
 
 function loadEvends(obj) {

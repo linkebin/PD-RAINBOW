@@ -17,4 +17,11 @@ public interface ScheduleService extends Service<Schedule> {
      */
     List<Schedule> findScheduleDataTimeOrEvent(Schedule schedule);
 
+    /**
+     * 查询今天往后30天的预约记录
+     * @param schedule
+     * @return
+     */
+    List<Schedule> findScheduleToBackDay30(Schedule schedule);
+
 }
