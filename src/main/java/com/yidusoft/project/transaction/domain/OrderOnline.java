@@ -78,6 +78,12 @@ public class OrderOnline {
     private String userId;
 
     /**
+     * 订单流水号
+     */
+    @Column(name = "serial_number")
+    private String serialNumber;
+
+    /**
      * 活动id
      */
     @Transient
@@ -289,6 +295,20 @@ public class OrderOnline {
      * @return
      */
     public String getUserId() { return userId; }
+
+    /**
+     * 获取订单流水号
+     *
+     * @param serialNumber
+     */
+    public void setSerialNumber(String serialNumber) { this.serialNumber = serialNumber; }
+
+    /**
+     * 设置订单流水号
+     *
+     * @return
+     */
+    public String getSerialNumber() { return serialNumber; }
 
     /**
      * 获取下单人id

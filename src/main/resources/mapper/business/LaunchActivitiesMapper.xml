@@ -39,6 +39,9 @@
         <if test="initiatorType!=null and initiatorType!=''">
             AND Initiator_type = #{initiatorType}
         </if>
+        <if test="activityStatus!=null and activityStatus!=''">
+            AND activity_status = #{activityStatus}
+        </if>
         ORDER BY create_time DESC
     </select>
 
