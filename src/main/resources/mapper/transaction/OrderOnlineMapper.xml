@@ -17,6 +17,7 @@
         <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime"/>
         <result column="product_id" jdbcType="VARCHAR" property="productId"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="serial_number" jdbcType="VARCHAR" property="serialNumber"/>
         <result column="promotions_id" jdbcType="VARCHAR" property="promotionsId"/>
         <result column="product_name" jdbcType="VARCHAR" property="productName"/>
     </resultMap>

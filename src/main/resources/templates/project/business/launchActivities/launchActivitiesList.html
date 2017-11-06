@@ -8,7 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
     <style>
-        .filtrateIn{
+        .filtrateIn {
+            width: 700px;
+            height: 100%;
+            position: fixed;
+            right: -700px;
+            top: 0;
+            background: #ffffff;
+        }
+
+        .filtrateIn1 {
             width: 700px;
             height: 100%;
             position: fixed;
@@ -25,6 +34,13 @@
             <div class="eui-input-inline eui-padding10">
                 <input type="text" name="activityName" e-verify="title" autocomplete="off" placeholder="活动名称/关键字"
                        class="eui-input">
+            </div>
+            <div class="eui-input-inline eui-padding10">
+                <select name="initiatorType">
+                    <option value="">活动类型</option>
+                    <option value="2">调研活动</option>
+                    <option value="1">企业活动</option>
+                </select>
             </div>
             <div class="eui-input-inline">
                 <span class="eui-btn" onclick="doSearch()">查询</span>
@@ -51,8 +67,7 @@
                 <th><input type="checkbox" e-skin="primary" title=""></th>
                 <th>活动编号</th>
                 <th>活动名称</th>
-                <th>人数</th>
-                <th>问卷名</th>
+                <th>活动类型</th>
                 <th>创建人</th>
                 <th>开始时间</th>
                 <th>结束时间</th>
@@ -85,31 +100,37 @@
         <div class="eui-form-item">
             <label class="eui-form-label">活动名称</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" name="activityName" placeholder="请输入活动名称" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" name="activityName" placeholder="请输入活动名称" e-verify="title"
+                       autocomplete="off">
             </div>
             <label class="eui-form-label">活动目的</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" name="activityAim" placeholder="请输入活动目的" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" name="activityAim" placeholder="请输入活动目的" e-verify="title"
+                       autocomplete="off">
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">参与方</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" name="participant" placeholder="请输入参与方" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" name="participant" placeholder="请输入参与方" e-verify="title"
+                       autocomplete="off">
             </div>
             <label class="eui-form-label">联系人</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" name="contacts" placeholder="请输入联系人" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" name="contacts" placeholder="请输入联系人" e-verify="title"
+                       autocomplete="off">
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">联系电话</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" name="phone" placeholder="请输入联系电话" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" name="phone" placeholder="请输入联系电话" e-verify="title"
+                       autocomplete="off">
             </div>
             <label class="eui-form-label">活动人数</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" name="activityTotal" placeholder="请输入活动人数" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" name="activityTotal" placeholder="请输入活动人数" e-verify="title"
+                       autocomplete="off">
             </div>
         </div>
         <div class="eui-form-item">
@@ -136,11 +157,11 @@
         </div>
         <input type="submit" id="sub" style="display: none;" value="提交"/>
     </form>
-    <div class="taskConfirm" style="width: 100%;"><span onclick="formSub()" class="eui-btn" >确认</span></div>
+    <div class="taskConfirm" style="width: 100%;"><span onclick="formSub()" class="eui-btn">确认</span></div>
 </div>
 <!-- 左滑新建活动结束 -->
 
-<!-- 左滑新建详情开始 -->
+<!-- 左滑查看详情开始 -->
 <div class="taskFiltrate1">
 </div>
 <div class="filtrateIn1">
@@ -156,53 +177,82 @@
         <div class="eui-form-item">
             <label class="eui-form-label">活动名称</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="activityName" placeholder="请输入活动名称" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" id="activityName" readonly>
             </div>
             <label class="eui-form-label">活动目的</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="activityAim" placeholder="请输入活动目的" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" id="activityAim" readonly>
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">参与方</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="participant" placeholder="请输入参与方" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" id="participant" readonly>
             </div>
             <label class="eui-form-label">联系人</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="contacts" placeholder="请输入联系人" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" id="contacts" readonly>
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">联系电话</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="phone" placeholder="请输入联系电话" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" id="phone" readonly>
             </div>
             <label class="eui-form-label">活动人数</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="activityTotal" placeholder="请输入活动人数" e-verify="title" autocomplete="off">
+                <input type="text" class="eui-input" id="activityTotal" readonly>
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">问卷名</label>
             <div class="eui-input-inline">
-                <select id="uestionnaireId">
+                <select id="uestionnaireId" disabled>
 
                 </select>
             </div>
             <label class="eui-form-label">开始时间</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="activityStartTime" name="activityStart" placeholder="请选择开始时间">
+                <input type="text" class="eui-input" id="activityStartTime" readonly>
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">结束时间</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="activityEndTime" name="activityEnd" placeholder="请选择结束时间">
+                <input type="text" class="eui-input" id="activityEndTime" readonly>
             </div>
             <label class="eui-form-label">活动地点</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="activityAddr" placeholder="请输入活动地点">
+                <input type="text" class="eui-input" id="activityAddr" readonly>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">创建人</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" id="creator" readonly>
+            </div>
+            <label class="eui-form-label">创建时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" id="createTime" readonly>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动类型</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" id="InitiatorType" readonly>
+            </div>
+            <label class="eui-form-label">活动邀请码</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" id="activityPorn" readonly>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动网址</label>
+            <div class="eui-input-inline" style="width: 350px">
+                <input type="text" class="eui-input" id="uestionnaireUrl" readonly >
+            </div>
+            <div class="eui-input-inline">
+                <button class="eui-btn" onclick="copyUrl()">复制链接</button>
             </div>
         </div>
     </form>
@@ -295,22 +345,22 @@
                 var obj = $("#activityNewForm").serializeObject();
                 obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
                 console.log(obj);
-                if(obj.activityStart>obj.activityEnd){
+                if (obj.activityStart > obj.activityEnd) {
                     layer.msg('开始时间不能大于结束时间', {
                         icon: 2,
                         time: 2000
                     });
                     return;
                 }
-                var url='/launch/activities/add';
-                if(typeof $('#activityId').val()!='undefined' && $('#activityId').val()!=''){
-                    url='/launch/activities/update';
+                var url = '/launch/activities/add';
+                if (typeof $('#activityId').val() != 'undefined' && $('#activityId').val() != '') {
+                    url = '/launch/activities/update';
                 }
                 $.post(url, {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
                     console.log(result);
                     if (result.code == 200) {
                         $(".taskFiltrate").hide();
-                        $(".filtrateIn").animate({right: '-800px'}, 800);
+                        $(".filtrateIn").animate({right: '-700'}, 700);
                         doSearch();
                     } else {
                         layer.msg(result.message);
@@ -322,11 +372,11 @@
 
     //加载数据
     function doSearch() {
-        eui.use(['form', 'laypage', 'layer','laydate'], function () {
+        eui.use(['form', 'laypage', 'layer', 'laydate'], function () {
             var form = eui.form
                     , laypage = eui.laypage
                     , layer = eui.layer
-                    , laydate =  eui.laydate
+                    , laydate = eui.laydate
                     , $ = eui.jquery;
 
             //常规用法
@@ -408,24 +458,24 @@
         var tableHtml = '';
         for (var item in activityList) {
             var activity = activityList[item];
-            var status="";
-            console.log("状态"+activity.activityStatus)
-            if(activity.activityStatus==0 && activity.initiatorType==1){
-                status="待审批"
-            }else if(activity.activityStatus==1){
-                status="审批通过"
-            }else{
-                status="不用审批"
+            var status = "不用审批";//审批状态
+            var initiatorType="企业活动";//活动类型
+            if(activity.initiatorType==2){
+                initiatorType="调研活动";
+            }
+            if (activity.activityStatus == 1 && activity.initiatorType == 2) {
+                status = "待审批"
+            } else if (activity.activityStatus == 2 && activity.initiatorType == 2) {
+                status = "审批通过"
             }
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
                     '<td>' + activity.activityCode + '</td>' +
                     '<td>' + activity.activityName + '</td>' +
-                    '<td>' + activity.activityTotal + '</td>' +
-                    '<td>' + activity.uestionnaireName + '</td>' +
+                    '<td>' + initiatorType + '</td>' +
                     '<td>' + activity.creator + '</td>' +
                     '<td>' + new Date(activity.activityStart).Format("yyyy-mm-dd") + '</td>' +
-                    '<td>' + new Date(activity.activityEnd).Format("yyyy-mm-dd")+ '</td>' +
+                    '<td>' + new Date(activity.activityEnd).Format("yyyy-mm-dd") + '</td>' +
                     '<td>' + status + '</td>' +
                     '<td>' +
                     '<div class="eui-btn-group"> ' +
@@ -445,16 +495,22 @@
         var participant = "'" + activity.participant + "'";
         var contacts = "'" + activity.contacts + "'";
         var total = "'" + activity.activityTotal + "'";
-        var start = "'" + new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss")  + "'";
+        var start = "'" + new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss") + "'";
         var end = "'" + new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss") + "'";
         var uestionnaireId = "'" + activity.uestionnaireId + "'";
-        var phone = "'"+ activity.phone +"'";
-        if(activity.activityStatus==1){
-            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ')"><i class="eui-icon tb">&#xe60e;</i></a>' +
+        var phone = "'" + activity.phone + "'";
+        var porn = "'"+ activity.activityPorn +"'";
+        var creator = "'"+ activity.creator +"'";
+        var createTime = "'"+ new Date(activity.createTime).Format("yyyy-MM-dd hh:mm:ss") +"'";
+        var type = "'"+ activity.initiatorType +"'";
+        var porn = "'"+ activity.activityPorn +"'";
+        var url = "'"+ activity.uestionnaireUri +"'";
+        if (activity.activityStatus == 1) {
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ',' + phone + ','+creator+','+createTime+','+type+','+porn+','+url+')"><i class="eui-icon tb">&#xe60e;</i></a>' +
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
         }
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity('+ name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ','+phone+')"><i class="eui-icon tb">&#xe60e;</i></a>' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="activityEdit(' + id + ',' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ','+phone+')"><i class="eui-icon">&#xe642;</i></button> ' +
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ',' + phone + ','+creator+','+createTime+','+type+','+porn+','+url+')"><i class="eui-icon tb">&#xe60e;</i></a>' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="activityEdit(' + id + ',' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ',' + phone + ')"><i class="eui-icon">&#xe642;</i></button> ' +
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
     }
 
@@ -476,7 +532,7 @@
                 }
                 form.render('select');
                 $(".taskFiltrate").show();
-                $(".filtrateIn").animate({right: '0'}, 800);
+                $(".filtrateIn").animate({right: '0'}, 700);
             })
             /* Act on the event */
         })
@@ -492,13 +548,13 @@
             $('input[name="activityStart"]').val("");
             $('input[name="activityEnd"]').val("");
             $('input[name="activityAddr"]').val("");
-            $(".filtrateIn").animate({right: '-800px'}, 800);
+            $(".filtrateIn").animate({right: '-700px'}, 700);
             $(".taskFiltrate").hide();
             form.render();
         });
     });
     //编辑活动
-    function activityEdit(id,name,aim,addr,participant,contacts,total,start,end,uestionnaireId,phone) {
+    function activityEdit(id, name, aim, addr, participant, contacts, total, start, end, uestionnaireId, phone) {
         $('#activityId').val(id);
         $('input[name="activityName"]').val(name);
         $('input[name="activityAim"]').val(aim);
@@ -517,14 +573,14 @@
                 }
                 form.render('select');
             }
-            $('select[name="uestionnaireId"]').children().each(function (index,data) {
-                if(data.value==uestionnaireId){
-                    $(this).attr("selected",true);
+            $('select[name="uestionnaireId"]').children().each(function (index, data) {
+                if (data.value == uestionnaireId) {
+                    $(this).attr("selected", true);
                 }
             })
             form.render('select');
             $(".taskFiltrate").show();
-            $(".filtrateIn").animate({right: '0'}, 800);
+            $(".filtrateIn").animate({right: '0'}, 700);
         })
     }
 
@@ -580,18 +636,55 @@
 
     $('.taskFiltrate1').hide()
     //查看活动详情
-    function checkActivity(name,aim,addr,participant,contacts,total,start,end,uestionnaireId,phone) {
+    function checkActivity(name, aim, addr, participant, contacts, total, start, end, uestionnaireId, phone,creator,createTime,type,porn,url) {
         $('#activityName').val(name);
         $('#activityAim').val(aim);
         $('#participant').val(participant);
         $('#contacts').val(contacts);
         $('#phone').val(phone);
         $('#activityTotal').val(total);
-        $('#activityStart').val(start);
-        $('#activityEnd').val(end);
+        $('#activityStartTime').val(start);
+        $('#activityEndTime').val(end);
         $('#activityAddr').val(addr);
-        $('.taskFiltrate1').show();
-        $('.filtrateIn1').animate({right: '-0px'},800)
+        $('#creator').val(creator);
+        $('#createTime').val(createTime);
+        $('#InitiatorType').val("企业活动")
+        $('#uestionnaireUrl').val(url);
+        if(type==2){
+            $('#InitiatorType').val("调研活动");
+        }
+        $('#activityPorn').val(porn);
+        $.get("/questionnaire/getQuestionnaireByState", function (result) {
+            if (result.code == 200) {
+                for (var i in result.data) {
+                    var questionnaire = result.data[i];
+                    $('#uestionnaireId').append('<option value="' + questionnaire.id + '">' + questionnaire.questionnaireName + '</option>')
+                }
+                form.render('select');
+            }
+            $('#uestionnaireId').children().each(function (index, data) {
+                if (data.value == uestionnaireId) {
+                    $(this).attr("selected", true);
+                }
+            })
+            form.render('select');
+            $(".taskFiltrate1").show();
+            $(".filtrateIn1").animate({right: '0'}, 700);
+        })
+    }
+
+    $(".activityClose,.taskFiltrate1").click(function (event) {
+        $(".filtrateIn1").animate({right: '-700px'}, 700);
+        $(".taskFiltrate1").hide();
+    });
+
+    function copyUrl() {
+        layer.msg('复制成功',{
+            icon:1
+        })
+        var Url2=document.getElementById("uestionnaireUrl");
+        Url2.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
     }
 </script>
 </body>

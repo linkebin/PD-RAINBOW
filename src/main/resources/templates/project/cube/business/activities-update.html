@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>活动发起</title>
+    <title>活动编辑</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
     <style>
@@ -25,7 +25,7 @@
     <div class="eui-row eui-area">
         <div class="xymfLogo">
             <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
-            <span class="payCentre">发起活动</span>
+            <span class="payCentre">编辑活动</span>
         </div>
     </div>
 </div>
@@ -40,9 +40,6 @@
             <div class="eui-bg-white eui-padding20 activity">
                 <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                     <div class="eui-col-md6 eui-font20">基本信息</div>
-                    <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward eui-cursorp"><i class="eui-icon">
-                        &#xe619;</i> 收起
-                    </div>
                 </div>
                 <!--基本-->
                 <div class="eui-bg-white eui-form activityContent">
@@ -62,26 +59,45 @@
                     </div>
                     <div data-toggle="distpicker">
                         <div class="eui-form-item">
-                            <label class="eui-form-label">联系人</label>
-                            <div class="eui-input-inline">
-                                <input type="text" name="contacts" placeholder="联系人" class="eui-input">
-                            </div>
-                            <label class="eui-form-label">联系电话</label>
-                            <div class="eui-input-inline">
-                                <input type="text" name="phone" placeholder="联系电话" class="eui-input">
-                            </div>
                             <label class="eui-form-label">活动地点</label>
+                            <div id="ld" data-toggle="distpicker">
+                                <div class="eui-input-inline">
+                                    <select id="province" class="eui-input" e-ignore name="province">
+
+                                    </select>
+                                </div>
+                                <div class="eui-input-inline">
+                                    <select id="city" class="eui-input" e-ignore name="city">
+
+                                    </select>
+                                </div>
+                                <div class="eui-input-inline">
+                                    <select id="district" class="eui-input" e-ignore name="district">
+
+                                    </select>
+                                </div>
+                            </div>
                             <div class="eui-input-inline">
                                 <input type="text" name="activityAddr" placeholder="具体地址" class="eui-input"
-                                    style="width:250px">
+                                       style="width: 250px;">
                             </div>
                         </div>
                     </div>
                     <div class="eui-form-item">
+                        <label class="eui-form-label">联系人</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="contacts" placeholder="联系人" class="eui-input">
+                        </div>
+                        <label class="eui-form-label">联系电话</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="phone" placeholder="联系电话" class="eui-input">
+                        </div>
                         <label class="eui-form-label">活动人数</label>
                         <div class="eui-input-inline">
                             <input type="text" name="activityTotal" placeholder="活动人数" class="eui-input">
                         </div>
+                    </div>
+                    <div class="eui-form-item">
                         <label class="eui-form-label">问卷名称</label>
                         <div class="eui-input-inline">
                             <select e-filter="uestionnaireId" name="uestionnaireId">
@@ -93,8 +109,6 @@
                             <input type="text" class="eui-input" readonly="readonly" id="activityStart"
                                    name="activityStart" placeholder="活动开始时间">
                         </div>
-                    </div>
-                    <div class="eui-form-item">
                         <label class="eui-form-label">活动结束时间</label>
                         <div class="eui-input-inline">
                             <input type="text" class="eui-input" readonly="readonly" id="activityEnd" name="activityEnd"
@@ -223,10 +237,11 @@
 
                 submitHandler: function () {
                     var obj = $("#activitiesForm").serializeObject();
+                    obj.activityAddr = obj.province + "-" + obj.city + "-" + obj.district + "-" + obj.activityAddr;
                     delete obj.province;
                     delete obj.city;
                     delete obj.district;
-                    obj.uestionnaireName=$('select[name="uestionnaireId"]').find("option:selected").text();
+                    obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
                     console.log(obj);
                     $.get("/user/questionnaires/list", function (result) {
                         console.log(result);
@@ -235,19 +250,27 @@
                             if (result.data != null) {
                                 total = result.data.questionnairesTotal;
                             }
-                            if (obj.activityTotal > total) {
-                                layer.confirm('你的使用卷不足!!', {
-                                    btn: ['继续添加', '前往购买']
-                                }, function () {
-                                    $.post('/launch/activities/update', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
-                                        if (result.code == 200) {
-                                            window.close();
-                                        } else {
-                                            layer.msg(result.message);
-                                        }
-                                    });
-                                })
-                            }
+                            $.post('/launch/activities/getSumTotal', {json: JSON.stringify($('#userId').val())}, function (result) {
+                                if (result.code == 200) {
+                                    var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
+                                    if (sumToatl > total) {
+                                        layer.confirm('你的使用卷不足!!', {
+                                            btn: ['前往购买', '残忍拒绝']
+                                        }, function () {
+                                            window.open("/cube/pay");
+                                        })
+                                    } else {
+                                        $.post('/launch/activities/update', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+                                            console.log(result);
+                                            if (result.code == 200) {
+                                                window.close();
+                                            } else {
+                                                layer.msg(result.message);
+                                            }
+                                        });
+                                    }
+                                }
+                            })
                         }
                     })
                 }
@@ -256,10 +279,23 @@
     });
 
     function detail(form) {
-        console.log(form);
-        $.post("/launch/activities/detail",{id:$('#id').val()},function (res) {
-            if(res.code==200){
-                var activity=res.data;
+        $.post("/launch/activities/detail", {id: $('#id').val()}, function (res) {
+            if (res.code == 200) {
+                var activity = res.data;
+                var address = activity.activityAddr;
+                var city = address.substring(address.indexOf("-") + 1, find(activity.activityAddr, '-', 1));
+                var province = address.substring(0, address.indexOf("-"));
+                var district = address.substring(find(activity.activityAddr, '-', 1) + 1, find(activity.activityAddr, '-', 2))
+                address = address.substring(find(activity.activityAddr, '-', 2) + 1, address.length);
+                $('#province').val(province);
+                $('#province').trigger("change");
+
+                $('#city').val(city);
+                $('#city').trigger("change");
+
+                $('#district').val(district);
+                $('#district').trigger("change");
+                $('select[name="district"]').val(district);
                 $('input[name="activityName"]').val(activity.activityName);
                 $('input[name="activityAim"]').val(activity.activityAim);
                 $('input[name="participant"]').val(activity.participant);
@@ -268,15 +304,23 @@
                 $('input[name="activityTotal"]').val(activity.activityTotal);
                 $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));
-                $('input[name="activityAddr"]').val(activity.activityAddr);
-                $('select[name="uestionnaireId"]').children().each(function (i,data) {
-                    if(data.value==activity.uestionnaireId){
-                        return $(this).attr("selected",true);
+                $('input[name="activityAddr"]').val(address);
+                $('select[name="uestionnaireId"]').children().each(function (i, data) {
+                    if (data.value == activity.uestionnaireId) {
+                        return $(this).attr("selected", true);
                     }
                 })
                 form.render('select');
             }
         })
+    }
+
+    function find(str, cha, num) {
+        var x = str.indexOf(cha);
+        for (var i = 0; i < num; i++) {
+            x = str.indexOf(cha, x + 1);
+        }
+        return x;
     }
     // 返回顶部
     var winH = $(window).height();
@@ -297,17 +341,6 @@
 
     $('.eui-backTop').click(function (e) {
         $('html,body').animate({scrollTop: 0}, 500)
-    });
-
-    // 展开收起
-    $(".upward").click(function (event) {
-        var activityIn = $(this).parents(".activity").children(".activityContent");
-        if ($(activityIn).css("display") == "none") {
-            $(this).html("<i class=" + "eui-icon" + ">&#xe619;</i> 收起");
-        } else {
-            $(this).html("<i class=" + "eui-icon" + ">&#xe61a;</i> 展开");
-        }
-        $(this).parents(".activity").children(".activityContent").slideToggle();
     });
 
 

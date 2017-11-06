@@ -142,4 +142,23 @@ public class LaunchActivitiesController {
         }
         return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
     }
+
+    /**
+     * 获取用户所有活动的人数
+     * @param json
+     * @return
+     */
+    @PostMapping("/getSumTotal")
+    public Result getSumTotal(String json) {
+        List<LaunchActivities> list = new ArrayList<>();
+        LaunchActivities launchActivities=JSON.parseObject(json,LaunchActivities.class);
+        list = launchActivitiesService.getActivityAll(launchActivities);
+        int sumTotal=0;
+        if(list!=null && list.size()>0){
+            for(LaunchActivities la:list){
+                sumTotal+=la.getActivityTotal();
+            }
+        }
+        return ResultGenerator.genSuccessResult(sumTotal);
+    }
 }

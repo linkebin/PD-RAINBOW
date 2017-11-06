@@ -15,7 +15,7 @@
             text-align: left;
         }
 
-        #promotionsForm input + label {
+        #activitiesForm input + label,select+label {
             color: red;
         }
     </style>
@@ -36,12 +36,10 @@
             <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
         </div>
         <form id="activitiesForm" onsubmit="return false;">
+            <input type="hidden" th:value="${session.userSession.id}" id="userId">
             <div class="eui-bg-white eui-padding20 activity">
                 <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                     <div class="eui-col-md6 eui-font20">基本信息</div>
-                    <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward eui-cursorp"><i class="eui-icon">
-                        &#xe619;</i> 收起
-                    </div>
                 </div>
                 <!--基本-->
                 <div class="eui-bg-white eui-form activityContent">
@@ -102,8 +100,8 @@
                     <div class="eui-form-item">
                         <label class="eui-form-label">问卷名称</label>
                         <div class="eui-input-inline">
-                            <select e-filter="uestionnaireId" name="uestionnaireId">
-
+                            <select e-filter="uestionnaireId" class="eui-input" e-ignore name="uestionnaireId">
+                                <option value="">请选择</option>
                             </select>
                         </div>
                         <label class="eui-form-label">活动开始时间</label>
@@ -203,6 +201,18 @@
                     },
                     activityEnd: {
                         required: true,
+                    },
+                    uestionnaireId:{
+                        required: true,
+                    },
+                    province:{
+                        required: true
+                    },
+                    city:{
+                        required: true
+                    },
+                    district:{
+                        required: true
                     }
                 },
                 messages: {
@@ -235,13 +245,25 @@
                     },
                     activityEnd: {
                         required: '请输入活动结束时间',
+                    },
+                    uestionnaireId: {
+                        required: '问卷名称不能为空',
+                    },
+                    province:{
+                        required: '省不能为空'
+                    },
+                    city:{
+                        required: '市不能为空'
+                    },
+                    district:{
+                        required: '区不能为空'
                     }
                 },
 
                 submitHandler: function () {
                     var obj = $("#activitiesForm").serializeObject();
                     console.log(obj)
-                    obj.activityAddr = obj.province + obj.city + obj.district + obj.activityAddr;
+                    obj.activityAddr = obj.province +"-"+ obj.city +"-"+ obj.district +"-"+ obj.activityAddr;
                     delete obj.province;
                     delete obj.city;
                     delete obj.district;
@@ -253,29 +275,26 @@
                             if (result.data != null) {
                                 total = result.data.questionnairesTotal;
                             }
-                            if (obj.activityTotal > total) {
-                                layer.confirm('你的使用卷不足！！', {
-                                    btn: ['继续添加', '前往购买']
-                                }, function () {
-                                    $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
-                                        if (result.code == 200) {
-                                            window.close();
-                                        } else {
-                                            layer.msg(result.message);
-                                        }
-                                    });
-                                },function () {
-                                    window.open("/cube/pay");
-                                })
-                            }else{
-                                $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
-                                    if (result.code == 200) {
-                                        window.close();
-                                    } else {
-                                        layer.msg(result.message);
+                            $.post('/launch/activities/getSumTotal', {json: JSON.stringify($('#userId').val())}, function (result) {
+                                if(result.code==200){
+                                    var sumToatl=parseInt(obj.activityTotal)+parseInt(result.data);
+                                    if (sumToatl > total) {
+                                        layer.confirm('你的使用卷不足！！', {
+                                            btn: ['前往购买','取消']
+                                        }, function () {
+                                            window.open("/cube/pay");
+                                        })
+                                    }else{
+                                        $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+                                            if (result.code == 200) {
+                                                window.close();
+                                            } else {
+                                                layer.msg(result.message);
+                                            }
+                                        });
                                     }
-                                });
-                            }
+                                }
+                            })
                         }
                     })
                 }
@@ -303,16 +322,6 @@
         $('html,body').animate({scrollTop: 0}, 500)
     });
 
-    // 展开收起
-    $(".upward").click(function (event) {
-        var activityIn = $(this).parents(".activity").children(".activityContent");
-        if ($(activityIn).css("display") == "none") {
-            $(this).html("<i class=" + "eui-icon" + ">&#xe619;</i> 收起");
-        } else {
-            $(this).html("<i class=" + "eui-icon" + ">&#xe61a;</i> 展开");
-        }
-        $(this).parents(".activity").children(".activityContent").slideToggle();
-    });
 
     /**
      * 获取问卷名称
