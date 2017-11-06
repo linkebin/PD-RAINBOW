@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yhdj on 2017/10/25.
@@ -52,24 +53,24 @@ public class CubeQuestionnaireUseInfoController {
     @PostMapping("/findMyQuestionnaireListByPage")
     @ResponseBody
     public Result findMyQuestionnaireListByPage(String params, int page, int size,String createTime){
-        DataAcquisition dataAcquisition = JSON.parseObject(params, DataAcquisition.class);
-        Date date = null;
-        if (createTime != null && createTime != "") {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-            try {
-                date = format.parse(createTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            dataAcquisition.setCreateTime(date);
-
-        }
-
-        dataAcquisition.setDataUser(Security.getUserId());
+        Map<String,Object> map = JSON.parseObject(params, Map.class);
+//        Date date = null;
+//        if (createTime != null && createTime != "") {
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//
+//            try {
+//                date = format.parse(createTime);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//            dataAcquisition.setCreateTime(date);
+//
+//        }
+        map.put("dataUser",Security.getUserId());
+        //dataAcquisition.setDataUser(Security.getUserId());
         PageHelper.startPage(page, size);
-        List<DataAcquisition> list = dataAcquisitionService.findMyQuestionnaireListByPage(dataAcquisition);
+        List<DataAcquisition> list = dataAcquisitionService.findMyQuestionnaireListByPage(map);
         //查询所有的相关数据
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

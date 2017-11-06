@@ -56,7 +56,7 @@
     </select>
 
     <!--查找我的问卷-->
-    <select id="findMyQuestionnaireListByPage" resultMap="QuestionnaireUseInfoResultMap" parameterType="com.yidusoft.project.questionnaire.domain.DataAcquisition">
+    <select id="findMyQuestionnaireListByPage" resultMap="QuestionnaireUseInfoResultMap" parameterType="Map">
         SELECT d.*, q.questionnaire_name, v.visitor_name
         FROM questionnaire q, data_acquisition d, visitor_register v
         WHERE d.deleted = 0
@@ -64,8 +64,8 @@
         AND q.ID_ IN (SELECT d.data_question FROM data_acquisition WHERE DELETED = 0)
         AND v.ID_ IN (SELECT d.user_id FROM data_acquisition WHERE deleted = 0)
         AND v.creator = #{dataUser}
-        <if test="createTime != null">
-            AND (d.create_time = #{createTime})
+        <if test="createTime != null and createTime != ''">
+            AND d.create_time &gt;= #{start} AND d.create_time &lt;= #{end}
         </if>
         <if test="visitorName != null and visitorName != ''">
             AND (v.visitor_name = #{visitorName})

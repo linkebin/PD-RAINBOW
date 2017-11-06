@@ -4,6 +4,7 @@ import com.yidusoft.core.Mapper;
 import com.yidusoft.project.questionnaire.domain.DataAcquisition;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DataAcquisitionMapper extends Mapper<DataAcquisition> {
 
@@ -11,5 +12,5 @@ public interface DataAcquisitionMapper extends Mapper<DataAcquisition> {
     List<DataAcquisition> questionnaireUseInfoListByPage(String creator);
     //根据日期查询来访者使用的问卷
     List<DataAcquisition> findQuestionnaireForVisitor (DataAcquisition dataAcquisition);
-    List<DataAcquisition> findMyQuestionnaireListByPage(DataAcquisition dataAcquisition);
+    List<DataAcquisition> findMyQuestionnaireListByPage(Map<String,Object> map);
 }

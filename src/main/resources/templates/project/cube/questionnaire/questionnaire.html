@@ -23,9 +23,11 @@
         <div class="xymfLogo">
             <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
             <span class="payCentre">问卷填写</span>
+            <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="toggleFullScreen()"  style="float:right;margin-left: 5px">全屏/退出全屏</span>
             <div class="eui-col-xs3" style="float:right;color:#1E9FFF ">
                 <div id="timer">计时：00:00:00</div>
             </div>
+
         </div>
 
     </div>
@@ -52,7 +54,7 @@
 
     <div class="questionSubmit">
         <div class="eui-area eui-textAlignR">
-            <img src="/Styles/images/xymfImages/QRcode.png" width="50" alt="">
+            <!--<img src="/Styles/images/xymfImages/QRcode.png" width="50" alt="">-->
             <span class="submitBtn" id="submitBtn" onclick="calScore();"><img src="/Styles/images/xymfImages/submit.png"
                                                                               width="30" alt="">提交问卷</span>
         </div>
@@ -128,6 +130,7 @@
             //事件中执行
             //清除动画与左右切换显示
             $('.subject').hover(function (e) {
+
                 //清除动画
                 clearInterval(timer);
                 //左右切换图标显示
@@ -141,9 +144,22 @@
             });
             //左侧点击
             $('.subject .sliderLeft').click(function (e) {
+
+                //判断当前页面是否答完题目
+                if (!isSelected(num)) {
+                    return;
+                }
+
+                //判断是否已经全部完成答题
+                for (var i = 0; i < pageSize; i++) {
+                    if (!isSelected(i)) {
+                        return;
+                    }
+                }
+
                 num--;
                 pageIndex--;
-                if (num < 0) {
+                if (num <= -1) {
                     num = pageSize;
                     pageIndex = pageSize;
                 }
@@ -155,7 +171,9 @@
                 var element = element = eui.element;
                 element.init(); //这样element对动态生成的元素才会重新有效
 
-
+                if(pageSize == 1){
+                    element.progress('demo', '100%');
+                }
                 //右侧点击
                 $('.subject .sliderRight').click(function (e) {
 
@@ -171,8 +189,9 @@
 
 
                     if (progress / pageSize * 100 <= 100) {
-                        element.progress('demo', Math.floor(num / pageSize * 100) + '%');
+                        element.progress('demo', Math.floor(progress / pageSize * 100) + '%');
                     }
+
 
                     if (progress == pageSize-1){
                         element.progress('demo', '100%');
@@ -260,17 +279,14 @@
                 layer.msg('第' + (num+1) + '页' + ',第' + (i+1) + '题还没回答'+ '，请完成答题！', {
                     time: 2000
                 });
-                var questionRow = $('.subject>ul>li .eui-row:eq('+(i+1)+')');
+                var questionRow = $('.subject>ul>li:eq('+(num)+') .eui-row:eq('+(i+1)+')');
                 questionRow.css("border","3px solid rgb(255, 153, 0)");
                 questionRow.animate({
                     borderWidth:2
-                },3000);
-                questionRow.animate({
-                    borderWidth:1
-                },3000);
+                },1000);
                 questionRow.animate({
                     borderWidth:0
-                },3000);
+                },1000);
                 return false;
             }
         }
@@ -351,6 +367,26 @@
         window.parent.hideTopBottom();
     }
 
+    function toggleFullScreen() {
+        if (!document.fullscreenElement &&    // alternative standard method
+            !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+                document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        } else {
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            }
+        }
+    }
 
     //计时器
 

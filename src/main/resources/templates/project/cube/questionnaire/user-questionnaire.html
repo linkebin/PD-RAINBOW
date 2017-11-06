@@ -18,28 +18,35 @@
                 <form class="eui-form" id="searchFrom">
                     <input type="hidden" id="creator" th:value="${session.userSession.id}"/>
                     <div class="eui-input-inline eui-padding10">
-                        <label class="eui-form-label">客户：</label>
+                        <label class="eui-form-label">客户</label>
                         <div class="eui-input-inline">
                             <input type="text" name="visitorName" id="visitorName" onfocus="defaultData('visitorName');"
-                                   placeholder="客户名称" class="eui-input" onchange="doSearch()">
+                                   placeholder="客户名称" class="eui-input" onchange="">
                         </div>
                     </div>
                     <div class="eui-input-inline eui-padding10">
-                        <label class="eui-form-label">使用问卷：</label>
+                        <label class="eui-form-label">使用问卷</label>
                         <div class="eui-input-inline">
                             <input type="text" name="questionnaireName" id="questionnaireName" e-verify="title"
-                                   onfocus="defaultData('questionnaireName')" placeholder="问卷名称" class="eui-input" onchange="doSearch()">
+                                   onfocus="defaultData('questionnaireName')" placeholder="问卷名称" class="eui-input" onchange="">
                         </div>
                     </div>
-                    <div class="eui-form-item eui-padding10">
-                        <label class="eui-form-label">时间：</label>
+                    <div class="eui-input-inline eui-width200">
+                        <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>
+                        <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                    </div>
+                    <div class="eui-form-item">
+                    </div>
+                    <div class="eui-input-inline eui-padding10">
+                        <label class="eui-form-label">时间区间</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="" id="createTime"  placeholder="时间"
-                                   class="eui-input eui-width160" onchange="doSearch()" readonly="readonly"/>
+                            <input type="text" name="createTime" id="createTime"  placeholder="请选择时间"
+                                   class="eui-input eui-width200" onchange="" readonly="readonly"/>
                         </div>
                     </div>
+
                 </form>
-                <div class="contentForm eui-marginT20">
+                <div class="eui-marginT20">
                     <div class="xymfForm">
                         <table class="eui-table eui-form" e-even e-skin="nob" id="myQuestionnaire">
                             <colgroup>
@@ -93,9 +100,9 @@
 
         laydate.render({
             elem: '#createTime'
-            , type: 'datetime'
+            ,range: true
             , done: function (value, date, endDate) {
-                doSearch();
+//                doSearch();
             }
         });
     });
@@ -118,7 +125,11 @@
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
             var params = $("#searchFrom").serializeObject();
 
-
+            if (params.createTime!=''){
+                var time = params.createTime.split(' - ');
+                params.start=time[0];
+                params.end=time[1];
+            }
             var createTime = $('#createTime').val();
 
             $.ajax({
@@ -126,8 +137,8 @@
                 data: {
                     params: JSON.stringify(params),
                     page: 1,
-                    size: 5,
-                    createTime: createTime
+                    size: 5
+//                    createTime: createTime
                 },
                 type: "post",
                 success: function (result) {
@@ -265,12 +276,12 @@
                 source: arr,
                 focus: function (event, ui) {
                     $("#visitorName").val(ui.item.value);
-                    doSearch();
+//                    doSearch();
                     return false;
                 },
                 select: function (event, ui) {
                     $("#visitorName").val(ui.item.value);
-                    doSearch();
+//                    doSearch();
                     return false;
                 }
             });
@@ -280,12 +291,12 @@
                 source: arr,
                 focus: function (event, ui) {
                     $("#questionnaireName").val(ui.item.value);
-                    doSearch();
+//                    doSearch();
                     return false;
                 },
                 select: function (event, ui) {
                     $("#questionnaireName").val(ui.item.value);
-                    doSearch();
+//                    doSearch();
                     return false;
                 }
             });
@@ -298,6 +309,11 @@
          if (item == 'delete') {//删除
                deleteMyQuestionnaire(id)
             }
+        }
+
+        //重置表格
+        function resetForm() {
+            $('#searchFrom')[0].reset();
         }
 
     // 删除来访者填写的问卷

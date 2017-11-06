@@ -224,8 +224,8 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
     }
 
     @Override
-    public List<DataAcquisition> findMyQuestionnaireListByPage(DataAcquisition dataAcquisition) {
-        return dataAcquisitionMapper.findMyQuestionnaireListByPage(dataAcquisition);
+    public List<DataAcquisition> findMyQuestionnaireListByPage(Map<String,Object> map) {
+        return dataAcquisitionMapper.findMyQuestionnaireListByPage(map);
     }
 
     //保留两位小数 不四舍五入
