@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <title>活动编辑</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/Styles/themes/default/style.css}" rel="stylesheet" type="text/css"/>
     <style>
 
-        .eui-form-label {
-            width: 100px;
-            text-align: left;
-        }
 
-        #promotionsForm input + label {
+        #activitiesForm input + label {
             color: red;
         }
     </style>
@@ -32,7 +28,8 @@
         <div class="activityTitle">
             <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
         </div>
-        <form id="activitiesForm" onsubmit="return false;" class="eui-form" >
+        <form id="activitiesForm" onsubmit="return false;" class="eui-form">
+            <input type="hidden" th:value="${id}" id="activityId">
             <div class="eui-bg-white eui-padding20 activity">
                 <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                     <div class="eui-col-md6 eui-font20">基本信息</div>
@@ -44,20 +41,20 @@
                         <div class="eui-input-inline">
                             <input type="text" name="fullName" placeholder="姓名" class="eui-input">
                         </div>
-                        <label class="eui-form-label">性别</label>
-                        <div class="eui-input-inline">
-                            <input  type="radio" name="sex" value="1" title="男" >
-                            <input  type="radio" name="sex" value="0" title="女">
-                        </div>
                         <label class="eui-form-label">年龄</label>
                         <div class="eui-input-inline">
                             <input type="text" name="age" placeholder="年龄" class="eui-input">
+                        </div>
+                        <label class="eui-form-label">性别</label>
+                        <div class="eui-input-inline">
+                            <input type="radio" name="sex" value="1" title="男" checked>
+                            <input type="radio" name="sex" value="0" title="女">
                         </div>
                     </div>
                     <div class="eui-form-item">
                         <label class="eui-form-label">活动邀请码</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="activityPron" placeholder="活动邀请码" class="eui-input">
+                            <input type="text" name="activityPorn" placeholder="活动邀请码" class="eui-input">
                         </div>
                         <label class="eui-form-label">手机</label>
                         <div class="eui-input-inline">
@@ -71,8 +68,10 @@
                                    placeholder="请输入手机验证码" class="eui-input">
                         </div>
                         <div class="eui-input-inline">
-                            <button  onclick="sendMsgCode(this)" id="btnSendCode"
-                                     type="button" style="background:#3f89ec ;color:#fff" class="eui-btn eui-btn-primary securityBut securityImg">点击获取</button>
+                            <button onclick="sendMsgCode(this)" id="btnSendCode"
+                                    type="button" style="background:#3f89ec ;color:#fff"
+                                    class="eui-btn eui-btn-primary securityBut securityImg">点击获取
+                            </button>
                             <label id="errcode2" class="eui-form-label" style="color: red;"></label>
                         </div>
                     </div>
@@ -81,7 +80,7 @@
 
             <div class="eui-textAlignC eui-bg-white eui-padding20">
             <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">
-                <img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 保存信息</span>
+                <img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交信息</span>
             </div>
 
             <input type="submit" id="sub" style="display: none;" value="提交"/>
@@ -107,7 +106,10 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-
+    var form, layedit, laydate;
+    eui.use(['form', 'layedit', 'laydate'], function () {
+        form = eui.form;
+    })
     $(function () {
         jQuery.validator.addMethod("isMobile", function (value, element) {
             var length = value.length;
@@ -131,7 +133,7 @@
                     minlength: 11,
                     isMobile: true
                 },
-                activityPron: {
+                activityPorn: {
                     required: true,
                 },
             },
@@ -151,13 +153,53 @@
                     minlength: "手机号码不能小于11个字符",
                     isMobile: "请正确填写手机号码"
                 },
-                activityPron: {
+                activityPorn: {
                     required: '请输入活动邀请码',
                 },
             },
 
             submitHandler: function () {
                 var obj = $("#activitiesForm").serializeObject();
+                obj.phone=parseInt(obj.phone);
+                var params = {};
+                params.activityPorn = obj.activityPorn;
+                params.id = $('#activityId').val();
+                delete obj.activityPorn;
+                delete obj.vrifyCode1;
+                $.post("/launch/activities/getIdByPorn", {json: JSON.stringify(params)}, function (result) {
+                    console.log(result);
+                    if (result.code = 200) {
+                        var activity = result.data;
+                        if (result.data == null) {
+                            return layer.msg('活动邀请码错误')
+                        }
+                        var start = new Date(activity.activityStart).Format('yyyy-MM-dd hh:mm:ss');
+                        var end = new Date(activity.activityEnd).Format('yyyy-MM-dd hh:mm:ss');
+                        if (new Date() > new Date(start) && new Date() < new Date(end)) {
+                            $.post('/data/acquisition/findCount', {activityId: activity.id}, function (res) {
+                                if (res.code == 200) {
+                                    if (res.data >= activity.activityTotal) {
+                                        layer.confirm('活动已结束', {
+                                            btn: ['确定']
+                                        })
+                                    } else {
+                                        $.post("/active/participant/add",{json:JSON.stringify(obj)},function (res) {
+                                            console.log(res);
+                                            if(res.code==200){
+                                                window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+activity.uestionnaireId+"&userId="+res.data.id+"&visitorTimes="+new Date()+"&activityId="+activity.id+"&userName="+res.data.fullName;
+                                            }
+                                        })
+
+                                    }
+                                }
+                            })
+                        } else {
+                            layer.confirm('活动已结束', {
+                                btn: ['确定']
+                            })
+                        }
+                    }
+                })
                 console.log(obj);
             }
         });

@@ -27,4 +27,10 @@ public interface LaunchActivitiesService extends Service<LaunchActivities> {
      */
     List<LaunchActivities> getActivityAll(LaunchActivities launchActivities);
 
+    /**
+     * 通过活动邀请码获取问卷id和活动id
+     * @param launchActivities
+     * @return
+     */
+    LaunchActivities getIdByPorn(LaunchActivities launchActivities);
 }

@@ -12,4 +12,6 @@ public interface LaunchActivitiesMapper extends Mapper<LaunchActivities> {
      * @return
      */
     List<LaunchActivities> getActivityAll(LaunchActivities launchActivities);
+
+    LaunchActivities getIdByPorn(LaunchActivities launchActivities);
 }

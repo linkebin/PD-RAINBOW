@@ -1,6 +1,7 @@
 package com.yidusoft.project.questionnaire.service;
-import com.yidusoft.project.questionnaire.domain.DataAcquisition;
+
 import com.yidusoft.core.Service;
+import com.yidusoft.project.questionnaire.domain.DataAcquisition;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ public interface DataAcquisitionService extends Service<DataAcquisition> {
     String  depressedOrAnxiousConclusion(String acquisitionId,String userId,String type);
     //根据日期查询来访者使用的问卷
     List<DataAcquisition> findQuestionnaireForVisitor (DataAcquisition dataAcquisition);
-
+    //查询活动的填报人数
+    Integer findCountByActivityId(String activityId);
     List<DataAcquisition> findMyQuestionnaireListByPage(Map<String,Object> map);
 }

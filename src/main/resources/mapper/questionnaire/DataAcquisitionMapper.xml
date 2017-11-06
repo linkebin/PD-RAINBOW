@@ -76,5 +76,8 @@
         order by     d.create_time  desc
     </select>
 
-
+    <select id="findCountByActivityId" resultType="INTEGER" parameterType="String">
+        SELECT count(*) FROM data_acquisition
+        WHERE activity_id=#{activityId} AND deleted=0
+    </select>
 </mapper>

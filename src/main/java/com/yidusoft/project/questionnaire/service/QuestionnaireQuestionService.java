@@ -1,10 +1,9 @@
 package com.yidusoft.project.questionnaire.service;
 import com.yidusoft.core.Result;
-import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.core.Service;
+import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -18,6 +17,6 @@ public interface QuestionnaireQuestionService extends Service<QuestionnaireQuest
     //查询问卷相关的问题
     List<QuestionnaireQuestion> findQuestionForQuestionnaire(String id);
     //提交问卷
-    Result  submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming);
+    Result  submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming,String activityId,String userName);
 
 }

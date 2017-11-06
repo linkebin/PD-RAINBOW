@@ -161,4 +161,16 @@ public class LaunchActivitiesController {
         }
         return ResultGenerator.genSuccessResult(sumTotal);
     }
+
+    /**
+     * 获取还在活动时间内的问卷id
+     * @param json
+     * @return
+     */
+    @PostMapping("/getIdByPorn")
+    public Result getIdByPorn(String json){
+        LaunchActivities launchActivities = JSON.parseObject(json,LaunchActivities.class);
+        launchActivities=launchActivitiesService.getIdByPorn(launchActivities);
+        return ResultGenerator.genSuccessResult(launchActivities);
+    }
 }

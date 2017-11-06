@@ -5,25 +5,46 @@
     <title>活动管理</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
     <style>
-        .defaultDiv{width: 100%;}
-        .formDiv .eui-form-item label{
+        .defaultDiv {
+            width: 100%;
+        }
+
+        .formDiv .eui-form-item label {
             width: 80px;
             padding: 9px 20px;
             text-align: left;
         }
-        .subBtn{color: white; background: #3f89ec;}
 
-        input[type="button"],[type="submit"]{
+        .subBtn {
+            color: white;
+            background: #3f89ec;
+        }
+
+        input[type="button"], [type="submit"] {
             cursor: pointer;
         }
-        input[name='userName'],[name='addr']{
+
+        input[name='userName'], [name='addr'] {
             border: 1px solid #1aa194;
         }
-        input[type='text']{height: 30px; line-height: 30px;}
 
-        .eui-form-label{padding: 5px 15px;}
-        .eui-input-inline{margin-left: 20px;}
-        .tb{cursor: pointer;margin-left: 10px;}
+        input[type='text'] {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .eui-form-label {
+            padding: 5px 15px;
+        }
+
+        .eui-input-inline {
+            margin-left: 20px;
+        }
+
+        .tb {
+            cursor: pointer;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body class="eui-layout-body">
@@ -190,16 +211,17 @@
             var activity = activityList[item];
 
             var id = "'" + activity.id + "'";
-
+            var url = activity.uestionnaireUri + '?id=' + activity.id;
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
                     '<td>' + activity.activityCode + '</td>' +
                     '<td>' + activity.activityName + '</td>' +
                     '<td>' + activity.activityAim + '</td>' +
                     '<td>' + activity.activityPorn + '</td>' +
-                    '<td><a href="'+activity.uestionnaireUri +'" target="_blank">' + activity.uestionnaireUri + '</a></td>' +
+                    '<td><a href="' + url + '" target="_blank">' + url + '</a></td>' +
                     '<td>' +
-                    '<a title="编辑" target="_blank" onclick="activities('+id+')"><i class="eui-icon tb">&#xe642;</i></a>' +
+                    '<i title="查看详情" onclick="checkActivity(' + id + ')" class="eui-icon tb">&#xe621;</i>' +
+                    '<a title="编辑" target="_blank" onclick="activities(' + id + ')"><i class="eui-icon tb">&#xe642;</i></a>' +
                     '<i title="删除" onclick="deleteActivity(' + id + ')" class="eui-icon tb">&#xe640;</i></td>' +
                     '</tr>';
         }
@@ -210,9 +232,9 @@
      */
     function activities(id) {
         var winObj;
-        if(typeof id!='undefined' && id!=''){
-            winObj = window.open("/web/activities/activitiesUpdate?id="+id);
-        }else{
+        if (typeof id != 'undefined' && id != '') {
+            winObj = window.open("/web/activities/activitiesUpdate?id=" + id);
+        } else {
             winObj = window.open("/web/activities/initiatingActivities");
         }
         var loop = setInterval(function () {
@@ -223,7 +245,14 @@
             }
         }, 1);
     }
+    /**
+     * 查看活动详情
+     */
+    function checkActivity(id) {
+        window.open("/web/activities/activitiesCheck?id=" + id);
+    }
 
+    //批量删除
     $('.activityDelete').click(function () {
         var ids = "";
         if (ids == "") {
@@ -251,24 +280,24 @@
      * 删除活动
      */
     function deleteActivity(id) {
-            layer.confirm('您确定删除吗？', {
-                btn: ['确认', '取消']
-            }, function () {
-                $.post("/launch/activities/delete",{ids:id},function (result) {
-                    if (result.message = "SUCCESS") {
-                        layer.msg('删除成功', {
-                            icon: 1,
-                            time: 2000
-                        });
-                        doSearch();
-                    } else {
-                        layer.msg(result.message, {
-                            icon: 1,
-                            time: 2000
-                        });
-                    }
-                })
+        layer.confirm('您确定删除吗？', {
+            btn: ['确认', '取消']
+        }, function () {
+            $.post("/launch/activities/delete", {ids: id}, function (result) {
+                if (result.message = "SUCCESS") {
+                    layer.msg('删除成功', {
+                        icon: 1,
+                        time: 2000
+                    });
+                    doSearch();
+                } else {
+                    layer.msg(result.message, {
+                        icon: 1,
+                        time: 2000
+                    });
+                }
             })
+        })
     }
 
 </script>

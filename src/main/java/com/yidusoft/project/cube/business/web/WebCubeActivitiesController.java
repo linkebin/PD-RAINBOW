@@ -28,7 +28,14 @@ public class WebCubeActivitiesController {
     }
 
     @RequestMapping("/fillingPage")
-    public String fillig(){
+    public String fillig(Model model,String id){
+        model.addAttribute("id",id);
         return "project/cube/business/filling-page";
+    }
+
+    @RequestMapping(value="/activitiesCheck")
+    public String Check(Model model,String id){
+        model.addAttribute("id",id);
+        return "project/cube/business/activities-check";
     }
 }

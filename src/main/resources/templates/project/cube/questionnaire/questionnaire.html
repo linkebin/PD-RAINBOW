@@ -18,7 +18,8 @@
     <input type="hidden" th:value="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireId"/>
     <input type="hidden" th:value="${userId}" id="userId"/>
     <input type="hidden" th:value="${visitorTimes}" id="visitorTimes"/>
-
+    <input type="hidden" th:value="${activityId}" id="activityId"/>
+    <input type="hidden" th:value="${userName}" id="userName"/>
     <div class="eui-row eui-area">
         <div class="xymfLogo">
             <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
@@ -327,12 +328,16 @@
         var userId = $("#userId").val();
         var visitorTimes = $("#visitorTimes").val();
         var timeConsuming=$("#timer").text();
+        var activityId = $("#activityId").val();
+        var userName = $('#userName').val();
         $.post("/cube/questionnaire/submitQuestionnaire", {
             "param": JSON.stringify(array),
             "questionnaireId": questionnaireId,
             "userId": userId,
             "visitorTimes": visitorTimes,
-            "timeConsuming":timeConsuming
+            "timeConsuming":timeConsuming,
+            "activityId": activityId,
+            "userName": userName
         }, function (result) {
             if (result.code == 200) {
                 window.location.href = "/web/cube/getSuccess";

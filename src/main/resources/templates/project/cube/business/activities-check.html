@@ -2,12 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>活动编辑</title>
+    <title>查看活动详情</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
     <style>
         .default_hide {
             display: none;
+        }
+
+        .eui-disabled, .eui-disabled:hover {
+            color: #333333 !important;
         }
 
         .eui-form-label {
@@ -25,36 +29,35 @@
     <div class="eui-row eui-area">
         <div class="xymfLogo">
             <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
-            <span class="payCentre">编辑活动</span>
+            <span class="payCentre">查看活动</span>
         </div>
     </div>
 </div>
 
 <div class="activityContent xymfMargin">
     <div class="eui-area">
-        <div class="activityTitle">
-            <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
-        </div>
         <form id="activitiesForm" onsubmit="return false;">
             <input type="hidden" th:value="${id}" id="id" name="id"/>
             <div class="eui-bg-white eui-padding20 activity">
                 <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
-                    <div class="eui-col-md6 eui-font20">基本信息</div>
+                    <div class="activityTitle">
+                        <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
+                    </div>
                 </div>
                 <!--基本-->
                 <div class="eui-bg-white eui-form activityContent">
                     <div class="eui-form-item">
                         <label class="eui-form-label">活动名称</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="activityName" placeholder="活动名称" class="eui-input">
+                            <input type="text" name="activityName" readonly class="eui-input">
                         </div>
                         <label class="eui-form-label">活动目的</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="activityAim" placeholder="活动目的" class="eui-input">
+                            <input type="text" name="activityAim" readonly class="eui-input">
                         </div>
                         <label class="eui-form-label">参与方</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="participant" placeholder="参与方" class="eui-input">
+                            <input type="text" name="participant" readonly class="eui-input">
                         </div>
                     </div>
                     <div data-toggle="distpicker">
@@ -62,23 +65,23 @@
                             <label class="eui-form-label">活动地点</label>
                             <div id="ld" data-toggle="distpicker">
                                 <div class="eui-input-inline">
-                                    <select id="province" class="eui-input" e-ignore name="province">
+                                    <select id="province" class="eui-input" name="province" disabled>
 
                                     </select>
                                 </div>
                                 <div class="eui-input-inline">
-                                    <select id="city" class="eui-input" e-ignore name="city">
+                                    <select id="city" class="eui-input" name="city" disabled>
 
                                     </select>
                                 </div>
                                 <div class="eui-input-inline">
-                                    <select id="district" class="eui-input" e-ignore name="district">
+                                    <select id="district" class="eui-input" name="district" disabled>
 
                                     </select>
                                 </div>
                             </div>
                             <div class="eui-input-inline">
-                                <input type="text" name="activityAddr" placeholder="具体地址" class="eui-input"
+                                <input type="text" name="activityAddr" readonly class="eui-input"
                                        style="width: 250px;">
                             </div>
                         </div>
@@ -86,48 +89,73 @@
                     <div class="eui-form-item">
                         <label class="eui-form-label">联系人</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="contacts" placeholder="联系人" class="eui-input">
+                            <input type="text" name="contacts" readonly class="eui-input">
                         </div>
                         <label class="eui-form-label">联系电话</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="phone" placeholder="联系电话" class="eui-input">
+                            <input type="text" name="phone" readonly class="eui-input">
                         </div>
                         <label class="eui-form-label">活动人数</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="activityTotal" placeholder="活动人数" class="eui-input">
+                            <input type="text" name="activityTotal" readonly class="eui-input">
                         </div>
                     </div>
                     <div class="eui-form-item">
                         <label class="eui-form-label">问卷名称</label>
                         <div class="eui-input-inline">
-                            <select e-filter="uestionnaireId" name="uestionnaireId">
+                            <select e-filter="uestionnaireId" name="uestionnaireId" disabled>
 
                             </select>
                         </div>
                         <label class="eui-form-label">活动开始时间</label>
                         <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly="readonly" id="activityStart"
+                            <input type="text" class="eui-input" readonly
                                    name="activityStart" placeholder="活动开始时间">
                         </div>
                         <label class="eui-form-label">活动结束时间</label>
                         <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly="readonly" id="activityEnd" name="activityEnd"
+                            <input type="text" class="eui-input" readonly="readonly" name="activityEnd"
                                    placeholder="活动结束时间">
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="eui-textAlignC eui-bg-white eui-padding20">
-            <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">
-                <img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 保存信息</span>
-            </div>
-
-            <input type="submit" id="sub" style="display: none;" value="提交"/>
         </form>
     </div>
 </div>
+<div class="activityContent xymfMargin">
+    <div class="eui-area">
+        <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
+            <div class="eui-col-md6">
+                <span class="eui-panels-title1"><i class="eui-icon">&#xe632;</i> 活动进度</span>
+            </div>
+        </div>
+        <div class="eui-row">
+            <div class="eui-col-md12">
+                <div class="eui-form">
+                    <table class="eui-table" id="participantTable">
+                        <colgroup>
+                            <col width="100">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <th>姓名</th>
+                        <th>年龄</th>
+                        <th>性别</th>
+                        <th>手机</th>
+                        <th>关注度</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
+                        </tbody>
+                    </table>
+                    <div id="pages" style="text-align:right;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="xymfFooter">
     <!-- 底部固定区域 -->
     © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
@@ -146,142 +174,70 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-
+    var form, laypage;
     $(function () {
-        eui.use(['form', 'layedit', 'laydate'], function () {
-            var form = eui.form
-                    , layer = eui.layer
-                    , layedit = eui.layedit
-                    , laydate = eui.laydate;
-
-            //常规用法
-            laydate.render({
-                elem: '#activityStart',
-                type: 'datetime'
-            });
-            laydate.render({
-                elem: '#activityEnd',
-                type: 'datetime'
-            });
-            getQuestions(form);//获取问卷名称
-            jQuery.validator.addMethod("isMobile", function (value, element) {
-                var length = value.length;
-                var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-                return this.optional(element) || (length == 11 && mobile.test(value));
-            }, "请正确填写您的手机号码");
-            $("#activitiesForm").validate({
-                rules: {
-                    activityName: {
-                        required: true,
-                    },
-                    activityAim: {
-                        required: true,
-                    },
-                    participant: {
-                        required: true,
-                    },
-                    phone: {
-                        required: true,
-                        minlength: 11,
-                        isMobile: true
-                    },
-                    activityAddr: {
-                        required: true,
-                    },
-                    contacts: {
-                        required: true,
-                    },
-                    activityTotal: {
-                        required: true,
-                        digits: true
-                    },
-                    activityStart: {
-                        required: true,
-                    },
-                    activityEnd: {
-                        required: true,
-                    }
-                },
-                messages: {
-                    activityName: {
-                        required: "请输入活动名称",
-                    },
-                    activityAim: {
-                        required: '请输入活动目的',
-                    },
-                    participant: {
-                        required: '请输入参与方',
-                    },
-                    phone: {
-                        required: '请输入手机号码',
-                        minlength: "联系电话不能小于11个字符",
-                        isMobile: "请正确填写手机号码"
-                    },
-                    activityAddr: {
-                        required: '请输入地址',
-                    },
-                    contacts: {
-                        required: '请输入联系人',
-                    },
-                    activityTotal: {
-                        required: '请输入活动人数',
-                        digits: '只能输入整数'
-                    },
-                    activityStart: {
-                        required: '请输入活动开始时间',
-                    },
-                    activityEnd: {
-                        required: '请输入活动结束时间',
-                    }
-                },
-
-                submitHandler: function () {
-                    var obj = $("#activitiesForm").serializeObject();
-                    obj.activityAddr = obj.province + "-" + obj.city + "-" + obj.district + "-" + obj.activityAddr;
-                    delete obj.province;
-                    delete obj.city;
-                    delete obj.district;
-                    obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
-                    console.log(obj);
-                    if(obj.activityStart>obj.activityEnd){
-                        return layer.msg('活动的开始时间不能大于结束时间');
-                    }
-                    $.get("/user/questionnaires/list", function (result) {
-                        console.log(result);
-                        if (result.code = 200) {
-                            var total = 0;
-                            if (result.data != null) {
-                                total = result.data.questionnairesTotal;
-                            }
-                            $.post('/launch/activities/getSumTotal', {json: JSON.stringify($('#userId').val())}, function (result) {
-                                if (result.code == 200) {
-                                    var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
-                                    if (sumToatl > total) {
-                                        layer.confirm('你的使用卷不足!!', {
-                                            btn: ['前往购买', '残忍拒绝']
-                                        }, function () {
-                                            window.open("/cube/pay");
-                                        })
-                                    } else {
-                                        $.post('/launch/activities/update', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
-                                            console.log(result);
-                                            if (result.code == 200) {
-                                                window.close();
-                                            } else {
-                                                layer.msg(result.message);
-                                            }
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    })
-                }
-            });
+        eui.use(['form', 'laypage'], function () {
+            form = eui.form;
+            laypage = eui.laypage;
+            getQuestions();//获取问卷名称
+            getActivityInfo();//获取填报人的信息
         });
     });
 
-    function detail(form) {
+    //获取填报人的信息
+    function getActivityInfo() {
+        $.post("/active/participant/list", {activityId: $('#id').val(), page: 1, size: 5}, function (result) {
+            console.log(result);
+            laypage.render({
+                elem: 'pages'
+                , count: result.data.total //数据总数
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                , skip: true
+                , theme: '#1E9FFF'
+                , jump: function (obj, first) {
+                    if (first) {
+                        //第一次，不需要查询数据
+                        var participantList = result.data.list;
+                        //遍历，拼接表格
+                        var tableHtml = getTable(participantList);
+                        $("#participantTable tbody").html(tableHtml);
+                    } else {
+                        $.post("/active/participant/list", {
+                            activityId: $('#id').val(),
+                            page: obj.curr,
+                            size: obj.limit
+                        }, function (result) {
+                            var participantList = result.data.list;
+                            //遍历，拼接表格
+                            var tableHtml = getTable(participantList);
+                            $("#participantTable tbody").html(tableHtml);
+                        })
+                    }
+                }
+            });
+        })
+    }
+
+    //拼接表格
+    function getTable(participantList) {
+        var tableHtml = '';
+        for (var item in participantList) {
+            var participant = participantList[item];
+            var sex = '男';
+            if (participant.sex == 0) {
+                sex = '女';
+            }
+            tableHtml += '<tr>' +
+                    '<td>' + participant.fullName + '</td>' +
+                    '<td>' + participant.age + '</td>' +
+                    '<td>' + sex + '</td>' +
+                    '<td>' + participant.phone + '</td>' +
+                    '</tr>';
+        }
+        return tableHtml;
+    }
+    //获取活动详情
+    function detail() {
         $.post("/launch/activities/detail", {id: $('#id').val()}, function (res) {
             if (res.code == 200) {
                 var activity = res.data;
@@ -351,7 +307,7 @@
      * 获取问卷名称
      * @param form
      */
-    function getQuestions(form) {
+    function getQuestions() {
         $.get("/questionnaire/getQuestionnaireByState", function (result) {
             if (result.code == 200) {
                 for (var i in result.data) {
@@ -359,7 +315,7 @@
                     $('select[name="uestionnaireId"]').append('<option value="' + questionnaire.id + '">' + questionnaire.questionnaireName + '</option>')
                 }
                 form.render('select');
-                detail(form);
+                detail();
             }
         })
     }

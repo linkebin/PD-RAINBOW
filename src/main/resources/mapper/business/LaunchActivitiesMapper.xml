@@ -45,4 +45,8 @@
         ORDER BY create_time DESC
     </select>
 
+    <select id="getIdByPorn" resultMap="BaseResultMap" parameterType="com.yidusoft.project.business.domain.LaunchActivities">
+        SELECT * FROM launch_activities where deleted=0 AND activity_porn=#{activityPorn} AND id_=#{id}
+    </select>
+
 </mapper>

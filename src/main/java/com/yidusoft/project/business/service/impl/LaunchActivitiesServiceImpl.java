@@ -71,4 +71,9 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
     public List<LaunchActivities> getActivityAll(LaunchActivities launchActivities) {
         return launchActivitiesMapper.getActivityAll(launchActivities);
     }
+
+    @Override
+    public LaunchActivities getIdByPorn(LaunchActivities launchActivities) {
+        return launchActivitiesMapper.getIdByPorn(launchActivities);
+    }
 }

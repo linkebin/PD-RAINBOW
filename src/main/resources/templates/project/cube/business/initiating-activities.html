@@ -268,6 +268,10 @@
                     delete obj.city;
                     delete obj.district;
                     obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                    console.log(obj);
+                    if(obj.activityStart>obj.activityEnd){
+                        return layer.msg('活动开始时间不能大于结束时间');
+                    }
                     $.get("/user/questionnaires/list", function (result) {
                         console.log(result);
                         if (result.code = 200) {

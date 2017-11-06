@@ -62,4 +62,15 @@ public class DataAcquisitionController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     * 获取活动的填报人数
+     * @param activityId
+     * @return
+     */
+    @PostMapping("/findCount")
+    public Result findCountByActivityId(String activityId){
+        Integer total=dataAcquisitionService.findCountByActivityId(activityId);
+        return ResultGenerator.genSuccessResult(total);
+    }
 }
