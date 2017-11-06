@@ -2,11 +2,13 @@ package com.yidusoft.project.questionnaire.controller;
 
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.questionnaire.domain.Questionnaire;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireAnswer;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.project.questionnaire.service.QuestionnaireAnswerService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.project.questionnaire.service.QuestionnaireService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,8 @@ import java.util.List;
 public class QuestionnaireAnswerController {
     @Resource
     private QuestionnaireAnswerService questionnaireAnswerService;
-
+    @Resource
+    private QuestionnaireService questionnaireService;
     @PostMapping
     public Result add(QuestionnaireAnswer questionnaireAnswer) {
         questionnaireAnswerService.save(questionnaireAnswer);
@@ -84,10 +87,14 @@ public class QuestionnaireAnswerController {
 
         //获取问题答案
         List<List<String>> answers = questionnaireAnswerService.getAnswers(questionnaireQuestions);
+        //获取问卷注意事项
+        Questionnaire questionnaire = questionnaireService.findById(questionnaireId);
+        String remarks = questionnaire.getRemarks();
         model.addAttribute("optionAnswers", optionAnswers);
         model.addAttribute("questionlist", questionlist);
         model.addAttribute("questionnaireQuestionSize", questionnaireQuestionSize);
         model.addAttribute("scoreList", answers);
+        model.addAttribute("remarks",remarks);
         return "project/cube/questionnaire/questionnaire";
     }
 }

@@ -23,10 +23,11 @@
         <div class="xymfLogo">
             <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
             <span class="payCentre">问卷填写</span>
+            <div class="eui-col-xs3" style="float:right;color:#1E9FFF ">
+                <div id="timer">计时：00:00:00</div>
+            </div>
         </div>
-        <div class="eui-col-xs3" style="float:right;color:#1E9FFF ">
-            <div id="timer">00:00:00</div>
-        </div>
+
     </div>
 </div>
 
@@ -34,7 +35,7 @@
 <div class="questionContent">
     <div class="eui-area">
         <p class="eui-lineHeight24 conetentHint eui-font14">
-            下面有<span th:text="${questionnaireQuestionSize}">90</span>道条测试项目，列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。
+            下面有<span th:text="${questionnaireQuestionSize}">90</span>道条测试项目，<span th:text="${remarks}">列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。</span>
         </p>
         <div class="subject">
             <ul id="questionUl">
@@ -259,6 +260,17 @@
                 layer.msg('第' + (num+1) + '页' + ',第' + (i+1) + '题还没回答'+ '，请完成答题！', {
                     time: 2000
                 });
+                var questionRow = $('.subject>ul>li .eui-row:eq('+(i+1)+')');
+                questionRow.css("border","3px solid rgb(255, 153, 0)");
+                questionRow.animate({
+                    borderWidth:2
+                },3000);
+                questionRow.animate({
+                    borderWidth:1
+                },3000);
+                questionRow.animate({
+                    borderWidth:0
+                },3000);
                 return false;
             }
         }
@@ -366,7 +378,7 @@
                 str_hour = "0" + n_hour;
             }
 
-            var time = str_hour + ":" + str_min + ":" + str_sec;
+            var time = '计时：'+ str_hour + ":" + str_min + ":" + str_sec;
             ele_timer.text(time);
             n_sec++;
             if (n_sec > 59){

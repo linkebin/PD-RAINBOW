@@ -52,7 +52,9 @@ public class WebCubeQuestionnaireController {
 
             //获取问题答案
             List<List<String>> answers = questionnaireAnswerService.getAnswers(questionnaireQuestions);
-
+            //获取问卷注意事项
+            String remarks = questionnaire.getRemarks();
+            model.addAttribute("remarks",remarks);
             model.addAttribute("optionAnswers", optionAnswers);
             model.addAttribute("questionlist", questionlist);
             model.addAttribute("questionnaireQuestionSize", questionnaireQuestionSize);
