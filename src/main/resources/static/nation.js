@@ -2,14 +2,24 @@
  * Created by smy on 2017/11/1.
  */
 var nationUtil = {
-    checkObjectFieldNoNull : function(obj,names) {
+    checkRadioFieldNoNull : function(names,formId) {
         var ival ='';
         $.each(names,function (key,val) {
 
-            if (obj[key] == undefined || obj[key] == '' ){
-                ival=val;
-                return false;
+            var val22=$('#'+formId+ ' input:radio[name="'+key+'"]:checked').val();
+
+            var desc = $('#'+formId+ ' input:radio[name="'+key+'"]').eq(0).attr('disabled');
+
+            if (desc!='disabled'){
+                if(val22 ==null || val22 == undefined){
+                    $('#'+formId+ ' input:radio[name="'+key+'"]').eq(0).parents('.eui-input-block,' +
+                        '.eui-input-inline')
+                        .css('border','1px solid red');
+                    ival=val;
+                    return false;
+                }
             }
+
         });
         return ival;
     },

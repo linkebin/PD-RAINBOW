@@ -26,7 +26,7 @@ public class WebCustomerController {
     @RequestMapping("/customerList")
     public String customerList(){
 
-        return "project/cube/customer/customer-list";
+        return "project/cube/customer/customerList";
     }
 
     @RequestMapping("/visitorRegister")
@@ -37,6 +37,16 @@ public class WebCustomerController {
         model.addAttribute("selectOptionList",selectOptionList);
 
         return "project/cube/customer/visitor-register";
+    }
+
+    @RequestMapping("/checkIn")
+    public String checkIn(Model model,String creator){
+
+        model.addAttribute("creator",creator);
+        List<SelectOption> selectOptionList = selectOptionService.findSelectOptionByType("profession");
+        model.addAttribute("selectOptionList",selectOptionList);
+
+        return "project/cube/customer/visitor-check-in";
     }
 
     @RequestMapping("/visitorUpdate")

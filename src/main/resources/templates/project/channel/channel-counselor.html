@@ -36,12 +36,15 @@
     var table;
     eui.use('table', function(){
         table = eui.table;
+
+        var oj = new Object();
+        oj.type=3;
          tableIns = table.render({
             id: 'idTest'
             ,elem: '#test2'
             ,url:'/channel/manage/listByAccountCounselor'
             ,method:'post'
-            ,where: {json: JSON.stringify(new Object())}
+            ,where: {json: JSON.stringify(oj)}
             ,height: 460
             ,cols: [[ //标题栏
                 {checkbox: true}
@@ -137,17 +140,6 @@
         tableIns.reload({
             where: {json: JSON.stringify(obj)}
         });
-       // 监听工具条
-//        tableIns.on('tool(idTest)', function(obj){
-//            var data = obj.data; //获得当前行数据
-//            var layEvent = obj.event; //获得 lay-event 对应的值
-//            var tr = obj.tr; //获得当前行 tr 的DOM对象
-//            if(layEvent === 'del'){ //删除
-//                deleteUser(data.ID_)
-//            } else if(layEvent === 'edit'){ //编辑
-//                updateAccount(data.ID_);
-//            }
-//        });
     }
 
     var channelTree;
@@ -192,7 +184,6 @@
                     var text =$(this).find('span').html();
                     $(this).attr("title",text);
                 });
-                channelTree.selectNode(channelTree.getNodeDom(0));
             }
         });
     }

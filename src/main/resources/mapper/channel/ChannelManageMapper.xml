@@ -76,6 +76,14 @@
       in (SELECT su.ID_ FROM sec_user su WHERE su.DELETED=0 AND su.channel_id=#{channel_id})
     </if>
 
+    <if test="type == 3">
+      SELECT su.ACCOUNT,su.USER_NAME,su.MOBILE,
+      (SELECT su1.USER_NAME FROM sec_user su1
+      WHERE su1.DELETED=0 AND su1.ID_=su.inviter_user) inviter_user
+      FROM sec_user su
+      WHERE su.DELETED=0
+    </if>
+
 
   </select>
 </mapper>

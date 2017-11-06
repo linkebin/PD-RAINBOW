@@ -87,7 +87,7 @@
                     <div class="xymfForm">
                         <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
                             <colgroup>
-                                <col width="60">
+                                <!--<col width="60">-->
                                 <col width="150">
                                 <col width="80">
                                 <col width="100">
@@ -97,7 +97,7 @@
                             </colgroup>
                             <thead>
                             <tr>
-                                <th><input type="checkbox" e-skin="primary" title=""></th>
+                                <!--<th><input type="checkbox" e-skin="primary" title=""></th>-->
                                 <th>时间</th>
                                 <th>类型</th>
                                 <th>客户姓名</th>
@@ -249,7 +249,6 @@
 
     //渲染数据，拼接表格
     function getTable(userList) {
-        console.log(userList)
         var tableHtml = '';
         for (var item in userList){
             var secUser = userList[item];
@@ -264,7 +263,7 @@
                 type = '预约';
             }
             tableHtml +=  '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+//                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
                 '<td>'+ new Date(secUser.visitor_time).Format('yyyy-MM-dd hh:mm') +'</td>' +
                 '<td>'+type+'</td>' +
                 '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.visitor_id + '">'+ secUser.visitor_name +'</a></td>' +

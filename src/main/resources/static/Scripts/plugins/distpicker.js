@@ -196,7 +196,7 @@
   Distpicker.DEFAULTS = {
     autoSelect: true,
     placeholder: true,
-    province: '—— 省 ——',
+    // province: '—— 省 ——',
     city: '—— 市 ——',
     district: '—— 区 ——'
   };
