@@ -105,10 +105,11 @@ public class OrderOnlineController {
      * @return
      */
     @PostMapping("/payment")
-    public Result payment(String id,int orderState) {
+    public Result payment(String id,String SerialNumber) {
         OrderOnline orderOnline = orderOnlineService.findById(id);
-        orderOnline.setOrderState(orderState);
+        orderOnline.setOrderState(1);
         orderOnline.setPaymentTime(new Date());
+        orderOnline.setSerialNumber(SerialNumber);
         orderOnlineService.update(orderOnline);
         UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", Security.getUserId());
         if (userQuestionnaires != null) {
