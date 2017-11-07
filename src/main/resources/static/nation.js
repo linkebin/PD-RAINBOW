@@ -7,14 +7,13 @@ var nationUtil = {
         $.each(names,function (key,val) {
 
             var val22=$('#'+formId+ ' input:radio[name="'+key+'"]:checked').val();
-
             var desc = $('#'+formId+ ' input:radio[name="'+key+'"]').eq(0).attr('disabled');
 
             if (desc!='disabled'){
                 if(val22 ==null || val22 == undefined){
-                    $('#'+formId+ ' input:radio[name="'+key+'"]').eq(0).parents('.eui-input-block,' +
-                        '.eui-input-inline')
-                        .css('border','1px solid red');
+                    $("html,body").animate({scrollTop:$('#'+formId+ ' input:radio[name="'+key+'"]').eq(0)
+                        .parents('.eui-form-item')
+                        .offset().top},1000);
                     ival=val;
                     return false;
                 }

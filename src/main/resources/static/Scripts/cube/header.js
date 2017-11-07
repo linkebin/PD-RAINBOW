@@ -32,12 +32,18 @@ function initLaydateTest_n1(obj) {
     });
 
     $.post('/schedule/backToday30',{json:JSON.stringify(obj)},function (result) {
-        console.log(result)
+
+        if (result.data.length==0){
+            $("#classify").append(' <div class="eui-margin10"> <div class="eui-overflowH eui-marginB10"> ' +
+                '<div class="eui-float-left eui-font14">暂无预约记录</div> </div> ' +
+                '</div>');
+            return;
+        }
         $.each(result.data,function (index,item) {
             var dateFormat = new Date(item.visitorTime).Format('yyyy-MM-dd');
             if(!$("#Z"+dateFormat)[0]){
                 $("#classify").append(' <div id="Z'+dateFormat+'" class="eui-margin10"> <div class="eui-overflowH eui-marginB10"> ' +
-                    '<div class="eui-float-left">'+new Date(item.visitorTime).Format('MM-dd')+'</div> </div> ' +
+                    '<div class="eui-float-left eui-font14">'+new Date(item.visitorTime).Format('MM-dd')+'</div> </div> ' +
                     '<div id="list'+dateFormat+'"> </div> ' +
                     '</div>');
             }
@@ -46,7 +52,7 @@ function initLaydateTest_n1(obj) {
         $.each(result.data,function (index,item) {
             var dateFormat = new Date(item.visitorTime).Format('yyyy-MM-dd');
             if($("#list"+dateFormat)[0]){
-                $("#list"+dateFormat).append(' <div class="eui-overflowH"> <div class="eui-float-left eui-marginB5">'+ new Date(item.visitorTime).Format('hh:mm')+'</div> ' +
+                $("#list"+dateFormat).append(' <div class="eui-overflowH eui-font14"> <div class="eui-float-left eui-marginB5">'+ new Date(item.visitorTime).Format('hh:mm')+'</div> ' +
                     '<div title="'+item.describes+'" style="text-overflow: ellipsis;" class="eui-float-left eui-marginB10 eui-marginL10 test">'+item.visitorName+'  '+item.describes+'</div> ' +
                     '</div>');
             }

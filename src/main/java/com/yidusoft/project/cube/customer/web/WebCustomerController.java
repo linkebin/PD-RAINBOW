@@ -48,6 +48,13 @@ public class WebCustomerController {
 
         return "project/cube/customer/visitor-check-in";
     }
+    @RequestMapping("/checkUpdate")
+    public String checkUpdate(Model model,String id){
+        model.addAttribute("id",id);
+        List<SelectOption> selectOptionList = selectOptionService.findSelectOptionByType("profession");
+        model.addAttribute("selectOptionList",selectOptionList);
+        return "project/cube/customer/visitor-check-update";
+    }
 
     @RequestMapping("/visitorUpdate")
     public String visitorUpdate(Model model,String id){

@@ -15,7 +15,30 @@
         </div>
     </div>
     <div class="eui-mn1 eui-bg-white">
+
         <div class="eui-mn1-type3">
+            <form class="eui-form" id="searchFrom">
+                <input type="hidden" id="id"  name="parentId"/>
+                <input type="hidden"   name="type" value="3"/>
+                <div class="eui-input-inline eui-padding10">
+
+                    <input type="text" name="USER_NAME" e-verify="title" value=""
+                           autocomplete="off" placeholder="咨询师姓名/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="ACCOUNT" e-verify="title" value=""
+                           autocomplete="off" placeholder="咨询师账户/关键字" class="eui-input">
+                </div>
+
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="MOBILE" e-verify="title" value=""
+                           autocomplete="off" placeholder="联系方式/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
             <table id="test2"></table>
         </div>
     </div>
@@ -134,12 +157,31 @@
         });
     });
 
+    function resetForm() {
+        $('#searchFrom')[0].reset();
+    }
+    function doSearch() {
+        var obj =$("#searchFrom").serializeObject();
 
+        if(obj.parentId!=''){
+            if (obj.parentId =='0'){
+                obj.type=2;
+                obj.channel_id=$("#id").attr('searchId');
+            }else {
+                obj.type=1;
+                obj.inviter_user=$("#id").attr('searchId');
+            }
+        }
+
+        dataList(obj);
+    }
 
     function dataList(obj) {
+        layer.load();
         tableIns.reload({
             where: {json: JSON.stringify(obj)}
         });
+        layer.closeAll();
     }
 
     var channelTree;
@@ -166,7 +208,9 @@
                     parentIDFieldName: 'parentId',
                     onSelect: function (node)
                     {
-                        var obj = new Object();
+                        var obj =$("#searchFrom").serializeObject();
+                        $("#id").val(node.data.parentId)
+                        $("#id").attr('searchId',node.data.id);
                         if (node.data.parentId =='0'){
                             obj.type=2;
                             obj.channel_id=node.data.id;

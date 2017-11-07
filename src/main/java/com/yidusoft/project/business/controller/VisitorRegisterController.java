@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.business.domain.VisitorRegister;
 import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -48,6 +49,8 @@ public class VisitorRegisterController {
 
         try {
             visitorRegisterService.deleteById(visitorRegister.getId());
+            visitorRegister.setDeleted(0);
+            visitorRegister.setCreator(Security.getUserId());
             visitorRegisterService.save(visitorRegister);
         }catch (Exception e){
             e.printStackTrace();
