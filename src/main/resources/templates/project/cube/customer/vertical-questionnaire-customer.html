@@ -165,7 +165,11 @@ function  loadQuestion() {
 
 //拼接问题
 function  getTable(list) {
-    $("#visitorName").text(list.visitorRegister.visitorName);
+    if(list.visitorRegister==null){
+        $("#visitorName").text(list.activeParticipant.fullName);
+    }else{
+        $("#visitorName").text(list.visitorRegister.visitorName);
+    }
     $("#questionnaireName").text(list.questionnaire.questionnaireName);
     $("#totalScore").text(list.dataAcquisition.totalScore);
     var timeConsuming=list.dataAcquisition.timeConsuming;

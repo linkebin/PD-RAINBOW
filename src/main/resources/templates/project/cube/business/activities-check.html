@@ -145,6 +145,7 @@
             <div class="eui-col-md12">
                 <div class="eui-form">
                     <table class="eui-table" id="participantTable">
+                        <input type="hidden" id="questionnaireId">
                         <colgroup>
                             <col width="100">
                             <col>
@@ -249,7 +250,7 @@
                 sex = '女';
             }
             var id = "'" + participant.id + "'";
-            var createTime = "'" + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + "'";
+            var createTime = "'" + new Date(participant.fillingTime).Format("yyyy-MM-dd") + "'";
             tableHtml += '<tr>' +
                     '<td>' + participant.fullName + '</td>' +
                     '<td>' + participant.phone + '</td>' +
@@ -292,20 +293,24 @@
                         return $(this).attr("selected", true);
                     }
                 })
+                $('#questionnaireId').val(activity.uestionnaireId);
                 form.render('select');
                 layer.close(index);
             }
         })
     }
-    function check(userId,createTime) {
+    function check(userId, createTime) {
         console.log(createTime);
         $.post("/data/acquisition/findQuestionnaireForVisitor", {
             "userId": userId,
             "createTime": createTime
         }, function (result) {
-            if(result.code==200){
-                var acquisitionId=
-                window.open("")
+            console.log(result);
+            if (result.code == 200) {
+                var question = result.data[0];
+                var acquisitionId = question.id;
+                var userId = question.userId;
+                window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+$('#questionnaireId').val()+"&userId="+userId+"&acquisitionId="+acquisitionId);
             }
         })
     }

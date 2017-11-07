@@ -2,9 +2,9 @@ package com.yidusoft.configurer;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.github.pagehelper.util.StringUtil;
+import com.yidusoft.project.system.domain.SecMenu;
 import com.yidusoft.project.system.service.SecMenuService;
 import com.yidusoft.shiro.MyShiroRealm;
-import com.yidusoft.project.system.domain.SecMenu;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -20,8 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +100,15 @@ public class ShiroConfigurer {
         filterChainDefinitionMap.put("/sign/**","anon");
         filterChainDefinitionMap.put("/upload/uploadImglayUi","anon");
 
+        filterChainDefinitionMap.put("/web/activities/fillingPage","anon");
+        filterChainDefinitionMap.put("/launch/activities/getIdByPorn","anon");
+        filterChainDefinitionMap.put("/data/acquisition/findCount","anon");
+        filterChainDefinitionMap.put("/active/participant/add","anon");
+        filterChainDefinitionMap.put("/web/cube/getQuestionnaireFill","anon");
+        filterChainDefinitionMap.put("project/cube/questionnaire/other-questionnaire","anon");
+        filterChainDefinitionMap.put("/cube/questionnaire/question/findQuestionForQuestionnaire","anon");
+        filterChainDefinitionMap.put("/cube/questionnaire/submitQuestionnaire","anon");
+        filterChainDefinitionMap.put("/web/cube/getSuccess","anon");
 
         //<!-- 过滤链定义，从上向下顺序执行，一般将 *放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->

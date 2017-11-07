@@ -87,4 +87,16 @@ public class WebCubeQuestionnaireController {
     public String getSuccess(){
         return "project/cube/questionnaire/questionnaire-fillIn-success";
     }
+
+    @RequestMapping(value ={"/getQuestionnaireFill"})
+    public String getQuestionnaireFill(String questionnaireId,String userId,String visitorTimes,String activityId,String userName,Model model){
+        model.addAttribute("questionnaireId",questionnaireId);
+        model.addAttribute("activityId",activityId);
+        model.addAttribute("userId",userId);
+        model.addAttribute("visitorTimes",visitorTimes);
+        model.addAttribute("userName",userName);
+        Questionnaire questionnaire= questionnaireService.findById(questionnaireId);
+        model.addAttribute("questionnaire",questionnaire);
+        return "project/cube/questionnaire/other-questionnaire";
+    }
 }

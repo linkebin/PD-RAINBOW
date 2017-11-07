@@ -177,6 +177,7 @@
                         var end = new Date(activity.activityEnd).Format('yyyy-MM-dd hh:mm:ss');
                         if (new Date() > new Date(start) && new Date() < new Date(end)) {
                             $.post('/data/acquisition/findCount', {activityId: activity.id}, function (res) {
+                                console.log(res)
                                 if (res.code == 200) {
                                     if (res.data >= activity.activityTotal) {
                                         layer.confirm('活动已结束', {
@@ -186,8 +187,8 @@
                                         $.post("/active/participant/add",{json:JSON.stringify(obj)},function (res) {
                                             console.log(res);
                                             if(res.code==200){
-                                                var time = '';
-                                                window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+activity.uestionnaireId+"&userId="+res.data.id+"&visitorTimes="+time+"&activityId="+activity.id+"&userName="+res.data.fullName;
+                                                var time = new Date().Format("yyyy-MM-dd");
+                                                window.location.href="/web/cube/getQuestionnaireFill?questionnaireId="+activity.uestionnaireId+"&userId="+res.data.id+"&visitorTimes="+time+"&activityId="+activity.id+"&userName="+res.data.fullName;
                                             }
                                         })
 

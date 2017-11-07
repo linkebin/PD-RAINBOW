@@ -132,7 +132,13 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 questionnaireAnswer.setAnswer(answer);
                 questionnaireAnswer.setQuestionId(questionId);
                 questionnaireAnswer.setCreateTime(new Date());
-                questionnaireAnswer.setCreator(Security.getUser().getUserName());
+                if (userName != null && userName != "") {
+                    questionnaireAnswer.setCreator(userName);
+                } else {
+                    if(Security.getUser().getUserName()!=null){
+                        questionnaireAnswer.setCreator(Security.getUser().getUserName());
+                    }
+                }
                 questionnaireAnswer.setDeleted(0);
                 questionnaireAnswer.setUserId(userId);
                 //判断  1  单选  2多选  3评分单选
@@ -194,20 +200,15 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             } else {
                 dataAcquisition.setDataUser(Security.getUser().getUserName());
             }
-            Date createTime = new Date();
-            if(visitorTimes!=null && visitorTimes!=""){
-                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
-                java.util.Date date=sdf.parse(visitorTimes);
-                dataAcquisition.setCreateTime(date);
-            }else{
-                dataAcquisition.setCreateTime(createTime);
-            }
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+            java.util.Date date=sdf.parse(visitorTimes);
+            dataAcquisition.setCreateTime(date);
             dataAcquisitionMapper.insert(dataAcquisition);
 
             //添加填报时间
             ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
             if(activeParticipant!=null){
-                activeParticipant.setFillingTime(createTime);
+                activeParticipant.setFillingTime(new Date());
                 activeParticipantService.update(activeParticipant);
             }
             //扣除余额
