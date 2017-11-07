@@ -36,7 +36,7 @@
 
 <div class="activityContent xymfMargin">
     <div class="eui-area">
-        <form id="activitiesForm" onsubmit="return false;">
+        <form id="activityForm" onsubmit="return false;">
             <input type="hidden" th:value="${id}" id="id" name="id"/>
             <div class="eui-bg-white eui-padding20 activity">
                 <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
@@ -109,13 +109,24 @@
                         </div>
                         <label class="eui-form-label">活动开始时间</label>
                         <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly
-                                   name="activityStart" placeholder="活动开始时间">
+                            <input type="text" class="eui-input" readonly name="activityStart">
                         </div>
                         <label class="eui-form-label">活动结束时间</label>
                         <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly="readonly" name="activityEnd"
-                                   placeholder="活动结束时间">
+                            <input type="text" class="eui-input" readonly="readonly" name="activityEnd">
+                        </div>
+                    </div>
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">活动邀请码</label>
+                        <div class="eui-input-inline">
+                            <input type="text" class="eui-input" readonly name="activityPorn" >
+                        </div>
+                        <label class="eui-form-label">活动访问网址</label>
+                        <div class="eui-input-inline">
+                            <input type="text" class="eui-input" readonly name="uestionnaireUri" id="url">
+                        </div>
+                        <div class="eui-input-inline">
+                            <button class="eui-btn eui-btn-normal" id="copyBtn">复制链接</button>
                         </div>
                     </div>
                 </div>
@@ -140,9 +151,10 @@
                         </colgroup>
                         <thead>
                         <th>姓名</th>
-                        <th>年龄</th>
+                        <th>手机号码</th>
                         <th>性别</th>
-                        <th>手机</th>
+                        <th>年龄</th>
+                        <th>填报时间</th>
                         <th>关注度</th>
                         </tr>
                         </thead>
@@ -167,6 +179,7 @@
 
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/plugins/jqueryZclip/jquery.zclip.min.js"></script>
 <script src="/Scripts/plugins/distpicker.data.js"></script>
 <script src="/Scripts/plugins/distpicker.js"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
@@ -174,18 +187,25 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-    var form, laypage;
+    var form, laypage,layer;
     $(function () {
-        eui.use(['form', 'laypage'], function () {
+        $('#copyBtn').zclip({
+            path: "/Scripts/plugins/jqueryZclip/ZeroClipboard.swf",
+            copy: function(){
+                return $('#url').val();
+            }
+        });
+        eui.use(['form', 'laypage','layer'], function () {
             form = eui.form;
             laypage = eui.laypage;
+            layer = eui.layer;
             getQuestions();//获取问卷名称
             getActivityInfo();//获取填报人的信息
         });
     });
-
     //获取填报人的信息
     function getActivityInfo() {
+        var index = layer.load(2); //加载
         $.post("/active/participant/list", {activityId: $('#id').val(), page: 1, size: 5}, function (result) {
             console.log(result);
             laypage.render({
@@ -213,6 +233,7 @@
                             $("#participantTable tbody").html(tableHtml);
                         })
                     }
+                    layer.close(index);
                 }
             });
         })
@@ -229,18 +250,22 @@
             }
             tableHtml += '<tr>' +
                     '<td>' + participant.fullName + '</td>' +
-                    '<td>' + participant.age + '</td>' +
-                    '<td>' + sex + '</td>' +
                     '<td>' + participant.phone + '</td>' +
+                    '<td>' + sex + '</td>' +
+                    '<td>' + participant.age + '</td>' +
+                    '<td>' + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
+                    '<td>算法待补充</td>' +
                     '</tr>';
         }
         return tableHtml;
     }
     //获取活动详情
     function detail() {
-        $.post("/launch/activities/detail", {id: $('#id').val()}, function (res) {
-            if (res.code == 200) {
-                var activity = res.data;
+        var index = layer.load(2); //加载
+        $.post("/launch/activities/detail", {id: $('#id').val()}, function (result) {
+            console.log(result);
+            if (result.code == 200) {
+                var activity = result.data;
                 var address = activity.activityAddr;
                 var city = address.substring(address.indexOf("-") + 1, find(activity.activityAddr, '-', 1));
                 var province = address.substring(0, address.indexOf("-"));
@@ -254,22 +279,19 @@
 
                 $('#district').val(district);
                 $('#district').trigger("change");
-                $('select[name="district"]').val(district);
-                $('input[name="activityName"]').val(activity.activityName);
-                $('input[name="activityAim"]').val(activity.activityAim);
-                $('input[name="participant"]').val(activity.participant);
-                $('input[name="contacts"]').val(activity.contacts);
-                $('input[name="phone"]').val(activity.phone);
-                $('input[name="activityTotal"]').val(activity.activityTotal);
+                $("#activityForm").setForm(result.data)
                 $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityAddr"]').val(address);
+                var uestionnaireUri=activity.uestionnaireUri+"?id="+activity.id;
+                $('input[name="uestionnaireUri"]').val(uestionnaireUri);
                 $('select[name="uestionnaireId"]').children().each(function (i, data) {
                     if (data.value == activity.uestionnaireId) {
                         return $(this).attr("selected", true);
                     }
                 })
                 form.render('select');
+                layer.close(index);
             }
         })
     }

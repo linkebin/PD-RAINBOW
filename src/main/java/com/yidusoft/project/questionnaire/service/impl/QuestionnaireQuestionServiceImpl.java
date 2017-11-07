@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.AbstractService;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.business.domain.ActiveParticipant;
+import com.yidusoft.project.business.service.ActiveParticipantService;
 import com.yidusoft.project.questionnaire.dao.DataAcquisitionMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireAnswerMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireMapper;
@@ -42,6 +44,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     private DataAcquisitionService dataAcquisitionService;
     @Resource
     private QuestionnaireMapper questionnaireMapper;
+    @Resource
+    private ActiveParticipantService activeParticipantService;
 
     //分页条件查询问题
     @Override
@@ -194,6 +198,10 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setCreateTime(new Date());
             dataAcquisitionMapper.insert(dataAcquisition);
 
+            //添加填报时间
+            ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
+            activeParticipant.setFillingTime(new Date());
+            activeParticipantService.update(activeParticipant);
             //扣除余额
             userQuestionnairesService.deduction();
         } catch (Exception e) {
