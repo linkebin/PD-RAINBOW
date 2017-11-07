@@ -279,7 +279,7 @@
                             if (result.data != null) {
                                 total = result.data.questionnairesTotal;
                             }
-                            $.post('/launch/activities/getSumTotal', {json: JSON.stringify($('#userId').val())}, function (result) {
+                            $.post('/launch/activities/getSumTotal', {id:""}, function (result) {
                                 if(result.code==200){
                                     var sumToatl=parseInt(obj.activityTotal)+parseInt(result.data);
                                     if (sumToatl > total) {

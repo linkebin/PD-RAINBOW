@@ -158,7 +158,7 @@ public class LaunchActivitiesController {
         int sumTotal=0;
         if(list!=null && list.size()>0){
             for(LaunchActivities la:list){
-                if(id.equals(la.getId())){
+                if(id!=null && id!="" && !id.equals(la.getId())){
                     sumTotal+=la.getActivityTotal();
                 }
             }
