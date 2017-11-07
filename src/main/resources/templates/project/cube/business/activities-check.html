@@ -119,7 +119,7 @@
                     <div class="eui-form-item">
                         <label class="eui-form-label">活动邀请码</label>
                         <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly name="activityPorn" >
+                            <input type="text" class="eui-input" readonly name="activityPorn">
                         </div>
                         <label class="eui-form-label">活动访问网址</label>
                         <div class="eui-input-inline">
@@ -187,15 +187,15 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-    var form, laypage,layer;
+    var form, laypage, layer;
     $(function () {
         $('#copyBtn').zclip({
             path: "/Scripts/plugins/jqueryZclip/ZeroClipboard.swf",
-            copy: function(){
+            copy: function () {
                 return $('#url').val();
             }
         });
-        eui.use(['form', 'laypage','layer'], function () {
+        eui.use(['form', 'laypage', 'layer'], function () {
             form = eui.form;
             laypage = eui.laypage;
             layer = eui.layer;
@@ -248,13 +248,15 @@
             if (participant.sex == 0) {
                 sex = '女';
             }
+            var id = "'" + participant.id + "'";
+            var createTime = "'" + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + "'";
             tableHtml += '<tr>' +
                     '<td>' + participant.fullName + '</td>' +
                     '<td>' + participant.phone + '</td>' +
                     '<td>' + sex + '</td>' +
                     '<td>' + participant.age + '</td>' +
                     '<td>' + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
-                    '<td>算法待补充</td>' +
+                    '<td><button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="check(' + id + ',' + createTime + ')"><i class="eui-icon">&#xe621;</i></button></td>' +
                     '</tr>';
         }
         return tableHtml;
@@ -283,7 +285,7 @@
                 $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityAddr"]').val(address);
-                var uestionnaireUri=activity.uestionnaireUri+"?id="+activity.id;
+                var uestionnaireUri = activity.uestionnaireUri + "?id=" + activity.id;
                 $('input[name="uestionnaireUri"]').val(uestionnaireUri);
                 $('select[name="uestionnaireId"]').children().each(function (i, data) {
                     if (data.value == activity.uestionnaireId) {
@@ -292,6 +294,18 @@
                 })
                 form.render('select');
                 layer.close(index);
+            }
+        })
+    }
+    function check(userId,createTime) {
+        console.log(createTime);
+        $.post("/data/acquisition/findQuestionnaireForVisitor", {
+            "userId": userId,
+            "createTime": createTime
+        }, function (result) {
+            if(result.code==200){
+                var acquisitionId=
+                window.open("")
             }
         })
     }

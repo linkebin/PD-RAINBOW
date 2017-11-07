@@ -186,7 +186,8 @@
                                         $.post("/active/participant/add",{json:JSON.stringify(obj)},function (res) {
                                             console.log(res);
                                             if(res.code==200){
-                                                window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+activity.uestionnaireId+"&userId="+res.data.id+"&visitorTimes="+new Date()+"&activityId="+activity.id+"&userName="+res.data.fullName;
+                                                var time = '';
+                                                window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+activity.uestionnaireId+"&userId="+res.data.id+"&visitorTimes="+time+"&activityId="+activity.id+"&userName="+res.data.fullName;
                                             }
                                         })
 

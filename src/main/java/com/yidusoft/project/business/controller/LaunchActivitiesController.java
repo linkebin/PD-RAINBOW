@@ -9,6 +9,7 @@ import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.SMSCode;
+import com.yidusoft.utils.Security;
 import com.yidusoft.utils.SendMessageCode;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -145,18 +146,21 @@ public class LaunchActivitiesController {
 
     /**
      * 获取用户所有活动的人数
-     * @param json
+     * @param id
      * @return
      */
     @PostMapping("/getSumTotal")
-    public Result getSumTotal(String json) {
+    public Result getSumTotal(String id) {
         List<LaunchActivities> list = new ArrayList<>();
-        LaunchActivities launchActivities=JSON.parseObject(json,LaunchActivities.class);
+        LaunchActivities launchActivities=new LaunchActivities();
+        launchActivities.setUserId(Security.getUserId());
         list = launchActivitiesService.getActivityAll(launchActivities);
         int sumTotal=0;
         if(list!=null && list.size()>0){
             for(LaunchActivities la:list){
-                sumTotal+=la.getActivityTotal();
+                if(id.equals(la.getId())){
+                    sumTotal+=la.getActivityTotal();
+                }
             }
         }
         return ResultGenerator.genSuccessResult(sumTotal);

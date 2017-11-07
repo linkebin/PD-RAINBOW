@@ -42,6 +42,9 @@
         <if test="activityStatus!=null and activityStatus!=''">
             AND activity_status = #{activityStatus}
         </if>
+        <if test="activityAim!=null and activityAim!=''">
+            AND activity_aim LIKE '%${activityAim}%'
+        </if>
         ORDER BY create_time DESC
     </select>
 

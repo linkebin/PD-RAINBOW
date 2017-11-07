@@ -61,8 +61,6 @@
                 <th>活动名称</th>
                 <th>活动类型</th>
                 <th>创建人</th>
-                <th>开始时间</th>
-                <th>结束时间</th>
                 <th>审批状态</th>
                 <th>操 作</th>
             </tr>
@@ -81,7 +79,7 @@
 <div class="filtrateIn1">
     <div class="eui-row eui-padding10 eui-borderB">
         <div class="eui-col-md10 eui-font18 eui-lineHeight30 newOrEdit">
-            <i class='eui-icon eui-font24'>&#xe654;</i>
+            <i class='eui-icon eui-font24'>&#xe621;</i>   查看详情
         </div>
         <div class="eui-col-md2 eui-textAlignR">
             <i class='eui-icon eui-font24 activityClose'>&#x1006;</i>
@@ -125,19 +123,19 @@
 
                 </select>
             </div>
+            <label class="eui-form-label">活动地点</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" id="activityAddr" readonly>
+            </div>
+        </div>
+        <div class="eui-form-item">
             <label class="eui-form-label">开始时间</label>
             <div class="eui-input-inline">
                 <input type="text" class="eui-input" id="activityStartTime" readonly>
             </div>
-        </div>
-        <div class="eui-form-item">
             <label class="eui-form-label">结束时间</label>
             <div class="eui-input-inline">
                 <input type="text" class="eui-input" id="activityEndTime" readonly>
-            </div>
-            <label class="eui-form-label">活动地点</label>
-            <div class="eui-input-inline">
-                <input type="text" class="eui-input" id="activityAddr" readonly>
             </div>
         </div>
         <div class="eui-form-item">
@@ -166,7 +164,7 @@
                 <input type="text" class="eui-input" id="uestionnaireUrl" readonly >
             </div>
             <div class="eui-input-inline">
-                <button class="eui-btn" onclick="copyUrl()">复制链接</button>
+                <button class="eui-btn" id="copyBtn">复制链接</button>
             </div>
         </div>
     </form>
@@ -175,6 +173,7 @@
 
 <script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/plugins/jqueryZclip/jquery.zclip.min.js"></script>
 <script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
@@ -183,17 +182,25 @@
         document.getElementById('searchFrom').reset();
     }
     $(function () {
+
+        //复制文本到剪贴板
+        $('#copyBtn').zclip({
+            path: "/Scripts/plugins/jqueryZclip/ZeroClipboard.swf",
+            copy: function(){
+                return $('#uestionnaireUrl').val();
+            }
+        });
         doSearch();
     });
 
     //加载数据
+    var form,laypage,layer,laydate
     function doSearch() {
         eui.use(['form', 'laypage', 'layer', 'laydate'], function () {
-            var form = eui.form
-                    , laypage = eui.laypage
-                    , layer = eui.layer
-                    , laydate = eui.laydate
-                    , $ = eui.jquery;
+            form = eui.form;
+            laypage = eui.laypage;
+            layer = eui.layer;
+            laydate = eui.laydate;
 
             //常规用法
             laydate.render({
@@ -289,8 +296,6 @@
                     '<td>' + activity.activityName + '</td>' +
                     '<td>' + initiatorType + '</td>' +
                     '<td>' + activity.creator + '</td>' +
-                    '<td>' + new Date(activity.activityStart).Format("yyyy-mm-dd") + '</td>' +
-                    '<td>' + new Date(activity.activityEnd).Format("yyyy-mm-dd") + '</td>' +
                     '<td>' + status + '</td>' +
                     '<td>';
             var id = "'" + activity.id + "'";
@@ -310,11 +315,11 @@
             var type = "'"+ activity.initiatorType +"'";
             var porn = "'"+ activity.activityPorn +"'";
             var url = "'"+ activity.uestionnaireUri +"'";
-            if (activity.activityStatus == 0) {
-                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ',' + phone + ','+creator+','+createTime+','+type+','+porn+','+url+')"><i class="eui-icon tb">&#xe60e;</i></a>' +
+            if (activity.activityStatus == 1) {
+                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ',' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ',' + phone + ','+creator+','+createTime+','+type+','+porn+','+url+')"><i class="eui-icon tb">&#xe621;</i></a>' +
                         '<button class="eui-btn eui-btn-primary eui-btn-mini" title="审批" onclick="approval(' + id + ')"><i class="eui-icon tb">&#x1005;</i></a>'
             } else {
-                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ',' + phone + ','+creator+','+createTime+','+type+','+porn+','+url+')"><i class="eui-icon tb">&#xe60e;</i></a>' +
+                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ',' + name + ',' + aim + ',' + addr + ',' + participant + ',' + contacts + ',' + total + ',' + start + ',' + end + ',' + uestionnaireId + ',' + phone + ','+creator+','+createTime+','+type+','+porn+','+url+')"><i class="eui-icon tb">&#xe621;</i></a>' +
                         '</tr>';
             }
         }
@@ -339,7 +344,7 @@
 
     $('.taskFiltrate1').hide()
     //查看活动详情
-    function checkActivity(name, aim, addr, participant, contacts, total, start, end, uestionnaireId, phone,creator,createTime,type,porn,url) {
+    function checkActivity(id,name, aim, addr, participant, contacts, total, start, end, uestionnaireId, phone,creator,createTime,type,porn,url) {
         $('#activityName').val(name);
         $('#activityAim').val(aim);
         $('#participant').val(participant);
@@ -352,7 +357,7 @@
         $('#creator').val(creator);
         $('#createTime').val(createTime);
         $('#InitiatorType').val("企业活动")
-        $('#uestionnaireUrl').val(url);
+        $('#uestionnaireUrl').val(url+"?id="+id);
         if(type==2){
             $('#InitiatorType').val("调研活动");
         }
@@ -375,6 +380,11 @@
             $(".filtrateIn1").animate({right: '0'}, 700);
         })
     }
+
+    $('.activityClose,.taskFiltrate1').click(function () {
+        $(".taskFiltrate1").hide();
+        $(".filtrateIn1").animate({right: '-700px'}, 700);
+    })
 </script>
 </body>
 </html>

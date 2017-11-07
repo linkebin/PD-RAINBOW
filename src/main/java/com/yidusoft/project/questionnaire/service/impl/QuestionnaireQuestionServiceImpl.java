@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -193,15 +194,22 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             } else {
                 dataAcquisition.setDataUser(Security.getUser().getUserName());
             }
-            /*SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
-            java.util.Date date=sdf.parse(visitorTimes);*/
-            dataAcquisition.setCreateTime(new Date());
+            Date createTime = new Date();
+            if(visitorTimes!=null && visitorTimes!=""){
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+                java.util.Date date=sdf.parse(visitorTimes);
+                dataAcquisition.setCreateTime(date);
+            }else{
+                dataAcquisition.setCreateTime(createTime);
+            }
             dataAcquisitionMapper.insert(dataAcquisition);
 
             //添加填报时间
             ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
-            activeParticipant.setFillingTime(new Date());
-            activeParticipantService.update(activeParticipant);
+            if(activeParticipant!=null){
+                activeParticipant.setFillingTime(createTime);
+                activeParticipantService.update(activeParticipant);
+            }
             //扣除余额
             userQuestionnairesService.deduction();
         } catch (Exception e) {

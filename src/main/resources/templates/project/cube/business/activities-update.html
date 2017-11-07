@@ -253,9 +253,12 @@
                             if (result.data != null) {
                                 total = result.data.questionnairesTotal;
                             }
-                            $.post('/launch/activities/getSumTotal', {json: JSON.stringify($('#userId').val())}, function (result) {
+                            console.log(total);
+                            $.post('/launch/activities/getSumTotal', {id:$('#id').val()}, function (result) {
                                 if (result.code == 200) {
                                     var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
+                                    console.log(parseInt(result.data))
+                                    console.log(sumToatl);
                                     if (sumToatl > total) {
                                         layer.confirm('你的使用卷不足!!', {
                                             btn: ['前往购买', '残忍拒绝']

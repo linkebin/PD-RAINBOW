@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.business.dao.ActiveParticipantMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.business.domain.ActiveParticipant">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="filling_time" jdbcType="TIMESTAMP" property="fillingTime" />
+    <result column="attention_degree" jdbcType="VARCHAR" property="attentionDegree" />
+  </resultMap>
+
+  <select id="getParticipantInfo" resultMap="BaseResultMap" parameterType="String">
+    SELECT ap.id_,ap.full_name,ap.phone,ap.sex,ap.age,
+          ap.create_time,ap.filling_time,ap.attention_degree
+    FROM  data_acquisition da,active_participant ap
+    WHERE da.user_id=ap.id_
+    AND	  da.activity_id=#{activityId}
+  </select>
+</mapper>
