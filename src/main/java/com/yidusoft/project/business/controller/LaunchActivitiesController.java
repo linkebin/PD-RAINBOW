@@ -7,10 +7,7 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
-import com.yidusoft.utils.CodeHelper;
-import com.yidusoft.utils.SMSCode;
-import com.yidusoft.utils.Security;
-import com.yidusoft.utils.SendMessageCode;
+import com.yidusoft.utils.*;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +18,6 @@ import javax.annotation.Resource;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.net.InetAddress.getLocalHost;
 
 /**
  * Created by CodeGenerator on 2017/10/11.
@@ -112,9 +107,9 @@ public class LaunchActivitiesController {
     public Result approval(String id,HttpServletRequest request) throws UnknownHostException {
         //获取服务器IP
         int port = request.getServerPort();
-        String addr = getLocalHost().getHostAddress();
+        String addr = IpAddressUtils.getIpAddress(request);
         LaunchActivities launchActivities=launchActivitiesService.findById(id);
-        launchActivities.setActivityStatus(1);
+        launchActivities.setActivityStatus(2);
         launchActivities.setActivityPorn(CodeHelper.randomCode(8));
         launchActivities.setUestionnaireUri("http://"+addr+":"+port+"/web/activities/fillingPage");
         launchActivitiesService.update(launchActivities);

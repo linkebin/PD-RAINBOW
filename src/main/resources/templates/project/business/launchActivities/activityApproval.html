@@ -330,11 +330,15 @@
      * @param id
      */
     function approval(id) {
-        $.post("/launch/activities/approval", {id: id}, function (res) {
-            console.log(res);
-            if (res.code = 200) {
-                doSearch();
-            }
+        layer.confirm('确认通过么？',{
+            btn:['确认','取消']
+        },function () {
+            $.post("/launch/activities/approval", {id: id}, function (res) {
+                console.log(res);
+                if (res.code = 200) {
+                    doSearch();
+                }
+            })
         })
     }
 
