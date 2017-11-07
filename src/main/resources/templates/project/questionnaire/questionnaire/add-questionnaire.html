@@ -394,9 +394,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     });
     //select 的选择监听事件
     form.on('select(gaugeId)', function(data){
-        console.log(data.elem); //得到select原始DOM对象
-        console.log(data.value); //得到被选中的值
-        console.log(data.othis); //得到美化后的DOM对象
+       //删除原来的所有问题
+        $("#questionCollapse").children().remove();
+        $("#addQuestionCollapse").children().remove();
         checkGauge(data.value);
     });
 

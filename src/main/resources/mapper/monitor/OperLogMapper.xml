@@ -11,5 +11,13 @@
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="oper_time" jdbcType="TIMESTAMP" property="operTime" />
+    <result column="oper_ip" jdbcType="VARCHAR" property="operIp" />
+    <result column="oper_url" jdbcType="VARCHAR" property="operUrl" />
+    <result column="oper_when_long" jdbcType="VARCHAR" property="operWhenLong" />
+    <result column="url_type" jdbcType="VARCHAR" property="urlType" />
+    <result column="url_method" jdbcType="VARCHAR" property="urlMethod" />
+    <result column="url_result" jdbcType="VARCHAR" property="urlResult" />
+    <result column="url_param" jdbcType="VARCHAR" property="urlParam" />
+    <result column="sessionId" jdbcType="VARCHAR" property="sessionId" />
   </resultMap>
 </mapper>

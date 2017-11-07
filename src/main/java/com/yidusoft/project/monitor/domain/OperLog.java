@@ -40,6 +40,120 @@ public class OperLog {
     private Date operTime;
 
     /**
+     * 操做人ip
+     */
+    @Column(name = "oper_ip")
+    private String operIp;
+
+
+    /**
+     * 访问url
+     */
+    @Column(name = "oper_url")
+    private String operUrl;
+
+    /**
+     * 操作时长
+     */
+    @Column(name = "oper_when_long")
+    private String operWhenLong;
+
+    /**
+     * 请求类型
+     */
+    @Column(name = "url_type")
+    private String urlType;
+
+    /**
+     * 请求方法
+     */
+    @Column(name = "url_method")
+    private String urlMethod;
+
+    /**
+     * 请求结果
+     */
+    @Column(name = "url_result")
+    private String urlResult;
+
+    /**
+     * 请求参数
+     */
+    @Column(name = "url_param")
+    private String urlParam;
+
+    /**
+     * sessionId
+     */
+    @Column(name = "sessionId")
+    private String sessionId;
+
+
+    public String getOperIp() {
+        return operIp;
+    }
+
+    public void setOperIp(String operIp) {
+        this.operIp = operIp;
+    }
+
+    public String getOperUrl() {
+        return operUrl;
+    }
+
+    public void setOperUrl(String operUrl) {
+        this.operUrl = operUrl;
+    }
+
+    public String getOperWhenLong() {
+        return operWhenLong;
+    }
+
+    public void setOperWhenLong(String operWhenLong) {
+        this.operWhenLong = operWhenLong;
+    }
+
+    public String getUrlType() {
+        return urlType;
+    }
+
+    public void setUrlType(String urlType) {
+        this.urlType = urlType;
+    }
+
+    public String getUrlMethod() {
+        return urlMethod;
+    }
+
+    public void setUrlMethod(String urlMethod) {
+        this.urlMethod = urlMethod;
+    }
+
+    public String getUrlResult() {
+        return urlResult;
+    }
+
+    public void setUrlResult(String urlResult) {
+        this.urlResult = urlResult;
+    }
+
+    public String getUrlParam() {
+        return urlParam;
+    }
+
+    public void setUrlParam(String urlParam) {
+        this.urlParam = urlParam;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    /**
      * @return oper_id
      */
     public String getOperId() {
