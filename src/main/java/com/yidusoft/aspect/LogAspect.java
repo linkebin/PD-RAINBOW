@@ -59,7 +59,7 @@ public class LogAspect {
         //获得进来的时间
         operWhenLong.set(System.currentTimeMillis()); ;
         // 接收到请求，记录请求内容
-        logger.info("-------------------------------------------");
+        logger.info("----------------请求日志开始---------------------------");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
             operLog.set(new OperLog());
@@ -110,6 +110,7 @@ public class LogAspect {
             // 此处将ex的类型声明为Throwable，意味着对目标方法抛出的异常不加限制  
             operLog.get().setUrlResult("异常");
             addOperLog();
+
         }
 
         //添加行为操作
