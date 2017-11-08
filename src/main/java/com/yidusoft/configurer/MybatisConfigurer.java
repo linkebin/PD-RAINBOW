@@ -20,8 +20,8 @@ import java.util.Properties;
 @Configuration
 public class MybatisConfigurer {
     public  final String BASE_PACKAGE = "com.yidusoft";//项目基础包名称
-    public  final String MODEL_PACKAGE = BASE_PACKAGE + ".project.*.domain";//Model所在包
-    public  final String MAPPER_PACKAGE = BASE_PACKAGE + ".project.*.dao";//Mapper所在包
+    public  final String MODEL_PACKAGE = BASE_PACKAGE + ".*.*.domain";//Model所在包
+    public  final String MAPPER_PACKAGE = BASE_PACKAGE + ".*.*.dao";//Mapper所在包
     public  final String MAPPER_INTERFACE_REFERENCE = BASE_PACKAGE + ".core.Mapper";//Mapper插件基础接口的完全限定名
 
     @Bean

@@ -8,6 +8,7 @@
     <script th:src="@{/Scripts/date2format.js}" charset="utf-8"></script>
 </head>
 <body class="eui-layout-body">
+<div hidden id="alipayResultForm"></div>
 <div class="eui-layout eui-layout-admin xymfHome xymfPay">
     <div class="eui-header">
         <div th:replace="project/cube/common/header :: header">Header</div>
@@ -268,8 +269,23 @@
                             obj.subject = product.productName;
                             obj.body = "";
                             /*window.location.href = "/cube/order";*/
+                            //支付宝支付请求
+                            $.ajax({
+                                type: 'POST',
+                                url: '/alipaytradepagepay/paymentByAlipay',
+                                data: {
+                                    formDatas: JSON.stringify(obj)
+                                },
+                                dataType: 'html',//支付宝接口响应支付表单字符串
+                                success: function (data) {
+                                    console.log(data);
+                                    //将响应回来的支付表单插入html，保证此表单为第一表单，以完成表单的默认提交
+                                    $("#alipayResultForm").append(data);
+                                }
+                            });
                         }
                     })
+
                 }
             })
         })
