@@ -20,4 +20,21 @@
     <result column="url_param" jdbcType="VARCHAR" property="urlParam" />
     <result column="sessionId" jdbcType="VARCHAR" property="sessionId" />
   </resultMap>
+
+  <select id="operLogListByPage" resultMap="BaseResultMap" parameterType="com.yidusoft.project.monitor.domain.OperLog">
+        SELECT
+          *
+         FROM oper_log
+         WHERE 1=1
+        <if test="userName!='' and userName!=null">
+          AND user_name like '%${userName}%'
+        </if>
+        <if test="urlParam!='' and urlParam!=null">
+          AND url_param like '%${urlParam}%'
+        </if>
+        <if test="sessionId!='' and sessionId!=null">
+          AND sessionId like '%${sessionId}%'
+        </if>
+        ORDER BY  oper_time DESC
+  </select>
 </mapper>
