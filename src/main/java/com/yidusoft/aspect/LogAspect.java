@@ -82,8 +82,7 @@ public class LogAspect {
             operLog.get().setUrlParam(JSON.toJSONString(map));
             logger.info("参数: " + JSON.toJSONString(map));
          // 记录下请求内容
-         // logger.info("URL : " + request.getRequestURL().toString());
-         logger.info("URL : " + request.getRequestURL().toString().replace("8088",",").split(",")[1]);
+         logger.info("URI : " + request.getRequestURI());
          logger.info("HTTP_METHOD : " + request.getMethod());
          logger.info("IP : " + request.getRemoteAddr());
          logger.info("sessionId : " +request.getSession().getId());
