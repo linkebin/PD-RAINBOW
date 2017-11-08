@@ -1,250 +1,250 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
-<head>
-    <meta charset="UTF-8">
-    <title>客户</title>
-    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
-    <style>
-        .defaultDiv{width: 100%;}
-        .formDiv .eui-form-item label{
-            width: 80px;
-            padding: 9px 20px;
-            text-align: left;
-        }
-        .subBtn{color: white; background: #3f89ec;}
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">-->
+<!--<head>-->
+    <!--<meta charset="UTF-8">-->
+    <!--<title>客户</title>-->
+    <!--<link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">-->
+    <!--<style>-->
+        <!--.defaultDiv{width: 100%;}-->
+        <!--.formDiv .eui-form-item label{-->
+            <!--width: 80px;-->
+            <!--padding: 9px 20px;-->
+            <!--text-align: left;-->
+        <!--}-->
+        <!--.subBtn{color: white; background: #3f89ec;}-->
 
-        input[type="button"],[type="submit"]{
-            cursor: pointer;
-        }
-        input[name='userName'],[name='addr']{
-            border: 1px solid #1aa194;
-        }
-        input[type='text']{height: 30px; line-height: 30px;}
+        <!--input[type="button"],[type="submit"]{-->
+            <!--cursor: pointer;-->
+        <!--}-->
+        <!--input[name='userName'],[name='addr']{-->
+            <!--border: 1px solid #1aa194;-->
+        <!--}-->
+        <!--input[type='text']{height: 30px; line-height: 30px;}-->
 
-        .eui-form-label{padding: 5px 15px;}
-        .eui-input-inline{margin-left: 20px;}
-        .tb{cursor: pointer;margin-left: 10px;}
-    </style>
-</head>
-<body class="eui-layout-body">
-<div class="eui-layout eui-layout-admin xymfHome">
-    <div th:replace="project/cube/common/header :: header">Header</div>
-    <div class="eui-area">
-        <div th:replace="project/cube/common/left :: left">sidebar</div>
-        <div class="eui-body">
-            <!-- 内容主体区域 -->
-            <div class="xymfContent">
-                <div class="defaultDiv">
-                    <form id="searchFrom" onsubmit="return false;">
-                        <input type="hidden" name="creator" th:value="${session.userSession.id}" />
-                        <div  class="eui-form eui-margin10">
-                        <div class="eui-form-item">
-                            <label class="eui-form-label">客户姓名</label>
-                            <div class="eui-input-inline">
-                                <input type="text" name="visitorName"  placeholder="" class="eui-input">
-                            </div>
-                                <label class="eui-form-label">联系方式</label>
-                                <div class="eui-input-inline">
-                                    <input type="text" name="phone"  placeholder="" class="eui-input">
-                                </div>
+        <!--.eui-form-label{padding: 5px 15px;}-->
+        <!--.eui-input-inline{margin-left: 20px;}-->
+        <!--.tb{cursor: pointer;margin-left: 10px;}-->
+    <!--</style>-->
+<!--</head>-->
+<!--<body class="eui-layout-body">-->
+<!--<div class="eui-layout eui-layout-admin xymfHome">-->
+    <!--<div th:replace="project/cube/common/header :: header">Header</div>-->
+    <!--<div class="eui-area">-->
+        <!--<div th:replace="project/cube/common/left :: left">sidebar</div>-->
+        <!--<div class="eui-body">-->
+            <!--&lt;!&ndash; 内容主体区域 &ndash;&gt;-->
+            <!--<div class="xymfContent">-->
+                <!--<div class="defaultDiv">-->
+                    <!--<form id="searchFrom" onsubmit="return false;">-->
+                        <!--<input type="hidden" name="creator" th:value="${session.userSession.id}" />-->
+                        <!--<div  class="eui-form eui-margin10">-->
+                        <!--<div class="eui-form-item">-->
+                            <!--<label class="eui-form-label">客户姓名</label>-->
+                            <!--<div class="eui-input-inline">-->
+                                <!--<input type="text" name="visitorName"  placeholder="" class="eui-input">-->
+                            <!--</div>-->
+                                <!--<label class="eui-form-label">联系方式</label>-->
+                                <!--<div class="eui-input-inline">-->
+                                    <!--<input type="text" name="phone"  placeholder="" class="eui-input">-->
+                                <!--</div>-->
 
-                            <div class="eui-input-inline">
-                                <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>
-                                <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
-                            </div>
-                        </div>
-                    </div>
-                    </form>
-                    <div class="eui-row eui-padding10 eui-borderB">
-                        <div class="eui-col-md6 eui-font18">
-                           &nbsp;
-                        </div>
-                        <div class="eui-col-md6 eui-textAlignR">
-                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"
-                               th:href="'/web/customer/checkIn?creator='+${session.userSession.id}">客户登记</a>
-                        </div>
-                    </div>
+                            <!--<div class="eui-input-inline">-->
+                                <!--<span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>-->
+                                <!--<span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--</form>-->
+                    <!--<div class="eui-row eui-padding10 eui-borderB">-->
+                        <!--<div class="eui-col-md6 eui-font18">-->
+                           <!--&nbsp;-->
+                        <!--</div>-->
+                        <!--<div class="eui-col-md6 eui-textAlignR">-->
+                            <!--<a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"-->
+                               <!--th:href="'/web/customer/checkIn?creator='+${session.userSession.id}">客户登记</a>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="xymfForm">
-                        <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
-                            <colgroup>
-                                <col width="60">
-                                <col width="100">
-                                <col width="100">
-                                <col width="80">
-                                <col width="140">
-                                <col >
-                            </colgroup>
-                            <thead>
-                            <tr>
-                                <th><input type="checkbox" e-skin="primary" title=""></th>
-                                <th>客户编号</th>
-                                <th>客户姓名</th>
-                                <th>性    别</th>
-                                <th>联系方式</th>
-                                <th>所在地</th>
-                                <th>操    作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-
-                            </tbody>
-                        </table>
-                        <div style="margin-left: 30px;" id="pages"></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div th:replace="project/cube/common/footer :: footer">footer</div>
-
-</div>
-
-<script src="/Scripts/module/eui.js" charset="utf-8"></script>
-<script src="/Scripts/main.js" charset="utf-8"></script>
-<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+                    <!--<div class="xymfForm">-->
+                        <!--<table class="eui-table eui-form" e-even e-skin="nob" id="userTable">-->
+                            <!--<colgroup>-->
+                                <!--<col width="60">-->
+                                <!--<col width="100">-->
+                                <!--<col width="100">-->
+                                <!--<col width="80">-->
+                                <!--<col width="140">-->
+                                <!--<col >-->
+                            <!--</colgroup>-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th><input type="checkbox" e-skin="primary" title=""></th>-->
+                                <!--<th>客户编号</th>-->
+                                <!--<th>客户姓名</th>-->
+                                <!--<th>性    别</th>-->
+                                <!--<th>联系方式</th>-->
+                                <!--<th>所在地</th>-->
+                                <!--<th>操    作</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody>-->
 
 
-<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
-<script src="/pack.ajax.js" type="text/javascript"></script>
-<script src="/Scripts/date2format.js" type="text/javascript"></script>
-<script src="/Scripts/plugins/jquery.validate.js"></script>
-<script>
-    function resetForm() {
-        document.getElementById('searchFrom').reset();
-    }
-    //表单
-    eui.use(['form', 'laydate', 'element'], function () {
-        var form = eui.form
-            , element = eui.element
-            , laydate = eui.laydate;
+                            <!--</tbody>-->
+                        <!--</table>-->
+                        <!--<div style="margin-left: 30px;" id="pages"></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
 
-        laydate.render({
-            elem: '#startTime'
-        });
-        laydate.render({
-            elem: '#endTime'
-        });
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div th:replace="project/cube/common/footer :: footer">footer</div>-->
 
-    });
-    $(function () {
-        doSearch();
-    });
+<!--</div>-->
 
-    //加载数据
-    function doSearch() {
-        eui.use(['form','laypage','layer'], function(){
-            var form = eui.form
-                ,laypage = eui.laypage
-                ,layer = eui.layer,
-                $ = eui.jquery;
-            //全选
-//            form.on('checkbox(allChoose)', function(data){
-//                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
-//                child.each(function(index, item){
-//                    item.checked = data.elem.checked;
-//                });
-//                form.render('checkbox');
-//            });
+<!--<script src="/Scripts/module/eui.js" charset="utf-8"></script>-->
+<!--<script src="/Scripts/main.js" charset="utf-8"></script>-->
+<!--<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>-->
 
-            var params = $("#searchFrom").serializeObject();
-            var index = layer.load(2); //加载
-            $.ajax({
-                url:"/visitor/register/listByparameter",
-                data: {
-                    json:JSON.stringify(params),
-                    page:1,
-                    pagesize:10
-                },
-                type:"post",
-                success:function(result){
-                    layer.closeAll();
-                    // 分页
-                    laypage.render({
-                        elem: 'pages'
-                        ,count: result.data.total //数据总数
-                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-                        ,skip: true
-                        ,theme: '#1E9FFF'
-                        ,jump: function(obj,first){
-                            if (first){
-                                //第一次，不需要查询数据
-                                var userList = result.data.list;
-                                console.log(userList)
-                                //遍历，拼接表格
-                                var tableHtml = getTable(userList);
-                                $("#userTable tbody").html(tableHtml);
-                                form.render('checkbox');
-                            }else {
-                                var params = $("#searchFrom").serializeObject();
-                                $.ajax({
-                                    url: "/visitor/register/listByparameter",
-                                    data: {
-                                        json: JSON.stringify(params),
-                                        page: obj.curr,
-                                        pagesize: obj.limit
-                                    },
-                                    type: "post",
-                                    success: function (result) {
-                                        var userList = result.data.list;
-                                        //遍历，拼接表格
-                                        var tableHtml = getTable(userList);
-                                        $("#userTable tbody").html(tableHtml);
-                                        //重新加载复选框
-                                        form.render('checkbox');
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-            });
 
-        });
-    }
+<!--<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>-->
+<!--<script src="/pack.ajax.js" type="text/javascript"></script>-->
+<!--<script src="/Scripts/date2format.js" type="text/javascript"></script>-->
+<!--<script src="/Scripts/plugins/jquery.validate.js"></script>-->
+<!--<script>-->
+    <!--function resetForm() {-->
+        <!--document.getElementById('searchFrom').reset();-->
+    <!--}-->
+    <!--//表单-->
+    <!--eui.use(['form', 'laydate', 'element'], function () {-->
+        <!--var form = eui.form-->
+            <!--, element = eui.element-->
+            <!--, laydate = eui.laydate;-->
 
-    //渲染数据，拼接表格
-    function getTable(userList) {
-        var tableHtml = '';
-        for (var item in userList){
-            var secUser = userList[item];
+        <!--laydate.render({-->
+            <!--elem: '#startTime'-->
+        <!--});-->
+        <!--laydate.render({-->
+            <!--elem: '#endTime'-->
+        <!--});-->
 
-            var id = "'" + secUser.id + "'";
-            var sex = '女';
-            if (secUser.sex == 1){
-                sex = '男';
-            }
-            var addr = secUser.province+secUser.city+secUser.district+secUser.address;
+    <!--});-->
+    <!--$(function () {-->
+        <!--doSearch();-->
+    <!--});-->
 
-            tableHtml +=  '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
-                '<td>'+ secUser.visitorCode +'</td>' +
-                '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.id + '">'+ secUser.visitorName +'</a></td>' +
-                '<td>'+ sex +'</td>' +
-                '<td>'+secUser.phone+'</td>' +
-                '<td>'+ addr +'</td>' +
-                '<td>' +
-                '<a title="编辑" target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.id + '"><i class="eui-icon tb">&#xe642;</i></a>' +
-                '<a title="来访记录" target="_blank" href="/web/customer/visitorInfo?id=' + secUser.id + '"><i class="eui-icon tb">&#xe60e;</i></a>' +
-                '<i title="删除" onclick="deleteCustomer('+id+')" class="eui-icon tb">&#xe640;</i></td>' +
-                '</tr>';
-        }
-        return tableHtml;
-    }
+    <!--//加载数据-->
+    <!--function doSearch() {-->
+        <!--eui.use(['form','laypage','layer'], function(){-->
+            <!--var form = eui.form-->
+                <!--,laypage = eui.laypage-->
+                <!--,layer = eui.layer,-->
+                <!--$ = eui.jquery;-->
+            <!--//全选-->
+<!--//            form.on('checkbox(allChoose)', function(data){-->
+<!--//                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');-->
+<!--//                child.each(function(index, item){-->
+<!--//                    item.checked = data.elem.checked;-->
+<!--//                });-->
+<!--//                form.render('checkbox');-->
+<!--//            });-->
 
-    function deleteCustomer(id) {
-        layer.confirm('确定删除该客户吗?', function(index){
-            $.post('/visitor/register/delete',{id:id},function (result) {
-                if (result.code == 200) {
-                    doSearch();
-                }else {
-                    layer.msg(result.message);
-                }
-            });
-        });
-    }
-</script>
-</body>
-</html>
+            <!--var params = $("#searchFrom").serializeObject();-->
+            <!--var index = layer.load(2); //加载-->
+            <!--$.ajax({-->
+                <!--url:"/visitor/register/listByparameter",-->
+                <!--data: {-->
+                    <!--json:JSON.stringify(params),-->
+                    <!--page:1,-->
+                    <!--pagesize:10-->
+                <!--},-->
+                <!--type:"post",-->
+                <!--success:function(result){-->
+                    <!--layer.closeAll();-->
+                    <!--// 分页-->
+                    <!--laypage.render({-->
+                        <!--elem: 'pages'-->
+                        <!--,count: result.data.total //数据总数-->
+                        <!--,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']-->
+                        <!--,skip: true-->
+                        <!--,theme: '#1E9FFF'-->
+                        <!--,jump: function(obj,first){-->
+                            <!--if (first){-->
+                                <!--//第一次，不需要查询数据-->
+                                <!--var userList = result.data.list;-->
+                                <!--console.log(userList)-->
+                                <!--//遍历，拼接表格-->
+                                <!--var tableHtml = getTable(userList);-->
+                                <!--$("#userTable tbody").html(tableHtml);-->
+                                <!--form.render('checkbox');-->
+                            <!--}else {-->
+                                <!--var params = $("#searchFrom").serializeObject();-->
+                                <!--$.ajax({-->
+                                    <!--url: "/visitor/register/listByparameter",-->
+                                    <!--data: {-->
+                                        <!--json: JSON.stringify(params),-->
+                                        <!--page: obj.curr,-->
+                                        <!--pagesize: obj.limit-->
+                                    <!--},-->
+                                    <!--type: "post",-->
+                                    <!--success: function (result) {-->
+                                        <!--var userList = result.data.list;-->
+                                        <!--//遍历，拼接表格-->
+                                        <!--var tableHtml = getTable(userList);-->
+                                        <!--$("#userTable tbody").html(tableHtml);-->
+                                        <!--//重新加载复选框-->
+                                        <!--form.render('checkbox');-->
+                                    <!--}-->
+                                <!--});-->
+                            <!--}-->
+                        <!--}-->
+                    <!--});-->
+                <!--}-->
+            <!--});-->
+
+        <!--});-->
+    <!--}-->
+
+    <!--//渲染数据，拼接表格-->
+    <!--function getTable(userList) {-->
+        <!--var tableHtml = '';-->
+        <!--for (var item in userList){-->
+            <!--var secUser = userList[item];-->
+
+            <!--var id = "'" + secUser.id + "'";-->
+            <!--var sex = '女';-->
+            <!--if (secUser.sex == 1){-->
+                <!--sex = '男';-->
+            <!--}-->
+            <!--var addr = secUser.province+secUser.city+secUser.district+secUser.address;-->
+
+            <!--tableHtml +=  '<tr>' +-->
+                <!--'<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +-->
+                <!--'<td>'+ secUser.visitorCode +'</td>' +-->
+                <!--'<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.id + '">'+ secUser.visitorName +'</a></td>' +-->
+                <!--'<td>'+ sex +'</td>' +-->
+                <!--'<td>'+secUser.phone+'</td>' +-->
+                <!--'<td>'+ addr +'</td>' +-->
+                <!--'<td>' +-->
+                <!--'<a title="编辑" target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.id + '"><i class="eui-icon tb">&#xe642;</i></a>' +-->
+                <!--'<a title="来访记录" target="_blank" href="/web/customer/visitorInfo?id=' + secUser.id + '"><i class="eui-icon tb">&#xe60e;</i></a>' +-->
+                <!--'<i title="删除" onclick="deleteCustomer('+id+')" class="eui-icon tb">&#xe640;</i></td>' +-->
+                <!--'</tr>';-->
+        <!--}-->
+        <!--return tableHtml;-->
+    <!--}-->
+
+    <!--function deleteCustomer(id) {-->
+        <!--layer.confirm('确定删除该客户吗?', function(index){-->
+            <!--$.post('/visitor/register/delete',{id:id},function (result) {-->
+                <!--if (result.code == 200) {-->
+                    <!--doSearch();-->
+                <!--}else {-->
+                    <!--layer.msg(result.message);-->
+                <!--}-->
+            <!--});-->
+        <!--});-->
+    <!--}-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

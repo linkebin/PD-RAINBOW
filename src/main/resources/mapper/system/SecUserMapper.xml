@@ -97,7 +97,7 @@
 
   <select id="getQueryAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.system.domain.SecUser">
 
-      SELECT * FROM sec_user WHERE DELETED = 0
+      SELECT * FROM sec_user WHERE DELETED = 0 AND ACCOUNT_TYPE = 0
       <if test="orgId != null and orgId != ''">
           AND ORG_ID IN(SELECT ID_ FROM sec_org WHERE FIND_IN_SET(ID_,F_getOrgChild(#{orgId})))
     </if>

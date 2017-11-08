@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>渠道商</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/shutter.css}" media="all">
+</head>
+<body class="eui-layout-body">
+    <div class="eui-layout eui-layout-admin xymfHome">
+        <div th:replace="project/channelEntrance/common/header :: header">Header</div>
+        <div class="eui-area">
+            <div class="eui-body">
+                <div class="xymfContent">
+                    首页
+                </div>
+            </div>
+        </div>
+        <div th:replace="project/channelEntrance/common/footer :: footer">footer</div>
+    </div>
+</body>
+<script th:src="@{/Scripts/module/eui.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/jquery-1.9.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/date2format.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/shutter.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/velocity.js}"></script>
+</html>

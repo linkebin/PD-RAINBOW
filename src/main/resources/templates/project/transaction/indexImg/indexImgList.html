@@ -99,7 +99,7 @@
             </div>
         </div>
     </form>
-    <div class="taskConfirm"><span onclick="addIndexImg()" class="eui-btn">确认</span></div>
+    <div class="taskConfirm"><span onclick="addIndexImg()" class="eui-btn confirm">确认</span></div>
 </div>
 <!-- 左滑新建图片结束 -->
 
@@ -377,6 +377,8 @@
      * 添加图片
      */
     function add(data) {
+        $('.confirm').text("正在保存...");
+        $('.confirm').attr("disabled",true);
         eui.use(['form'], function () {
             var form = eui.form;
             $.post("/index/img/add", {indexImgJson: JSON.stringify(data)}, function (result) {
@@ -387,6 +389,7 @@
                     $('#promotionsId').html('<option value="">请选择活动</option>');
                     $('#demo1').removeAttr("src");
                     imgPath = "";
+                    layer.closeAll();
                     form.render();
                     layer.msg('添加成功！', {
                         icon: 1,
@@ -395,7 +398,13 @@
                     $(".filtrateIn").animate({right: '-400px'}, 400);
                     $(".taskFiltrate").hide();
                     doSearch();
+                }else{
+                    layer.msg('编辑失败！', {
+                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                    });
                 }
+                $('.confirm').text("确认");
+                $('.confirm').removeAttr("disabled");
             })
         })
     }

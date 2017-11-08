@@ -27,7 +27,7 @@
   </resultMap>
   <!--获取所有的活动-->
   <select id="getPromotionAll" resultMap="BaseResultMap">
-    SELECT * FROM questionnaire_promotions WHERE deleted=0 order by CREATE_TIME desc
+    SELECT * FROM questionnaire_promotions WHERE deleted=0 order by promotions_end desc
   </select>
 
   <!--获取活动启用并还在活动时间范围内的活动-->

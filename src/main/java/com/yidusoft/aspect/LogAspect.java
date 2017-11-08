@@ -1,6 +1,7 @@
 package com.yidusoft.aspect;
 
 import com.alibaba.fastjson.JSON;
+import com.yidusoft.configurer.ResourcesStatic;
 import com.yidusoft.project.monitor.domain.OperLog;
 import com.yidusoft.project.monitor.service.OperLogService;
 import com.yidusoft.project.system.domain.SecUser;
@@ -67,7 +68,8 @@ public class LogAspect {
             operLog.get().setOperInfo("");
             operLog.get().setOperType("");
             operLog.get().setOperIp(request.getRemoteAddr());
-            operLog.get().setOperUrl(request.getRequestURL().toString());
+            operLog.get().setOperUrl(request.getRequestURI());
+            operLog.get().setUrlType(request.getMethod());
               //System.currentTimeMillis  精确到毫秒
             operLog.get().setOperTime(new Date());
             operLog.get().setSessionId(request.getSession().getId());
@@ -108,6 +110,7 @@ public class LogAspect {
         public void doRecoveryActions(Throwable ex) {
             // 声明ex时指定的类型会限制目标方法必须抛出指定类型的异常  
             // 此处将ex的类型声明为Throwable，意味着对目标方法抛出的异常不加限制  
+            logger.info("*******异常********");
             operLog.get().setUrlResult("异常");
             addOperLog();
 
@@ -125,6 +128,11 @@ public class LogAspect {
            }
            logger.info("标识时间："+(operWhenLong.get()));
            logger.info("用去时长："+(now-operWhenLong.get()+"ms"));
-           //operLogService.save(operLog);
+
+           if( ResourcesStatic.OPERRESOURCES.get(operLog.get().getOperUrl())!=null){
+               operLog.get().setOperInfo(ResourcesStatic.OPERRESOURCES.get(operLog.get().getOperUrl()).toString());
+               operLogService.save( operLog.get());
+           }
+
     }
 }

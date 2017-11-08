@@ -124,7 +124,7 @@
         </div>
     </form>
     <div class="taskConfirm">
-        <span onclick="addOrUpPromotion()" class="eui-btn">确认</span>
+        <span onclick="addOrUpPromotion()" class="eui-btn confirm">确认</span>
     </div>
 </div>
 <!-- 左滑新建活动结束 -->
@@ -406,6 +406,8 @@
         }
 
         console.log(params);
+        $('.confirm').text("正在保存...");
+        $('.confirm').attr("disabled",true);
         if ($('#questionId').val() != '') {
             $.post("/questionnaire/promotions/update", {"promotionsJson": JSON.stringify(params)}, function (result) {
                 if (result.message = 'SUCCESS') {
@@ -419,12 +421,13 @@
                     $(".filtrateIn").animate({right: '-400px'}, 400);
                     $(".taskFiltrate").hide();
                 } else {
-                    layer.close(indexs);
                     layer.msg('编辑失败！', {
                         time: 2000 //1秒关闭（如果不配置，默认是3秒）
                     });
 
                 }
+                $('.confirm').text("确认");
+                $('.confirm').removeAttr("disabled");
             });
             return;
         }
@@ -450,6 +453,8 @@
                 });
 
             }
+            $('.confirm').text("确认");
+            $('.confirm').removeAttr("disabled");
         });
     }
 

@@ -1,7 +1,9 @@
 package com.yidusoft.project.monitor.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.monitor.domain.LoginLog;
 import com.yidusoft.project.monitor.domain.OperLog;
 import com.yidusoft.project.monitor.service.OperLogService;
 import com.github.pagehelper.PageHelper;
@@ -20,35 +22,23 @@ public class OperLogController {
     @Resource
     private OperLogService operLogService;
 
-    @PostMapping
-    public Result add(OperLog operLog) {
-        operLogService.save(operLog);
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        operLogService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @PutMapping
-    public Result update(OperLog operLog) {
-        operLogService.update(operLog);
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        OperLog operLog = operLogService.findById(id);
-        return ResultGenerator.genSuccessResult(operLog);
-    }
-
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<OperLog> list = operLogService.findAll();
+    /**
+     * 分页条件查询所有的行为记录
+     * @param params
+     * @param page
+     * @param limit
+     * @return
+     */
+    @PostMapping("/operLogListByPage")
+    @ResponseBody
+    public Result operLogListByPage(String params, Integer page,  Integer limit) {
+        OperLog operLog= JSON.parseObject(params,OperLog.class);
+        PageHelper.startPage(page, limit);
+        List<OperLog> list =operLogService.operLogListByPage(operLog);
+        //查询所有的相关数据
         PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
+        return ResultGenerator.genSuccessResult(pageInfo.getList()).setCount(pageInfo.getTotal()).setCode(0);
     }
+
+
 }

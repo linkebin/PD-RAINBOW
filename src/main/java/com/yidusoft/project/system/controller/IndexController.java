@@ -61,11 +61,7 @@ public class IndexController {
             return "login";
         }
         SecUser secUser = Security.getUser();
-        if (0==secUser.getAccountType()){
-            return  "index";
-        }else {
-            return  "project/cube/index";
-}
+        return link(secUser);
     }
 
 
@@ -88,11 +84,19 @@ public class IndexController {
             return "login";
         }
         SecUser secUser = Security.getUser();
+        return link(secUser);
+    }
+
+    public String link(SecUser secUser){
         if (0==secUser.getAccountType()){
             return  "index";
-        }else {
+        }else if(1==secUser.getAccountType()){
             return  "project/cube/index";
+        }else if(2==secUser.getAccountType()){
+
+            return  "project/channelentrance/index";
         }
+        return "/error/403";
     }
 
     @RequestMapping("/sign/forgetpassword")

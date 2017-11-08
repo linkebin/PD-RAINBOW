@@ -28,7 +28,7 @@ public interface ChannelManageService extends Service<ChannelManage> {
      * 查询渠道下的账号树
      * @return
      */
-    List<Map<String,Object>> findChannelAccountTree();
+    List<Map<String,Object>> findChannelAccountTree(Map<String,Object> map);
 
 
     /**
