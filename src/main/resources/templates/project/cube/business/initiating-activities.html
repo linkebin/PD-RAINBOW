@@ -194,7 +194,8 @@
                     },
                     activityTotal: {
                         required: true,
-                        digits: true
+                        digits: true,
+                        min: true
                     },
                     activityStart: {
                         required: true,
@@ -238,7 +239,8 @@
                     },
                     activityTotal: {
                         required: '请输入活动人数',
-                        digits: '只能输入整数'
+                        digits: '只能输入整数',
+                        min: '人数必须大于0'
                     },
                     activityStart: {
                         required: '请输入活动开始时间',

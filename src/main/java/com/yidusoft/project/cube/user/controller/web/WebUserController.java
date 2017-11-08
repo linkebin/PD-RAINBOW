@@ -19,4 +19,13 @@ public class WebUserController {
     public String userInfoA(){
         return "project/channelentrance/user-info";
     }
+
+    /**
+     * 跳转到账户信息
+     * @return
+     */
+    @RequestMapping("/account")
+    public String accountInfo(){
+        return "project/cube/user/account-info";
+    }
 }

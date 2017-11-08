@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>账户信息</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header">Header</div>
+    <div class="eui-area">
+        <div th:replace="project/cube/common/left :: left">sidebar</div>
+        <div class="eui-body">
+            <div class="xymfContent">
+                <div  class="eui-form eui-margin10">
+                    <div class="eui-row eui-paddingTB10 eui-borderB">
+                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
+                            <i class='eui-icon eui-font24'>&#xe63c;</i> 收支明细
+                        </div>
+                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
+                            <small>剩余问卷使用卷</small>
+                        </div>
+                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
+                            <i>24张</i>
+                        </div>
+                    </div>
+                </div>
+                <div  class="eui-form eui-margin10">
+                    <form id="searchFrom" onsubmit="return false;">
+                        <div  class="eui-form eui-margin10">
+                            <div class="eui-form-item">
+                                <label class="eui-form-label">交易时间</label>
+                                <div class="eui-input-inline">
+                                    <input type="text" id="startTime" name="visitorName" class="eui-input" oninput="change(this)">
+                                </div>
+                                <label class="eui-form-label" style="text-align: center">至</label>
+                                <div class="eui-input-inline">
+                                    <input type="text" id="endTime" name="phone" class="eui-input" onchange="change(this)">
+                                </div>
+                                <label class="eui-form-label">最近</label>
+                                <div class="eui-input-inline">
+                                    <i class="eui-icon">7天</i>
+                                    <i class="eui-icon">30天</i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="eui-row eui-paddingTB10 eui-borderB">
+                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
+                            <small>购买<i class="eui-color-green">&nbsp; 100 &nbsp;</i>张</small>
+                            <small>使用<i class="eui-color-red ">&nbsp; 34 &nbsp;</i>张</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="xymfForm">
+                    <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
+                        <colgroup>
+                            <col width="60">
+                            <col width="100">
+                            <col width="100">
+                            <col width="100">
+                            <col width="140">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" e-skin="primary" title=""></th>
+                            <th>流水号</th>
+                            <th>日期</th>
+                            <th>备注</th>
+                            <th>购买</th>
+                            <th>使用</th>
+                            <th>余额</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        </tbody>
+                    </table>
+                    <div style="margin-left: 30px;" id="pages"></div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="project/cube/common/footer :: footer">footer</div>
+    </div>
+</div>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/cube/header.js" type="text/javascript"></script>
+<script type="text/javascript">
+    eui.use(['laydate','layer'],function () {
+        var laydate = eui.laydate,layer = eui.layer;
+        //常规用法
+        laydate.render({
+            elem: '#startTime'
+            ,format: 'yyyy/MM/dd' //可任意组合
+            ,done: function(value, date){
+                if(value > $('#endTime').val()){
+                    layer.alert('亲！开始时间不能大于结束时间哦！');
+                }
+            }
+        });
+        laydate.render({
+            elem: '#endTime'
+            ,format: 'yyyy/MM/dd' //可任意组合
+            ,done: function(value, date){
+                console.log(date);
+                if(value < $('#startTime').val()){
+                    layer.alert('亲！结束时间不能小于开始时间哦！');
+                }
+            }
+        });
+    })
+    $(function () {
+        $('#startTime').val(new Date().Format("yyyy/MM/dd"));
+        var endTime = new Date();
+        endTime=endTime.setDate(endTime.getDate()+7);
+        $('#endTime').val(new Date(endTime).Format("yyyy/MM/dd"));
+    })
+
+    function change(data) {
+        console.log(data)
+    }
+</script>
+</body>
+</html>

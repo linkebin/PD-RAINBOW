@@ -25,6 +25,9 @@
             top: 0;
             background: #ffffff;
         }
+        #activityNewForm input + label,select + label{
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -134,8 +137,8 @@
         <div class="eui-form-item">
             <label class="eui-form-label">问卷名</label>
             <div class="eui-input-inline">
-                <select name="uestionnaireId">
-
+                <select name="uestionnaireId" e-ignore>
+                    <option value="">请选择</option>
                 </select>
             </div>
             <label class="eui-form-label">活动地点</label>
@@ -155,7 +158,7 @@
         </div>
         <input type="submit" id="sub" style="display: none;" value="提交"/>
     </form>
-    <div class="taskConfirm" style="width: 100%;"><span onclick="formSub()" class="eui-btn">确认</span></div>
+    <div class="taskConfirm" style="width: 100%;"><span onclick="formSub()" class="eui-btn" id="Confirm">确认添加</span></div>
 </div>
 <!-- 左滑新建活动结束 -->
 
@@ -307,13 +310,17 @@
                 },
                 activityTotal: {
                     required: true,
-                    digits: true
+                    digits: true,
+                    min: true
                 },
                 activityStart: {
                     required: true,
                 },
                 activityEnd: {
                     required: true,
+                },
+                uestionnaireId: {
+                    required: true
                 }
             },
             messages: {
@@ -339,13 +346,17 @@
                 },
                 activityTotal: {
                     required: '请输入活动人数',
-                    digits: '只能输入整数'
+                    digits: '只能输入整数',
+                    min:"人数必须大于0"
                 },
                 activityStart: {
                     required: '请输入活动开始时间',
                 },
                 activityEnd: {
                     required: '请输入活动结束时间',
+                },
+                uestionnaireId: {
+                    required: '请选择问卷名称',
                 }
             },
 
@@ -364,6 +375,8 @@
                 if (typeof $('#activityId').val() != 'undefined' && $('#activityId').val() != '') {
                     url = '/launch/activities/update';
                 }
+                $('#confirm').text("正在保存...")
+                $('#confirm').attr("disabled",true);
                 $.post(url, {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
                     console.log(result);
                     if (result.code == 200) {
@@ -373,6 +386,8 @@
                     } else {
                         layer.msg(result.message);
                     }
+                    $('#confirm').text("确认添加")
+                    $('#confirm').removeAttr("disabled");
                 });
             }
         });
@@ -528,6 +543,7 @@
         form = eui.form; //独立版的layer无需执行这一句
         $(".taskFiltrate").hide();
         $('.activityNew').click(function () {
+            $('.error').text("");
             $('#activityId').val("");
             $.get("/questionnaire/getQuestionnaireByState", function (result) {
                 if (result.code == 200) {
@@ -545,7 +561,7 @@
         })
         //关闭
         $(".activityClose,.taskFiltrate").click(function (event) {
-            $('select[name="uestionnaireId"]').html("");
+            $('select[name="uestionnaireId"]').html('<option value="">请选择</option>');
             $('input[name="activityName"]').val("");
             $('input[name="activityAim"]').val("");
             $('input[name="participant"]').val("");
@@ -555,9 +571,9 @@
             $('input[name="activityStart"]').val("");
             $('input[name="activityEnd"]').val("");
             $('input[name="activityAddr"]').val("");
+            form.render('select');
             $(".filtrateIn").animate({right: '-700px'}, 700);
             $(".taskFiltrate").hide();
-            form.render();
         });
     });
     //编辑活动
