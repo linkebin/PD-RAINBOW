@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-    <aside th:fragment="left">
+    <div th:fragment="left">
     <div class="eui-side eui-bg-white">
       <div class="eui-user-top">
           <p id="userName" th:text="${session.userSession.userName}" class="eui-font18 eui-userName"></p>
@@ -18,7 +18,7 @@
       </ul>
 
     </div>
-    </aside>
+    </div>
   </div>
 </body>
 </html>
