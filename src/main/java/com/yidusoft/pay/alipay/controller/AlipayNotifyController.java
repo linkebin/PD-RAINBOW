@@ -5,6 +5,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.yidusoft.pay.alipay.domain.AlipayConfig;
 import com.yidusoft.pay.alipay.domain.OrderOnlineBean;
 import com.yidusoft.pay.alipay.service.AlipayOrderVerifiedServcie;
+import com.yidusoft.project.transaction.controller.OrderOnlineController;
 import com.yidusoft.project.transaction.domain.OrderOnline;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +28,8 @@ public class AlipayNotifyController {
     @Resource
     private AlipayOrderVerifiedServcie alipayOrderVerifiedServcie;
 
+    @Resource
+    OrderOnlineController orderOnlineController;
     /**
      * 接口异步通知
      *
@@ -70,10 +73,10 @@ public class AlipayNotifyController {
                                 //触发条件是商户不支持退款，买家付款成功；或者支持退款，超过退款期限
                                 if (trade_status.equals("TRADE_FINISHED")) {
                                     //付款成功调用订单更新接口
-                                    
+                                    orderOnlineController.payment(out_trade_no,trade_no);
                                 } else if (trade_status.equals("TRADE_SUCCESS")) {//支付成功的触发条件是商户支持退款
                                     //付款成功调用订单更新接口
-
+                                    orderOnlineController.payment(out_trade_no,trade_no);
                                 }
 
                                 response.getWriter().write("success");

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yidusoft.pay.alipay.dao.AlipayOrderVerifiedMapper">
-    <resultMap id="BaseResultMap" type="com.yidusoft.project.transaction.domain.OrderOnline">
+    <resultMap id="BaseResultMap" type="com.yidusoft.pay.alipay.domain.OrderOnlineBean">
         <id column="ID_" jdbcType="VARCHAR" property="id"/>
         <result column="order_code" jdbcType="VARCHAR" property="orderCode"/>
         <result column="questionnaire_total" jdbcType="INTEGER" property="questionnaireTotal"/>
@@ -18,9 +18,10 @@
         <result column="product_name" jdbcType="VARCHAR" property="productName"/>
     </resultMap>
     <select id="getOrderOnlineByCode" parameterType="String" resultMap="BaseResultMap">
-        SELECT *
-            FROM order_online oo
+        SELECT oo.*,ps.promotions_id,ps.product_name
+            FROM order_online oo,product_settings ps
         WHERE oo.deleted=0
+            AND oo.product_id=ps.ID_
             AND oo.order_code=#{orderCode}
     </select>
 </mapper>
