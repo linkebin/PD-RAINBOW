@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>账号管理</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/shutter.css}" media="all">
+    <style>
+        .defaultDiv{width: 100%;}
+        .formDiv .eui-form-item label{
+            width: 80px;
+            padding: 9px 20px;
+            text-align: left;
+        }
+        .subBtn{color: white; background: #3f89ec;}
+
+        input[type="button"],[type="submit"]{
+            cursor: pointer;
+        }
+        input[name='userName'],[name='addr']{
+            border: 1px solid #1aa194;
+        }
+        input[type='text']{height: 30px; line-height: 30px;}
+
+        .eui-form-label{padding: 5px 15px;}
+        .eui-input-inline{margin-left: 20px;}
+        .tb{cursor: pointer;margin-left: 10px;}
+
+        .error{color: red;font-size: 12px;}
+    </style>
+</head>
+<body class="eui-layout-body">
+    <div class="eui-layout eui-layout-admin xymfHome">
+        <div th:replace="project/channelentrance/common/header :: header">Header</div>
+        <div class="eui-area">
+            <div style="margin-left: 0px;" class="eui-body">
+                <div class="xymfContent">
+                    <div class="defaultDiv">
+                        <form id="searchFrom" onsubmit="return false;">
+                            <input type="hidden" name="channel_id" th:value="${session.userSession.channelId}" />
+                            <div  class="eui-form eui-margin10">
+                                <div class="eui-form-item">
+                                    <label class="eui-form-label">登录账号</label>
+                                    <div class="eui-input-inline">
+                                        <input type="text" name="ACCOUNT"  placeholder="" class="eui-input">
+                                    </div>
+                                    <label class="eui-form-label">姓名</label>
+                                    <div class="eui-input-inline">
+                                        <input type="text" name="USER_NAME"  placeholder="" class="eui-input">
+                                    </div>
+
+                                    <div class="eui-input-inline">
+                                        <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>
+                                        <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                                    </div>
+
+
+                                </div>
+                                <div class="eui-form-item">
+                                    <label class="eui-form-label">联系方式</label>
+                                    <div class="eui-input-inline">
+                                        <input type="text" name="MOBILE"  placeholder="" class="eui-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="eui-row eui-padding10 eui-borderB">
+                            <div class="eui-col-md6 eui-font18">
+                                &nbsp;
+                            </div>
+                            <div class="eui-col-md6 eui-textAlignR">
+                                <a onclick="addAccount()" class="eui-btn eui-btn-small eui-btn-normal">添加账号</a>
+                            </div>
+                        </div>
+
+                        <div class="xymfForm">
+                            <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
+                                <colgroup>
+                                    <col width="60">
+                                    <col width="300">
+                                    <col width="300">
+                                    <col width="300">
+                                    <col >
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" e-skin="primary" title=""></th>
+                                    <th>登录账号</th>
+                                    <th>姓名</th>
+                                    <th>联系方式</th>
+                                    <th>操    作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+                                </tbody>
+                            </table>
+                            <div style="margin-left: 30px;" id="pages"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="project/channelentrance/common/footer :: footer">footer</div>
+    </div>
+</body>
+<script th:src="@{/Scripts/module/eui.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/jquery-1.9.0.min.js}"></script>
+<script type="text/javascript" th:src="@{/date2format.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/shutter.js}"></script>
+<script type="text/javascript" th:src="@{/Scripts/velocity.js}"></script>
+<script type="text/javascript" th:src="@{/pack.ajax.js}"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
+<script>
+    $(function () {
+        doSearch();
+
+        jQuery.validator.addMethod("isMobile", function(value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "请正确填写您的手机号码");
+
+        $("#channelAccountAddForm").validate({
+            rules: {
+                account: {
+                    required : true,
+                    minlength : 11,
+                    isMobile : true
+                },
+                userPass: {
+                    required: true,
+                },
+                userName: {
+                    required: true,
+                }
+            },
+            messages: {
+                account: {
+                    required : "请输入手机号",
+                    minlength : "确认手机不能小于11个字符",
+                    isMobile : "请正确填写您的手机号码"
+                },
+                userPass: {
+                    required: "请输入密码",
+                },
+                userName: {
+                    required: "请输入姓名",
+                }
+            },
+            submitHandler: function() {
+                var obj = $("#channelAccountAdd form").serializeObject();
+
+                if ($("#channelAccountAddForm input[name='id']").val()==''){
+                    obj.userPass=md5(obj.userPass);
+                    obj.mobile=obj.account;
+                    obj.accountType=2;
+                    obj.sex=0;
+                    $.post('/channel/manage/channelAccountAdd',{params:JSON.stringify(obj)},function (result) {
+                        if (result.code==200){
+                            layer.closeAll();
+                            doSearch();
+                        }else {
+                            layer.msg(result.message);
+                        }
+                    });
+                }else {
+                    if (obj.userPass=='1234'){
+                        obj.userPass=null;
+                    }
+                    $.post('/channel/manage/updateaccountInfo',{json:JSON.stringify(obj)},function (result) {
+                        if (result.code==200){
+                            layer.closeAll();
+                            location.reload();
+                        }else {
+                            layer.msg(result.message);
+                        }
+                    });
+                }
+            }
+        });
+    });
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+    }
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/channel/account/listByaccounts",
+                data: {
+                    json:JSON.stringify(params),
+                    page:1,
+                    pagesize:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,theme: '#1E9FFF'
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/channel/account/listByaccounts",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+
+            var id = "'" + secUser.ID_ + "'";
+
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.ACCOUNT +'</td>' +
+                '<td><a>'+ secUser.USER_NAME +'</a></td>' +
+                '<td>'+secUser.MOBILE+'</td>' +
+                '<td>' +
+                '<i title="编辑" onclick="updateAccount('+id+')" class="eui-icon tb">&#xe642;</i>' +
+                '<i title="删除" onclick="deleteUser('+id+')" class="eui-icon tb">&#xe640;</i></td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+    function deleteUser(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='userId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的账号', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该账号吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                $.ajax({
+                    url:"/sec/user/deleteBacth",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                        location.reload();
+                    }
+                });
+            });
+        }
+    }
+
+    function addAccount() {
+        $("#channelAccountAddForm input[name='id']").val('')
+        var index = layer.open({
+            title: '添加账号'
+            , type: 1
+            , area: ['600px', '400px']
+            , content: $("#channelAccountAdd")
+            ,offset: 't'
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                $("#channelAccountAdd form").submit();
+            }
+            ,btn2: function(index, layero){
+                $('#channelAccountAddForm')[0].reset();
+            }
+        });
+    }
+
+    function updateAccount(id) {
+        var index = layer.open({
+            title: '编辑账号'
+            , type: 1
+            , area: ['600px', '400px']
+            , content: $("#channelAccountAdd")
+            ,offset: 't'
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                $("#channelAccountAdd form").submit();
+            }
+            ,btn2: function(index, layero){
+                $('#channelAccountAddForm')[0].reset();
+            }
+        });
+        $.post('/channel/manage/accountInfo',{id:id},function (result) {
+            result.data.userPass='1234';
+            $("#channelAccountAdd").setForm(result.data)
+        });
+
+    }
+</script>
+
+<div id="channelAccountAdd" style="display: none" class="eui-margin20 eui-form">
+    <form id="channelAccountAddForm" onsubmit="return false;">
+        <input  type="hidden" name="id"  />
+        <input th:value="${session.userSession.channelId}" type="hidden" name="channelId"  />
+        <div class="eui-form-item">
+            <label class="eui-form-label">账号</label>
+            <div class="eui-input-block">
+                <input type="text" name="account"  placeholder="请输入手机号码" class="eui-input" />
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">姓名</label>
+            <div class="eui-input-block">
+                <input type="text" name="userName"  placeholder="请输入姓名" class="eui-input" />
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">密码</label>
+            <div class="eui-input-block">
+                <input type="password" name="userPass"  placeholder="请输入密码" class="eui-input" />
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">状态</label>
+            <div class="eui-input-block eui-checkSmall">
+                <input type="radio" name="status" value="1" title="可用" checked>
+                <input type="radio" name="status" value="0" title="不可用">
+            </div>
+        </div>
+        <input type="submit" style="display: none;">
+    </form>
+</div>
+</html>

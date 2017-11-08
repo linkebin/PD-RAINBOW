@@ -14,4 +14,9 @@ public class WebUserController {
     public String userInfo(){
         return "project/cube/user/user-info";
     }
+
+    @RequestMapping("/userInfoA")
+    public String userInfoA(){
+        return "project/channelentrance/user-info";
+    }
 }

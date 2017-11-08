@@ -134,8 +134,11 @@ public class ChannelManageController {
     }
 
     @PostMapping("/accounttree")
-    public Result accounttree() {
-        return ResultGenerator.genSuccessResult(channelManageService.findChannelAccountTree());
+    public Result accounttree(String json) {
+
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+
+        return ResultGenerator.genSuccessResult(channelManageService.findChannelAccountTree(map));
     }
 
     @PostMapping("/listByAccountCounselor")
