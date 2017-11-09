@@ -63,57 +63,34 @@
 
 <div class="visitorContent xymfMargin">
     <div class="eui-area">
-        <div class="visitorTitle">
-            <div class="eui-row">
-                <div class="eui-col-md3 eui-paddingT10">
-                    <th:block th:if="${visitorRegister.sex==0}">
-                        <img src="/Styles/images/xymfImages/woman.png" width="30" alt="">&nbsp;&nbsp;
-                    </th:block>
-                    <th:block th:if="${visitorRegister.sex==1}">
-                        <img src="/Styles/images/xymfImages/man.png" width="30" alt="">&nbsp;&nbsp;
-                    </th:block>
-
-                    <a target="_blank" th:text="${visitorRegister.visitorName}"
-                       th:href="'/web/customer/visitorUpdate?id='+${visitorRegister.id}" class="eui-color-blue"></a>
+        <div class="eui-area eui-bd eui-bg-white eui-paddingT0">
+            <div style="width: 200px;" class="eui-sd1 eui-sd1-type1 visitorLeft">
+                <div class="eui-row personage">
+                    <div class="eui-col-md6">
+                        <th:block th:if="${visitorRegister.sex==0}">
+                            <img src="/Styles/images/xymfImages/woman.png" width="30" alt="">&nbsp;&nbsp;
+                        </th:block>
+                        <th:block th:if="${visitorRegister.sex==1}">
+                            <img src="/Styles/images/xymfImages/man.png" width="30" alt="">&nbsp;&nbsp;
+                        </th:block>
+                        <a target="_blank" th:text="${visitorRegister.visitorName}"
+                           th:href="'/web/customer/visitorUpdate?id='+${visitorRegister.id}" class="eui-color-blue"></a>
+                    </div>
+                    <div class="eui-col-md6 eui-textAlignR">
+                        <img src="/Styles/images/xymfImages/look.png" alt=""/>
+                    </div>
                 </div>
-                <div class="eui-col-md1 eui-paddingT20 eui-color-gray3"></div>
-                <div class="eui-col-md8 eui-textAlignR">
-                    <span class="eui-btn eui-btn-normal eui-btn-small" onclick="addVisitorRecord()">
-                <i style="cursor: pointer;" class="eui-icon eui-font12"> &#xe654; </i>来访记录 </span>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="eui-area eui-bd eui-bg-white">
-            <div style="width: 120px;" class="eui-sd1 eui-sd1-type1">
-
-                <ul id="shaftTime" class="eui-timeline eui-font14 eui-marginL10 eui-marginT20">
+                <ul id="shaftTime" class="eui-timeline eui-font14 eui-padding20">
 
                 </ul>
+                <span class="eui-btn eui-btn-normal eui-btn-small record" onclick="addVisitorRecord()">
+                <i style="cursor: pointer;" class="eui-icon eui-font12"> &#xe654; </i>来访记录 </span>
             </div>
-            <div style="width: 98%;" class="eui-mn1">
+            <div style="width: 91%;" class="eui-mn1">
                 <div class="eui-mn1-type1 eui-padding20 eui-bg-white eui-box-shadow">
                     <form  id="searchFrom">
                         <input type="hidden" name="visitorId" th:value="${id}" />
-                        <!--<div class="eui-form">-->
-                        <!--<div class="eui-form-item">-->
-                        <!--<label class="eui-form-label">开始时间</label>-->
-                        <!--<div class="eui-input-inline">-->
-                        <!--<input type="text" name="startTime" id="startTime" readonly="readonly"  placeholder="" class="eui-input">-->
-                        <!--</div>-->
 
-                        <!--<label class="eui-form-label">截至时间</label>-->
-                        <!--<div class="eui-input-inline">-->
-                        <!--<input type="text" name="endTime" id="endTime" readonly="readonly"  placeholder="" class="eui-input">-->
-                        <!--</div>-->
-                        <!--<div class="eui-input-inline">-->
-                        <!--<span class="eui-btn eui-btn-small" onclick="doSearch()">查询</span>-->
-                        <!--<span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>-->
-                        <!--</div>-->
-                        <!--</div>-->
-
-                        <!--</div>-->
                     </form>
                     <div class="DivInfo">
                         <p><i class="eui-icon">&#xe60e;</i>
@@ -699,7 +676,7 @@
                     ,moveType: 0//拖拽模式，0或者1
                     ,maxmin: true
                     ,content:"/web/customer/getCheckQuestionnaire"
-                    ,btn: ['确定', '关闭'] //只是为了演示
+                    // ,btn: ['确定', '关闭'] //只是为了演示
                     ,yes: function(){
                         //得到设置返回的结果
                         list=iframeWin.checkQuestionnaire();

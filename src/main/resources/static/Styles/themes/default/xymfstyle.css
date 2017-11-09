@@ -473,7 +473,7 @@
 /* 问卷填写 */
 .eui-area{width: 1200px;margin: 0 auto;}
 .eui-display-Ib{display:inline-block;}
-.questionHeader{width: 100%;height: 60px;background:#ffffff; background-size: 100%;box-shadow: 0 0 20px #68a8d7;margin-bottom: 20px;}
+.questionHeader{width: 100%;height: 60px;background:#ffffff; background-size: 100%;box-shadow: 0 0 10px #68a8d7;margin-bottom: 20px;}
 .xymfLogo{color: #333;font-size: 18px;padding-top: 14px;}
 .xymfLogo .payCentre{display:inline-block; border-left: 2px solid #ddd; padding-left: 10px; margin-left: 10px; }
 .questionContent{width: 100%;height: auto;}
@@ -534,7 +534,7 @@
 
 
 /* 来访者咨询管理 */
-.visitorContent .eui-area{box-shadow: 5px 5px 20px #eee;}
+.visitorContent .eui-area{box-shadow: 0 0 12px #c4e1f7;border-radius: 5px;}
 .visitorContent .visitorTitle{font-size: 18px;padding:16px;background: #f4f9fd;border-bottom: 1px solid #1e9eff;color: #1e9eff; }
 .visitorContent .visitorIn{background: #ffffff;}
 .visitorPhone1{padding-left: 34px;background: url(../../images/xymfImages/phone.png) no-repeat left center;background-size: 26px;}
@@ -552,6 +552,43 @@
 .questionbg{background: #f4f9fd;border-bottom: 1px solid #1e9eff;height: 60px;}
 .xymfMargin{margin-bottom: 60px;}
 
+
+/* 选择问卷模版弹窗 */
+.classify .eui-colla-title{
+    background-color: #fcfcfc;
+}
+.classify h2{
+    font-weight: 400;
+}
+#checkQuestionnaire{
+    background: #ffffff!important;
+}
+
+body .eui-layer-title{
+    background: #f4f9fd;
+    border-bottom: 1px solid #1e9eff;
+    color: #1e9eff;
+}
+
+.personage{
+    padding: 10px;
+    background: #33a8fe;
+    border-radius: 5px 5px 0 0;
+}
+.personage a{
+    color:#ffffff;
+}
+.visitorLeft .eui-timeline{
+    background:#f4f9fd;
+}
+.visitorLeft{
+    position: relative;
+}
+.visitorLeft .record{
+    position: absolute;
+    right: 10px;
+    top: 490px;
+}
 
 
 
