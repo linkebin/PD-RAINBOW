@@ -14,50 +14,51 @@
         <div th:replace="project/cube/common/header :: header">Header</div>
         <div class="eui-area">
             <div th:replace="project/cube/common/left :: left">sidebar</div>
-        <div class="eui-body">
-            <!-- 内容主体区域 -->
-            <div class="orderContent">
-                <div class="eui-tab eui-tab-brief" e-filter="docDemoTabBrief">
-                    <ul class="eui-tab-title">
-                        <li class="eui-this">全部订单</li>
-                        <li>已支付</li>
-                        <li>未支付</li>
-                        <li>已关闭</li>
-                    </ul>
-                    <div class="eui-tab-content">
-                        <div class="eui-tab-item eui-show">
-                            <div class="orderForm">
-                                <table class="orderT">
-                                    <colgroup>
-                                        <col width="350">
-                                        <col width="170">
-                                        <col width="170">
-                                        <col width="150">
-                                        <col>
-                                    </colgroup>
-                                    <tr>
-                                        <th>商品名称</th>
-                                        <th>订单金额</th>
-                                        <th>下单时间</th>
-                                        <th>订单状态</th>
-                                        <th>操作</th>
-                                    </tr>
-                                </table>
-                                <div class="orderIn">
+            <div class="eui-body">
+                <!-- 内容主体区域 -->
+                <div class="orderContent">
+                    <div class="eui-tab eui-tab-brief" e-filter="docDemoTabBrief">
+                        <ul class="eui-tab-title">
+                            <li class="eui-this">全部订单</li>
+                            <li>已支付</li>
+                            <li>未支付</li>
+                            <li>已关闭</li>
+                        </ul>
+                        <div class="eui-tab-content">
+                            <div class="eui-tab-item eui-show">
+                                <div class="orderForm">
+                                    <table class="orderT">
+                                        <colgroup>
+                                            <col width="350">
+                                            <col width="170">
+                                            <col width="170">
+                                            <col width="150">
+                                            <col>
+                                        </colgroup>
+                                        <tr>
+                                            <th>商品名称</th>
+                                            <th>订单金额</th>
+                                            <th>下单时间</th>
+                                            <th>订单状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </table>
+                                    <div class="orderIn">
+                                    </div>
                                 </div>
+                                <div style="margin-left: 30px;" id="pages"></div>
                             </div>
-                            <div style="margin-left: 30px;" id="pages"></div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
-
-    </div>
-    <div class="eui-footer">
-        <!-- 底部固定区域 -->
-        © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+        <div class="eui-footer">
+            <!-- 底部固定区域 -->
+            © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+        </div>
     </div>
 </div>
 <script src="/Scripts/module/eui.js"></script>
@@ -221,7 +222,7 @@
                     layer.confirm('确认付款', {
                         btn: ['确认', '取消']
                     }, function () {
-                        $.post("/order/online/payment", {id: id}, function (result) {
+                        $.post("/order/online/payment", {id: id,SerialNumber:"123213131313"}, function (result) {
                             if (result.message = "success") {
                                 layer.msg('支付成功！', {icon: 1});
                                 getDoSearchByState();

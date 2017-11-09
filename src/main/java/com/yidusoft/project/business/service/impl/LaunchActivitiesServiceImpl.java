@@ -9,7 +9,6 @@ import com.yidusoft.project.business.dao.LaunchActivitiesMapper;
 import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.utils.CodeHelper;
-import com.yidusoft.utils.IpAddressUtils;
 import com.yidusoft.utils.Security;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
@@ -53,10 +52,10 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
             launchActivities.setInitiatorType(1);
             launchActivities.setActivityStatus(0);
         } else {
-            int port = request.getServerPort();//获取服务器端口
-            String addr = IpAddressUtils.getIpAddress(request);
+            int port = request.getServerPort();//获取服务器地址
+            String IP = request.getServerName();//获取服务器端口
             launchActivities.setInitiatorType(0);
-            launchActivities.setUestionnaireUri("http://" + addr + ":" + port + "/web/activities/fillingPage");
+            launchActivities.setUestionnaireUri("http://" + IP + ":" + port + "/web/activities/fillingPage");
             launchActivities.setActivityPorn(CodeHelper.randomCode(8));
         }
         launchActivitiesService.save(launchActivities);

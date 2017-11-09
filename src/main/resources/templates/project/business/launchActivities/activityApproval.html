@@ -182,7 +182,7 @@
         document.getElementById('searchFrom').reset();
     }
     $(function () {
-
+        doSearch();
         //复制文本到剪贴板
         $('#copyBtn').zclip({
             path: "/Scripts/plugins/jqueryZclip/ZeroClipboard.swf",
@@ -190,8 +190,34 @@
                 return $('#uestionnaireUrl').val();
             }
         });
-        doSearch();
     });
+
+    $('#copyBtn').click(function () {
+        var hasFlash=flashChecker();
+        if(hasFlash!=1){
+            alert("没有安装Flash或者没有启用，请手动复制");
+        }
+    })
+
+    function flashChecker() {//返回1 说明已安装falsh
+        var hasFlash = 0;//初始化未安装
+        if (document.all) { //IE浏览器
+            var swf = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
+            if (swf) {
+                hasFlash = 1; //安装了falsh
+            }
+        } else { //其他浏览器
+            if (navigator.plugins && navigator.plugins.length > 0) {
+                var swf = navigator.plugins["Shockwave Flash"];
+                if (swf) {
+                    hasFlash = 1;//安装了falsh
+                }
+            }
+        }
+        return hasFlash;//    return {f: hasFlash, v: flashVersion};
+    }
+
+
 
     //加载数据
     var form,laypage,layer,laydate

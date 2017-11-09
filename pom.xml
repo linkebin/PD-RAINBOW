@@ -69,9 +69,6 @@
 			<artifactId>json</artifactId>
 			<version>20090211</version>
 		</dependency>
-
-
-
 		<!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -192,6 +189,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.guerlab/sdk-alipay-core -->
+		<dependency>
+			<groupId>net.guerlab</groupId>
+			<artifactId>sdk-alipay-core</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+
 
 	</dependencies>
 

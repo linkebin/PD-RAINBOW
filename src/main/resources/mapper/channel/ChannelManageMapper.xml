@@ -41,15 +41,32 @@
 
   <select id="findChannelAccountListByChannelId" parameterType="Map" resultType="java.util.Map">
       SELECT * FROM sec_user WHERE DELETED=0 AND channel_id=#{channel_id}
+      <if test="ACCOUNT!=null and ACCOUNT!=''">
+        AND ACCOUNT LIKE '%${ACCOUNT}%'
+      </if>
+      <if test="USER_NAME!=null and USER_NAME!=''">
+        AND USER_NAME LIKE '%${USER_NAME}%'
+      </if>
+      <if test="MOBILE!=null and MOBILE!=''">
+        AND MOBILE LIKE '%${MOBILE}%'
+      </if>
   </select>
 
-  <select id="findChannelAccountTree" resultType="java.util.Map">
-        SELECT  cm.id_ id,  cm.channel_name name, 0 parentId FROM channel_manage cm WHERE cm.deleted=0
-        UNION ALL
+  <select id="findChannelAccountTree" parameterType="Map" resultType="java.util.Map">
+    SELECT b.* FROM(
 
-        SELECT su.ID_ id , su.ACCOUNT name, cc.id_ parentId FROM   channel_manage cc
+    SELECT  cm.id_ id,  cm.channel_name name, 0 parentId FROM channel_manage cm WHERE cm.deleted=0
+    UNION ALL
 
-        LEFT JOIN sec_user su  on cc.id_=su.channel_id WHERE su.DELETED=0 AND cc.deleted=0
+    SELECT su.ID_ id , su.ACCOUNT name, cc.id_ parentId FROM   channel_manage cc
+
+    LEFT JOIN sec_user su  on cc.id_=su.channel_id WHERE su.DELETED=0 AND cc.deleted=0
+    ) b WHERE 1=1
+
+    <if test="parentId =='one'">
+      AND b.parentId=#{channel_id}
+    </if>
+
   </select>
 
   <select id="findChannelOrAccountCounselorListByParameter" parameterType="Map" resultType="java.util.Map">

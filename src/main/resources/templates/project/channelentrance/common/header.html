@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<body class="eui-layout-body">
+<header  th:fragment="header">
+  <div class="eui-header">
+    <div class="headerIn">
+      <div class="eui-logo"><img th:src="@{/Styles/images/xymfImages/xymf/logo.png}" alt=""
+                                 onclick="javascript:window.location.href='/index'"></div>
+      <!-- 头部区域（可配合layui已有的水平导航） -->
+      <ul class="eui-nav xymfNav">
+        <li class="eui-nav-item"><a href="/index">首页</a></li>
+        <li class="eui-nav-item"><a href="/web/channelentrance/accountmanage">账号管理</a></li>
+        <li class="eui-nav-item"><a href="/web/channelentrance/consultManage">咨询师管理</a></li>
+      </ul>
+      <ul class="eui-nav personage">
+        <li class="eui-nav-item">
+          <a href="javascript:;">
+            <img th:src="@{/Styles/images/xymfImages/xymf/SNS.png}" alt="">
+            <!--<span class="eui-badge eui-bg-blue">9</span>-->
+            个人中心
+          </a>
+          <dl class="eui-nav-child">
+            <dd><a href="/web/user/userInfoA">基本资料</a></dd>
+            <dd><a href="/cube/todo">安全设置</a></dd>
+            <dd><a href="/logout">退出平台</a></dd>
+          </dl>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+</body>
+</html>

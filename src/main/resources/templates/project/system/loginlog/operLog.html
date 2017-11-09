@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>行为记录</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body>
+
+<div class="eui-bd eui-padding15">
+    <div class=" eui-bg-white">
+        <div class="">
+            <form class="eui-form" id="searchFrom">
+                <div class="eui-input-inline eui-padding10">
+
+                    <input type="text" name="userName" e-verify="title" value=""
+                           autocomplete="off" placeholder="操作人/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="urlParam" e-verify="title" value=""
+                           autocomplete="off" placeholder="请求参数/关键字" class="eui-input">
+                </div>
+
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="sessionId" e-verify="title" value=""
+                           autocomplete="off" placeholder="sessionId/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
+            <table id="test2"></table>
+        </div>
+    </div>
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
+
+<script>
+
+    var tableIns;
+    var table;
+    eui.use('table', function(){
+        table = eui.table;
+
+         tableIns = table.render({
+            id: 'idTest'
+            ,elem: '#test2'
+            ,url:'/oper/log/operLogListByPage'
+            ,method:'post'
+            ,where: {params: JSON.stringify($("#searchFrom").serializeObject())}
+            ,height: 460
+            ,cols: [[ //标题栏
+                 //{checkbox: true}
+                 {field: '', title: '序号', width: 150}
+                ,{field: 'operInfo', title: '操作内容', width: 150}
+                ,{field: 'userName', title: '操作人', width: 180}
+                ,{field: 'operIp', title: '操做人ip', width: 196}
+                ,{field: 'operUrl', title: '访问uri', width: 196}
+                ,{field: 'urlType', title: '请求类型', width: 196}
+                ,{field: 'urlMethod', title: '请求方法', width: 196}
+                ,{field: 'urlParam', title: '请求参数', width: 196}
+                ,{field: 'sessionId', title: 'sessionId', width: 196}
+                ,{field: 'urlResult', title: '请求结果', width: 100,templet:'<div>{{# if(d.urlResult=="异常"){ }}  <span style="color: red">{{d.urlResult}}</span>  {{#  }else{  }}  <span style="color: green"> {{d.urlResult}} </span> {{#  }  }}</div>'}
+                ,{field: 'operWhenLong', title: '操作时长', width: 196}
+                ,{field: 'operTime', title: '操作时间', width: 196,templet:'<div>{{new Date(d.operTime).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+
+             ]]
+            ,response: {
+                statusName: 'code' //数据状态的字段名称，默认：code
+                ,statusCode: 200 //成功的状态码，默认：0
+                ,msgName: 'message' //状态信息的字段名称，默认：msg
+                ,countName: 'count' //数据总数的字段名称，默认：count
+                ,dataName: 'data' //数据列表的字段名称，默认：data
+            }
+            ,skin: 'row' //表格风格
+            ,even: true
+            ,loading: true
+            ,page: true //是否显示分页
+            ,limits: [10,20,30]
+            ,limit: 10 //每页默认显示的数量
+            ,done: function(res, curr, count){
+
+            }
+        });
+    });
+
+    function resetForm() {
+        $('#searchFrom')[0].reset();
+    }
+    function doSearch() {
+        var obj =$("#searchFrom").serializeObject();
+        dataList(obj);
+    }
+
+    function dataList(obj) {
+        layer.load();
+        tableIns.reload({
+            where: {params: JSON.stringify(obj)}
+        });
+        layer.closeAll();
+    }
+
+
+    $(function () {
+
+    });
+
+
+</script>
+</body>
+</html>

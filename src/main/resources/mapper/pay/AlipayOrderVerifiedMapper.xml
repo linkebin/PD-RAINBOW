@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.pay.alipay.dao.AlipayOrderVerifiedMapper">
+    <resultMap id="BaseResultMap" type="com.yidusoft.pay.alipay.domain.OrderOnlineBean">
+        <id column="ID_" jdbcType="VARCHAR" property="id"/>
+        <result column="order_code" jdbcType="VARCHAR" property="orderCode"/>
+        <result column="questionnaire_total" jdbcType="INTEGER" property="questionnaireTotal"/>
+        <result column="order_money" jdbcType="DECIMAL" property="orderMoney"/>
+        <result column="payment_method" jdbcType="VARCHAR" property="paymentMethod"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="deleted" jdbcType="INTEGER" property="deleted"/>
+        <result column="order_state" jdbcType="INTEGER" property="orderState"/>
+        <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime"/>
+        <result column="product_id" jdbcType="VARCHAR" property="productId"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="promotions_id" jdbcType="VARCHAR" property="promotionsId"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+    </resultMap>
+    <select id="getOrderOnlineByCode" parameterType="String" resultMap="BaseResultMap">
+        SELECT oo.*,ps.promotions_id,ps.product_name
+            FROM order_online oo,product_settings ps
+        WHERE oo.deleted=0
+            AND oo.product_id=ps.ID_
+            AND oo.order_code=#{orderCode}
+    </select>
+</mapper>

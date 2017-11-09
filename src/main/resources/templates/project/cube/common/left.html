@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <body>
-    <aside th:fragment="left">
+    <div th:fragment="left">
     <div class="eui-side eui-bg-white">
       <div class="eui-user-top">
           <p id="userName" th:text="${session.userSession.userName}" class="eui-font18 eui-userName"></p>
@@ -14,11 +14,11 @@
           <li onclick="javaScript:window.location.href='/cube/order'">我的订单</li>
           <li onclick="javaScript:window.location.href='/cube/userQuestionnaire'">我的问卷</li>
           <li onclick="javaScript:window.location.href='/cube/todo'">我的特权</li>
-          <li onclick="javaScript:window.location.href='/web/user/userInfo'">个人信息</li>
+          <li onclick="javaScript:window.location.href='/web/user/account'">账户信息</li>
       </ul>
 
     </div>
-    </aside>
+    </div>
   </div>
 </body>
 </html>

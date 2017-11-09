@@ -37,11 +37,6 @@ public class SecUserController {
     private SecMenuMemberService secMenuMemberService;
 
 
-
-
-
-
-
     @PostMapping("/updateUserInfoPass")
     @ResponseBody
     public Result updateUserInfoPass(String json) {

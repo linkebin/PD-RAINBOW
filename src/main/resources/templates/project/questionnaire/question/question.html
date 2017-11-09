@@ -53,7 +53,7 @@
                     <a href="###" onclick="deleteQuestion('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
             </div>
-            <table class="eui-table eui-form" id="questionTable">
+            <table  e-filter="questionTable" class="eui-table eui-form" id="questionTable">
                 <colgroup>
                     <col width="60">
                     <col>
@@ -134,7 +134,7 @@
                 </select>
             </div>
             <label name="answer1" class="eui-form-label eui-form-pane">答案</label>
-            <div class="eui-input-inline  eui-input-block" name="answer1">
+            <div class="eui-input-inline  " name="answer1">
                 <input type="text" name="answer" required placeholder="例:A:一般||B:好" autocomplete="off" class="eui-input">
             </div>
 
@@ -166,12 +166,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     ,laydate = eui.laydate
     ,laypage = eui.laypage;
 
-    //全选
     form.on('select', function(data){
         if(data.elem.value!='3' && data.elem.value!='0'){
             $("[name='answer1']").show();
         }else {
             $("[name='answer1']").hide();
+
+            $("[name='answer']").val("");
         }
     });
 
@@ -181,6 +182,14 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         ,range: true
     });
 
+    //全选
+    form.on('checkbox(allChoose)', function(data){
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+        child.each(function(index, item){
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
 });
 
 </script>
@@ -289,6 +298,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                                 var tableHtml = getTable(questionList);
                                 $("#questionTable tbody").html(tableHtml);
                                 form.render('checkbox');
+                                //staticToDynamic();
                             }else {
                                 var params = $("#searchFrom").serializeObject();
                                 //加载层
@@ -309,6 +319,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                                         $("#questionTable tbody").html(tableHtml);
                                         //重新加载复选框
                                         form.render('checkbox');
+                                        //staticToDynamic();
                                     }
                                 });
                             }
@@ -381,7 +392,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         layer.open({
             type: 1
             ,title: '添加问题'
-            ,zIndex: -1000
             ,content:$('#questionForm')
             ,area: ['800px', '600px']
             ,btnAlign: 'c'
@@ -397,48 +407,35 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 var answer= $("[name='answer']").val().trim();
                 var msgs="";
                 if(questionContent==""){
-                    msgs="请输入问题内容";
-                    layer.tips(msgs, $("[name='questionContent']"), {
-                        tips: [1, '#3595CC'],
-                        zIndex: layer.zIndex, //重点1
+                    layer.msg('请输入问题内容', {
+                        time: 2000
                     });
-                    layer.setTop(layero); //重点2
                     return;
                 }else if(optionAnswer==""){
-                    msgs="请输入选项";
-                    layer.tips(msgs, $("[name='optionAnswer']"), {
-                        tips: [1, '#3595CC'],
-                        zIndex: layer.zIndex, //重点1
+                    layer.msg('请输入选项', {
+                        time: 2000
                     });
-                    layer.setTop(layero); //重点2
                     return;
                 }else if(optionScore==""){
-                    msgs="请输入选项对应分数";
-                    layer.tips(msgs, $("[name='optionScore']"), {
-                        tips: [1, '#3595CC'],
-                        zIndex: layer.zIndex, //重点1
+                    layer.msg('请输入选项对应分数', {
+                        time: 2000
                     });
-                    layer.setTop(layero); //重点2
                     return;
-                }else if(questionType==""){
-                    layer.tips(msgs, $("[name='questionType']"), {
-                        tips: [1, '#3595CC'],
-                        zIndex: layer.zIndex, //重点1
+                }else if(questionType=="0"){
+                    layer.msg('请输入类型', {
+                        time: 2000
                     });
-                    layer.setTop(layero); //重点2
                     return;
                 }
-                else if(questionType!='3'){
+                else if(questionType!='3' && questionType!='0'){
                     if(answer==""){
-                        msgs="请输入答案";
-                        layer.tips(msgs, $("[name='answer']"), {
-                            tips: [1, '#3595CC'],
-                            zIndex: layer.zIndex, //重点1
+                        layer.msg('请输入答案', {
+                            time: 2000
                         });
-                        layer.setTop(layero); //重点2
                         return;
                     }
-                }else {
+                }
+
                     var forms= $('#questionForm').serialize();
                     //加载层
                     var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
@@ -458,18 +455,12 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                         }
                     });
                 }
-
-
-
-
-            }
             ,btn2: function(){
                 layer.closeAll();
                 resetAddOrUpdateForm();
             }
-            ,zIndex: layer.zIndex //重点1
             ,success: function(layero){
-                layer.setTop(layero); //重点2
+                //layer.setTop(layero); //重点2
             }
             ,cancel: function(){
                 //右上角关闭回调
@@ -515,7 +506,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
              //修改
                layer.open({
                     type: 1
-                    ,id: 'LAY_update'
                     ,title: '修改问题'
                     ,content:$('#questionForm')
                     ,area: ['800px', '600px']
@@ -525,6 +515,41 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                     ,maxmin: true
                     ,btn: ['确定', '关闭'] //只是为了演示
                     ,yes: function(){
+                       var questionContent=$("#questionForm [name='questionContent']").val().trim();
+                       var optionAnswer= $("#questionForm [name='optionAnswer']").val().trim();
+                       var optionScore= $("#questionForm [name='optionScore']").val().trim();
+                       var questionType= $("#questionForm [name='questionType']").val().trim();
+                       var answer= $("[name='answer']").val().trim();
+                       if(questionContent==""){
+                           layer.msg('请输入问题内容', {
+                               time: 2000
+                           });
+                           return;
+                       }else if(optionAnswer==""){
+                           layer.msg('请输入选项', {
+                               time: 2000
+                           });
+                           return;
+                       }else if(optionScore==""){
+                           layer.msg('请输入选项对应分数', {
+                               time: 2000
+                           });
+                           return;
+                       }else if(questionType=="0"){
+                           layer.msg('请输入类型', {
+                               time: 2000
+                           });
+                           return;
+                       }
+                       else if(questionType!='3' && questionType!='0'){
+                           if(answer==""){
+                               layer.msg('请输入答案', {
+                                   time: 2000
+                               });
+                               return;
+                           }
+                       }
+
                         var forms= $('#questionForm').serialize();
                        //加载层
                        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
@@ -548,9 +573,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                         layer.closeAll();
                        resetAddOrUpdateForm();
                     }
-                    ,zIndex: layer.zIndex //重点1
                     ,success: function(layero){
-                        layer.setTop(layero); //重点2
                     }
                    ,cancel: function(){
                        //右上角关闭回调
@@ -576,7 +599,19 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         var seconds = time.getSeconds();
         return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
     }
+    //静态表格转动态
+ /*  function  staticToDynamic() {
+       var table = eui.table;
+       //转换静态表格
+       table.init('questionTable', {
+           height: 100 //设置高度
+           //支持所有基础参数
+       });
+   }
+*/
 </script>
+
+
 
 </body>
 </html>

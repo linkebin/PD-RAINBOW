@@ -150,7 +150,7 @@
             </div>
         </div>
     </form>
-    <div class="taskConfirm"><span onclick="updateProduct()" class="eui-btn">确认</span></div>
+    <div class="taskConfirm"><span onclick="updateProduct()" class="eui-btn confirm">确认</span></div>
 </div>
 <!-- 左滑编辑套餐结束 -->
 
@@ -538,6 +538,8 @@
             obj.promotionsId = promotionId;
             obj.promotionsName = promotionNameEdit;
             obj.id = $("#id_edit").val();
+            $('.confirm').text("正在保存...");
+            $('.confirm').attr("disabled",true);
             $.post("/product/settings/update", {"productJson": JSON.stringify(obj)}, function (result) {
                 if (result.message = 'SUCCESS') {
                     //关闭
@@ -554,6 +556,8 @@
                     });
 
                 }
+                $('.confirm').text("确认");
+                $('.confirm').removeAttr("disabled");
             });
         } else {
             layer.msg('套餐名称、问卷数量和套餐价格都不能为空！', {
@@ -582,6 +586,8 @@
 
             var indexs = layer.load(2); //加载
             var obj = new Object();
+            $('.confirm').text("正在保存...");
+            $('.confirm').attr("disabled",true);
             $.post("/product/settings/add", {"productJson": JSON.stringify(params)}, function (result) {
                 if (result.message = 'SUCCESS') {
                     //关闭
@@ -603,6 +609,8 @@
                     });
 
                 }
+                $('.confirm').text("确认");
+                $('.confirm').removeAttr("disabled");
             });
         } else {
             layer.msg('问卷数量、套餐价格和套餐名称不能为空！', {

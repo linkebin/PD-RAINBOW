@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -19,4 +20,8 @@ public class OperLogServiceImpl extends AbstractService<OperLog> implements Oper
     @Resource
     private OperLogMapper operLogMapper;
 
+    @Override
+    public List<OperLog> operLogListByPage(OperLog operLog) {
+        return operLogMapper.operLogListByPage(operLog);
+    }
 }
