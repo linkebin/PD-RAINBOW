@@ -10,6 +10,7 @@ import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.PasswordHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class ChannelManageController {
     @Resource
     private ChannelManageService channelManageService;
 
+
     @PostMapping("/add")
     public Result add(String json) {
         ChannelManage channelManage = JSON.parseObject(json,ChannelManage.class);
@@ -35,8 +37,39 @@ public class ChannelManageController {
         channelManage.setChannelCode(CodeHelper.getCode("QD"));
         channelManage.setCreator(Security.getUser().getUserName());
         channelManage.setDeleted(0);
-        channelManageService.save(channelManage);
-        return ResultGenerator.genSuccessResult();
+
+        SecUser secUser = new SecUser();
+        secUser.setId(UUID.randomUUID().toString());
+        secUser.setAccountType(2);
+        secUser.setAccount(channelManage.getLinkmanTell());
+        secUser.setUserName(channelManage.getLinkman());
+        secUser.setSex(0);
+        secUser.setHeadImg("/upload/headImg/default-pic.png");
+        secUser.setUserPass(PasswordHelper.strToMd5(secUser.getAccount()));
+        secUser.setMobile(secUser.getAccount());
+        secUser.setChannelId(channelManage.getId());
+
+        String inviterCode = CodeHelper.randomCode(8);
+        SecUser isUser = null;
+        if (inviterCode!=null){
+            isUser = secUserService.findSecUserByInviterCode(inviterCode);
+        }
+        if (isUser != null){
+            add(json);
+        }else {
+            secUser.setInviterCode(inviterCode);
+            try {
+                Result result = secUserService.addUser(JSON.toJSONString(secUser));
+                if (result.getCode() !=200){
+                    return result;
+                }
+                channelManageService.save(channelManage);
+            }catch (Exception e){
+                e.printStackTrace();
+                return ResultGenerator.genFailResult("添加失败");
+            }
+        }
+        return ResultGenerator.genSuccessResult("添加成功");
     }
 
     @DeleteMapping("/{id}")

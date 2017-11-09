@@ -66,10 +66,10 @@
                         </form>
                         <div class="eui-row eui-padding10 eui-borderB">
                             <div class="eui-col-md6 eui-font18">
-                                &nbsp;
+                                用户列表
                             </div>
                             <div class="eui-col-md6 eui-textAlignR">
-                                <a onclick="addAccount()" class="eui-btn eui-btn-small eui-btn-normal">添加账号</a>
+                                <a onclick="addAccount()" class="eui-btn eui-btn-small eui-btn-normal">添加用户</a>
                             </div>
                         </div>
 
@@ -77,18 +77,20 @@
                             <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
                                 <colgroup>
                                     <col width="60">
-                                    <col width="300">
-                                    <col width="300">
-                                    <col width="300">
+                                    <col width="200">
+                                    <col width="200">
+                                    <col width="200">
+                                    <col width="200">
                                     <col >
                                 </colgroup>
                                 <thead>
                                 <tr>
                                     <th><input type="checkbox" e-skin="primary" title=""></th>
-                                    <th>登录账号</th>
                                     <th>姓名</th>
-                                    <th>联系方式</th>
-                                    <th>操    作</th>
+                                    <th>性别</th>
+                                    <th>手机</th>
+                                    <th>邮箱</th>
+                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -264,12 +266,17 @@
             var secUser = userList[item];
 
             var id = "'" + secUser.ID_ + "'";
+            var sex = '男';
+            if (secUser.SEX=='0'){
+                sex='女';
+            }
 
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
-                '<td>'+ secUser.ACCOUNT +'</td>' +
                 '<td><a>'+ secUser.USER_NAME +'</a></td>' +
+                '<td>'+ sex +'</td>' +
                 '<td>'+secUser.MOBILE+'</td>' +
+                '<td>'+ secUser.EMAIL +'</td>' +
                 '<td>' +
                 '<i title="编辑" onclick="updateAccount('+id+')" class="eui-icon tb">&#xe642;</i>' +
                 '<i title="删除" onclick="deleteUser('+id+')" class="eui-icon tb">&#xe640;</i></td>' +
