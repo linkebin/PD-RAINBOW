@@ -10,6 +10,82 @@ eui.use(['form', 'laydate', 'element'], function () {
     laydate = eui.laydate
     var obj = new Object();
     initLaydateTest_n1(obj);
+    //控制左侧菜单样式固定
+    var pageIndex = $("#pageIndex").val();
+    $("#cymfNav li").each(function(i){
+              if(pageIndex!=""&&pageIndex==i){
+                $(this).addClass("nav-this")
+              }
+    });
+
+    //控制头部菜单样式固定
+    var headIndex = $("#headIndex").val();
+        if(headIndex==0){
+            $("#head_nav_left .eui-nav-bar").css({
+                "left":"20px",
+                "top":"55px",
+                "width":"68px",
+                "opacity":"1"
+            })
+        }else  if(headIndex==1){
+            $("#head_nav_left .eui-nav-bar").css({
+                "left":"88px",
+                "top":"55px",
+                "width":"96px",
+                "opacity":"1"
+            })
+        }else if(headIndex==2){
+            $("#head_nav_left .eui-nav-bar").css({
+                "left":"184px",
+                "top":"55px",
+                "width":"96px",
+                "opacity":"1"
+            })
+        }else if(headIndex==3){
+            $("#head_nav_left .eui-nav-bar").css({
+                "left":"280px",
+                "top":"55px",
+                "width":"68px",
+                "opacity":"1"
+            })
+        }else if(headIndex==4){
+            $("#head_nav_left .eui-nav-bar").css({
+                "left":"348px",
+                "top":"55px",
+                "width":"96px",
+                "opacity":"1"
+            })
+        }else if(headIndex==5){
+            $("#head_nav_left .eui-nav-bar").css({
+                "left":"20px",
+                "top":"55px",
+                "width":"68px",
+                "opacity":"1"
+            })
+        }else if(headIndex==5){
+            $("#head_nav_left .eui-nav-bar").css({
+                "left":"20px",
+                "top":"55px",
+                "width":"68px",
+                "opacity":"1"
+            })
+        }else if(headIndex==6){
+            $("#head_nav_right .eui-nav-bar").css({
+                "left":"20px",
+                "top":"55px",
+                "width":"124px",
+                "opacity":"1"
+            })
+        }else if(headIndex==7){
+            $("#head_nav_right .eui-nav-bar").css({
+                "left":"144.281px",
+                "top":"55px",
+                "width":"128px",
+                "opacity":"1"
+            })
+        }else {
+
+        }
 });
 
 function initLaydateTest_n1(obj) {
