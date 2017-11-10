@@ -52,10 +52,10 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
             launchActivities.setInitiatorType(1);
             launchActivities.setActivityStatus(0);
         } else {
-            int port = request.getServerPort();//获取服务器地址
-            String IP = request.getServerName();//获取服务器端口
+            int port = request.getServerPort();//获取服务器端口
+            String ip = request.getServerName();//获取服务端ip
             launchActivities.setInitiatorType(0);
-            launchActivities.setUestionnaireUri("http://" + IP + ":" + port + "/web/activities/fillingPage");
+            launchActivities.setUestionnaireUri("http://" + ip + ":" + port + "/web/activities/fillingPage");
             launchActivities.setActivityPorn(CodeHelper.randomCode(8));
         }
         launchActivitiesService.save(launchActivities);

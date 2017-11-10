@@ -187,11 +187,13 @@
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script type="text/javascript" src="/Scripts/main.js"></script>
 <script type="text/javascript">
-    var indexId;
+    var indexId,element;
+
     eui.use(['element','layer'],function(){
         var $ = eui.jquery
-                ,layer = eui.layer
-                ,element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+                ,layer = eui.layer;
+
+                element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
         //初始化首页
         var indexVal = $("ul.navul >li:first-child a span").text(),

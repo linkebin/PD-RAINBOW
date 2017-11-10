@@ -30,4 +30,14 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
     public BigDecimal getUnitPriceByTotal() {
         return productSettingsMapper.getUnitPriceByTotal();
     }
+
+    @Override
+    public List<ProductSettings> getProductByTime() {
+        return productSettingsMapper.getProductByTime();
+    }
+
+    @Override
+    public List<ProductSettings> getUpdateUnion(String id) {
+        return productSettingsMapper.getUpdateUnion(id);
+    }
 }

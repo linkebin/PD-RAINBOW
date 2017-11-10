@@ -11,7 +11,10 @@ import com.yidusoft.project.transaction.service.ProductSettingsService;
 import com.yidusoft.project.transaction.service.QuestionnairePromotionsService;
 import com.yidusoft.utils.Security;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -19,6 +22,7 @@ import java.util.*;
 /**
  * Created by CodeGenerator on 2017/10/11.
  */
+@Transactional
 @RestController
 @RequestMapping("/questionnaire/promotions")
 public class QuestionnairePromotionsController {
@@ -69,14 +73,23 @@ public class QuestionnairePromotionsController {
      * @return
      */
     @PostMapping("/add")
-    public Result add(String promotionsJson) {
+    public Result add(String promotionsJson,String ids) {
+        String id_=UUID.randomUUID().toString();
         QuestionnairePromotions promotions = JSON.parseObject(promotionsJson, QuestionnairePromotions.class);
-        promotions.setId(UUID.randomUUID().toString());
-        ;
+        promotions.setId(id_);
         promotions.setCreator(Security.getUser().getUserName());
         promotions.setCreateTime(new Date());
         promotions.setDeleted(0);
         questionnairePromotionsService.save(promotions);
+        if(ids!=null && ids!=""){
+            String arr[] = ids.split(",");
+            for (String id : arr) {
+                ProductSettings productSettings = productSettingsService.findById(id);
+                productSettings.setPromotionsId(id_);
+                productSettings.setPromotionsName(promotions.getPromotionsName());
+                productSettingsService.update(productSettings);
+            }
+        }
         return ResultGenerator.genSuccessResult();
     }
 
@@ -120,6 +133,27 @@ public class QuestionnairePromotionsController {
             productSettingsService.update(productSettings);
         }
         questionnairePromotionsService.update(questionnairePromotions);
+        return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 修改套餐
+     * @param promotionsId
+     * @param promotionsName
+     * @param ids
+     * @return
+     */
+    @PostMapping("/updateProduct")
+    public Result updateProduct(String promotionsId,String promotionsName,String ids) {
+        if(ids!=null && ids!=""){
+            String arr[] = ids.split(",");
+            for (String id : arr) {
+                ProductSettings productSettings = productSettingsService.findById(id);
+                productSettings.setPromotionsId(promotionsId);
+                productSettings.setPromotionsName(promotionsName);
+                productSettingsService.update(productSettings);
+            }
+        }
         return ResultGenerator.genSuccessResult();
     }
 

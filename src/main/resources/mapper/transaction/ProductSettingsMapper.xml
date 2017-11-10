@@ -15,17 +15,38 @@
         <result column="promotions_id" jdbcType="VARCHAR" property="promotionsId"/>
         <result column="product_name" jdbcType="VARCHAR" property="productName"/>
         <result column="promotions_name" jdbcType="VARCHAR" property="promotionsName"/>
-
+        <result column="product_state" jdbcType="INTEGER" property="productState"/>
     </resultMap>
 
     <select id="getProductAll" resultMap="BaseResultMap" parameterType="Integer">
-        SELECT id_,product_code,product_total,product_price,creator,
-        create_time,deleted,promotions_id,product_name,promotions_name
+        SELECT id_,product_code,product_total,product_price,creator,create_time,
+        deleted,promotions_id,product_name,promotions_name,product_state
         FROM product_settings where deleted=0 order by product_price ASC
     </select>
 
     <select id="getUnitPriceByTotal" resultType="DECIMAL">
         SELECT product_price FROM product_settings where deleted=0 AND product_total=1
+    </select>
+
+    <select id="getProductByTime" resultMap="BaseResultMap">
+        select  a.* FROM(
+	    select ps.* from product_settings ps,questionnaire_promotions qp
+        where ps.promotions_id=qp.ID_
+        AND ps.deleted=0 AND qp.deleted=0
+		AND ps.product_state=0
+        AND NOW() > qp.promotions_end
+        UNION
+
+        SELECT * FROM product_settings WHERE deleted=0 AND promotions_id=''
+				AND product_total!=1 AND product_state=0
+        ) as a
+    </select>
+
+    <select id="getUpdateUnion" resultMap="BaseResultMap">
+        SELECT id_,product_code,product_total,product_price,creator,create_time,
+        deleted,promotions_id,product_name,promotions_name,product_state
+        FROM product_settings WHERE promotions_id=#{id} AND deleted=0
+        AND product_state=0 AND product_total!=1
     </select>
 </mapper>
 

@@ -111,7 +111,7 @@ public class OrderOnlineController {
         orderOnline.setPaymentTime(new Date());
         orderOnline.setSerialNumber(SerialNumber);
         orderOnlineService.update(orderOnline);
-        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", Security.getUserId());
+        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
         if (userQuestionnaires != null) {
             userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()+orderOnline.getQuestionnaireTotal());
             userQuestionnairesService.update(userQuestionnaires);

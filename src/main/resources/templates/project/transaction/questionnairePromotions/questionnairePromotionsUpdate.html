@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
+    <script src="/Scripts/date2format.js" type="text/javascript"></script>
+    <style>
+        #promotionsForm input + label {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="eui-row eui-padding10 eui-borderB">
+    <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAdd">
+        <i class='eui-icon eui-font24'>&#xe654;</i> 编辑促销
+    </div>
+</div>
+<form class="eui-form eui-marginT10 eui-paddingR10" id="promotionsForm" th:object="${promotions}">
+    <input type="hidden" name="id" id="questionId" th:value="*{id}">
+    <input type="hidden" name="id" id="promotionsName" th:value="*{promotionsName}">
+    <div class="eui-form-item">
+        <label class="eui-form-label">促销名称</label>
+        <div class="eui-input-inline">
+            <input type="text" name="promotionsName" e-verify="title" th:value="*{promotionsName}" class="eui-input"
+                   placeholder="请输入名称">
+        </div>
+        <label class="eui-form-label">开始时间</label>
+        <div class="eui-input-inline">
+            <input type="text" class="eui-input" name="promotionsStart" th:value="*{promotionsStart}" id="startTime"
+                   placeholder="年-月-日 时:分:秒">
+        </div>
+        <label class="eui-form-label">结束时间</label>
+        <div class="eui-input-inline">
+            <input type="text" class="eui-input" name="promotionsEnd" th:value="*{promotionsEnd}" id="endTime"
+                   placeholder="年-月-日 时:分:秒">
+        </div>
+    </div>
+    <div class="eui-form-item">
+        <label class="eui-form-label">是否开启</label>
+        <div class="eui-input-inline" th:if="*{promotionsState==0}">
+            <input type="radio" name="promotionsState" value="0" title="是" checked/>
+            <input type="radio" name="promotionsState" value="1" title="否"/>
+        </div>
+        <div class="eui-input-inline" th:if="*{promotionsState==1}">
+            <input type="radio" name="promotionsState" value="0" title="是"/>
+            <input type="radio" name="promotionsState" value="1" title="否" checked/>
+        </div>
+        <label class="eui-form-label">促销类型</label>
+        <input type="hidden" th:value="*{promotionsType}" id="promotionsType">
+        <div class="eui-input-inline" th:if="*{promotionsType==1}">
+            <input type="radio" name="promotionsType" value="1" title="折扣" checked e-filter="allChoose">
+            <input type="radio" name="promotionsType" value="2" title="买送" e-filter="allChoose">
+        </div>
+        <div class="eui-input-inline" th:if="*{promotionsType==2}">
+            <input type="radio" name="promotionsType" value="1" title="折扣" e-filter="allChoose">
+            <input type="radio" name="promotionsType" value="2" title="买送" checked e-filter="allChoose">
+        </div>
+    </div>
+    <div class="eui-form-item" id="discount">
+        <label class="eui-form-label">促销折扣</label>
+        <div class="eui-input-block">
+            <input type="text" name="promotionsDiscount" th:value="*{promotionsDiscount}" e-verify="title"
+                   autocomplete="off" class="eui-input"
+                   placeholder="请输入折扣，例如:输入0.08=8折;">
+        </div>
+    </div>
+    <div class="eui-form-item" id="buySend">
+        <label class="eui-form-label">赠送数量</label>
+        <div class="eui-input-block">
+            <input type="text" name="promotionsBuySend" th:value="*{promotionsBuySend}" e-verify="title"
+                   autocomplete="on" class="eui-input"
+                   placeholder="请输入赠送数量">
+        </div>
+    </div>
+    <div class="eui-bg-white eui-row eui-paddingT10">
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 已选的套餐
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <a href="###" class="eui-btn eui-btn-small promotionNew" data-type="tabAdd"><i
+                        class='eui-icon eui-font24'>&#xe61d;</i>可选的套餐</a>
+            </div>
+        </div>
+        <table class="eui-table eui-form" id="productTable">
+            <colgroup>
+                <col width="120">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>套餐编号</th>
+                <th>套餐名称</th>
+                <th>问卷数量</th>
+                <th>套餐价格</th>
+                <th>创建人</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+    </div>
+    <div class="eui-textAlignC eui-bg-white eui-padding20">
+            <span onclick="formSub()" class="eui-btn eui-btn-big confirm">
+                <img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 保存信息</span>
+    </div>
+    <input type="submit" id="sub" style="display: none;" value="提交"/>
+</form>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#startTime').val(new Date($('#startTime').val()).Format("yyyy-MM-dd hh:mm:ss"));
+        $('#endTime').val(new Date($('#endTime').val()).Format("yyyy-MM-dd hh:mm:ss"));
+        $('#discount').hide();
+        $('#buySend').hide();
+        if ($('#promotionsType').val() == 1) {
+            $('#discount').show();
+        } else {
+            $('#buySend').show();
+        }
+        doSearch();
+        eui.use(['form', 'laydate'], function () {
+            var form = eui.form
+                    , laydate = eui.laydate;
+
+            //常规用法
+            laydate.render({
+                elem: '#startTime',
+                type: 'datetime'
+            });
+            laydate.render({
+                elem: '#endTime',
+                type: 'datetime'
+            });
+
+            form.on('radio(allChoose)', function (data) {
+                if (data.elem.value == 1) {
+                    $("#discount").show();
+                    $("#buySend").hide();
+                } else {
+                    $("#discount").hide();
+                    $("#buySend").show();
+                }
+            })
+
+            jQuery.validator.addMethod("minNumber", function (value, element) {
+                var returnVal = true;
+                inputZ = value;
+                var ArrMen = inputZ.split(".");    //截取字符串
+                if (ArrMen.length == 2) {
+                    if (ArrMen[1].length > 2) {    //判断小数点后面的字符串长度
+                        returnVal = false;
+                        return false;
+                    }
+                }
+                return returnVal;
+            }, "小数点后最多为两位");
+            $("#promotionsForm").validate({
+                rules: {
+                    promotionsName: {
+                        required: true,
+                    },
+                    promotionsStart: {
+                        required: true,
+                    },
+                    promotionsEnd: {
+                        required: true,
+                    },
+                    promotionsDiscount: {
+                        required: true,
+                        range: [0.09, 0.1],
+                        number: true,
+                        minNumber: true,
+                    },
+                    promotionsBuySend: {
+                        required: true,
+                        number: true,
+                        min: 1
+                    },
+                },
+                messages: {
+                    promotionsName: {
+                        required: "请输入促销名称",
+                    },
+                    promotionsStart: {
+                        required: '请输入开始时间',
+                    },
+                    promotionsEnd: {
+                        required: '请输入结束时间',
+                    },
+                    promotionsDiscount: {
+                        required: '请输入折扣',
+                        range: '请输入0.09到0.1之间的数',
+                        number: '请输入正确的数字',
+                        minNumber: '输入数字最多小数点后两位'
+                    },
+                    promotionsBuySend: {
+                        required: '请输入数量',
+                        number: '请输入正确的数字',
+                        min: '输入的数量最少为1'
+                    }
+                },
+                submitHandler: function () {
+                    var params = $("#promotionsForm").serializeObject();
+                    $('.confirm').text("正在保存...");
+                    $('.confirm').attr("disabled", true);
+                    $.post("/questionnaire/promotions/update", {"promotionsJson": JSON.stringify(params)}, function (result) {
+                        if (result.message = 'SUCCESS') {
+                            //关闭
+                            layer.closeAll();
+                            layer.msg('编辑成功！', {
+                                icon: 1,
+                                time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                            });
+                            $('.confirm').text("保存信息");
+                            $('.confirm').removeAttr("disabled");
+                            doSearch();
+                        } else {
+                            layer.msg('编辑失败！', {
+                                time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                            });
+
+                        }
+                        $('.confirm').text("保存信息");
+                        $('.confirm').removeAttr("disabled");
+                    });
+                }
+            });
+        })
+    })
+
+    function formSub() {
+        return $("#sub").click();
+    }
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer,
+                    $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url: "/product/settings/updateListPage",
+                data: {
+                    page: 1,
+                    size: 10,
+                    id: $('#questionId').val()
+                },
+                type: "post",
+                success: function (result) {
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+//                        ,pages: result.data.pages
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var productList = result.data.list;
+                                console.log(productList);
+                                //遍历，拼接表格
+                                var tableHtml = getTable(productList);
+                                $("#productTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                $.ajax({
+                                    url: "/product/settings/updateListPage",
+                                    data: {
+                                        page: obj.curr,
+                                        size: obj.limit,
+                                        id: $('#questionId').val()
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        console.log(result);
+                                        var productList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(productList);
+                                        $("#productTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+    //渲染数据，拼接表格
+    function getTable(productList) {
+        var tableHtml = '';
+        for (var item in productList) {
+            var product = productList[item];
+            var id = "'"+product.id+"'";
+            tableHtml += '<tr>' +
+                    '<td>' + product.productCode + '</td>' +
+                    '<td>' + product.productName + '</td>' +
+                    '<td>' + product.productTotal + '</td>' +
+                    '<td>' + product.productPrice + '元</td>' +
+                    '<td>' + product.creator + '</td>' +
+                    '<td>' + new Date(product.createTime).Format('yyyy-MM-dd hh:mm:ss') + '</td>' +
+                    /*'<td><button class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deleteProduct(' + id + ')"><i class="eui-icon">&#xe640;</i></button></td>'+*/
+                    '</tr>';
+
+        }
+        return tableHtml;
+    }
+    $('.promotionNew').click(function () {
+        var id = $('#questionId').val();
+        var name = $('#promotionsName').val();
+        eui.use(['form', 'layer'], function () { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+                    layer = eui.layer, form = eui.form; //独立版的layer无需执行这一句
+            var iframeWin;//iframe对象
+            layer.open({
+                type: 2
+                , id: 'checkQuestionnaire'
+                , title: '选择套餐'
+                , area: ['800px', '500px']
+                , success: function (layero, index) {
+                    var body = layer.getChildFrame('body', index);
+                    iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                , shade: 0
+                , moveType: 0//拖拽模式，0或者1
+                , maxmin: true
+                , content: "/web/promotion/choose"
+                , btn: ['确定', '关闭'] //只是为了演示
+                , yes: function () {
+                    //得到设置返回的结果
+                    var ids = iframeWin.chooseProduct();
+                    //加载层
+                    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                    console.log(ids);
+                    layer.close(index);
+                    if(ids!=''){
+                        $.post("/questionnaire/promotions/updateProduct",{promotionsId:id,promotionsName:name,ids:ids},function (res) {
+                            if(res.code){
+                                layer.msg("套餐添加成功");
+                                setTimeout(function () {
+                                    doSearch();
+                                },2000)
+                            }else{
+                                layer.msg("套餐添加失败");
+                            }
+                        })
+                    }
+                }
+                , btn2: function () {
+                    layer.closeAll();
+                }, cancel: function () {
+                    layer.closeAll();
+                }
+                , zIndex: layer.zIndex //重点1
+            });
+        });
+    })
+    //删除套餐
+    function deleteProduct(id) {
+        eui.use('layer', function () { //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer; //独立版的layer无需执行
+            layer.confirm('您确定删除吗？', {
+                btn: ['确认', '取消']
+            }, function () {
+                $.post("/product/settings/updateProduct",{id:id},function (result) {
+                    if(result.code==200){
+                        layer.msg("删除成功")
+                    } else {
+                        layer.msg(result.message)
+                    }
+                })
+            })
+        })
+    }
+</script>
+</body>
+</html>

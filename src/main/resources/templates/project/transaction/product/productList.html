@@ -49,6 +49,7 @@
                 <th>创建人</th>
                 <th>创建时间</th>
                 <th>参与的活动</th>
+                <th>是否启用</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -95,10 +96,10 @@
             </div>
         </div>
         <div class="eui-form-item">
-            <label class="eui-form-label">参与的促销</label>
+            <label class="eui-form-label">是否启用</label>
             <div class="eui-input-block">
-                <select name="promotionId" id="promotionsId" e-filter="allChoose">
-                </select>
+                <input type="radio" title="是" value="0" name="productState" checked>
+                <input type="radio" title="否" value="1" name="productState">
             </div>
         </div>
     </form>
@@ -141,12 +142,11 @@
                         oninput="priceChange(this)">
             </div>
         </div>
-        <div class="eui-form-item promotionHide">
-            <label class="eui-form-label">参与的活动</label>
+        <div class="eui-form-item">
+            <label class="eui-form-label">套餐价格</label>
             <div class="eui-input-block">
-                <select id="product_edit" e-filter="allSelected">
-
-                </select>
+                <input type="radio" title="是" value="0" name="state_edit" checked>
+                <input type="radio" title="否" value="1" name="state_edit">
             </div>
         </div>
     </form>
@@ -213,24 +213,8 @@
         // 新建套餐
         $(".taskFiltrate").hide();
         $(".productNew").click(function (event) {
-            $.get("/questionnaire/promotions/getState", function (result) {
-                if (result.message == "SUCCESS") {
-                    var form = eui.form;
-                    var promotion = result.data;
-                    var selectHtml = '<option value="">请选择</option>';
-                    for (var index in promotion) {
-                        var promotionList = promotion[index];
-                        selectHtml += '<option value="' + promotionList.id + '">'
-                                + promotionList.promotionsName +
-                                '</option>';
-                        continue;
-                    }
-                    $('#promotionsId').html(selectHtml);
-                    $(".taskFiltrate").show();
-                    $(".filtrateIn").animate({right: '0'}, 400);
-                    form.render();
-                }
-            })
+            $(".taskFiltrate").show();
+            $(".filtrateIn").animate({right: '0'}, 400);
             /* Act on the event */
         });
 
@@ -430,21 +414,27 @@
     function getTable(userList) {
         var tableHtml = '';
         for (var item in userList) {
-            var prodouct = userList[item];
+            var product = userList[item];
 
-            var id = "'" + prodouct.id + "'";
+            var id = "'" + product.id + "'";
+            var state = "否";
+            console.log(product.productState)
+            if(product.productState==0){
+                state = "是";
+            }
             tableHtml += '<tr>' +
-                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="productId" type="hidden" value="' + prodouct.id + '"></td>' +
-                    '<td>' + prodouct.productCode + '</td>' +
-                    '<td>' + prodouct.productName + '</td>' +
-                    '<td>' + prodouct.productTotal + '</td>' +
-                    '<td>' + prodouct.productPrice + '元</td>' +
-                    '<td>' + prodouct.creator + '</td>' +
-                    '<td>' + new Date(prodouct.createTime).Format('yyyy-MM-dd') + '</td>';
-            prodouct.promotionsName != "" ? tableHtml += '<td>' + prodouct.promotionsName + '</td>' : tableHtml += '<td>不参与活动</td>'
-            tableHtml += '<td>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="productId" type="hidden" value="' + product.id + '"></td>' +
+                    '<td>' + product.productCode + '</td>' +
+                    '<td>' + product.productName + '</td>' +
+                    '<td>' + product.productTotal + '</td>' +
+                    '<td>' + product.productPrice + '元</td>' +
+                    '<td>' + product.creator + '</td>' +
+                    '<td>' + new Date(product.createTime).Format('yyyy-MM-dd') + '</td>';
+            product.promotionsName != "" ? tableHtml += '<td>' + product.promotionsName + '</td>' : tableHtml += '<td>不参与活动</td>'
+            tableHtml += '<td>' + state + '</td>' +
+                    '<td>' +
                     '<div class="eui-btn-group"> ' +
-                    '' + Buts(prodouct.id, prodouct.productTotal, prodouct.productPrice, prodouct.productName, prodouct.promotionsName) + '' +
+                    '' + Buts(product.id, product.productTotal, product.productPrice, product.productName, product.productState) + '' +
                     '</div>' +
                     '</td>' +
                     '</tr>';
@@ -453,13 +443,13 @@
         return tableHtml;
     }
 
-    function Buts(id, productTotal, price, name, proName) {
+    function Buts(id, productTotal, price, name, state) {
         id = "'" + id + "'";
         var total = "'" + productTotal + "'";
         var price = "'" + price + "'";
         var name = "'" + name + "'";
-        var proName = "'" + proName + "'";
-        var btnHtml = '<button class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="编辑套餐" onclick="productEdit(' + id + ',' + total + ',' + price + ',' + name + ',' + proName + ')"><i class="eui-icon">&#xe642;</i></button> ';
+        var state = "'" + state + "'";
+        var btnHtml = '<button class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="编辑套餐" onclick="productEdit(' + id + ',' + total + ',' + price + ',' + name + ',' + state + ')"><i class="eui-icon">&#xe642;</i></button> ';
         if (productTotal != 1) {
             btnHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deletePrpduct(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
         }
@@ -470,46 +460,29 @@
 
 
     //显示编辑套餐的表单
-    function productEdit(id, total, price, name, proName) {
+    function productEdit(id, total, price, name, state) {
         eui.use(['form'], function () {
             var form = eui.form;
             $("#total_edit").val(total);
             $("#price_edit").val(price);
             $("#name_edit").val(name);
-            promotionNameEdit = proName;
             $("#id_edit").val(id);
-            $.get("/questionnaire/promotions/getState", function (result) {
-                if (result.message == "SUCCESS") {
-                    var promotion = result.data;
-                    var selectHtml = '<option value="">不参与活动</option>';
-                    for (var index in promotion) {
-                        var promotionList = promotion[index];
-                        if (proName == promotionList.promotionsName) {
-                            selectHtml += '<option value="' + promotionList.id + '" selected>'
-                                    + promotionList.promotionsName +
-                                    '</option>';
-                            continue;
-                        }
-                        selectHtml += '<option value="' + promotionList.id + '">'
-                                + promotionList.promotionsName +
-                                '</option>';
-                        continue;
-                    }
-                    $('#product_edit').html(selectHtml);
-                    form.render('select');
-                    if (total == 1) {
-                        $(".nameHide").hide();
-                        $(".totalHide").hide();
-                        $(".promotionHide").hide();
-                    } else {
-                        $(".nameHide").show();
-                        $(".totalHide").show();
-                        $(".promotionHide").show();
-                    }
+            $('input[name="state_edit"]').each(function (i,data) {
+                if(data.value==state){
+                    $(this).attr("checked",true);
                 }
-                $(".taskFiltrate2").show();
-                $(".filtrateIn2").animate({right: '0'}, 400);
             })
+            if (total == 1) {
+                $(".nameHide").hide();
+                $(".totalHide").hide();
+                $(".promotionHide").hide();
+            } else {
+                $(".nameHide").show();
+                $(".totalHide").show();
+                $(".promotionHide").show();
+            }
+            $(".taskFiltrate2").show();
+            $(".filtrateIn2").animate({right: '0'}, 400);
         })
     }
     /**
@@ -523,9 +496,8 @@
         var total = $.trim($("#total_edit").val());
         var price = $.trim($("#price_edit").val());
         var name = $.trim($("#name_edit").val());
-        var promotionId = $.trim($("#product_edit").val());
-        console.log($("#product_edit").val())
-        console.log()
+        var state = $('input[name="state_edit"]:checked').val();
+        console.log(state);
         if (total != '' && price != '' && name != "") {
             if(price==0){
                 return layer.msg("套餐价格不能为0")
@@ -535,8 +507,7 @@
             obj.productTotal = total;
             obj.productPrice = price;
             obj.productName = name;
-            obj.promotionsId = promotionId;
-            obj.promotionsName = promotionNameEdit;
+            obj.productState = state;
             obj.id = $("#id_edit").val();
             $('.confirm').text("正在保存...");
             $('.confirm').attr("disabled",true);
