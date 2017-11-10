@@ -33,20 +33,20 @@
     <div class="eui-layout eui-layout-admin xymfHome">
         <div th:replace="project/channelentrance/common/header :: header">Header</div>
         <div class="eui-area">
-            <div style="margin-left: 0px;" class="eui-body">
+            <div  class="eui-body">
                 <div class="xymfContent">
                     <div class="defaultDiv">
                         <form id="searchFrom" onsubmit="return false;">
                             <input type="hidden" name="channel_id" th:value="${session.userSession.channelId}" />
                             <div  class="eui-form eui-margin10">
                                 <div class="eui-form-item">
-                                    <label class="eui-form-label">登录账号</label>
-                                    <div class="eui-input-inline">
-                                        <input type="text" name="ACCOUNT"  placeholder="" class="eui-input">
-                                    </div>
                                     <label class="eui-form-label">姓名</label>
                                     <div class="eui-input-inline">
                                         <input type="text" name="USER_NAME"  placeholder="" class="eui-input">
+                                    </div>
+                                    <label class="eui-form-label">手机</label>
+                                    <div class="eui-input-inline">
+                                        <input type="text" name="MOBILE"  placeholder="" class="eui-input">
                                     </div>
 
                                     <div class="eui-input-inline">
@@ -57,9 +57,18 @@
 
                                 </div>
                                 <div class="eui-form-item">
-                                    <label class="eui-form-label">联系方式</label>
+                                    <label class="eui-form-label">邮箱</label>
                                     <div class="eui-input-inline">
-                                        <input type="text" name="MOBILE"  placeholder="" class="eui-input">
+                                        <input type="text" name="EMAIL"  placeholder="" class="eui-input">
+                                    </div>
+
+                                    <label class="eui-form-label">性别</label>
+                                    <div class="eui-input-inline">
+                                        <select  name="SEX">
+                                            <option value="">全部</option>
+                                            <option value="0">女</option>
+                                            <option value="1">男</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -77,8 +86,8 @@
                             <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
                                 <colgroup>
                                     <col width="60">
-                                    <col width="200">
-                                    <col width="200">
+                                    <col width="150">
+                                    <col width="100">
                                     <col width="200">
                                     <col width="200">
                                     <col >
@@ -128,26 +137,28 @@
 
         $("#channelAccountAddForm").validate({
             rules: {
-                account: {
+                mobile: {
                     required : true,
                     minlength : 11,
                     isMobile : true
                 },
-                userPass: {
+                email: {
                     required: true,
+                    email:true
                 },
                 userName: {
                     required: true,
                 }
             },
             messages: {
-                account: {
+                mobile: {
                     required : "请输入手机号",
                     minlength : "确认手机不能小于11个字符",
                     isMobile : "请正确填写您的手机号码"
                 },
-                userPass: {
-                    required: "请输入密码",
+                email: {
+                    required: "请输入邮箱地址",
+                    email:'请输入正确的邮件地址'
                 },
                 userName: {
                     required: "请输入姓名",
@@ -157,10 +168,8 @@
                 var obj = $("#channelAccountAdd form").serializeObject();
 
                 if ($("#channelAccountAddForm input[name='id']").val()==''){
-                    obj.userPass=md5(obj.userPass);
-                    obj.mobile=obj.account;
-                    obj.accountType=2;
-                    obj.sex=0;
+                    obj.accountType=999;
+                    obj.userPass='b706835de79a2b4e80506f582af3676a';
                     $.post('/channel/manage/channelAccountAdd',{params:JSON.stringify(obj)},function (result) {
                         if (result.code==200){
                             layer.closeAll();
@@ -170,9 +179,6 @@
                         }
                     });
                 }else {
-                    if (obj.userPass=='1234'){
-                        obj.userPass=null;
-                    }
                     $.post('/channel/manage/updateaccountInfo',{json:JSON.stringify(obj)},function (result) {
                         if (result.code==200){
                             layer.closeAll();
@@ -278,8 +284,11 @@
                 '<td>'+secUser.MOBILE+'</td>' +
                 '<td>'+ secUser.EMAIL +'</td>' +
                 '<td>' +
-                '<i title="编辑" onclick="updateAccount('+id+')" class="eui-icon tb">&#xe642;</i>' +
-                '<i title="删除" onclick="deleteUser('+id+')" class="eui-icon tb">&#xe640;</i></td>' +
+                '<div class="eui-btn-group"> ' +
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑" onclick="updateAccount('+id+')" ><i class="eui-icon"></i></button>' +
+                    ' <button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="deleteUser('+id+')"><i class="eui-icon"></i></button>' +
+                ' </div>' +
+                '</td>'+
                 '</tr>';
         }
         return tableHtml;
@@ -323,7 +332,7 @@
     function addAccount() {
         $("#channelAccountAddForm input[name='id']").val('')
         var index = layer.open({
-            title: '添加账号'
+            title: '添加用户'
             , type: 1
             , area: ['600px', '400px']
             , content: $("#channelAccountAdd")
@@ -340,7 +349,7 @@
 
     function updateAccount(id) {
         var index = layer.open({
-            title: '编辑账号'
+            title: '编辑用户'
             , type: 1
             , area: ['600px', '400px']
             , content: $("#channelAccountAdd")
@@ -365,12 +374,7 @@
     <form id="channelAccountAddForm" onsubmit="return false;">
         <input  type="hidden" name="id"  />
         <input th:value="${session.userSession.channelId}" type="hidden" name="channelId"  />
-        <div class="eui-form-item">
-            <label class="eui-form-label">账号</label>
-            <div class="eui-input-block">
-                <input type="text" name="account"  placeholder="请输入手机号码" class="eui-input" />
-            </div>
-        </div>
+
         <div class="eui-form-item">
             <label class="eui-form-label">姓名</label>
             <div class="eui-input-block">
@@ -378,16 +382,23 @@
             </div>
         </div>
         <div class="eui-form-item">
-            <label class="eui-form-label">密码</label>
-            <div class="eui-input-block">
-                <input type="password" name="userPass"  placeholder="请输入密码" class="eui-input" />
+            <label class="eui-form-label">性别</label>
+            <div class="eui-input-block eui-checkSmall">
+                <input type="radio" name="sex" value="1" title="男" checked>
+                <input type="radio" name="sex" value="0" title="女">
             </div>
         </div>
         <div class="eui-form-item">
-            <label class="eui-form-label">状态</label>
-            <div class="eui-input-block eui-checkSmall">
-                <input type="radio" name="status" value="1" title="可用" checked>
-                <input type="radio" name="status" value="0" title="不可用">
+            <label class="eui-form-label">手机</label>
+            <div class="eui-input-block">
+                <input type="text" name="mobile"  placeholder="请输入手机号码" class="eui-input" />
+            </div>
+        </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">邮箱</label>
+            <div class="eui-input-block">
+                <input type="email" name="email"  placeholder="请输入邮箱地址" class="eui-input" />
             </div>
         </div>
         <input type="submit" style="display: none;">

@@ -19,4 +19,5 @@ public class WebChannelEntranceController {
     public String consultManage() {
         return "project/channelentrance/consult-manage";
     }
+
 }

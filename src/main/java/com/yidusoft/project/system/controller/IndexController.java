@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.channel.domain.ChannelManage;
+import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.monitor.domain.LoginLog;
 import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecUser;
@@ -161,6 +163,77 @@ public class IndexController {
             return ResultGenerator.genSuccessResult(result.getData());
         }
         return ResultGenerator.genFailResult("注册失败");
+    }
+
+    @Autowired
+    private ChannelManageService channelManageService;
+
+    /**
+     * 渠道商注册
+     * @param json
+     * @return
+     */
+    @PostMapping("/sign/channel")
+    @ResponseBody
+    public Result signChannel(String json,HttpServletRequest request) {
+
+        SecUser secUserJ = JSON.parseObject(json,SecUser.class);
+
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+
+        if (!captchaId.equals(secUserJ.getVrifyCode()) && !"".equals(captchaId)) {
+            return ResultGenerator.genFailResult("图形验证码错误");
+        }
+
+        if(request.getSession().getAttribute("signCode")==null || request.getSession().getAttribute("signCode")==""){
+            return ResultGenerator.genFailResult("请获取手机验证码");
+        }
+        String code = (String) request.getSession().getAttribute("signCode");
+
+        if (!code.equals(secUserJ.getMsgCode()) ){
+            return ResultGenerator.genFailResult("手机验证码错误");
+        }
+
+        ChannelManage channelManage = JSON.parseObject(json,ChannelManage.class);
+
+        channelManage.setId(UUID.randomUUID().toString());
+        channelManage.setChannelCode(CodeHelper.getCode("QD"));
+        channelManage.setDeleted(0);
+        channelManage.setCreateTime(new Date());
+
+        SecUser secUser = new SecUser();
+        secUser.setAccountType(2);
+        secUser.setAccount(channelManage.getLinkmanTell());
+        secUser.setUserName(channelManage.getLinkman());
+        secUser.setSex(0);
+        secUser.setStatus(0);
+        secUser.setHeadImg("/upload/headImg/default-pic.png");
+        secUser.setUserPass(secUserJ.getUserPass());
+        secUser.setMobile(channelManage.getLinkmanTell());
+        secUser.setChannelId(channelManage.getId());
+
+
+        String inviterCode = CodeHelper.randomCode(8);
+        SecUser isUser = null;
+        if (inviterCode!=null){
+            isUser = secUserService.findSecUserByInviterCode(inviterCode);
+        }
+        if (isUser != null){
+            signChannel(json,request);
+        }else {
+            secUser.setInviterCode(inviterCode);
+            try {
+                Result result = secUserService.addUser(JSON.toJSONString(secUser));
+                if (result.getCode() !=200){
+                    return result;
+                }
+                channelManageService.save(channelManage);
+            }catch (Exception e){
+                e.printStackTrace();
+                return ResultGenerator.genFailResult("登记失败");
+            }
+        }
+        return ResultGenerator.genSuccessResult().setMessage("登记成功");
     }
 
     /**
@@ -348,6 +421,11 @@ public class IndexController {
             return ResultGenerator.genFailResult("账号不存在！");
         }
         return ResultGenerator.genSuccessResult(mobile);
+    }
+
+    @RequestMapping(value = "/sign/channelin")
+    public String channelin() {
+        return "project/channelentrance/channel-in";
     }
 
     @PostMapping("/sign/reset/password")

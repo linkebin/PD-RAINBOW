@@ -31,15 +31,31 @@
 
         .ci-count {
             position: absolute;
-            top: -5px;
-            left: 100px;
+            top: 25px;
+            left: 20px;
             right: auto;
             display: inline-block;
             padding: 1px;
             font-size: 12px;
             line-height: 12px;
-            color: #fff;
-            background-color: #35a9ff;
+            color: #000000;
+            /*background-color: #35a9ff;*/
+            -moz-border-radius: 7px;
+            border-radius: 7px;
+            min-width: 12px;
+            text-align: center;
+        }
+        .ci-guide {
+            position: absolute;
+            top: 0px;
+            left: 130px;
+            right: auto;
+            display: inline-block;
+            padding: 1px;
+            font-size: 12px;
+            line-height: 12px;
+            color: #000000;
+            /*background-color: #35a9ff;*/
             -moz-border-radius: 7px;
             border-radius: 7px;
             min-width: 12px;
@@ -73,14 +89,15 @@
                             <img src="/Styles/images/xymfImages/man-white.png" width="30" alt="">&nbsp;&nbsp;
                         </th:block>
                         <a target="_blank" th:text="${visitorRegister.visitorName}"
-                           th:href="'/web/customer/visitorUpdate?id='+${visitorRegister.id}" class="eui-color-blue"></a>
+                           th:href="'/web/customer/checkUpdate?id='+${visitorRegister.id}" class="eui-color-blue"></a>
                     </div>
                     <div class="eui-col-md2 eui-textAlignR eui-marginT5">
-                        <img src="/Styles/images/xymfImages/look.png" alt=""/>
+                        <a target="_blank" th:href="'/web/customer/checkUpdate?id='+${visitorRegister.id}">
+                            <img src="/Styles/images/xymfImages/look.png" alt=""/>
+                        </a>
                     </div>
                 </div>
                 <ul id="shaftTime" class="eui-timeline eui-font14">
-
                 </ul>
                 <span class="eui-btn eui-btn-normal eui-btn-small record" onclick="addVisitorRecord()">
                 <i style="cursor: pointer;" class="eui-icon eui-font12"> &#xe654; </i>来访记录 </span>
@@ -101,13 +118,16 @@
                             <span  class="eui-marginL15 visitorTime"></span>
                         </p>
                         <div class="eui-marginT15 eui-row">
-                            <div class="eui-col-md2 eui-marginT5 eui-font16 questionWhite"><i class="eui-icon eui-color-blue eui-font18">&#xe622;</i> 问卷填写 </div>
+                            <div class="eui-col-md2 eui-marginT5 eui-font16 questionWhite">
+                                <i class="eui-icon eui-color-blue eui-font18">&#xe622;</i> 问卷填写
+
+                            </div>
 
 
                             <div class="eui-col-md2 eui-marginL20" id="addQuestionnaire" onclick="loadQuestionnaire()">
                              <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
                                     <i class="eui-icon">&#xe654;</i> 使用问卷
-                        </span>
+                            </span>
                             </div>
                         </div>
                         <div class="eui-marginT20 eui-form">
@@ -516,26 +536,32 @@
             if (list.length>0){
                 $.each(list, function (index, item) {
                     var icon = '';
-                    if (item.flag>0){
-                        icon = '<span class="ci-count">'+item.flag+'</span>'
+                    if (item.flag>0 || item.filesCount>0){
+                        icon = '  <div class="ci-count"> <img src="/Styles/images/xymfImages/number.png" height="16"' +
+                            'width="16"/><span> X '+item.flag+'</span> <img class="eui-marginL20" src="/Styles/images/xymfImages/accessory.png" height="16"' +
+                            'width="16"/><span> X '+item.filesCount+'</span> </div>'
                     }
                     $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
                         '<div class="eui-timeline-content eui-text"> ' +
-                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'</div> ' +
+                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'<span class="guide ci-guide"></span></div> ' +
                         '</div> ' +icon+
                         '<i style="color: #35a9ff;" class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
                         '</li>');
                 });
                 loadVisitorRecordDetail(list[0].id);
-
+                var guide = '<img src="/Styles/images/xymfImages/arror0.png" height="12" width="9"/>';
                 $("#shaftTime li").find('i').eq(0).html('&#xe617;');
+                $("#shaftTime li").eq(0).find('.eui-timeline-title .guide').html(guide);
 
                 $("#shaftTime li").click(function () {
+
                     $('#resetDiv').hide();
                     var id = $(this).attr('visitorId');
                     loadVisitorRecordDetail(id);
                     $("#shaftTime li").find('i').html('&#xe63f;');
-                    $(this).find('i').html('&#xe617;')
+                    $(this).find('i').html('&#xe617;');
+                    $(".guide").html('')
+                    $(this).find('.eui-timeline-title .guide').html(guide);
                 });
             }else {
                 $('#noData').hide();
@@ -590,7 +616,7 @@
                 var coontext="";
                 for(var i in list){
                     coontext+='<div  name="startAnswer" acquisitionId="'+list[i].id+'" questionnaireId="'+list[i].dataQuestion+'" class="eui-col-md3 consultSheet eui-marginR10">'+list[i].questionnaireName;
-                    coontext+='    <i class="eui-icon">&#xe621;</i>';
+                    coontext+='    &nbsp;&nbsp;<img src="/Styles/images/xymfImages/number.png" height="16" width="16"/>';
                     coontext+=' </div> ';
                 }
                 $("[name='startAnswer']").remove();
@@ -733,7 +759,7 @@
    function startAnswer(questionnaireId,userId) {
        window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes;
    }
-</script>
+    </script>
 
 </body>
 </html>

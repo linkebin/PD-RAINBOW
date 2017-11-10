@@ -38,16 +38,14 @@
 
         .accounts-p{
             border-bottom: 0;
-            text-align: center; height: 34px;
+            height: 34px;
             line-height: 34px;
             cursor: pointer;
+            text-indent:1em;
         }
-        .accounts p:hover{
-            background: rgb(161, 214, 255);
-        }
-
         .accounts-p-bg{
             background: rgb(161, 214, 255);
+            color: #fff9ec;
         }
 
     </style>
@@ -91,6 +89,10 @@
                                     <label class="eui-form-label">联系方式</label>
                                     <div class="eui-input-inline">
                                         <input type="text" name="MOBILE"  placeholder="" class="eui-input">
+                                    </div>
+                                    <label class="eui-form-label">邀请人</label>
+                                    <div class="eui-input-inline">
+                                        <input type="text" name="inviter_userName"  placeholder="" class="eui-input">
                                     </div>
                                 </div>
                             </div>

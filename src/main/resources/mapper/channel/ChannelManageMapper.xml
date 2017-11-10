@@ -15,10 +15,16 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="district" jdbcType="VARCHAR" property="district" />
+
   </resultMap>
 
   <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">
-      SELECT cm.* FROM channel_manage cm WHERE cm.deleted=0
+      SELECT cm.* FROM channel_manage cm WHERE cm.deleted=0 AND cm.status=#{status}
 
     <if test="channelName!='' and channelName!=null">
       AND cm.channel_name LIKE  '%${channelName}%'
@@ -41,8 +47,8 @@
 
   <select id="findChannelAccountListByChannelId" parameterType="Map" resultType="java.util.Map">
       SELECT * FROM sec_user WHERE DELETED=0 AND channel_id=#{channel_id}
-      <if test="ACCOUNT!=null and ACCOUNT!=''">
-        AND ACCOUNT LIKE '%${ACCOUNT}%'
+      <if test="EMAIL!=null and EMAIL!=''">
+        AND EMAIL LIKE '%${EMAIL}%'
       </if>
       <if test="USER_NAME!=null and USER_NAME!=''">
         AND USER_NAME LIKE '%${USER_NAME}%'
@@ -50,6 +56,10 @@
       <if test="MOBILE!=null and MOBILE!=''">
         AND MOBILE LIKE '%${MOBILE}%'
       </if>
+
+    <if test="SEX!=null and SEX!=''">
+      AND SEX = #{SEX}
+    </if>
   </select>
 
   <select id="findChannelAccountTree" parameterType="Map" resultType="java.util.Map">
@@ -87,7 +97,11 @@
          AND su.MOBILE LIKE '%${MOBILE}%'
        </if>
 
-
+       <if test="inviter_userName!=null and inviter_userName!=''">
+         AND su.inviter_user in(
+         SELECT uu.ID_ FROM sec_user uu WHERE uu.DELETED=0 AND uu.USER_NAME LIKE '%${inviter_userName}%'
+         )
+       </if>
      </if>
 
     <if test="type == 2">
@@ -113,7 +127,11 @@
       <if test="MOBILE!=null and MOBILE!=''">
         AND su.MOBILE LIKE '%${MOBILE}%'
       </if>
-
+      <if test="inviter_userName!=null and inviter_userName!=''">
+        AND su.inviter_user in(
+        SELECT uu.ID_ FROM sec_user uu WHERE uu.DELETED=0 AND uu.USER_NAME LIKE '%${inviter_userName}%'
+        )
+      </if>
 
     </if>
 
@@ -134,6 +152,11 @@
         AND su.MOBILE LIKE '%${MOBILE}%'
       </if>
 
+      <if test="inviter_userName!=null and inviter_userName!=''">
+        AND su.inviter_user in(
+            SELECT uu.ID_ FROM sec_user uu WHERE uu.DELETED=0 AND uu.USER_NAME LIKE '%${inviter_userName}%'
+        )
+      </if>
 
     </if>
 

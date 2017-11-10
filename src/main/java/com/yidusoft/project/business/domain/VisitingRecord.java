@@ -144,6 +144,17 @@ public class VisitingRecord {
     @Transient
     private Integer flag;
 
+    @Transient
+    private Integer filesCount;
+
+    public Integer getFilesCount() {
+        return filesCount;
+    }
+
+    public void setFilesCount(Integer filesCount) {
+        this.filesCount = filesCount;
+    }
+
     public Integer getFlag() {
         return flag;
     }
