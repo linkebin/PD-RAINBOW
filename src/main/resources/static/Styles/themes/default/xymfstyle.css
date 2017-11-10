@@ -216,9 +216,9 @@
     color: #fff;
 }
 
-/*.contentR .eui-laydate .eui-this{*/
-    /*background-color: #1e9eff!important;*/
-/*}*/
+.contentR .eui-laydate .eui-this{
+    background-color: #1e9eff!important;
+}
 
 .contentR .calendarEvents{
     padding: 20px;
@@ -252,13 +252,13 @@
 .orderContent .eui-tab-title li{
     line-height: 52px;
 }
-/*.orderContent .eui-tab-title .eui-this:after{*/
-    /*height: 50px;*/
-    /*border-bottom: 2px solid #1e9eff;*/
-/*}*/
-/*.orderContent .eui-tab-brief>.eui-tab-title .eui-this{*/
-    /*color:#1e9eff;*/
-/*}*/
+.orderContent .eui-tab-title .eui-this:after{
+    height: 50px;
+    border-bottom: 2px solid #1e9eff;
+}
+.orderContent .eui-tab-brief>.eui-tab-title .eui-this{
+    color:#1e9eff;
+}
 
 .orderForm .orderT{
     background: transparent;
@@ -338,7 +338,6 @@
 .payRight{
     width: 290px;
     background: #fff;
-    margin:0 10px 10px 0;
     box-shadow:  3px 3px 15px #ccc;
     border-radius: 5px 5px 0 0;
     float: left;
@@ -523,13 +522,13 @@
 .submitBtn img{margin-right: 10px;}
 .conetentHint{margin-left: 98px;padding-top:10px;}
 /* 常用投影 */
-.eui-box-shadow{box-shadow: 5px 5px 20px #eee;}
+.eui-box-shadow{box-shadow:  0 0 12px #c4e1f7;}
 
 
 /* 来访者咨询管理 */
 .visitorContent{ margin-top: 80px;}
 .visitorContent .eui-area{box-shadow: 0 0 12px #c4e1f7;border-radius: 5px;}
-.visitorContent .visitorTitle{font-size: 18px;padding:16px;background: #f4f9fd;border-bottom: 1px solid #1e9eff;color: #1e9eff; }
+.visitorTitle{font-size: 18px;padding:16px;background: #f4f9fd;border-bottom: 1px solid #1e9eff;color: #1e9eff; }
 .visitorContent .visitorIn{background: #ffffff;}
 .visitorPhone1{padding-left: 34px;background: url(../../images/xymfImages/phone.png) no-repeat left center;background-size: 26px;}
 .visitorPhone2{padding-left: 34px;background: url(../../images/xymfImages/mobile-phone.png) no-repeat left center;background-size: 22px;}
@@ -546,7 +545,7 @@
 .questionbg{background: #f4f9fd;border-bottom: 1px solid #1e9eff;height: 60px;}
 .xymfMargin{margin-bottom: 60px;}
 
-
+/* 2017-11-10 */
 /* 选择问卷模版弹窗 */
 .classify .eui-colla-title{
     background-color: #fcfcfc;
@@ -566,11 +565,12 @@ body .eui-layer-title{
 
 .personage1{
     padding: 10px;
-    background: #33a8fe;
+    background: #1e9eff;
     border-radius: 5px 5px 0 0;
 }
-.personage a{
+.personage1 a{
     color:#ffffff;
+    font-size: 16px;
 }
 .visitorLeft .eui-timeline{
     background:#f4f9fd;
@@ -589,6 +589,34 @@ body .eui-layer-title{
     right: 10px;
     bottom: 10px;
 }
+
+.visitorInCon .eui-area{
+    background: none;
+    box-shadow: none;
+}
+.visitorInCon .eui-area .eui-mn1-type1{
+    margin-right: 10px;
+    border-radius: 5px;
+}
+.switch{
+    font-size: 16px;
+    padding: 0 14px;
+    margin: 8px 10px 0 0;
+}
+.visitorInput input{
+    background:#f4f9fd;
+    border: 1px solid #1e9eff;
+}
+.visitorInput input::-webkit-input-placeholder{
+    color: #cccccc;opacity:1;
+}
+.questionWhite{
+    width: 88px;
+}
+
+
+
+
 
 
 
