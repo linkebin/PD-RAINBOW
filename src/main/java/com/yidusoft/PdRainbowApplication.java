@@ -9,6 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class PdRainbowApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PdRainbowApplication.class, args);
+		 SpringApplication.run(PdRainbowApplication.class, args);
 	}
 }
