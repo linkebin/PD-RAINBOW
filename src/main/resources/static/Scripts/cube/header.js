@@ -14,7 +14,7 @@ eui.use(['form', 'laydate', 'element'], function () {
     var pageIndex = $("#pageIndex").val();
     $("#cymfNav li").each(function(i){
               if(pageIndex!=""&&pageIndex==i){
-                $(this).addClass("eui-this")
+                $(this).addClass("nav-this")
               }
     });
 
