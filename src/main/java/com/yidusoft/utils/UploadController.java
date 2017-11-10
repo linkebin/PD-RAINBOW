@@ -1,18 +1,23 @@
 package com.yidusoft.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.VisitingRecordFile;
 import com.yidusoft.project.business.service.VisitingRecordFileService;
+import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -330,4 +335,83 @@ public class UploadController {
         }
 
     }
+
+    @PostMapping("/upload/cropHeadImg")
+    public Result cropHeadImg(String image){
+        String saveFileName = "";
+        String path = "";
+        FileResponseData fileResponseData = null;
+        String childPath = "";
+        System.out.println(image + "================");
+        try {
+            if (image != null && !"".equals(image)){
+                //   去掉base64数据头部data:image/png;base64,和尾部的” " “
+                String[] ww= image.split(",");
+                image = ww[1];
+                String[] aa = image.split("\"");
+                image = aa[0];
+
+
+
+//
+
+
+                String realPath = System.getProperty("user.dir");
+                // 自定义的文件名称
+                saveFileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
+                // 设置存放图片文件的路径
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                childPath = "/upload/headImg/" + format.format(new Date());
+                path = realPath + childPath;
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                try {
+
+                    //  file.transferTo(new File(path + "/" + saveFileName));
+
+                    BASE64Decoder decoder = new BASE64Decoder();
+                    try {
+                        // Base64解码
+                        byte[] bytes = decoder.decodeBuffer(image);
+                        for (int i = 0; i < bytes.length; ++i) {
+                            if (bytes[i] < 0) {// 调整异常数据
+                                bytes[i] += 256;
+                            }
+                        }
+                        // 生成jpeg图片
+                        OutputStream out = new FileOutputStream(path + "/" + saveFileName);
+                        out.write(bytes);
+                        out.flush();
+                        out.close();
+
+                    } catch (Exception e) {
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                SecUser secUser =  secUserService.findById(Security.getUserId());
+                secUser.setHeadImg(image);
+                System.out.println(image + "==========");
+                //secUserService.update(secUser);
+//                    fileResponseData = new FileResponseData();
+//                    fileResponseData.setCode(0);
+//                    fileResponseData.setMsg("上传成功");
+//                    Data data = new Data();
+//                    data.setSrc(path + "/" + saveFileName);
+//                    fileResponseData.setData(data);
+                return ResultGenerator.genSuccessResult(childPath + "/" + saveFileName);
+            }
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("上传图片失败！");
+        }
+
+        return ResultGenerator.genSuccessResult(childPath+ "/" + saveFileName);
+    }
+
 }
