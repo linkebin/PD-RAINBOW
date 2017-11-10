@@ -11,7 +11,7 @@
 <div hidden id="alipayResultForm"></div>
 <div class="eui-layout eui-layout-admin xymfHome xymfPay">
     <div class="eui-header">
-        <div th:replace="project/cube/common/header :: header">Header</div>
+        <div th:replace="project/cube/common/header :: header(${-1})">Header</div>
         <div class="eui-area">
             <div class="payLeft eui-row eui-padding20">
                 <div class="eui-col-md1 eui-marginR20">登录账号：</div>
@@ -74,7 +74,7 @@
 
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
-
+<script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
 <script>
     //表单
     eui.use(['form', 'laydate', 'element'], function () {

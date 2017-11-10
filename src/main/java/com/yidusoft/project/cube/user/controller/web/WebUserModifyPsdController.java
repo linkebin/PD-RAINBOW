@@ -13,4 +13,9 @@ public class WebUserModifyPsdController {
     public String modifyPassword(){
         return "project/cube/user/modify-password";
     }
+
+    @RequestMapping("/modifyPasswordA")
+    public String modifyPasswordA(){
+        return "project/channelentrance/modify-password";
+    }
 }

@@ -324,13 +324,13 @@
 	-webkit-animation-duration: 175ms;
 	transform: rotateY(-90deg) scale(.9);
 	animation-name: flipouttoleft;
-	animation-duration: 175ms;
+	animation-duration: 1500ms;
 }
 .flip.in {
 	-webkit-animation-name: flipintoright;
 	-webkit-animation-duration: 225ms;
 	animation-name: flipintoright;
-	animation-duration: 225ms;
+	animation-duration: 1500ms;
 }
 .flip.out.reverse {
 	-webkit-transform: rotateY(90deg) scale(.9);

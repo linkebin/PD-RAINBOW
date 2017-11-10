@@ -34,7 +34,11 @@
             questionnaire   q
             ON  q.ID_=d.data_question
             WHERE   d.create_time = DATE_FORMAT(vv.visitor_time,'%Y-%m-%d')  AND d.user_id=#{visitorId}
-    ) flag
+    ) flag,
+		(
+        SELECT count(*)  from
+            visiting_record_file  f  WHERE f.deleted=0 AND f.creator=vv.creator AND f.record_id=vv.ID_
+        ) filesCount
 
      FROM visiting_record vv WHERE vv.deleted=0 AND vv.visitor_id=#{visitorId}
 

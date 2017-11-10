@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -65,20 +66,27 @@ public class AlipayNotifyController {
 
                 OrderOnlineBean orderOnline = alipayOrderVerifiedServcie.getOrderOnlineByCode(out_trade_no);
                 if (orderOnline != null) {//是否能通过订单号查找到该订单
-                    if (orderOnline.getOrderMoney().equals(total_amount)) {//判断金额是否正确
+                    DecimalFormat df = new DecimalFormat("#.00");
+                    String money = df.format(orderOnline.getOrderMoney());
+                    if (money.equals(total_amount)) {//判断金额是否正确
                         //判断是否为商户用户号，商户可能有多个用户号，此处后期稍有变动
                         if (seller_id.equals("2088102171354664")) {
                             //检验商户应用ID
                             if (AlipayConfig.APP_ID.equals(app_id)) {
                                 //触发条件是商户不支持退款，买家付款成功；或者支持退款，超过退款期限
                                 if (trade_status.equals("TRADE_FINISHED")) {
+                                    System.out.println("@@@@@@@@@@订单状态FINISHED@@@@@@@@@@@@@@@@@@@@@@@");
                                     //付款成功调用订单更新接口
-                                    orderOnlineController.payment(out_trade_no,trade_no);
+                                    orderOnlineController.payment(orderOnline.getId(),trade_no);
+                                    response.getWriter().write("success");
                                 } else if (trade_status.equals("TRADE_SUCCESS")) {//支付成功的触发条件是商户支持退款
                                     //付款成功调用订单更新接口
-                                    orderOnlineController.payment(out_trade_no,trade_no);
+                                    System.out.println("@@@@@@@@@@订单状态SUCCESS@@@@@@@@@@@@@@@@@@@@@@@");
+                                    orderOnlineController.payment(orderOnline.getId(),trade_no);
+                                    response.getWriter().write("success");
                                 }
 
+                                System.out.println("&&&&&&&&&&&异步通知部分结束&&&&&&&&&&&&&&&&&&");
                                 response.getWriter().write("success");
                             }
                         }

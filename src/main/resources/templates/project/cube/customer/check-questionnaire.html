@@ -20,22 +20,31 @@
     </style>
 </head>
 <body>
-<div class="eui-bd">
+<div class="eui-bd eui-paddingT0">
 
     <div class="eui-mn1 eui-bg-white">
         <div class="eui-mn1-type">
-            <form class="eui-form" id="searchFrom">
-                <input type="hidden" name="questionnaireState" value="2">
-
-                <div class="eui-input-inline eui-padding10">
-                    <input type="text" name="questionnaireCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
+            <form class="eui-form eui-row" id="searchFrom">
+                <div class="eui-col-sm6 eui-col-md6 eui-padding10">
+                    <div class="eui-paddingB10">
+                        <span class="eui-marginR10">选择</span>
+                        <p class="eui-btn eui-btn-small eui-btn-primary">调查 <span class="eui-icon">&#x1006;</span></p>
+                        <p class="eui-btn eui-btn-small eui-btn-primary">互联网 <span class="eui-icon">&#x1006;</span></p>
+                    </div>
                 </div>
-                <div class="eui-input-inline">
-                    <span class="eui-btn" onclick="doSearch()">查询</span>
-                    <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                <div class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-paddingR10">
+                    <input type="hidden" name="questionnaireState" value="2">
+
+                    <div class="eui-input-inline eui-padding10">
+                        <input type="text" name="questionnaireCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
+                    </div>
+                    <div class="eui-input-inline">
+                        <span class="eui-btn eui-btn-normal" onclick="doSearch()">查询</span>
+                        <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                    </div>
                 </div>
             </form>
-            <div class="eui-row eui-padding10 eui-borderB">
+            <!--<div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
                     <i class='eui-icon eui-font24'>&#xe61d;</i> 问卷列表
                 </div>
@@ -60,8 +69,106 @@
 
                 </tbody>
             </table>
-            <div id="pages"></div>
-
+            <div id="pages"></div>-->
+            <!--选择问卷模版-->
+            <div class="eui-bd eui-padding10">
+                <div class="eui-sd1 eui-sd1-type2">
+                    <ul>
+                        <li class="eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷场景</li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">调查</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">10</p>
+                        </li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">测试</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">12</p>
+                        </li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">满意度</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">23</p>
+                        </li>
+                        <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷标签</li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">互联网</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">10</p>
+                        </li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">生活商业</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">12</p>
+                        </li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">食品保健</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">23</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="eui-mn1">
+                    <div class="eui-mn1-type2 classify">
+                        <div class="eui-collapse" e-accordion="">
+                            <div class="eui-colla-item">
+                                <h2 class="eui-colla-title">社交网站满意度问卷模板</h2>
+                                <div class="eui-colla-content eui-show">
+                                    <p>内容内容</p>
+                                    <div class="eui-textAlignR">
+                                        <p class="eui-btn-group">
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">预览详情</span>
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">使用该问卷</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="eui-colla-item">
+                                <h2 class="eui-colla-title">数码家电类产品满意度模板</h2>
+                                <div class="eui-colla-content">
+                                    <p>内内容</p>
+                                    <div class="eui-textAlignR">
+                                        <p class="eui-btn-group">
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">预览详情</span>
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">使用该问卷</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="eui-colla-item">
+                                <h2 class="eui-colla-title">购物网用户满意度调查</h2>
+                                <div class="eui-colla-content">
+                                    <p>内容内容</p>
+                                    <div class="eui-textAlignR">
+                                        <p class="eui-btn-group">
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">预览详情</span>
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">使用该问卷</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="eui-colla-item">
+                                <h2 class="eui-colla-title">餐饮类团购用户满意度问卷模板</h2>
+                                <div class="eui-colla-content">
+                                    <p>简介内容</p>
+                                    <div class="eui-textAlignR">
+                                        <p class="eui-btn-group">
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">预览详情</span>
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">使用该问卷</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="eui-colla-item">
+                                <h2 class="eui-colla-title">圣诞狂欢市场调查问卷</h2>
+                                <div class="eui-colla-content">
+                                    <p>简介</p>
+                                    <div class="eui-textAlignR">
+                                        <p class="eui-btn-group">
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">预览详情</span>
+                                            <span class="eui-btn eui-btn-small eui-btn-normal">使用该问卷</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -85,11 +192,12 @@
 
 <script>
 // 表单
-eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
+eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
     var form = eui.form
     ,layer = eui.layer
     ,layedit = eui.layedit
     ,laydate = eui.laydate
+    ,element = eui.element
     ,laypage = eui.laypage;
 
     //全选
@@ -107,8 +215,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         ,range: true
     });
 
+    //手风琴折叠面板
+    element.on('collapse(test)', function(data){
+        layer.msg('展开状态：'+ data.show);
+    });
 
 });
+
 
 </script>
 

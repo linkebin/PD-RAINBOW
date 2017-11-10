@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
     <style>
-        input[type='text']{height: 30px; line-height: 30px;}
+        /*input[type='text']{height: 30px; line-height: 30px;}*/
         .eui-form-label{padding: 5px 15px;}
         .eui-btn-smallmin {
             height: 26px;
@@ -20,11 +20,10 @@
         }
         #shaftTime  li{cursor: pointer;}
 
-        .customerList .line{cursor: pointer;
-        }
+        .customerList .line{cursor: pointer;}
 
         .customerList .line:hover{
-            background: #4bb2ff;
+            background: #f7f5f6;
         }
 
         #DivAddForm textarea + label{color: red;}
@@ -32,15 +31,31 @@
 
         .ci-count {
             position: absolute;
-            top: -5px;
-            left: 100px;
+            top: 25px;
+            left: 20px;
             right: auto;
             display: inline-block;
             padding: 1px;
             font-size: 12px;
             line-height: 12px;
-            color: #fff;
-            background-color: #35a9ff;
+            color: #000000;
+            /*background-color: #35a9ff;*/
+            -moz-border-radius: 7px;
+            border-radius: 7px;
+            min-width: 12px;
+            text-align: center;
+        }
+        .ci-guide {
+            position: absolute;
+            top: 0px;
+            left: 130px;
+            right: auto;
+            display: inline-block;
+            padding: 1px;
+            font-size: 12px;
+            line-height: 12px;
+            color: #000000;
+            /*background-color: #35a9ff;*/
             -moz-border-radius: 7px;
             border-radius: 7px;
             min-width: 12px;
@@ -56,82 +71,63 @@
             <span class="payCentre">来访者咨询管理</span>
         </div>
         <div class="eui-col-md6 eui-textAlignR">
-            <span onclick="resetCustomer()" class="eui-btn switch eui-btn-big eui-btn-normal eui-btn-small eui-marginT15 eui-marginR15"><i class="eui-icon">&#x1002;</i>切换来访者</span>
+            <span onclick="resetCustomer()" class="eui-btn switch eui-btn-big eui-btn-normal"><img src="../../Styles/images/xymfImages/switch.png" alt=""/> 切换来访者</span>
         </div>
     </div>
 </div>
 
-<div class="visitorContent xymfMargin">
+<div class="visitorContent xymfMargin visitorInCon">
     <div class="eui-area">
-        <div class="visitorTitle">
-            <div class="eui-row">
-                <div class="eui-col-md3 eui-paddingT10">
-                    <th:block th:if="${visitorRegister.sex==0}">
-                        <img src="/Styles/images/xymfImages/woman.png" width="30" alt="">&nbsp;&nbsp;
-                    </th:block>
-                    <th:block th:if="${visitorRegister.sex==1}">
-                        <img src="/Styles/images/xymfImages/man.png" width="30" alt="">&nbsp;&nbsp;
-                    </th:block>
-
-                    <a target="_blank" th:text="${visitorRegister.visitorName}"
-                       th:href="'/web/customer/visitorUpdate?id='+${visitorRegister.id}" class="eui-color-blue"></a>
+        <div class="eui-area eui-bd eui-paddingT0">
+            <div style="width: 200px;" class="eui-sd1 eui-sd1-type1 visitorLeft">
+                <div class="eui-row personage1">
+                    <div class="eui-col-md10">
+                        <th:block th:if="${visitorRegister.sex==0}">
+                            <img src="/Styles/images/xymfImages/woman-white.png" width="30" alt="">&nbsp;&nbsp;
+                        </th:block>
+                        <th:block th:if="${visitorRegister.sex==1}">
+                            <img src="/Styles/images/xymfImages/man-white.png" width="30" alt="">&nbsp;&nbsp;
+                        </th:block>
+                        <a target="_blank" th:text="${visitorRegister.visitorName}"
+                           th:href="'/web/customer/checkUpdate?id='+${visitorRegister.id}" class="eui-color-blue"></a>
+                    </div>
+                    <div class="eui-col-md2 eui-textAlignR eui-marginT5">
+                        <a target="_blank" th:href="'/web/customer/checkUpdate?id='+${visitorRegister.id}">
+                            <img src="/Styles/images/xymfImages/look.png" alt=""/>
+                        </a>
+                    </div>
                 </div>
-                <div class="eui-col-md1 eui-paddingT20 eui-color-gray3"></div>
-                <div class="eui-col-md8 eui-textAlignR">
-                    <span class="eui-btn eui-btn-normal eui-btn-small" onclick="addVisitorRecord()">
-                <i style="cursor: pointer;" class="eui-icon eui-font12"> &#xe654; </i>来访记录 </span>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="eui-area eui-bd eui-bg-white">
-            <div style="width: 120px;" class="eui-sd1 eui-sd1-type1">
-
-                <ul id="shaftTime" class="eui-timeline eui-font14 eui-marginL10 eui-marginT20">
-
+                <ul id="shaftTime" class="eui-timeline eui-font14">
                 </ul>
+                <span class="eui-btn eui-btn-normal eui-btn-small record" onclick="addVisitorRecord()">
+                <i style="cursor: pointer;" class="eui-icon eui-font12"> &#xe654; </i>来访记录 </span>
             </div>
-            <div style="width: 98%;" class="eui-mn1">
+            <div style="width: 91%;" class="eui-mn1">
                 <div class="eui-mn1-type1 eui-padding20 eui-bg-white eui-box-shadow">
                     <form  id="searchFrom">
                         <input type="hidden" name="visitorId" th:value="${id}" />
-                        <!--<div class="eui-form">-->
-                        <!--<div class="eui-form-item">-->
-                        <!--<label class="eui-form-label">开始时间</label>-->
-                        <!--<div class="eui-input-inline">-->
-                        <!--<input type="text" name="startTime" id="startTime" readonly="readonly"  placeholder="" class="eui-input">-->
-                        <!--</div>-->
 
-                        <!--<label class="eui-form-label">截至时间</label>-->
-                        <!--<div class="eui-input-inline">-->
-                        <!--<input type="text" name="endTime" id="endTime" readonly="readonly"  placeholder="" class="eui-input">-->
-                        <!--</div>-->
-                        <!--<div class="eui-input-inline">-->
-                        <!--<span class="eui-btn eui-btn-small" onclick="doSearch()">查询</span>-->
-                        <!--<span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>-->
-                        <!--</div>-->
-                        <!--</div>-->
-
-                        <!--</div>-->
                     </form>
                     <div class="DivInfo">
-                        <p><i class="eui-icon">&#xe60e;</i>
+                        <p><i class="eui-icon eui-color-blue eui-font18">&#xe60e;</i>
                             <span class="eui-font16">记录时间</span>
                             <span  class="eui-marginL15 createTime"></span></p>
 
-                        <p class="eui-marginT10"><i class="eui-icon">&#xe606;</i>
+                        <p class="eui-marginT15"><i class="eui-icon eui-color-blue eui-font18">&#xe60e;</i>
                             <span class="eui-font16">来访时间</span>
                             <span  class="eui-marginL15 visitorTime"></span>
                         </p>
-                        <div class="eui-marginT10 eui-row">
-                            <div class="eui-col-md1 eui-marginT5 eui-font16 eui-marginR15"><i class="eui-icon">&#xe63c;</i> 问卷填写 </div>
+                        <div class="eui-marginT15 eui-row">
+                            <div class="eui-col-md2 eui-marginT5 eui-font16 questionWhite">
+                                <i class="eui-icon eui-color-blue eui-font18">&#xe622;</i> 问卷填写
+
+                            </div>
 
 
                             <div class="eui-col-md2 eui-marginL20" id="addQuestionnaire" onclick="loadQuestionnaire()">
                              <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
                                     <i class="eui-icon">&#xe654;</i> 使用问卷
-                        </span>
+                            </span>
                             </div>
                         </div>
                         <div class="eui-marginT20 eui-form">
@@ -299,12 +295,15 @@
 <div class="eui-slipBg">
 </div>
 <div style="overflow: scroll" class="eui-slipContent">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md2 eui-marginT5">客户姓名</div>
-        <div class="eui-col-md10">
-            <input type="hidden" id="creator" th:value="${session.userSession.id}" />
-            <input type="text" id="visitorName" autocomplete="off" placeholder="输入来客户姓名搜索" class="eui-input">
+    <div class="visitorTitle">
+        <div class="eui-row">
+            <div class="eui-col-md2 eui-marginT10 eui-font14">客户姓名</div>
+            <div class="eui-col-md10 eui-font14 visitorInput">
+                <input type="hidden" id="creator" th:value="${session.userSession.id}" />
+                <input type="text" id="visitorName" autocomplete="off" placeholder="输入来访客户姓名搜索" class="eui-input">
+            </div>
         </div>
+
     </div>
 
     <div class="customerList">
@@ -327,6 +326,12 @@
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 
 <script>
+    $(function(){
+        var visiterHeight = window.innerHeight-250;
+//        alert(visiterHeight);
+        $(".visitorLeft .eui-timeline").css("max-height",visiterHeight+"px");
+    });
+
     eui.use(['form', 'layedit', 'laydate'], function(){
         var form = eui.form
             ,layer = eui.layer
@@ -424,54 +429,54 @@
     $("#DivAddForm").validate({
         rules: {
             visitorTime: {
-                required : true,
+                required : true
             },
             interview:{
-                required : true,
+                required : true
             },
             VisitingPurpose: {
-                required: true,
+                required: true
             },
             resolved: {
-                required: true,
+                required: true
             },
             thisTime:{
-                required : true,
+                required : true
             },
             evaluate: {
-                required: true,
+                required: true
             },
             FollowUpPlan: {
-                required: true,
+                required: true
             },
             processLog: {
-                required: true,
+                required: true
             }
         },
         messages: {
             visitorTime: {
-                required : "请选择来访时间",
+                required : "请选择来访时间"
             },
             interview:{
-                required : '请输入面询印象简录',
+                required : '请输入面询印象简录'
             },
             VisitingPurpose: {
-                required: '请输入来访者初诊',
+                required: '请输入来访者初诊'
             },
             resolved: {
-                required: '请输入已解决的问题',
+                required: '请输入已解决的问题'
             },
             thisTime:{
-                required : '请输入本次咨询内容',
+                required : '请输入本次咨询内容'
             },
             evaluate: {
-                required: '请输入咨询效果评价',
+                required: '请输入咨询效果评价'
             },
             FollowUpPlan: {
-                required: '请输入咨询中所运用的心理学方法与技术',
+                required: '请输入咨询中所运用的心理学方法与技术'
             },
             processLog: {
-                required: '请输入咨询过程记录',
+                required: '请输入咨询过程记录'
             }
         },
         submitHandler: function() {
@@ -509,12 +514,12 @@
                     img='/Styles/images/xymfImages/man.png'
                 }
 
-                $(".customerList").append('<div visitorId="'+item.id+'" class="eui-row  eui-padding10 line"> ' +
-                    '<div class="eui-col-md8 eui-lineHeight24"> ' +
+                $(".customerList").append('<div visitorId="'+item.id+'" class="eui-row eui-padding10 line eui-borderB"> ' +
+                    '<div class="eui-col-md10 eui-paddingL20 eui-lineHeight24"> ' +
                     '<p> <span class="eui-font16">'+item.visitorName+'</span></p> ' +
                     '' +
                     '</div> ' +
-                    '<div class="eui-col-md2 eui-textAlignR">' +
+                    '<div class="eui-col-md2 eui-paddingR20 eui-textAlignR">' +
                     '<img src="'+img+'" width="20" alt=""></div> ' +
                     '</div>')
             });
@@ -531,26 +536,32 @@
             if (list.length>0){
                 $.each(list, function (index, item) {
                     var icon = '';
-                    if (item.flag>0){
-                        icon = '<span class="ci-count">'+item.flag+'</span>'
+                    if (item.flag>0 || item.filesCount>0){
+                        icon = '  <div class="ci-count"> <img src="/Styles/images/xymfImages/number.png" height="16"' +
+                            'width="16"/><span> X '+item.flag+'</span> <img class="eui-marginL20" src="/Styles/images/xymfImages/accessory.png" height="16"' +
+                            'width="16"/><span> X '+item.filesCount+'</span> </div>'
                     }
                     $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
                         '<div class="eui-timeline-content eui-text"> ' +
-                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'</div> ' +
+                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'<span class="guide ci-guide"></span></div> ' +
                         '</div> ' +icon+
                         '<i style="color: #35a9ff;" class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
                         '</li>');
                 });
                 loadVisitorRecordDetail(list[0].id);
-
+                var guide = '<img src="/Styles/images/xymfImages/arror0.png" height="12" width="9"/>';
                 $("#shaftTime li").find('i').eq(0).html('&#xe617;');
+                $("#shaftTime li").eq(0).find('.eui-timeline-title .guide').html(guide);
 
                 $("#shaftTime li").click(function () {
+
                     $('#resetDiv').hide();
                     var id = $(this).attr('visitorId');
                     loadVisitorRecordDetail(id);
                     $("#shaftTime li").find('i').html('&#xe63f;');
-                    $(this).find('i').html('&#xe617;')
+                    $(this).find('i').html('&#xe617;');
+                    $(".guide").html('')
+                    $(this).find('.eui-timeline-title .guide').html(guide);
                 });
             }else {
                 $('#noData').hide();
@@ -605,7 +616,7 @@
                 var coontext="";
                 for(var i in list){
                     coontext+='<div  name="startAnswer" acquisitionId="'+list[i].id+'" questionnaireId="'+list[i].dataQuestion+'" class="eui-col-md3 consultSheet eui-marginR10">'+list[i].questionnaireName;
-                    coontext+='    <i class="eui-icon">&#xe621;</i>';
+                    coontext+='    &nbsp;&nbsp;<img src="/Styles/images/xymfImages/number.png" height="16" width="16"/>';
                     coontext+=' </div> ';
                 }
                 $("[name='startAnswer']").remove();
@@ -699,7 +710,7 @@
                     ,moveType: 0//拖拽模式，0或者1
                     ,maxmin: true
                     ,content:"/web/customer/getCheckQuestionnaire"
-                    ,btn: ['确定', '关闭'] //只是为了演示
+                    // ,btn: ['确定', '关闭'] //只是为了演示
                     ,yes: function(){
                         //得到设置返回的结果
                         list=iframeWin.checkQuestionnaire();
@@ -748,7 +759,7 @@
    function startAnswer(questionnaireId,userId) {
        window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes;
    }
-</script>
+    </script>
 
 </body>
 </html>

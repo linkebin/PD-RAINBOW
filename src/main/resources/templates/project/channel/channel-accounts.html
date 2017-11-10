@@ -2,14 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>渠道商账号</title>
+    <title>渠道商用户</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <style>
+        .error{color: red;font-size: 12px;}
+    </style>
 </head>
 <body class="eui-bg-white">
 <div class="eui-margin20">
     <input th:value="${channelId}" type="hidden" id="channel_id" />
     <div class="eui-col-md6 eui-textAlignR">
-        <a class="eui-btn eui-btn-small" onclick="addAccount()">添加账号</a>
+        <a class="eui-btn eui-btn-small" onclick="addAccount()">添加用户</a>
     </div>
     <table id="test2"></table>
 </div>
@@ -17,12 +20,7 @@
     <form id="channelAccountAddForm" onsubmit="return false;">
         <input  type="hidden" name="id"  />
         <input th:value="${channelId}" type="hidden" name="channelId"  />
-        <div class="eui-form-item">
-            <label class="eui-form-label">账号</label>
-            <div class="eui-input-block">
-                <input type="text" name="account"  placeholder="请输入手机号码" class="eui-input" />
-            </div>
-        </div>
+
         <div class="eui-form-item">
             <label class="eui-form-label">姓名</label>
             <div class="eui-input-block">
@@ -30,18 +28,26 @@
             </div>
         </div>
         <div class="eui-form-item">
-            <label class="eui-form-label">密码</label>
-            <div class="eui-input-block">
-                <input type="password" name="userPass"  placeholder="请输入密码" class="eui-input" />
+            <label class="eui-form-label">性别</label>
+            <div class="eui-input-block eui-checkSmall">
+                <input type="radio" name="sex" value="1" title="男" checked>
+                <input type="radio" name="sex" value="0" title="女">
             </div>
         </div>
         <div class="eui-form-item">
-            <label class="eui-form-label">状态</label>
-            <div class="eui-input-block eui-checkSmall">
-                <input type="radio" name="status" value="1" title="可用" checked>
-                <input type="radio" name="status" value="0" title="不可用">
+            <label class="eui-form-label">手机</label>
+            <div class="eui-input-block">
+                <input type="text" name="mobile"  placeholder="请输入手机号码" class="eui-input" />
             </div>
         </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">邮箱</label>
+            <div class="eui-input-block">
+                <input type="email" name="email"  placeholder="请输入邮箱地址" class="eui-input" />
+            </div>
+        </div>
+
         <input type="submit" style="display: none;">
     </form>
 </div>
@@ -71,10 +77,11 @@
             ,height: 300
             ,cols: [[ //标题栏
                 {checkbox: true}
-                ,{field: 'ACCOUNT', title: '登录账号', width: 180}
-                ,{field: 'USER_NAME', title: '姓名', width: 180}
-                ,{field: 'MOBILE', title: '联系方式', width: 196}
-                ,{fixed: 'right', width:150,  toolbar: '#barDemo'}
+                ,{field: 'USER_NAME', title: '姓名', width:150}
+                ,{field: 'SEX', title: '性别', width: 100,templet:'<div>{{# if(d.SEX=="1"){ }} 男  {{#  }else{   }} 女 {{# } }}</div>'}
+                ,{field: 'MOBILE', title: '手机', width: 150}
+                ,{field: 'EMAIL', title: '邮箱', width: 150}
+                ,{fixed: 'right', width:154,  toolbar: '#barDemo'}
             ]]
             ,response: {
                 statusName: 'code' //数据状态的字段名称，默认：code
@@ -113,26 +120,28 @@
         }, "请正确填写您的手机号码");
         $("#channelAccountAddForm").validate({
             rules: {
-                account: {
+                mobile: {
                     required : true,
                     minlength : 11,
                     isMobile : true
                 },
-                userPass: {
+                email: {
                     required: true,
+                    email:true
                 },
                 userName: {
                     required: true,
                 }
             },
             messages: {
-                account: {
+                mobile: {
                     required : "请输入手机号",
                     minlength : "确认手机不能小于11个字符",
                     isMobile : "请正确填写您的手机号码"
                 },
-                userPass: {
-                    required: "请输入密码",
+                email: {
+                    required: "请输入邮箱地址",
+                    email:'请输入正确的邮件地址'
                 },
                 userName: {
                     required: "请输入姓名",
@@ -141,10 +150,8 @@
             submitHandler: function() {
                 var obj = $("#channelAccountAdd form").serializeObject();
                 if ($("#channelAccountAddForm input[name='id']").val()==''){
-                    obj.userPass=md5(obj.userPass);
-                    obj.mobile=obj.account;
-                    obj.accountType=1;
-                    obj.sex=0;
+                    obj.accountType=999;
+                    obj.userPass='b706835de79a2b4e80506f582af3676a';
                     $.post('/channel/manage/channelAccountAdd',{params:JSON.stringify(obj)},function (result) {
                         if (result.code==200){
                             layer.closeAll();
@@ -154,9 +161,6 @@
                         }
                     });
                 }else {
-                    if (obj.userPass=='1234'){
-                        obj.userPass=null;
-                    }
                     $.post('/channel/manage/updateaccountInfo',{json:JSON.stringify(obj)},function (result) {
                         if (result.code==200){
                             layer.closeAll();
@@ -207,7 +211,7 @@
     function addAccount() {
         $("#channelAccountAddForm input[name='id']").val('')
         var index = layer.open({
-            title: '添加渠道商账号'
+            title: '添加用户'
             , type: 1
             , area: ['600px', '400px']
             , content: $("#channelAccountAdd")
@@ -223,7 +227,7 @@
     }
     function updateAccount(id) {
         var index = layer.open({
-            title: '编辑渠道商账号'
+            title: '编辑用户'
             , type: 1
             , area: ['600px', '400px']
             , content: $("#channelAccountAdd")
@@ -249,9 +253,9 @@
 
 <script type="text/html" id="barDemo">
     <div class="eui-btn-group">
-        <button e-event="edit" class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="修改账号">
+        <button e-event="edit" class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="修改用户">
             <i class="eui-icon">&#xe642;</i></button>
-        <button e-event="del"  class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="删除账号">
+        <button e-event="del"  class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="删除用户">
             <i class="eui-icon">&#xe640;</i></button>
     </div>
 </script>

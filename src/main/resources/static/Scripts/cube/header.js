@@ -10,6 +10,30 @@ eui.use(['form', 'laydate', 'element'], function () {
     laydate = eui.laydate
     var obj = new Object();
     initLaydateTest_n1(obj);
+    //控制左侧菜单样式固定
+    var pageIndex = $("#pageIndex").val();
+    $("#cymfNav li").each(function(i){
+              if(pageIndex!=""&&pageIndex==i){
+                $(this).addClass("nav-this")
+              }
+    });
+
+    //控制头部菜单样式固定左侧
+    var headIndex = $("#headIndex").val();
+    $("#head_nav_left li").each(function(i){
+        if(headIndex!=""&&headIndex==i){
+            $(this).addClass("eui-this")
+        }
+    });
+    //控制头部菜单样式固定右侧
+    $("#head_nav_right li").each(function(i){
+        if(i==1&&headIndex==7){
+            $(this).addClass("eui-this")
+        }
+    });
+
+
+
 });
 
 function initLaydateTest_n1(obj) {

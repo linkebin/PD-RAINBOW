@@ -10,7 +10,7 @@
 <div class="eui-bd eui-padding15">
     <div class="eui-sd1 eui-sd1-type3">
         <div class="eui-col-md3 etree">
-            <p>渠道结构树</p>
+            <p>渠道用户结构树</p>
             <ul style="padding: 10px;" id="channelTree"></ul>
         </div>
     </div>
@@ -39,6 +39,13 @@
                     <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
                 </div>
             </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 咨询师列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                </div>
+            </div>
             <table id="test2"></table>
         </div>
     </div>
@@ -70,11 +77,11 @@
             ,where: {json: JSON.stringify(oj)}
             ,height: 460
             ,cols: [[ //标题栏
-                {checkbox: true}
-                ,{field: 'USER_NAME', title: '咨询师姓名', width: 150}
-                ,{field: 'ACCOUNT', title: '咨询师账号', width: 180}
-                ,{field: 'MOBILE', title: '联系方式', width: 196}
-                ,{field: 'inviter_user', title: '邀请人', width: 196}
+//                {checkbox: true}
+                {field: 'USER_NAME', title: '咨询师姓名', width: 247}
+                ,{field: 'ACCOUNT', title: '咨询师账号', width: 247}
+                ,{field: 'MOBILE', title: '联系方式', width: 247}
+                ,{field: 'inviter_user', title: '邀请人', width: 247,templet:'<div>{{# if(d.inviter_user==undefined){ }} 无邀请人  {{#  }else{   }} {{d.inviter_user}} {{# } }}</div>'}
             ]]
             ,response: {
                 statusName: 'code' //数据状态的字段名称，默认：code

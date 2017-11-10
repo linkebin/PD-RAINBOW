@@ -28,6 +28,11 @@ public class WebChannelManageController {
         return "project/channel/channel-list";
     }
 
+    @RequestMapping("/onaylanmam")
+    public String onaylanmamopenlist() {
+        return "project/channel/onaylanmam-channel-list";
+    }
+
     @RequestMapping("/openaccounts")
     public String openaccounts(String id, Model model) {
         model.addAttribute("channelId",id);

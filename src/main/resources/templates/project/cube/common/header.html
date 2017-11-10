@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <body class="eui-layout-body">
-<div  th:fragment="header">
+<div  th:fragment="header(headIndex)">
+  <input class="eui-hide" id="headIndex" th:value="${headIndex}"></input>
   <div class="eui-header">
     <div class="headerIn">
       <div class="eui-logo"><img th:src="@{/Styles/images/xymfImages/xymf/logo.png}" alt=""
                                  onclick="javascript:window.location.href='/index'"></div>
       <!-- 头部区域（可配合layui已有的水平导航） -->
-      <ul class="eui-nav xymfNav">
+      <ul class="eui-nav xymfNav" id="head_nav_left">
         <li class="eui-nav-item"><a href="/index">首页</a></li>
         <li class="eui-nav-item"><a href="/web/visitor/record/openlist">来访管理</a></li>
         <li class="eui-nav-item">
@@ -21,7 +22,7 @@
         <li class="eui-nav-item"><a href="/web/customer/customerList">客户</a></li>
         <li class="eui-nav-item"><a href="/web/activities/activitiesList">活动管理</a></li>
       </ul>
-      <ul class="eui-nav personage">
+      <ul class="eui-nav personage" id="head_nav_right">
         <li class="eui-nav-item"><a href="/cube/pay">
           <img th:src="@{/Styles/images/xymfImages/xymf/VIP.png}" alt="">
           问卷VIP
