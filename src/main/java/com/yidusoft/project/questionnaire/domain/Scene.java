@@ -43,6 +43,20 @@ public class Scene {
     private String deleted;
 
     /**
+     * 问卷的数量
+     */
+    @Transient
+    private Integer nums;
+
+    public Integer getNums() {
+        return nums;
+    }
+
+    public void setNums(Integer nums) {
+        this.nums = nums;
+    }
+
+    /**
      * 获取id
      *
      * @return id_ - id

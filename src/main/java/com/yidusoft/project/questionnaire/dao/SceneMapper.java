@@ -13,4 +13,6 @@ public interface SceneMapper extends Mapper<Scene> {
     List<Scene>  findSceneForQuestionnaire(String questionnaireId);
 
     Scene findSameSceneName(String sceneName);
+    //查询场景里面问卷的数量
+    List<Scene> findQuestionnaireForSceneNum();
 }

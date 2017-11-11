@@ -40,4 +40,9 @@ public class QuestionnaireTagServiceImpl extends AbstractService<QuestionnaireTa
     public QuestionnaireTag findSameTag(String tagName) {
         return questionnaireTagMapper.findSameTag(tagName);
     }
+    //查询这个标签有多少个问卷使用
+    @Override
+    public List<QuestionnaireTag> findQuestionnaireForTagNum() {
+        return questionnaireTagMapper.findQuestionnaireForTagNum();
+    }
 }

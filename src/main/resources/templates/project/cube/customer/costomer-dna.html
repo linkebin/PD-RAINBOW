@@ -7,39 +7,27 @@
 </head>
 <body>
 
-<div  class="eui-margin20">
-    <p style="text-align:center">
-        <strong style="font-family: 宋体;">《<span style="font-size:18px">心理咨询保密协议书》</span></strong><br/>
+<div class="eui-margin20 eui-lineHeight30 eui-font14">
+    <p class="eui-font24 eui-textAlignC eui-margin20">
+        <strong>《心理咨询保密协议书》</strong>
     </p>
-    <p style="text-align:center">
-        <span style="font-family: 宋体; font-size: 16px;"><strong><br/></strong></span>
+    <p class="eui-textIndent">
+        <span>一、心理咨询师本着尊重、保护来访者个人隐私的态度，对心理咨询过程中的有关信息，包括个案记录、测验资料、信件、录音和其他资料，均属专业信息，都将在严格保密的情况下进行保存。同时，心理咨询师还必须严格遵守职业道德中保密原则的有关规定，严守咨询个案的相关资料。咨询时，来访者有责任向咨询师如实提供个人相关资料;由于来访者故意隐瞒或者扭曲资料而造成的不良后果由来访者自己负责。</span>
     </p>
-    <p style="text-indent:38px">
-        <span style="font-family: 宋体;font-size:16px">一、心理咨询师本着尊重、保护来访者个人隐私的态度，对心理咨询过程中的有关信息，包括个案记录、测验资料、信件、录音和其他资料，均属专业信息，都将在严格保密的情况下进行保存。同时，心理咨询师还必须严格遵守职业道德中保密原则的有关规定，严守咨询个案的相关资料。咨询时，来访者有责任向咨询师如实提供个人相关资料;由于来访者故意隐瞒或者扭曲资料而造成的不良后果由来访者自己负责。</span>
+    <p class="eui-textIndent">
+        <span>二、上述保密资料，除来访者的私人心理咨询师外，任何人<span>(</span>包括老师、领导、家属等<span>)</span>均不得查阅。如确因工作需要而进行案例讨论和督导，或采用案例进行教学、科研、写作等，则会隐去那些可能会辨认出您的有关信息。<span>&nbsp;&nbsp;</span></span>
     </p>
-    <p style="text-indent:38px">
-        <span style="font-family: 宋体;font-size:16px"><br/></span>
+    <p class="eui-textIndent">
+        <span>三、心理咨询师只有在征得来访者同意的情况下才能对咨询过程进行笔录、录音。来访者有权拒绝心理咨询师提出的笔录、录音请求。<span>&nbsp;</span></span>
     </p>
-    <p style="text-indent:38px">
-        <span style="font-family: 宋体;font-size:16px">二、上述保密资料，除来访者的私人心理咨询师外，任何人<span>(</span>包括老师、领导、家属等<span>)</span>均不得查阅。如确因工作需要而进行案例讨论和督导，或采用案例进行教学、科研、写作等，则会隐去那些可能会辨认出您的有关信息。<span>&nbsp;&nbsp;</span></span>
+    <p class="eui-textIndent">
+        <span>四、保密例外原则。在心理咨询工作中，一旦发现来访者有危害自身或他人的情况，必须采取必要的措施，防止意外事件发生<span>(</span>必要时应通知老师、有关领导或家属<span>)</span>，或与其他心理咨询师进行磋商，但应将有关保密信息的暴露程度限制在最低范围之内。<span>&nbsp; </span></span>
     </p>
-    <p style="text-indent:38px">
-        <span style="font-family: 宋体;font-size:16px">三、心理咨询师只有在征得来访者同意的情况下才能对咨询过程进行笔录、录音。来访者有权拒绝心理咨询师提出的笔录、录音请求。<span>&nbsp;</span></span>
-    </p>
-    <p style="text-indent:38px">
-        <span style="font-family: 宋体;font-size:16px"><span><br/></span></span>
-    </p>
-    <p style="text-indent:38px">
-        <span style="font-family: 宋体;font-size:16px">四、保密例外原则。在心理咨询工作中，一旦发现来访者有危害自身或他人的情况，必须采取必要的措施，防止意外事件发生<span>(</span>必要时应通知老师、有关领导或家属<span>)</span>，或与其他心理咨询师进行磋商，但应将有关保密信息的暴露程度限制在最低范围之内。<span>&nbsp; </span></span>
-    </p>
-    <p style="text-indent:38px">
-        <span style="font-family: 宋体;font-size:16px"><span><br/></span></span>
-    </p>
-    <p>
-        <span style="font-family: 宋体;font-size:16px">注：协议一式两份，双方各执一份。</span>
+    <p class="eui-marginT10 eui-textIndent">
+        <span>注：协议一式两份，双方各执一份。</span>
     </p>
 </div>
-    <div id="code" style="position:fixed; right:20px; bottom:20px;">
+    <div class="agreement" id="code">
 
     </div>
 </body>
@@ -57,7 +45,7 @@
         if(int<0){
             i=window.clearInterval(i)//结束
             int = 10; //重新赋值
-            document.getElementById("code").innerHTML = '<a onclick="parent.timeout();" class="eui-btn eui-btn-small eui-btn-normal">同意协议</a>';
+            document.getElementById("code").innerHTML = '<a onclick="parent.timeout();" class="eui-btn eui-btn-small eui-btn-normal">同意协议（10s）</a>'+'<a onclick="parent.timeout();" class="eui-btn eui-btn-small eui-btn-primary">退出</a>';
         }
     }
 </script>

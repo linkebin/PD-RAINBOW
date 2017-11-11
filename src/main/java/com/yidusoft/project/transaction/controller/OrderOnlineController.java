@@ -105,13 +105,14 @@ public class OrderOnlineController {
      * @return
      */
     @PostMapping("/payment")
-    public Result payment(String id,String SerialNumber) {
+    public Result payment(String id,String serialNumber) {
+        System.out.println("进入更新@@@@@@@@@@@@@@@@@@@@@@@@@@订单号"+id+"流水号："+serialNumber);
         OrderOnline orderOnline = orderOnlineService.findById(id);
         orderOnline.setOrderState(1);
         orderOnline.setPaymentTime(new Date());
-        orderOnline.setSerialNumber(SerialNumber);
+        orderOnline.setSerialNumber(serialNumber);
         orderOnlineService.update(orderOnline);
-        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", Security.getUserId());
+        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
         if (userQuestionnaires != null) {
             userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()+orderOnline.getQuestionnaireTotal());
             userQuestionnairesService.update(userQuestionnaires);

@@ -13,6 +13,10 @@
     <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
 
     <style>
+       /* #pages{
+            position: absolute;
+            bottom: 10px;
+        }*/
         #menuDig{
             height: 300px;
             display: none;
@@ -25,18 +29,23 @@
     <div class="eui-mn1 eui-bg-white">
         <div class="eui-mn1-type">
             <form class="eui-form eui-row" id="searchFrom">
+                <input type="hidden" name="tagIds"/>
+                <input type="hidden" name="sceneIds"/>
                 <div class="eui-col-sm6 eui-col-md6 eui-padding10">
-                    <div class="eui-paddingB10">
+                    <div class="eui-paddingB10" id="tagScene">
                         <span class="eui-marginR10">选择</span>
-                        <p class="eui-btn eui-btn-small eui-btn-primary">调查 <span class="eui-icon">&#x1006;</span></p>
-                        <p class="eui-btn eui-btn-small eui-btn-primary">互联网 <span class="eui-icon">&#x1006;</span></p>
+                      <!--  <p ptype="tag" tagId="" class="eui-btn eui-btn-small eui-btn-primary">调查 <span class="eui-icon">&#x1006;</span></p>
+                        <p ptype="scene" sceneId="" class="eui-btn eui-btn-small eui-btn-primary">互联网 <span class="eui-icon">&#x1006;</span></p>
+                        <p ptype="tag" tagId="" class="eui-btn eui-btn-small eui-btn-primary">调查 <span class="eui-icon">&#x1006;</span></p>
+                        <p ptype="scene" sceneId="" class="eui-btn eui-btn-small eui-btn-primary">互联网 <span class="eui-icon">&#x1006;</span></p>
+                        <p ptype="tag" tagId="" class="eui-btn eui-btn-small eui-btn-primary">调查 <span class="eui-icon">&#x1006;</span></p>
+                        <p ptype="scene" sceneId="" class="eui-btn eui-btn-small eui-btn-primary">互联网 <span class="eui-icon">&#x1006;</span></p>-->
                     </div>
                 </div>
                 <div class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-paddingR10">
-                    <input type="hidden" name="questionnaireState" value="2">
 
                     <div class="eui-input-inline eui-padding10">
-                        <input type="text" name="questionnaireCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
+                        <input type="text" name="questionnaireName" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
                     </div>
                     <div class="eui-input-inline">
                         <span class="eui-btn eui-btn-normal" onclick="doSearch()">查询</span>
@@ -72,11 +81,11 @@
             <div id="pages"></div>-->
             <!--选择问卷模版-->
             <div class="eui-bd eui-padding10">
-                <div class="eui-sd1 eui-sd1-type2">
-                    <ul>
-                        <li class="eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷场景</li>
-                        <li class="eui-row eui-padding10">
-                            <p class="eui-col-sm6 eui-col-md6">调查</p>
+                <div class="eui-sd1 eui-sd1-type2" style="overflow-y: auto;height: 350px">
+                    <ul id="ulScene">
+                       <li class="eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷场景</li>
+                        <!-- <li class="eui-row eui-padding10">
+                            <a class="eui-col-sm6 eui-col-md6">调查</a>
                             <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">10</p>
                         </li>
                         <li class="eui-row eui-padding10">
@@ -86,9 +95,12 @@
                         <li class="eui-row eui-padding10">
                             <p class="eui-col-sm6 eui-col-md6">满意度</p>
                             <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">23</p>
-                        </li>
+                        </li>-->
+
+                    </ul>
+                    <ul id="ulTag">
                         <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷标签</li>
-                        <li class="eui-row eui-padding10">
+                       <!-- <li class="eui-row eui-padding10">
                             <p class="eui-col-sm6 eui-col-md6">互联网</p>
                             <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">10</p>
                         </li>
@@ -100,24 +112,22 @@
                             <p class="eui-col-sm6 eui-col-md6">食品保健</p>
                             <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">23</p>
                         </li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">互联网</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">10</p>
+                        </li>
+                        <li class="eui-row eui-padding10">
+                            <p class="eui-col-sm6 eui-col-md6">生活商业</p>
+                            <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">12</p>
+                        </li>-->
+
                     </ul>
                 </div>
                 <div class="eui-mn1">
-                    <div class="eui-mn1-type2 classify">
-                        <div class="eui-collapse" e-accordion="">
-                            <div class="eui-colla-item">
-                                <h2 class="eui-colla-title">社交网站满意度问卷模板</h2>
-                                <div class="eui-colla-content eui-show">
-                                    <p>内容内容</p>
-                                    <div class="eui-textAlignR">
-                                        <p class="eui-btn-group">
-                                            <span class="eui-btn eui-btn-small eui-btn-normal">预览详情</span>
-                                            <span class="eui-btn eui-btn-small eui-btn-normal">使用该问卷</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="eui-colla-item">
+                    <div class="eui-mn1-type2 classify" >
+                        <div class="eui-collapse"  e-filter="divQuestionnaire" e-accordion="" id="divQuestionnaire" >
+
+                        <!--    <div class="eui-colla-item">
                                 <h2 class="eui-colla-title">数码家电类产品满意度模板</h2>
                                 <div class="eui-colla-content">
                                     <p>内内容</p>
@@ -164,9 +174,11 @@
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
+                        <div id="pages"></div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -182,7 +194,7 @@
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
-<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" ></script>
 <script src="/pack.ajax.js" charset="utf-8"></script>
 <script src="/date2format.js" charset="utf-8"></script>
 <script src="/Scripts/plugins/md5/md5.min.js" type="text/javascript"></script>
@@ -226,42 +238,33 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
 </script>
 
 <script type="text/javascript">
-
+    var tagIds="";
+    var sceneIds="";
     $(function () {
         doSearch();
+        loadScene();
+        loadTag();
     });
-
-
-
-
-    //工具条按钮事件
-    function itemclick(item,id)
-    {
-        if (item=='add'){//添加
-          //  addQuestion();
-        }else if (item == 'delete'){//删除
-            deleteQuestionnaire(id);
-        }else if (item=='edit'){//编辑
-          //  window.open("/web/questionnaire/getUpdateQuestionnaire?id="+id);
-        }
-    }
-
-
-    //加载数据
+  
+    //加载数据    questionnaireName tagIds sceneIds
     function doSearch() {
-        eui.use(['form','laypage','layer'], function(){
+        eui.use(['form','laypage','layer','element'], function(){
             var form = eui.form
                 ,laypage = eui.laypage
+                ,element = eui.element
                 ,layer = eui.layer,
                 $ = eui.jquery;
 
-            var params = $("#searchFrom").serializeObject();
+
+            var questionnaireName=$("[name='questionnaireName']").val();
             //加载层
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
             $.ajax({
-                url:"/questionnaire/questionnaireListByPage",
-                data: {
-                    params:JSON.stringify(params),
+                url:"/questionnaire/findQuestionnaireForTagAndScene",
+                data:{
+                    tagIds:tagIds,
+                    sceneIds:sceneIds,
+                    questionnaireName:questionnaireName,
                     page:1,
                     size:10
                 },
@@ -272,26 +275,30 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
                     laypage.render({
                         elem: 'pages'
                         ,count: result.data.total
-                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'limits', 'skip']
                         ,skip: true
+                        ,theme: '#1E9FFF'
                         ,jump: function(obj,first){
                             if (first){
                                 //第一次，不需要查询数据
                                 var questionnaireList = result.data.list;
                                 //遍历，拼接表格
                                 var tableHtml = getTable(questionnaireList);
-                                $("#questionTable tbody").html(tableHtml);
-                                form.render('checkbox');
+                                $("#divQuestionnaire").html(tableHtml);
+                                //element.render('collapse');
+                                element.init();
                             }else {
-                                var params = $("#searchFrom").serializeObject();
+
                                 //加载层
                                 var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
                                 $.ajax({
-                                    url: "/questionnaire/questionnaireListByPage",
+                                    url: "/questionnaire/findQuestionnaireForTagAndScene",
                                     data: {
-                                        params: JSON.stringify(params),
-                                        page: obj.curr,
-                                        size: obj.limit
+                                        tagIds:tagIds,
+                                        sceneIds:sceneIds,
+                                        questionnaireName:questionnaireName,
+                                        page:obj.curr,
+                                        size:obj.limit
                                     },
                                     type: "post",
                                     success: function (result) {
@@ -299,9 +306,9 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
                                         var questionnaireList = result.data.list;
                                         //遍历，拼接表格
                                         var tableHtml = getTable(questionnaireList);
-                                        $("#questionTable tbody").html(tableHtml);
-                                        //重新加载复选框
-                                        form.render('checkbox');
+                                        $("#divQuestionnaire").html(tableHtml);
+                                       // element.render('collapse');
+                                        element.init();
                                     }
                                 });
                             }
@@ -312,46 +319,167 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
 
         });
     }
+   //  给 tagIds sceneIds赋值  ptype tagId sceneId tagScene
+    function   assignmentTagIdsAndSceneIds () {
+        var pDom=$("#tagScene").children("p");
+        var tagIds="";
+        var sceneIds="";
+        for(var i =0;i<pDom.length;i++){
+            if(pDom.eq(i).attr("ptype")=='tag'){
+                tagIds+=pDom.eq(i).attr("tagId");
+            }
+            if(pDom.eq(i).attr("ptype")=='scene'){
+                sceneIds+=pDom.eq(i).attr("sceneId");
+            }
+        }
 
+    }
     //渲染数据，拼接表格
     function getTable(questionnaireList) {
         var tableHtml = '';
+            for (var item in questionnaireList){
+                var questionnaire=questionnaireList[item];
+                tableHtml+= '<div class="eui-colla-item">'+
+                    '<h2 class="eui-colla-title">'+questionnaire.questionnaireName+'</h2>'+
+                    '<div class="eui-colla-content ">'+
+                    '<p>'+questionnaire.remarks+'</p>'+
+                    '<div class="eui-textAlignR">'+
+                    '<p class="eui-btn-group">'+
+                    '<span class="eui-btn eui-btn-small eui-btn-normal" onclick="preview(\''+questionnaire.id+'\')">预览详情</span>'+
+                    '<span class="eui-btn eui-btn-small eui-btn-normal" onclick="useQuestionnaire(\''+questionnaire.id+'\')">使用该问卷</span>'+
+                    '</p>'+
+                    '</div>'+
+                    '</div>'+
+                    '</div>';
 
-        for (var item in questionnaireList){
-            var questionnaire=questionnaireList[item];
-            var questionnaireState ="";
-           if(questionnaire.questionnaireState==1){
-               questionnaireState="设计中";
-            }else if(questionnaire.questionnaireState==2){
-               questionnaireState="使用中";
-            }else {
-               questionnaireState="已失效";
-           }
-            var sequence="";
-            if(questionnaire.questionSequence==1){
-                sequence="正序";
-            }else {
-                sequence="反序";
-            }
-            var answerModel="";
-            if(questionnaire.answerModelType==1){
-                answerModel="横版";
-            }else {
-                answerModel="竖版";
-            }
-            tableHtml +=  '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireId"  questionName="'+questionnaire.questionnaireName+'" type="hidden" value="' + questionnaire.id + '"></td>' +
-                '<td>'+ questionnaire.questionnaireCode +'</td>' +
-                '<td>'+ questionnaire.questionnaireName +'</td>' +
-                '<td>'+ questionnaire.questionnaireTypeName +'</td>'   +
-                '<td>'+answerModel+'</td>' +
-                '</tr>';
         }
 
         return tableHtml;
     }
+   //加载场景
+    function loadScene() {
+        eui.use(['form','laypage','layer'], function(){
+        var form = eui.form
+            ,laypage = eui.laypage
+            ,layer = eui.layer,
+            $ = eui.jquery;
+        //加载层
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("/scene/findQuestionnaireForSceneNum",{},function (result) {
+            var context=  sceneOrTag(result.data,'scene');
+            $("#ulScene").append(context);
+            layer.closeAll();
+        });
+         });
+    }
+    //加载标签
+    function loadTag() {
+        eui.use(['form','laypage','layer'], function(){
+        var form = eui.form
+            ,laypage = eui.laypage
+            ,layer = eui.layer,
+            $ = eui.jquery;
+        //加载层
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        $.post("/questionnaire/tag/findQuestionnaireForTagNum",{},function (result) {
+            var context=  sceneOrTag(result.data,'tag');
+            $("#ulTag").append(context);
+            layer.closeAll();
+        });
+        });
+    }
+    //场景 或者标签的拼接
+    function  sceneOrTag(data,type) {
+        var html="";
+        for(var i=0;i<data.length;i++){
+             html+='<li class="eui-row eui-padding10">';
+            if(type=='scene'){
+                html+='<a class="eui-col-sm6 eui-col-md6" ' +
+                       'onclick="tagOrSceneCondition(\''+data[i].id+'\',\''+data[i].sceneName+'\',\'scene\''+')">'+data[i].sceneName+'</a>';
+            }else {
+                html+='<a class="eui-col-sm6 eui-col-md6" ' +
+                    'onclick="tagOrSceneCondition(\''+data[i].id+'\',\''+data[i].tagName+'\',\'tag\''+')">'+data[i].tagName+'</a>';
+            }
+            html+='  <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">'+data[i].nums+'</p>';
+            html+="</li>";
+        }
 
+        return html ;
+    }
+    //给添加查询条件 标签 或者场景
+    function tagOrSceneCondition(id,name,type){
+        //去掉重复的 标签或者场景
+        var pTagOrSence=$("[name='pTagOrSence']");
+        var stast=0;
+        for(var i=0;i<pTagOrSence.length;i++){
+                if(pTagOrSence.eq(i).attr("tagOrSenceId")==id){
+                    stast++;
+                }
+        }
+        if(stast==0){
+            var html='<p name="pTagOrSence" id="p'+id+'" ptype="tag" tagOrSenceId="'+id+'" class="eui-btn eui-btn-small eui-btn-primary">'+name+
+                '<span class="eui-icon" onclick="deletedTagOrScene(\''+id+'\',\''+type+'\')">&#x1006;</span></p>';
+            if(type=='tag'){
+                tagIds+=id+",";
+                if(tagIds!=""){
+                    tagIds=tagIds.substring(0,tagIds.length-1);
+                }
+            }else {
+                sceneIds+=id+",";
+                if(sceneIds!=""){
+                    sceneIds=sceneIds.substring(0,sceneIds.length-1);
+                }
+            }
+        }else{
+            stast=0;
+        }
+       $("#tagScene").append(html);
+       doSearch();
+    }
+    //删除 场景 或者 标签
+    function deletedTagOrScene(id,type){
+        if(type=='scene'){
+            sceneIds=sceneIds.replace(id+",","");
+            sceneIds=sceneIds.replace(","+id,"");
+            sceneIds=sceneIds.replace(id,"");
+        }else {
+            tagIds=tagIds.replace(id+",","");
+            tagIds=tagIds.replace(","+id,"");
+            tagIds=tagIds.replace(id,"");
+        }
+        $("#p"+id).remove();
+        doSearch();
+    }
+    //问卷预览
+    function preview(id) {
+        window.open("/web/questionnaire/question_horizontal_or_vertital_preview?questionnaireId=" + id);
+    }
+    //使用问卷
+    function useQuestionnaire (questionnaireId) {
+        //加载层
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        //添加问卷使用
+        $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
+            layer.closeAll();
+            if(result.code!=200){
+                // 账号余额不足
+                layer.open({
+                    title:"充值",
+                    type: 1,
+                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
+                });
 
+            }else {
+                var obj= window.parent.getVisitorId();
+                startAnswer(questionnaireId,obj.userId,obj.visitorTimes);
+            }
+        });
+    }
+    //开始答题
+    function startAnswer(questionnaireId,userId,visitorTimes) {
+        window.open("/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes);
+        window.close();
+    }
 //重置
     function resetForm() {
         document.getElementById('searchFrom').reset()
@@ -377,7 +505,7 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
             });
         }
         if (ids==''){
-            layer.msg('请选择问卷', {
+            return layer.msg('请选择问卷', {
                 time: 2000
             });
         }

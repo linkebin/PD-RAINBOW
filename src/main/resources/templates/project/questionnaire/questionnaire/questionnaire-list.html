@@ -113,11 +113,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         form.render('checkbox');
     });
 
-    //日期范围
-    laydate.render({
-        elem: '#test6'
-        ,range: true
-    });
 
 
 });
@@ -228,10 +223,10 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                questionnaireState="设计中";
             }else if(questionnaire.questionnaireState==2){
                questionnaireState="使用中";
-                context="";
+                context= '<button class="eui-btn eui-btn-primary eui-btn-mini" title="下架" onclick="setState('+3+",'"+questionnaire.id+'\')"><i class="eui-icon">&#xe502;</i></button> ';
             }else {
-               questionnaireState="已失效";
-
+               questionnaireState="已下架";
+                context= '<button class="eui-btn eui-btn-primary eui-btn-mini" title="上架" onclick="setState('+2+",'"+questionnaire.id+'\')"><i class="eui-icon">&#xe6d3;</i></button> ';
            }
             var answerModel="";
             if(questionnaire.answerModelType==1){
@@ -251,7 +246,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+questionnaire.remarks+'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +context+
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="状态" onclick="setState('+questionnaire.questionnaireState+",'"+questionnaire.id+'\')"><i class="eui-icon">&#xe631;</i></button> ' +
                 '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="预览" onclick="itemclick('+"'preview','"+questionnaire.id+'\')"><i class="eui-icon">&#xe63c;</i></button> ' +
                 '</div>' +
                 '</td>' +
@@ -320,49 +314,42 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //设置 问卷的状态
     function setState(state,id){
-        var questionnaireState=$("[name='questionnaireState']");
-        for(var i=0;i<questionnaireState.length;i++){
-
-            if(questionnaireState.eq(i).val()==state+""){
-                questionnaireState.eq(i).prop("checked",true);
-                formRender();
-            }
+        //加载层
+        eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
+        var form = eui.form
+            ,laypage = eui.laypage
+            ,layer = eui.layer,
+            $ = eui.jquery;
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+        var context="";
+        if(state=='2'){
+            context="你确定上架吗?";
+        }else {
+            context="你确定下架吗?";
         }
-        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
-            var $ = eui.jquery,
-            layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
-            layer.open({
-                type: 1
-                ,title: '修改状态'
-                ,content:$('#questionnaireStateDiv')
-                ,area: ['470px', '180px']
-                ,btnAlign: 'c'
-                ,shade: 0
-                ,moveType: 0//拖拽
-                ,btn: ['确定', '关闭'] //只是为了演示
-                ,yes: function(){
-                    state=  $("input[type='radio']:checked").val();
-                    $.post("/questionnaire/invalidQuestionnaire/",{"id":id,"state":state},function (result) {
-                        layer.closeAll();
-                        if(result.code==200){
-                            doSearch();
-                            layer.msg('修改成功', {
-                                icon: 1,
-                                time: 3000
-                            });
-                        }else {
-                            layer.msg('修改失败', {
-                                icon: 1,
-                                time: 3000
-                            });
-                        }
+        layer.confirm(context, {
+            btn: ['确认', '取消'],
+            shade: 0,
+            title:'提示'
+        }, function(){
+            $.post("/questionnaire/invalidQuestionnaire/",{"id":id,"state":state},function (result) {
+                layer.closeAll();
+                if(result.code==200){
+                    doSearch();
+                    layer.msg('操作成功', {
+                        icon: 1,
+                        time: 3000
+                    });
+                }else {
+                    layer.msg('操作失败', {
+                        icon: 1,
+                        time: 3000
                     });
                 }
-                ,btn2: function(){
-                    layer.closeAll();
-                }
-                ,zIndex: layer.zIndex //重点1
-              });
+            });
+        },function () {
+            layer.closeAll();
+        });
         });
     }
 

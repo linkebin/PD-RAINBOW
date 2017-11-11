@@ -17,7 +17,7 @@
         .error{color: red;font-size: 12px;}
     </style>
 </head>
-<body>
+<body class="questionBody">
     <div class="questionHeader">
         <div class="eui-row eui-area">
             <div class="xymfLogo">
@@ -28,20 +28,36 @@
     </div>
     <div class="visitorContent xymfMargin">
         <div class="eui-area">
-            <div class="visitorTitle">
-                <img src="/Styles/images/xymfImages/cube.png" width="24" alt="">  个人信息卡
+            <div class="visitorTitle eui-row">
+                <div class="eui-col-md7"><img src="/Styles/images/xymfImages/cube.png" width="24" alt="">  个人信息卡</div>
+                <div class="eui-col-md5 eui-row updateProcess eui-col-offset1">
+                    <div class="updateProcess-this">
+                        <p class="updateNum eui-col-md1 eui-col-offset1">1</p>
+                        <p class="updateFont eui-col-md1 eui-marginLR5">基本信息</p>
+                        <p class="updateLine eui-col-md1"></p>
+                    </div>
+                    <div>
+                        <p class="updateNum eui-col-md1">2</p>
+                        <p class="updateFont eui-col-md1 eui-marginLR5">家庭信息</p>
+                        <p class="updateLine eui-col-md1"></p>
+                    </div>
+                    <div>
+                        <p class="updateNum eui-col-md1">3</p>
+                        <p class="updateFont eui-col-md1 eui-marginLR5">咨询情况</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="entirety">
+            <div class="entirety eui-bg-white">
                 <div style="display: block;" class="flip in eui-bg-white eui-padding20 visitor commonDiv">
-                    <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                    <!--<div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                         <div class="eui-col-md6 eui-font20">基本信息</div>
                         <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward eui-cursorp">
-                            <a onclick="$('#baseInfoForm').submit()" class="eui-btn eui-btn-small eui-btn-normal">下一步</a></div>
-                    </div>
+                        </div>
+                    </div>-->
                     <!--基本-->
                     <form id="baseInfoForm" onsubmit="return false;">
-                        <div class="eui-bg-white eui-form visitorContent">
+                        <div class="eui-bg-white eui-form">
                         <div class="eui-form-item">
                             <label class="eui-form-label">姓名</label>
                             <div class="eui-input-inline">
@@ -225,18 +241,20 @@
                         </div>
                     </div>
                     </form>
+                    <div class="eui-textAlignC eui-paddingTB20">
+                        <a onclick="$('#baseInfoForm').submit()" class="eui-btn eui-btn-normal">下一步</a>
+                    </div>
                 </div>
                 <!--家庭-->
                 <div style="display: none;" class="flip out eui-bg-white  eui-padding20 visitor commonDiv">
-                    <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                    <!--<div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                         <div class="eui-col-md6 eui-font20">家庭情况</div>
                         <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward eui-cursorp">
-                            <a onclick="tabShowHide(0)" class="eui-btn eui-btn-small eui-btn-normal">上一步</a>
-                            <a onclick="$('#familyForm').submit()"  class="eui-btn eui-btn-small eui-btn-normal">下一步</a>
+
                         </div>
-                    </div>
+                    </div>-->
                     <form id="familyForm" onsubmit="return false">
-                    <div class="eui-bg-white visitorContent eui-form">
+                    <div class="eui-bg-white eui-form">
                         <div class="eui-form-item">
                             <label class="eui-form-label">父亲是否健在</label>
                             <div class="eui-input-inline">
@@ -381,18 +399,21 @@
                         </div>
                     </div>
                     </form>
+                    <div class="eui-textAlignC eui-paddingTB20">
+                        <a onclick="tabShowHide(0)" class="eui-btn eui-btn-normal">上一步</a>
+                        <a onclick="$('#familyForm').submit()"  class="eui-btn eui-btn-normal">下一步</a>
+                    </div>
                 </div>
 
                 <!--咨询-->
                 <div  style="display: none;" class="flip out eui-bg-white eui-padding20 visitor commonDiv">
-                    <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                    <!--<div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                         <div class="eui-col-md6 eui-font20">咨询情况</div>
                         <div class="eui-col-md6 eui-textAlignR eui-paddingT10 upward eui-cursorp">
-                            <a onclick="tabShowHide(1)" class="eui-btn eui-btn-small eui-btn-normal">上一步</a>
-                            <a onclick="$('#consultForm').submit()"  class="eui-btn eui-btn-small eui-btn-normal">保存</a>
+
 
                         </div>
-                    </div>
+                    </div>-->
                     <form id="consultForm" onsubmit="return false;">
                         <input type="hidden" name="id" th:value="${id}">
                         <input type="hidden" name="creator" >
@@ -400,7 +421,7 @@
                         <input type="hidden" name="deleted" >
                         <input type="hidden" name="visitorCode">
 
-                        <div class="eui-bg-white visitorContent eui-form">
+                        <div class="eui-bg-white eui-form">
                         <div class="eui-form-item">
                             <label class="eui-form-label" style="width: 240px;">以前进行过心里咨询吗？</label>
                             <div class="eui-input-inline">
@@ -491,12 +512,21 @@
 
                     </div>
                     </form>
+                    <div class="eui-textAlignC eui-paddingTB20">
+                        <a onclick="tabShowHide(1)" class="eui-btn eui-btn-normal">上一步</a>
+                        <a onclick="$('#consultForm').submit()"  class="eui-btn eui-btn-normal">保存</a>
+                    </div>
                 </div>
 
 
             </div>
         </div>
 
+    </div>
+
+    <div class="xymfFooter">
+        <!-- 底部固定区域 -->
+        © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
     </div>
 
 </body>

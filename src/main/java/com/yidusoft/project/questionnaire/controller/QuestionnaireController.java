@@ -10,7 +10,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -40,6 +42,36 @@ public class QuestionnaireController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    /**
+     * 选择填写的问卷    场景 标签 条件查询
+     * @param questionnaireName
+     * @param tagIds
+     * @param sceneIds
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/findQuestionnaireForTagAndScene")
+    @ResponseBody
+    public Result findQuestionnaireForTagAndScene(String questionnaireName,String tagIds,String sceneIds, Integer page, Integer size) {
+        Map<String,Object> map=new HashMap<>();
+        if(!"".equals(tagIds) && tagIds!=null){
+            map.put("tagIds", tagIds.split(","));
+        }else {
+            map.put("tagIds", "");
+        }
+        if(!"".equals(sceneIds) && sceneIds!=null){
+            map.put("sceneIds", sceneIds.split(","));
+        }else {
+            map.put("sceneIds", "");
+        }
+        map.put("questionnaireName", questionnaireName);
+        PageHelper.startPage(page, size);
+        List<Questionnaire> list =questionnaireService.findQuestionnaireForTagAndScene(map);
+        //查询所有的相关数据
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 
     /**
      * 添加问卷

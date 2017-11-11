@@ -11,4 +11,8 @@ public interface ProductSettingsMapper extends Mapper<ProductSettings> {
     List<ProductSettings> getProductAll();
 
     BigDecimal getUnitPriceByTotal();
+
+    List<ProductSettings> getProductByTime();
+
+    List<ProductSettings> getUpdateUnion(String id);
 }

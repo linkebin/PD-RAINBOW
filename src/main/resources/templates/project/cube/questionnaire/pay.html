@@ -24,13 +24,13 @@
             <div class="eui-col-md10"><span class="pay-color-red eui-font24"></span>元</div>
             <div class="eui-col-md1 eui-marginR20 eui-marginT15">支付方式：</div>
             <ul class="eui-col-md10 payTicket">
-                <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1">
+                <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1 payTicketNew">
                     <input type="hidden" value="支付宝">
                     <img src="/Styles/images/xymfImages/xymf/alipay.png" alt="">
                     <i class="eui-icon tickFont">&#xe605;</i>
                     <span class="tick"></span>
                 </li>
-                <li class="eui-float-left payTicket0 eui-lineHeight24 wechatpay">
+                <li class="eui-float-left payTicket0 eui-lineHeight24 wechatpay payTicketNew">
                     <input type="hidden" value="微信">
                     <img src="/Styles/images/xymfImages/xymf/wechatpay.png" alt="">
                     <i class="eui-icon tickFont">&#xe605;</i>
@@ -112,29 +112,32 @@
                             unitPrice = product.productPrice;
                         }
                         if (product.promotionsId != "") {
-                            //找到该活动
-                            if (product.promotionsId == question.id) {
-                                //活动启用
-                                if (question.promotionsState == 0) {
-                                    var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
-                                    var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
-                                    //还在活动时间内
-                                    if (new Date() > new Date(start) && new Date() < new Date(end)) {
-                                        if (question.promotionsType == 1) {//活动类型是折扣
-                                            var discount = question.promotionsDiscount * 10;//折扣
-                                            pro.total = product.productTotal;
-                                            pro.price = (product.productPrice * question.promotionsDiscount).toFixed(1);
-                                            pro.type = discount + "折";
-                                            pro.discountContent = discount + '折';
-                                        } else {//活动类型是买送
-                                            pro.price = product.productPrice;
-                                            pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
-                                            pro.type = "买送";
-                                            pro.discountContent = question.promotionsBuySend + '张问卷';
-                                            //原价
-                                            pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
+                            //套餐是否启用
+                            if(product.productState==0){
+                                //找到该活动
+                                if (product.promotionsId == question.id) {
+                                    //活动启用
+                                    if (question.promotionsState == 0) {
+                                        var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
+                                        var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
+                                        //还在活动时间内
+                                        if (new Date() > new Date(start) && new Date() < new Date(end)) {
+                                            if (question.promotionsType == 1) {//活动类型是折扣
+                                                var discount = question.promotionsDiscount * 10;//折扣
+                                                pro.total = product.productTotal;
+                                                pro.price = (product.productPrice * question.promotionsDiscount).toFixed(1);
+                                                pro.type = discount + "折";
+                                                pro.discountContent = discount + '折';
+                                            } else {//活动类型是买送
+                                                pro.price = product.productPrice;
+                                                pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
+                                                pro.type = "买送";
+                                                pro.discountContent = question.promotionsBuySend + '张问卷';
+                                                //原价
+                                                pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
+                                            }
+                                            pro.promotionsId = question.id;
                                         }
-                                        pro.promotionsId = question.id;
                                     }
                                 }
                             }

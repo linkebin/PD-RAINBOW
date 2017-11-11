@@ -63,6 +63,9 @@ public class ProductSettings {
     @Column(name = "product_name")
     private String productName;
 
+    @Column(name = "product_state")
+    private Integer productState;
+
     /**
      * @return ID_
      */
@@ -231,5 +234,21 @@ public class ProductSettings {
      */
     public void setPromotionsName(String promotionsName) {
         this.promotionsName = promotionsName;
+    }
+
+    /**
+     * 获取套餐状态
+     * @return
+     */
+    public Integer getProductState() {
+        return productState;
+    }
+
+    /**
+     * 设置套餐状态
+     * @param productState
+     */
+    public void setProductState(Integer productState) {
+        this.productState = productState;
     }
 }

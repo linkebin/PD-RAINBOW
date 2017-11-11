@@ -2,7 +2,7 @@
 /*  */
 .xymfHome .eui-header{
     background: #fff;
-    box-shadow: 0 0 20px #68a8d7;
+    box-shadow: 0 0 10px #68a8d7;
     position: static;
 }
 .xymfHome .headerIn{
@@ -48,7 +48,7 @@
 }
 .xymfHome .eui-body {
     position: static;
-    margin-left: 220px;
+    margin-left: 210px;
     width: auto;
     box-sizing: border-box;
 }
@@ -59,7 +59,7 @@
     margin: 20px 0;
     float: left;
     border-radius: 5px 5px 0 0;
-    box-shadow: 3px 3px 15px #ccc;
+    box-shadow: 2px 2px 10px #b4ccde;
     min-height: 524px;
 }
 
@@ -148,7 +148,9 @@
 
 .xymfHome .xymfContent{
     overflow: hidden;
-    margin-top: 20px;
+    margin: 20px 10px 10px 10px;
+    box-shadow: 2px 2px 10px #b4ccde;
+    border-radius:5px 5px 0 0;
 }
 .xymfContent .contentL{
     float: left;
@@ -162,7 +164,7 @@
     width: 272px;
 }
 .xymfContent .activity img{
-    box-shadow: 3px 3px 15px #ccc;
+    box-shadow: 0 0 10px #68a8d7;
     margin-bottom: 20px;
 }
 
@@ -178,7 +180,7 @@
 }
 
 .contentForm .eui-table thead tr{
-    background: transparent;
+    /*background: transparent;*/
     border-bottom: 1px solid #eee;
 }
 .contentForm .eui-table[e-even] tr:nth-child(even){
@@ -187,7 +189,7 @@
 
 .contentForm,.contentR{
     background: #fff;
-    box-shadow:  3px 3px 15px #ccc;
+    box-shadow:  2px 2px 10px #b4ccde;
     border-radius: 5px 5px 0 0;
     margin-bottom: 20px;
     min-height: 377px;
@@ -240,7 +242,7 @@
 .orderContent{
     margin-top: 20px;
     background: #fff;
-    box-shadow: 3px 3px 15px #ccc;
+    box-shadow:0 0 10px #68a8d7;
     border-radius: 5px 5px 0 0;
     margin-bottom: 20px;
     min-height: 524px;
@@ -330,7 +332,7 @@
     width: 840px;
     float: left;
     background: #fff;
-    box-shadow:  3px 3px 15px #ccc;
+    box-shadow: 2px 2px 10px #b4ccde;
     border-radius: 5px 5px 0 0;
     margin: 20px 0;
     line-height: 60px;
@@ -338,7 +340,7 @@
 .payRight{
     width: 290px;
     background: #fff;
-    box-shadow:  3px 3px 15px #ccc;
+    box-shadow:2px 2px 10px #b4ccde;
     border-radius: 5px 5px 0 0;
     float: left;
     margin: 20px 0 20px 20px;
@@ -522,12 +524,12 @@
 .submitBtn img{margin-right: 10px;}
 .conetentHint{margin-left: 98px;padding-top:10px;}
 /* 常用投影 */
-.eui-box-shadow{box-shadow:  0 0 12px #c4e1f7;}
+.eui-box-shadow{box-shadow: 2px 2px 10px #b4ccde;}
 
 
 /* 来访者咨询管理 */
-.visitorContent{ margin-top: 80px;}
-.visitorContent .eui-area{box-shadow: 0 0 12px #c4e1f7;border-radius: 5px;}
+.questionBody .visitorContent{ margin-top: 80px;}
+.visitorContent .eui-area{box-shadow: 2px 2px 10px #b4ccde;border-radius: 5px;}
 .visitorTitle{font-size: 18px;padding:16px;background: #f4f9fd;border-bottom: 1px solid #1e9eff;color: #1e9eff; }
 .visitorContent .visitorIn{background: #ffffff;}
 .visitorPhone1{padding-left: 34px;background: url(../../images/xymfImages/phone.png) no-repeat left center;background-size: 26px;}
@@ -536,7 +538,7 @@
 /* 来访者记录 */
 .consuletTop{height: 58px; border-bottom: 1px solid #eee; box-shadow: 0 10px 10px #ccc;}
 
-.consultSheet{width: 198px; padding: 5px;background: #f2f2f2;}
+.consultSheet{width: auto; padding: 5px 14px;background: #f2f2f2; margin-bottom: 10px;}
 .consultSheet .eui-icon{padding: 6px;background: #e5e5e5;margin-right: 2px;}
 
 
@@ -561,6 +563,10 @@ body .eui-layer-title{
     background: #f4f9fd;
     border-bottom: 1px solid #1e9eff;
     color: #1e9eff;
+    padding: 26px;
+    height: auto;
+    line-height: 0;
+    font-size: 16px;
 }
 
 .personage1{
@@ -577,12 +583,13 @@ body .eui-layer-title{
     padding:20px 20px 40px 20px;
     /*max-height: 450px;*/
     overflow-y: auto;
+    min-height: 410px;
 }
 .visitorLeft{
     position: fixed;
     left: 50%;
     margin-left: -600px;
-    box-shadow: 0 0 12px #c4e1f7;
+    box-shadow:2px 2px 10px #b4ccde;
 }
 .visitorLeft .record{
     position: absolute;
@@ -595,8 +602,8 @@ body .eui-layer-title{
     box-shadow: none;
 }
 .visitorInCon .eui-area .eui-mn1-type1{
-    margin-right: 10px;
-    border-radius: 5px;
+    margin:0 10px 10px 110px;
+    border-radius: 5px 5px 0 0;
 }
 .switch{
     font-size: 16px;
@@ -614,11 +621,83 @@ body .eui-layer-title{
     width: 88px;
 }
 
+/* 2017-11-11 */
+.orderIn .orderCode{
+    padding: 10px;
+}
+.eui-bg-none{
+    background: none !important;
+    box-shadow: none !important;
+}
+.payTicket .payTicketNew{
+    width: 170px;
+}
+.shutter{
+    box-shadow: 2px 2px 10px #b4ccde;
+}
+.activityContent{
+    margin-top: 80px;
+}
+.eui-textIndent{
+    text-indent: 2em;
+}
+.agreement{
+    position: fixed;
+    left:50%;
+    bottom:20px;
+    margin-left: -83px;
+}
+.xymf-width{ width: 800px;}
 
+.xymf-marginB60{
+    margin-bottom: 60px;
+}
+.xymf-marginT80{
+    margin-bottom: 60px;
+}
+.updateProcess{
+    font-size: 16px;
+    color: #999;
+}
+.updateProcess .updateNum{
+    border: 1px solid #999;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    line-height: 18px;
+    text-align: center;
+    margin:0 10px;
+}
+.updateProcess .updateLine{
+    display: inline-block;
+    width: 60px;
+    height: 2px;
+    background: #ccc;
+    margin: 8px 0 0 8px;
+}
+.updateProcess .updateFont{
+    width: 70px;
+}
+.updateProcess-this{
+    color: #1e9eff;
+}
+.updateProcess-this .updateNum{
+    border: 1px solid #1e9eff;
+}
+.updateProcess-this .updateLine{
+    background: #1e9eff;
+}
+.updateProcess>div{
+    cursor: pointer;
+}
 
-
-
-
+.welcomePage{
+    background: #f4f9fd;
+}
+.xymfShadow{
+    box-shadow: 0 5px 10px #84caff;
+}
 
 
 

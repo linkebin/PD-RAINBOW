@@ -60,6 +60,12 @@ public class QuestionnaireQuestion {
 
 
     /**
+     * 归属类型 1 问卷 2 量表
+     */
+    @Column(name = "ascription_type")
+    private Integer ascriptionType;
+
+        /**
      * 类型名称
      */
     @Transient
@@ -79,13 +85,21 @@ public class QuestionnaireQuestion {
     @Column(name = "answer_sequence")
     private Integer answerSequence;
 
-        public Integer getAnswerSequence() {
-            return answerSequence;
-        }
+    public Integer getAnswerSequence() {
+        return answerSequence;
+    }
 
-        public void setAnswerSequence(Integer answerSequence) {
-            this.answerSequence = answerSequence;
-        }
+    public void setAnswerSequence(Integer answerSequence) {
+        this.answerSequence = answerSequence;
+    }
+
+    public Integer getAscriptionType() {
+        return ascriptionType;
+    }
+
+    public void setAscriptionType(Integer ascriptionType) {
+        this.ascriptionType = ascriptionType;
+    }
 
         /**
      * @return ID_

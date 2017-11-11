@@ -15,8 +15,8 @@ public class WebLaunchActivitiesController {
         return "project/business/launchActivities/launchActivitiesList";
     }
 
-    @RequestMapping("/approval")
-    public String add(){
-        return "project/business/launchActivities/activityApproval";
+    @RequestMapping("/list")
+    public String list() {
+        return "project/business/launchActivities/launchActivityList";
     }
 }

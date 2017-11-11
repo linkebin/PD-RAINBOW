@@ -12,8 +12,8 @@
         .contentR{position: absolute;}
      #pages{
         position: absolute;
-        left: 10px;
-        bottom: 10px;
+        left: 20px;
+        bottom: -2px;
       }
     .contentForm{
         position: relative;
@@ -43,14 +43,13 @@
     </style>
 
 </head>
-<body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome">
     <div th:replace="project/cube/common/header :: header(${0})">Header</div>
     <div class="eui-area">
         <div th:replace="project/cube/common/left :: left(${null})">sidebar</div>
         <div class="eui-body">
             <!-- 内容主体区域 -->
-            <div class="xymfContent">
+            <div class="xymfContent eui-bg-none">
                 <div class="contentL">
                     <div class="shutter">
                         <div class="shutter-img">
@@ -75,8 +74,8 @@
                                     onclick="window.location.href='/cube/pay'">购 买</span>
                             </div>
                         </div>
-                        <div class="xymfForm">
-                            <table class="eui-table eui-form" e-even e-skin="nob" id="questionnaireUseInfo">
+                        <div class="xymfForm eui-form">
+                            <table class="eui-table" e-even e-skin="nob" id="questionnaireUseInfo">
                                 <colgroup>
                                     <col>
                                     <col>
@@ -105,7 +104,7 @@
                     </div>
 
 
-                    <a title="切换视图" class="btns" onclick="cut('schedule')"><i class="eui-icon">&#x1002;</i></a>
+                    <a title="切换视图" class="btns" onclick="cut('schedule')"><img src="/Styles/images/xymfImages/switch-blue.png" width="20" alt=""></a>
                 </div>
                 <div id="calendar" class="contentR  flip">
                         <div class="eui-inline" id="test-n1"></div>
@@ -117,7 +116,7 @@
                             <div id="scheduleData">
                             </div>
 
-                            <a title="切换视图" class="btns" onclick="cut('calendar')"><i class="eui-icon">&#x1002;</i></a>
+                            <a title="切换视图" class="btns" onclick="cut('calendar')"><img src="/Styles/images/xymfImages/switch-blue.png" width="20" alt=""></a>
                         </div>
                 </div>
             </div>

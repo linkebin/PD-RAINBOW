@@ -63,7 +63,7 @@
         }
     </style>
 </head>
-<body>
+<body class="questionBody">
 <div class="questionHeader">
     <div class="eui-row eui-area">
         <div class="xymfLogo eui-col-md6">
@@ -120,14 +120,13 @@
                         <div class="eui-marginT15 eui-row">
                             <div class="eui-col-md2 eui-marginT5 eui-font16 questionWhite">
                                 <i class="eui-icon eui-color-blue eui-font18">&#xe622;</i> 问卷填写
-
                             </div>
-
-
-                            <div class="eui-col-md2 eui-marginL20" id="addQuestionnaire" onclick="loadQuestionnaire()">
-                             <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
-                                    <i class="eui-icon">&#xe654;</i> 使用问卷
-                            </span>
+                            <div class="eui-col-md10 eui-marginL20">
+                                <div id="addQuestionnaire" onclick="loadQuestionnaire()">
+                                    <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
+                                        <i class="eui-icon">&#xe654;</i> 使用问卷
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="eui-marginT20 eui-form">
@@ -185,7 +184,7 @@
                         <div style="display: none;" class="DivAdd">
 
                             <p style="float: left;" class="">
-                                <i class="eui-icon">&#xe606;</i>
+                                <i class="eui-icon eui-color-blue">&#xe60e;</i>
                                 <span class="eui-font16">来访时间</span>
                             <div style=" float: left; margin-left: 12px; margin-top: -5px; ">
                                 <input placeholder="请选择来访时间" type="text" readonly="readonly" name="visitorTime" id="visitorTime"
@@ -538,8 +537,8 @@
                     var icon = '';
                     if (item.flag>0 || item.filesCount>0){
                         icon = '  <div class="ci-count"> <img src="/Styles/images/xymfImages/number.png" height="16"' +
-                            'width="16"/><span> X '+item.flag+'</span> <img class="eui-marginL20" src="/Styles/images/xymfImages/accessory.png" height="16"' +
-                            'width="16"/><span> X '+item.filesCount+'</span> </div>'
+                            'width="16"/><span class="eui-color-gray2"> X '+item.flag+'</span> <img class="eui-marginL20" src="/Styles/images/xymfImages/accessory.png" height="16"' +
+                            'width="16"/><span class="eui-color-gray2"> X '+item.filesCount+'</span> </div>'
                     }
                     $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
                         '<div class="eui-timeline-content eui-text"> ' +
@@ -712,34 +711,34 @@
                     ,content:"/web/customer/getCheckQuestionnaire"
                     // ,btn: ['确定', '关闭'] //只是为了演示
                     ,yes: function(){
-                        //得到设置返回的结果
-                        list=iframeWin.checkQuestionnaire();
-                        //加载层
-                        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                        //添加问卷使用
-                        $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
-                            layer.closeAll();
-                            if(result.code!=200){
-                               // 账号余额不足
-                                layer.open({
-                                    title:"充值",
-                                    type: 1,
-                                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
-                                });
-                               /* layer.msg("您的可用余额不足，请及时充值！" ,{
-                                    time: 6000
-                                });*/
-                            }else {
-                                layer.closeAll();
-                                console.info("  console.info(list);");
-                                console.info(list);
-                                for(var i in list){
-                                    var questionnaireId=list[i].id;
-                                    startAnswer(questionnaireId,userId);
-                                }
-                            }
-                        });
-
+                       /* //得到设置返回的结果
+                         list=iframeWin.checkQuestionnaire();
+                         //加载层
+                         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                         //添加问卷使用
+                         $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
+                         layer.closeAll();
+                         if(result.code!=200){
+                         // 账号余额不足
+                         layer.open({
+                         title:"充值",
+                         type: 1,
+                         content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
+                         });
+                         /!* layer.msg("您的可用余额不足，请及时充值！" ,{
+                         time: 6000
+                         });*!/
+                         }else {
+                         layer.closeAll();
+                         console.info("  console.info(list);");
+                         console.info(list);
+                         for(var i in list){
+                         var questionnaireId=list[i].id;
+                         startAnswer(questionnaireId,userId);
+                         }
+                         }
+                         });
+                         */
                     }
                     ,btn2: function(){
                         layer.closeAll();
@@ -755,6 +754,15 @@
     function selQuestionnaireForVisitor(questionnaireId,userId,acquisitionId){
        window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+questionnaireId+"&userId="+userId+"&acquisitionId="+acquisitionId);
     }
+    //获取客户的id
+    function  getVisitorId() {
+        var obj=new Object();
+        obj.userId=$("#searchFrom [name='visitorId']").val();
+        obj.visitorTimes=visitorTimes;
+
+        return obj;
+    }
+
 
    function startAnswer(questionnaireId,userId) {
        window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes;

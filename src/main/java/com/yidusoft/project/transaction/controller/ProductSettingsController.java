@@ -34,6 +34,7 @@ public class ProductSettingsController {
 
     /**
      * 获取套餐列表
+     *
      * @return
      */
     @GetMapping("/list")
@@ -45,6 +46,7 @@ public class ProductSettingsController {
 
     /**
      * 数据分页
+     *
      * @param page
      * @param size
      * @return
@@ -59,6 +61,7 @@ public class ProductSettingsController {
 
     /**
      * 设置套餐
+     *
      * @param productJson
      * @return
      */
@@ -76,6 +79,7 @@ public class ProductSettingsController {
 
     /**
      * 套餐批量删除
+     *
      * @param ids
      * @return
      */
@@ -103,14 +107,8 @@ public class ProductSettingsController {
     @PostMapping("/update")
     public Result update(String productJson) {
         ProductSettings product = JSON.parseObject(productJson, ProductSettings.class);
-        ProductSettings product1 = productSettingsService.findById(product.getId());
-        product1.setProductTotal(product.getProductTotal());
-        product1.setProductPrice(product.getProductPrice());
-        product1.setProductName(product.getProductName());
-        product1.setPromotionsId(product.getPromotionsId());
-        product1.setPromotionsName(product.getPromotionsName());
-        productSettingsService.update(product1);
-        return ResultGenerator.genSuccessResult(product1);
+        productSettingsService.update(product);
+        return ResultGenerator.genSuccessResult(product);
     }
 
     /**
@@ -125,7 +123,8 @@ public class ProductSettingsController {
     }
 
     /**
-     *  查看详情
+     * 查看详情
+     *
      * @param id
      * @return
      */
@@ -135,11 +134,41 @@ public class ProductSettingsController {
         return ResultGenerator.genSuccessResult(productSettings);
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String id) {
-        productSettingsService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
+    /**
+     * 获取没参与活动和活动已过期的套餐
+     *
+     * @return
+     */
+    @PostMapping("/listPage")
+    public Result listPage(int page, int size) {
+        PageHelper.startPage(page, size);
+        List<ProductSettings> list = productSettingsService.getProductByTime();
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 
 
+    /**
+     * 获取参与该活动并启用的套餐
+     * @return
+     */
+    @PostMapping("/updateListPage")
+    public Result updateListPage(int page, int size, String id) {
+        PageHelper.startPage(page, size);
+        List<ProductSettings> list = productSettingsService.getUpdateUnion(id);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 删除活动的套餐
+     */
+    @PostMapping("/updateProduct")
+    public Result updateProduct(String id){
+       ProductSettings productSettings = productSettingsService.findById(id);
+        productSettings.setPromotionsId("");
+        productSettings.setPromotionsName("");
+        productSettingsService.update(productSettings);
+        return ResultGenerator.genSuccessResult();
+    }
 }

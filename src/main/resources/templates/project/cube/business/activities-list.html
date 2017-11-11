@@ -58,7 +58,7 @@
                 <div class="defaultDiv">
                     <form id="searchFrom" onsubmit="return false;">
                         <input type="hidden" name="userId" th:value="${session.userSession.id}"/>
-                        <div class="eui-form eui-margin10">
+                        <div class="eui-form eui-margin20">
                             <div class="eui-form-item">
                                 <label class="eui-form-label">活动名称</label>
                                 <div class="eui-input-inline">
@@ -76,18 +76,15 @@
                             </div>
                         </div>
                     </form>
-                    <div class="eui-row eui-padding10 eui-borderB">
-                        <div class="eui-col-md6 eui-font18">
-                            &nbsp;
-                        </div>
-                        <div class="eui-col-md6 eui-textAlignR">
+                    <div class="eui-marginR20 eui-textAlignR">
+                        <div class="eui-btn-group">
                             <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"
                                onclick="activities()">发起活动</a>
                             <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal activityDelete">批量删除</a>
                         </div>
                     </div>
 
-                    <div class="xymfForm">
+                    <div class="xymfForm eui-marginLR20">
                         <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
                             <colgroup>
                                 <col width="60">
