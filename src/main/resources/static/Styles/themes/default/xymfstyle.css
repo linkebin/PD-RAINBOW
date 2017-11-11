@@ -692,7 +692,12 @@ body .eui-layer-title{
     cursor: pointer;
 }
 
-
+.welcomePage{
+    background: #f4f9fd;
+}
+.xymfShadow{
+    box-shadow: 0 5px 10px #84caff;
+}
 
 
 
