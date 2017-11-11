@@ -76,7 +76,7 @@
 
                          <label class="eui-form-label">模板类型</label>
                          <div class="eui-input-inline">
-                            <select name="answerModelType" id="answerModelType" e-verify="" >
+                            <select  e-filter="answerModelType" name="answerModelType" id="answerModelType" e-verify="" >
                                  <option value="">请选择</option>
                                  <option value="1">横版</option>
                                  <option value="2">竖版</option>
@@ -87,23 +87,21 @@
                        <div class="eui-input-inline" style="display: none">
                            <input type="radio" id="questionSequence1" name="questionSequence" value="0" title="正" checked>
                            <input type="radio" id="questionSequence2" name="questionSequence" value="1" title="反" >
-                       </div>
-
-
-                    </div>
-
-
-                    <div class="eui-form-item">
-                        <label class="eui-form-label">备注</label>
-                        <div class="eui-input-block">
-                            <textarea placeholder="备注"  name="remarks" id="remarks" class="eui-textarea"></textarea>
                         </div>
-                    </div>
-
-
-
+                        </div>
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">问卷说明</label>
+                            <div class="eui-input-block">
+                                <textarea placeholder="问卷说明"  name="remarks" id="remarks" class="eui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <div class="eui-form-item">
+                            <label class="eui-form-label">引导语</label>
+                            <div class="eui-input-block">
+                                <textarea placeholder="引导语"  name="guide" id="guide" class="eui-textarea"></textarea>
+                            </div>
+                        </div>
             </div>
-
         </div>
       </form>
 
@@ -152,8 +150,8 @@
 
 
 
-        <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
-            <div class="eui-col-md6">
+        <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20" name="transverse">
+            <div class="eui-col-md6" >
                 <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>可选的问题</span>
             </div>
             <div class="eui-col-md6">
@@ -162,11 +160,12 @@
                 </div>
             </div>
         </div>
-        <div class="eui-row"   >
+        <div class="eui-row"   name="transverse">
             <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
                 <form class="eui-form " id="searchFrom" action=""   >
                     <blockquote class="eui-elem-quote eui-quote-search">
                         <input type="hidden" id="id" name="id"/>
+                        <input type="hidden"  name="ascriptionType" value="1"/>
                         <div class="eui-input-inline eui-padding10">
                             <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
                         </div>
@@ -221,8 +220,8 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
-                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>自定义问题</p>
+                       <!-- <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
+                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>自定义问题</p>-->
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
                 </div>
@@ -236,7 +235,7 @@
                 </div>
             </div>
             <div class="eui-colla-item">
-                <h2 class="eui-colla-title">新增的问题</h2>
+                <h2 class="eui-colla-title" name="transverse">新增的问题</h2>
                 <div class="eui-colla-content" id="addQuestionCollapse">
                     <!--这里放新添加的问题-->
                 </div>
@@ -340,11 +339,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     ,laypage = eui.laypage;
 
 
-//常规用法
-    laydate.render({
-        elem: '#times'
-    });
-
     //问题类型
     form.on('select(questionType)', function(data){
         if(data.elem.value!='3' && data.elem.value!='0'){
@@ -372,26 +366,12 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         return false;
     });
 
-//验证
-    form.verify({
-        gaugeName: function(value, item){ //value：表单的值、item：表单的DOM对象
-            if("".test(value)){
-                return '量表名称不能为空！';
-            }
-        },
-        gaugeType: function(value, item){ //value：表单的值、item：表单的DOM对象
-            if("".test(value)){
-                return '类型不能为空！';
-            }
-        }
-        //我们既支持上述函数式的方式，也支持下述数组的形式
-        //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-       /* ,gaugeType: [
-            /^[\S]{6,12}$/
-            ,'密码必须6到12位，且不能出现空格'
-        ]*/
-    });
 
+    //前后若干天可选，这里以1天为例
+    laydate.render({
+        elem: '#times'
+        ,min: 1
+    });
 
     //日期范围
     laydate.render({
@@ -407,6 +387,18 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         checkGauge(data.value);
     });
 
+    //模板类型
+    form.on('select(answerModelType)', function(data){
+        if(data.elem.value=='1'){
+            $("[name='transverse']").hide();
+            var questionList= $("#addQuestionCollapse").children();
+            for(var i=0;i< questionList.length;i++ ){
+                deleteQuestion( questionList.eq(i).attr("question"));
+            }
+        }else if(data.elem.value=='2'){
+            $("[name='transverse']").show();
+        }
+    });
 });
 
 </script>
@@ -1018,6 +1010,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          $("#formQuestionnaire [name='questionnaireType']").val(questionnaires.questionnaireType);
          $("#formQuestionnaire [name='answerModelType']").val(questionnaires.answerModelType);
          $("#formQuestionnaire [name='remarks']").val(questionnaires.remarks);
+         $("#formQuestionnaire [name='guide']").val(questionnaires.guide);
+
          formRender();
         var texts="";
         for(var i=0;i<questionnaireQuestionFactorList.length;i++){
@@ -1027,6 +1021,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         $("#questionStr").val(texts);
 
         initializeQuestion(questionnaireQuestionFactorList,questionnaireTagList,sceneList,0);
+         if(questionnaires.answerModelType=='1'){
+             $("[name='transverse']").hide();
+             $("#addQuestionCollapse").children().remove();
+         }else if(questionnaires.answerModelType=='2'){
+             $("[name='transverse']").show();
+
+         }
     }
 
 

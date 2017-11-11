@@ -26,9 +26,9 @@ import java.io.IOException;
  * 7 @Around在切入点前后切入内容，并自己控制何时执行切入点自身的内容
  * 8 @AfterThrowing用来处理当切入内容部分抛出异常之后的处理逻辑
  */
-@Aspect
-@Component
-@Order(-5)
+//@Aspect
+//@Component
+//@Order(-5)
 public class LoginAspect {
      private Logger logger =LoggerFactory.getLogger(this.getClass());
       /**

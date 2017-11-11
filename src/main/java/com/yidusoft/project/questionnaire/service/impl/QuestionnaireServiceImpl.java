@@ -149,4 +149,10 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
     public List<Questionnaire> getQuestionnaireByState(){
         return questionnaireMapper.getQuestionnaireByState();
     }
+
+    //选择填写的问卷    场景 标签 条件查询
+    @Override
+    public List<Questionnaire> findQuestionnaireForTagAndScene(Map<String, Object> map) {
+        return questionnaireMapper.findQuestionnaireForTagAndScene(map);
+    }
 }

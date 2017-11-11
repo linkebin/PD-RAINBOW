@@ -63,6 +63,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
         map.put("questionCode", questionnaireQuestion.getQuestionCode());
         map.put("questionContent", questionnaireQuestion.getQuestionContent());
         map.put("questionType", questionnaireQuestion.getQuestionType());
+        map.put("ascriptionType", questionnaireQuestion.getAscriptionType());
         return questionnaireQuestionMapper.findQuestionBYid(map);
     }
 

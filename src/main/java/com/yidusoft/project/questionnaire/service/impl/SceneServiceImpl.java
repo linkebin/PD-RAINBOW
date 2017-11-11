@@ -42,4 +42,9 @@ public class SceneServiceImpl extends AbstractService<Scene> implements SceneSer
     public Scene findSameSceneName(String sceneName) {
         return sceneMapper.findSameSceneName(sceneName);
     }
+    //查询场景里面问卷的数量
+    @Override
+    public List<Scene> findQuestionnaireForSceneNum() {
+        return sceneMapper.findQuestionnaireForSceneNum();
+    }
 }

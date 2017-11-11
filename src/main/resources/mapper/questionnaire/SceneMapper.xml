@@ -13,6 +13,19 @@
         <result column="deleted" jdbcType="VARCHAR" property="deleted"/>
     </resultMap>
 
+    <resultMap id="BaseResultMap1" type="com.yidusoft.project.questionnaire.domain.Scene">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id_" jdbcType="VARCHAR" property="id"/>
+        <result column="scene_code" jdbcType="VARCHAR" property="sceneCode"/>
+        <result column="scene_name" jdbcType="VARCHAR" property="sceneName"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="deleted" jdbcType="VARCHAR" property="deleted"/>
+        <result column="nums" jdbcType="INTEGER" property="nums"/>
+    </resultMap>
+
 
     <select id="questionnaireSceneListByPage" resultMap="BaseResultMap"
             parameterType="com.yidusoft.project.questionnaire.domain.Scene">
@@ -63,5 +76,21 @@
     WHERE deleted=0
     AND SCENE_NAME = #{sceneName}
   </select>
+
+    <select id="findQuestionnaireForSceneNum"  resultMap="BaseResultMap1">
+           SELECT
+                s.id_,s.scene_name,sum(1)as  nums
+               FROM
+                 scene  s
+               LEFT JOIN
+				  questionnaire_scene  c
+               ON s.id_= c.scene_id
+               LEFT JOIN
+                 questionnaire  q
+                ON    q.id_ =c.questionnaire_id
+                WHERE q.deleted=0
+                AND   q.questionnaire_state=2
+                GROUP BY   s.scene_name,s.id_
+    </select>
 
 </mapper>

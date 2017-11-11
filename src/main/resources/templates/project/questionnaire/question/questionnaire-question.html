@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>问题管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+
+    <style>
+        #menuDig{
+            height: 300px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="eui-bd">
+
+    <div class="eui-mn1 eui-bg-white">
+        <div class="eui-mn1-type">
+            <form class="eui-form" id="searchFrom">
+                <input type="hidden" name="ascriptionType" value="1"/>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="questionContent" e-verify="title" value="" autocomplete="off" placeholder="问题内容" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <select name="questionType">
+                        <option value="" >答案类型</option>
+                        <option value="1" >单选</option>
+                        <option value="2" >多选</option>
+                        <option value="3" >评分单选</option>
+                        <option value="4" >收集单选</option>
+                        <option value="5" >收集多选</option>
+                    </select>
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 问题列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                    <a href="###"  onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加问题</a>
+                    <a href="###" onclick="deleteQuestion('')" class="eui-btn eui-btn-small">批量删除</a>
+                </div>
+            </div>
+            <table  e-filter="questionTable" class="eui-table eui-form" id="questionTable">
+                <colgroup>
+                    <col width="60">
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                        <th>问题编号</th>
+                        <th>问题内容</th>
+                        <th>选项</th>
+                        <th>对应分数</th>
+                        <th>答案</th>
+                        <th>答案顺序</th>
+                        <th>类型</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div id="pages"></div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!--添加的界面-->
+<form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane" id="questionForm" onsubmit="return false;" style="display: none">
+    <input  type="hidden" name="id"/>
+    <input  type="hidden" name="createTime"/>
+    <input  type="hidden" name="creator"/>
+    <input  type="hidden" name="deleted"/>
+    <input  type="hidden" name="questionCode"/>
+    <input type="hidden" name="ascriptionType" value="1"/>
+    <div class="eui-form-item" style="width: 700px">
+         <div class="eui-form-item eui-form-text" >
+            <label class="eui-form-label">问题内容 </label>
+            <div class="eui-input-block">
+                <textarea name="questionContent" placeholder="请输入内容" class="eui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="eui-form-item" style="width: 700px">
+        <div class="eui-form-item eui-form-text">
+            <label class="eui-form-label">选项</label>
+            <div class="eui-input-block">
+                <textarea name="optionAnswer"  placeholder="例:A:一般||B:好||C:非常好" class="eui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="eui-form-item"  style="width: 700px">
+        <div class="eui-form-item eui-form-text">
+            <label class="eui-form-label">选项对应分数</label>
+            <div class="eui-input-block">
+                <textarea name="optionScore" placeholder="例:10||20||30" class="eui-textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="eui-form-item"  style="width: 700px">
+
+            <label class="eui-form-label">答案顺序</label>
+            <div class="eui-input-inline" >
+                <input type="radio" id="answerSequence1" name="answerSequence" value="1" title="正" checked>
+                <input type="radio" id="answerSequence2" name="answerSequence" value="2" title="反" >
+            </div>
+
+            <label class="eui-form-label">答案类型</label>
+            <div class="eui-input-inline">
+                <select name="questionType">
+                    <option value="0" >请选择类型</option>
+                    <option value="1" >单选</option>
+                    <option value="2" >多选</option>
+                    <option value="3" >评分单选</option>
+                    <option value="4" >收集单选</option>
+                    <option value="5" >收集多选</option>
+                </select>
+            </div>
+            <label name="answer1" class="eui-form-label eui-form-pane">答案</label>
+            <div class="eui-input-inline  " name="answer1">
+                <input type="text" name="answer" required placeholder="例:A:一般||B:好" autocomplete="off" class="eui-input">
+            </div>
+
+
+    </div>
+</form>
+
+
+
+
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" charset="utf-8"></script>
+<script src="/date2format.js" charset="utf-8"></script>
+<script src="/Scripts/plugins/md5/md5.min.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+
+
+
+<script>
+// 表单
+eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
+    var form = eui.form
+    ,layer = eui.layer
+    ,layedit = eui.layedit
+    ,laydate = eui.laydate
+    ,laypage = eui.laypage;
+
+    form.on('select', function(data){
+        if(data.elem.value!='3' && data.elem.value!='0'){
+            $("[name='answer1']").show();
+        }else {
+            $("[name='answer1']").hide();
+
+            $("[name='answer']").val("");
+        }
+    });
+
+    //日期范围
+    laydate.render({
+        elem: '#test6'
+        ,range: true
+    });
+
+    //全选
+    form.on('checkbox(allChoose)', function(data){
+        var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+        child.each(function(index, item){
+            item.checked = data.elem.checked;
+        });
+        form.render('checkbox');
+    });
+});
+
+</script>
+
+<script type="text/javascript">
+
+    $(function () {
+        doSearch();
+        //答案隐藏
+        $("[name='answer1']").hide();
+    });
+    //删除问题
+    function deleteQuestion(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='questionId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的问题', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该问题吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                //加载层
+                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                $.ajax({
+                    url:"/questionnaire/question/deleteQuestion",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.closeAll();
+                        if(result.code==200){
+                            layer.msg('删除成功', {
+                                icon: 1,
+                                time: 2000
+                            });
+                        }else {
+                            layer.msg('删除失败', {
+                                icon: 1,
+                                time: 2000
+                            });
+                        }
+
+                        doSearch();
+                    }
+                });
+            });
+        }
+    }
+
+
+
+    //工具条按钮事件
+    function itemclick(item,id)
+    {
+        if (item=='add'){//添加
+            addQuestion();
+        }else if (item == 'delete'){//删除
+            deleteQuestion(id);
+        }else if (item=='edit'){//编辑
+            updateQuestion(id);
+        }
+    }
+
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+
+            var params = $("#searchFrom").serializeObject();
+            //加载层
+            var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+            $.ajax({
+                url:"/questionnaire/question/questionListByPage",
+                data: {
+                    params:JSON.stringify(params),
+                    page:1,
+                    size:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var questionList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(questionList);
+                                $("#questionTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                                //staticToDynamic();
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                //加载层
+                                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                                $.ajax({
+                                    url: "/questionnaire/question/questionListByPage",
+                                    data: {
+                                        params: JSON.stringify(params),
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        layer.closeAll();
+                                        var questionList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(questionList);
+                                        $("#questionTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                        //staticToDynamic();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(questionList) {
+        var tableHtml = '';
+
+        for (var item in questionList){
+            var question=questionList[item];
+            var type="";
+            if(question.questionType=='1'){
+                type="单选";
+            }else if(question.questionType=='2'){
+                type="多选";
+            }else if(question.questionType=='3'){
+                type="评分单选";
+            }
+            var sequence="";
+            if(question.answerSequence==1){
+                sequence="正";
+            }else {
+                sequence="反";
+            }
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionId" type="hidden" value="' + question.id + '"></td>' +
+                '<td>'+ question.questionCode +'</td>' +
+                '<td>'+ question.questionContent +'</td>' +
+                '<td>'+ question.optionAnswer +'</td>'   +
+                '<td>'+ question.optionScore +'</td>' +
+                '<td>'+ question.answer +'</td>' +
+                '<td>'+ sequence +'</td>' +
+                '<td>'+ type +'</td>' +
+                '<td>'+ question.creator +'</td>' +
+                '<td>'+ new Date(question.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+question.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+question.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+
+        return tableHtml;
+    }
+
+
+//重置
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+    }
+//添加修改form表单修改
+    function resetAddOrUpdateForm() {
+        $("#questionForm [name='id']").val("");
+        document.getElementById('questionForm').reset();
+    }
+
+ //问题添加
+    function addQuestion() {
+        eui.use('layer', function(){ //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer,form=eui.form;
+        layer.open({
+            type: 1
+            ,title: '添加问题'
+            ,content:$('#questionForm')
+            ,area: ['800px', '600px']
+            ,btnAlign: 'c'
+            ,shade: 0
+            ,moveType: 0//拖拽模式，0或者1
+            ,maxmin: true
+            ,btn: ['确定', '关闭'] //只是为了演示
+            ,yes: function(){
+                var questionContent=$("#questionForm [name='questionContent']").val().trim();
+                var optionAnswer= $("#questionForm [name='optionAnswer']").val().trim();
+                var optionScore= $("#questionForm [name='optionScore']").val().trim();
+                var questionType= $("#questionForm [name='questionType']").val().trim();
+                var answer= $("[name='answer']").val().trim();
+                var msgs="";
+                if(questionContent==""){
+                    layer.msg('请输入问题内容', {
+                        time: 2000
+                    });
+                    return;
+                }else if(optionAnswer==""){
+                    layer.msg('请输入选项', {
+                        time: 2000
+                    });
+                    return;
+                }else if(optionScore==""){
+                    layer.msg('请输入选项对应分数', {
+                        time: 2000
+                    });
+                    return;
+                }else if(questionType=="0"){
+                    layer.msg('请输入类型', {
+                        time: 2000
+                    });
+                    return;
+                }
+                else if(questionType!='3' && questionType!='0'){
+                    if(answer==""){
+                        layer.msg('请输入答案', {
+                            time: 2000
+                        });
+                        return;
+                    }
+                }
+
+                    var forms= $('#questionForm').serialize();
+                    //加载层
+                    var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                    $.post("/questionnaire/question/addORupdateQuestion",forms,function (result) {
+                        if(result.code==200){
+                            layer.closeAll();
+                            doSearch();
+                            layer.msg("添加成功！", {
+                                time: 2000
+                            });
+
+                            resetAddOrUpdateForm();
+                        }else{
+                            layer.msg("添加失败！", {
+                                time: 2000
+                            });
+                        }
+                    });
+                }
+            ,btn2: function(){
+                layer.closeAll();
+                resetAddOrUpdateForm();
+            }
+            ,success: function(layero){
+                //layer.setTop(layero); //重点2
+            }
+            ,cancel: function(){
+                //右上角关闭回调
+                resetAddOrUpdateForm();
+            }
+        });
+
+        });
+
+    }
+
+    //问题修改
+    function updateQuestion(id) {
+        //查询问题的信息
+        eui.use('layer', function(){ //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer,form=eui.form;
+        $.post("/questionnaire/question/findQuestionForUpdate",{"id":id},function (result) {
+           var question =result.data;
+            $("[name='id']").val(question.id);
+            $("[name='createTime']").val(format(question.createTime));
+            $("[name='creator']").val(question.creator);
+            $("[name='deleted']").val(question.deleted);
+            $("#questionForm [name='questionCode']").val(question.questionCode);
+            $("#questionForm [name='questionContent']").val(question.questionContent);
+            $("#questionForm [name='optionAnswer']").val(question.optionAnswer);
+            $("#questionForm [name='optionScore']").val(question.optionScore);
+            $("[name='answer']").val(question.answer);
+            $("#questionForm [name='questionType']").val(question.questionType);
+            if(question.questionType!='3'){
+                $("[name='answer1']").show();
+            }else {
+                $("[name='answer1']").hide();
+            }
+
+            if(question.answerSequence==1){
+                $("#answerSequence1").attr("checked","checked");
+                $("#answerSequence2").removeAttr("checked");
+            }else {
+                $("#answerSequence2").attr("checked","checked");
+                $("#answerSequence1").removeAttr("checked");
+            }
+            form.render();
+             //修改
+               layer.open({
+                    type: 1
+                    ,title: '修改问题'
+                    ,content:$('#questionForm')
+                    ,area: ['800px', '600px']
+                    ,shade: 0
+                    ,btnAlign: 'c'
+                    ,moveType: 0//拖拽模式，0或者1
+                    ,maxmin: true
+                    ,btn: ['确定', '关闭'] //只是为了演示
+                    ,yes: function(){
+                       var questionContent=$("#questionForm [name='questionContent']").val().trim();
+                       var optionAnswer= $("#questionForm [name='optionAnswer']").val().trim();
+                       var optionScore= $("#questionForm [name='optionScore']").val().trim();
+                       var questionType= $("#questionForm [name='questionType']").val().trim();
+                       var answer= $("[name='answer']").val().trim();
+                       if(questionContent==""){
+                           layer.msg('请输入问题内容', {
+                               time: 2000
+                           });
+                           return;
+                       }else if(optionAnswer==""){
+                           layer.msg('请输入选项', {
+                               time: 2000
+                           });
+                           return;
+                       }else if(optionScore==""){
+                           layer.msg('请输入选项对应分数', {
+                               time: 2000
+                           });
+                           return;
+                       }else if(questionType=="0"){
+                           layer.msg('请输入类型', {
+                               time: 2000
+                           });
+                           return;
+                       }
+                       else if(questionType!='3' && questionType!='0'){
+                           if(answer==""){
+                               layer.msg('请输入答案', {
+                                   time: 2000
+                               });
+                               return;
+                           }
+                       }
+
+                        var forms= $('#questionForm').serialize();
+                       //加载层
+                       var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                        $.post("/questionnaire/question/addORupdateQuestion",forms,function (result) {
+                            if(result.code==200){
+                                layer.closeAll();
+                                doSearch();
+                                layer.msg("修改成功！", {
+                                    time: 2000
+                                });
+                                resetAddOrUpdateForm();
+                            }else{
+                                layer.msg("修改失败！", {
+                                    time: 2000
+                                });
+                            }
+                        });
+
+                    }
+                    ,btn2: function(){
+                        layer.closeAll();
+                       resetAddOrUpdateForm();
+                    }
+                    ,success: function(layero){
+                    }
+                   ,cancel: function(){
+                       //右上角关闭回调
+                       resetAddOrUpdateForm();
+                   }
+               });
+         });
+        });
+
+    }
+
+    function add0(m){return m<10?'0'+m:m }
+    function format(timestamp)
+    {
+        //timestamp是整数，否则要parseInt转换,不会出现少个0的情况
+
+        var time = new Date(timestamp);
+        var year = time.getFullYear();
+        var month = time.getMonth()+1;
+        var date = time.getDate();
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        return year+'-'+add0(month)+'-'+add0(date)+' '+add0(hours)+':'+add0(minutes)+':'+add0(seconds);
+    }
+    //静态表格转动态
+ /*  function  staticToDynamic() {
+       var table = eui.table;
+       //转换静态表格
+       table.init('questionTable', {
+           height: 100 //设置高度
+           //支持所有基础参数
+       });
+   }
+*/
+</script>
+
+
+
+</body>
+</html>

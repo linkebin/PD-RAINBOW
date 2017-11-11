@@ -70,6 +70,11 @@ public class Questionnaire {
      */
     @Column(name = "update_time")
     private Date updateTime;
+    /**
+     * 引导语
+     */
+    @Column(name = "guide")
+    private String guide;
 
     /**
      * 是否删除 0 否 1 是
@@ -115,6 +120,14 @@ public class Questionnaire {
 
     public void setQuestionnaireTypeName(String questionnaireTypeName) {
         this.questionnaireTypeName = questionnaireTypeName;
+    }
+
+    public String getGuide() {
+        return guide;
+    }
+
+    public void setGuide(String guide) {
+        this.guide = guide;
     }
 
     /**

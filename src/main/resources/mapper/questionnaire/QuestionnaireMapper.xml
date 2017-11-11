@@ -20,6 +20,8 @@
     <result column="gauge_id" jdbcType="VARCHAR" property="gaugeId" />
     <result column="answer_model_type" jdbcType="INTEGER" property="answerModelType" />
     <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
+    <result column="guide" jdbcType="LONGVARCHAR" property="guide" />
+
   </resultMap>
 
     <resultMap id="BaseResultMap1" type="com.yidusoft.project.questionnaire.domain.Questionnaire">
@@ -40,6 +42,7 @@
         <result column="questionnaire_type" jdbcType="VARCHAR" property="questionnaireType" />
         <result column="gauge_id" jdbcType="VARCHAR" property="gaugeId" />
         <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
+        <result column="guide" jdbcType="LONGVARCHAR" property="guide" />
         <result column="answer_model_type" jdbcType="INTEGER" property="answerModelType" />
         <result column="gauge_name" jdbcType="VARCHAR" property="gaugeName" />
         <result column="questionnaire_type_name" jdbcType="VARCHAR" property="questionnaireTypeName" />
@@ -99,5 +102,39 @@
         FROM questionnaire
         WHERE deleted=0
         AND questionnaire_state=2
+    </select>
+
+    <select id="findQuestionnaireForTagAndScene" resultMap="BaseResultMap"  parameterType="java.util.HashMap">
+           SELECT
+             q.id_,q.questionnaire_name,q.remarks
+            FROM
+              questionnaire q
+           LEFT JOIN
+               questionnaire_scene c
+            ON q.id_=c.questionnaire_id
+           LEFT JOIN
+              questionnaire_tag_middle t
+            ON  q.id_=t.questionnaire_id
+          WHERE q.deleted=0
+            AND q.questionnaire_state=2
+            <if test="questionnaireName!= ''">
+                AND  q.questionnaire_name like '%${questionnaireName}%'
+            </if>
+            <if test="tagIds != null and tagIds != ''">
+                AND t.questionnaire_tag_id in
+                <foreach item="item" index="index" collection="tagIds" open="("
+                         separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="sceneIds != null and sceneIds != ''">
+                AND c.scene_id in
+                <foreach item="item" index="index" collection="sceneIds" open="("
+                         separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            GROUP BY  q.id_,q.questionnaire_name,q.remarks
     </select>
 </mapper>
