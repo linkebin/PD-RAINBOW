@@ -15,39 +15,32 @@
         <div class="eui-body">
             <!-- 内容主体区域 -->
             <div class="xymfContent">
-                <form class="eui-form" id="searchFrom">
+                <form class="eui-form eui-marginT20" id="searchFrom">
                     <input type="hidden" id="creator" th:value="${session.userSession.id}"/>
-                    <div class="eui-input-inline eui-padding10">
+                    <div class="eui-form-item">
                         <label class="eui-form-label">客户</label>
                         <div class="eui-input-inline">
                             <input type="text" name="visitorName" id="visitorName" onfocus="defaultData('visitorName');"
                                    placeholder="客户名称" class="eui-input" onchange="">
                         </div>
-                    </div>
-                    <div class="eui-input-inline eui-padding10">
                         <label class="eui-form-label">使用问卷</label>
                         <div class="eui-input-inline">
                             <input type="text" name="questionnaireName" id="questionnaireName" e-verify="title"
                                    onfocus="defaultData('questionnaireName')" placeholder="问卷名称" class="eui-input" onchange="">
                         </div>
-                    </div>
-                    <div class="eui-input-inline eui-width200">
                         <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()"  >查询</span>
                         <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
                     </div>
                     <div class="eui-form-item">
-                    </div>
-                    <div class="eui-input-inline eui-padding10">
                         <label class="eui-form-label">时间区间</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="createTime" id="createTime"  placeholder="请选择时间"
-                                   class="eui-input eui-width200" onchange="" readonly="readonly"/>
+                            <input type="text" name="createTime" id="createTime"  placeholder="请选择时间" class="eui-input" onchange="" readonly="readonly"/>
                         </div>
                     </div>
 
                 </form>
                 <div class="eui-marginT20">
-                    <div class="xymfForm">
+                    <div class="xymfForm eui-margin20">
                         <table class="eui-table eui-form" e-even e-skin="nob" id="myQuestionnaire">
                             <colgroup>
                                 <col>
