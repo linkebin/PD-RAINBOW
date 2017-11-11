@@ -7,48 +7,60 @@
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
     <script src="../../../../static/pack.ajax.js"></script>
 </head>
-<body>
+<body class="questionBody">
 <div class="questionHeader">
-    <div class="eui-row">
-        <h1 class="eui-col-md1 eui-marginL10"><a href="###"><img src="/Styles/images/xymfImages/logo.png" class="eui-marginT10" alt=""></a></h1>
-        <p class="eui-col-md2 eui-color-white eui-font20 eui-padding10 eui-display-Ib questionTitle">问卷详情</p>
+    <div class="eui-row eui-area xymf-width">
+        <div class="xymfLogo eui-col-md12">
+            <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">问卷详情</span>
+        </div>
     </div>
 </div>
+
 <div class="visitorContent">
-    <div class="eui-area" style="width: 800px">
+    <div class="eui-area xymf-width xymf-marginB60">
         <div class="visitorTitle">
-            <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 内容
+            <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-bg-white eui-form visitorContent" id="dataResult" >
-                <div class="eui-form-item eui-padding20">
-                    <div class="eui-font16 eui-input-inline">
-                        客户名称：<span id="visitorName">张三</span>
-                    </div>
-                    <div class="eui-font16 eui-input-inline">
-                        问卷名称：<span id="questionnaireName"></span>
-                    </div>
-                    <div class="eui-font16 eui-input-inline">
-                        填写日期：<span id="createTime"></span>
-                    </div>
-
+            <div class="eui-row eui-font16">
+                <div class="eui-col-md5">
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">客户名称：</span>
+                        <span id="visitorName">张三</span>
+                    </p>
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">总分：</span>
+                        <span id="totalScore"></span>
+                    </p>
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">填写日期：</span>
+                        <span id="createTime"></span>
+                    </p>
                 </div>
-                <div class="eui-form-item eui-padding20">
-                    <div class="eui-font16 eui-input-inline">
-                        总分：<span id="totalScore"></span>
-                    </div>
-                    <div class="eui-font16 eui-input-inline">
-                        耗时：<span id="timeConsuming"></span>
-                    </div>
+                <div class="eui-col-md7">
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">结果：</span>
+                        <span class="eui-color-blue">轻度焦虑</span>
+                    </p>
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">标准分：</span>
+                        <span class="eui-color-blue">55.5</span>
+                    </p>
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">耗时：</span>
+                        <span id="timeConsuming"></span>
+                    </p>
                 </div>
-
             </div>
-           <form>
+            <div id="dataResult" class="eui-marginTB20">
+            </div>
+           <form class="eui-paddingT20">
                <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
                <input type="hidden" th:value="${userId}"  id="userId"/>
                <input type="hidden" th:value="${acquisitionId}"  id="acquisitionId"/>
 
-             <div class="eui-bg-white eui-form visitorContent" id="divTable" >
+             <div class="eui-bg-white eui-form" id="divTable">
                  <div class="eui-form-item eui-padding20">
                     <!--<div class="eui-font18">
                         1.你经常头痛吗？
@@ -83,11 +95,12 @@
 <script src="/date2format.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 <script>
-eui.use(['form', 'layedit', 'laydate'], function(){
+eui.use(['form', 'layedit', 'laydate','element'], function(){
     var form = eui.form
     ,layer = eui.layer
     ,layedit = eui.layedit
-    ,laydate = eui.laydate;
+    ,laydate = eui.laydate
+    ,element = eui.element;
 
     //常规用法
     laydate.render({
@@ -162,7 +175,7 @@ function  getTable(list) {
     var dataResult=list.dataAcquisition.dataResult.split("#");
     var context="";
     for(var i in dataResult){
-        context+='<div class="eui-font18 eui-form-item" >';
+        context+='<div class="eui-font14 eui-form-item" >';
         context+=dataResult[i];
         context+='</div>';
     }
@@ -176,8 +189,8 @@ function  getTable(list) {
     var context="";
     console.info(answerList);
    for(var i in questionList){
-    context+='<div questionType="'+questionList[i].questionType+'" radioNmae="answer'+questionList[i].id+'" correctAnswer="'+questionList[i].answer+'" questionId="'+questionList[i].id+'"  class="eui-form-item eui-padding20" name="divQuestion">';
-    context+='<div class="eui-font18">';
+    context+='<div questionType="'+questionList[i].questionType+'" radioNmae="answer'+questionList[i].id+'" correctAnswer="'+questionList[i].answer+'" questionId="'+questionList[i].id+'"  class="eui-form-item eui-paddingB10" name="divQuestion">';
+    context+='<div class="eui-font14">';
     context+=(parseInt(i)+1)+"."+questionList[i].questionContent;
     context+='</div>';
     var optionAnswer=questionList[i].optionAnswer.split("||");

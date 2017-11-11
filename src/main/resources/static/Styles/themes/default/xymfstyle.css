@@ -180,7 +180,7 @@
 }
 
 .contentForm .eui-table thead tr{
-    background: transparent;
+    /*background: transparent;*/
     border-bottom: 1px solid #eee;
 }
 .contentForm .eui-table[e-even] tr:nth-child(even){
@@ -524,12 +524,12 @@
 .submitBtn img{margin-right: 10px;}
 .conetentHint{margin-left: 98px;padding-top:10px;}
 /* 常用投影 */
-.eui-box-shadow{box-shadow:  0 0 12px #c4e1f7;}
+.eui-box-shadow{box-shadow: 2px 2px 10px #b4ccde;}
 
 
 /* 来访者咨询管理 */
-.visitorContent{ margin-top: 80px;}
-.visitorContent .eui-area{box-shadow: 0 0 12px #c4e1f7;border-radius: 5px;}
+.questionBody .visitorContent{ margin-top: 80px;}
+.visitorContent .eui-area{box-shadow: 2px 2px 10px #b4ccde;border-radius: 5px;}
 .visitorTitle{font-size: 18px;padding:16px;background: #f4f9fd;border-bottom: 1px solid #1e9eff;color: #1e9eff; }
 .visitorContent .visitorIn{background: #ffffff;}
 .visitorPhone1{padding-left: 34px;background: url(../../images/xymfImages/phone.png) no-repeat left center;background-size: 26px;}
@@ -538,7 +538,7 @@
 /* 来访者记录 */
 .consuletTop{height: 58px; border-bottom: 1px solid #eee; box-shadow: 0 10px 10px #ccc;}
 
-.consultSheet{width: auto; padding: 5px 14px;background: #f2f2f2; margin-left: 20px;}
+.consultSheet{width: auto; padding: 5px 14px;background: #f2f2f2; margin-bottom: 10px;}
 .consultSheet .eui-icon{padding: 6px;background: #e5e5e5;margin-right: 2px;}
 
 
@@ -589,7 +589,7 @@ body .eui-layer-title{
     position: fixed;
     left: 50%;
     margin-left: -600px;
-    box-shadow: 0 0 12px #c4e1f7;
+    box-shadow:2px 2px 10px #b4ccde;
 }
 .visitorLeft .record{
     position: absolute;
@@ -647,4 +647,56 @@ body .eui-layer-title{
     bottom:20px;
     margin-left: -83px;
 }
+.xymf-width{ width: 800px;}
+
+.xymf-marginB60{
+    margin-bottom: 60px;
+}
+.xymf-marginT80{
+    margin-bottom: 60px;
+}
+.updateProcess{
+    font-size: 14px;
+    color: #999;
+    padding-left: 54px;
+}
+.updateProcess .updateNum{
+    border: 1px solid #999;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    line-height: 18px;
+    text-align: center;
+    margin:0 10px;
+}
+.updateProcess .updateLine{
+    display: inline-block;
+    width: 60px;
+    height: 2px;
+    background: #ccc;
+    margin: 8px 0 0 8px;
+}
+.updateProcess .updateFont{
+    width: 58px;
+}
+.updateProcess-this{
+    color: #1e9eff;
+}
+.updateProcess-this .updateNum{
+    border: 1px solid #1e9eff;
+}
+.updateProcess-this .updateLine{
+    background: #1e9eff;
+}
+.updateProcess>div{
+    cursor: pointer;
+}
+
+
+
+
+
+
+
 
