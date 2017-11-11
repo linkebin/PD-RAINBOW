@@ -90,7 +90,70 @@
     </div>
 </div>
 
+<!-- 左滑添加渠道商开始 -->
+<div class="taskFiltrate">
+</div>
+<div class="filtrateIn">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe654;</i> <span class="title-add-edit">添加渠道商</span>
+        </div>
+        <div class="eui-col-md2 eui-textAlignR">
+            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="channelAdd" onsubmit="return false;">
+        <input type="hidden" id="flag" value="add"/>
+        <input type="hidden" name="id" value="">
+        <input type="hidden" name="channelCode" value="">
+        <input type="hidden" name="creator" value="">
+        <input type="hidden" name="deleted" value="">
+        <div class="eui-form-item">
+            <label class="eui-form-label">渠道商名称</label>
+            <div class="eui-input-block">
+                <input type="text" name="channelName" e-verify="title"  autocomplete="off" placeholder="请输入渠道名称" class="eui-input" />
 
+            </div>
+        </div>
+        <div class="eui-form-item eui-grade">
+            <label class="eui-form-label">联系人姓名</label>
+            <div class="eui-input-block">
+                <input type="text" name="linkman" e-verify="title" autocomplete="off" placeholder="请输入联系人" class="eui-input" >
+            </div>
+        </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">联系人手机</label>
+            <div class="eui-input-block">
+                <input type="text" name="linkmanTell" e-verify="title" autocomplete="off" placeholder="请输入联系人手机" class="eui-input">
+            </div>
+        </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">联系人住址</label>
+            <div class="eui-input-block">
+                <input type="text" name="linkmanAddr" e-verify="title" autocomplete="off" placeholder="选填" class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">渠道负责人</label>
+            <div class="eui-input-block">
+                <input type="text" name="channelManager" e-verify="title" autocomplete="off" placeholder="请输入渠道负责人" class="eui-input" >
+            </div>
+        </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">渠道入驻时间</label>
+            <div class="eui-input-block">
+                <input type="text" name="createTime" class="eui-input" id="joinTime" placeholder="加入时间" readonly="readonly">
+            </div>
+        </div>
+
+        <div class="taskConfirm"><button type="submit"  class="eui-btn">确定</button>
+        </div>
+    </form>
+</div>
+<!-- 左滑添加渠道商结束 -->
 
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
