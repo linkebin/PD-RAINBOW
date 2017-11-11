@@ -44,6 +44,20 @@ public class QuestionnaireTag {
     private String tagExplain;
 
     /**
+     * 问卷的数量
+     */
+    @Transient
+    private Integer nums;
+
+    public Integer getNums() {
+        return nums;
+    }
+
+    public void setNums(Integer nums) {
+        this.nums = nums;
+    }
+
+    /**
      * @return ID_
      */
     public String getId() {

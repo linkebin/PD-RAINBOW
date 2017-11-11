@@ -154,4 +154,16 @@ public class SceneController {
         return ResultGenerator.genSuccessResult(scene);
     }
 
+    /**
+     * 查询场景里面问卷的数量
+     * @return
+     */
+    @PostMapping("/findQuestionnaireForSceneNum")
+    @ResponseBody
+    public Result findQuestionnaireForSceneNum( ){
+        List<Scene> list = sceneService.findQuestionnaireForSceneNum();
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+
 }

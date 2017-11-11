@@ -712,34 +712,34 @@
                     ,content:"/web/customer/getCheckQuestionnaire"
                     // ,btn: ['确定', '关闭'] //只是为了演示
                     ,yes: function(){
-                        //得到设置返回的结果
-                        list=iframeWin.checkQuestionnaire();
-                        //加载层
-                        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                        //添加问卷使用
-                        $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
-                            layer.closeAll();
-                            if(result.code!=200){
-                               // 账号余额不足
-                                layer.open({
-                                    title:"充值",
-                                    type: 1,
-                                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
-                                });
-                               /* layer.msg("您的可用余额不足，请及时充值！" ,{
-                                    time: 6000
-                                });*/
-                            }else {
-                                layer.closeAll();
-                                console.info("  console.info(list);");
-                                console.info(list);
-                                for(var i in list){
-                                    var questionnaireId=list[i].id;
-                                    startAnswer(questionnaireId,userId);
-                                }
-                            }
-                        });
-
+                       /* //得到设置返回的结果
+                         list=iframeWin.checkQuestionnaire();
+                         //加载层
+                         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+                         //添加问卷使用
+                         $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
+                         layer.closeAll();
+                         if(result.code!=200){
+                         // 账号余额不足
+                         layer.open({
+                         title:"充值",
+                         type: 1,
+                         content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
+                         });
+                         /!* layer.msg("您的可用余额不足，请及时充值！" ,{
+                         time: 6000
+                         });*!/
+                         }else {
+                         layer.closeAll();
+                         console.info("  console.info(list);");
+                         console.info(list);
+                         for(var i in list){
+                         var questionnaireId=list[i].id;
+                         startAnswer(questionnaireId,userId);
+                         }
+                         }
+                         });
+                         */
                     }
                     ,btn2: function(){
                         layer.closeAll();
@@ -755,6 +755,15 @@
     function selQuestionnaireForVisitor(questionnaireId,userId,acquisitionId){
        window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+questionnaireId+"&userId="+userId+"&acquisitionId="+acquisitionId);
     }
+    //获取客户的id
+    function  getVisitorId() {
+        var obj=new Object();
+        obj.userId=$("#searchFrom [name='visitorId']").val();
+        obj.visitorTimes=visitorTimes;
+
+        return obj;
+    }
+
 
    function startAnswer(questionnaireId,userId) {
        window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes;

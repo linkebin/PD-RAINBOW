@@ -14,6 +14,21 @@
         <result column="tag_explain" jdbcType="LONGVARCHAR" property="tagExplain"/>
     </resultMap>
 
+    <resultMap id="BaseResultMap1" type="com.yidusoft.project.questionnaire.domain.QuestionnaireTag">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID_" jdbcType="VARCHAR" property="id"/>
+        <result column="tag_code" jdbcType="VARCHAR" property="tagCode"/>
+        <result column="tag_name" jdbcType="VARCHAR" property="tagName"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="deleted" jdbcType="INTEGER" property="deleted"/>
+        <result column="tag_explain" jdbcType="LONGVARCHAR" property="tagExplain"/>
+        <result column="nums" jdbcType="INTEGER" property="nums"/>
+    </resultMap>
+
+
 
     <select id="questionnaireTagListByPage" resultMap="BaseResultMap"
             parameterType="com.yidusoft.project.questionnaire.domain.QuestionnaireTag">
@@ -65,5 +80,17 @@
 
     </select>
 
+    <select id="findQuestionnaireForTagNum"  resultMap="BaseResultMap1">
+          SELECT
+              t.id_,t.tag_name,sum(1)as  nums
+            FROM    questionnaire_tag t
+            LEFT JOIN questionnaire_tag_middle m
+              ON  t.id_=m.questionnaire_tag_id
+            LEFT JOIN   questionnaire   q
+              ON    q.id_ =m.questionnaire_id
+            WHERE q.deleted=0
+             AND   q.questionnaire_state=2
+             GROUP BY   t.tag_name,t.id_
+     </select>
 
 </mapper>

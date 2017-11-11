@@ -14,12 +14,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WebQuestionnaireQuestionController {
 
     /**
-     * 跳转到问题的页面
+     * 跳转到问卷问题的页面
      * @return
      */
-    @RequestMapping("/getQuestion")
+    @RequestMapping("/getQuestionnaireQuestion")
+    public String getQuestionnaireQuestion() {
+        return "project/questionnaire/question/questionnaire-question";
+    }
+
+    /**
+     * 跳转到问卷问题的页面
+     * @returng
+     */
+    @RequestMapping("/getGaugeQuestion")
     public String getQuestion() {
-        return "project/questionnaire/question/question";
+        return "project/questionnaire/question/gauge-question";
     }
 
 }

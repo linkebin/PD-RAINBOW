@@ -163,5 +163,11 @@ public class QuestionnaireTagController {
         QuestionnaireTag questionnaireTag = questionnaireTagService.findSameTag(tagName);
         return ResultGenerator.genSuccessResult(questionnaireTag);
     }
-
+    //查询这个标签有多少个问卷使用 findQuestionnaireForTagNum
+    @PostMapping("/findQuestionnaireForTagNum")
+    @ResponseBody
+    public Result findQuestionnaireForTagNum( ){
+        List<QuestionnaireTag> list = questionnaireTagService.findQuestionnaireForTagNum();
+        return ResultGenerator.genSuccessResult(list);
+    }
 }
