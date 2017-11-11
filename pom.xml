@@ -195,8 +195,12 @@
 			<artifactId>sdk-alipay-core</artifactId>
 			<version>1.0.3</version>
 		</dependency>
-
-
+		<!--审批流引擎-->
+		<dependency>
+			<groupId>org.activiti</groupId>
+			<artifactId>activiti-spring-boot-starter-basic</artifactId>
+			<version>5.22.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
