@@ -270,13 +270,17 @@
         var tableHtml = '';
         for (var item in userList){
             var secUser = userList[item];
-
             var id = "'" + secUser.ID_ + "'";
             var sex = '男';
             if (secUser.SEX=='0'){
                 sex='女';
             }
+            var str = '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑" onclick="updateAccount('+id+')" ><i class="eui-icon"></i></button>' +
+            ' <button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="deleteUser('+id+')"><i class="eui-icon"></i></button>';
 
+            if (secUser.ACCOUNT_TYPE==2){
+                str='<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑" onclick="updateAccount('+id+')" ><i class="eui-icon"></i></button>';
+            }
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
                 '<td><a>'+ secUser.USER_NAME +'</a></td>' +
@@ -284,10 +288,8 @@
                 '<td>'+secUser.MOBILE+'</td>' +
                 '<td>'+ secUser.EMAIL +'</td>' +
                 '<td>' +
-                '<div class="eui-btn-group"> ' +
-                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑" onclick="updateAccount('+id+')" ><i class="eui-icon"></i></button>' +
-                    ' <button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="deleteUser('+id+')"><i class="eui-icon"></i></button>' +
-                ' </div>' +
+                '<div class="eui-btn-group"> ' +str+
+                    ' </div>' +
                 '</td>'+
                 '</tr>';
         }

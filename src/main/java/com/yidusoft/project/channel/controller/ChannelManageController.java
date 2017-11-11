@@ -44,10 +44,12 @@ public class ChannelManageController {
         secUser.setAccount(channelManage.getLinkmanTell());
         secUser.setUserName(channelManage.getLinkman());
         secUser.setSex(0);
+        secUser.setStatus(0);
         secUser.setHeadImg("/upload/headImg/default-pic.png");
         secUser.setUserPass(PasswordHelper.strToMd5(secUser.getAccount()));
         secUser.setMobile(secUser.getAccount());
         secUser.setChannelId(channelManage.getId());
+        secUser.setEmail("无");
 
         String inviterCode = CodeHelper.randomCode(8);
         SecUser isUser = null;

@@ -330,26 +330,22 @@
 //        alert(visiterHeight);
         $(".visitorLeft .eui-timeline").css("max-height",visiterHeight+"px");
     });
-
+var processLogA=null;
+    var remarksA=null;
+    var layedit;
     eui.use(['form', 'layedit', 'laydate'], function(){
         var form = eui.form
             ,layer = eui.layer
-            ,layedit = eui.layedit
             ,laydate = eui.laydate;
+        layedit = eui.layedit
 
-//        laydate.render({
-//            elem: '#startTime'
-//        });
-//        laydate.render({
-//            elem: '#endTime'
-//        });
 
         laydate.render({
             elem: '#visitorTime'
             ,type: 'datetime'
         });
 
-        layedit.build('processLogA',{
+        processLogA=  layedit.build('processLogA',{
             tool: [
                 'strong' //加粗
                 ,'italic' //斜体
@@ -363,7 +359,7 @@
                 ,'unlink' //清除链接
             ]
         });
-        layedit.build('remarksA', {
+        remarksA=  layedit.build('remarksA', {
             tool: [
                 'strong' //加粗
                 ,'italic' //斜体
@@ -480,6 +476,8 @@
         },
         submitHandler: function() {
             var obj = $("#DivAddForm").serializeObject();
+            obj.processLog=layedit.getContent(processLogA);
+            obj.remarks=layedit.getContent(remarksA);
             $.post('/visiting/record/add',{json:JSON.stringify(obj)},function (result) {
                 if (result.code==200){
                     location.reload();
