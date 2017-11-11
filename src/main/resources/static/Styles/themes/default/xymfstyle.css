@@ -656,9 +656,8 @@ body .eui-layer-title{
     margin-bottom: 60px;
 }
 .updateProcess{
-    font-size: 14px;
+    font-size: 16px;
     color: #999;
-    padding-left: 54px;
 }
 .updateProcess .updateNum{
     border: 1px solid #999;
@@ -678,7 +677,7 @@ body .eui-layer-title{
     margin: 8px 0 0 8px;
 }
 .updateProcess .updateFont{
-    width: 58px;
+    width: 70px;
 }
 .updateProcess-this{
     color: #1e9eff;
