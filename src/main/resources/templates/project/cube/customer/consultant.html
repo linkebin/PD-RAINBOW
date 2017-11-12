@@ -549,7 +549,7 @@ var processLogA=null;
                 var guide = '<img src="/Styles/images/xymfImages/arror0.png" height="12" width="9"/>';
                 $("#shaftTime li").find('i').eq(0).html('&#xe617;');
                 $("#shaftTime li").eq(0).find('.eui-timeline-title .guide').html(guide);
-
+                $("#shaftTime li").eq(0).find('.eui-timeline-title').css('color','#35a9ff');
                 $("#shaftTime li").click(function () {
 
                     $('#resetDiv').hide();
@@ -557,6 +557,8 @@ var processLogA=null;
                     loadVisitorRecordDetail(id);
                     $("#shaftTime li").find('i').html('&#xe63f;');
                     $(this).find('i').html('&#xe617;');
+                    $("#shaftTime li").find('.eui-timeline-title').css('color','');
+                    $(this).find('.eui-timeline-title').css('color','#35a9ff');
                     $(".guide").html('')
                     $(this).find('.eui-timeline-title .guide').html(guide);
                 });
