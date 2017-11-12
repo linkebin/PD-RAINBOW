@@ -49,8 +49,8 @@
              </div>
            </form>
         </div>
-        <div class="eui-textAlignC eui-bg-white eui-padding20" id="submitBnt">
-            <span onclick="submitQuestionnaire()" class="eui-btn eui-btn-normal eui-btn-big"><img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷</span>
+        <div class="eui-textAlignC eui-bg-white eui-padding20" id="submitBnt" disabled="true">
+            <button id="submitQuestionnaire"  onclick="submitQuestionnaire()" class="eui-btn eui-btn-normal eui-btn-big"><img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷</button>
         </div>
     </div>
 </div>
@@ -304,6 +304,7 @@ function  getTable(questionList) {
                var questionnaireId=$("#questionnaireId").val();
                var userId=$("#userId").val();
                var timeConsuming=$("#timer").text();
+              $("#submitQuestionnaire").attr("disabled","disabled");
               //加载层
                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
                $.post("/cube/questionnaire/submitQuestionnaire",
@@ -317,6 +318,7 @@ function  getTable(questionList) {
                    if(result.code=200){
                        window.location.href="/web/cube/getSuccess";
                    }else {
+                       $("#submitQuestionnaire").attr("disabled","false");
                       layer.msg('填写失败！', {
                            icon: 1,
                            time: 5000

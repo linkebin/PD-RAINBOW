@@ -23,6 +23,19 @@ public class WebCubeQuestionnaireController {
     @Resource
     private QuestionnaireAnswerService questionnaireAnswerService;
 
+
+    @RequestMapping(value ={"/getQuestionnaireGuide"})
+    public String getQuestionnaireGuide(String questionnaireId,String userId,String visitorTimes,String activityId,String userName,Model model){
+        model.addAttribute("questionnaireId",questionnaireId);
+        model.addAttribute("activityId",activityId);
+        model.addAttribute("userId",userId);
+        model.addAttribute("visitorTimes",visitorTimes);
+        model.addAttribute("userName",userName);
+        Questionnaire questionnaire= questionnaireService.findById(questionnaireId);
+        model.addAttribute("guide",questionnaire.getGuide());
+        return "project/cube/questionnaire/questionnaire-guide";
+    }
+
     /**
      * 跳转到问卷填写
      * @return

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>问卷填写</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .eui-col-md7 .degree li {
+            margin-right: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<!--<div class="questionHeader">
+
+</div>
+<div class="questionContent">
+   <div class="eui-area">
+
+
+        <div class="subject" align="center" style="display:table-cell; vertical-align:middle;">
+           &lt;!&ndash; <p class="eui-textAlignC eui-paddingB20"><img src="/Styles/images/xymfImages/success.png" alt=""/></p>
+            <p class="eui-textAlignC eui-color-blue eui-font36 eui-marginT20">恭喜您答题成功！</p>&ndash;&gt;
+        </div>
+    </div>
+
+    <div class="questionSubmit">
+        <div class="eui-area eui-textAlignR">
+            <img src="/Styles/images/xymfImages/QRcode.png" width="50" alt="">
+        </div>
+
+    </div>
+
+</div>-->
+
+
+<!--答题欢迎内容-->
+<div class="eui-marginTB20">
+    <p class="eui-color-blue eui-textAlignC eui-font36 eui-marginT20">欢迎来到答题页面！</p>
+    <div class="eui-margin20 eui-padding20 welcomePage eui-lineHeight30">
+        <p class="eui-textIndent">请认真阅读以下内容！</p>
+        <p class="eui-textIndent" th:text="${guide}">请认真阅读以下内容！请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容</p>
+
+    </div>
+    <div class="eui-textAlignC eui-marginT20"><span class="xymfShadow eui-btn eui-btn-normal eui-btn-big eui-btn-radius" onclick="startAnswer()">开始答题</span></div>
+</div>
+
+
+<script src="/Scripts/module/eui.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!-- 评分 -->
+<script src="/Scripts/plugins/grade/js/jquery.barrating.js"></script>
+<script src="/Scripts/plugins/grade/js/examples.js"></script>
+<script th:inline="javascript">
+    var pageIndex = 0;
+    var pageSize = $('.subject>ul>li').length;
+
+    //注意进度条依赖 element 模块，否则无法进行正常渲染和功能性操作
+    var element = null;
+    eui.use('element', function () {
+        element = eui.element;
+        element.init(); //这样element对动态生成的元素才会重新有效
+
+    });
+
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
+        var form = eui.form
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
+    });
+    var questionnaireId=[[${questionnaireId}]];
+    var userId=[[${userId}]];
+    var visitorTimes=[[${visitorTimes}]];
+    function  startAnswer() {
+      window.location.href="/web/cube/getQuestionnaireFillIn?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes;
+
+}
+
+
+</script>
+
+
+
+<script type="text/javascript">
+
+    $('#questionUl li').eq(0).addClass('current');
+    $('#sliderOl li').eq(0).addClass('current');
+</script>
+
+</body>
+</html>
