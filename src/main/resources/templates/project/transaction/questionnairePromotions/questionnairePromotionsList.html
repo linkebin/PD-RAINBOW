@@ -159,37 +159,50 @@
         for (var item in userList) {
             var promotion = userList[item];
             /*var id = "'" + promotion.id + "'";*/
-            var discount = (promotion.promotionsDiscount * 10) + "折";
+            var discount = (promotion.promotionsDiscount * 10).toFixed(1) + "折";
+            var state="设计中";
+            if(promotion.promotionsState==2){
+                state="活动中";
+            } else if (promotion.promotionsState==3){
+                state="提前终止";
+            }
+            var start = new Date(promotion.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
+            var end = new Date(promotion.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
+            var now = new Date().Format('yyyy-MM-dd hh:mm:ss');
+            if(promotion.promotionsState==2 && now < end){
+                state="正常结束";
+            }
+
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="promotionsId" type="hidden" value="' + promotion.id + '"></td>' +
                     '<td>' + promotion.promotionsName + '</td>'
-
             promotion.promotionsType == 1 ? tableHtml += '<td>限时折扣</td>' : tableHtml += '<td>限时买送</td>';
-
             tableHtml +=
                     '<td>' + new Date(promotion.promotionsStart).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' + new Date(promotion.promotionsEnd).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' + discount + '</td>' +
-                    '<td>' + promotion.promotionsBuySend + '</td>';
-
-            promotion.promotionsState == 0 ? tableHtml += '<td>是</td>' : tableHtml += '<td>否</td>'
-
-            tableHtml +=
+                    '<td>' + promotion.promotionsBuySend + '</td>' +
+                    '<td>' + state + '</td>' +
                     '<td>' + promotion.creator + '</td>' +
                     '<td>' + new Date(promotion.createTime).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' +
                     '<div class="eui-btn-group"> ' +
-                    '' + Buts(promotion.id) + '' +
+                    '' + Buts(promotion.id,promotion.promotionsState,now,end) + '' +
                     '</div>' +
                     '</td>' +
                     '</tr>';
         }
         return tableHtml;
     }
-    function Buts(data) {
-        var id = "'" + data + "'";
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit " title="编辑促销" onclick="promotionEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除促销" onclick="deletePromotion(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+    function Buts(id,sate,now,end) {
+        var id = "'" + id + "'";
+        if(sate==1){
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit " title="编辑促销" onclick="promotionEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除促销" onclick="deletePromotion(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ' +
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="启用促销" onclick="enableActivity('+"''," + id + ')"><i class="eui-icon">&#xe618;</i></button> ';
+        }else if(sate==2 && now < end){
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="enableActivity('+"'termination'," + id + ')"><i class="eui-icon">&#xe6d8;</i></button> ';
+        }
     }
 
     // 新建促销
@@ -232,10 +245,49 @@
                             icon: 1,
                             time: 2000 //1秒关闭（如果不配置，默认是3秒）
                         });
-                        doSearch();
+                        setTimeout(function () {
+                            doSearch();
+                        },2000)
                     } else {
                         layer.close(indexs);
                         layer.msg('删除失败！', {
+                            icon: 2,
+                            time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                        });
+                    }
+                })
+            })
+        })
+    }
+
+    //启用促销
+    function enableActivity(data,id) {
+        var message = '您确定启用促销吗？';
+        var state = 2;
+        if(data=='termination'){
+            message = '您确定提前终止吗？';
+            state = 3;
+        }
+        eui.use('layer', function () { //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer; //独立版的layer无需执行
+            layer.confirm(message , {
+                btn: ['确认', '取消']
+            }, function () {
+                var indexs = layer.load(2); //加载
+                $.post("/questionnaire/promotions/updateState", {id: id,state: state}, function (result) {
+                    if (result.message == "SUCCESS") {
+                        layer.closeAll();
+                        layer.msg('操作成功！', {
+                            icon: 1,
+                            time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                        });
+                        setTimeout(function () {
+                            doSearch();
+                        },2000)
+                    } else {
+                        layer.close(indexs);
+                        layer.msg('删除失败！', {
+                            icon: 2,
                             time: 2000 //1秒关闭（如果不配置，默认是3秒）
                         });
                     }

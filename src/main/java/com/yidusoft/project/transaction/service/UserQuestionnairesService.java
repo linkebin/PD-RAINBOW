@@ -13,4 +13,6 @@ public interface UserQuestionnairesService extends Service<UserQuestionnaires> {
       boolean   flgBalance();
     //消费扣除问卷
       void   deduction();
+    //消费扣除活动发起人的使用卷
+    void deleteDuction(String activityId);
 }

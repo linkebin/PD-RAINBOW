@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
+    <style>
+        #activityNewForm input + label, select + label, textarea + label {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="eui-bg-white eui-row eui-paddingT10">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAdd">
+            <i class='eui-icon eui-font24'>&#xe654;</i> 编辑调研活动
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="activityNewForm" th:object="${activity}">
+        <input type="hidden" id="uestionnaireId" th:value="*{uestionnaireId}"/>
+        <input type="hidden" id="activityId" name="id" th:value="*{id}"/>
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动名称</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="activityName" placeholder="请输入活动名称" th:value="*{activityName}">
+            </div>
+            <label class="eui-form-label">联系人</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="contacts" placeholder="请输入联系人" e-verify="title"
+                       autocomplete="off" th:value="*{contacts}">
+            </div>
+            <label class="eui-form-label">参与方</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="participant" placeholder="请输入参与方" e-verify="title"
+                       autocomplete="off" th:value="*{participant}">
+            </div>
+        </div>
+        <div data-toggle="distpicker">
+            <div class="eui-form-item">
+                <label class="eui-form-label">活动地点</label>
+                <div id="ld" data-toggle="distpicker">
+                    <div class="eui-input-inline">
+                        <select id="province" class="eui-input" e-ignore name="province">
+
+                        </select>
+                    </div>
+                    <div class="eui-input-inline">
+                        <select id="city" class="eui-input" e-ignore name="city">
+
+                        </select>
+                    </div>
+                    <div class="eui-input-inline">
+                        <select id="district" class="eui-input" e-ignore name="district">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="eui-input-inline">
+                    <input type="text" name="activityAddr" th:value="*{activityAddr}" placeholder="具体地址" class="eui-input"
+                           style="width: 210px;">
+                </div>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">问卷名</label>
+            <div class="eui-input-inline">
+                <select name="uestionnaireId" e-ignore style="width: 190px;height: 38px">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+            <label class="eui-form-label">联系电话</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="phone" placeholder="请输入联系电话" e-verify="title"
+                       autocomplete="off" th:value="*{phone}">
+            </div>
+            <label class="eui-form-label">活动人数</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" name="activityTotal" placeholder="请输入活动人数" e-verify="title"
+                       autocomplete="off" th:value="*{activityTotal}">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">开始时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" th:value="*{activityStart}" id="activityStart" name="activityStart" placeholder="请选择开始时间">
+            </div>
+            <label class="eui-form-label">结束时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" th:value="*{activityEnd}" id="activityEnd" name="activityEnd" placeholder="请选择结束时间">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动目的</label>
+            <div class="eui-input-block">
+                <textarea class="eui-textarea" style="height: 100px;width: 810px" name="activityAim" th:text="*{activityAim}" placeholder="请输入活动目的">
+                </textarea>
+            </div>
+        </div>
+        <div class="eui-textAlignC eui-bg-white eui-padding20">
+                <button onclick="formSub()" class="eui-btn eui-btn-big confirm">
+                    <img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 修改信息</button>
+        </div>
+        <input type="submit" id="sub" style="display: none;" value="提交"/>
+    </form>
+</div>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/distpicker.data.js"></script>
+<script src="/Scripts/plugins/distpicker.js"></script>
+<script>
+    eui.use(['form', 'laydate'], function () {
+        var laydate = eui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#activityStart',
+            type: 'datetime'
+        });
+        laydate.render({
+            elem: '#activityEnd',
+            type: 'datetime'
+        });
+    })
+
+    jQuery.validator.addMethod("isMobile", function (value, element) {
+        var length = value.length;
+        var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
+    }, "请正确填写您的手机号码");
+    $("#activityNewForm").validate({
+        rules: {
+            activityName: {
+                required: true,
+            },
+            activityAim: {
+                required: true,
+            },
+            participant: {
+                required: true,
+            },
+            phone: {
+                required: true,
+                minlength: 11,
+                isMobile: true
+            },
+            activityAddr: {
+                required: true,
+            },
+            contacts: {
+                required: true,
+            },
+            activityTotal: {
+                required: true,
+                digits: true,
+                min: true
+            },
+            activityStart: {
+                required: true,
+            },
+            activityEnd: {
+                required: true,
+            },
+            uestionnaireId: {
+                required: true
+            }
+        },
+        messages: {
+            activityName: {
+                required: "请输入活动名称",
+            },
+            activityAim: {
+                required: '请输入活动目的',
+            },
+            participant: {
+                required: '请输入参与方',
+            },
+            phone: {
+                required: '请输入手机号码',
+                minlength: "联系电话不能小于11个字符",
+                isMobile: "请正确填写手机号码"
+            },
+            activityAddr: {
+                required: '请输入地址',
+            },
+            contacts: {
+                required: '请输入联系人',
+            },
+            activityTotal: {
+                required: '请输入活动人数',
+                digits: '只能输入整数',
+                min: "人数必须大于0"
+            },
+            activityStart: {
+                required: '请输入活动开始时间',
+            },
+            activityEnd: {
+                required: '请输入活动结束时间',
+            },
+            uestionnaireId: {
+                required: '请选择问卷名称',
+            }
+        },
+
+        submitHandler: function () {
+            var obj = $("#activityNewForm").serializeObject();
+            obj.activityAddr = obj.province + "-" + obj.city + "-" + obj.district + "-" + obj.activityAddr;
+            delete obj.province;
+            delete obj.city;
+            delete obj.district;
+            obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+            console.log(obj);
+            if (obj.activityStart > obj.activityEnd) {
+                layer.msg('开始时间不能大于结束时间', {
+                    icon: 2,
+                    time: 2000
+                });
+                return;
+            }
+            $('.confirm').text("正在修改...")
+            $('.confirm').attr("disabled", true);
+            $.post('/launch/activities/update', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+                console.log(result);
+                if (result.code == 200) {
+                    layer.msg("修改成功",{
+                        icon: 1,
+                        time: 2000,
+                    })
+                    setTimeout(function () {
+                        parent.element.tabDelete("nav-tab", 4);
+                    },2000)
+                } else {
+                    layer.msg(result.message);
+                    $('.confirm').text("修改信息")
+                    $('.confirm').removeAttr("disabled");
+                }
+            });
+        }
+    })
+
+    function formSub() {
+        return $("#sub").click();
+    }
+    $(function () {
+
+        eui.use("form",function () {
+            var form = eui.form;
+            var address = $('input[name="activityAddr"]').val();
+            console.log(address);
+            var city = address.substring(address.indexOf("-") + 1, find(address, '-', 1));
+            var province = address.substring(0, address.indexOf("-"));
+            var district = address.substring(find(address, '-', 1) + 1, find(address, '-', 2))
+            address = address.substring(find(address, '-', 2) + 1, address.length);
+            $('input[name="activityAddr"]').val(address);
+            $('#province').val(province);
+            $('#province').trigger("change");
+
+            $('#city').val(city);
+            $('#city').trigger("change");
+
+            $('#district').val(district);
+            $('#district').trigger("change");
+            form.render('select');
+            $('#activityStart').val(new Date($('#activityStart').val()).Format("yyyy-MM-dd hh:mm:ss"));
+            $('#activityEnd').val(new Date($('#activityEnd').val()).Format("yyyy-MM-dd hh:mm:ss"));
+            $.get("/questionnaire/getQuestionnaireByState", function (result) {
+                if (result.code == 200) {
+                    for (var i in result.data) {
+                        var questionnaire = result.data[i];
+                        $('select[name="uestionnaireId"]').append('<option value="' + questionnaire.id + '">' + questionnaire.questionnaireName + '</option>')
+                    }
+                    $('select[name="uestionnaireId"]').children().each(function (i,data) {
+                        if($('#uestionnaireId').val() == data.value){
+                            $(this).attr("selected",true);
+                        }
+                    })
+                }
+            })
+        })
+
+        function find(str, cha, num) {
+            var x = str.indexOf(cha);
+            for (var i = 0; i < num; i++) {
+                x = str.indexOf(cha, x + 1);
+            }
+            return x;
+        }
+    })
+</script>
+</body>
+</html>

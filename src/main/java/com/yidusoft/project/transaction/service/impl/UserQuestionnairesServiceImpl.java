@@ -1,6 +1,8 @@
 package com.yidusoft.project.transaction.service.impl;
 
 import com.yidusoft.core.AbstractService;
+import com.yidusoft.project.business.domain.LaunchActivities;
+import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.project.transaction.dao.UserQuestionnairesMapper;
 import com.yidusoft.project.transaction.domain.UserQuestionnaires;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
@@ -20,6 +22,9 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
     @Resource
     private UserQuestionnairesMapper userQuestionnairesMapper;
 
+    @Resource
+    private LaunchActivitiesService launchActivitiesService;
+
     //判断余额是否不等于0
     @Override
     public boolean flgBalance() {
@@ -35,6 +40,15 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
     @Override
     public void deduction() {
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(Security.getUserId());
+        userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+        userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+        this.update(userQuestionnaires);
+    }
+    //消费扣除活动发起人的使用卷
+    @Override
+    public void deleteDuction(String activityId) {
+        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
+        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(launchActivities.getUserId());
         userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
         userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
         this.update(userQuestionnaires);

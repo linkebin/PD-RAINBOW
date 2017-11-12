@@ -15,7 +15,7 @@
             text-align: left;
         }
 
-        #activitiesForm input + label,select+label {
+        #activitiesForm input + label, select + label {
             color: red;
         }
     </style>
@@ -203,16 +203,16 @@
                     activityEnd: {
                         required: true,
                     },
-                    uestionnaireId:{
+                    uestionnaireId: {
                         required: true,
                     },
-                    province:{
+                    province: {
                         required: true
                     },
-                    city:{
+                    city: {
                         required: true
                     },
-                    district:{
+                    district: {
                         required: true
                     }
                 },
@@ -251,13 +251,13 @@
                     uestionnaireId: {
                         required: '问卷名称不能为空',
                     },
-                    province:{
+                    province: {
                         required: '省不能为空'
                     },
-                    city:{
+                    city: {
                         required: '市不能为空'
                     },
-                    district:{
+                    district: {
                         required: '区不能为空'
                     }
                 },
@@ -265,13 +265,13 @@
                 submitHandler: function () {
                     var obj = $("#activitiesForm").serializeObject();
                     console.log(obj)
-                    obj.activityAddr = obj.province +"-"+ obj.city +"-"+ obj.district +"-"+ obj.activityAddr;
+                    obj.activityAddr = obj.province + "-" + obj.city + "-" + obj.district + "-" + obj.activityAddr;
                     delete obj.province;
                     delete obj.city;
                     delete obj.district;
                     obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
                     console.log(obj);
-                    if(obj.activityStart>obj.activityEnd){
+                    if (obj.activityStart > obj.activityEnd) {
                         return layer.msg('活动开始时间不能大于结束时间');
                     }
                     $.get("/user/questionnaires/list", function (result) {
@@ -281,19 +281,25 @@
                             if (result.data != null) {
                                 total = result.data.questionnairesTotal;
                             }
-                            $.post('/launch/activities/getSumTotal', {id:""}, function (result) {
-                                if(result.code==200){
-                                    var sumToatl=parseInt(obj.activityTotal)+parseInt(result.data);
+                            $.post('/launch/activities/getSumTotal', {id: ""}, function (result) {
+                                if (result.code == 200) {
+                                    var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
                                     if (sumToatl > total) {
                                         layer.confirm('你的使用卷不足！！', {
-                                            btn: ['前往购买','取消']
+                                            btn: ['前往购买', '取消']
                                         }, function () {
                                             window.open("/cube/pay");
                                         })
-                                    }else{
+                                    } else {
                                         $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
                                             if (result.code == 200) {
-                                                window.close();
+                                                layer.msg("操作成功", {
+                                                    icon: 1,
+                                                    time: 1500
+                                                })
+                                                setTimeout(function () {
+                                                    window.close();
+                                                }, 1500)
                                             } else {
                                                 layer.msg(result.message);
                                             }
@@ -335,6 +341,7 @@
      */
     function getQuestions(form) {
         $.get("/questionnaire/getQuestionnaireByState", function (result) {
+            console.log(result);
             if (result.code == 200) {
                 for (var i in result.data) {
                     var questionnaire = result.data[i];

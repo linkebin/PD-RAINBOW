@@ -80,6 +80,7 @@ public class QuestionnairePromotionsController {
         promotions.setCreator(Security.getUser().getUserName());
         promotions.setCreateTime(new Date());
         promotions.setDeleted(0);
+        promotions.setPromotionsState(1);
         questionnairePromotionsService.save(promotions);
         if(ids!=null && ids!=""){
             String arr[] = ids.split(",");
@@ -208,6 +209,19 @@ public class QuestionnairePromotionsController {
     @PostMapping("/getOne")
     public Result getOne(String id) {
         QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
+        return ResultGenerator.genSuccessResult(questionnairePromotions);
+    }
+
+    /**
+     * 启用促销
+     * @param id
+     * @return
+     */
+    @PostMapping("/updateState")
+    public Result updateState(String id,Integer state) {
+        QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
+        questionnairePromotions.setPromotionsState(state);
+        questionnairePromotionsService.update(questionnairePromotions);
         return ResultGenerator.genSuccessResult(questionnairePromotions);
     }
 }

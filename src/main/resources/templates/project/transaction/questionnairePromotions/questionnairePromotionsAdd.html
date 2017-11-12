@@ -40,29 +40,24 @@
         </div>
     </div>
     <div class="eui-form-item">
-        <label class="eui-form-label">是否开启</label>
-        <div class="eui-input-inline">
-            <input type="radio" name="promotionsState" value="0" title="是" checked/>
-            <input type="radio" name="promotionsState" value="1" title="否"/>
-        </div>
         <label class="eui-form-label">促销类型</label>
         <div class="eui-input-inline">
             <input type="radio" name="promotionsType" value="1" title="折扣" checked e-filter="allChoose">
             <input type="radio" name="promotionsType" value="2" title="买送" e-filter="allChoose">
         </div>
-    </div>
-    <div class="eui-form-item" id="discount">
-        <label class="eui-form-label">促销折扣</label>
-        <div class="eui-input-block">
-            <input type="text" name="promotionsDiscount" e-verify="title" autocomplete="off" class="eui-input"
-                   placeholder="请输入折扣，例如:输入0.08=8折;">
+        <div id="buySend">
+            <label class="eui-form-label">赠送数量</label>
+            <div class="eui-input-inline">
+                <input type="text" name="promotionsBuySend" e-verify="title" autocomplete="on" class="eui-input"
+                       placeholder="请输入赠送数量">
+            </div>
         </div>
-    </div>
-    <div class="eui-form-item" id="buySend">
-        <label class="eui-form-label">赠送数量</label>
-        <div class="eui-input-block">
-            <input type="text" name="promotionsBuySend" e-verify="title" autocomplete="on" class="eui-input"
-                   placeholder="请输入赠送数量">
+        <div id="discount">
+            <label class="eui-form-label">促销折扣</label>
+            <div class="eui-input-inline">
+                <input type="text" name="promotionsDiscount" e-verify="title" autocomplete="off" class="eui-input"
+                       placeholder="例如:输入0.8=8折;">
+            </div>
         </div>
     </div>
     <div class="eui-bg-white eui-row eui-paddingT10">
@@ -159,7 +154,7 @@
                     },
                     promotionsDiscount: {
                         required: true,
-                        range:[0.09,0.1],
+                        range:[0.1,0.9],
                         number: true,
                         minNumber: true,
                     },
@@ -181,7 +176,7 @@
                     },
                     promotionsDiscount: {
                         required: '请输入折扣',
-                        range: '请输入0.09到0.1之间的数',
+                        range: '请输入0.1到0.9之间的数',
                         number: '请输入正确的数字',
                         minNumber: '输入数字最多小数点后两位'
                     },
@@ -217,7 +212,9 @@
                             });
                             $('.confirm').text("保存信息");
                             $('.confirm').removeAttr("disabled");
-                            parent.element.tabDelete("nav-tab", 1);
+                            setTimeout(function () {
+                                parent.element.tabDelete("nav-tab", 1);
+                            },2000)
                         } else {
                             layer.msg('新建失败！', {
                                 time: 1500 //1秒关闭（如果不配置，默认是3秒）
