@@ -248,25 +248,32 @@
             var secUser = userList[item];
 
             var id = "'" + secUser.ID_ + "'";
+            var visitor_id = "'" + secUser.visitor_id + "'";
             var type = '来访';
-            var aicon = '<a title="来访记录" target="_blank" href="/web/customer/visitorInfo?id='
-                + secUser.visitor_id + '"><i class="eui-icon tb">&#xe60e;</i></a>';
+            var aicon = '<button title="来访记录" class="eui-btn eui-btn-primary eui-btn-mini" onclick="log('+visitor_id+')" ><i class="eui-icon">&#xe60e;</i></button>';
+
                 var update = "'update'";
             if (secUser.type == 2){
-                aicon='<a title="预约详情" onclick="openSchrdule('+update+','+id+')"  href="javasrcipt:void;"><i class="eui-icon tb">&#xe60e;</i></a>';
+                aicon='<button title="预约详情" class="eui-btn eui-btn-primary eui-btn-mini" onclick="openSchrdule('+update+','+id+')" ><i class="eui-icon">&#xe60e;</i></button>';
                 type = '预约';
             }
             tableHtml +=  '<tr>' +
 //                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
                 '<td>'+ new Date(secUser.visitor_time).Format('yyyy-MM-dd hh:mm') +'</td>' +
                 '<td>'+type+'</td>' +
-                '<td><a target="_blank" href="/web/customer/visitorUpdate?id=' + secUser.visitor_id + '">'+ secUser.visitor_name +'</a></td>' +
+                '<td><a target="_blank" href="/web/customer/checkUpdate?id=' + secUser.visitor_id + '">'+ secUser.visitor_name +'</a></td>' +
                 '<td>'+secUser.phone+'</td>' +
                 '<td title="'+secUser.Visiting_purpose+'">'+secUser.Visiting_purpose+'</td>' +
-                '<td>'+aicon+'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group">' +aicon+
+                '</div>' +
+                '</td>'
                 '</tr>';
         }
         return tableHtml;
+    }
+    function log(id) {
+        window.open('/web/customer/visitorInfo?id='+id);
     }
 </script>
 
