@@ -28,9 +28,11 @@
     </p>
 </div>
     <div class="agreement" id="code">
-
+        <button disabled="disabled" id="r" onclick="parent.timeout();" class="eui-btn eui-btn-small eui-btn-normal">同意协议<span id="d">(10s)</span></button>
+        <!--<button onclick="closeTab1()" class="eui-btn eui-btn-small">取消</button>-->
     </div>
 </body>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 <script>
     var i;
     var int = 10
@@ -40,13 +42,17 @@
     };
 
     function countdown() {
-        document.getElementById("code").innerHTML = int + "秒";
+        document.getElementById("d").innerHTML ="("+ int + "s)";
         int--;
         if(int<0){
             i=window.clearInterval(i)//结束
             int = 10; //重新赋值
-            document.getElementById("code").innerHTML = '<a onclick="parent.timeout();" class="eui-btn eui-btn-small eui-btn-normal">同意协议（10s）</a>'+'<a onclick="parent.timeout();" class="eui-btn eui-btn-small eui-btn-primary">退出</a>';
+            document.getElementById("d").innerHTML='';
+            document.getElementById("r").removeAttribute('disabled');
         }
+    }
+
+    function closeTab1() {
     }
 </script>
 </html>

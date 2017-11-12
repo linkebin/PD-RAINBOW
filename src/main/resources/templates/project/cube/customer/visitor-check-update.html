@@ -30,7 +30,7 @@
         <div class="eui-area">
             <div class="visitorTitle eui-row">
                 <div class="eui-col-md7"><img src="/Styles/images/xymfImages/cube.png" width="24" alt="">  个人信息卡</div>
-                <div class="eui-col-md5 eui-row updateProcess eui-col-offset1">
+                <div id="ys" class="eui-col-md5 eui-row updateProcess eui-col-offset1">
                     <div class="updateProcess-this">
                         <p class="updateNum eui-col-md1 eui-col-offset1">1</p>
                         <p class="updateFont eui-col-md1 eui-marginLR5">基本信息</p>
@@ -937,6 +937,8 @@
                 }
                 $(".entirety .commonDiv").hide().addClass('out');
                 $(".entirety .commonDiv").eq(1).show().removeClass('out').addClass('in');
+                $("#ys").find('div').removeClass('updateProcess-this');
+                $("#ys").find('div').eq(1).addClass('updateProcess-this');
             }
         });
     }
@@ -969,6 +971,8 @@
 
                 $(".entirety .commonDiv").hide().addClass('out');
                 $(".entirety .commonDiv").eq(2).show().removeClass('out').addClass('in');
+                $("#ys").find('div').removeClass('updateProcess-this');
+                $("#ys").find('div').eq(2).addClass('updateProcess-this');
             }
         });
     }
@@ -1052,6 +1056,8 @@
     function tabShowHide(index) {
         $(".entirety .commonDiv").hide().addClass('out').removeClass('in');
         $(".entirety .commonDiv").eq(index).show().removeClass('out').addClass('in');
+        $("#ys").find('div').removeClass('updateProcess-this');
+        $("#ys").find('div').eq(index).addClass('updateProcess-this');
     }
 
 
