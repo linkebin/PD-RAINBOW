@@ -42,19 +42,19 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
     @Override
     public Result addActivites(String launchActivitiesJson, HttpServletRequest request) throws UnknownHostException {
         LaunchActivities launchActivities = JSON.parseObject(launchActivitiesJson, LaunchActivities.class);
-        launchActivities.setActivityCode(CodeHelper.getCode("LA"));
+        launchActivities.setActivityCode(UUID.randomUUID().toString());
         launchActivities.setDeleted(0);
         launchActivities.setId(UUID.randomUUID().toString());
         launchActivities.setCreator(Security.getUser().getUserName());
         launchActivities.setUserId(Security.getUserId());
         launchActivities.setCreateTime(new Date());
         if (Security.getUser().getAccountType() == 0) {
-            launchActivities.setInitiatorType(1);
-            launchActivities.setActivityStatus(0);
+            launchActivities.setInitiatorType(2);
+            launchActivities.setActivityStatus(1);
         } else {
             int port = request.getServerPort();//获取服务器端口
             String ip = request.getServerName();//获取服务端ip
-            launchActivities.setInitiatorType(0);
+            launchActivities.setInitiatorType(1);
             launchActivities.setUestionnaireUri("http://" + ip + ":" + port + "/web/activities/fillingPage");
             launchActivities.setActivityPorn(CodeHelper.randomCode(8));
         }
@@ -76,5 +76,10 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
     @Override
     public LaunchActivities getIdByPorn(LaunchActivities launchActivities) {
         return launchActivitiesMapper.getIdByPorn(launchActivities);
+    }
+
+    @Override
+    public LaunchActivities getActivityById(String id) {
+        return launchActivitiesMapper.getActivityById(id);
     }
 }

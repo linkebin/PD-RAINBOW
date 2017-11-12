@@ -18,5 +18,7 @@ public interface QuestionnaireQuestionService extends Service<QuestionnaireQuest
     List<QuestionnaireQuestion> findQuestionForQuestionnaire(String id);
     //提交问卷
     Result  submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming,String activityId,String userName);
+    //活动提交问卷
+    Result subQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName);
 
 }

@@ -117,7 +117,7 @@
                                 //找到该活动
                                 if (product.promotionsId == question.id) {
                                     //活动启用
-                                    if (question.promotionsState == 0) {
+                                    if (question.promotionsState == 2) {
                                         var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
                                         var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
                                         //还在活动时间内
@@ -204,11 +204,15 @@
                         $('.send').html("");
                     }
                 }
+                var message='span class="discount"></span>';
+                if(pay.type==""){
+                    message="";
+                }
                 if (item == 0) {
                     tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">' +
                             '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
                             '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
-                            '<span class="discount"></span>' +
+                            message +
                             '<span class="discountFont">' + pay.type + '</span>' +
                             '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
                             '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
@@ -219,7 +223,7 @@
                 tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24">' +
                         '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
                         '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
-                        '<span class="discount"></span>' +
+                        message +
                         '<span class="discountFont">' + pay.type + '</span>' +
                         '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +

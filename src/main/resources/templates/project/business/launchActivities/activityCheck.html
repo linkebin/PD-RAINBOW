@@ -25,36 +25,21 @@
     </style>
 </head>
 <body>
-<div class="questionHeader">
-    <div class="eui-row eui-area">
-        <div class="xymfLogo">
-            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
-            <span class="payCentre">查看活动</span>
-        </div>
-    </div>
-</div>
-
 <div class="activityContent xymfMargin">
     <div class="eui-area">
-        <div class="visitorTitle">
-            <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
-        </div>
         <form id="activityForm" onsubmit="return false;">
             <input type="hidden" th:value="${id}" id="id" name="id"/>
             <div class="eui-bg-white eui-padding20 activity">
-                <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
-                    <div class="eui-col-md12 eui-font16">基本信息</div>
-                </div>
                 <!--基本-->
-                <div class="eui-bg-white eui-form">
+                <div class="eui-bg-white eui-form activityContent">
                     <div class="eui-form-item">
                         <label class="eui-form-label">活动名称</label>
                         <div class="eui-input-inline">
                             <input type="text" name="activityName" readonly class="eui-input">
                         </div>
-                        <label class="eui-form-label">活动目的</label>
+                        <label class="eui-form-label">联系人</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="activityAim" readonly class="eui-input">
+                            <input type="text" name="contacts" readonly class="eui-input">
                         </div>
                         <label class="eui-form-label">参与方</label>
                         <div class="eui-input-inline">
@@ -88,9 +73,11 @@
                         </div>
                     </div>
                     <div class="eui-form-item">
-                        <label class="eui-form-label">联系人</label>
+                        <label class="eui-form-label">问卷名称</label>
                         <div class="eui-input-inline">
-                            <input type="text" name="contacts" readonly class="eui-input">
+                            <select e-filter="uestionnaireId" name="uestionnaireId" disabled>
+
+                            </select>
                         </div>
                         <label class="eui-form-label">联系电话</label>
                         <div class="eui-input-inline">
@@ -102,12 +89,7 @@
                         </div>
                     </div>
                     <div class="eui-form-item">
-                        <label class="eui-form-label">问卷名称</label>
-                        <div class="eui-input-inline">
-                            <select e-filter="uestionnaireId" name="uestionnaireId" disabled>
 
-                            </select>
-                        </div>
                         <label class="eui-form-label">活动开始时间</label>
                         <div class="eui-input-inline">
                             <input type="text" class="eui-input" readonly name="activityStart">
@@ -123,40 +105,19 @@
                             <input type="text" class="eui-input" readonly name="activityPorn">
                         </div>
                         <label class="eui-form-label">活动访问网址</label>
-                        <div class="eui-input-inline" style="width: 418px;">
+                        <div class="eui-input-inline">
                             <input type="text" class="eui-input" readonly name="uestionnaireUri" id="url">
                         </div>
-                        <div>
+                        <div class="eui-input-inline">
                             <button class="eui-btn eui-btn-normal" id="copyBtn">复制链接</button>
                         </div>
                     </div>
-                </div>
-                <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
-                    <div class="eui-col-md12 eui-font16">活动进度</div>
-                </div>
-                <div class="eui-row">
-                    <div class="eui-col-md12">
-                        <div class="eui-form">
-                            <table class="eui-table" id="participantTable">
-                                <input type="hidden" id="questionnaireId">
-                                <colgroup>
-                                    <col width="100">
-                                    <col>
-                                </colgroup>
-                                <thead>
-                                <th>姓名</th>
-                                <th>手机号码</th>
-                                <th>性别</th>
-                                <th>年龄</th>
-                                <th>填报时间</th>
-                                <th>关注度</th>
-                                </tr>
-                                </thead>
-                                <tbody>
 
-                                </tbody>
-                            </table>
-                            <div id="pages" style="text-align:right;"></div>
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">活动目的</label>
+                        <div class="eui-input-block">
+                        <textarea class="eui-input" style="height: 100px;width: 850px" name="activityAim" readonly>
+                        </textarea>
                         </div>
                     </div>
                 </div>
@@ -164,18 +125,41 @@
         </form>
     </div>
 </div>
+<div class="activityContent xymfMargin">
+    <div class="eui-area">
+        <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
+            <div class="eui-col-md6">
+                <span class="eui-panels-title1"><i class="eui-icon">&#xe632;</i> 活动进度</span>
+            </div>
+        </div>
+        <div class="eui-row">
+            <div class="eui-col-md12">
+                <div class="eui-form">
+                    <table class="eui-table" id="participantTable">
+                        <input type="hidden" id="questionnaireId">
+                        <colgroup>
+                            <col width="100">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <th>姓名</th>
+                        <th>手机号码</th>
+                        <th>性别</th>
+                        <th>年龄</th>
+                        <th>填报时间</th>
+                        <th>关注度</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-<!--<div class="activityContent xymfMargin">-->
-    <!--<div class="eui-area">-->
-        <!--<div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">-->
-            <!--<div class="eui-col-md6">-->
-                <!--<span class="eui-panels-title1"><i class="eui-icon">&#xe632;</i> 活动进度</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!---->
-    <!--</div>-->
-<!--</div>-->
-
+                        </tbody>
+                    </table>
+                    <div id="pages" style="text-align:right;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="xymfFooter">
     <!-- 底部固定区域 -->
     © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
@@ -293,6 +277,7 @@
                 $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityAddr"]').val(address);
+                $('textarea[name="activityAim"]').val(activity.activityAim);
                 var uestionnaireUri = activity.uestionnaireUri + "?id=" + activity.id;
                 $('input[name="uestionnaireUri"]').val(uestionnaireUri);
                 $('select[name="uestionnaireId"]').children().each(function (i, data) {
@@ -329,31 +314,10 @@
         }
         return x;
     }
-    // 返回顶部
-    var winH = $(window).height();
-
-    function formSub() {
-        return $("#sub").click();
-    }
-
-    $('.eui-backTop').hide();
-    $(window).scroll(function (e) {
-        var winT = $(window).scrollTop();
-        if (winT > winH) {
-            $('.eui-backTop').fadeIn()
-        } else {
-            $('.eui-backTop').fadeOut()
-        }
-    });
-
-    $('.eui-backTop').click(function (e) {
-        $('html,body').animate({scrollTop: 0}, 500)
-    });
 
 
     /**
      * 获取问卷名称
-     * @param form
      */
     function getQuestions() {
         $.get("/questionnaire/getQuestionnaireByState", function (result) {

@@ -219,4 +219,141 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
         }
         return ResultGenerator.genSuccessResult();
     }
+
+    //活动提交问卷
+    @Override
+    public Result subQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
+        try {
+            List<Map<String, Object>> mapList = (List<Map<String, Object>>) JSON.parse(param);
+            //问卷使用的id
+            String dataAcquisitionId = UUID.randomUUID().toString();
+            //总分
+            int totalScore = 0;
+            for (Map map : mapList) {
+                //分数
+                String score = map.get("score").toString();
+                //问题id
+                String questionId = map.get("questionId").toString();
+                //答案
+                String answer = map.get("answer").toString();
+
+                //正确答案
+                //String correctAnswer=map.get("correctAnswer").toString();
+                //答案类型
+                String questionType = map.get("questionType").toString();
+
+                //   判断正确的答案  与填写答案
+                int state = 0;
+                String[] correctAnswerArray;
+                String[] answerArray;
+                String[] scoreArray;
+
+                if (answer.contains("||")) {
+                    answerArray = answer.split("\\|\\|");
+                } else {
+                    answerArray = new String[]{answer};
+                }
+
+                if (score.contains("||")) {
+                    scoreArray = score.split("\\|\\|");
+                } else {
+                    scoreArray = new String[]{score};
+                }
+                if (map.get("correctAnswer") != null) {
+                    if (map.get("correctAnswer").toString().contains("||")) {
+                        correctAnswerArray = map.get("correctAnswer").toString().split("\\|\\|");
+                    } else {
+                        correctAnswerArray = new String[]{map.get("correctAnswer").toString()};
+                    }
+                    for (int j = 0; j < answerArray.length; j++) {
+                        for (int i = 0; i < correctAnswerArray.length; i++) {
+                            if (correctAnswerArray[i].equals(answerArray[j])) {
+                                state += 1;
+                            }
+                        }
+                    }
+                }
+
+                QuestionnaireAnswer questionnaireAnswer = new QuestionnaireAnswer();
+                questionnaireAnswer.setId(UUID.randomUUID().toString());
+                questionnaireAnswer.setAcquisitionId(dataAcquisitionId);
+                questionnaireAnswer.setAnswer(answer);
+                questionnaireAnswer.setQuestionId(questionId);
+                questionnaireAnswer.setCreateTime(new Date());
+                questionnaireAnswer.setCreator(userName);
+                questionnaireAnswer.setDeleted(0);
+                questionnaireAnswer.setUserId(userId);
+                //判断  1  单选  2多选  3评分单选
+                if (!questionType.equals("3")) {
+                    //答案正确
+                    if (answerArray.length == state) {
+                        int scores = 0;
+                        for (int i = 0; i < answerArray.length; i++) {
+                            totalScore += Integer.valueOf(scoreArray[i]);
+                            scores += Integer.valueOf(scoreArray[i]);
+                        }
+
+                        questionnaireAnswer.setAnswerScore(scores);
+
+                    } else {
+                        //答案错误
+                        questionnaireAnswer.setAnswerScore(0);
+                    }
+
+                    questionnaireAnswerMapper.insert(questionnaireAnswer);
+
+                } else {
+                    int scores = 0;
+                    for (int i = 0; i < answerArray.length; i++) {
+                        totalScore += Integer.valueOf(scoreArray[i]);
+                        scores += Integer.valueOf(scoreArray[i]);
+                    }
+                    questionnaireAnswer.setAnswerScore(scores);
+                    questionnaireAnswerMapper.insert(questionnaireAnswer);
+
+                }
+
+            }
+            //判断问卷的类型
+            Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
+            String result = "";
+            if ("症状自评量表-SCL90".equals(questionnaire.getQuestionnaireTypeName())) {
+                result = dataAcquisitionService.symptomConclusion(dataAcquisitionId, userId);
+
+            } else if ("抑郁自评量表(SDS)".equals(questionnaire.getQuestionnaireTypeName())) {
+                result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "depressed");
+            } else {
+                result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "anxious");
+                //焦虑自评量表(SAS)
+            }
+            DataAcquisition dataAcquisition = new DataAcquisition();
+            dataAcquisition.setId(dataAcquisitionId);
+            //dataAcquisition.setActivityId();
+            dataAcquisition.setDataResult(result);
+            dataAcquisition.setTimeConsuming(timeConsuming);
+            dataAcquisition.setDataQuestion(questionnaireId);
+            dataAcquisition.setActivityId(activityId);
+            dataAcquisition.setDataCode(CodeHelper.randomCode(8));
+            dataAcquisition.setTotalScore(totalScore);
+            dataAcquisition.setUserId(userId);
+            dataAcquisition.setDeleted(0);
+            dataAcquisition.setDataUser(userName);
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+            java.util.Date date=sdf.parse(visitorTimes);
+            dataAcquisition.setCreateTime(date);
+            dataAcquisitionMapper.insert(dataAcquisition);
+
+            //添加填报时间
+            ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
+            if(activeParticipant!=null){
+                activeParticipant.setFillingTime(new Date());
+                activeParticipantService.update(activeParticipant);
+            }
+            //活动扣除余额
+            userQuestionnairesService.deleteDuction(activityId);
+        } catch (Exception e) {
+            return ResultGenerator.genFailResult(e.getMessage());
+        }
+        return ResultGenerator.genSuccessResult();
+    }
 }

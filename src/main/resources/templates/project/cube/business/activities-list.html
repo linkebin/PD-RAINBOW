@@ -287,7 +287,9 @@
                         icon: 1,
                         time: 2000
                     });
-                    doSearch();
+                    setTimeout(function () {
+                        doSearch();
+                    },2000)
                 } else {
                     layer.msg(result.message, {
                         icon: 1,

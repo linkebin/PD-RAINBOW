@@ -52,4 +52,8 @@
         SELECT * FROM launch_activities where deleted=0 AND activity_porn=#{activityPorn} AND id_=#{id}
     </select>
 
+    <select id="getActivityById" resultMap="BaseResultMap" parameterType="String">
+        SELECT * FROM launch_activities where deleted=0 AND id_=#{id}
+        AND now() BETWEEN activity_start AND activity_end
+    </select>
 </mapper>

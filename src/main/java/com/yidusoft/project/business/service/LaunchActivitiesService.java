@@ -33,4 +33,11 @@ public interface LaunchActivitiesService extends Service<LaunchActivities> {
      * @return
      */
     LaunchActivities getIdByPorn(LaunchActivities launchActivities);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    LaunchActivities getActivityById(String id);
 }

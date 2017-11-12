@@ -127,7 +127,7 @@
                         $('.ImmediatePay').attr("disabled","disabled");
                     }
                     if(product.productState==0) {
-                        if (promotion.promotionsState == 0) {
+                        if (promotion.promotionsState == 2) {
                             if (promotion.promotionsType == 1) {//活动类型是折扣
                                 var discount = promotion.promotionsDiscount * 10;//折扣
                                 pro.total = product.productTotal;

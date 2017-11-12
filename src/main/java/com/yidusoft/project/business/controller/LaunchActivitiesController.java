@@ -106,12 +106,12 @@ public class LaunchActivitiesController {
     @PostMapping("/approval")
     public Result approval(String id,HttpServletRequest request) throws UnknownHostException {
         //获取服务器IP
-        int port = request.getServerPort();
-        String addr = IpAddressUtils.getIpAddress(request);
+        int port = request.getServerPort();//获取服务器端口
+        String ip = request.getServerName();//获取服务端ip
         LaunchActivities launchActivities=launchActivitiesService.findById(id);
         launchActivities.setActivityStatus(2);
         launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-        launchActivities.setUestionnaireUri("http://"+addr+":"+port+"/web/activities/fillingPage");
+        launchActivities.setUestionnaireUri("http://"+ip+":"+port+"/web/activities/fillingPage");
         launchActivitiesService.update(launchActivities);
         return ResultGenerator.genSuccessResult();
     }
@@ -153,7 +153,7 @@ public class LaunchActivitiesController {
         int sumTotal=0;
         if(list!=null && list.size()>0){
             for(LaunchActivities la:list){
-                if(id!=null && id!="" && !id.equals(la.getId())){
+                if(!id.equals(la.getId())){
                     sumTotal+=la.getActivityTotal();
                 }
             }
@@ -170,6 +170,17 @@ public class LaunchActivitiesController {
     public Result getIdByPorn(String json){
         LaunchActivities launchActivities = JSON.parseObject(json,LaunchActivities.class);
         launchActivities=launchActivitiesService.getIdByPorn(launchActivities);
+        return ResultGenerator.genSuccessResult(launchActivities);
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @PostMapping("/getActivityById")
+    public Result getActivityById(String id){
+        LaunchActivities launchActivities=launchActivitiesService.getActivityById(id);
         return ResultGenerator.genSuccessResult(launchActivities);
     }
 }

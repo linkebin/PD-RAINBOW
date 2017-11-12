@@ -181,7 +181,7 @@
                     },
                     promotionsDiscount: {
                         required: true,
-                        range: [0.09, 0.1],
+                        range: [0.1, 0.9],
                         number: true,
                         minNumber: true,
                     },
@@ -203,7 +203,7 @@
                     },
                     promotionsDiscount: {
                         required: '请输入折扣',
-                        range: '请输入0.09到0.1之间的数',
+                        range: '请输入0.1到0.9之间的数',
                         number: '请输入正确的数字',
                         minNumber: '输入数字最多小数点后两位'
                     },
@@ -330,7 +330,7 @@
                     '<td>' + product.productPrice + '元</td>' +
                     '<td>' + product.creator + '</td>' +
                     '<td>' + new Date(product.createTime).Format('yyyy-MM-dd hh:mm:ss') + '</td>' +
-                    /*'<td><button class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deleteProduct(' + id + ')"><i class="eui-icon">&#xe640;</i></button></td>'+*/
+                    '<td><a href="javascript:void(0)" class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deleteProduct(' + id + ')"><i class="eui-icon">&#xe640;</i></a></td>'+
                     '</tr>';
 
         }
@@ -367,12 +367,18 @@
                     if(ids!=''){
                         $.post("/questionnaire/promotions/updateProduct",{promotionsId:id,promotionsName:name,ids:ids},function (res) {
                             if(res.code){
-                                layer.msg("套餐添加成功");
+                                layer.msg("套餐添加成功",{
+                                    icon: 1,
+                                    time: 1500
+                                });
                                 setTimeout(function () {
                                     doSearch();
-                                },2000)
+                                },1500)
                             }else{
-                                layer.msg("套餐添加失败");
+                                layer.msg("套餐添加失败",{
+                                    icon: 1,
+                                    time: 1500
+                                });
                             }
                         })
                     }
@@ -395,7 +401,13 @@
             }, function () {
                 $.post("/product/settings/updateProduct",{id:id},function (result) {
                     if(result.code==200){
-                        layer.msg("删除成功")
+                        layer.msg("删除成功",{
+                            icon: 1,
+                            time: 1500
+                        });
+                        setTimeout(function () {
+                            doSearch();
+                        },1500)
                     } else {
                         layer.msg(result.message)
                     }

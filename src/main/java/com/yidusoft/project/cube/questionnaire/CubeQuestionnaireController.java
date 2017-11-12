@@ -33,5 +33,17 @@ public class CubeQuestionnaireController {
         return ResultGenerator.genSuccessResult(questionnaireQuestionService.submitQuestionnaire(param,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName));
     }
 
+    /**
+     * 活动问卷提交
+     * @param param
+     * @param questionnaireId
+     * @param userId
+     * @return
+     */
+    @PostMapping("/subQuestionnaire")
+    @ResponseBody
+    public  Result subQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming,String activityId,String userName){
+        return ResultGenerator.genSuccessResult(questionnaireQuestionService.subQuestionnaire(param,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName));
+    }
 
 }
