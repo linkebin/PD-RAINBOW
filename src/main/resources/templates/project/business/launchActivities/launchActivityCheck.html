@@ -132,7 +132,6 @@
                 <div class="eui-col-md12">
                     <div class="eui-form">
                         <table class="eui-table" id="participantTable">
-                            <input type="hidden" id="questionnaireId">
                             <colgroup>
                                 <col width="100">
                                 <col>
@@ -169,6 +168,7 @@
 <script>
     var form, laypage, layer;
     $(function () {
+        $('#url').val($('#url').val()+"?id="+$('#activityId').val());
         $('#copyBtn').zclip({
             path: "/Scripts/plugins/jqueryZclip/ZeroClipboard.swf",
             copy: function () {
@@ -281,7 +281,7 @@
                         time: 2000,
                     })
                     setTimeout(function () {
-                        parent.element.tabDelete("nav-tab", 5);
+                        parent.element.tabDelete("nav-tab", 10003);
                     },2000)
                 } else {
                     layer.msg(res.message,{
@@ -306,7 +306,7 @@
                 var question = result.data[0];
                 var acquisitionId = question.id;
                 var userId = question.userId;
-                window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+$('#questionnaireId').val()+"&userId="+userId+"&acquisitionId="+acquisitionId);
+                window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+$('#uestionnaireId').val()+"&userId="+userId+"&acquisitionId="+acquisitionId);
             }
         })
     }

@@ -243,7 +243,7 @@
                         time: 2000,
                     })
                     setTimeout(function () {
-                        parent.element.tabDelete("nav-tab", 3);
+                        parent.element.tabDelete("nav-tab", 10001);
                     },2000)
                 } else {
                     layer.msg(result.message);
@@ -258,6 +258,7 @@
         return $("#sub").click();
     }
     $(function () {
+        $('textarea[name="activityAim"]').val("");
         $.get("/questionnaire/getQuestionnaireByState", function (result) {
             if (result.code == 200) {
                 for (var i in result.data) {

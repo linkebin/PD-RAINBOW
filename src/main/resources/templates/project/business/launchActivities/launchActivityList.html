@@ -211,6 +211,10 @@
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
     }
 
+    parent.element.on('tab(nav-tab)', function(elem){
+        doSearch();
+    });
+
     var form
     eui.use('form', function () { //独立版的layer无需执行这一句
         form = eui.form; //独立版的layer无需执行这一句;

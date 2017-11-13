@@ -224,29 +224,38 @@
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" title="审批" onclick="checkActivity('+"'approval'," + id + ')"><i class="eui-icon tb">&#x1005;</i></button>';
     }
 
+    parent.element.on('tab(nav-tab)', function(elem){
+        doSearch();
+    });
+
     var form
-    eui.use('form', function () { //独立版的layer无需执行这一句
+    eui.use(['form'], function () { //独立版的layer无需执行这一句
         form = eui.form; //独立版的layer无需执行这一句;
         $('.activityNew').click(function () {
-            parent.element.tabAdd('nav-tab', {
-                title: '添加调研活动'
-                ,type: 2
-                , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/add"></iframe>'
-                , id: 3 //实际使用一般是规定好的id，这里以时间戳模拟下
-            })
-            parent.element.tabChange("nav-tab", 3);
+            //新增一个Tab项
+            if(parent.$(".eui-tab-title li[e-id='10001']").length<=0){
+                parent.element.tabAdd('nav-tab', {
+                    title: '添加调研活动'
+                    ,type: 2
+                    , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/add"></iframe>'
+                    , id: 10001 //实际使用一般是规定好的id，这里以时间戳模拟下
+                })
+            }
+            parent.element.tabChange("nav-tab", 10001);
         })
     });
 
     //编辑活动
     function activityEdit(id) {
-        parent.element.tabAdd('nav-tab', {
-            title: '修改调研活动'
-            ,type: 2
-            , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/update/'+id+'"></iframe>'
-            , id: 4 //实际使用一般是规定好的id，这里以时间戳模拟下
-        })
-        parent.element.tabChange("nav-tab", 4);
+        if(parent.$(".eui-tab-title li[e-id='10002']").length<=0){
+            parent.element.tabAdd('nav-tab', {
+                title: '修改调研活动'
+                ,type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/update/'+id+'"></iframe>'
+                , id: 10002 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 10002);
     }
 
     //查看活动详情
@@ -255,13 +264,15 @@
         if(typeof data!='undefined' && data=="approval" ){
             message = '调研活动审批'
         }
-        parent.element.tabAdd('nav-tab', {
-            title: message
-            ,type: 2
-            , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/check/'+id+'"></iframe>'
-            , id: 5 //实际使用一般是规定好的id，这里以时间戳模拟下
-        })
-        parent.element.tabChange("nav-tab", 5);
+        if(parent.$(".eui-tab-title li[e-id='10003']").length<=0){
+            parent.element.tabAdd('nav-tab', {
+                title: message
+                ,type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/check/'+id+'"></iframe>'
+                , id: 10003 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 10003);
     }
 
     /**

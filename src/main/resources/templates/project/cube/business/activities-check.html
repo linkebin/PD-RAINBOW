@@ -131,32 +131,49 @@
                         </div>
                     </div>
                 </div>
-                <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
-                    <div class="eui-col-md12 eui-font16">活动进度</div>
+                <div class="eui-bg-white eui-padding20">
+                    <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                        <div class="eui-col-md12 eui-font16">活动进度</div>
+                    </div>
+                    <div class="eui-progress eui-progress-big" e-showpercent="yes">
+                        <div class="eui-progress-bar eui-bg-blue"></div>
+                    </div>
                 </div>
-                <div class="eui-row">
-                    <div class="eui-col-md12">
-                        <div class="eui-form">
-                            <table class="eui-table" id="participantTable">
-                                <input type="hidden" id="questionnaireId">
-                                <colgroup>
-                                    <col width="100">
-                                    <col>
-                                </colgroup>
-                                <thead>
-                                <th>姓名</th>
-                                <th>手机号码</th>
-                                <th>性别</th>
-                                <th>年龄</th>
-                                <th>填报时间</th>
-                                <th>关注度</th>
-                                </tr>
-                                </thead>
-                                <tbody>
 
-                                </tbody>
-                            </table>
-                            <div id="pages" style="text-align:right;"></div>
+                <div class="eui-bg-white eui-padding20">
+                    <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+                        <div class="eui-col-md12 eui-font16">填报人信息</div>
+                    </div>
+                    <div class="eui-row">
+                        <div class="eui-col-md12">
+                            <div class="eui-form">
+                                <table class="eui-table" id="participantTable">
+                                    <input type="hidden" id="questionnaireId">
+                                    <colgroup>
+                                        <col width="150">
+                                        <col width="150">
+                                        <col width="100">
+                                        <col width="100">
+                                        <col width="200">
+                                        <col width="300">
+                                        <col width="50">
+                                    </colgroup>
+                                    <thead>
+                                    <th>姓名</th>
+                                    <th>手机号码</th>
+                                    <th>性别</th>
+                                    <th>年龄</th>
+                                    <th>填报时间</th>
+                                    <th>关注度</th>
+                                    <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                                <div id="pages" style="text-align:right;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -164,17 +181,6 @@
         </form>
     </div>
 </div>
-
-<!--<div class="activityContent xymfMargin">-->
-    <!--<div class="eui-area">-->
-        <!--<div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">-->
-            <!--<div class="eui-col-md6">-->
-                <!--<span class="eui-panels-title1"><i class="eui-icon">&#xe632;</i> 活动进度</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!---->
-    <!--</div>-->
-<!--</div>-->
 
 <div class="xymfFooter">
     <!-- 底部固定区域 -->
@@ -203,10 +209,11 @@
                 return $('#url').val();
             }
         });
-        eui.use(['form', 'laypage', 'layer'], function () {
+        eui.use(['form', 'laypage', 'layer', 'element'], function () {
             form = eui.form;
             laypage = eui.laypage;
             layer = eui.layer;
+            var element = eui.element;
             getQuestions();//获取问卷名称
             getActivityInfo();//获取填报人的信息
         });
@@ -214,7 +221,7 @@
     //获取填报人的信息
     function getActivityInfo() {
         var index = layer.load(2); //加载
-        $.post("/active/participant/list", {activityId: $('#id').val(), page: 1, size: 5}, function (result) {
+        $.post("/active/participant/list", { page: 1, size: 5 ,activityId: $('#id').val()}, function (result) {
             console.log(result);
             laypage.render({
                 elem: 'pages'
@@ -231,9 +238,9 @@
                         $("#participantTable tbody").html(tableHtml);
                     } else {
                         $.post("/active/participant/list", {
-                            activityId: $('#id').val(),
                             page: obj.curr,
-                            size: obj.limit
+                            size: obj.limit,
+                            activityId: $('#id').val()
                         }, function (result) {
                             var participantList = result.data.list;
                             //遍历，拼接表格
@@ -262,9 +269,13 @@
                     '<td>' + participant.fullName + '</td>' +
                     '<td>' + participant.phone + '</td>' +
                     '<td>' + sex + '</td>' +
-                    '<td>' + participant.age + '</td>' +
+                    '<td>' + participant.age + '岁</td>' +
                     '<td>' + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
-                    '<td><button class="eui-btn eui-btn-primary eui-btn-mini" title="查看填报详情" onclick="check(' + id + ',' + createTime + ')"><i class="eui-icon">&#xe621;</i></button></td>' +
+                    '<td>'+
+                    '</td>' +
+                    '<td>' +
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看填报详情" onclick="check(' + id + ',' + createTime + ')"><i class="eui-icon">&#xe621;</i></button>' +
+                    '</td>' +
                     '</tr>';
         }
         return tableHtml;
@@ -303,6 +314,7 @@
                 $('#questionnaireId').val(activity.uestionnaireId);
                 form.render('select');
                 layer.close(index);
+                getTotal();
             }
         })
     }
@@ -317,7 +329,7 @@
                 var question = result.data[0];
                 var acquisitionId = question.id;
                 var userId = question.userId;
-                window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+$('#questionnaireId').val()+"&userId="+userId+"&acquisitionId="+acquisitionId);
+                window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId=" + $('#questionnaireId').val() + "&userId=" + userId + "&acquisitionId=" + acquisitionId);
             }
         })
     }
@@ -364,6 +376,20 @@
                 }
                 form.render('select');
                 detail();
+            }
+        })
+    }
+    /**
+     * 获取已经填报的人数
+     */
+    function getTotal() {
+        console.log();
+        $.post("/active/participant/getTotal", {activityId: $('#id').val()}, function (result) {
+            if(result.code=200){
+                var progressBar = parseInt(result.data/$('input[name="activityTotal"]').val())*100;
+                progressBar = progressBar+"%";
+                $('.eui-progress-bar').css("width",progressBar);
+                $('.eui-progress-text').text(progressBar);
             }
         })
     }

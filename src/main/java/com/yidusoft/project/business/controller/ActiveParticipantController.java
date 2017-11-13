@@ -41,6 +41,13 @@ public class ActiveParticipantController {
         return ResultGenerator.genSuccessResult(activeParticipant);
     }
 
+    /**
+     * 数据分页查询
+     * @param page
+     * @param size
+     * @param activityId
+     * @return
+     */
     @PostMapping("/list")
     public Result list(Integer page, Integer size, String activityId) {
         PageHelper.startPage(page, size);
@@ -49,10 +56,15 @@ public class ActiveParticipantController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        activeParticipantService.deleteById(id);
-        return ResultGenerator.genSuccessResult();
+    /**
+     * 获取已经填报的人数
+     * @param activityId
+     * @return
+     */
+    @PostMapping("/getTotal")
+    public Result getTotal(String activityId) {
+        List<ActiveParticipant> list = activeParticipantService.getParticipantInfo(activityId);
+        return ResultGenerator.genSuccessResult(list.size());
     }
 
     @PutMapping

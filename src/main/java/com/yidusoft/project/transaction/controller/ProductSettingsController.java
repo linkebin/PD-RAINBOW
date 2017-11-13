@@ -73,6 +73,8 @@ public class ProductSettingsController {
         product.setCreator(Security.getUser().getUserName());
         product.setCreateTime(new Date());
         product.setDeleted(0);
+        product.setPromotionsId("");
+        product.setPromotionsName("");
         productSettingsService.save(product);
         return ResultGenerator.genSuccessResult();
     }

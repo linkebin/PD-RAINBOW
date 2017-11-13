@@ -58,7 +58,7 @@
                             <input type="text" id="phone" name="phone" placeholder="手机号码" class="eui-input">
                         </div>
                     </div>
-                    <div class="eui-form-item">
+                    <!--<div class="eui-form-item">
                         <label class="eui-form-label">手机验证码</label>
                         <div class="eui-input-inline">
                             <input type="text" name="msgCode" e-verify="title" autocomplete="off"
@@ -71,7 +71,7 @@
                             </button>
                             <label id="errcode2" class="eui-form-label" style="color: red;"></label>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
 
@@ -136,9 +136,9 @@
                 activityPorn: {
                     required: true,
                 },
-                msgCode: {
+                /*msgCode: {
                     required: true,
-                }
+                }*/
             },
             messages: {
                 fullName: {
@@ -159,9 +159,9 @@
                 activityPorn: {
                     required: '请输入活动邀请码',
                 },
-                msgCode: {
+                /*msgCode: {
                     required: '请输入手机验证码',
-                }
+                }*/
             },
 
             submitHandler: function () {
@@ -171,22 +171,23 @@
                 params.activityPorn = obj.activityPorn;
                 params.id = $('#activityId').val();
                 delete obj.activityPorn;
-                delete obj.msgCode;
-                $.post("/user/check/msgCode", {msgCode: obj.msgCode}, function (result) {
+                add(params,obj);
+                /*$.post("/user/check/msgCode", {msgCode: obj.msgCode}, function (result) {
                     if(result.code==200){
-                        add();
+                        delete obj.msgCode;
+                        add(params,obj);
                     }else{
                         layer.msg(result.message,{
                             icon: 2,
                             time: 1500
                         });
                     }
-                })
+                })*/
             }
         });
     });
 
-    function add() {
+    function add(params,obj) {
         $.post("/launch/activities/getIdByPorn", {json: JSON.stringify(params)}, function (result) {
             console.log(result);
             if (result.code = 200) {
@@ -234,6 +235,7 @@
 
     //发送手机验证码
     function sendMsgCode(o) {
+        $("#btnSendCode").html("正在发送");
         var m = $("#phone").val();
         curCount = count;
         $(o).attr('disabled','true');
@@ -246,14 +248,12 @@
             dataType:"json",
             success:function(data){
                 if(data.code ==200) {
-                    $("#errorInfo").html('');
                     layer.msg(data.message);
                     InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
-
                 }else {
                     layer.msg(data.message);
-                    $("#errorInfo").html('');
                     //$(o).removeAttr('disabled');
+                    $("#btnSendCode").html("点击获取");
                     $("#btnSendCode").removeAttr('disabled')
                             .css("background","#7dbbfa").css("color","#fff").removeClass('eui-btn-disabled');
                 }

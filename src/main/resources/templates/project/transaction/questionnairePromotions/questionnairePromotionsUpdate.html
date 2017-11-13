@@ -22,7 +22,7 @@
 </div>
 <form class="eui-form eui-marginT10 eui-paddingR10" id="promotionsForm" th:object="${promotions}">
     <input type="hidden" name="id" id="questionId" th:value="*{id}">
-    <input type="hidden" name="id" id="promotionsName" th:value="*{promotionsName}">
+    <input type="hidden" id="promotionsName" th:value="*{promotionsName}">
     <div class="eui-form-item">
         <label class="eui-form-label">促销名称</label>
         <div class="eui-input-inline">
@@ -220,14 +220,16 @@
                     $.post("/questionnaire/promotions/update", {"promotionsJson": JSON.stringify(params)}, function (result) {
                         if (result.message = 'SUCCESS') {
                             //关闭
-                            layer.closeAll();
                             layer.msg('编辑成功！', {
                                 icon: 1,
                                 time: 2000 //1秒关闭（如果不配置，默认是3秒）
                             });
+
                             $('.confirm').text("保存信息");
                             $('.confirm').removeAttr("disabled");
-                            doSearch();
+                            setTimeout(function () {
+                                parent.element.tabDelete("nav-tab", 1002);
+                            },2000)
                         } else {
                             layer.msg('编辑失败！', {
                                 time: 1500 //1秒关闭（如果不配置，默认是3秒）

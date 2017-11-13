@@ -42,7 +42,7 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
     @Override
     public Result addActivites(String launchActivitiesJson, HttpServletRequest request) throws UnknownHostException {
         LaunchActivities launchActivities = JSON.parseObject(launchActivitiesJson, LaunchActivities.class);
-        launchActivities.setActivityCode(UUID.randomUUID().toString());
+        launchActivities.setActivityCode(CodeHelper.getCode("LA"));
         launchActivities.setDeleted(0);
         launchActivities.setId(UUID.randomUUID().toString());
         launchActivities.setCreator(Security.getUser().getUserName());

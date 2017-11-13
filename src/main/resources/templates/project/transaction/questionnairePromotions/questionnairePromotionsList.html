@@ -206,14 +206,14 @@
     }
 
     // 新建促销
-    $(".promotionNew").click(function (event) {
+    $(".promotionNew").click(function () {
         parent.element.tabAdd('nav-tab', {
             title: '新建促销活动',
             type: 2
             , content: '<iframe frameborder=0 class="contentIframe" src="web/promotion/add"></iframe>'
-            , id: 1 //实际使用一般是规定好的id，这里以时间戳模拟下
+            , id: 1001 //实际使用一般是规定好的id，这里以时间戳模拟下
         })
-        parent.element.tabChange("nav-tab", 1);
+        parent.element.tabChange("nav-tab", 1001);
     });
 
     //编辑促销
@@ -222,10 +222,16 @@
             title: '编辑促销活动',
             type: 2
             , content: '<iframe frameborder=0 class="contentIframe" src="web/promotion/update/'+id+'"></iframe>'
-            , id: 2 //实际使用一般是规定好的id，这里以时间戳模拟下
+            , id: 1002 //实际使用一般是规定好的id，这里以时间戳模拟下
         })
-        parent.element.tabChange("nav-tab", 2);
+        parent.element.tabChange("nav-tab", 1002);
+
     }
+
+    parent.element.on('tab(nav-tab)', function(elem){
+        doSearch();
+    });
+
     /**
      * 删除促销
      * @param id
