@@ -63,7 +63,8 @@
 
   <select id="findViitorByCounselorId" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultMap="BaseResultMap">
 
-    SELECT ID_,visitor_name,visitor_code,sex,phone,province,city,district,address FROM visitor_register WHERE deleted=0 AND creator=#{creator}
+    SELECT ID_,visitor_name,visitor_code,sex,phone,province,city,district,address FROM visitor_register
+    WHERE deleted=0 AND creator=#{creator}
 
     <if test="phone!=null and phone!=''">
       AND phone LIKE '%${phone}%'
@@ -74,5 +75,22 @@
       </if>
 
     ORDER BY create_time
+  </select>
+
+  <select id="findViitorByCounselorIdSortTime" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultType="java.util.Map">
+      SELECT b.* FROM (
+          SELECT ID_,visitor_name, create_time now_time,sex FROM visitor_register
+                  WHERE deleted=0 AND creator=#{creator}
+
+          AND ID_ NOT IN(SELECT visitor_id FROM visiting_record WHERE deleted=0 AND creator=#{creator})
+
+          UNION ALL
+
+          SELECT ID_,visitor_name, NOW() now_time,sex  FROM visitor_register
+                  WHERE deleted=0 AND ID_ IN (SELECT visitor_id FROM visiting_record WHERE deleted=0 AND creator=#{creator}
+                  ORDER BY create_time DESC)   LIMIT 0,10
+  ) b
+  ORDER BY b.now_time DESC
+
   </select>
 </mapper>

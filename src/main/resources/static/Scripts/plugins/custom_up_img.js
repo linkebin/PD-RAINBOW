@@ -54,7 +54,7 @@ $(function() {
                     }).cropper('reset').cropper('replace', blobURL);
                     $inputImage.val('');
                 } else {
-                    window.alert('Please choose an image file.');
+
                 }
             }
 
@@ -75,13 +75,12 @@ $(function() {
     	var $modal_alert = $('#my-alert');
     	var img_src=$image.attr("src");
     	if(img_src==""){
-    		set_alert_info("没有选择上传的图片");
-    		$modal_alert.modal();
+    		set_alert_info("请选择图片");
     		return false;
     	}
 
     	$modal.modal();
-        //$modal.modal('close');
+        $modal.modal('close');
     	var url=$(this).attr("url");
     	var canvas=$("#image").cropper('getCroppedCanvas');
     	var data=canvas.toDataURL(); //转成base64
@@ -93,28 +92,20 @@ $(function() {
                 success: function(result){
                     $modal.modal();
                     $modal.modal('close');
-                   // $('#doc-modal-1').hide();
-                    //$('#inputImage').val('');
-                	//set_alert_info(data.result);
-                	$modal_alert.modal();
+                    $modal_alert.modal();
                 	if(result.code== 200){
-                       $("#userInfoForm input[name='headImg']").val(result.data);
-                   $("#headImg").attr('src','/files'+result.data+'?t='+ Math.random());
-                   $("#left_img_head").attr('src','/files'+result.data+'?t='+ Math.random());
-                        // $("#headImg").attr("src",data.file);
-                        // $("#left_img_head").attr('src','/files'+data.src+'?t='+ Math.random());
-                		console.log('/files'+result.data+'?t='+ Math.random() + "666");
-                		// alert("data msg = " + data.message );
-                        //var img_name=result.file.split('/')[2];
-                        // console.log(img_name);
-                        // $("#pic").text(img_name);
+                        $("#userInfoForm input[name='headImg']").val(result.data);
+                        $("#headImg").attr('src','/files'+result.data+'?t='+ Math.random());
+                        $("#left_img_head").attr('src','/files'+result.data+'?t='+ Math.random());
+                        $("#doc-modal-1").hide();
+                        $(".am-active").hide();
+                        parent.childCallParent('/files'+result.data+'?t='+ Math.random())
                 	}
                 },
                 error: function(){
                 	$modal.modal('close');
                 	set_alert_info("上传文件失败了！");
                 	$modal_alert.modal();
-                	//console.log('Upload error');
                 }
          });
 
@@ -132,7 +123,8 @@ $("#image").cropper('rotate', -90);
 }
 
 function set_alert_info(content){
-	$("#alert_content").html(content);
+
+	layer.msg(content)
 }
 
 

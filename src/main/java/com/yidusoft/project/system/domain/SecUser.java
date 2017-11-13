@@ -33,6 +33,14 @@ public class SecUser implements Serializable {
     private String userPass;
 
 
+    @Column(name = "province")
+    private String province;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "district")
+    private String district;
 
     /**
      * 用户名称
@@ -110,6 +118,30 @@ public class SecUser implements Serializable {
 
     @Column(name = "channel_id")
     private String channelId;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
 
     public String getChannelId() {
         return channelId;

@@ -5,6 +5,7 @@ import com.yidusoft.core.Service;
 import com.yidusoft.project.business.domain.VisitorRegister;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -20,4 +21,6 @@ public interface VisitorRegisterService extends Service<VisitorRegister> {
     List<VisitorRegister> findViitorByCounselorId(VisitorRegister visitorRegister);
     //为来访者使用问卷
     Result getCheckQuestionnaireForVisitor();
+
+    List<Map<String,Object>> findViitorByCounselorIdSortTime(VisitorRegister visitorRegister);
 }

@@ -5,7 +5,11 @@
     <meta charset="utf-8">
     <title>用户列表</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/Styles/themes/mycss/amazeui.cropper.css}">
+    <link rel="stylesheet" th:href="@{/Styles/themes/mycss/amazeui.min.css}">
+    <link rel="stylesheet" th:href="@{/Styles/themes/mycss/custom_up_img.css}">
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+
     <style type="text/css">
         .nomargin{
             margin: 0 !important;
@@ -69,12 +73,12 @@
             </div>
             <div class="eui-col-md4">
                 <div style="width: 250px; height: 150px;">
-                    <th:block th:if="${session.userSession.headImg=='' || session.userSession.headImg==null}">
-                        <img style="width: 200px; height: 112px;"
-                             class="userImg"  th:src="@{/Styles/images/ruhua.png}" alt="">
-                    </th:block>
+                    <!--<th:block th:if="${session.userSession.headImg=='' || session.userSession.headImg==null}">-->
+                        <!--<img style="width: 200px; height: 112px;"-->
+                             <!--id="headImg"  th:src="@{/Styles/images/ruhua.png}" alt="">-->
+                    <!--</th:block>-->
                     <th:block th:if="${session.userSession.headImg!='' && session.userSession.headImg!=null}">
-                        <img class="userImg" imgPath="" th:src="${'data:image/png;base64,'+session.userSession.headImg}" style="width: 200px; height: 112px;">
+                        <img id="headImg" imgPath=""th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" style="width: 200px; height: 112px;">
                     </th:block>
 
 
@@ -82,10 +86,45 @@
 
                 <div style="height: 30px; width: 250px;">
                         <button type="button"   class="eui-btn eui-btn-small" id="upFiles">
-                            <i class="eui-icon">&#xe67c;</i>上传图片
+                            <i class="eui-icon">&#xe67c;</i>头像上传
                         </button>
                         (只支持图片上传)
                 </div>
+
+                <!--图片上传框-->
+                <div  class="am-modal am-modal-no-btn up-frame-bj " tabindex="-1" id="doc-modal-1">
+                    <div class="am-modal-dialog up-frame-parent up-frame-radius">
+                        <div class="am-modal-hd up-frame-header">
+                            <label style="color: #1E9FFF">上传图片</label>
+                            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+                        </div>
+                        <div class="am-modal-bd  up-frame-body">
+                            <div class="am-g am-fl">
+                                <div class="am-form-group am-form-file">
+                                    <div class="am-fl">
+                                        <button type="button" class="eui-btn eui-btn-small eui-btn-normal">
+                                            <i class="eui-icon">&#xe67c;</i> 选择要上传的图片</button>
+                                    </div>
+                                    <input type="file" id="inputImage">
+                                </div>
+                            </div>
+                            <div class="am-g am-fl" >
+                                <div class="up-pre-before up-frame-radius">
+                                    <img alt="" src="" id="image" >
+                                </div>
+                                <div class="up-pre-after up-frame-radius">
+                                </div>
+                            </div>
+                            <div class="am-g am-fl">
+                                <div  style="background: center;" class="up-control-btns">
+                                    <a  class="eui-btn eui-btn-small  eui-btn-normal" id="up-btn-ok" url="/upload/upload/cropHeadImg">保存修改</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <fieldset class="eui-elem-field eui-field-title eui-font18 " style="margin-top: 20px;">
@@ -131,47 +170,22 @@
 <script th:src="@{/Scripts/jquery-1.9.0.min.js}" charset="utf-8"></script>
 <script th:src="@{/pack.ajax.js}" charset="utf-8"></script>
 <script th:src="@{/Scripts/module/eui.js}" charset="utf-8"></script>
-
-
 <script th:src="@{/Scripts/plugins/md5/md5.min.js}" type="text/javascript"></script>
 <script th:src="@{/Scripts/plugins/jquery.validate.js}"></script>
+<script src="/Scripts/plugins/amazeui.min.js"></script>
+<script src="/Scripts/plugins/cropper.min.js"></script>
+<script src="/Scripts/plugins/custom_up_img.js"></script>
+
 <script >
-    //新上传
-    eui.use('upload', function(){
-        var $ = eui.jquery
-            ,upload = eui.upload;
-
-        //普通图片上传
-        var uploadInst = upload.render({
-            elem: '#upFiles'
-            , method: 'post'
-            ,field:'file'
-            ,url: '/upload/uploadImg'
-            ,done: function(res){
-                //如果上传失败
-                var result=eval("("+res+")");
-                if(result.code==200){
-                    $(".userImg").attr("src","data:image/png;base64,"+result.data.img );
-                    $(".userImg").attr("imgPath",result.data.imgPath );
-                }else{
-                    eui.use(['form', 'layedit', 'laydate'], function() {
-                        var form = eui.form
-                            , layer = eui.layer
-                            , laydate = eui.laydate;
-                        layedit = eui.layedit
-                        layer.msg("图片的格式只能是png与jpg!");
-                    });
-                }
-            }
-            ,error: function(){
-
-            }
-        });
+    // 表单
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
+        var form = eui.form
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
 
     });
-
-
-
 
     $(function () {
         loadInfo();

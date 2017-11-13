@@ -496,7 +496,7 @@ var processLogA=null;
         loadCustomerList(params);
     }
     function loadCustomerList(params) {
-        $.post('/visitor/register/listByparameter',{
+        $.post('/visitor/register/listByparameterTime',{
             json:JSON.stringify(params),
             page:1,
             pagesize:100000
@@ -511,9 +511,9 @@ var processLogA=null;
                     img='/Styles/images/xymfImages/man.png'
                 }
 
-                $(".customerList").append('<div visitorId="'+item.id+'" class="eui-row eui-padding10 line eui-borderB"> ' +
+                $(".customerList").append('<div visitorId="'+item.ID_+'" class="eui-row eui-padding10 line eui-borderB"> ' +
                     '<div class="eui-col-md10 eui-paddingL20 eui-lineHeight24"> ' +
-                    '<p> <span class="eui-font16">'+item.visitorName+'</span></p> ' +
+                    '<p> <span class="eui-font16">'+item.visitor_name+'</span></p> ' +
                     '' +
                     '</div> ' +
                     '<div class="eui-col-md2 eui-paddingR20 eui-textAlignR">' +

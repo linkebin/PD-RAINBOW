@@ -1,16 +1,19 @@
 package com.yidusoft.project.channel.service.impl;
 
+import com.yidusoft.core.Result;
 import com.yidusoft.project.channel.dao.ChannelManageMapper;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.core.AbstractService;
 
+import com.yidusoft.project.system.service.SecUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
 
 
 /**
@@ -21,6 +24,9 @@ import java.util.Map;
 public class ChannelManageServiceImpl extends AbstractService<ChannelManage> implements ChannelManageService {
     @Resource
     private ChannelManageMapper channelManageMapper;
+
+    @Resource
+    private SecUserService secUserService;
 
     @Override
     public List<ChannelManage> finndChannelByParameterList(ChannelManage channelManage) {
@@ -40,5 +46,10 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     @Override
     public List<Map<String, Object>> findChannelOrAccountCounselorListByParameter(Map<String, Object> map) {
         return channelManageMapper.findChannelOrAccountCounselorListByParameter(map);
+    }
+
+    @Override
+    public Result updateChannelApproveStatus(Map<String, Object> map) {
+        return null;
     }
 }

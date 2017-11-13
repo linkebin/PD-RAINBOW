@@ -84,4 +84,11 @@ public interface SecUserMapper extends Mapper<SecUser> {
 
     List<SecUser> findOrgByUsers(SecUser secUser);
 
+    /**
+     * 查询渠道商默认账号
+     * @param channelId
+     * @return
+     */
+    SecUser findChannelDefaultAccount(String channelId);
+
 }

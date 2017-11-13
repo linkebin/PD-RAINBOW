@@ -7,6 +7,8 @@ import com.yidusoft.project.business.domain.VisitingRecordFile;
 import com.yidusoft.project.business.service.VisitingRecordFileService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,7 +221,6 @@ public class UploadController {
     }
 
 
-    // layui上传用户头像 "JPG","PNG"
     @PostMapping("/uploadImglayUi")
     @ResponseBody
     public String uploadImglayUi(HttpServletRequest request, @RequestParam("file") MultipartFile file, String userId) {
@@ -342,7 +343,6 @@ public class UploadController {
         String path = "";
         FileResponseData fileResponseData = null;
         String childPath = "";
-        System.out.println(image + "================");
         try {
             if (image != null && !"".equals(image)){
                 //   去掉base64数据头部data:image/png;base64,和尾部的” " “
@@ -351,26 +351,16 @@ public class UploadController {
                 String[] aa = image.split("\"");
                 image = aa[0];
 
-
-
-//
-
-
                 String realPath = System.getProperty("user.dir");
                 // 自定义的文件名称
-                saveFileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
-                // 设置存放图片文件的路径
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                childPath = "/upload/headImg/" + format.format(new Date());
+                saveFileName = Security.getUserId() + ".jpg";
+                childPath = "/upload/headImg/";
                 path = realPath + childPath;
                 File dir = new File(path);
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
                 try {
-
-                    //  file.transferTo(new File(path + "/" + saveFileName));
-
                     BASE64Decoder decoder = new BASE64Decoder();
                     try {
                         // Base64解码
@@ -387,30 +377,26 @@ public class UploadController {
                         out.close();
 
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-
                 SecUser secUser =  secUserService.findById(Security.getUserId());
-                secUser.setHeadImg(image);
-                System.out.println(image + "==========");
-                //secUserService.update(secUser);
-//                    fileResponseData = new FileResponseData();
-//                    fileResponseData.setCode(0);
-//                    fileResponseData.setMsg("上传成功");
-//                    Data data = new Data();
-//                    data.setSrc(path + "/" + saveFileName);
-//                    fileResponseData.setData(data);
+                secUser.setHeadImg(childPath+saveFileName);
+
+                Session session = SecurityUtils.getSubject().getSession();
+                session.setAttribute("userSessionId", secUser.getId());
+                session.setAttribute("userSession", secUser);
+
+                secUserService.update(secUser);
                 return ResultGenerator.genSuccessResult(childPath + "/" + saveFileName);
             }
         }catch (Exception e){
             return ResultGenerator.genFailResult("上传图片失败！");
         }
-
         return ResultGenerator.genSuccessResult(childPath+ "/" + saveFileName);
     }
 

@@ -39,7 +39,8 @@
             <!-- 内容主体区域 -->
             <div class="xymfContent">
                 <div class="defaultDiv">
-                    <form id="searchFrom" onsubmit="return false;">
+
+                    <form  id="searchFrom" onsubmit="return false;">
                         <input type="hidden" name="creator" th:value="${session.userSession.id}" />
                             <div class="eui-form eui-margin20">
                                 <div class="eui-form-item">
@@ -68,9 +69,16 @@
 
                                         </select>
                                     </div>
-                                    <label class="eui-form-label">时间区间</label>
-                                    <div class="eui-input-inline eui-width200">
+                                    <label class="eui-form-label">来访时间</label>
+                                    <div style="width: 335px;" class="eui-input-inline">
                                         <input  type="text" name="visitor_time" id="visitor_time"  placeholder="请选择" class="eui-input ">
+                                    </div>
+                                </div>
+
+                                <div class="eui-form-item">
+                                    <label class="eui-form-label">创建时间</label>
+                                    <div style="width: 305px;" class="eui-input-inline">
+                                        <input  type="text" name="create_time" id="create_time"  placeholder="请选择" class="eui-input ">
                                     </div>
                                 </div>
                             </div>
@@ -85,17 +93,19 @@
                                 <col width="80">
                                 <col width="100">
                                 <col width="120">
-                                <col width="350">
+                                <col width="250">
+                                <col width="150">
                                 <col >
                             </colgroup>
                             <thead>
                             <tr>
                                 <!--<th><input type="checkbox" e-skin="primary" title=""></th>-->
-                                <th>时间</th>
+                                <th>来访时间</th>
                                 <th>类型</th>
                                 <th>客户姓名</th>
                                 <th>联系方式</th>
                                 <th>描述</th>
+                                <th>创建时间</th>
                                 <th>操    作</th>
                             </tr>
                             </thead>
@@ -136,6 +146,11 @@
 
         laydate.render({
             elem: '#visitor_time'
+            ,type: 'datetime'
+            ,range: true
+        });
+        laydate.render({
+            elem: '#create_time'
             ,type: 'datetime'
             ,range: true
         });
@@ -185,6 +200,11 @@
                 var time = params.visitor_time.split(' - ');
                 params.start=time[0];
                 params.end=time[1];
+            }
+            if (params.create_time!=''){
+                var time = params.create_time.split(' - ');
+                params.start1=time[0];
+                params.end1=time[1];
             }
             var index = layer.load(2); //加载
             $.ajax({
@@ -264,6 +284,7 @@
                 '<td><a target="_blank" href="/web/customer/checkUpdate?id=' + secUser.visitor_id + '">'+ secUser.visitor_name +'</a></td>' +
                 '<td>'+secUser.phone+'</td>' +
                 '<td title="'+secUser.Visiting_purpose+'">'+secUser.Visiting_purpose+'</td>' +
+                '<td>'+ new Date(secUser.create_time).Format('yyyy-MM-dd hh:mm') +'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group">' +aicon+
                 '</div>' +
