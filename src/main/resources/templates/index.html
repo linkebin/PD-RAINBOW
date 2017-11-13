@@ -93,7 +93,7 @@
                                             <img class="eui-borderRadiusC userImgs" name="headImg" th:src="@{/Styles/images/ruhua.png}" alt="">
                                         </th:block>
                                          <th:block th:if="${session.userSession.headImg!='' && session.userSession.headImg!=null}">
-                                             <img class="eui-borderRadiusC userImgs" name="headImg" th:src="${'data:image/png;base64,'+session.userSession.headImg}" alt="">
+                                             <img class="eui-borderRadiusC userImgs" id="left_img_head" name="headImg" th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" alt="">
                                          </th:block>
                                         <span id="msgCount"></span>
 
@@ -357,7 +357,7 @@
     }
 
     $(document).ready(function () {
-        msgCount();
+//        msgCount();
         // $("#sidebar ul.rootmenu>li").has("ul").addClass("plus");
 
 

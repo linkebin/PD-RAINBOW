@@ -27,6 +27,11 @@
       <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
 
     <result column="ORG_NAME" jdbcType="INTEGER" property="orgName" />
+
+      <result column="province" jdbcType="VARCHAR" property="province" />
+      <result column="city" jdbcType="VARCHAR" property="city" />
+      <result column="district" jdbcType="VARCHAR" property="district" />
+
   </resultMap>
 
   <resultMap id="userTree" type="com.yidusoft.utils.TreeNode">
@@ -35,6 +40,10 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="flag" property="flag" jdbcType="VARCHAR" />
   </resultMap>
+
+    <select id="findChannelDefaultAccount" parameterType="String" resultMap="BaseResultMap">
+      SELECT * FROM sec_user WHERE DELETED=0 AND ACCOUNT_TYPE=2 AND channel_id=#{channelId}
+    </select>
 
     <select id="findSecUserByInviterCode" parameterType="String" resultMap="BaseResultMap">
 

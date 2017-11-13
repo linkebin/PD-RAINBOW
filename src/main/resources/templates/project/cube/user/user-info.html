@@ -10,7 +10,7 @@
     <style>
         .defaultDiv{width: 100%; border: 1px solid ghostwhite;}
         .formDiv .eui-form-item label{
-            width: 80px;
+            width: 120px;
             padding: 9px 20px;
             text-align: left;
         }
@@ -38,7 +38,7 @@
                             <h1 style="display: inline; font-size: 20px;">基本资料</h1>
                         </div>
 
-                    <form style="width: 60%;float: left;" id="userInfoForm" class="eui-padding20" onsubmit="return false;">
+                    <form style="width: 65%;float: left;" id="userInfoForm" class="eui-padding20" onsubmit="return false;">
                         <input type="hidden" th:value="${session.userSession.headImg}" name="headImg">
                         <div class="formDiv">
                             <input type="hidden" id="id" name="id" th:value="${session.userSession.id}">
@@ -82,8 +82,38 @@
                                 <div class="eui-form-mid eui-word-aux"></div>
                             </div>
 
+                            <div  data-toggle="distpicker">
                             <div class="eui-form-item">
-                                <label class="eui-form-label">通讯地址</label>
+                                <label class="eui-form-label">省</label>
+                                <div class="eui-input-inline">
+                                    <select data-province="" id="province" class="eui-input eui-width400" e-ignore name="province">
+                                    </select>
+                                </div>
+                                <div class="eui-form-mid eui-word-aux"></div>
+                            </div>
+                            <div class="eui-form-item">
+                                <label class="eui-form-label">市</label>
+                                <div class="eui-input-inline">
+                                    <select data-province="" id="city" class="eui-input eui-width400" e-ignore name="city">
+                                    </select>
+
+                                </div>
+                                <div class="eui-form-mid eui-word-aux"></div>
+                            </div>
+                            <div class="eui-form-item">
+                                <label class="eui-form-label">区</label>
+                                <div class="eui-input-inline">
+                                    <select data-province="" id="district" class="eui-input eui-width400" e-ignore name="district">
+                                    </select>
+
+                                </div>
+                                <div class="eui-form-mid eui-word-aux"></div>
+                            </div>
+                            </div>
+
+
+                            <div class="eui-form-item">
+                                <label class="eui-form-label">详细地址</label>
                                 <div class="eui-input-inline">
                                     <input th:value="${session.userSession.addr}" type="text" name="addr"   class="eui-input eui-width400">
                                 </div>
@@ -105,25 +135,24 @@
                         </div>
                     </form>
 
-                    <div style="width: 30%;float: right;" class="eui-padding20">
-                        <div style="width: 90px; height: 90px; float: left;">
-                            <img id="headImg" th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" width="90" height="90">
-                        </div>
-
-
-                        <button  style="margin-left: 20px; " type="button"   class="eui-btn eui-btn-small eui-btn-normal" id="upFiles">
+                    <div style="width: 33%;float: right;" class="eui-paddingT20">
+                        <button   type="button"   class="eui-btn eui-btn-small eui-btn-normal" id="upFiles">
                             <i class="eui-icon">&#xe67c;</i>上传图片
                         </button><br/>
-                        <span style="font-size: 12px; margin-left: 20px;">(只支持图片上传,支持jpg,png)</span>
+                        <span style="font-size: 12px;">(只支持图片上传,支持jpg,png)</span>
+                    </div>
+
+                    <div style="width: 33%;float: right;" class="">
+                        <div style="width: 100px; height: 100px; float: left;">
+                            <img id="headImg" th:src="${'/files'+session.userSession.headImg+'?t='+'javascript:Math.random()'}" width="90" height="90">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!--========================================================================-->
-
 
             <!--图片上传框-->
-            <div class="am-modal am-modal-no-btn up-frame-bj " tabindex="-1" id="doc-modal-1">
+            <div  class="am-modal am-modal-no-btn up-frame-bj " tabindex="-1" id="doc-modal-1">
                 <div class="am-modal-dialog up-frame-parent up-frame-radius">
                     <div class="am-modal-hd up-frame-header">
                         <label style="color: #1E9FFF">上传图片</label>
@@ -134,7 +163,7 @@
                             <div class="am-form-group am-form-file">
                                 <div class="am-fl">
                                     <button type="button" class="eui-btn eui-btn-small eui-btn-normal">
-                                        <i class="eui-icon">&#xe67c;</i> 选择要上传的文件</button>
+                                        <i class="eui-icon">&#xe67c;</i> 选择要上传的图片</button>
                                 </div>
                                 <input type="file" id="inputImage">
                             </div>
@@ -147,42 +176,14 @@
                             </div>
                         </div>
                         <div class="am-g am-fl">
-                            <div class="up-control-btns">
-                                <a href="#"><span class=eui-icon" id="up-btn-ok" url="/upload/upload/cropHeadImg">&#xe7d0;</span></a>
-
+                            <div  style="background: center;" class="up-control-btns">
+                                <a  class="eui-btn eui-btn-small  eui-btn-normal" id="up-btn-ok" url="/upload/upload/cropHeadImg">保存修改</a>
                             </div>
                         </div>
 
                     </div>
                 </div>
             </div>
-
-            <!--加载框-->
-            <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
-                <div class="am-modal-dialog">
-                    <div class="am-modal-hd">正在上传...</div>
-                    <div class="am-modal-bd">
-                        <span class="am-icon-spinner am-icon-spin"></span>
-                    </div>
-                </div>
-            </div>
-
-            <!--警告框-->
-            <div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
-                <div class="am-modal-dialog">
-                    <div class="am-modal-hd">信息</div>
-                    <div class="am-modal-bd"  id="alert_content">
-                        成功了
-                    </div>
-                    <div class="am-modal-footer">
-                        <span class="am-modal-btn">确定</span>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!--==========================================================================-->
 
 
         </div>
@@ -204,41 +205,34 @@
 <script src="/Scripts/plugins/cropper.min.js"></script>
 <script src="/Scripts/plugins/custom_up_img.js"></script>
 <script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
-<script>
-    eui.use('upload', function(){
-        var $ = eui.jquery
-            ,upload = eui.upload;
+<script src="/Scripts/plugins/distpicker.data.js"></script>
+<script src="/Scripts/plugins/distpicker.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var updateObj  =[[${session.userSession}]];
+    /*]]>*/
 
-        //普通图片上传
-//        var uploadInst = upload.render({
-//            elem: '#upFiles'
-//            , method: 'post'
-//            ,data:{
-//                userId:$("#userInfoForm input[name='id']").val()
-//            }
-//            ,field:'file'
-//            ,url: '/upload/uploadImglayUi'
-//            ,done: function(res){
-//                //如果上传失败
-//                var result=eval("("+res+")");
-//                console.log(result)
-//                if(result.code==0){
-//                    $("#userInfoForm input[name='headImg']").val(result.data.src);
-//                    $("#headImg").attr('src','/files'+result.data.src+'?t='+ Math.random());
-//                    $("#left_img_head").attr('src','/files'+result.data.src+'?t='+ Math.random());
-//                }else{
-//                    eui.use(['form', 'layedit', 'laydate'], function() {
-//                        var form = eui.form
-//                            , layer = eui.layer
-//                            , laydate = eui.laydate;
-//                        layedit = eui.layedit
-//                        layer.msg(result.message);
-//                    });
-//                }
-//            }
-//            ,error: function(){
-//            }
-//        });
+
+
+</script>
+
+<script>
+    // 表单
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
+        var form = eui.form
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
+
+        $('#province').val(updateObj .province);
+        $('#province').trigger("change");
+
+        $('#city').val(updateObj .city);
+        $('#city').trigger("change");
+
+        $('#district').val(updateObj .district);
+        $('#district').trigger("change");
     });
 
     $(function () {

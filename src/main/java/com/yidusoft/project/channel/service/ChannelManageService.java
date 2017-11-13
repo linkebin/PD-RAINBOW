@@ -1,4 +1,5 @@
 package com.yidusoft.project.channel.service;
+import com.yidusoft.core.Result;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.core.Service;
 
@@ -37,5 +38,12 @@ public interface ChannelManageService extends Service<ChannelManage> {
      * @return
      */
     List<Map<String,Object>> findChannelOrAccountCounselorListByParameter(Map<String,Object> map);
+
+    /**
+     * 渠道审批通过
+     * @param map
+     * @return
+     */
+    Result updateChannelApproveStatus(Map<String,Object> map);
 
 }

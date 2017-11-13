@@ -4,6 +4,7 @@ import com.yidusoft.core.Mapper;
 import com.yidusoft.project.business.domain.VisitorRegister;
 
 import java.util.List;
+import java.util.Map;
 
 public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
 
@@ -13,4 +14,11 @@ public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
      * @return
      */
     List<VisitorRegister> findViitorByCounselorId(VisitorRegister visitorRegister);
+
+    /**
+     * 根据咨询师id查询所对应的客户,按最近时间排序
+     * @param visitorRegister
+     * @return
+     */
+    List<Map<String,Object>> findViitorByCounselorIdSortTime(VisitorRegister visitorRegister);
 }

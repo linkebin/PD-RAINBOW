@@ -311,17 +311,7 @@ public class IndexController {
             return "login";
         }
         SecUser  user = secUserService.getSecUserInfo(username);
-        if(0==user.getAccountType()){
-            try {
-                //将图片转换成base64
-                if(user.getHeadImg()!=null && !user.getHeadImg().equals("")){
-                    user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
-                }
-            }catch (Exception e) {
-                user.setHeadImg("");
-            }
 
-        }
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", user.getId());
         session.setAttribute("userSession", user);
@@ -473,8 +463,10 @@ public class IndexController {
 
         secUser.setUserName(userJson.getUserName());
         secUser.setEmail(userJson.getEmail());
-        secUser.setHeadImg(userJson.getHeadImg());
         secUser.setAddr(userJson.getAddr());
+        secUser.setProvince(userJson.getProvince());
+        secUser.setCity(userJson.getCity());
+        secUser.setDistrict(userJson.getDistrict());
 
         secUserService.update(secUser);
 

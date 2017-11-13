@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -53,6 +54,11 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
             return ResultGenerator.genFailResult(e.getMessage());
         }
         return ResultGenerator.genSuccessResult();
+    }
+
+    @Override
+    public List<Map<String, Object>> findViitorByCounselorIdSortTime(VisitorRegister visitorRegister) {
+        return visitorRegisterMapper.findViitorByCounselorIdSortTime(visitorRegister);
     }
 
 }
