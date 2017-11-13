@@ -26,7 +26,7 @@
             <span class="payCentre">问卷填写</span>
             <span  class="eui-btn eui-btn-small eui-btn-normal" onclick="toggleFullScreen()"  style="float:right;margin-left: 5px">全屏/退出全屏</span>
             <div class="eui-col-xs3" style="float:right;color:#1E9FFF ">
-                <span><div id="timer">计时：00:00:00</div></span>
+                <span><div id="timer">00:00:00</div></span>
             </div>
 
         </div>
@@ -422,7 +422,7 @@
                 str_hour = "0" + n_hour;
             }
 
-            var time = '计时：'+ str_hour + ":" + str_min + ":" + str_sec;
+            var time =  str_hour + ":" + str_min + ":" + str_sec;
             ele_timer.text(time);
             n_sec++;
             if (n_sec > 59){

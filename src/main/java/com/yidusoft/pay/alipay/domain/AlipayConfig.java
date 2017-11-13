@@ -15,14 +15,6 @@ public class AlipayConfig {
     // 支付宝公钥，APP_ID对应的支付宝公钥,查看地址：https://openhome.alipay.com/platform/keyManage.htm
     public static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApSMVUCKzCtt341d7e0YT6rdLAyG8YAlLcpSbkl+trlZfva+Kjiy/PYvcG41oJDyepQC0u2iFt1Dm1Sqm0692M6XVW+SyyPVu9Dp8s8wQeOIxFq3bzijkG1j57PHrhCPDWG9YK2SaN9ENAloVbE9VvAwKjKfoLtX8s91grwiHjLXa+IKF8bicMTEQwthIqkg89QQcFXGd2CvK5AQghN1rf5xisGNeQdJ3E9wX/Yp5rjaCFiw3X8ThkK1YigCdqTNk3Fq3B62qSnVFkSlIggVe4SmVOyewv/SX+xJka0SQzmq1YV8jv8kJoRDb/DlMaBSFD7s1syx+ighRNaMZwRmh8wIDAQAB";
 
-    // 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
-    public static String NOTIFY_URL = "http://119.23.245.226:8088/alipay/notify/notifyUrl";
-
-    // 页面跳转同步通知页面路径
-    //网页重定向通知，由客户端浏览器触发的通知，可本地调试，若客户去网银支付，也会受银行接口影响，由于各种影响因素特别多，所以该种类型的通知支付宝不保证其到达率。
-    //买家付款成功后,会跳到 return_url所在的页面,这个页面可以展示给客户看,这个页面只有付款成功才会跳转,并且只跳转一次
-    public static String RETURN_URL = "http://119.23.245.226:8088/alipay/notify/returnUrl";
-
     // 签名方式
     public static String SIGN_TYPE = "RSA2";
 

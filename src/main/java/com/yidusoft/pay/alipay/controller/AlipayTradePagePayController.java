@@ -22,8 +22,18 @@ import java.io.IOException;
 @RequestMapping("/alipaytradepagepay")
 public class AlipayTradePagePayController {
 
+
+
     @RequestMapping("/paymentByAlipay")
     public void paymentByAlipay(HttpServletRequest request, HttpServletResponse response, String formDatas) throws IOException {
+
+        // 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
+        String NOTIFY_URL = "http://"+request.getServerName()+":"+request.getServerPort()+"/alipay/notify/notifyUrl";
+
+        // 页面跳转同步通知页面路径
+        //网页重定向通知，由客户端浏览器触发的通知，可本地调试，若客户去网银支付，也会受银行接口影响，由于各种影响因素特别多，所以该种类型的通知支付宝不保证其到达率。
+        //买家付款成功后,会跳到 return_url所在的页面,这个页面可以展示给客户看,这个页面只有付款成功才会跳转,并且只跳转一次
+        String RETURN_URL = "http://"+request.getServerName()+":"+request.getServerPort()+"/alipay/notify/returnUrl";
 
         //接收订单请求的参数
         JSONObject jsonObject = JSON.parseObject(formDatas);
@@ -47,9 +57,9 @@ public class AlipayTradePagePayController {
         //实例化网站支付接口请求对象
         AlipayTradePagePayRequest alipayTradePagePayRequest = new AlipayTradePagePayRequest();
         //设置同步通知页面
-        alipayTradePagePayRequest.setReturnUrl(AlipayConfig.RETURN_URL);
+        alipayTradePagePayRequest.setReturnUrl(RETURN_URL);
         //设置异步通知页面
-        alipayTradePagePayRequest.setNotifyUrl(AlipayConfig.NOTIFY_URL);
+        alipayTradePagePayRequest.setNotifyUrl(NOTIFY_URL);
         //请求数据
         alipayTradePagePayRequest.setBizContent(bizContent);
         String formString = "";
