@@ -131,9 +131,13 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
             }
         }
         //阳性症状均分
-        double positiveMean=decimal(positiveTotalScore/positiveTotal);
+        if(positiveTotalScore>0){
+            double positiveMean=decimal(positiveTotalScore/positiveTotal);
+        }
         //阴性症状均分
-        double negativeMean=decimal(negativeTotalScore/negativeTotal);
+        if(negativeTotalScore>0){
+            double negativeMean=decimal(negativeTotalScore/negativeTotal);
+        }
         //因子平均分factorMean
         for(int i=0;i<factor.size();i++){
           Map<String,Object>factorMap=factor.get((i+1)+"");
@@ -145,8 +149,10 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
                 factorTotalScore=factorTotalScore+q.getAnswerScore();
             }
             //因子平均分
-
-            double  factorMean= decimal(factorTotalScore/factorArray.length);
+            double  factorMean=0;
+            if(factorTotalScore>0){
+                  factorMean= decimal(factorTotalScore/factorArray.length);
+            }
             factor.get((i+1)+"").put("factorMean",factorMean);
             factor.get((i+1)+"").put("factorTotalScore",factorTotalScore);
         }
