@@ -35,6 +35,12 @@
         <if test="sessionId!='' and sessionId!=null">
           AND sessionId like '%${sessionId}%'
         </if>
+        <if test="operInfo!='' and operInfo!=null">
+          AND oper_info like '%${operInfo}%'
+        </if>
+        <if test="urlResult!='' and urlResult!=null">
+          AND url_result like '%${urlResult}%'
+        </if>
         ORDER BY  oper_time DESC
   </select>
 </mapper>

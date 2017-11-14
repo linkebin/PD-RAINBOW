@@ -32,6 +32,10 @@
                 <a href="###" class="eui-btn eui-btn-small productNew"><i class='eui-icon eui-font24'>&#xe654;</i> 设置套餐</a>
                 <a href="###" class="eui-btn eui-btn-small productDelete"><i class='eui-icon eui-font24'>&#xe640;</i>
                     批量删除</a>
+                <a href="###" class="eui-btn eui-btn-small checkRecord">
+                    <i class='eui-icon eui-font24'>&#xe60e;</i>
+                    套餐修改轨迹
+                </a>
             </div>
         </div>
         <table class="eui-table eui-form" id="userTable">
@@ -41,7 +45,7 @@
             </colgroup>
             <thead>
             <tr>
-                <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                <th><input type="checkbox" name="" title="" e-filter="allChecked" e-skin="primary"></th>
                 <th>套餐编号</th>
                 <th>套餐名称</th>
                 <th>问卷数量</th>
@@ -82,10 +86,24 @@
             </div>
         </div>
         <div class="eui-form-item">
+            <label class="eui-form-label">套餐名称</label>
+            <div class="eui-input-block">
+                <input type="radio" name="productType" title="问卷" value="1" checked e-filter="allSelected">
+                <input type="radio" name="productType" title="会员" value="2" e-filter="allSelected">
+            </div>
+        </div>
+        <div class="eui-form-item" id="total">
             <label class="eui-form-label">问卷数量</label>
             <div class="eui-input-block">
                 <input type="text" name="productTotal" e-verify="title" autocomplete="off" placeholder="请输入套餐数量"
-                       class="eui-input"  oninput="totalChange(this)">
+                       class="eui-input" oninput="totalChange(this)">
+            </div>
+        </div>
+        <div class="eui-form-item" id="time">
+            <label class="eui-form-label">时间期限</label>
+            <div class="eui-input-block">
+                <input type="text" name="timeLimit" e-verify="title" autocomplete="off" placeholder="请输入时间期限"
+                       class="eui-input">
             </div>
         </div>
         <div class="eui-form-item">
@@ -139,11 +157,11 @@
             <label class="eui-form-label">套餐价格</label>
             <div class="eui-input-block">
                 <input type="text" id="price_edit" e-verify="title" autocomplete="off" class="eui-input"
-                        oninput="priceChange(this)">
+                       oninput="priceChange(this)">
             </div>
         </div>
         <div class="eui-form-item">
-            <label class="eui-form-label">套餐价格</label>
+            <label class="eui-form-label">是否启用</label>
             <div class="eui-input-block">
                 <input type="radio" title="是" value="0" name="state_edit" checked>
                 <input type="radio" title="否" value="1" name="state_edit">
@@ -170,7 +188,6 @@
 
 <script>
     var promotionName = "";//活动名称
-    var promotionNameEdit = "";//要修改的活动名称
     // 表单
     eui.use(['element', 'form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
         var form = eui.form
@@ -178,19 +195,20 @@
                 , layedit = eui.layedit
                 , laydate = eui.laydate
                 , laypage = eui.laypage
-                , $ = eui.jquery,
-                element = eui.element;
+                , element = eui.element;
 
-        form.on('select(allChoose)', function (data) {
-            promotionName = data.elem[data.elem.selectedIndex].text;
-        })
-
-        form.on('select(allSelected)', function (data) {
-            promotionNameEdit = data.elem[data.elem.selectedIndex].text;
-            console.log(promotionNameEdit);
+        $('#time').hide();
+        form.on('radio(allSelected)', function (data) {
+            if (data.value == 1) {
+                $('#time').hide();
+                $('#total').show();
+            } else {
+                $('#time').show();
+                $('#total').hide();
+            }
         })
         //全选
-        form.on('checkbox(allChoose)', function (data) {
+        form.on('checkbox(allChecked)', function (data) {
             var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
             child.each(function (index, item) {
                 item.checked = data.elem.checked;
@@ -289,15 +307,15 @@
      * 套餐价格文本框的监听事件
      * @param total
      */
-    function priceChange(e){
-        if(e.value==0){
+    function priceChange(e) {
+        if (e.value == 0) {
             layer.msg("套餐价格不能为0", {
                 icon: 2,
                 time: 2000
             });
         }
         if (e.value != "") {
-            validationNumber(e,1,"请输入大于0的数字");
+            validationNumber(e, 1, "请输入大于0的数字");
         }
     }
 
@@ -306,20 +324,20 @@
      * @param total
      */
     function totalChange(e) {
-        if(parseInt(e.value)==0){
+        if (parseInt(e.value) == 0) {
             layer.msg("问卷数量不能为0", {
                 icon: 2,
                 time: 2000
             });
             e.value = e.value.substring(0, e.value.length - 1);
             e.focus();
-        }else{
-            validationNumber(e,0,"请输入大于0的整数");
+        } else {
+            validationNumber(e, 0, "请输入大于0的整数");
             if (e.value != "") {
                 console.log(unitPrice);
                 console.log(e.value * unitPrice);
                 $('input[name="productPrice"]').val((e.value * unitPrice).toFixed(1));
-                $('#price_edit').val(e.value * unitPrice);
+                $('#price_edit').val((e.value * unitPrice).toFixed(1));
             } else {
                 $('input[name="productPrice"]').val("");
                 $('#price_edit').val("");
@@ -347,7 +365,7 @@
                     , layer = eui.layer,
                     $ = eui.jquery;
             //全选
-            form.on('checkbox(allChoose)', function (data) {
+            form.on('checkbox(allChecked)', function (data) {
                 var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
                 child.each(function (index, item) {
                     item.checked = data.elem.checked;
@@ -419,7 +437,7 @@
             var id = "'" + product.id + "'";
             var state = "否";
             console.log(product.productState)
-            if(product.productState==0){
+            if (product.productState == 0) {
                 state = "是";
             }
             tableHtml += '<tr>' +
@@ -457,19 +475,18 @@
     }
 
 
-
-
     //显示编辑套餐的表单
     function productEdit(id, total, price, name, state) {
+        console.log($('input[name="state_edit"]')[0].checked=true);
         eui.use(['form'], function () {
             var form = eui.form;
             $("#total_edit").val(total);
             $("#price_edit").val(price);
             $("#name_edit").val(name);
             $("#id_edit").val(id);
-            $('input[name="state_edit"]').each(function (i,data) {
-                if(data.value==state){
-                    $(this).attr("checked",true);
+            $('input[name="state_edit"]').each(function (i, data) {
+                if (data.value == state) {
+                    data.checked=true;
                 }
             })
             if (total == 1) {
@@ -481,6 +498,7 @@
                 $(".totalHide").show();
                 $(".promotionHide").show();
             }
+            form.render();
             $(".taskFiltrate2").show();
             $(".filtrateIn2").animate({right: '0'}, 400);
         })
@@ -499,7 +517,7 @@
         var state = $('input[name="state_edit"]:checked').val();
         console.log(state);
         if (total != '' && price != '' && name != "") {
-            if(price==0){
+            if (price == 0) {
                 return layer.msg("套餐价格不能为0")
             }
             var indexs = layer.load(2); //加载
@@ -510,7 +528,7 @@
             obj.productState = state;
             obj.id = $("#id_edit").val();
             $('.confirm').text("正在保存...");
-            $('.confirm').attr("disabled",true);
+            $('.confirm').attr("disabled", true);
             $.post("/product/settings/update", {"productJson": JSON.stringify(obj)}, function (result) {
                 if (result.message = 'SUCCESS') {
                     //关闭
@@ -548,17 +566,17 @@
                 layer.msg('问卷单价已设置,问卷数量不能低于2', {});
                 return;
             }
-            validate(params.productTotal,"问卷数量不能小于或等于0","问卷数量只能数字！！！");//验证信息
+            validate(params.productTotal, "问卷数量不能小于或等于0", "问卷数量只能数字！！！");//验证信息
         }
         params.promotionsName = promotionName;
         if (params.productTotal != '' && params.productPrice != '' && params.productName != '') {
 
-            validate(params.productPrice,"套餐价格不能小于或等于0","套餐价格只能数字！！！");//验证信息
+            validate(params.productPrice, "套餐价格不能小于或等于0", "套餐价格只能数字！！！");//验证信息
 
             var indexs = layer.load(2); //加载
             var obj = new Object();
             $('.confirm').text("正在保存...");
-            $('.confirm').attr("disabled",true);
+            $('.confirm').attr("disabled", true);
             $.post("/product/settings/add", {"productJson": JSON.stringify(params)}, function (result) {
                 if (result.message = 'SUCCESS') {
                     //关闭
@@ -669,13 +687,13 @@
      * @param message
      * @returns {*}
      */
-    function validate(value,msg,message) {
-        if(parseInt(value)<=0){
+    function validate(value, msg, message) {
+        if (parseInt(value) <= 0) {
             return layer.msg(msg);
         }
-        var reNum=/^\d*$/;
+        var reNum = /^\d*$/;
         // 如果验证失败给出警告
-        if(!reNum.test(value)){
+        if (!reNum.test(value)) {
             return layer.msg(message);
         }
     }
@@ -684,7 +702,7 @@
      * @param e
      * @param num //保留几位小数点
      */
-    function validationNumber(e, num ,message) {
+    function validationNumber(e, num, message) {
         var regu = /^[0-9]+\.?[0-9]*$/;
         if (e.value != "") {
             if (!regu.test(e.value)) {
@@ -714,6 +732,18 @@
             }
         }
     }
+
+    $('.checkRecord').click(function () {
+        if (parent.$(".eui-tab-title li[e-id='999']").length <= 0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '套餐修改轨迹',
+                type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="web/product/trajectory"></iframe>'
+                , id: 999 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 999);
+    })
 </script>
 </body>
 </html>

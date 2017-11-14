@@ -18,4 +18,9 @@ public class WebProductSettingsController {
     public String linkList(){
         return "project/transaction/product/productList";
     }
+
+    @RequestMapping("/trajectory")
+    public String trajectory(){
+        return "project/transaction/product/productTrajectory";
+    }
 }

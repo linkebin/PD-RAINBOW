@@ -207,23 +207,27 @@
 
     // 新建促销
     $(".promotionNew").click(function () {
-        parent.element.tabAdd('nav-tab', {
-            title: '新建促销活动',
-            type: 2
-            , content: '<iframe frameborder=0 class="contentIframe" src="web/promotion/add"></iframe>'
-            , id: 1001 //实际使用一般是规定好的id，这里以时间戳模拟下
-        })
+        if(parent.$(".eui-tab-title li[e-id='1001']").length<=0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '新建促销活动',
+                type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="web/promotion/add"></iframe>'
+                , id: 1001 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
         parent.element.tabChange("nav-tab", 1001);
     });
 
     //编辑促销
     function promotionEdit(id) {
-        parent.element.tabAdd('nav-tab', {
-            title: '编辑促销活动',
-            type: 2
-            , content: '<iframe frameborder=0 class="contentIframe" src="web/promotion/update/'+id+'"></iframe>'
-            , id: 1002 //实际使用一般是规定好的id，这里以时间戳模拟下
-        })
+        if(parent.$(".eui-tab-title li[e-id='1002']").length<=0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '编辑促销活动',
+                type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="web/promotion/update/' + id + '"></iframe>'
+                , id: 1002 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
         parent.element.tabChange("nav-tab", 1002);
 
     }

@@ -1,24 +1,21 @@
 package com.yidusoft.project.transaction.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.domain.ProductSettings;
-import com.yidusoft.project.transaction.service.OrderOnlineService;
 import com.yidusoft.project.transaction.service.ProductSettingsService;
-import com.yidusoft.utils.CodeHelper;
-import com.yidusoft.utils.Security;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by CodeGenerator on 2017/10/11.
@@ -29,8 +26,6 @@ public class ProductSettingsController {
     @Resource
     private ProductSettingsService productSettingsService;
 
-    @Resource
-    private OrderOnlineService orderOnlineService;
 
     /**
      * 获取套餐列表
@@ -67,16 +62,7 @@ public class ProductSettingsController {
      */
     @PostMapping("/add")
     public Result add(String productJson) {
-        ProductSettings product = JSON.parseObject(productJson, ProductSettings.class);
-        product.setId(UUID.randomUUID().toString());
-        product.setProductCode(CodeHelper.getCode("P"));
-        product.setCreator(Security.getUser().getUserName());
-        product.setCreateTime(new Date());
-        product.setDeleted(0);
-        product.setPromotionsId("");
-        product.setPromotionsName("");
-        productSettingsService.save(product);
-        return ResultGenerator.genSuccessResult();
+        return productSettingsService.addProduct(productJson);
     }
 
     /**
@@ -88,16 +74,7 @@ public class ProductSettingsController {
     @Transactional
     @PostMapping("/deleteBacth")
     public Result deleteBacth(String ids) {
-        String arr[] = ids.split(",");
-        for (String str : arr) {
-            ProductSettings product = productSettingsService.findById(str);
-            product.setDeleted(1);
-            productSettingsService.update(product);
-            orderOnlineService.updateOrderOnline(str);
-            //更新权限
-//            shiroService.updatePermission();
-        }
-        return ResultGenerator.genSuccessResult();
+        return productSettingsService.deleteBacth(ids);
     }
 
     /**
@@ -108,9 +85,7 @@ public class ProductSettingsController {
      */
     @PostMapping("/update")
     public Result update(String productJson) {
-        ProductSettings product = JSON.parseObject(productJson, ProductSettings.class);
-        productSettingsService.update(product);
-        return ResultGenerator.genSuccessResult(product);
+        return productSettingsService.updateProduct(productJson);
     }
 
     /**

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>行为记录</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body>
+
+<div class="eui-bd eui-padding15">
+    <div class=" eui-bg-white">
+        <div class="">
+            <form class="eui-form" id="searchFrom">
+                <div class="eui-input-inline eui-padding10">
+
+                    <input type="text" name="content" e-verify="title" value=""
+                           autocomplete="off" placeholder="操作内容/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="creator" e-verify="title" value=""
+                           autocomplete="off" placeholder="操作人/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="productName" e-verify="title" value=""
+                           autocomplete="off" placeholder="套餐名/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
+            <table class="eui-table eui-form" id="trajectoryTable">
+                <colgroup>
+                    <col width="600">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>操作内容</th>
+                    <th>操作套餐</th>
+                    <th>操作人</th>
+                    <th>操作时间</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <div style="margin-left: 30px;" id="pages"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
+
+<script>
+
+    function resetForm() {
+        $('#searchFrom')[0].reset();
+    }
+
+    $(function () {
+        doSearch();
+    })
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form', 'laypage', 'layer'], function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer,
+                    $ = eui.jquery;
+
+            var params = $("#searchFrom").serializeObject();
+            $.ajax({
+                url: "/modify/trajectory/listByPage",
+                data: {
+                    page: 1,
+                    size: 10,
+                    params: JSON.stringify($("#searchFrom").serializeObject())
+                },
+                type: "post",
+                success: function (result) {
+                    console.log(result);
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+//                        ,pages: result.data.pages
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var trajectoryList = result.data.list;
+                                console.log(trajectoryList);
+                                //遍历，拼接表格
+                                var tableHtml = getTable(trajectoryList);
+                                $("#trajectoryTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                $.ajax({
+                                    url: "/modify/trajectory/listByPage",
+                                    data: {
+                                        page: obj.curr,
+                                        size: obj.limit,
+                                        params: JSON.stringify($("#searchFrom").serializeObject())
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        console.log(result);
+                                        var trajectoryList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(trajectoryList);
+                                        $("#trajectoryTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(trajectoryList) {
+        var tableHtml = '';
+        for (var item in trajectoryList) {
+            var trajectory = trajectoryList[item];
+            var color ="green";
+            if(trajectory.urlResult=="异常"){
+                color = "red";
+            }
+            tableHtml += '<tr>' +
+                    '<td>' + trajectory.content + '</td>' +
+                    '<td>' + trajectory.productName + '</td>' +
+                    '<td>' + trajectory.creator + '</td>' +
+                    '<td>' + new Date(trajectory.createTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
+                    '</tr>';
+        }
+        return tableHtml;
+    }
+</script>
+</body>
+</html>

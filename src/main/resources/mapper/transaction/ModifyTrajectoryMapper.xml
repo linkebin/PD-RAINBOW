@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.transaction.dao.ModifyTrajectoryMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.transaction.domain.ModifyTrajectory">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+  </resultMap>
+  <select id="getAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.transaction.domain.ModifyTrajectory">
+    SELECT content,creator,create_time,product_name FROM modify_trajectory
+    WHERE 1=1
+    <if test="content!=null and content!=''">
+      AND content LIKE '%${content}%'
+    </if>
+    <if test="productName!=null and productName!=''">
+      AND product_name LIKE '%${productName}%'
+    </if>
+    <if test="creator!=null and creator!=''">
+      AND creator LIKE '%${creator}%'
+    </if>
+    ORDER BY create_time DESC
+  </select>
+</mapper>
