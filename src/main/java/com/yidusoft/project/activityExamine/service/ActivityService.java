@@ -9,11 +9,13 @@ import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jery on 2016/11/23.
@@ -46,6 +45,9 @@ public class ActivityService {
 
     @Autowired
     private SecUserService secUserService;
+
+    @Autowired
+    private ProcessEngine processEngine;
 
     @Value("${server.port}")
     private String port;
@@ -98,14 +100,13 @@ public class ActivityService {
      * @return
      */
     public List<String> findUsers(DelegateExecution execution) {
-        List<SecUser> secUsers = secUserService.userListByRoleId("e927c081-0786-48ff-8b00-728f9e1d48a2");
+        List<SecUser> secUsers = secUserService.userListByRoleId("c47beaee-4935-4961-a4d2-bc60e3f66ac2");
         List<String> userIds = new ArrayList<>();
         for (SecUser secUser:secUsers) {
-            userIds.add(secUser.getId());
+            userIds.add(secUser.getAccount());
         }
         return userIds;
     }
-
 
     /**
      * 流程轨迹
@@ -159,12 +160,14 @@ public class ActivityService {
         Boolean bool = (Boolean) execution.getVariable("launchApproved");
 
         if (bool) {
-            //获取服务器IP
-            LaunchActivities launchActivities=launchActivitiesService.findById("");
-            launchActivities.setActivityStatus(2);
-            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-            launchActivities.setUestionnaireUri("http://"+ip+":"+port+"/web/activities/fillingPage");
-            launchActivitiesService.update(launchActivities);
+            Long personId = (Long) execution.getVariable("personId");
+            Long compId = (Long) execution.getVariable("compId");
+//            //获取服务器IP
+//            LaunchActivities launchActivities=launchActivitiesService.findById("");
+//            launchActivities.setActivityStatus(2);
+//            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
+//            launchActivities.setUestionnaireUri("http://"+ip+":"+port+"/web/activities/fillingPage");
+//            launchActivitiesService.update(launchActivities);
             logger.info("活动审批通过");
         } else {
             logger.info("活动审批退回");

@@ -10,7 +10,7 @@
 				                       required="true"></activiti:formProperty>
 			</extensionElements>
 		</startEvent>
-		<userTask id="ApprovalTask" name="审批"
+		<userTask id="ApprovalTask" name="审批122"
 				  activiti:candidateUsers="${activityService.findUsers(execution)}" isForCompensation="true">
 			<extensionElements>
 				<activiti:formProperty id="launchApproved" name="launch Approved" type="enum">
@@ -26,4 +26,5 @@
 					 activiti:expression="${activityService.launch(execution)}"></serviceTask>
 		<sequenceFlow id="flow3" sourceRef="AutoTask" targetRef="end"></sequenceFlow>
 	</process>
+
 </definitions>
