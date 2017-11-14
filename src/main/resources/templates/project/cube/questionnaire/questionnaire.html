@@ -36,11 +36,11 @@
 
 
 <div class="questionContent">
-    <div class="eui-area">
+    <div class="eui-area subjectCon">
         <p class="eui-lineHeight24 conetentHint eui-font14">
             下面有<span th:text="${questionnaireQuestionSize}">90</span>道条测试项目，<span th:text="${remarks}">列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。</span>
         </p>
-        <div class="subject">
+        <div class="subject eui-box-shadow">
             <ul id="questionUl">
             </ul>
             <span class="sliderLeft"></span>
@@ -56,7 +56,7 @@
     <div class="questionSubmit">
         <div class="eui-area eui-textAlignR">
             <!--<img src="/Styles/images/xymfImages/QRcode.png" width="50" alt="">-->
-            <button class="submitBtn" id="submitBtn" onclick="calScore();"><img src="/Styles/images/xymfImages/submit.png"
+            <button class="submitBtn eui-btn" id="submitBtn" onclick="calScore();"><img src="/Styles/images/xymfImages/submit.png"
                                                                               width="30" alt="">提交问卷</button>
         </div>
 
@@ -241,12 +241,12 @@
             var scoreIndex = i;
             for (var z = 0; z < questions.length; z++) {
                 var scores = scoreList[(scoreIndex * 10 + z)];
-                contentHtml += '<div class="eui-row">' +
+                contentHtml += '<div class="eui-row eui-marginB15">' +
                     '<div class="eui-col-md5 eui-textAlignR gradeSubject eui-paddingR20" name="questionContent" questionType="'+questions[z].questionType+'" questionId="'+questions[z].id+'">' +
                     (z+1) +'.' + questions[z].questionContent+
                     '</div>' +
                     '<div class="eui-col-md7">' +
-                    '<div style="height: 50px;" class="grade">' +
+                    '<div class="grade">' +
                     '<select class="example-0 rating" name="rating">' ;
                 for (var s in scores) {
                     contentHtml += '<option value="' + scores[s] + '"></option>';

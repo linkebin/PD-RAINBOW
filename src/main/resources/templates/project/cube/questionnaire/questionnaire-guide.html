@@ -35,18 +35,33 @@
     </div>
 
 </div>-->
-
-
-<!--答题欢迎内容-->
-<div class="eui-marginTB20">
-    <p class="eui-color-blue eui-textAlignC eui-font36 eui-marginT20">欢迎来到答题页面！</p>
-    <div class="eui-margin20 eui-padding20 welcomePage eui-lineHeight30">
-        <p class="eui-textIndent">请认真阅读以下内容！</p>
-        <p class="eui-textIndent" th:text="${guide}">请认真阅读以下内容！请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容</p>
+<div class="questionHeader">
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">问卷填写</span>
+        </div>
 
     </div>
-    <div class="eui-textAlignC eui-marginT20"><span class="xymfShadow eui-btn eui-btn-normal eui-btn-big eui-btn-radius" onclick="startAnswer()">开始答题</span></div>
 </div>
+<div class="eui-area welcomeContent">
+    <!--答题欢迎内容-->
+    <div class="eui-paddingTB20 eui-bg-white">
+        <p class="eui-color-blue eui-textAlignC eui-font36 eui-marginT20">欢迎来到答题页面！</p>
+        <div class="eui-margin20 eui-padding20 welcomePage eui-lineHeight30">
+            <p class="eui-textIndent">请认真阅读以下内容！</p>
+            <p class="eui-textIndent" th:text="${guide}">请认真阅读以下内容！请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容请认真阅读以下内容</p>
+        </div>
+        <div class="eui-textAlignC eui-marginT20"><span class="xymfShadow eui-btn eui-btn-normal eui-btn-big eui-btn-radius" onclick="startAnswer()">开始答题</span></div>
+    </div>
+</div>
+
+
+<div class="xymfFooter">
+    <!-- 底部固定区域 -->
+    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+</div>
+
 
 
 <script src="/Scripts/module/eui.js"></script>
