@@ -68,6 +68,17 @@ public class WebController {
         return "project/cube/questionnaire/activity";
     }
     /**
+     * 跳转到活动页面
+     * @param model
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = {"/slideshow/{id}"})
+    public String slideshow(Model model,@PathVariable String id){
+        model.addAttribute("id",id);
+        return "project/cube/questionnaire/slideshow";
+    }
+    /**
      * 跳转到建设中页面
      * @return
      */

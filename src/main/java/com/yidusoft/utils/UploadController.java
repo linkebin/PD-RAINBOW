@@ -264,7 +264,7 @@ public class UploadController {
 
     //通用图片上传
     @PostMapping("/comUploadImg")
-    public String comUploadImg(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+    public String comUploadImg(@RequestParam("file") MultipartFile file) {
         String fileName = file.getOriginalFilename();// 文件原名称
 
         String type = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
@@ -286,31 +286,33 @@ public class UploadController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return  JSON.toJSONString(ResultGenerator.genSuccessResult(childPath + "/" + saveFileName));
+            return JSON.toJSONString(ResultGenerator.genSuccessResult(childPath + "/" + saveFileName));
         } else {
-            return  JSON.toJSONString(ResultGenerator.genFailResult("只支持jpg与png的格式上传！"));
+            return JSON.toJSONString(ResultGenerator.genFailResult("只支持jpg与png的格式上传！"));
         }
     }
-        /**
-         * 获取限制的文件类型
-         * @param fileType
-         * @return
-         */
-        public static List<String> getTypes(String fileType){
-            if ("pictures".equals(fileType)) {
-                return pictures;
-            } else if ("docs".equals(fileType)) {
-                return docs;
-            } else if ("videos".equals(fileType)) {
-                return videos;
-            } else if ("tottents".equals(fileType)) {
-                return tottents;
-            } else if ("audios".equals(fileType)) {
-                return audios;
-            } else {
-                return null;
-            }
+
+    /**
+     * 获取限制的文件类型
+     *
+     * @param fileType
+     * @return
+     */
+    public static List<String> getTypes(String fileType) {
+        if ("pictures".equals(fileType)) {
+            return pictures;
+        } else if ("docs".equals(fileType)) {
+            return docs;
+        } else if ("videos".equals(fileType)) {
+            return videos;
+        } else if ("tottents".equals(fileType)) {
+            return tottents;
+        } else if ("audios".equals(fileType)) {
+            return audios;
+        } else {
+            return null;
         }
+    }
 
 
     public void saveFilePathInDataBase(String fileTable, FileResponseData fileResponseData,
@@ -338,15 +340,15 @@ public class UploadController {
     }
 
     @PostMapping("/upload/cropHeadImg")
-    public Result cropHeadImg(String image){
+    public Result cropHeadImg(String image) {
         String saveFileName = "";
         String path = "";
         FileResponseData fileResponseData = null;
         String childPath = "";
         try {
-            if (image != null && !"".equals(image)){
+            if (image != null && !"".equals(image)) {
                 //   去掉base64数据头部data:image/png;base64,和尾部的” " “
-                String[] ww= image.split(",");
+                String[] ww = image.split(",");
                 image = ww[1];
                 String[] aa = image.split("\"");
                 image = aa[0];
@@ -384,8 +386,8 @@ public class UploadController {
                     e.printStackTrace();
                 }
 
-                SecUser secUser =  secUserService.findById(Security.getUserId());
-                secUser.setHeadImg(childPath+saveFileName);
+                SecUser secUser = secUserService.findById(Security.getUserId());
+                secUser.setHeadImg(childPath + saveFileName);
 
                 Session session = SecurityUtils.getSubject().getSession();
                 session.setAttribute("userSessionId", secUser.getId());
@@ -394,10 +396,123 @@ public class UploadController {
                 secUserService.update(secUser);
                 return ResultGenerator.genSuccessResult(childPath + "/" + saveFileName);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResultGenerator.genFailResult("上传图片失败！");
         }
-        return ResultGenerator.genSuccessResult(childPath+ "/" + saveFileName);
+        return ResultGenerator.genSuccessResult(childPath + "/" + saveFileName);
     }
 
+    /**
+     * 百度富文本的配置参数
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/ueConfig")
+    @ResponseBody
+    public JSON ueConfig(HttpServletRequest request) {
+        String config ="\n" +
+                "{\n" +
+                "   \n" +
+                "    \"imageActionName\": \"uploadimage\",\n" +
+                "    \"imageFieldName\": \"upfile\",\n" +
+                "    \"imageMaxSize\": 2048000, \n" +
+                "    \"imageAllowFiles\": [\".png\", \".jpg\", \".jpeg\", \".gif\", \".bmp\"],\n" +
+                "    \"imageCompressEnable\": true,\n" +
+                "    \"imageCompressBorder\": 1600,\n" +
+                "    \"imageInsertAlign\": \"none\",\n" +
+                "    \"imageUrlPrefix\": \"/files\",\n" +
+                "    \"imagePathFormat\": \"/ueditor/jsp/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
+                "                           \n" +
+                "\n" +
+                "  \n" +
+                "    \"scrawlActionName\": \"uploadscrawl\",\n" +
+                "    \"scrawlFieldName\": \"upfile\",\n" +
+                "    \"scrawlPathFormat\": \"/ueditor/jsp/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
+                "    \"scrawlMaxSize\": 2048000, \n" +
+                "    \"scrawlUrlPrefix\": \"/files\",\n" +
+                "    \"scrawlInsertAlign\": \"none\",\n" +
+                "\n" +
+                "   \n" +
+                "    \"snapscreenActionName\": \"uploadimage\",\n" +
+                "    \"snapscreenPathFormat\": \"/ueditor/jsp/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
+                "    \"snapscreenUrlPrefix\": \"/files\",\n" +
+                "    \"snapscreenInsertAlign\": \"none\",\n" +
+                "\n" +
+                "   \n" +
+                "    \"catcherLocalDomain\": [\"127.0.0.1\", \"localhost\", \"img.baidu.com\"],\n" +
+                "    \"catcherActionName\": \"catchimage\",\n" +
+                "    \"catcherFieldName\": \"source\",\n" +
+                "    \"catcherPathFormat\": \"/ueditor/jsp/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
+                "    \"catcherUrlPrefix\": \"\",\n" +
+                "    \"catcherMaxSize\": 2048000, \n" +
+                "    \"catcherAllowFiles\": [\".png\", \".jpg\", \".jpeg\", \".gif\", \".bmp\"],\n" +
+                "\n" +
+                "   \n" +
+                "    \"videoActionName\": \"uploadvideo\",\n" +
+                "    \"videoFieldName\": \"upfile\",\n" +
+                "    \"videoPathFormat\": \"/ueditor/jsp/upload/video/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
+                "    \"videoUrlPrefix\": \"\",\n" +
+                "    \"videoMaxSize\": 102400000,\n" +
+                "    \"videoAllowFiles\": [\n" +
+                "        \".flv\", \".swf\", \".mkv\", \".avi\", \".rm\", \".rmvb\", \".mpeg\", \".mpg\",\n" +
+                "        \".ogg\", \".ogv\", \".mov\", \".wmv\", \".mp4\", \".webm\", \".mp3\", \".wav\", \".mid\"],\n" +
+                "\n" +
+                "   \n" +
+                "    \"fileActionName\": \"uploadfile\",\n" +
+                "    \"fileFieldName\": \"upfile\",\n" +
+                "    \"filePathFormat\": \"/ueditor/jsp/upload/file/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
+                "    \"fileUrlPrefix\": \"\",\n" +
+                "    \"fileMaxSize\": 51200000, \n" +
+                "    \"fileAllowFiles\": [\n" +
+                "        \".png\", \".jpg\", \".jpeg\", \".gif\", \".bmp\",\n" +
+                "        \".flv\", \".swf\", \".mkv\", \".avi\", \".rm\", \".rmvb\", \".mpeg\", \".mpg\",\n" +
+                "        \".ogg\", \".ogv\", \".mov\", \".wmv\", \".mp4\", \".webm\", \".mp3\", \".wav\", \".mid\",\n" +
+                "        \".rar\", \".zip\", \".tar\", \".gz\", \".7z\", \".bz2\", \".cab\", \".iso\",\n" +
+                "        \".doc\", \".docx\", \".xls\", \".xlsx\", \".ppt\", \".pptx\", \".pdf\", \".txt\", \".md\", \".xml\"\n" +
+                "    ],\n" +
+                "\n" +
+                "   \n" +
+                "    \"imageManagerActionName\": \"listimage\",\n" +
+                "    \"imageManagerListPath\": \"/ueditor/jsp/upload/image/\",\n" +
+                "    \"imageManagerListSize\": 20,\n" +
+                "    \"imageManagerUrlPrefix\": \"\",\n" +
+                "    \"imageManagerInsertAlign\": \"none\",\n" +
+                "    \"imageManagerAllowFiles\": [\".png\", \".jpg\", \".jpeg\", \".gif\", \".bmp\"],\n" +
+                "\n" +
+                "   \n" +
+                "    \"fileManagerActionName\": \"listfile\",\n" +
+                "    \"fileManagerListPath\": \"/ueditor/jsp/upload/file/\",\n" +
+                "    \"fileManagerUrlPrefix\": \"\",\n" +
+                "    \"fileManagerListSize\": 20,\n" +
+                "    \"fileManagerAllowFiles\": [\n" +
+                "        \".png\", \".jpg\", \".jpeg\", \".gif\", \".bmp\",\n" +
+                "        \".flv\", \".swf\", \".mkv\", \".avi\", \".rm\", \".rmvb\", \".mpeg\", \".mpg\",\n" +
+                "        \".ogg\", \".ogv\", \".mov\", \".wmv\", \".mp4\", \".webm\", \".mp3\", \".wav\", \".mid\",\n" +
+                "        \".rar\", \".zip\", \".tar\", \".gz\", \".7z\", \".bz2\", \".cab\", \".iso\",\n" +
+                "        \".doc\", \".docx\", \".xls\", \".xlsx\", \".ppt\", \".pptx\", \".pdf\", \".txt\", \".md\", \".xml\"\n" +
+                "    ]\n" +
+                "\n" +
+                "}";
+
+        return JSON.parseObject(config);
+    }
+
+
+    /**
+     * 百度富文本的图片上传
+     *
+     * @return
+     */
+    @PostMapping("/ueUploadImg")
+    public JSON ueUploadImg(MultipartFile upfile) {
+        Result result = JSON.parseObject(this.comUploadImg(upfile),Result.class);
+        if ("200".equals(result.getCode()+"")) {
+            String path = result.getData().toString();
+            String config ="{\"state\": \"SUCCESS\",\"url\": \"/files" + path + "\",\"title\": \"path\",\"original\": \"11\" }";
+            return JSON.parseObject(config);
+
+        }
+        return null;
+    }
 }

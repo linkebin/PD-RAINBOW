@@ -177,14 +177,14 @@
                                         if(result.message == "SUCCESS"){
                                             var promotion =result.data;
                                             if(promotion!=null){
-                                                $('.shutter-img').append('<a href="/cube/activity/' + img.objectId + '" data-shutter-title="'+promotion.promotionsName+'">' +
+                                                $('.shutter-img').append('<a href="/cube/slideshow/' + img.objectId + '" data-shutter-title="'+promotion.promotionsName+'">' +
                                                         '<img src="/files' + imgPath + '"></a>');
                                             }
                                         }
                                     }
                                 })
                             } else {
-                                $('.shutter-img').append('<a href="#" data-shutter-title="其他">' +
+                                $('.shutter-img').append('<a href="/cube/slideshow/' + img.objectId + '" data-shutter-title="其他">' +
                                         '<img src="/files' + imgPath + '"></a>');
                             }
                         }
