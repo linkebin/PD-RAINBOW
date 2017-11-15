@@ -99,10 +99,11 @@
                     </div>
                     <div class="eui-form-item">
                         <label class="eui-form-label">问卷名称</label>
-                        <div class="eui-input-inline">
-                            <select e-filter="uestionnaireId" class="eui-input" e-ignore name="uestionnaireId">
-                                <option value="">请选择</option>
-                            </select>
+                        <div class="eui-input-inline" onclick="loadQuestionnaireForAct()">
+                            <!--<select e-filter="uestionnaireId" class="eui-input" e-ignore name="uestionnaireId">-->
+                            <!--<option value="">请选择</option>-->
+                            <!--</select>-->
+                            <input type="text" name="uestionnaireId" id="uestionnaireId" e-verify="title" autocomplete="off" placeholder="请选择问卷" class="eui-input" readonly="readonly" >
                         </div>
                         <label class="eui-form-label">活动开始时间</label>
                         <div class="eui-input-inline">
@@ -144,7 +145,7 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-
+    var queName = '';
     $(function () {
         eui.use(['form', 'layedit', 'laydate'], function () {
             var form = eui.form
@@ -162,7 +163,7 @@
                 type: 'datetime'
             });
 
-            getQuestions(form);
+            //getQuestions(form);
 
             jQuery.validator.addMethod("isMobile", function (value, element) {
                 var length = value.length;
@@ -261,7 +262,8 @@
                     delete obj.province;
                     delete obj.city;
                     delete obj.district;
-                    obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                   // obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                    obj.uestionnaireName = queName;
                     console.log(obj);
                     if (obj.activityStart > obj.activityEnd) {
                         return layer.msg('活动开始时间不能大于结束时间');
@@ -352,6 +354,50 @@
                 console.log($('select[name="uestionnaireId"]:selected').text());
             }
         })
+    }
+
+    /**
+     * 加载问卷
+     *
+     */
+
+    function loadQuestionnaireForAct() {
+        var userId=$("[name='visitorId']").val();
+        var list=new Array;
+        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+            var iframeWin;//iframe对象
+            layer.open({
+                type: 2
+                ,id: ''
+                ,title: '选择问卷'
+                ,area: ['800px', '500px']
+                ,success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,shade: 0
+                ,moveType: 0//拖拽模式，0或者1
+                ,maxmin: true
+                ,content:"/web/customer/getCheckQuestionnaireForAct"
+                ,btn: ['确定', '关闭'] //只是为了演示
+                ,yes: function(){
+                    var obj =  iframeWin.getQuestionnaireNameAndId();
+                    queName = obj.questionnaireName;
+                    $('#uestionnaireId').val(queName);
+                    console.log("questionnaireName = " + obj.questionnaireName);
+                    layer.closeAll();
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                },cancel: function(){
+                    layer.closeAll();
+                }
+                ,zIndex: layer.zIndex //重点1
+            });
+        });
+
     }
 </script>
 

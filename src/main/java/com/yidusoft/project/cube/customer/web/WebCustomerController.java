@@ -82,6 +82,11 @@ public class WebCustomerController {
         return "project/cube/customer/check-questionnaire";
     }
 
+    //添加活动 跳转选择问卷页面
+    @RequestMapping("/getCheckQuestionnaireForAct")
+    public String getCheckQuestionnaireForAct(){
+        return "project/cube/customer/check-questionnaire-activity";
+    }
 
     @RequestMapping("/dna")
     public String dna(){
