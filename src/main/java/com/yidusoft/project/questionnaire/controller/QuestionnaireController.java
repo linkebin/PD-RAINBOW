@@ -7,6 +7,7 @@ import com.yidusoft.project.questionnaire.domain.Questionnaire;
 import com.yidusoft.project.questionnaire.service.QuestionnaireService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -53,7 +54,10 @@ public class QuestionnaireController {
      */
     @PostMapping("/findQuestionnaireForTagAndScene")
     @ResponseBody
-    public Result findQuestionnaireForTagAndScene(String questionnaireName,String tagIds,String sceneIds, Integer page, Integer size) {
+    public Result findQuestionnaireForTagAndScene(String questionnaireName,String tagIds,String sceneIds, Integer page, Integer size,String typeIds) {
+      System.out.println(typeIds);
+      System.out.println("tagid  = " + tagIds);
+      System.out.println("sceneid =  " + sceneIds);
         Map<String,Object> map=new HashMap<>();
         if(!"".equals(tagIds) && tagIds!=null){
             map.put("tagIds", tagIds.split(","));
@@ -65,7 +69,14 @@ public class QuestionnaireController {
         }else {
             map.put("sceneIds", "");
         }
+        if(typeIds != null && !"".equals(typeIds)){
+            map.put("typeIds",typeIds.split(","));
+        }else{
+            map.put("typeIds","");
+        }
+
         map.put("questionnaireName", questionnaireName);
+        map.put("userId", Security.getUserId());
         PageHelper.startPage(page, size);
         List<Questionnaire> list =questionnaireService.findQuestionnaireForTagAndScene(map);
         //查询所有的相关数据
@@ -81,9 +92,9 @@ public class QuestionnaireController {
      */
     @PostMapping("/addQuestionnaire")
     @ResponseBody
-    public Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId) {
+    public Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId,String userIds) {
 
-        return  questionnaireService.addQuestionnaire( questionnaire,questionStr, tagId, sceneId);
+        return  questionnaireService.addQuestionnaire( questionnaire,questionStr, tagId, sceneId, userIds);
     }
 
 

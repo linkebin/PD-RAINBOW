@@ -14,6 +14,20 @@
         <result column="pid" jdbcType="VARCHAR" property="pid"/>
     </resultMap>
 
+    <resultMap id="BaseResultMap1" type="com.yidusoft.project.questionnaire.domain.QuestionnaireType">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID_" jdbcType="VARCHAR" property="id"/>
+        <result column="questionnaire_type_code" jdbcType="VARCHAR" property="questionnaireTypeCode"/>
+        <result column="questionnaire_type_name" jdbcType="VARCHAR" property="questionnaireTypeName"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="deleted" jdbcType="INTEGER" property="deleted"/>
+        <result column="pid" jdbcType="VARCHAR" property="pid"/>
+        <result column="nums" jdbcType="INTEGER" property="nums"/>
+    </resultMap>
+
     <resultMap id="tree_map" type="com.yidusoft.utils.TreeNode">
         <id column="id" property="id" jdbcType="VARCHAR"/>
         <result column="parentId" property="parentId" jdbcType="VARCHAR"/>
@@ -69,6 +83,18 @@
          SELECT * FROM QUESTIONNAIRE_TYPE WHERE
         DELETED=0
         AND PID = #{id}
+    </select>
+
+    <select id="findQuestionnaireForTypeNum" resultMap="BaseResultMap1">
+        SELECT t.questionnaire_type_name ,t.Id_ ,SUM(1) as nums FROM
+		questionnaire q
+			LEFT JOIN
+					questionnaire_type t
+							ON t.id_ = q.questionnaire_type
+        WHERE q.deleted = 0
+          AND q.questionnaire_state = 2
+          AND t.deleted = 0
+              GROUP BY t.questionnaire_type_name ,q.questionnaire_type
     </select>
 
 </mapper>

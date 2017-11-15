@@ -199,4 +199,13 @@ public class QuestionnaireTypeController {
         return ResultGenerator.genSuccessResult(questionnaireType);
     }
 
+    /**
+     * 查询类型里面问卷的数量
+     */
+    @PostMapping("/findQuestionnaireForTypeNum")
+    public Result findQuestionnaireForTypeNum(){
+        List<QuestionnaireType> questionnaireTypes = questionnaireTypeService.findQuestionnaireForTypeNum();
+        return ResultGenerator.genSuccessResult(questionnaireTypes);
+    }
+
 }

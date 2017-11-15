@@ -70,4 +70,9 @@ public class QuestionnaireTypeServiceImpl extends AbstractService<QuestionnaireT
     public QuestionnaireType findDeleteIsContainChild(String id) {
         return questionnaireTypeMapper.findDeleteIsContainChild(id);
     }
+
+    @Override
+    public List<QuestionnaireType> findQuestionnaireForTypeNum() {
+        return questionnaireTypeMapper.findQuestionnaireForTypeNum();
+    }
 }

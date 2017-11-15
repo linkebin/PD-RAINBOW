@@ -94,6 +94,29 @@ public class Questionnaire {
     private String gaugeId;
 
     /**
+     * 获取问卷权限
+     * @return
+     */
+    public Integer getQuestionnairePermission() {
+        return questionnairePermission;
+    }
+
+    /**
+     * 设置问卷权限
+     * @param questionnairePermission
+     */
+    public void setQuestionnairePermission(Integer questionnairePermission) {
+        this.questionnairePermission = questionnairePermission;
+    }
+
+    /**
+     * 问卷可见权限 1：全部  2：指定咨询师
+
+     */
+    @Column(name = "questionnaire_permission")
+    private Integer questionnairePermission;
+
+    /**
      * 注意事项
      */
     private String remarks;
