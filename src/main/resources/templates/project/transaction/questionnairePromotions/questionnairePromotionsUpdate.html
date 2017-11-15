@@ -96,7 +96,9 @@
             <tr>
                 <th>套餐编号</th>
                 <th>套餐名称</th>
+                <th>套餐类型</th>
                 <th>问卷数量</th>
+                <th>时间期限</th>
                 <th>套餐价格</th>
                 <th>创建人</th>
                 <th>创建时间</th>
@@ -121,14 +123,17 @@
 <script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <script type="text/javascript">
+    var promotionsType = 1;//活动类型
     $(function () {
         $('#startTime').val(new Date($('#startTime').val()).Format("yyyy-MM-dd hh:mm:ss"));
         $('#endTime').val(new Date($('#endTime').val()).Format("yyyy-MM-dd hh:mm:ss"));
         $('#discount').hide();
         $('#buySend').hide();
         if ($('#promotionsType').val() == 1) {
+            promotionsType = 1;
             $('#discount').show();
         } else {
+            promotionsType = 2;
             $('#buySend').show();
         }
         doSearch();
@@ -150,9 +155,11 @@
                 if (data.elem.value == 1) {
                     $("#discount").show();
                     $("#buySend").hide();
+                    promotionsType = 1;
                 } else {
                     $("#discount").hide();
                     $("#buySend").show();
+                    promotionsType = 2;
                 }
             })
 
@@ -215,6 +222,12 @@
                 },
                 submitHandler: function () {
                     var params = $("#promotionsForm").serializeObject();
+                    if (params.promotionsStart > params.promotionsEnd) {
+                        return layer.msg('开始时间不能大于结束时间', {
+                            icon: 2,
+                            time: 2000
+                        });
+                    }
                     $('.confirm').text("正在保存...");
                     $('.confirm').attr("disabled", true);
                     $.post("/questionnaire/promotions/update", {"promotionsJson": JSON.stringify(params)}, function (result) {
@@ -325,16 +338,21 @@
         for (var item in productList) {
             var product = productList[item];
             var id = "'"+product.id+"'";
+            var type = "问卷";
+            if(product.productType==2){
+                type = "会员";
+            }
             tableHtml += '<tr>' +
                     '<td>' + product.productCode + '</td>' +
                     '<td>' + product.productName + '</td>' +
+                    '<td>' + type + '</td>' +
                     '<td>' + product.productTotal + '</td>' +
+                    '<td>' + product.timeLimit + '</td>' +
                     '<td>' + product.productPrice + '元</td>' +
                     '<td>' + product.creator + '</td>' +
                     '<td>' + new Date(product.createTime).Format('yyyy-MM-dd hh:mm:ss') + '</td>' +
                     '<td><a href="javascript:void(0)" class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deleteProduct(' + id + ')"><i class="eui-icon">&#xe640;</i></a></td>'+
                     '</tr>';
-
         }
         return tableHtml;
     }
@@ -357,7 +375,7 @@
                 , shade: 0
                 , moveType: 0//拖拽模式，0或者1
                 , maxmin: true
-                , content: "/web/promotion/choose"
+                , content: "/web/promotion/choose/"+promotionsType
                 , btn: ['确定', '关闭'] //只是为了演示
                 , yes: function () {
                     //得到设置返回的结果

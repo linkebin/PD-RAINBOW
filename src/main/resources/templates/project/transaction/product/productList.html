@@ -8,8 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/demo.css" media="all">
-    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+    <style>
+        #productForm input + label {
+            color: red;
+        }
+    </style>
 </head>
 <body>
 <div class="eui-bg-white eui-row eui-paddingT10">
@@ -48,7 +51,9 @@
                 <th><input type="checkbox" name="" title="" e-filter="allChecked" e-skin="primary"></th>
                 <th>套餐编号</th>
                 <th>套餐名称</th>
+                <th>套餐类型</th>
                 <th>问卷数量</th>
+                <th>时间期限</th>
                 <th>套餐价格</th>
                 <th>创建人</th>
                 <th>创建时间</th>
@@ -70,14 +75,15 @@
 </div>
 <div class="filtrateIn">
     <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
-            <i class='eui-icon eui-font24'>&#xe654;</i> 新建套餐
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30 addOrUpdate">
+            <i class='eui-icon eui-font24'></i> 新建套餐
         </div>
         <div class="eui-col-md2 eui-textAlignR">
             <i class='eui-icon eui-font24 productClose'>&#x1006;</i>
         </div>
     </div>
-    <form class="eui-form eui-marginT10 eui-paddingR10" id="productNewForm">
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="productForm">
+        <input type="hidden" id="id_edit" value="">
         <div class="eui-form-item">
             <label class="eui-form-label">套餐名称</label>
             <div class="eui-input-block">
@@ -85,8 +91,8 @@
                        class="eui-input">
             </div>
         </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">套餐名称</label>
+        <div class="eui-form-item productType">
+            <label class="eui-form-label">套餐类型</label>
             <div class="eui-input-block">
                 <input type="radio" name="productType" title="问卷" value="1" checked e-filter="allSelected">
                 <input type="radio" name="productType" title="会员" value="2" e-filter="allSelected">
@@ -102,7 +108,7 @@
         <div class="eui-form-item" id="time">
             <label class="eui-form-label">时间期限</label>
             <div class="eui-input-block">
-                <input type="text" name="timeLimit" e-verify="title" autocomplete="off" placeholder="请输入时间期限"
+                <input type="text" name="timeLimit" e-verify="title" autocomplete="off" placeholder="请输入时间期限，例如输入3=3月份"
                        class="eui-input">
             </div>
         </div>
@@ -110,7 +116,7 @@
             <label class="eui-form-label">套餐价格</label>
             <div class="eui-input-block">
                 <input type="text" name="productPrice" e-verify="title" autocomplete="off" placeholder="请输入套餐价格"
-                       class="eui-input" oninput="priceChange(this)">
+                       class="eui-input">
             </div>
         </div>
         <div class="eui-form-item">
@@ -120,69 +126,20 @@
                 <input type="radio" title="否" value="1" name="productState">
             </div>
         </div>
+        <div class="taskConfirm">
+            <button onclick="formSub()" class="eui-btn confirm">确认</button>
+        </div>
+        <input type="submit" id="sub" style="display: none;" value="提交"/>
     </form>
-    <div class="taskConfirm"><span onclick="addProduct()" class="eui-btn">确认</span></div>
 </div>
 <!-- 左滑新建套餐结束 -->
 
 
-<!-- 左滑编辑套餐开始 -->
-<div class="taskFiltrate2">
-</div>
-<div class="filtrateIn2">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
-            <i class='eui-icon eui-font24'>&#xe642;</i> 编辑套餐
-        </div>
-        <div class="eui-col-md2 eui-textAlignR">
-            <i class='eui-icon eui-font24 productClose'>&#x1006;</i>
-        </div>
-    </div>
-    <form class="eui-form eui-marginT10 eui-paddingR10">
-        <input type="hidden" id="id_edit"/>
-        <div class="eui-form-item nameHide">
-            <label class="eui-form-label">套餐名称</label>
-            <div class="eui-input-block">
-                <input type="text" id="name_edit" e-verify="title" autocomplete="off" class="eui-input">
-            </div>
-        </div>
-        <div class="eui-form-item totalHide">
-            <label class="eui-form-label">问卷数量</label>
-            <div class="eui-input-block">
-                <input type="text" id="total_edit" e-verify="title" autocomplete="off" class="eui-input"
-                       oninput="totalChange(this)">
-            </div>
-        </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">套餐价格</label>
-            <div class="eui-input-block">
-                <input type="text" id="price_edit" e-verify="title" autocomplete="off" class="eui-input"
-                       oninput="priceChange(this)">
-            </div>
-        </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">是否启用</label>
-            <div class="eui-input-block">
-                <input type="radio" title="是" value="0" name="state_edit" checked>
-                <input type="radio" title="否" value="1" name="state_edit">
-            </div>
-        </div>
-    </form>
-    <div class="taskConfirm"><span onclick="updateProduct()" class="eui-btn confirm">确认</span></div>
-</div>
-<!-- 左滑编辑套餐结束 -->
-
 <script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
 <script src="../../../Scripts/main.js" charset="utf-8"></script>
 <script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
-
-<!-- ztree -->
-<script src="../../../Scripts/libs/ztree/js/jquery.ztree.core.js"></script>
-<script src="../../../Scripts/libs/ztree/js/jquery.ztree.excheck.js"></script>
-<script src="../../../Scripts/libs/ztree/js/jquery.ztree.exedit.js"></script>
-
-<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
 <script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 
 
@@ -190,12 +147,7 @@
     var promotionName = "";//活动名称
     // 表单
     eui.use(['element', 'form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
-        var form = eui.form
-                , layer = eui.layer
-                , layedit = eui.layedit
-                , laydate = eui.laydate
-                , laypage = eui.laypage
-                , element = eui.element;
+        var form = eui.form;
 
         $('#time').hide();
         form.on('radio(allSelected)', function (data) {
@@ -216,14 +168,125 @@
             form.render('checkbox');
         });
 
-        //日期范围
-        laydate.render({
-            elem: '#test6'
-            , range: true
+        jQuery.validator.addMethod("minNumber", function (value, element) {
+            var returnVal = true;
+            inputZ = value;
+            var ArrMen = inputZ.split(".");    //截取字符串
+            if (ArrMen.length == 2) {
+                if (ArrMen[1].length > 1) {    //判断小数点后面的字符串长度
+                    returnVal = false;
+                    return false;
+                }
+            }
+            return returnVal;
+        }, "小数点后最多为一位");
+        $("#productForm").validate({
+            rules: {
+                productName: {
+                    required: true,
+                },
+                productTotal: {
+                    required: true,
+                    number: true,
+                    digits: true
+                },
+                timeLimit: {
+                    required: true,
+                    number: true,
+                    digits: true,
+                    min: 1,
+                },
+                productPrice: {
+                    required: true,
+                    number: true,
+                    minNumber: true,
+                    min: 0.1,
+                },
+            },
+            messages: {
+                productName: {
+                    required: "请输入套餐名称",
+                },
+                productTotal: {
+                    required: '请输入问卷数量',
+                    number: '问卷数量只能是数字',
+                    digits: '只能输入整数',
+                },
+                timeLimit: {
+                    required: '请输入时间期限',
+                    number: '时间期限只能是数字',
+                    digits: '只能输入整数',
+                    min: '时间期限最少为1'
+                },
+                productPrice: {
+                    required: '请输入套餐价格',
+                    number: '套餐价格只能是数字',
+                    min: '套餐价格最少为0.1'
+                }
+            },
+            submitHandler: function () {
+                $('.confirm').attr("disabled", true);
+                var params = $('#productForm').serializeObject();
+                if (params.productTotal == 1) {
+                    return layer.msg("问卷的单价已设置,请不要重复设置", {
+                        icon: 2,
+                        time: 1500
+                    })
+                }
+                params.promotionsName = promotionName;
+                var url = "/product/settings/add";
+                if ($("#id_edit").val() != '') {
+                    url = "/product/settings/update"
+                    params.id = $("#id_edit").val();
+                }
+                if ($("#id_edit").val() == '') {
+                    layer.confirm("套餐类型一旦设定，便无法修改。", {
+                        btn: ["确定", "取消"]
+                    }, function () {
+                        sub(url, params);
+                    });
+                } else {
+                    sub(url, params);
+                }
+
+            }
         });
 
     });
 
+    function sub(url, params) {
+        $('.confirm').text("正在保存...");
+        console.log(params);
+        $.post(url, {"productJson": JSON.stringify(params)}, function (result) {
+            if (result.message = 'SUCCESS') {
+                document.getElementById('productForm').reset();
+                //关闭
+                $(".taskFiltrate").hide();
+                $(".filtrateIn").animate({right: '-400px'}, 400);
+                layer.msg('操作成功！', {
+                    time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                });
+                setTimeout(function () {
+                    doSearch();
+                }, 1500);
+                promotionName = "";
+                $('input[name="productTotal"]').val("");
+                $('input[name="productPrice"]').val("");
+                $('input[name="productName"]').val("");
+            } else {
+                layer.msg('操作失败！', {
+                    time: 1500 //1秒关闭（如果不配置，默认是3秒）
+                });
+
+            }
+            $('.confirm').text("确认");
+            $('.confirm').removeAttr("disabled");
+        });
+    }
+
+    function formSub() {
+        return $("#sub").click();
+    }
 
     eui.use('form', function () { //独立版的layer无需执行这一句
         var form = eui.form; //独立版的layer无需执行这一句
@@ -231,6 +294,11 @@
         // 新建套餐
         $(".taskFiltrate").hide();
         $(".productNew").click(function (event) {
+            $('#time').hide();
+            $('#total').show();
+            $("#id_edit").val('');
+            $('.productType').show();
+            $('.addOrUpdate').text("添加套餐")
             $(".taskFiltrate").show();
             $(".filtrateIn").animate({right: '0'}, 400);
             /* Act on the event */
@@ -238,58 +306,12 @@
 
         $(".productClose,.taskFiltrate").click(function (event) {
             promotionName = "";
-            $('input[name="productTotal"]').val("");
-            $('input[name="productPrice"]').val("");
-            $('input[name="productName"]').val("");
+            $('#time').hide();
+            $('#total').show();
+            document.getElementById('productForm').reset();
             $(".filtrateIn").animate({right: '-400px'}, 400);
             $(".taskFiltrate").hide();
             form.render();
-        });
-
-        // 套餐Edit
-        $(".taskFiltrate2").hide();
-        $(".proEdit").click(function (event) {
-            $(".taskFiltrate2").show();
-            $(".filtrateIn2").animate({right: '0'}, 400);
-            /* Act on the event */
-        });
-
-        $(".productClose,.taskFiltrate2").click(function (event) {
-            $(".filtrateIn2").animate({right: '-400px'}, 400);
-            $(".taskFiltrate2").hide();
-        });
-    });
-
-
-    eui.use('layer', function () { //独立版的layer无需执行这一句
-        var $ = eui.jquery, layer = eui.layer; //独立版的layer无需执行这一句
-
-        //触发事件
-        var active = {
-            offset: function (othis) {
-                var type = othis.data('type')
-                        , text = othis.text();
-
-                layer.open({
-                    type: 1
-                    , title: '检索负责人'
-                    , area: ['700px', '500px']
-                    , offset: type
-                    , content: $("#principalAdd")
-                    , btn: ['保存', '取消']
-                    , btnAlign: 'c' //按钮居中
-                    , yes: function () {
-                        layer.closeAll();
-                    }
-                });
-            }
-
-
-        };
-
-        $('.eui-btn,.eui-icon').on('click', function () {
-            var othis = $(this), method = othis.data('method');
-            active[method] ? active[method].call(this, othis) : '';
         });
 
     });
@@ -303,21 +325,6 @@
         doSearch();
     });
 
-    /**
-     * 套餐价格文本框的监听事件
-     * @param total
-     */
-    function priceChange(e) {
-        if (e.value == 0) {
-            layer.msg("套餐价格不能为0", {
-                icon: 2,
-                time: 2000
-            });
-        }
-        if (e.value != "") {
-            validationNumber(e, 1, "请输入大于0的数字");
-        }
-    }
 
     /**
      * 问卷数量文本框的监听事件
@@ -346,9 +353,6 @@
 
     }
 
-    function resetForm() {
-        document.getElementById('searchFrom').reset()
-    }
 
     //加载数据
     function doSearch() {
@@ -440,11 +444,18 @@
             if (product.productState == 0) {
                 state = "是";
             }
+            var type = "问卷";
+            console.log()
+            if (product.productType == 2) {
+                type = "会员";
+            }
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="productId" type="hidden" value="' + product.id + '"></td>' +
                     '<td>' + product.productCode + '</td>' +
                     '<td>' + product.productName + '</td>' +
+                    '<td>' + type + '</td>' +
                     '<td>' + product.productTotal + '</td>' +
+                    '<td>' + product.timeLimit + '月</td>' +
                     '<td>' + product.productPrice + '元</td>' +
                     '<td>' + product.creator + '</td>' +
                     '<td>' + new Date(product.createTime).Format('yyyy-MM-dd') + '</td>';
@@ -452,7 +463,7 @@
             tableHtml += '<td>' + state + '</td>' +
                     '<td>' +
                     '<div class="eui-btn-group"> ' +
-                    '' + Buts(product.id, product.productTotal, product.productPrice, product.productName, product.productState) + '' +
+                    '' + Buts(product) + '' +
                     '</div>' +
                     '</td>' +
                     '</tr>';
@@ -461,157 +472,62 @@
         return tableHtml;
     }
 
-    function Buts(id, productTotal, price, name, state) {
-        id = "'" + id + "'";
-        var total = "'" + productTotal + "'";
-        var price = "'" + price + "'";
-        var name = "'" + name + "'";
-        var state = "'" + state + "'";
-        var btnHtml = '<button class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="编辑套餐" onclick="productEdit(' + id + ',' + total + ',' + price + ',' + name + ',' + state + ')"><i class="eui-icon">&#xe642;</i></button> ';
-        if (productTotal != 1) {
-            btnHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deletePrpduct(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+    function Buts(product) {
+        var id = "'" + product.id + "'";
+        var total = "'" + product.productTotal + "'";
+        var price = "'" + product.productPrice + "'";
+        var name = "'" + product.productName + "'";
+        var state = "'" + product.productState + "'";
+        var type = "'" + product.productType + "'";
+        var limit = "'" + product.timeLimit + "'"
+        var btnHtml = '<button class="eui-btn eui-btn-primary eui-btn-mini " title="编辑套餐" onclick="productEdit(' + id + ',' + total + ',' + price + ',' + name + ',' + state + ',' + type + ',' + limit + ')"><i class="eui-icon">&#xe642;</i></button> ';
+        if (total != 1) {
+            btnHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deleteProduct(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
         }
         return btnHtml;
     }
 
 
     //显示编辑套餐的表单
-    function productEdit(id, total, price, name, state) {
-        console.log($('input[name="state_edit"]')[0].checked=true);
+    function productEdit(id, total, price, name, state, type, limit) {
+        $('.addOrUpdate').text("修改套餐")
         eui.use(['form'], function () {
             var form = eui.form;
-            $("#total_edit").val(total);
-            $("#price_edit").val(price);
-            $("#name_edit").val(name);
+            $("input[name='productTotal']").val(total);
+            $("input[name='productPrice']").val(price);
+            $("input[name='productName']").val(name);
+            $("input[name='timeLimit']").val(limit);
             $("#id_edit").val(id);
-            $('input[name="state_edit"]').each(function (i, data) {
+            $('input[name="productState"]').each(function (i, data) {
+                console.log(data)
                 if (data.value == state) {
-                    data.checked=true;
+                    data.checked = true;
                 }
             })
-            if (total == 1) {
-                $(".nameHide").hide();
-                $(".totalHide").hide();
-                $(".promotionHide").hide();
+            if (type == 2) {
+                $('#total').hide();
+                $('#time').show();
             } else {
-                $(".nameHide").show();
-                $(".totalHide").show();
-                $(".promotionHide").show();
+                $('#time').hide();
+                $('#total').show();
             }
+            $('input[name="productType"]').each(function (i, data) {
+                if (data.value == type) {
+                    data.checked = true;
+                }
+            })
+            $('.productType').hide();
             form.render();
-            $(".taskFiltrate2").show();
-            $(".filtrateIn2").animate({right: '0'}, 400);
+            $(".taskFiltrate").show();
+            $(".filtrateIn").animate({right: '0'}, 400);
         })
     }
-    /**
-     * 修改套餐
-     * @param s
-     * @param id
-     * @param total
-     * @param price
-     */
-    function updateProduct() {
-        var total = $.trim($("#total_edit").val());
-        var price = $.trim($("#price_edit").val());
-        var name = $.trim($("#name_edit").val());
-        var state = $('input[name="state_edit"]:checked').val();
-        console.log(state);
-        if (total != '' && price != '' && name != "") {
-            if (price == 0) {
-                return layer.msg("套餐价格不能为0")
-            }
-            var indexs = layer.load(2); //加载
-            var obj = new Object();
-            obj.productTotal = total;
-            obj.productPrice = price;
-            obj.productName = name;
-            obj.productState = state;
-            obj.id = $("#id_edit").val();
-            $('.confirm').text("正在保存...");
-            $('.confirm').attr("disabled", true);
-            $.post("/product/settings/update", {"productJson": JSON.stringify(obj)}, function (result) {
-                if (result.message = 'SUCCESS') {
-                    //关闭
-                    doSearch();
-                    layer.msg('编辑成功！', {
-                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
-                    });
-                    $(".filtrateIn2").animate({right: '-400px'}, 400);
-                    $(".taskFiltrate2").hide();
-                } else {
-                    layer.close(indexs);
-                    layer.msg('编辑失败！', {
-                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
-                    });
 
-                }
-                $('.confirm').text("确认");
-                $('.confirm').removeAttr("disabled");
-            });
-        } else {
-            layer.msg('套餐名称、问卷数量和套餐价格都不能为空！', {
-                time: 2000 //1秒关闭（如果不配置，默认是3秒）
-            });
-        }
-    }
-
-
-    /**
-     * 添加套餐
-     */
-    function addProduct() {
-        var params = $('#productNewForm').serializeObject();
-        if (unitPrice != null && unitPrice != 0) {
-            if (params.productTotal == 1) {
-                layer.msg('问卷单价已设置,问卷数量不能低于2', {});
-                return;
-            }
-            validate(params.productTotal, "问卷数量不能小于或等于0", "问卷数量只能数字！！！");//验证信息
-        }
-        params.promotionsName = promotionName;
-        if (params.productTotal != '' && params.productPrice != '' && params.productName != '') {
-
-            validate(params.productPrice, "套餐价格不能小于或等于0", "套餐价格只能数字！！！");//验证信息
-
-            var indexs = layer.load(2); //加载
-            var obj = new Object();
-            $('.confirm').text("正在保存...");
-            $('.confirm').attr("disabled", true);
-            $.post("/product/settings/add", {"productJson": JSON.stringify(params)}, function (result) {
-                if (result.message = 'SUCCESS') {
-                    //关闭
-                    $(".taskFiltrate").hide();
-                    $(".filtrateIn").animate({right: '-400px'}, 400);
-                    layer.closeAll();
-                    layer.msg('新建成功！', {
-                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
-                    });
-                    doSearch();
-                    promotionName = "";
-                    $('input[name="productTotal"]').val("");
-                    $('input[name="productPrice"]').val("");
-                    $('input[name="productName"]').val("");
-                } else {
-                    layer.close(indexs);
-                    layer.msg('新建失败！', {
-                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
-                    });
-
-                }
-                $('.confirm').text("确认");
-                $('.confirm').removeAttr("disabled");
-            });
-        } else {
-            layer.msg('问卷数量、套餐价格和套餐名称不能为空！', {
-                time: 2000 //1秒关闭（如果不配置，默认是3秒）
-            });
-        }
-    }
     /**
      * 删除套餐
      * @param id
      */
-    function deletePrpduct(id) {
+    function deleteProduct(id) {
         layer.confirm('您确定删除吗？', {
             btn: ['确认', '取消']
         }, function () {

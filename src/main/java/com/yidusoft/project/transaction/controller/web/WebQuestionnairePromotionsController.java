@@ -36,8 +36,9 @@ public class WebQuestionnairePromotionsController {
         return "project/transaction/questionnairePromotions/questionnairePromotionsUpdate";
     }
 
-    @RequestMapping("/choose")
-    public String choose() {
+    @RequestMapping("/choose/{type}")
+    public String choose(@PathVariable String type,Model model) {
+        model.addAttribute("type",type);
         return "project/transaction/questionnairePromotions/questionnairePromotionsChoose";
     }
 }

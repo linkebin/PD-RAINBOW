@@ -119,7 +119,7 @@
             </div>
 
             <div class="eui-textAlignC eui-bg-white eui-padding20">
-            <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">保存信息</span>
+                <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">保存信息</span>
             </div>
 
             <input type="submit" id="sub" style="display: none;" value="提交"/>
@@ -169,6 +169,9 @@
                 var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
                 return this.optional(element) || (length == 11 && mobile.test(value));
             }, "请正确填写您的手机号码");
+            jQuery.validator.addMethod("isProvincePNo", function(value, element) {
+                return this.optional(element) || value!='—— 省 ——';
+            }, "请选择省份");
             $("#activitiesForm").validate({
                 rules: {
                     activityName: {
@@ -205,14 +208,9 @@
                     uestionnaireId: {
                         required: true,
                     },
-                    province: {
-                        required: true
-                    },
-                    city: {
-                        required: true
-                    },
-                    district: {
-                        required: true
+                    province :{
+                        required: true,
+                        isProvincePNo: true
                     }
                 },
                 messages: {
@@ -250,14 +248,9 @@
                     uestionnaireId: {
                         required: '问卷名称不能为空',
                     },
-                    province: {
-                        required: '省不能为空'
-                    },
-                    city: {
-                        required: '市不能为空'
-                    },
-                    district: {
-                        required: '区不能为空'
+                    province :{
+                        required:'请选择省',
+                        isProvincePNo:'请选择省份'
                     }
                 },
 
@@ -276,35 +269,28 @@
                     $.get("/user/questionnaires/list", function (result) {
                         console.log(result);
                         if (result.code = 200) {
-                            var total = 0;
                             if (result.data != null) {
-                                total = result.data.questionnairesTotal;
-                            }
-                            $.post('/launch/activities/getSumTotal', {id: ""}, function (result) {
-                                if (result.code == 200) {
-                                    var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
-                                    if (sumToatl > total) {
-                                        layer.confirm('你的使用卷不足！！', {
-                                            btn: ['前往购买', '取消']
-                                        }, function () {
-                                            window.open("/cube/pay");
-                                        })
-                                    } else {
-                                        $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
-                                            if (result.code == 200) {
-                                                layer.msg("操作成功", {
-                                                    icon: 1,
-                                                    time: 1500
-                                                })
-                                                setTimeout(function () {
-                                                    window.close();
-                                                }, 1500)
-                                            } else {
-                                                layer.msg(result.message);
-                                            }
-                                        });
+                                var total = result.data.questionnairesTotal;
+                                if (result.data.member == 1) {//如果是会员
+                                    if (new Date() < new Date(result.data.endTime)) {//如果会员还没到期
+                                        add(obj);
+                                    } else {//会员到期
+                                        getTotal(total, obj);
                                     }
+                                } else {//不是会员
+                                    getTotal(total, obj);
                                 }
+                            } else {
+                                layer.confirm('你的使用卷不足！！', {
+                                    btn: ['前往购买', '取消']
+                                }, function () {
+                                    window.open("/cube/pay");
+                                })
+                            }
+                        } else {
+                            layer.msg(result.message,{
+                                icon: 2,
+                                time: 1500
                             })
                         }
                     })
@@ -312,27 +298,43 @@
             });
         });
     });
-    // 返回顶部
-    var winH = $(window).height();
 
     function formSub() {
         return $("#sub").click();
     }
 
-    $('.eui-backTop').hide();
-    $(window).scroll(function (e) {
-        var winT = $(window).scrollTop();
-        if (winT > winH) {
-            $('.eui-backTop').fadeIn()
-        } else {
-            $('.eui-backTop').fadeOut()
-        }
-    });
+    function getTotal(total, obj) {
+        $.post('/launch/activities/getSumTotal', {id: ""}, function (result) {
+            if (result.code == 200) {
+                var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
+                if (sumToatl > total) {
+                    layer.confirm('你的使用卷不足！！', {
+                        btn: ['前往购买', '取消']
+                    }, function () {
+                        window.open("/cube/pay");
+                    })
+                } else {
+                    add(obj)
+                }
+            }
+        })
+    }
 
-    $('.eui-backTop').click(function (e) {
-        $('html,body').animate({scrollTop: 0}, 500)
-    });
-
+    function add(obj) {
+        $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+            if (result.code == 200) {
+                layer.msg("操作成功", {
+                    icon: 1,
+                    time: 1500
+                })
+                setTimeout(function () {
+                    window.close();
+                }, 1500)
+            } else {
+                layer.msg(result.message);
+            }
+        });
+    }
 
     /**
      * 获取问卷名称

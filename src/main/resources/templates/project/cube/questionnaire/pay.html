@@ -104,8 +104,12 @@
                         productId: product.id,
                         promotionsId: "",
                         price: product.productPrice,
-                        total: product.productTotal
+                        total: product.productTotal,
+                        productType: product.productType,
                     };
+                    if(product.productType==2){
+                        pro.total=  product.timeLimit
+                    }
                     for (var index in questionList) {
                         var question = questionList[index];
                         if (product.productTotal == 1) {//问卷单价
@@ -167,6 +171,16 @@
                             total = strTotal;
                         }
                         console.log(total);
+                    }else if(total.indexOf('个月') != -1){
+                        var strTotal;
+                        strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("个月"));
+                        if (strTotal.indexOf('+') != -1) {
+                            total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
+                            total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
+                        } else {
+                            total = strTotal;
+                        }
+                        console.log(total);
                     }
                     $('.eui-font24').html(str);
                     var send = event.currentTarget.children[1].value;
@@ -190,6 +204,7 @@
             var tableHtml = '';
             for (var item in payList) {
                 var pay = payList[item];
+                console.log(pay);
                 //初始化
                 if ($('.eui-font24').html() == "") {
                     $('.eui-font24').html(pay.price + " ");
@@ -208,13 +223,18 @@
                 if(pay.type==""){
                     message="";
                 }
+                if(pay.productType==2){
+                    pay.total = pay.total+"个月";
+                }else{
+                    pay.total = pay.total+"张";
+                }
                 if (item == 0) {
                     tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">' +
                             '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
                             '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                             message +
                             '<span class="discountFont">' + pay.type + '</span>' +
-                            '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                            '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
                             '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                             '<i class="eui-icon tickFont">&#xe605;</i>' +
                             '<span class="tick"></span></li>';
@@ -225,7 +245,7 @@
                         '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                         message +
                         '<span class="discountFont">' + pay.type + '</span>' +
-                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + '张 <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>';
@@ -258,6 +278,7 @@
                     orderOnline.payment_method = $(this).children()[0].value;
                 }
             })
+            console.log(orderOnline);
             var orderCode=new Date().Format("yyyy-MM-dd-hh-mm-ss");
             orderCode=orderCode.replace(/-/g,"")+parseInt(Math.random()*100000);
             $.post("/order/online/add", {onlineJson: JSON.stringify(orderOnline),orderCode:orderCode}, function (result) {

@@ -14,6 +14,9 @@ public  class  ResourcesStatic {
         OPERRESOURCES.put("/questionnaire/updateQuestionnaire","修改问卷");
         OPERRESOURCES.put("/questionnaire/invalidQuestionnaire","问卷下架");
         OPERRESOURCES.put("/questionnaire/deleteQuestionnaire","删除问卷");
+        OPERRESOURCES.put("/product/settings/add","添加套餐");
+        OPERRESOURCES.put("/product/settings/update","修改套餐");
+        OPERRESOURCES.put("/product/settings/deleteBacth","删除套餐");
     }
 
 

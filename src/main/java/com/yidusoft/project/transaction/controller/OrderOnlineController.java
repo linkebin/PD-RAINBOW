@@ -6,8 +6,10 @@ import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.domain.OrderOnline;
+import com.yidusoft.project.transaction.domain.ProductSettings;
 import com.yidusoft.project.transaction.domain.UserQuestionnaires;
 import com.yidusoft.project.transaction.service.OrderOnlineService;
+import com.yidusoft.project.transaction.service.ProductSettingsService;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
 import com.yidusoft.utils.Security;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -33,8 +36,12 @@ public class OrderOnlineController {
     @Resource
     private UserQuestionnairesService userQuestionnairesService;
 
+    @Resource
+    private ProductSettingsService productSettingsService;
+
     /**
      * 添加订单
+     *
      * @param onlineJson
      * @return
      */
@@ -54,12 +61,13 @@ public class OrderOnlineController {
 
     /**
      * 根据订单状态获取订单信息
+     *
      * @param orderState
      * @return
      */
     @PostMapping("/list")
-    public Result list(String orderState,int page, int size) {
-        PageHelper.startPage(page,size);
+    public Result list(String orderState, int page, int size) {
+        PageHelper.startPage(page, size);
         OrderOnline orderOnline = new OrderOnline();
         orderOnline.setUserId(Security.getUser().getId());
         if (orderState != null && orderState != "") {
@@ -73,15 +81,16 @@ public class OrderOnlineController {
 
     /**
      * 删除订单，逻辑删除，数据还在
+     *
      * @param id
      * @return
      */
     @PostMapping("/delete")
-    public Result delete(String id,String orderType) {
+    public Result delete(String id, String orderType) {
         OrderOnline orderOnline = orderOnlineService.findById(id);
-        if(orderType.indexOf("cancel")!=-1){
+        if (orderType.indexOf("cancel") != -1) {
             orderOnline.setOrderState(3);
-        }else{
+        } else {
             orderOnline.setDeleted(1);
         }
         orderOnlineService.update(orderOnline);
@@ -90,6 +99,7 @@ public class OrderOnlineController {
 
     /**
      * 获取订单的状态
+     *
      * @param id
      * @return
      */
@@ -101,27 +111,58 @@ public class OrderOnlineController {
 
     /**
      * 付款
+     *
      * @param id
      * @return
      */
     @PostMapping("/payment")
-    public Result payment(String id,String serialNumber) {
-        System.out.println("进入更新@@@@@@@@@@@@@@@@@@@@@@@@@@订单号"+id+"流水号："+serialNumber);
+    public Result payment(String id, String serialNumber) {
+        System.out.println("进入更新@@@@@@@@@@@@@@@@@@@@@@@@@@订单号" + id + "流水号：" + serialNumber);
         OrderOnline orderOnline = orderOnlineService.findById(id);
         orderOnline.setOrderState(1);
         orderOnline.setPaymentTime(new Date());
         orderOnline.setSerialNumber(serialNumber);
         orderOnlineService.update(orderOnline);
         UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
+        ProductSettings productSettings = productSettingsService.findById(orderOnline.getProductId());
         if (userQuestionnaires != null) {
-            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()+orderOnline.getQuestionnaireTotal());
+            if (productSettings.getProductType() == 1) {
+                userQuestionnaires.setMember(2);
+                userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal() + orderOnline.getQuestionnaireTotal());
+            } else {
+                Date date = new Date();
+                if(userQuestionnaires.getEndTime()!=null){
+                    date = userQuestionnaires.getEndTime();
+                }
+                if(userQuestionnaires.getBuyTime()==null){
+                    userQuestionnaires.setBuyTime(new Date());
+                }
+                Calendar rightNow = Calendar.getInstance();
+                rightNow.setTime(date);
+                rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
+                date = rightNow.getTime();
+                userQuestionnaires.setMember(1);
+                userQuestionnaires.setEndTime(date);
+            }
             userQuestionnairesService.update(userQuestionnaires);
-        }else{
-            UserQuestionnaires userQuestionnaire =new UserQuestionnaires();
+        } else {
+            UserQuestionnaires userQuestionnaire = new UserQuestionnaires();
             userQuestionnaire.setId(UUID.randomUUID().toString());
-            userQuestionnaire.setUserId(Security.getUserId());
-            userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
+            userQuestionnaire.setUserId(orderOnline.getUserId());
             userQuestionnaire.setQuestionnairesCumulativeTotal(0);
+            if (productSettings.getProductType() == 1) {
+                userQuestionnaires.setMember(2);
+                userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
+            }else{
+                Date date = new Date();
+                Calendar rightNow = Calendar.getInstance();
+                rightNow.setTime(date);
+                rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
+                date = rightNow.getTime();
+                userQuestionnaires.setBuyTime(new Date());
+                userQuestionnaires.setMember(1);
+                userQuestionnaires.setEndTime(date);
+            }
             userQuestionnairesService.save(userQuestionnaire);
         }
         return ResultGenerator.genSuccessResult();

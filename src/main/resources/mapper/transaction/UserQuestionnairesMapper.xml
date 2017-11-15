@@ -9,6 +9,9 @@
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="questionnaires_total" jdbcType="INTEGER" property="questionnairesTotal" />
     <result column="questionnaires_cumulative_total" jdbcType="INTEGER" property="questionnairesCumulativeTotal" />
+      <result column="member" jdbcType="INTEGER" property="member" />
+      <result column="buy_time" jdbcType="TIMESTAMP" property="buyTime"/>
+      <result column="end_time" jdbcType="TIMESTAMP" property="endTime"/>
   </resultMap>
 
    <select id="flgBalance" resultMap="BaseResultMap" parameterType="String">

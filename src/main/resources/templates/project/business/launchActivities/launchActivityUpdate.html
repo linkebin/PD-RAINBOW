@@ -133,6 +133,9 @@
         var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
         return this.optional(element) || (length == 11 && mobile.test(value));
     }, "请正确填写您的手机号码");
+    jQuery.validator.addMethod("isProvincePNo", function(value, element) {
+        return this.optional(element) || value!='—— 省 ——';
+    }, "请选择省份");
     $("#activityNewForm").validate({
         rules: {
             activityName: {
@@ -168,6 +171,10 @@
             },
             uestionnaireId: {
                 required: true
+            },
+            province :{
+                required: true,
+                isProvincePNo: true
             }
         },
         messages: {
@@ -204,6 +211,10 @@
             },
             uestionnaireId: {
                 required: '请选择问卷名称',
+            },
+            province :{
+                required:'请选择省',
+                isProvincePNo:'请选择省份'
             }
         },
 
@@ -216,11 +227,10 @@
             obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
             console.log(obj);
             if (obj.activityStart > obj.activityEnd) {
-                layer.msg('开始时间不能大于结束时间', {
+                return layer.msg('开始时间不能大于结束时间', {
                     icon: 2,
                     time: 2000
                 });
-                return;
             }
             $('.confirm').text("正在修改...")
             $('.confirm').attr("disabled", true);

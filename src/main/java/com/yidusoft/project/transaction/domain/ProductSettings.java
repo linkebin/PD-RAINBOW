@@ -63,8 +63,23 @@ public class ProductSettings {
     @Column(name = "product_name")
     private String productName;
 
+    /**
+     * 启用状态
+     */
     @Column(name = "product_state")
     private Integer productState;
+
+    /**
+     * 套餐类型
+     */
+    @Column(name = "product_type")
+    private Integer productType;
+
+    /**
+     * 时间期限
+     */
+    @Column(name = "time_limit")
+    private Integer timeLimit;
 
     /**
      * @return ID_
@@ -250,5 +265,37 @@ public class ProductSettings {
      */
     public void setProductState(Integer productState) {
         this.productState = productState;
+    }
+
+    /**
+     * 获取套餐类型
+     * @return
+     */
+    public Integer getProductType() {
+        return productType;
+    }
+
+    /**
+     * 设置套餐类型
+     * @param productType
+     */
+    public void setProductType(Integer productType) {
+        this.productType = productType;
+    }
+
+    /**
+     * 获取时间期限
+     * @return
+     */
+    public Integer getTimeLimit() {
+        return timeLimit;
+    }
+
+    /**
+     * 设置时间期限
+     * @param timeLimit
+     */
+    public void setTimeLimit(Integer timeLimit) {
+        this.timeLimit = timeLimit;
     }
 }
