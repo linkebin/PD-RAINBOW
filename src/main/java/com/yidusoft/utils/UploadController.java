@@ -421,7 +421,7 @@ public class UploadController {
                 "    \"imageCompressEnable\": true,\n" +
                 "    \"imageCompressBorder\": 1600,\n" +
                 "    \"imageInsertAlign\": \"none\",\n" +
-                "    \"imageUrlPrefix\": \"/files\",\n" +
+                "    \"imageUrlPrefix\": \"\",\n" +
                 "    \"imagePathFormat\": \"/ueditor/jsp/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
                 "                           \n" +
                 "\n" +
@@ -430,13 +430,13 @@ public class UploadController {
                 "    \"scrawlFieldName\": \"upfile\",\n" +
                 "    \"scrawlPathFormat\": \"/ueditor/jsp/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
                 "    \"scrawlMaxSize\": 2048000, \n" +
-                "    \"scrawlUrlPrefix\": \"/files\",\n" +
+                "    \"scrawlUrlPrefix\": \"\",\n" +
                 "    \"scrawlInsertAlign\": \"none\",\n" +
                 "\n" +
                 "   \n" +
                 "    \"snapscreenActionName\": \"uploadimage\",\n" +
                 "    \"snapscreenPathFormat\": \"/ueditor/jsp/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}\",\n" +
-                "    \"snapscreenUrlPrefix\": \"/files\",\n" +
+                "    \"snapscreenUrlPrefix\": \"\",\n" +
                 "    \"snapscreenInsertAlign\": \"none\",\n" +
                 "\n" +
                 "   \n" +
@@ -509,7 +509,7 @@ public class UploadController {
         Result result = JSON.parseObject(this.comUploadImg(upfile),Result.class);
         if ("200".equals(result.getCode()+"")) {
             String path = result.getData().toString();
-            String config ="{\"state\": \"SUCCESS\",\"url\": \"/files" + path + "\",\"title\": \"path\",\"original\": \"11\" }";
+            String config ="{\"state\": \"SUCCESS\",\"url\": \"/files" + path + "\",\"title\": \"path\",\"original\": \"img\" }";
             return JSON.parseObject(config);
 
         }
