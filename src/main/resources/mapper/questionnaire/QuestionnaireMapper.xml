@@ -107,15 +107,12 @@
 
     <select id="findQuestionnaireForTagAndScene" resultMap="BaseResultMap"  parameterType="java.util.HashMap">
         SELECT q.* from( SELECT
-        q.id_,q.questionnaire_name,q.remarks
+        q.id_,q.questionnaire_name,q.remarks,q.questionnaire_permission
         FROM
         questionnaire q
         WHERE q.deleted=0
         AND q.questionnaire_state=2
-        AND (q.questionnaire_permission = 1 OR  #{userId} IN (
-        SELECT user_id FROM questionnaire_permission_middle
-        )
-        )
+
         <if test="questionnaireName!= '' and questionnaireName!= null ">
             AND q. questionnaire_name like  '%${questionnaireName}%'
         </if>
@@ -128,7 +125,7 @@
                 <foreach item="item" index="index" collection="tagIds" open=""  separator=" " close="">
                     UNION ALL
                    SELECT
-                    q.id_,q.questionnaire_name,q.remarks
+                    q.id_,q.questionnaire_name,q.remarks,q.questionnaire_permission
                     FROM
                     questionnaire q
                     LEFT JOIN
@@ -144,7 +141,7 @@
                 <foreach item="item" index="index" collection="sceneIds" open="" separator="" close="">
                     UNION ALL
                     SELECT
-                    q.id_,q.questionnaire_name,q.remarks
+                    q.id_,q.questionnaire_name,q.remarks,q.questionnaire_permission
                     FROM
                     questionnaire q
                     LEFT JOIN
@@ -158,6 +155,8 @@
             </if>
 
             ) q
-        GROUP BY  q.id_,q.questionnaire_name,q.remarks HAVING COUNT(q.id_)=#{size}
+        GROUP BY  q.id_,q.questionnaire_name,q.remarks,q.questionnaire_permission HAVING COUNT(q.id_)=#{size}
+        AND (q.questionnaire_permission = 1 OR  q.id_ IN (
+        SELECT questionnaire_id FROM questionnaire_permission_middle  where user_id = #{userId}  )   )
     </select>
 </mapper>
