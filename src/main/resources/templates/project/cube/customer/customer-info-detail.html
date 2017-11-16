@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${vr.visitorName}"></title>
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+    <style>
+        tr td:nth-child(1){
+            font-weight:bold;
+            text-align: right;
+        }
+        tr td:nth-child(3){
+            font-weight:bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body class="questionBody">
+<div class="questionHeader">
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">客户详情</span>
+        </div>
+    </div>
+</div>
+<div class="visitorContent xymfMargin">
+    <div class="eui-area">
+        <div class="visitorTitle eui-row">
+            <div class="eui-col-md7"><img src="/Styles/images/xymfImages/cube.png" width="24" alt="">  个人信息卡</div>
+        </div>
+
+        <div class="entirety eui-bg-white">
+            <table class="eui-table">
+                <colgroup>
+                    <col width="240">
+                    <col>
+                    <col width="240">
+                    <col>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <td>姓名:</td>
+                    <td th:text="${vr.visitorName}"></td>
+                    <td>身份证号:</td>
+                    <td th:text="${vr.idCard}">2016-11-29</td>
+                </tr>
+                <tr>
+                    <td>出生年月:</td>
+                    <td th:text="${vr.birthday}">2017-07-29</td>
+                    <td>籍贯:</td>
+                    <td th:text="${vr.nativePlace}">2017-07-29</td>
+                </tr>
+                <tr>
+                    <td>性别:</td>
+                    <th:block th:if="${vr.sex==0}">
+                        <td >女</td>
+                    </th:block>
+                    <th:block th:if="${vr.sex==1}">
+                        <td >男</td>
+                    </th:block>
+
+                    <td>年龄:</td>
+                    <td>2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>民族:</td>
+                    <td th:text="${vr.nation}">2017-09-10</td>
+                    <td>手机号码:</td>
+                    <td th:text="${vr.phone}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>Email地址:</td>
+                    <td th:text="${vr.email}">2017-09-10</td>
+                    <td>所在地:</td>
+                    <td th:text="${vr.address}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>职业:</td>
+                    <td th:text="${vr.occupation}">2017-09-10</td>
+                    <td>收入水平:</td>
+                    <td th:text="${vr.income}">2017-09-10</td>
+                </tr>
+                <tr>
+                    <td>紧急联系人关系:</td>
+                    <td th:text="${vr.exigenceContacts}">2017-09-10</td>
+                    <td>紧急联系人电话:</td>
+                    <td th:text="${vr.exigencePhone}">2017-09-10</td>
+                </tr>
+                <tr>
+                    <td>血型:</td>
+                    <td th:text="${vr.bloodType}">2017-09-10</td>
+                    <td>教育程度:</td>
+                    <td th:text="${vr.educationLevel}">2017-09-10</td>
+
+                </tr>
+                <tr>
+                    <td>宗教信仰:</td>
+                    <td th:text="${vr.religiousBelief}">2017-09-10</td>
+                    <td>婚姻情况:</td>
+                    <td th:text="${vr.maritalStatus}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>结婚年数:</td>
+                    <td th:text="${vr.marryTotal}">2017-09-10</td>
+                    <td>第一个孩子性别:</td>
+                    <th:block th:if="${vr.childSex==0}">
+                        <td >女</td>
+                    </th:block>
+                    <th:block th:if="${vr.childSex==1}">
+                        <td >男</td>
+                    </th:block>
+                </tr>
+                <tr>
+                    <td>第一个孩子年龄:</td>
+                    <td th:text="${vr.childAge}">2017-09-10</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>父亲职业:</td>
+                    <td th:text="${vr.fatherOccupation}">2017-09-10</td>
+                    <td>父亲年龄:</td>
+                    <td th:text="${vr.fatherAge}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>父亲学历:</td>
+                    <td th:text="${vr.fatherEducation}">2017-09-10</td>
+                    <td>母亲职业:</td>
+                    <td th:text="${vr.motherOccupation}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>母亲年龄:</td>
+                    <td th:text="${vr.motherAge}">2017-09-10</td>
+                    <td>母亲学历:</td>
+                    <td th:text="${vr.motherEducation}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>父亲去世时你的年龄:</td>
+                    <td th:text="${vr.fatherDeathYourAge}">2017-09-10</td>
+                    <td>母亲去世时你的年龄:</td>
+                    <td th:text="${vr.motherDeathYourAge}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>父母分居时你的年龄:</td>
+                    <td th:text="${vr.parentalSeparationYourAge}">2017-09-10</td>
+                    <td>父母离婚时你的年龄:</td>
+                    <td th:text="${vr.parentalDivorceYourAge}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>兄弟姐妹人数:</td>
+                    <td th:text="${vr.brothersSistersTotal}">2017-09-10</td>
+                    <td>家中排行第几:</td>
+                    <td th:text="${vr.brothersSistersRanking}">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>&nbsp;</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>做过几次咨询:</td>
+                    <td th:text="${vr.counselingTotal}">2017-09-10</td>
+                    <td>最近一次咨询距现在多少天:</td>
+                    <td th:text="${vr.awayNowTotal}">2017-09-10</td>
+                </tr>
+                <tr>
+                    <td>最近一次咨询的地址:</td>
+                    <td th:text="${vr.counselingAddress}">2017-09-10</td>
+                    <td>是否因心理问题就医:</td>
+                    <td th:text="${vr.medicalTreatment}">2017-09-10</td>
+                </tr>
+                <tr>
+                    <td>最近一次诊断结果:</td>
+                    <td th:text="${vr.diagnosisResult}" colspan="3">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>是否慢性疾病,家族病史和过敏史:</td>
+                    <th:block th:if="${vr.medicalHistory==0}">
+                        <td colspan="3">没有</td>
+                    </th:block>
+                    <th:block th:if="${vr.medicalHistory==1}">
+                        <td colspan="3">有</td>
+                    </th:block>
+                </tr>
+                <tr>
+                    <td>具体情况:</td>
+                    <td th:text="${vr.specificCircumstances}" colspan="3">2017-09-10</td>
+                </tr>
+
+
+                <tr>
+                    <td>曾长期服用过何种药物?:</td>
+                    <th:block th:if="${vr.longMedication==0}">
+                        <td colspan="3">没有</td>
+                    </th:block>
+                    <th:block th:if="${vr.longMedication==1}">
+                        <td colspan="3">有</td>
+                    </th:block>
+                </tr>
+                <tr>
+                    <td>药物不良症状:</td>
+                    <td th:text="${vr.adverseDrugSymptoms}" colspan="3">2017-09-10</td>
+                </tr>
+
+                <tr>
+                    <td>目前与健康有关的疾病及所接受的治疗:</td>
+                    <td th:text="${vr.treatmentCondition}" colspan="3">2017-09-10</td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+</html>

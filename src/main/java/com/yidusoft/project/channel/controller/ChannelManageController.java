@@ -3,6 +3,7 @@ package com.yidusoft.project.channel.controller;
 import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.activityExamine.service.ChannelActivityService;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +30,8 @@ public class ChannelManageController {
     @Resource
     private ChannelManageService channelManageService;
 
+    @Autowired
+    private ChannelActivityService channelActivityService;
 
     @PostMapping("/add")
     public Result add(String json) {
@@ -49,7 +52,6 @@ public class ChannelManageController {
         secUser.setUserPass(PasswordHelper.strToMd5(secUser.getAccount()));
         secUser.setMobile(secUser.getAccount());
         secUser.setChannelId(channelManage.getId());
-        secUser.setEmail("无");
 
         String inviterCode = CodeHelper.randomCode(8);
         SecUser isUser = null;
@@ -71,6 +73,9 @@ public class ChannelManageController {
                 return ResultGenerator.genFailResult("添加失败");
             }
         }
+
+        channelActivityService.startProcess(channelManage.getId(),channelManage.getChannelName()+" 申请入驻平台");
+
         return ResultGenerator.genSuccessResult("添加成功");
     }
 

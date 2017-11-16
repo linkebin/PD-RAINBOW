@@ -1,5 +1,6 @@
 package com.yidusoft.project.activityExamine.service;
 
+import com.github.pagehelper.PageHelper;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.LaunchActivities;
@@ -46,8 +47,7 @@ public class ActivityService {
     @Autowired
     private SecUserService secUserService;
 
-    @Autowired
-    private ProcessEngine processEngine;
+
 
     @Value("${server.port}")
     private String port;
@@ -59,9 +59,10 @@ public class ActivityService {
      * 开始流程 输入活动ID
      * @param launchId
      */
-    public void startProcess(String launchId) {
+    public void startProcess(String launchId,String launchName) {
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("launchId", launchId);
+        variables.put("ID_S", launchId);
+        variables.put("NAME_S", launchName);
         runtimeService.startProcessInstanceByKey("launchProcess", variables);
     }
 
@@ -70,8 +71,12 @@ public class ActivityService {
      * @param assignee
      * @return
      */
-    public List<Task> getTasks(String assignee) {
-        return taskService.createTaskQuery().taskCandidateUser(assignee).list();
+    public List<Task> getTasks(String assignee,Integer page,Integer pagesize) {
+        return taskService.createTaskQuery().taskCandidateUser(assignee).listPage(page*pagesize,pagesize);
+    }
+
+    public int getTasksCount(String assignee) {
+        return taskService.createTaskQuery().taskCandidateUser(assignee).list().size();
     }
 
     //审批

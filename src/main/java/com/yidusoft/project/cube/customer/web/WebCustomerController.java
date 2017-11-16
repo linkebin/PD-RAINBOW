@@ -1,15 +1,18 @@
 package com.yidusoft.project.cube.customer.web;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.project.business.domain.VisitorRegister;
 import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.project.system.domain.SelectOption;
 import com.yidusoft.project.system.service.SelectOptionService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by smy on 2017/10/19.
@@ -22,6 +25,81 @@ public class WebCustomerController {
 
     @Autowired
     private VisitorRegisterService visitorRegisterService;
+
+    @RequestMapping("/customerinfodetail")
+    public String customerinfodetail(String id,Model model){
+        VisitorRegister visitorRegister = visitorRegisterService.findById(id);
+        visitorRegister.setAddress(visitorRegister.getProvince()+visitorRegister.getCity()+visitorRegister.getDistrict()+visitorRegister.getAddress());
+
+        String json = JSON.toJSONString(visitorRegister);
+
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+
+        religiousBelief(visitorRegister,map);
+        educationLevel(visitorRegister,map);
+        if (visitorRegister.getMotherDeathYourAge()==0){
+            map.put("motherDeathYourAge","");
+        }
+        if (visitorRegister.getFatherDeathYourAge()==0){
+            map.put("fatherDeathYourAge","");
+        }
+
+        if (visitorRegister.getParentalDivorceYourAge()==0){
+            map.put("parentalDivorceYourAge","");
+        }
+        if (visitorRegister.getParentalSeparationYourAge()==0){
+            map.put("parentalSeparationYourAge","");
+        }
+        model.addAttribute("vr",map);
+
+        return "project/cube/customer/customer-info-detail";
+    }
+
+    public void educationLevel(VisitorRegister visitorRegister,Map<String,Object> map){
+        String str ="小学";
+        if (visitorRegister.getEducationLevel()==2){
+            str="初中";
+        }
+        if (visitorRegister.getEducationLevel()==3){
+            str="高中";
+        }
+        if (visitorRegister.getEducationLevel()==4){
+            str="专科";
+        }
+        if (visitorRegister.getEducationLevel()==5){
+            str="本科";
+        }
+        if (visitorRegister.getEducationLevel()==6){
+            str="研究生";
+        }
+        if (visitorRegister.getEducationLevel()==7){
+            str="博士";
+        }
+
+        map.put("educationLevel",str);
+    }
+    public void religiousBelief(VisitorRegister visitorRegister,Map<String,Object> map){
+        String str ="没有";
+        if (visitorRegister.getReligiousBelief()==1){
+            str="基督教";
+        }
+        if (visitorRegister.getReligiousBelief()==2){
+            str="佛教";
+        }
+        if (visitorRegister.getReligiousBelief()==3){
+            str="道教";
+        }
+        if (visitorRegister.getReligiousBelief()==4){
+            str="天主教";
+        }
+        if (visitorRegister.getReligiousBelief()==5){
+            str="伊斯兰教";
+        }
+        if (visitorRegister.getReligiousBelief()==6){
+            str="其他";
+        }
+        map.put("religiousBelief",str);
+    }
 
     @RequestMapping("/customerList")
     public String customerList(){

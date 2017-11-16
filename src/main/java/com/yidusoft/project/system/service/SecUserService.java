@@ -72,4 +72,11 @@ public interface SecUserService extends Service<SecUser> {
     List<TreeNode> leadingTreeList(SecUser secUser);
 
     List<SecUser> findOrgByUsers(SecUser secUser);
+
+    /**
+     * 查询渠道商账号
+     * @param channelId
+     * @return
+     */
+    SecUser findChannelDefaultAccount(String channelId);
 }
