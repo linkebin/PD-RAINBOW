@@ -18,9 +18,6 @@
     <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAdd">
         <i class='eui-icon eui-font24'>&#xe654;</i> 选择套餐
     </div>
-    <div class="eui-col-md2 eui-textAlignR">
-        <i class='eui-icon eui-font24 promotionClose'>&#x1006;</i>
-    </div>
 </div>
 
 <div class="eui-bg-white eui-row eui-paddingT10">
@@ -29,7 +26,7 @@
             <i class='eui-icon eui-font24'>&#xe61d;</i> 可选的套餐
         </div>
         <table class="eui-table eui-form" id="productTable">
-            <input type="hidden" th:value="${ids}" id="ids">
+            <input type="hidden" th:value="${type}" id="type">
             <colgroup>
                 <col width="60">
                 <col>
@@ -136,17 +133,19 @@
     //渲染数据，拼接表格
     function getTable(productList) {
         var tableHtml = '';
-        var arr = $('#ids').val().split(",");
             for (var item in productList) {
-                var prodouct = productList[item];
+                var product = productList[item];
+                if($('#type').val()==2 && product.productType==2){
+                    continue;
+                }
                 tableHtml += '<tr>' +
-                        '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="productId" type="hidden" value="' + prodouct.id + '"></td>' +
-                        '<td>' + prodouct.productCode + '</td>' +
-                        '<td>' + prodouct.productName + '</td>' +
-                        '<td>' + prodouct.productTotal + '</td>' +
-                        '<td>' + prodouct.productPrice + '元</td>' +
-                        '<td>' + prodouct.creator + '</td>' +
-                        '<td>' + new Date(prodouct.createTime).Format('yyyy-MM-dd') + '</td>' +
+                        '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="productId" type="hidden" value="' + product.id + '"></td>' +
+                        '<td>' + product.productCode + '</td>' +
+                        '<td>' + product.productName + '</td>' +
+                        '<td>' + product.productTotal + '</td>' +
+                        '<td>' + product.productPrice + '元</td>' +
+                        '<td>' + product.creator + '</td>' +
+                        '<td>' + new Date(product.createTime).Format('yyyy-MM-dd') + '</td>' +
                         '</tr>';
             }
         return tableHtml;

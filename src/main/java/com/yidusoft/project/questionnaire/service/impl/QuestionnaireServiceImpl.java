@@ -5,10 +5,7 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionFactorMapper;
-import com.yidusoft.project.questionnaire.domain.Questionnaire;
-import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestionFactor;
-import com.yidusoft.project.questionnaire.domain.QuestionnaireTag;
-import com.yidusoft.project.questionnaire.domain.Scene;
+import com.yidusoft.project.questionnaire.domain.*;
 import com.yidusoft.project.questionnaire.service.*;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
@@ -39,6 +36,8 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
     private QuestionnaireTagService questionnaireTagService;
     @Resource
     private SceneService sceneService;
+    @Resource
+    private QuestionnairePermissionMiddleService questionnairePermissionMiddleService;
     //分页条件查询相关的问卷信息
     @Override
     public List<Questionnaire> questionnaireListByPage(Questionnaire questionnaire) {
@@ -47,7 +46,7 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
 
     //添加问卷
     @Override
-    public Result addQuestionnaire(Questionnaire questionnaire, String questionStr, String tagId, String sceneId) {
+    public Result addQuestionnaire(Questionnaire questionnaire, String questionStr, String tagId, String sceneId,String userIds) {
         try{
             //问卷
             String questionnaireId= UUID.randomUUID().toString();
@@ -72,6 +71,20 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
             //场景
             questionnaireSceneService.addQuestionnaireScene(sceneId,questionnaireId);
 
+            //问卷权限 1 : 全部  2 ： 指定
+            if (questionnaire.getQuestionnairePermission() != null && questionnaire.getQuestionnairePermission() == 2){
+               if (userIds != null && !"".equals(userIds)){
+                   String[] ids = userIds.split(",");
+                   for (int i = 0; i < ids.length; i++){
+                       QuestionnairePermissionMiddle questionnairePermissionMiddle = new QuestionnairePermissionMiddle();
+                       String permissionId = UUID.randomUUID().toString();
+                       questionnairePermissionMiddle.setId(permissionId);
+                       questionnairePermissionMiddle.setUserID(ids[i]);
+                       questionnairePermissionMiddle.setQuestionnaireId(questionnaireId);
+                       questionnairePermissionMiddleService.save(questionnairePermissionMiddle);
+                   }
+               }
+            }
         }catch (Exception e){
             return ResultGenerator.genFailResult("操作失败");
         }

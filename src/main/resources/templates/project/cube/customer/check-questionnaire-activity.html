@@ -32,6 +32,8 @@
                 <input type="hidden" name="tagIds"/>
                 <input type="hidden" name="sceneIds"/>
                 <input type="hidden" name="typeIds">
+                <input type="hidden" id="questionnaireName">
+                <input type="hidden" id="questionnaireId">
                 <div class="eui-col-sm6 eui-col-md6 eui-padding10">
                     <div class="eui-paddingB10" id="tagScene">
                         <span class="eui-marginR10">选择</span>
@@ -378,7 +380,7 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
                     '<div class="eui-textAlignR">'+
                     '<p class="eui-btn-group">'+
                     '<span class="eui-btn eui-btn-small eui-btn-normal" onclick="preview(\''+questionnaire.id+'\')">预览详情</span>'+
-                    '<span class="eui-btn eui-btn-small eui-btn-normal" onclick="useQuestionnaire(\''+questionnaire.id+'\')">使用该问卷</span>'+
+                    '<span class="eui-btn eui-btn-small eui-btn-normal" onclick="useQuestionnaire(\''+questionnaire.questionnaireName+","+questionnaire.id+'\')">选择该问卷</span>'+
                     '</p>'+
                     '</div>'+
                     '</div>'+
@@ -516,32 +518,22 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
     function preview(id) {
         window.open("/web/questionnaire/question_horizontal_or_vertital_preview?questionnaireId=" + id);
     }
-    //使用问卷
-    function useQuestionnaire (questionnaireId) {
-        //加载层
-        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-        //添加问卷使用
-        $.post("/cube/customer/getCheckQuestionnaireForVisitor",{},function (result) {
+    //选择问卷
+    function useQuestionnaire (questionnaireName) {
+        var nameAndId = questionnaireName.split(',');
+        $('#questionnaireName').val(nameAndId[0]);
+        $('#questionnaireId').val(nameAndId[1]);
+        console.log($('#questionnaireName').val() + "  " + $('#questionnaireId').val())
             layer.closeAll();
-            if(result.code!=200){
-                // 账号余额不足
-                layer.open({
-                    title:"充值",
-                    type: 1,
-                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
-                });
+    }
 
-            }else {
-                var obj= window.parent.getVisitorId();
-                startAnswer(questionnaireId,obj.userId,obj.visitorTimes);
-            }
-        });
+    function getQuestionnaireNameAndId() {
+        var obj = new Object();
+        obj.questionnaireName =  $('#questionnaireName').val();
+        obj.questionnaireId =  $('#questionnaireId').val();
+        return obj;
     }
-    //开始答题
-    function startAnswer(questionnaireId,userId,visitorTimes) {
-        window.open("/web/cube/getQuestionnaireGuide?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes);
-        window.close();
-    }
+
 //重置
     function resetForm() {
         document.getElementById('searchFrom').reset()

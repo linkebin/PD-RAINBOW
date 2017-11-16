@@ -99,10 +99,11 @@
                     </div>
                     <div class="eui-form-item">
                         <label class="eui-form-label">问卷名称</label>
-                        <div class="eui-input-inline">
-                            <select e-filter="uestionnaireId" class="eui-input" e-ignore name="uestionnaireId">
-                                <option value="">请选择</option>
-                            </select>
+                        <div class="eui-input-inline" onclick="loadQuestionnaireForAct()">
+                            <!--<select e-filter="uestionnaireId" class="eui-input" e-ignore name="uestionnaireId">-->
+                            <!--<option value="">请选择</option>-->
+                            <!--</select>-->
+                            <input type="text" name="uestionnaireId" id="uestionnaireId" e-verify="title" autocomplete="off" placeholder="请选择问卷" class="eui-input" readonly="readonly" >
                         </div>
                         <label class="eui-form-label">活动开始时间</label>
                         <div class="eui-input-inline">
@@ -119,7 +120,7 @@
             </div>
 
             <div class="eui-textAlignC eui-bg-white eui-padding20">
-            <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">保存信息</span>
+                <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">保存信息</span>
             </div>
 
             <input type="submit" id="sub" style="display: none;" value="提交"/>
@@ -144,7 +145,7 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-
+    var queName = '';
     $(function () {
         eui.use(['form', 'layedit', 'laydate'], function () {
             var form = eui.form
@@ -162,13 +163,16 @@
                 type: 'datetime'
             });
 
-            getQuestions(form);
+            //getQuestions(form);
 
             jQuery.validator.addMethod("isMobile", function (value, element) {
                 var length = value.length;
                 var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
                 return this.optional(element) || (length == 11 && mobile.test(value));
             }, "请正确填写您的手机号码");
+            jQuery.validator.addMethod("isProvincePNo", function(value, element) {
+                return this.optional(element) || value!='—— 省 ——';
+            }, "请选择省份");
             $("#activitiesForm").validate({
                 rules: {
                     activityName: {
@@ -205,14 +209,9 @@
                     uestionnaireId: {
                         required: true,
                     },
-                    province: {
-                        required: true
-                    },
-                    city: {
-                        required: true
-                    },
-                    district: {
-                        required: true
+                    province :{
+                        required: true,
+                        isProvincePNo: true
                     }
                 },
                 messages: {
@@ -250,14 +249,9 @@
                     uestionnaireId: {
                         required: '问卷名称不能为空',
                     },
-                    province: {
-                        required: '省不能为空'
-                    },
-                    city: {
-                        required: '市不能为空'
-                    },
-                    district: {
-                        required: '区不能为空'
+                    province :{
+                        required:'请选择省',
+                        isProvincePNo:'请选择省份'
                     }
                 },
 
@@ -268,7 +262,8 @@
                     delete obj.province;
                     delete obj.city;
                     delete obj.district;
-                    obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                   // obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                    obj.uestionnaireName = queName;
                     console.log(obj);
                     if (obj.activityStart > obj.activityEnd) {
                         return layer.msg('活动开始时间不能大于结束时间');
@@ -276,35 +271,28 @@
                     $.get("/user/questionnaires/list", function (result) {
                         console.log(result);
                         if (result.code = 200) {
-                            var total = 0;
                             if (result.data != null) {
-                                total = result.data.questionnairesTotal;
-                            }
-                            $.post('/launch/activities/getSumTotal', {id: ""}, function (result) {
-                                if (result.code == 200) {
-                                    var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
-                                    if (sumToatl > total) {
-                                        layer.confirm('你的使用卷不足！！', {
-                                            btn: ['前往购买', '取消']
-                                        }, function () {
-                                            window.open("/cube/pay");
-                                        })
-                                    } else {
-                                        $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
-                                            if (result.code == 200) {
-                                                layer.msg("操作成功", {
-                                                    icon: 1,
-                                                    time: 1500
-                                                })
-                                                setTimeout(function () {
-                                                    window.close();
-                                                }, 1500)
-                                            } else {
-                                                layer.msg(result.message);
-                                            }
-                                        });
+                                var total = result.data.questionnairesTotal;
+                                if (result.data.member == 1) {//如果是会员
+                                    if (new Date() < new Date(result.data.endTime)) {//如果会员还没到期
+                                        add(obj);
+                                    } else {//会员到期
+                                        getTotal(total, obj);
                                     }
+                                } else {//不是会员
+                                    getTotal(total, obj);
                                 }
+                            } else {
+                                layer.confirm('你的使用卷不足！！', {
+                                    btn: ['前往购买', '取消']
+                                }, function () {
+                                    window.open("/cube/pay");
+                                })
+                            }
+                        } else {
+                            layer.msg(result.message,{
+                                icon: 2,
+                                time: 1500
                             })
                         }
                     })
@@ -312,27 +300,43 @@
             });
         });
     });
-    // 返回顶部
-    var winH = $(window).height();
 
     function formSub() {
         return $("#sub").click();
     }
 
-    $('.eui-backTop').hide();
-    $(window).scroll(function (e) {
-        var winT = $(window).scrollTop();
-        if (winT > winH) {
-            $('.eui-backTop').fadeIn()
-        } else {
-            $('.eui-backTop').fadeOut()
-        }
-    });
+    function getTotal(total, obj) {
+        $.post('/launch/activities/getSumTotal', {id: ""}, function (result) {
+            if (result.code == 200) {
+                var sumToatl = parseInt(obj.activityTotal) + parseInt(result.data);
+                if (sumToatl > total) {
+                    layer.confirm('你的使用卷不足！！', {
+                        btn: ['前往购买', '取消']
+                    }, function () {
+                        window.open("/cube/pay");
+                    })
+                } else {
+                    add(obj)
+                }
+            }
+        })
+    }
 
-    $('.eui-backTop').click(function (e) {
-        $('html,body').animate({scrollTop: 0}, 500)
-    });
-
+    function add(obj) {
+        $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+            if (result.code == 200) {
+                layer.msg("操作成功", {
+                    icon: 1,
+                    time: 1500
+                })
+                setTimeout(function () {
+                    window.close();
+                }, 1500)
+            } else {
+                layer.msg(result.message);
+            }
+        });
+    }
 
     /**
      * 获取问卷名称
@@ -350,6 +354,50 @@
                 console.log($('select[name="uestionnaireId"]:selected').text());
             }
         })
+    }
+
+    /**
+     * 加载问卷
+     *
+     */
+
+    function loadQuestionnaireForAct() {
+        var userId=$("[name='visitorId']").val();
+        var list=new Array;
+        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+            var iframeWin;//iframe对象
+            layer.open({
+                type: 2
+                ,id: ''
+                ,title: '选择问卷'
+                ,area: ['800px', '500px']
+                ,success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,shade: 0
+                ,moveType: 0//拖拽模式，0或者1
+                ,maxmin: true
+                ,content:"/web/customer/getCheckQuestionnaireForAct"
+                ,btn: ['确定', '关闭'] //只是为了演示
+                ,yes: function(){
+                    var obj =  iframeWin.getQuestionnaireNameAndId();
+                    queName = obj.questionnaireName;
+                    $('#uestionnaireId').val(queName);
+                    console.log("questionnaireName = " + obj.questionnaireName);
+                    layer.closeAll();
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                },cancel: function(){
+                    layer.closeAll();
+                }
+                ,zIndex: layer.zIndex //重点1
+            });
+        });
+
     }
 </script>
 

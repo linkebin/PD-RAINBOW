@@ -61,6 +61,11 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
         return productSettingsMapper.getUpdateUnion(id);
     }
 
+    /**
+     * 修改套餐
+     * @param json
+     * @return
+     */
     @Override
     public Result updateProduct(String json) {
         ProductSettings product = JSON.parseObject(json, ProductSettings.class);
@@ -88,31 +93,24 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
         if(content.length()>1){
             content = content.substring(0, content.length() - 1);
         }
-        ModifyTrajectory mt = new ModifyTrajectory();
-        mt.setContent(content);
-        mt.setId(UUID.randomUUID().toString());
-        mt.setCreator(Security.getUser().getUserName());
-        mt.setProductId(product.getId());
-        mt.setProductName(product.getProductName());
-        mt.setCreateTime(new Date());
-        modifyTrajectoryService.save(mt);
+        addTrajectory(content,UUID.randomUUID().toString(),product.getId(),product.getProductName());
         productSettingsService.update(product);
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 添加套餐
+     * @param json
+     * @return
+     */
     @Override
     public Result addProduct(String json) {
         ProductSettings product = JSON.parseObject(json, ProductSettings.class);
         String content = "添加了套餐:" + product.getProductName();
         ModifyTrajectory mt = new ModifyTrajectory();
         String id = UUID.randomUUID().toString();
-        mt.setContent(content);
-        mt.setId(id);
-        mt.setCreator(Security.getUser().getUserName());
-        mt.setProductId(product.getId());
-        mt.setProductName(product.getProductName());
-        mt.setCreateTime(new Date());
-        modifyTrajectoryService.save(mt);
+        //添加修改轨迹
+        addTrajectory(content,id,product.getId(),product.getProductName());
         product.setId(id);
         product.setProductCode(CodeHelper.getCode("P"));
         product.setCreator(Security.getUser().getUserName());
@@ -124,23 +122,42 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
         return ResultGenerator.genSuccessResult();
     }
 
+    /**
+     * 批量删除套餐
+     * @param ids
+     * @return
+     */
     @Override
     public Result deleteBacth(String ids) {
         String arr[] = ids.split(",");
         for (String str : arr) {
             ProductSettings product = productSettingsService.findById(str);
             product.setDeleted(1);
-            ModifyTrajectory mt = new ModifyTrajectory();
-            mt.setContent("删除了套餐:" + product.getProductName());
-            mt.setId(UUID.randomUUID().toString());
-            mt.setCreator(Security.getUser().getUserName());
-            mt.setProductId(product.getId());
-            mt.setProductName(product.getProductName());
-            mt.setCreateTime(new Date());
-            modifyTrajectoryService.save(mt);
+            String content = "删除了套餐:" + product.getProductName();
+            //添加修改轨迹
+            addTrajectory(content,UUID.randomUUID().toString(),product.getId(),product.getProductName());
             productSettingsService.update(product);
             orderOnlineService.updateOrderOnline(str);
         }
         return ResultGenerator.genSuccessResult();
+    }
+
+    /**
+     * 添加套餐修改轨迹
+     * @param content
+     * @param uuId
+     * @param productId
+     * @param name
+     */
+    @Override
+    public void addTrajectory(String content,String uuId,String productId,String name) {
+        ModifyTrajectory mt = new ModifyTrajectory();
+        mt.setContent(content);
+        mt.setId(uuId);
+        mt.setCreator(Security.getUser().getUserName());
+        mt.setProductId(productId);
+        mt.setProductName(name);
+        mt.setCreateTime(new Date());
+        modifyTrajectoryService.save(mt);
     }
 }

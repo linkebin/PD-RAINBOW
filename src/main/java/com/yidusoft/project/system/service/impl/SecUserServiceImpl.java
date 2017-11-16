@@ -201,4 +201,9 @@ public class SecUserServiceImpl extends AbstractService<SecUser> implements SecU
     public List<SecUser> findOrgByUsers(SecUser secUser) {
         return secUserMapper.findOrgByUsers(secUser);
     }
+
+    @Override
+    public SecUser findChannelDefaultAccount(String channelId) {
+        return secUserMapper.findChannelDefaultAccount(channelId);
+    }
 }

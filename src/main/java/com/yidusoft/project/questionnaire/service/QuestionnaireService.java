@@ -14,7 +14,7 @@ public interface QuestionnaireService extends Service<Questionnaire> {
     //分页条件查询相关的问卷信息
     List<Questionnaire> questionnaireListByPage(Questionnaire questionnaire);
     //添加问卷
-    Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId);
+    Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId, String userIds);
 
      //查询问卷 相关的 标签   场景
     Result  getQuestionnaireInfo(String id);

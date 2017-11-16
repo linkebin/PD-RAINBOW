@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.activiti.org/test">
+
+	<process id="channelProcess" name="渠道申请" isExecutable="true">
+		<startEvent id="channelStart" name="渠道申请流程开始">
+			<extensionElements>
+				<activiti:formProperty id="ID_S" name="渠道ID" type="string"
+				                       required="true"></activiti:formProperty>
+				<activiti:formProperty id="NAME_S" name="渠道名称" type="string"
+									   required="true"></activiti:formProperty>
+			</extensionElements>
+		</startEvent>
+		<userTask id="channelAapproval" name="渠道审批"
+				  activiti:candidateUsers="${channelActivityService.findUsers(execution)}" isForCompensation="true">
+			<extensionElements>
+				<activiti:formProperty id="channelAapproval_" name="渠道审批操作" type="enum">
+					<activiti:value id="true" name="通过"></activiti:value>
+					<activiti:value id="false" name="打回"></activiti:value>
+				</activiti:formProperty>
+			</extensionElements>
+		</userTask>
+
+		<endEvent id="channelEnd" name="渠道申请流程结束"></endEvent>
+
+
+		<sequenceFlow id="channelflow1" sourceRef="channelStart" targetRef="channelAapproval"></sequenceFlow>
+		<sequenceFlow id="channelflow2" sourceRef="channelAapproval" targetRef="ChannelAutoTask"></sequenceFlow>
+
+		<serviceTask id="ChannelAutoTask" name="审批后操作"
+					 activiti:expression="${channelActivityService.channel(execution)}"></serviceTask>
+
+		<sequenceFlow id="channelflow3" sourceRef="ChannelAutoTask" targetRef="channelEnd"></sequenceFlow>
+	</process>
+
+</definitions>

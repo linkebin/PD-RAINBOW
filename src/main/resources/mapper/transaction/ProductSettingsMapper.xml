@@ -16,11 +16,14 @@
         <result column="product_name" jdbcType="VARCHAR" property="productName"/>
         <result column="promotions_name" jdbcType="VARCHAR" property="promotionsName"/>
         <result column="product_state" jdbcType="INTEGER" property="productState"/>
+        <result column="product_type" jdbcType="INTEGER" property="productType"/>
+        <result column="time_limit" jdbcType="INTEGER" property="timeLimit"/>
     </resultMap>
 
     <select id="getProductAll" resultMap="BaseResultMap" parameterType="Integer">
         SELECT id_,product_code,product_total,product_price,creator,create_time,
-        deleted,promotions_id,product_name,promotions_name,product_state
+        deleted,promotions_id,product_name,promotions_name,product_state,
+        product_type,time_limit
         FROM product_settings where deleted=0 order by product_price ASC
     </select>
 

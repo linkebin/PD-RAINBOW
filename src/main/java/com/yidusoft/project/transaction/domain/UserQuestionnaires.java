@@ -1,6 +1,9 @@
 package com.yidusoft.project.transaction.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Date;
 
 @Table(name = "user_questionnaires")
 public class UserQuestionnaires {
@@ -25,6 +28,24 @@ public class UserQuestionnaires {
      */
     @Column(name = "questionnaires_cumulative_total")
     private Integer questionnairesCumulativeTotal;
+
+    /**
+     * 是否为会员
+     */
+    @Column(name = "member")
+    private Integer member;
+
+    /**
+     * 购买时间
+     */
+    @Column(name = "buy_time")
+    private Date buyTime;
+
+    /**
+     * 到期时间
+     */
+    @Column(name = "end_time")
+    private Date endTime;
 
     /**
      * @return ID_
@@ -92,5 +113,53 @@ public class UserQuestionnaires {
      */
     public void setQuestionnairesCumulativeTotal(Integer questionnairesCumulativeTotal) {
         this.questionnairesCumulativeTotal = questionnairesCumulativeTotal;
+    }
+
+    /**
+     * 获取到会员
+     * @return
+     */
+    public Integer getMember() {
+        return member;
+    }
+
+    /**
+     * 设置会员
+     * @param member
+     */
+    public void setMember(Integer member) {
+        this.member = member;
+    }
+
+    /**
+     * 获取购买时间
+     * @return
+     */
+    public Date getBuyTime() {
+        return buyTime;
+    }
+
+    /**
+     * 设置购买时间
+     * @param buyTime
+     */
+    public void setBuyTime(Date buyTime) {
+        this.buyTime = buyTime;
+    }
+
+    /**
+     * 获取到期时间
+     * @return
+     */
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * 设置到期时间
+     * @param endTime
+     */
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

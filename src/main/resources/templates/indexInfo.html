@@ -9,6 +9,156 @@
     <link rel="stylesheet"  th:href="@{/Styles/themes/default/modules/pageLogin/login-base/login.css}"   media="all">
 </head>
 <body>
-<div  class="Login"></div>
+<div class="eui-bg-white eui-row eui-padding15">
+    <div class="eui-col-md12 eui-paddingR10">
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 待审批任务
+            </div>
+        </div>
+        <table  class="eui-table eui-form" id="userTable">
+            <colgroup>
+                <col width="100">
+                <col width="250">
+                <col width="100">
+                <col width="180">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>任务名称</th>
+                <th>任务类型</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+
+<script>
+    $(function () {
+        doSearch();
+    });
+
+    function resetForm() {
+        document.getElementById('searchFrom').reset()
+    }
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+
+            var params = new Object();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/tasks",
+                data: {
+                    roleJson:JSON.stringify(params),
+                    page:1,
+                    pagesize: 10,
+                    assignee:'admin'
+                },
+                type:"post",
+                success:function(result){
+                    console.log(result);
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = new Object();
+                                $.ajax({
+                                    url: "/tasks",
+                                    data: {
+                                        roleJson: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit,
+                                        assignee:'admin'
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            tableHtml +=  '<tr>' +
+                '<td>'+ secUser.taskId +'</td>' +
+                '<td>'+ secUser.name_ +'</td>' +
+                '<td>'+ secUser.taskName +'</td>' +
+                '<td>'+ new Date(secUser.taskTime).Format('yyyy-MM-dd hh:mm:ss') +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> '+
+                ''+Buts(secUser)+'' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+    function Buts(secUser) {
+            var taskId = "'"+secUser.taskId+"'";
+            return '<button onclick="approveYes('+taskId+')" class="eui-btn eui-btn-primary eui-btn-mini" title="通过"><i class="eui-icon">&#xe605;</i></button> ' +
+                '<button onclick="approveNo('+taskId+')" class="eui-btn eui-btn-primary eui-btn-mini" title="打回" ><i class="eui-icon">&#x1006;</i></button> ';
+    }
+    
+    function approveYes(taskId) {
+        $.post('/channelComplete/true/'+taskId+'/22',function (result) {
+            location.reload();
+        });
+    }
+
+    function approveNo(taskId) {
+        $.post('/channelComplete/false/'+taskId+'/22',function (result) {
+            location.reload();
+        });
+    }
+</script>
 </body>
 </html>

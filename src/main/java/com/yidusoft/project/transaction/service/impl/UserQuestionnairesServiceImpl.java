@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 /**
@@ -48,9 +49,22 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
     @Override
     public void deleteDuction(String activityId) {
         LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(launchActivities.getUserId());
-        userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
-        userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+        if(launchActivities.getInitiatorType()!=2){
+            updateUserQuestionnaires(launchActivities.getUserId());
+        }
+    }
+
+    public void updateUserQuestionnaires(String userId){
+        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
+        if(userQuestionnaires.getMember()!=1){
+            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+            userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+        }else{
+            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){
+                userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+                userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+            }
+        }
         this.update(userQuestionnaires);
     }
 }
