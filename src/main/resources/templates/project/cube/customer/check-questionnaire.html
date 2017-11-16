@@ -82,9 +82,9 @@
             <div id="pages"></div>-->
             <!--选择问卷模版-->
             <div class="eui-bd eui-padding10">
-                <div class="eui-sd1 eui-sd1-type2" style="overflow-y: auto;height: 350px">
+                <div class="eui-sd1 eui-sd1-type3" style="overflow-y: auto;height: 450px">
                     <ul id="ulScene">
-                       <li class="eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷场景</li>
+                       <li class="eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span><span style="font-weight: bold">问卷场景</span></li>
                         <!-- <li class="eui-row eui-padding10">
                             <a class="eui-col-sm6 eui-col-md6">调查</a>
                             <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">10</p>
@@ -100,7 +100,7 @@
 
                     </ul>
                     <ul id="ulTag">
-                        <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷标签</li>
+                        <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span><span style="font-weight: bold">问卷标签</span></li>
                        <!-- <li class="eui-row eui-padding10">
                             <p class="eui-col-sm6 eui-col-md6">互联网</p>
                             <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">10</p>
@@ -124,11 +124,11 @@
 
                     </ul>
                     <ul id="ulType">
-                        <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span>问卷类型</li>
+                        <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font20">&#xe60a;</span><span style="font-weight: bold">问卷类型</span></li>
                     </ul>
                 </div>
                 <div class="eui-mn1">
-                    <div class="eui-mn1-type2 classify" >
+                    <div class="eui-mn1-type3 classify" >
                         <div class="eui-collapse"  e-filter="divQuestionnaire" e-accordion="" id="divQuestionnaire" >
 
                         <!--    <div class="eui-colla-item">
@@ -423,18 +423,18 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
     function  sceneOrTag(data,type) {
         var html="";
         for(var i=0;i<data.length;i++){
-             html+='<li class="eui-row eui-padding10">';
+             html+='<li class="eui-row eui-padding5">';
             if(type=='scene'){
-                html+='<a class="eui-col-sm6 eui-col-md6" ' +
-                       'onclick="tagOrSceneCondition(\''+data[i].id+'\',\''+data[i].sceneName+'\',\'scene\''+')">'+data[i].sceneName+'</a>';
+                html+='<a class="eui-col-sm9 eui-col-md9 eui-font12" ' +
+                    'onclick="tagOrSceneCondition(\'' + data[i].id + '\',\'' + data[i].sceneName + '\',\'scene\'' + ')" xmlns="http://www.w3.org/1999/html">'+data[i].sceneName+'</a>';
             }else if(type=='tag'){
-                html+='<a class="eui-col-sm6 eui-col-md6" ' +
+                html+='<a class="eui-col-sm9 eui-col-md9 eui-font12" ' +
                     'onclick="tagOrSceneCondition(\''+data[i].id+'\',\''+data[i].tagName+'\',\'tag\''+')">'+data[i].tagName+'</a>';
             }else {
-                html+='<a  class="eui-col-sm6 eui-col-md6" ' +
+                html+='<a  class="eui-col-sm9 eui-col-md9 eui-font12" ' +
                     'onclick="tagOrSceneCondition(\''+data[i].id+'\',\''+data[i].questionnaireTypeName+'\',\'type\''+')">'+data[i].questionnaireTypeName+'</a>';
             }
-            html+='  <p class="eui-col-sm6 eui-col-md6 eui-textAlignR eui-color-gray3">'+data[i].nums+'</p>';
+            html+='  <p class="eui-col-sm3 eui-col-md3 eui-textAlignR eui-color-gray3 eui-font12">'+data[i].nums+'</p>';
             html+="</li>";
         }
 
