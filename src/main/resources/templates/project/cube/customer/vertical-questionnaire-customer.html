@@ -30,10 +30,6 @@
                         <span id="visitorName">张三</span>
                     </p>
                     <p class="eui-marginB10">
-                        <span class="eui-color-gray3">总分：</span>
-                        <span id="totalScore"></span>
-                    </p>
-                    <p class="eui-marginB10">
                         <span class="eui-color-gray3">填写日期：</span>
                         <span id="createTime"></span>
                     </p>
@@ -48,9 +44,21 @@
                         <span class="eui-color-blue">55.5</span>
                     </p>-->
                     <p class="eui-marginB10">
+                        <span class="eui-color-gray3">总分：</span>
+                        <span id="totalScore"></span>
+                    </p>
+                    <p class="eui-marginB10">
                         <span class="eui-color-gray3">耗时：</span>
                         <span id="timeConsuming"></span>
                     </p>
+                </div>
+            </div>
+            <div class="eui-row dataCharts">
+                <div class="eui-col-md6">
+                    <div id="main1"  style="width: 100%;height:281px;"></div>
+                </div>
+                <div class="eui-col-md6">
+                    <div id="main2"  style="width: 100%;height:281px;"></div>
                 </div>
             </div>
             <div id="dataResult" class="eui-marginTB20">
@@ -94,7 +102,116 @@
 <script src="/Scripts/module/eui.js"></script>
 <script src="/date2format.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/Scripts/plugins/echarts/echarts.min.js"></script>
+<!-- 引入 macarons 主题 -->
+<script src="/Scripts/plugins/echarts/macarons.js"></script>
+
 <script>
+    // 基于准备好的dom，初始化echarts实例(风格化图表)
+    var myChart1 = echarts.init(document.getElementById('main1'),'macarons');
+    // 指定图表的配置项和数据
+    var option = {
+        tooltip : {
+            formatter: "{a} <br/>{b} : {c}"
+        },
+        toolbox: {
+            feature: {
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        //       修改柱状条的颜色color
+        itemStyle: {
+            normal: {
+                shadowColor: 'rgba(0, 0, 0, 0.1)'
+            }
+        },
+        series: [
+            {
+                name: '我的总分',
+                type: 'gauge',
+                detail: {formatter:'{value}'},
+                data: [{value: 90, name: '总分'}]
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+
+    // 基于准备好的dom，初始化echarts实例(风格化图表)
+    var myChart2 = echarts.init(document.getElementById('main2'),'macarons');
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '自定义雷达图'
+        },
+        legend: {
+            data: ['图一','图二', '张三', '李四']
+        },
+        radar: [
+            {
+
+            },
+            {
+                indicator: [
+                    { text: '语文', max: 150 },
+                    { text: '数学', max: 150 },
+                    { text: '英语', max: 150 },
+                    { text: '物理', max: 120 },
+                    { text: '化学', max: 108 },
+                    { text: '生物', max: 72 }
+                ],
+                center: ['50%', '50%'],
+                radius: 120
+            }
+        ],
+        series: [
+
+            {
+                name: '成绩单',
+                type: 'radar',
+                radarIndex: 1,
+                data: [
+                    {
+                        value: [120, 118, 130, 100, 99, 70],
+                        name: '张三',
+                        label: {
+                            normal: {
+                                show: true,
+                                formatter:function(params) {
+                                    return params.value;
+                                }
+                            }
+                        }
+                    },
+                    {
+                        value: [90, 113, 140, 30, 70, 60],
+                        name: '李四',
+                        areaStyle: {
+                            normal: {
+                                opacity: 0.9,
+                                color: new echarts.graphic.RadialGradient(0.5, 0.5, 1, [
+                                    {
+                                        color: '#B8D3E4',
+                                        offset: 0
+                                    },
+                                    {
+                                        color: '#72ACD1',
+                                        offset: 1
+                                    }
+                                ])
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    // 使用刚指定的配置项和数据显示图表。
+    myChart2.setOption(option);
+
+
 eui.use(['form', 'layedit', 'laydate','element'], function(){
     var form = eui.form
     ,layer = eui.layer
