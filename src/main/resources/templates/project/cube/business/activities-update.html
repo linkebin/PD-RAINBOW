@@ -99,10 +99,13 @@
                     </div>
                     <div class="eui-form-item">
                         <label class="eui-form-label">问卷名称</label>
-                        <div class="eui-input-inline">
-                            <select e-filter="uestionnaireId" name="uestionnaireId">
+                        <!--<div class="eui-input-inline">-->
+                            <!--<select e-filter="uestionnaireId" name="uestionnaireId">-->
 
-                            </select>
+                            <!--</select>-->
+                        <!--</div>-->
+                        <div class="eui-input-inline" onclick="loadQuestionnaireForAct()">
+                            <input type="text" name="uestionnaireId" id="uestionnaireId" e-verify="uestionnaireId" autocomplete="off" placeholder="请选择问卷" class="eui-input" readonly="readonly" >
                         </div>
                         <label class="eui-form-label">活动开始时间</label>
                         <div class="eui-input-inline">
@@ -145,7 +148,7 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-
+    var queName = '';
     $(function () {
         eui.use(['form', 'layedit', 'laydate'], function () {
             var form = eui.form
@@ -162,7 +165,8 @@
                 elem: '#activityEnd',
                 type: 'datetime'
             });
-            getQuestions(form);//获取问卷名称
+            //getQuestions(form);//获取问卷名称
+            detail(form);
             jQuery.validator.addMethod("isMobile", function (value, element) {
                 var length = value.length;
                 var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
@@ -251,7 +255,9 @@
                     delete obj.province;
                     delete obj.city;
                     delete obj.district;
-                    obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                   // obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
+                    obj.uestionnaireName = $('#uestionnaireId').val();
+                    obj.uestionnaireId = queName;
                     console.log(obj);
                     if(obj.activityStart>obj.activityEnd){
                         return layer.msg('活动的开始时间不能大于结束时间');
@@ -350,11 +356,12 @@
                 $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityAddr"]').val(address);
-                $('select[name="uestionnaireId"]').children().each(function (i, data) {
-                    if (data.value == activity.uestionnaireId) {
-                        return $(this).attr("selected", true);
-                    }
-                })
+//                $('select[name="uestionnaireId"]').children().each(function (i, data) {
+//                    if (data.value == activity.uestionnaireId) {
+//                        return $(this).attr("selected", true);
+//                    }
+//                })
+                $('#uestionnaireId').val(activity.uestionnaireName);
                 form.render('select');
             }
         })
@@ -404,6 +411,50 @@
                 detail(form);
             }
         })
+    }
+
+
+    /**
+     * 加载问卷
+     *
+     */
+    function loadQuestionnaireForAct() {
+        var userId=$("[name='visitorId']").val();
+        var list=new Array;
+        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+            var iframeWin;//iframe对象
+            layer.open({
+                type: 2
+                ,id: ''
+                ,title: '选择问卷'
+                ,area: ['800px', '500px']
+                ,success: function(layero, index){
+                    var body = layer.getChildFrame('body', index);
+                    iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+                }
+                ,shade: 0
+                ,moveType: 0//拖拽模式，0或者1
+                ,maxmin: true
+                ,content:"/web/customer/getCheckQuestionnaireForAct"
+                ,btn: ['确定', '关闭'] //只是为了演示
+                ,yes: function(){
+                    var obj =  iframeWin.getQuestionnaireNameAndId();
+                    queName = obj.questionnaireId;
+                    $('#uestionnaireId').val(obj.questionnaireName);
+                    console.log("questionnaireName = " + obj.questionnaireName);
+                    layer.closeAll();
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                },cancel: function(){
+                    layer.closeAll();
+                }
+                ,zIndex: layer.zIndex //重点1
+            });
+        });
+
     }
 </script>
 
