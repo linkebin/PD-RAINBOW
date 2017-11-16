@@ -113,16 +113,15 @@
         WHERE q.deleted=0
         AND q.questionnaire_state=2
         AND (q.questionnaire_permission = 1 OR  #{userId} IN (
-        SELECT qpm.user_id FROM questionnaire_permission_middle
+        SELECT user_id FROM questionnaire_permission_middle
         )
         )
-        <if test="questionnaireName!= '' and questionnaireName!= null ">AND q. questionnaire_name like
-            '%${questionnaireName}%'
+        <if test="questionnaireName!= '' and questionnaireName!= null ">
+            AND q. questionnaire_name like  '%${questionnaireName}%'
         </if>
-            <if test="
-        questionnaireType!= '' and questionnaireType!= null ">
-                AND  q.questionnaire_type =#{questionnaireType}
-            </if>
+        <if test=" questionnaireType!= '' and questionnaireType!= null ">
+        AND  q.questionnaire_type =#{questionnaireType}
+       </if>
 
 
             <if test="tagIds != null and tagIds != ''">
