@@ -103,7 +103,7 @@
                             <!--<select e-filter="uestionnaireId" class="eui-input" e-ignore name="uestionnaireId">-->
                             <!--<option value="">请选择</option>-->
                             <!--</select>-->
-                            <input type="text" name="uestionnaireId" id="uestionnaireId" e-verify="title" autocomplete="off" placeholder="请选择问卷" class="eui-input" readonly="readonly" >
+                            <input type="text" name="uestionnaireId" id="uestionnaireId" e-verify="uestionnaireId" autocomplete="off" placeholder="请选择问卷" class="eui-input" readonly="readonly" >
                         </div>
                         <label class="eui-form-label">活动开始时间</label>
                         <div class="eui-input-inline">
@@ -263,7 +263,8 @@
                     delete obj.city;
                     delete obj.district;
                    // obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
-                    obj.uestionnaireName = queName;
+                    obj.uestionnaireName = $('#uestionnaireId').val();
+                    obj.uestionnaireId = queName;
                     console.log(obj);
                     if (obj.activityStart > obj.activityEnd) {
                         return layer.msg('活动开始时间不能大于结束时间');
@@ -372,7 +373,7 @@
                 type: 2
                 ,id: ''
                 ,title: '选择问卷'
-                ,area: ['800px', '500px']
+                ,area: ['900px', '600px']
                 ,success: function(layero, index){
                     var body = layer.getChildFrame('body', index);
                     iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
@@ -384,8 +385,8 @@
                 ,btn: ['确定', '关闭'] //只是为了演示
                 ,yes: function(){
                     var obj =  iframeWin.getQuestionnaireNameAndId();
-                    queName = obj.questionnaireName;
-                    $('#uestionnaireId').val(queName);
+                    queName = obj.questionnaireId;
+                    $('#uestionnaireId').val(obj.questionnaireName);
                     console.log("questionnaireName = " + obj.questionnaireName);
                     layer.closeAll();
                 }

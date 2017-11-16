@@ -9,6 +9,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -54,29 +55,29 @@ public class QuestionnaireController {
      */
     @PostMapping("/findQuestionnaireForTagAndScene")
     @ResponseBody
-    public Result findQuestionnaireForTagAndScene(String questionnaireName,String tagIds,String sceneIds, Integer page, Integer size,String typeIds) {
-      System.out.println(typeIds);
-      System.out.println("tagid  = " + tagIds);
-      System.out.println("sceneid =  " + sceneIds);
+    public Result findQuestionnaireForTagAndScene(String questionnaireType,String questionnaireName,String tagIds,String sceneIds, Integer page, Integer size) {
         Map<String,Object> map=new HashMap<>();
+        int sizes=0;
         if(!"".equals(tagIds) && tagIds!=null){
             map.put("tagIds", tagIds.split(","));
+            sizes=sizes+tagIds.split(",").length;
         }else {
             map.put("tagIds", "");
         }
         if(!"".equals(sceneIds) && sceneIds!=null){
             map.put("sceneIds", sceneIds.split(","));
+            sizes=sizes+sceneIds.split(",").length;
         }else {
             map.put("sceneIds", "");
         }
-        if(typeIds != null && !"".equals(typeIds)){
-            map.put("typeIds",typeIds.split(","));
-        }else{
-            map.put("typeIds","");
+         map.put("userId",Security.getUserId());
+         sizes=sizes+1;
+        if(StringUtils.isEmpty(questionnaireType) &&StringUtils.isEmpty(questionnaireName)){
+          //sizes=sizes-1;
         }
-
+        map.put("size",sizes);
+        map.put("questionnaireType", questionnaireType);
         map.put("questionnaireName", questionnaireName);
-        map.put("userId", Security.getUserId());
         PageHelper.startPage(page, size);
         List<Questionnaire> list =questionnaireService.findQuestionnaireForTagAndScene(map);
         //查询所有的相关数据
@@ -92,9 +93,9 @@ public class QuestionnaireController {
      */
     @PostMapping("/addQuestionnaire")
     @ResponseBody
-    public Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId,String userIds) {
+    public Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId,String userIds ) {
 
-        return  questionnaireService.addQuestionnaire( questionnaire,questionStr, tagId, sceneId, userIds);
+        return  questionnaireService.addQuestionnaire(questionnaire,questionStr, tagId, sceneId,userIds);
     }
 
 

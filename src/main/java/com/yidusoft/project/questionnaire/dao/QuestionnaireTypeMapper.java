@@ -19,6 +19,6 @@ public interface QuestionnaireTypeMapper extends Mapper<QuestionnaireType> {
 
     //删除时检查所要删除的是否包含子类型
     QuestionnaireType findDeleteIsContainChild(String id);
-
+    //类型相关联的数量
     List<QuestionnaireType> findQuestionnaireForTypeNum();
 }

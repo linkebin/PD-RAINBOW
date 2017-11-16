@@ -48,18 +48,10 @@ public class QuestionnaireType {
     @Transient
     private Integer nums;
 
-    /**
-     * 获取问卷数量
-     * @return
-     */
     public Integer getNums() {
         return nums;
     }
 
-    /**
-     * 设置问卷数量
-     * @param nums
-     */
     public void setNums(Integer nums) {
         this.nums = nums;
     }

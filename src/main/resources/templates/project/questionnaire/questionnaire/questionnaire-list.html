@@ -339,6 +339,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             btn: ['确认', '取消'],
             shade: 0,
             title:'提示'
+            ,cancel:function(index, layero){
+                layer.closeAll();
+            }
         }, function(){
             $.post("/questionnaire/invalidQuestionnaire/",{"id":id,"state":state},function (result) {
                 layer.closeAll();
@@ -358,6 +361,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         },function () {
             layer.closeAll();
         });
+
         });
     }
 

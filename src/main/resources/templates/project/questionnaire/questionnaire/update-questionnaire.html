@@ -1031,87 +1031,24 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     }
 
 
+
     //自定义添加问题
     function addQuestion() {
+        var uri='/web/questionnaire/getAddQuestion?flg=0&ids='+0+'&ascriptionType=1';
         eui.use('layer', function(){ //独立版的layer无需执行这一句
             var $ = eui.jquery, layer = eui.layer,form=eui.form;
             layer.open({
-                type: 1
+                type: 2
                 ,title: '添加问题'
-                ,content:$('#questionForm')
-                ,area: ['800px', '700px']
+                ,content: uri
+                ,area: ['900px', '600px']
                 ,btnAlign: 'c'
                 ,shade: 0
                 ,moveType: 0//拖拽模式，0或者1
                 ,maxmin: true
-                ,btn: ['确定', '关闭'] //只是为了演示
-                ,yes: function(){
-                    var questionContent=$("#questionForm [name='questionContent']").val().trim();
-                    var optionAnswer= $("#questionForm [name='optionAnswer']").val().trim();
-                    var optionScore= $("#questionForm [name='optionScore']").val().trim();
-                    var questionType= $("#questionForm [name='questionType']").val().trim();
-                    var answer= $("#questionForm [name='answer']").val().trim();
-                    var msgs="";
-                    if(questionContent==""){
-                     layer.msg('请输入问题内容', {
-                            time: 2000
-                            ,zIndex: layer.zIndex
-                        });
-                       // layer.setTop(layero);
-                        return;
-                    }else if(optionAnswer==""){
-                        layer.msg('请输入选项', {
-                            time: 2000
-                        });
-                        return;
-                    }else if(optionScore==""){
-                        layer.msg('请输入选项对应分数', {
-                            time: 2000
-                        });
-                        return;
-                    }else if(questionType=="0"){
-                        layer.msg('请选择类型', {
-                            time: 2000
-                        });
-                        return;
-                    }
-                    else if(questionType!='3' && questionType!='0'){
-                        if(answer==""){
-                            layer.msg('请输入答案', {
-                                time: 2000
-                            });
-                            return;
-                        }
-                    }else {
-                        var forms= $('#questionForm').serialize();
-                        //加载层
-                        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                        $.post("/questionnaire/question/addORupdateQuestion",forms,function (result) {
-                            if(result.code==200){
-                                layer.closeAll();
-                                var array=new Array;
-                                array[0]=result.data;
-                                var context= questionList(array,"show");
-                                $("#addQuestionCollapse").append(context);
-                                idArray+=","+result.data.id;
-                                spanSequence();
-                                layer.msg("添加成功！", {
-                                    time: 2000
-                                });
-                                resetAddOrUpdateForm();
-                            }else{
-                                layer.msg("添加失败！", {
-                                    time: 2000
-                                });
-                            }
-                        });
-                    }
+                ,success: function(layero){
+                    //layer.setTop(layero); //重点2
                 }
-                ,btn2: function(){
-                    layer.closeAll();
-                    resetAddOrUpdateForm();
-                }
-                //,zIndex: layer.zIndex //重点1
                 ,cancel: function(){
                     //右上角关闭回调
                     resetAddOrUpdateForm();
@@ -1121,6 +1058,30 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         });
 
     }
+
+    //子页面调用父页面的方法
+    function  whetherSuccess(type,question) {
+        eui.use('layer', function(){ //独立版的layer无需执行这一句
+            var $ = eui.jquery, layer = eui.layer,form=eui.form;
+            layer.closeAll();
+            if(type=='success'){
+                var array=new Array;
+                array[0]=question;
+                var context= questionList(array,"show");
+                $("#addQuestionCollapse").append(context);
+                idArray+=","+question.id;
+                spanSequence();
+                layer.msg('操作成功', {
+                    time: 2000
+                });
+            }else {
+                layer.msg('操作失败', {
+                    time: 2000
+                });
+            }
+        });
+    }
+
     //添加修改form表单修改
     function resetAddOrUpdateForm() {
         $("#questionForm [name='id']").val("");
