@@ -128,4 +128,15 @@ public class WebQuestionnaireController {
 
     }
 
+    /**
+     *跳转到添加问题
+     * @return
+     */
+    @RequestMapping("/getAddQuestion")
+    public  String  getAddQuestion(String flg,String  ids,String   ascriptionType,Model model ){
+        model.addAttribute("flg",flg);
+        model.addAttribute("ids",ids);
+        model.addAttribute("ascriptionType",ascriptionType);
+        return "project/questionnaire/questionnaire/save-questionnaire-question";
+    }
 }

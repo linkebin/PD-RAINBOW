@@ -106,52 +106,59 @@
     </select>
 
     <select id="findQuestionnaireForTagAndScene" resultMap="BaseResultMap"  parameterType="java.util.HashMap">
-        SELECT
+        SELECT q.* from( SELECT
         q.id_,q.questionnaire_name,q.remarks
         FROM
         questionnaire q
-        LEFT JOIN
-        questionnaire_scene c
-        ON q.id_=c.questionnaire_id
-        LEFT JOIN
-        questionnaire_tag_middle t
-        ON q.id_=t.questionnaire_id
-        LEFT JOIN
-        questionnaire_permission_middle qpm
-        ON q.id_ = qpm.questionnaire_id
         WHERE q.deleted=0
         AND q.questionnaire_state=2
         AND (q.questionnaire_permission = 1 OR  #{userId} IN (
         SELECT qpm.user_id FROM questionnaire_permission_middle
         )
         )
-
-        <if test="questionnaireName!= ''">
-                AND  q.questionnaire_name like '%${questionnaireName}%'
+        <if test="questionnaireName!= '' and questionnaireName!= null ">AND q. questionnaire_name like
+            '%${questionnaireName}%'
+        </if>
+            <if test="
+        questionnaireType!= '' and questionnaireType!= null ">
+                AND  q.questionnaire_type =#{questionnaireType}
             </if>
+
+
             <if test="tagIds != null and tagIds != ''">
-                AND t.questionnaire_tag_id in
-                <foreach item="item" index="index" collection="tagIds" open="("
-                         separator="," close=")">
-                    #{item}
+                <foreach item="item" index="index" collection="tagIds" open=""  separator=" " close="">
+                    UNION ALL
+                   SELECT
+                    q.id_,q.questionnaire_name,q.remarks
+                    FROM
+                    questionnaire q
+                    LEFT JOIN
+                    questionnaire_tag_middle t
+                    ON  q.id_=t.questionnaire_id
+                    WHERE q.deleted=0
+                    AND q.questionnaire_state=2
+                    AND t.questionnaire_tag_id= #{item}
+
                 </foreach>
             </if>
             <if test="sceneIds != null and sceneIds != ''">
-                AND c.scene_id in
-                <foreach item="item" index="index" collection="sceneIds" open="("
-                         separator="," close=")">
-                    #{item}
+                <foreach item="item" index="index" collection="sceneIds" open="" separator="" close="">
+                    UNION ALL
+                    SELECT
+                    q.id_,q.questionnaire_name,q.remarks
+                    FROM
+                    questionnaire q
+                    LEFT JOIN
+                    questionnaire_scene c
+                    ON q.id_=c.questionnaire_id
+                    WHERE q.deleted=0
+                    AND q.questionnaire_state=2
+                    AND c.scene_id=#{item}
+
                 </foreach>
             </if>
 
-        <if test="typeIds != null and typeIds != ''">
-            AND q.questionnaire_type in
-            <foreach item="item" index="index" collection="typeIds" open="("
-                     separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-
-       GROUP BY  q.id_,q.questionnaire_name,q.remarks
+            ) q
+        GROUP BY  q.id_,q.questionnaire_name,q.remarks HAVING COUNT(q.id_)=#{size}
     </select>
 </mapper>

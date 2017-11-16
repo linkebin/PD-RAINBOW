@@ -142,8 +142,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 }
                 questionnaireAnswer.setDeleted(0);
                 questionnaireAnswer.setUserId(userId);
-                //判断  1  单选  2多选  3评分单选
-                if (!questionType.equals("3")) {
+                //判断  1  单选  2多选  3评分单选 4 收集单选  5 收集多选
+                if (!questionType.equals("3") && !questionType.equals("5")) {
                     //答案正确
                     if (answerArray.length == state) {
                         int scores = 0;

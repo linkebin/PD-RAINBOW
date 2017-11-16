@@ -28,6 +28,6 @@ public interface QuestionnaireTypeService extends Service<QuestionnaireType> {
 
     //删除是检查所要删除的是否包含子类型
     QuestionnaireType findDeleteIsContainChild(String id);
-
+    //类型相关联的数量
     List<QuestionnaireType> findQuestionnaireForTypeNum();
 }

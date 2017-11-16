@@ -71,8 +71,9 @@ public class QuestionnaireTypeServiceImpl extends AbstractService<QuestionnaireT
         return questionnaireTypeMapper.findDeleteIsContainChild(id);
     }
 
+    //查询类型相关联问卷的数量
     @Override
-    public List<QuestionnaireType> findQuestionnaireForTypeNum() {
+    public  List<QuestionnaireType> findQuestionnaireForTypeNum() {
         return questionnaireTypeMapper.findQuestionnaireForTypeNum();
     }
 }

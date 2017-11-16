@@ -183,6 +183,8 @@ function  loadQuestion() {
 //拼接问题
 function  getTable(questionList) {
     var context="";
+    console.info("questionList");
+    console.info(questionList);
    for(var i in questionList){
         context+='<div questionType="'+questionList[i].questionType+'" ' +
                        'radioNmae="answer'+questionList[i].id+'" ' +
@@ -206,9 +208,9 @@ function  getTable(questionList) {
             }else {
                 sequence=optionAnswer.length-parseInt(j)-1;
             }
-              //判断问题是单选还是多选 2多选
+              //判断问题是单选还是多选1 单选 2 多选  3 评分单选  4 收集单选   5 收集多选
                var radioName="";
-            if(questionList[i].questionType==2){
+            if(questionList[i].questionType==2 || questionList[i].questionType==5){
                 radioName='answer'+questionList[i].id+j;
                 context+='  <input e-filter="filter" type="radio" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
             }else {
