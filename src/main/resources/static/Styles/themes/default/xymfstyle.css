@@ -717,13 +717,16 @@ body .eui-layer-title{
     border-color: #1e9eff;
 }
 
-
 /* 2017-11-16 admin 后台样式 */
 .pagesBg .eui-laypage .eui-laypage-curr .eui-laypage-em{
     background-color: #009688!important;
 }
-
-
+.l-tree .l-over span{
+    text-decoration: none!important;
+}
+.xymfLogoIn{
+    width: 148px!important;
+}
 
 
 
