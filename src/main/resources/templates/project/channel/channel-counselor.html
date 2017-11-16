@@ -78,10 +78,10 @@
             ,height: 460
             ,cols: [[ //标题栏
 //                {checkbox: true}
-                {field: 'USER_NAME', title: '咨询师姓名', width: 247}
-                ,{field: 'ACCOUNT', title: '咨询师账号', width: 247}
-                ,{field: 'MOBILE', title: '联系方式', width: 247}
-                ,{field: 'inviter_user', title: '邀请人', width: 247,templet:'<div>{{# if(d.inviter_user==undefined){ }} 无邀请人  {{#  }else{   }} {{d.inviter_user}} {{# } }}</div>'}
+                {field: 'USER_NAME', title: '咨询师姓名', width: 180}
+                ,{field: 'ACCOUNT', title: '咨询师账号', width: 180}
+                ,{field: 'MOBILE', title: '联系方式', width: 180}
+                ,{field: 'inviter_user', title: '邀请人', width: 150,templet:'<div>{{# if(d.inviter_user==undefined){ }} 无邀请人  {{#  }else{   }} {{d.inviter_user}} {{# } }}</div>'}
             ]]
             ,response: {
                 statusName: 'code' //数据状态的字段名称，默认：code

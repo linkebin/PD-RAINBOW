@@ -60,17 +60,17 @@
             ,height: 460
             ,cols: [[ //标题栏
                  //{checkbox: true}
-                 {field: '', title: '序号', width: 150}
-                ,{field: 'operInfo', title: '操作内容', width: 150}
-                ,{field: 'userName', title: '操作人', width: 180}
-                ,{field: 'operIp', title: '操作人ip', width: 196}
-                ,{field: 'operUrl', title: '访问uri', width: 196}
-                ,{field: 'urlType', title: '请求类型', width: 196}
-                ,{field: 'urlMethod', title: '请求方法', width: 196}
-                ,{field: 'urlParam', title: '请求参数', width: 196}
-                ,{field: 'sessionId', title: 'sessionId', width: 196}
+                 {field: '', title: '序号', width: 60}
+                ,{field: 'operInfo', title: '操作内容', width: 120}
+                ,{field: 'userName', title: '操作人', width: 130}
+                ,{field: 'operIp', title: '操作人ip', width: 160}
+                ,{field: 'operUrl', title: '访问url', width: 280}
+                ,{field: 'urlType', title: '请求类型', width: 130}
+                ,{field: 'urlMethod', title: '请求方法', width: 330}
+                ,{field: 'urlParam', title: '请求参数', width: 330}
+                ,{field: 'sessionId', title: 'sessionId', width: 330}
                 ,{field: 'urlResult', title: '请求结果', width: 100,templet:'<div>{{# if(d.urlResult=="异常"){ }}  <span style="color: red">{{d.urlResult}}</span>  {{#  }else{  }}  <span style="color: green"> {{d.urlResult}} </span> {{#  }  }}</div>'}
-                ,{field: 'operWhenLong', title: '操作时长', width: 196}
+                ,{field: 'operWhenLong', title: '操作时长', width: 90}
                 ,{field: 'operTime', title: '操作时间', width: 196,templet:'<div>{{new Date(d.operTime).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
 
              ]]

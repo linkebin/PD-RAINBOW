@@ -32,40 +32,40 @@
             <div class="eui-col-md8">
                 <form  class="eui-form" id="userForm">
                     <div class="eui-form-item" >
-                        <label class="eui-form-label">账号</label>
-                        <div class="eui-input-inline eui-width300">
-                            <input disabled type="text" name="account" e-verify="account" autocomplete="off" class="eui-input eui-width300">
+                        <label class="eui-form-label eui-width100">账号</label>
+                        <div class="eui-input-inline">
+                            <input disabled type="text" name="account" e-verify="account" autocomplete="off" class="eui-input">
                         </div>
-                        <label class="eui-form-label">用户名</label>
-                        <div class="eui-input-inline eui-width300">
-                            <input type="text" name="userName" e-verify="userName" autocomplete="off" class="eui-input eui-width300" required data-msg-required="请填写用户名"/>
+                        <label class="eui-form-label eui-width100">用户名</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="userName" e-verify="userName" autocomplete="off" class="eui-input" required data-msg-required="请填写用户名"/>
                         </div>
                     </div>
                     <div class="eui-form-item">
-                        <label class="eui-form-label">地址</label>
-                        <div class="eui-input-inline eui-width300">
-                            <input type="text" name="addr" e-verify="addr" autocomplete="off" class="eui-input eui-width300">
+                        <label class="eui-form-label eui-width100">地址</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="addr" e-verify="addr" autocomplete="off" class="eui-input">
                         </div>
-                        <label class="eui-form-label">性别</label>
-                        <div class="eui-input-inline eui-width300">
+                        <label class="eui-form-label eui-width100">性别</label>
+                        <div class="eui-input-inline">
                             <input type="radio" name="sex" value="1" title="男" checked>
                             <input type="radio" name="sex" value="0" title="女">
                         </div>
                     </div>
                     <div class="eui-form-item">
-                        <label class="eui-form-label">联系手机</label>
-                        <div class="eui-input-inline eui-width300">
-                            <input type="tel" name="mobile" lay-verify="mobile" data-rule-isMobile="true"  autocomplete="off" class="eui-input eui-width300">
+                        <label class="eui-form-label eui-width100">联系手机</label>
+                        <div class="eui-input-inline">
+                            <input type="tel" name="mobile" lay-verify="mobile" data-rule-isMobile="true"  autocomplete="off" class="eui-input">
                         </div>
-                        <label class="eui-form-label">联系邮箱</label>
-                        <div class="eui-input-inline eui-width300">
-                            <input type="email" name="email" lay-verify="email" autocomplete="off" data-msg-email="请输入有效邮箱" class="eui-input eui-width300">
+                        <label class="eui-form-label eui-width100">联系邮箱</label>
+                        <div class="eui-input-inline">
+                            <input type="email" name="email" lay-verify="email" autocomplete="off" data-msg-email="请输入有效邮箱" class="eui-input">
                         </div>
                     </div>
 
                 </form>
                 <div class="eui-form-item">
-                    <label class="eui-form-label"></label>
+                    <label class="eui-form-label eui-width100"></label>
                     <div class="eui-input-inline">
                         <a class="eui-btn eui-btn-small" type="submit" onclick="save()">保存数据</a>
                     </div>
@@ -127,9 +127,11 @@
 
             </div>
         </div>
-        <fieldset class="eui-elem-field eui-field-title eui-font18 " style="margin-top: 20px;">
-            <legend><i class='eui-icon eui-font24'>&#xe61d;</i>修改密码</legend>
-        </fieldset>
+<div class="eui-row eui-padding15 eui-borderB eui-bg-white">
+    <div class="eui-col-md6 eui-font18 eui-lineHeight30">
+        <i class='eui-icon eui-font24'>&#xe61d;</i> 修改密码
+    </div>
+</div>
     <div class="eui-bg-white eui-row eui-padding15">
         <div class="eui-col-md4">
                 <form id="userPassDigForm" class="eui-form eui-marginT10 eui-paddingR10"  onsubmit="return false;">

@@ -49,16 +49,25 @@
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
-                    <i class='eui-icon eui-font24'>&#xe61d;</i> 问题列表
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 问卷问题列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
                     <a href="###"  onclick="itemclick('add','')" class="eui-btn eui-btn-small userAdd">添加问题</a>
                     <a href="###" onclick="deleteQuestion('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
             </div>
-            <table  e-filter="questionTable" class="eui-table eui-form" id="questionTable">
+            <table e-filter="questionTable" class="eui-table eui-form" id="questionTable">
                 <colgroup>
-                    <col width="60">
+                    <col width="50">
+                    <col width="110">
+                    <col width="110">
+                    <col width="120">
+                    <col width="90">
+                    <col width="76">
+                    <col width="90">
+                    <col width="90">
+                    <col width="99">
+                    <col width="102">
                     <col>
                 </colgroup>
                 <thead>
@@ -143,8 +152,6 @@
             <div class="eui-input-inline  " name="answer1">
                 <input type="text" name="answer" required placeholder="例:A:一般||B:好" autocomplete="off" class="eui-input">
             </div>
-
-
     </div>
 </form>
 
@@ -153,8 +160,9 @@
 
 
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
-<script src="/Scripts/main.js" charset="utf-8"></script>
+
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
 <script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
 <script src="/pack.ajax.js" charset="utf-8"></script>
 <script src="/date2format.js" charset="utf-8"></script>

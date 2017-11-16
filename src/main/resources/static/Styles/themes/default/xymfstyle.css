@@ -709,19 +709,19 @@ body .eui-layer-title{
 .subjectCon{
     margin-top: 70px;
 }
-.xymfHome .eui-nav .eui-nav-item a:visited{
-    background:#f4f9fd;
+
+.xymfHome .xymfNav .eui-nav .eui-this:after .eui-nav-itemed:after{
+    background-color:#f4f9fd!important;
 }
 .eui-btn-primary:hover{
     border-color: #1e9eff;
 }
 
-.dataCharts{
 
+/* 2017-11-16 admin 后台样式 */
+.pagesBg .eui-laypage .eui-laypage-curr .eui-laypage-em{
+    background-color: #009688!important;
 }
-
-
-
 
 
 

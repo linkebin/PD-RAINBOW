@@ -13,45 +13,42 @@
 <div class="eui-bg-white eui-row eui-padding15">
     <div class="eui-col-md12 eui-paddingR10">
         <form class="eui-form" id="searchFrom">
-            <div class="eui-input-inline eui-padding10">
-                <input type="text" name="userName" e-verify="title" autocomplete="off" placeholder="登录账号/关键字" class="eui-input">
+            <div class="eui-form-item eui-marginT10">
+                <div class="eui-input-inline">
+                    <input type="text" name="userName" e-verify="title" autocomplete="off" placeholder="登录账号/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline">
+                    <select name="accountType" e-verify="required">
+                        <option value="">全部账号类型</option>
+                        <option value="0">内部用户</option>
+                        <option value="1">外部用户</option>
+                    </select>
+                </div>
+                <div class="eui-input-inline">
+                    <input type="text" name="loginAddr" e-verify="title" autocomplete="off" placeholder="登录地址/关键字" class="eui-input">
+                </div>
             </div>
-
-            <div class="eui-input-inline">
-                <select name="accountType" e-verify="required">
-                    <option value="">全部账号类型</option>
-                    <option value="0">内部用户</option>
-                    <option value="1">外部用户</option>
-                </select>
+            <div class="eui-form-item">
+                <div class="eui-input-inline">
+                    <input type="text" name="loginIp" e-verify="title" autocomplete="off" placeholder="登录IP/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline">
+                    <select name="loginType" e-verify="required">
+                        <option value="">全部登录方式</option>
+                        <option value="网页登录">网页登录</option>
+                    </select>
+                </div>
+                <div class="eui-input-inline eui-paddingT5">
+                    <span class="eui-btn eui-btn-small" onclick="doSearch()">查询</span>
+                    <span class="eui-btn eui-btn-primary eui-btn-small" onclick="resetForm()">重置</span>
+                </div>
             </div>
-            <div class="eui-input-inline eui-padding10">
-                <input type="text" name="loginAddr" e-verify="title" autocomplete="off" placeholder="登录地址/关键字" class="eui-input">
-            </div>
-
-            <div class="eui-input-inline eui-padding10">
-                <input type="text" name="loginIp" e-verify="title" autocomplete="off" placeholder="登录IP/关键字" class="eui-input">
-            </div>
-
-            <div class="eui-input-inline">
-                <select name="loginType" e-verify="required">
-                    <option value="">全部登录方式</option>
-                    <option value="网页登录">网页登录</option>
-                </select>
-            </div>
-
-            <div class="eui-input-inline">
-                <span class="eui-btn eui-btn-small" onclick="doSearch()">查询</span>
-                <span class="eui-btn eui-btn-primary eui-btn-small" onclick="resetForm()">重置</span>
-            </div>
-
-
         </form>
 
         <div class="eui-row eui-padding10 eui-borderB">
             <div class="eui-col-md6 eui-font18">
                 <i class='eui-icon eui-font24'>&#xe61d;</i> 登录记录
             </div>
-
         </div>
         <table class="eui-table eui-form" id="userTable">
             <colgroup>
