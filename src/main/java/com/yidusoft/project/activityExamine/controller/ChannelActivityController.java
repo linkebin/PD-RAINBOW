@@ -13,6 +13,7 @@ import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -31,7 +32,8 @@ public class ChannelActivityController {
 	@Autowired
 	private ChannelActivityService channelActivityService;
 
-
+	@Autowired
+	private ProcessEngine processEngine;
 
 	//开启渠道审批流程实例
 	@RequestMapping(value = "/channelProcess", method = RequestMethod.POST)
@@ -45,4 +47,23 @@ public class ChannelActivityController {
 
 		 return channelActivityService.completeTasks(channelAapproval_, taskId,msg);
 	}
+
+	@RequestMapping("/aaa")
+	public void queryHistoricActivitiInstance() {
+		String processInstanceId = "12505";
+		List<HistoricActivityInstance> list = processEngine.getHistoryService()
+				.createHistoricActivityInstanceQuery()
+				.processInstanceId(processInstanceId)
+				.list();
+		if (list != null && list.size() > 0) {
+			for (HistoricActivityInstance hai : list) {
+				System.out.println(hai.getId());
+				System.out.println("步骤ID：" + hai.getActivityId());
+				System.out.println("步骤名称：" + hai.getActivityName());
+				System.out.println("执行人：" + hai.getAssignee());
+				System.out.println("====================================");
+			}
+		}
+	}
+
 }

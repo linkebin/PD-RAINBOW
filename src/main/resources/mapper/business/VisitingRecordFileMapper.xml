@@ -12,6 +12,9 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
+
+
+    <result column="file_type" jdbcType="VARCHAR" property="fileType" />
   </resultMap>
 
   <select id="findVisitingRecordFileByVisitorId" parameterType="com.yidusoft.project.business.domain.VisitingRecordFile"
