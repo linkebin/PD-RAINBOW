@@ -511,8 +511,11 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
             }else {
                 var obj= window.parent.getVisitorId();
                 startAnswer(questionnaireId,obj.userId,obj.visitorTimes);
+                window.parent.closeLay();
             }
+
         });
+
     }
     //开始答题
     function startAnswer(questionnaireId,userId,visitorTimes) {

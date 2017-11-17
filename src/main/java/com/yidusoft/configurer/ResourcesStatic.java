@@ -6,18 +6,17 @@ import java.util.Map;
 /**
  * Created by zcb on 2017/11/8.
  */
-public class ResourcesStatic {
-    public final static Map<String, Object> OPERRESOURCES = new HashMap<>();
-
+public  class  ResourcesStatic {
+    public final   static Map<String,Object> OPERRESOURCES=new HashMap<>();
     static {
         //问卷的操作
-        OPERRESOURCES.put("/questionnaire/addQuestionnaire", "添加问卷");
-        OPERRESOURCES.put("/questionnaire/updateQuestionnaire", "修改问卷");
-        OPERRESOURCES.put("/questionnaire/invalidQuestionnaire", "问卷下架");
-        OPERRESOURCES.put("/questionnaire/deleteQuestionnaire", "删除问卷");
-        OPERRESOURCES.put("/product/settings/add", "添加套餐");
-        OPERRESOURCES.put("/product/settings/update", "修改套餐");
-        OPERRESOURCES.put("/product/settings/deleteBacth", "删除套餐");
+        OPERRESOURCES.put("/questionnaire/addQuestionnaire","添加问卷");
+        OPERRESOURCES.put("/questionnaire/updateQuestionnaire","修改问卷");
+        OPERRESOURCES.put("/questionnaire/invalidQuestionnaire","问卷下架");
+        OPERRESOURCES.put("/questionnaire/deleteQuestionnaire","删除问卷");
+        OPERRESOURCES.put("/product/settings/add","添加套餐");
+        OPERRESOURCES.put("/product/settings/update","修改套餐");
+        OPERRESOURCES.put("/product/settings/deleteBacth","删除套餐");
     }
 
     public final static Map<String, Object> GAUGE = new HashMap<>();

@@ -1195,7 +1195,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             $("#questionSequence2").attr("checked","checked");
             $("#questionSequence1").removeAttr("checked");
         }
-         $("#formQuestionnaire [name='shelfTime']").val(format(questionnaires.shelfTime));
+         $("#formQuestionnaire [name='shelfTime']").val(format(questionnaires.shelfTime).replace("00:00:00","").trim());
          $("#formQuestionnaire [name='questionnaireType']").val(questionnaires.questionnaireType);
          $("#formQuestionnaire [name='answerModelType']").val(questionnaires.answerModelType);
          $("#formQuestionnaire [name='remarks']").val(questionnaires.remarks);
