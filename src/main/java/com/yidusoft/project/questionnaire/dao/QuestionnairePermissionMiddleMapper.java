@@ -11,4 +11,8 @@ import java.util.List;
  */
 public interface QuestionnairePermissionMiddleMapper extends Mapper<QuestionnairePermissionMiddle> {
     List<SecUser> findQuestionnaireSecUser(SecUser secUser);
+
+    List<SecUser> findSecUserByQuestionnaireId(String questionnaireId);
+
+    List<QuestionnairePermissionMiddle> findPermission(String questionnaireId);
 }

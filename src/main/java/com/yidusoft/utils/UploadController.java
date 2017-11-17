@@ -136,6 +136,7 @@ public class UploadController {
                         fileResponseData.setData(data);
                         fileResponseData.setMsg("上传成功");
                         fileResponseData.setFileName(fileName);
+                        fileResponseData.setFileType(fileType);
                         fileResponseData.setId(UUID.randomUUID().toString());
                         saveFilePathInDataBase(fileTable, fileResponseData, request);
                         fileResponseData.setCode(0);
@@ -327,6 +328,7 @@ public class UploadController {
                 visitingRecordFile.setCreateTime(new Date());
                 visitingRecordFile.setFileUri(fileResponseData.getData().getSrc());
                 visitingRecordFile.setDeleted(0);
+                visitingRecordFile.setFileType(fileResponseData.getFileType());
                 visitingRecordFile.setCreator(Security.getUserId());
 
                 try {

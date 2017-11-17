@@ -56,6 +56,7 @@ public class ChannelActivityService {
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("ID_S", channelId);
         variables.put("NAME_S", channelName);
+
         runtimeService.startProcessInstanceByKey("channelProcess", variables);
     }
 
@@ -108,13 +109,13 @@ public class ChannelActivityService {
     public void channel(DelegateExecution execution) {
         Boolean bool = (Boolean) execution.getVariable("channelAapproval_");
         if (bool) {
-            String channelId = (String) execution.getVariable("ID_S");
-            ChannelManage channelManage = channelManageService.findById(channelId);
-            channelManage.setStatus(2);
-            channelManageService.update(channelManage);
-            SecUser secUser = secUserService.findChannelDefaultAccount(channelManage.getId());
-            secUser.setStatus(1);
-            secUserService.update(secUser);
+//            String channelId = (String) execution.getVariable("ID_S");
+//            ChannelManage channelManage = channelManageService.findById(channelId);
+//            channelManage.setStatus(2);
+//            channelManageService.update(channelManage);
+//            SecUser secUser = secUserService.findChannelDefaultAccount(channelManage.getId());
+//            secUser.setStatus(1);
+//            secUserService.update(secUser);
 
             logger.info("渠道审批通过");
         } else {

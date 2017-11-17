@@ -119,9 +119,9 @@ public class QuestionnaireController {
      */
     @PostMapping("/updateQuestionnaire")
     @ResponseBody
-    public Result updateQuestionnaire(Questionnaire questionnaire, String questionStr) {
+    public Result updateQuestionnaire(Questionnaire questionnaire, String questionStr,String userIds) {
         try {
-            questionnaireService.updateQuestionnaire(questionnaire,questionStr);
+            questionnaireService.updateQuestionnaire(questionnaire,questionStr,userIds);
         }catch (Exception e){
             return ResultGenerator.genFailResult("操作失败");
         }
