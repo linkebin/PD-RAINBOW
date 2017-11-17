@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<div class="visitorContent">
+<div class="visitorContent" >
     <div class="eui-area xymf-width xymf-marginB60">
         <div class="visitorTitle">
             <span id="questionnaireName"></span>
@@ -329,41 +329,6 @@ function  getTable(list) {
 }
 
 
-//判断计算那些问题没有做
-  function  flg() {
-      var result="";
-      var questions=$("[name='divQuestion']");
-       for(var i=0;i<questions.length;i++){
-           //题目的序号
-           var num=parseInt(i)+1;
-           //当前第一个对象
-           var question=questions.eq(i);
-           //获得子的个数
-           var size=question.children("input").length;
-           //循环当前问题的选项 看有没有被选中
-           var state=0;
-           for(var j=0;j<size;j++){
-
-               if (question.children("input").eq(j).prop("checked")) {
-                   state=1;
-               }
-           }
-           if(state==0){
-              //state=0 说明没有做这道题
-               result+=num+","
-           }
-
-       }
-       if(result!=""){
-           result+="题没有做，请答完！";
-           layer.msg(result, {
-               icon: 1,
-               time: 5000
-       });
-       }
-       return result;
-  }
-
 
 //form表单  select,checkbox,radio 动态添加  需要更新
 function   formRender() {
@@ -372,9 +337,11 @@ function   formRender() {
         form.render();
     });
 }
-
-
-
+//打印功能
+function questionnairePrint () {
+    $("#divTable").hide();
+    window.print();
+}
 
 
 

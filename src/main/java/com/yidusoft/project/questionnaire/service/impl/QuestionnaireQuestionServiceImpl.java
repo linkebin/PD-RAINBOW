@@ -176,10 +176,10 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             //判断问卷的类型
             Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
             String result = "";
-            if ("症状自评量表-SCL90".equals(questionnaire.getQuestionnaireTypeName())) {
+            if ("症状自评量表-SCL90".equals(questionnaire.getGaugeName())) {
                 result = dataAcquisitionService.symptomConclusion(dataAcquisitionId, userId);
 
-            } else if ("抑郁自评量表(SDS)".equals(questionnaire.getQuestionnaireTypeName())) {
+            } else if ("抑郁自评量表(SDS)".equals(questionnaire.getGaugeName())) {
                 result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "depressed");
             } else {
                 result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "anxious");

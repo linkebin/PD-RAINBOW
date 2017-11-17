@@ -20,6 +20,7 @@ public  class  ResourcesStatic {
     }
     public final   static Map<String,Object> GAUGE=new HashMap<>();
         static {
+            //方法名称 与 页面名称 相同
             GAUGE.put("90项症状清单(SCL90)","");
             GAUGE.put("儿少心理健康量表(MHS-CA)","");
             GAUGE.put("Achenbach儿童行为量表(CBCL)","");
@@ -86,7 +87,6 @@ public  class  ResourcesStatic {
             GAUGE.put("大学生坚韧人格评定量表","");
             GAUGE.put("学龄前儿童活动调查表(PSAI)","");
             GAUGE.put("中文人生意义问卷(C-MLQ)","");
-            GAUGE.put("","");
             GAUGE.put("出世量表","");
             GAUGE.put("中学生与其父母价值观差异问卷","");
             GAUGE.put("大学生公正世界信念量表","");
