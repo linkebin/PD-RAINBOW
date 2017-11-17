@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>我的订单</title>
+    <title>心云魔方</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css">
     <script th:src="@{/Scripts/date2format.js}" charset="utf-8"></script>
     <style>
@@ -14,15 +14,21 @@
 <div class="eui-layout eui-layout-admin xymfHome xymfPay">
     <div th:replace="project/cube/common/header :: header(${-1})">Header</div>
     <div class="eui-area">
-        <div th:object="${indexImg}">
+        <div th:object="${indexImg}" class="eui-bg-white eui-marginT20">
             <input type="hidden" th:value="*{imageText}" id="imageText">
-            <div style="width: 800px;height: auto;align-content: center" id="showHtml"></div>
-            <a th:if="*{imgType==1}" class="eui-btn eui-btn-normal" th:href="@{'/cube/activity/'+*{objectId}}">前往购买</a>
+            <div class="eui-marginT20 eui-marginB20" style="width: 1000px;margin-left: 60px" >
+                <div id="showHtml" class="eui-marginB20">
+
+                </div>
+                <a th:if="*{imgType==1}" class="eui-btn eui-btn-normal" th:href="@{'/cube/activity/'+*{objectId}}">前往购买...</a>
+            </div>
+
         </div>
     </div>
 </div>
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
 <script>
     $(function () {
         $('#showHtml').append($('#imageText').val());

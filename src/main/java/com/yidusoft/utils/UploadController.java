@@ -283,10 +283,11 @@ public class UploadController {
             }
             try {
                 file.transferTo(new File(path + "/" + saveFileName));
+                return JSON.toJSONString(ResultGenerator.genSuccessResult(childPath + "/" + saveFileName));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return JSON.toJSONString(ResultGenerator.genSuccessResult(childPath + "/" + saveFileName));
+            return JSON.toJSONString(ResultGenerator.genFailResult("文件上传失败"));
         } else {
             return JSON.toJSONString(ResultGenerator.genFailResult("只支持jpg与png的格式上传！"));
         }
