@@ -53,24 +53,25 @@
                     </div>
                 </div>
                 <div class="xymfForm">
-                    <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
+                    <table class="eui-table eui-form" e-even e-skin="nob" id="accountTable">
                         <colgroup>
                             <col width="60">
                             <col width="100">
+                            <col width="200">
                             <col width="100">
                             <col width="100">
-                            <col width="140">
                             <col>
                         </colgroup>
                         <thead>
-                        <tr>
+                        <tr align="center">
                             <th><input type="checkbox" e-skin="primary" title=""></th>
                             <th>流水号</th>
                             <th>日期</th>
                             <th>备注</th>
                             <th>购买</th>
                             <th>使用</th>
-                            <th>余额</th>
+                            <th>消费</th>
+                            <th>剩余使用量</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -84,8 +85,10 @@
         </div>
         <div th:replace="project/cube/common/footer :: footer">footer</div>
     </div>
+</div>
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script src="/Scripts/cube/header.js" type="text/javascript"></script>
@@ -118,10 +121,98 @@
         var endTime = new Date();
         endTime=endTime.setDate(endTime.getDate()+7);
         $('#endTime').val(new Date(endTime).Format("yyyy/MM/dd"));
+        doSearch();
     })
 
     function change(data) {
         console.log(data)
+    }
+
+    function doSearch() {
+        eui.use(['form', 'laypage', 'layer'],function () {
+            var form = eui.form
+                    , laypage = eui.laypage
+                    , layer = eui.layer,
+                    $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChecked)', function (data) {
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function (index, item) {
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.post("/account/info/listPage",{page:1,size:10},function (result) {
+                console.log(result);
+                layer.close(index);
+                if(result.code==200){
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+//                        ,pages: result.data.pages
+                        , count: result.data.total //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var accountList = result.data.list;
+                                console.log(accountList);
+                                //遍历，拼接表格
+                                var tableHtml = getTable(accountList);
+                                $("#accountTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            } else {
+                                $.ajax({
+                                    url: "/account/info/listPage",
+                                    data: {
+                                        page: obj.curr,
+                                        size: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        console.log(result);
+                                        var accountList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(accountList);
+                                        $("#accountTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }else{
+                    layer.msg(result.message,{
+                        icon: 2,
+                        time: 1500
+                    })
+                }
+            })
+        })
+    }
+
+    //渲染数据，拼接表格
+    function getTable(accountList) {
+        var tableHtml = '';
+        for (var item in accountList) {
+            var account = accountList[item];
+            tableHtml += '<tr>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="accountId" type="hidden" value="' + account.id + '"></td>' +
+                    '<td>' + account.serialNumber + '</td>' +
+                    '<td>' + new Date(account.accountDate).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
+                    '<td>' + account.accountRemarks + '</td>' +
+                    '<td>' + account.buyTotal + '</td>' +
+                    '<td>' + account.accountTotal + '</td>' +
+                    '<td>' + account.costMoney + '</td>' +
+                    '<td>' + account.accountSurplus + '张</td>' +
+                    '</tr>';
+
+        }
+        return tableHtml;
     }
 </script>
 </body>

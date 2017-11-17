@@ -5,7 +5,9 @@ import com.yidusoft.core.AbstractService;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.ActiveParticipant;
+import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.ActiveParticipantService;
+import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.project.questionnaire.dao.DataAcquisitionMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireAnswerMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireMapper;
@@ -16,6 +18,10 @@ import com.yidusoft.project.questionnaire.domain.QuestionnaireAnswer;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.project.questionnaire.service.DataAcquisitionService;
 import com.yidusoft.project.questionnaire.service.QuestionnaireQuestionService;
+import com.yidusoft.project.transaction.dao.UserQuestionnairesMapper;
+import com.yidusoft.project.transaction.domain.AccountInfo;
+import com.yidusoft.project.transaction.domain.UserQuestionnaires;
+import com.yidusoft.project.transaction.service.AccountInfoService;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
@@ -47,6 +53,12 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     private QuestionnaireMapper questionnaireMapper;
     @Resource
     private ActiveParticipantService activeParticipantService;
+    @Resource
+    private UserQuestionnairesMapper userQuestionnairesMapper;
+    @Resource
+    private LaunchActivitiesService launchActivitiesService;
+    @Resource
+    private AccountInfoService accountInfoService;
 
     //分页条件查询问题
     @Override
@@ -350,10 +362,58 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 activeParticipantService.update(activeParticipant);
             }
             //活动扣除余额
-            userQuestionnairesService.deleteDuction(activityId);
+            deleteDuction(activityId);
+            //记录到账户信息
         } catch (Exception e) {
             return ResultGenerator.genFailResult(e.getMessage());
         }
         return ResultGenerator.genSuccessResult();
+    }
+
+    //消费扣除活动发起人的使用卷
+    public void deleteDuction(String activityId) {
+        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
+        if(launchActivities.getInitiatorType()!=2){
+            updateUserQuestionnaires(launchActivities.getUserId());
+        }
+    }
+
+    public void updateUserQuestionnaires(String userId){
+        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
+        if(userQuestionnaires.getMember()!=1){
+            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+            userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+        }else{
+            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){
+                userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+                userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+            }
+        }
+        userQuestionnairesService.update(userQuestionnaires);
+        addAccount(userId);
+    }
+
+    public void addAccount(String userId){
+        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
+        if(userQuestionnaires!=null && userQuestionnaires.getMember()!=1){
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+            String orderCode = formatter.format(new Date());
+            orderCode=orderCode+""+(int)Math.random()*100000;
+            AccountInfo accountInfo = new AccountInfo();
+            accountInfo.setId(UUID.randomUUID().toString());
+            accountInfo.setSerialNumber(orderCode);
+            accountInfo.setAccountDate(new Date());
+            accountInfo.setAccountRemarks("使用了问卷");
+            accountInfo.setAccountTotal("1张");
+            accountInfo.setBuyTotal("--");
+            accountInfo.setCostMoney("--");
+            accountInfo.setUserId(userId);
+            UserQuestionnaires uq = userQuestionnairesService.findBy("userId", userId);
+            if(uq!=null){
+                accountInfo.setAccountSurplus(uq.getQuestionnairesTotal());
+            }
+            accountInfoService.save(accountInfo);
+        }
+
     }
 }

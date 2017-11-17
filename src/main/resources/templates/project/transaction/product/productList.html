@@ -119,7 +119,7 @@
                        class="eui-input">
             </div>
         </div>
-        <div class="eui-form-item">
+        <div class="eui-form-item" id="state">
             <label class="eui-form-label">是否启用</label>
             <div class="eui-input-block">
                 <input type="radio" title="是" value="0" name="productState" checked>
@@ -481,7 +481,7 @@
         var type = "'" + product.productType + "'";
         var limit = "'" + product.timeLimit + "'"
         var btnHtml = '<button class="eui-btn eui-btn-primary eui-btn-mini " title="编辑套餐" onclick="productEdit(' + id + ',' + total + ',' + price + ',' + name + ',' + state + ',' + type + ',' + limit + ')"><i class="eui-icon">&#xe642;</i></button> ';
-        if (total != 1) {
+        if (product.productTotal != 1) {
             btnHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除套餐" onclick="deleteProduct(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
         }
         return btnHtml;
@@ -490,7 +490,7 @@
 
     //显示编辑套餐的表单
     function productEdit(id, total, price, name, state, type, limit) {
-        $('.addOrUpdate').text("修改套餐")
+        $('.addOrUpdate').text("修改套餐");
         eui.use(['form'], function () {
             var form = eui.form;
             $("input[name='productTotal']").val(total);
@@ -510,6 +510,10 @@
             } else {
                 $('#time').hide();
                 $('#total').show();
+            }
+            if(total==1){
+                $('#total').hide();
+                $('#state').hide();
             }
             $('input[name="productType"]').each(function (i, data) {
                 if (data.value == type) {

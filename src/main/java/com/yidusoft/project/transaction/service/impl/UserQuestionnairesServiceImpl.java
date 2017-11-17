@@ -1,17 +1,15 @@
 package com.yidusoft.project.transaction.service.impl;
 
 import com.yidusoft.core.AbstractService;
-import com.yidusoft.project.business.domain.LaunchActivities;
-import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.project.transaction.dao.UserQuestionnairesMapper;
 import com.yidusoft.project.transaction.domain.UserQuestionnaires;
+import com.yidusoft.project.transaction.service.AccountInfoService;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
 import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 
 /**
@@ -24,7 +22,10 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
     private UserQuestionnairesMapper userQuestionnairesMapper;
 
     @Resource
-    private LaunchActivitiesService launchActivitiesService;
+    private UserQuestionnairesService userQuestionnairesService;
+
+    @Resource
+    private AccountInfoService accountInfoService;
 
     //判断余额是否不等于0
     @Override
@@ -45,26 +46,5 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
         userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
         this.update(userQuestionnaires);
     }
-    //消费扣除活动发起人的使用卷
-    @Override
-    public void deleteDuction(String activityId) {
-        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        if(launchActivities.getInitiatorType()!=2){
-            updateUserQuestionnaires(launchActivities.getUserId());
-        }
-    }
 
-    public void updateUserQuestionnaires(String userId){
-        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
-        if(userQuestionnaires.getMember()!=1){
-            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
-            userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
-        }else{
-            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){
-                userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
-                userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
-            }
-        }
-        this.update(userQuestionnaires);
-    }
 }

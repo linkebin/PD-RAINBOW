@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.transaction.domain.AccountInfo;
+import com.yidusoft.project.transaction.service.AccountInfoService;
 import com.yidusoft.project.transaction.domain.OrderOnline;
 import com.yidusoft.project.transaction.domain.ProductSettings;
 import com.yidusoft.project.transaction.domain.UserQuestionnaires;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +41,9 @@ public class OrderOnlineController {
 
     @Resource
     private ProductSettingsService productSettingsService;
+
+    @Resource
+    private AccountInfoService accountInfoService;
 
     /**
      * 添加订单
@@ -165,6 +171,25 @@ public class OrderOnlineController {
             }
             userQuestionnairesService.save(userQuestionnaire);
         }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String orderCode = formatter.format(new Date());
+        orderCode=orderCode+""+(int)Math.random()*100000;
+        AccountInfo accountInfo = new AccountInfo();
+        accountInfo.setId(UUID.randomUUID().toString());
+        accountInfo.setSerialNumber(orderCode);
+        accountInfo.setAccountDate(new Date());
+        accountInfo.setAccountRemarks("购买了"+productSettings.getProductName());
+        String buyTotal = orderOnline.getQuestionnaireTotal().toString()+"个月";
+        if(productSettings.getProductType()==1){
+            buyTotal = orderOnline.getQuestionnaireTotal().toString()+"张";
+        }
+        accountInfo.setBuyTotal(buyTotal);
+        accountInfo.setAccountTotal("--");
+        accountInfo.setCostMoney(orderOnline.getOrderMoney()+"元");
+        accountInfo.setUserId(orderOnline.getUserId());
+        UserQuestionnaires uq = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
+        accountInfo.setAccountSurplus(uq.getQuestionnairesTotal());
+        accountInfoService.save(accountInfo);
         return ResultGenerator.genSuccessResult();
     }
 

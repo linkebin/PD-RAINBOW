@@ -102,12 +102,14 @@ public class ShiroConfigurer {
 
         filterChainDefinitionMap.put("/web/activities/fillingPage","anon");
         filterChainDefinitionMap.put("/launch/activities/getIdByPorn","anon");
+        filterChainDefinitionMap.put("/launch/activities/getActivityById","anon");
         filterChainDefinitionMap.put("/data/acquisition/findCount","anon");
         filterChainDefinitionMap.put("/active/participant/add","anon");
         filterChainDefinitionMap.put("/web/cube/getQuestionnaireFill","anon");
         filterChainDefinitionMap.put("project/cube/questionnaire/other-questionnaire","anon");
         filterChainDefinitionMap.put("/cube/questionnaire/question/findQuestionForQuestionnaire","anon");
         filterChainDefinitionMap.put("/cube/questionnaire/submitQuestionnaire","anon");
+        filterChainDefinitionMap.put("/cube/questionnaire/subQuestionnaire","anon");
         filterChainDefinitionMap.put("/web/cube/getSuccess","anon");
         filterChainDefinitionMap.put("/alipay/notify/notifyUrl","anon");
         filterChainDefinitionMap.put("/user/modifyPsd/code","anon");
