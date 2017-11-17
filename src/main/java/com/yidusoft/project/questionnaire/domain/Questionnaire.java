@@ -1,5 +1,6 @@
 package com.yidusoft.project.questionnaire.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -68,6 +69,7 @@ public class Questionnaire {
     /**
      * 修改时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_time")
     private Date updateTime;
     /**

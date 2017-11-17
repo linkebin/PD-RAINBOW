@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.transaction.dao.AccountInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.transaction.domain.AccountInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="account_date" jdbcType="TIMESTAMP" property="accountDate" />
+    <result column="account_remarks" jdbcType="VARCHAR" property="accountRemarks" />
+    <result column="buy_total" jdbcType="VARCHAR" property="buyTotal" />
+    <result column="account_total" jdbcType="VARCHAR" property="accountTotal" />
+    <result column="cost_money" jdbcType="DECIMAL" property="costMoney" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="account_surplus" jdbcType="INTEGER" property="accountSurplus" />
+  </resultMap>
+</mapper>
