@@ -507,10 +507,11 @@ public class UploadController {
      */
     @PostMapping("/ueUploadImg")
     public JSON ueUploadImg(MultipartFile upfile) {
+        String fileName = upfile.getOriginalFilename();
         Result result = JSON.parseObject(this.comUploadImg(upfile),Result.class);
         if ("200".equals(result.getCode()+"")) {
             String path = result.getData().toString();
-            String config ="{\"state\": \"SUCCESS\",\"url\": \"/files" + path + "\",\"title\": \"path\",\"original\": \"img\" }";
+            String config ="{\"state\": \"SUCCESS\",\"url\": \"/files" + path + "\",\"title\": \""+fileName+"\",\"original\": \""+fileName+"\" }";
             return JSON.parseObject(config);
 
         }
