@@ -27,6 +27,9 @@ public class VisitingRecordFile {
     @Column(name = "file_uri")
     private String fileUri;
 
+    @Column(name = "file_type")
+    private String fileType;
+
     /**
      * 创建人
      */
@@ -37,6 +40,15 @@ public class VisitingRecordFile {
      */
     @Column(name = "create_time")
     private Date createTime;
+
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 
     /**
      * 是否删除0 否 1是

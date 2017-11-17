@@ -1,16 +1,21 @@
 package com.yidusoft.project.cube.customer.web;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.yidusoft.project.business.domain.VisitorRegister;
 import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.project.system.domain.SelectOption;
 import com.yidusoft.project.system.service.SelectOptionService;
 import org.json.JSONObject;
+import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -31,12 +36,14 @@ public class WebCustomerController {
         VisitorRegister visitorRegister = visitorRegisterService.findById(id);
         visitorRegister.setAddress(visitorRegister.getProvince()+visitorRegister.getCity()+visitorRegister.getDistrict()+visitorRegister.getAddress());
 
-        String json = JSON.toJSONString(visitorRegister);
+        String json = JSON.toJSONString(visitorRegister, SerializerFeature.WriteMapNullValue);
 
         Map<String,Object> map = JSON.parseObject(json,Map.class);
 
         religiousBelief(visitorRegister,map);
         educationLevel(visitorRegister,map);
+        maritalStatus(visitorRegister,map);
+
         if (visitorRegister.getMotherDeathYourAge()==0){
             map.put("motherDeathYourAge","");
         }
@@ -55,6 +62,26 @@ public class WebCustomerController {
         return "project/cube/customer/customer-info-detail";
     }
 
+
+    public void maritalStatus(VisitorRegister visitorRegister,Map<String,Object> map){
+        String str ="未婚";
+        if (visitorRegister.getMaritalStatus()==2){
+            str="已婚";
+        }
+        if (visitorRegister.getMaritalStatus()==3){
+            str="已婚分居";
+        }
+        if (visitorRegister.getMaritalStatus()==4){
+            str="再婚";
+        }
+        if (visitorRegister.getMaritalStatus()==5){
+            str="离婚独居";
+        }
+        if (visitorRegister.getMaritalStatus()==6){
+            str="丧偶独居";
+        }
+        map.put("maritalStatus",str);
+    }
     public void educationLevel(VisitorRegister visitorRegister,Map<String,Object> map){
         String str ="小学";
         if (visitorRegister.getEducationLevel()==2){

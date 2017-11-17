@@ -4,6 +4,7 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.activiti.org/test">
 
+
 	<process id="channelProcess" name="渠道申请" isExecutable="true">
 		<startEvent id="channelStart" name="渠道申请流程开始">
 			<extensionElements>
@@ -13,10 +14,11 @@
 									   required="true"></activiti:formProperty>
 			</extensionElements>
 		</startEvent>
+
 		<userTask id="channelAapproval" name="渠道审批"
 				  activiti:candidateUsers="${channelActivityService.findUsers(execution)}" isForCompensation="true">
 			<extensionElements>
-				<activiti:formProperty id="channelAapproval_" name="渠道审批操作" type="enum">
+				<activiti:formProperty id="channelAapproval_"  type="enum">
 					<activiti:value id="true" name="通过"></activiti:value>
 					<activiti:value id="false" name="打回"></activiti:value>
 				</activiti:formProperty>
@@ -29,10 +31,27 @@
 		<sequenceFlow id="channelflow1" sourceRef="channelStart" targetRef="channelAapproval"></sequenceFlow>
 		<sequenceFlow id="channelflow2" sourceRef="channelAapproval" targetRef="ChannelAutoTask"></sequenceFlow>
 
-		<serviceTask id="ChannelAutoTask" name="审批后操作"
+		<serviceTask id="ChannelAutoTask" name="ChannelAutoTask"
 					 activiti:expression="${channelActivityService.channel(execution)}"></serviceTask>
 
 		<sequenceFlow id="channelflow3" sourceRef="ChannelAutoTask" targetRef="channelEnd"></sequenceFlow>
 	</process>
+
+	<BPMNDiagram xmlns="http://www.omg.org/spec/BPMN/20100524/DI">
+		<BPMNPlane>
+			<BPMNShape bpmnElement="channelEnd">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="48.0" width="48.0" x="629.0" y="118.0"/>
+			</BPMNShape>
+			<BPMNShape bpmnElement="channelAapproval">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="48.0" width="120.0" x="221.0" y="112.0"/>
+			</BPMNShape>
+			<BPMNShape bpmnElement="ChannelAutoTask">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="48.0" width="120.0" x="428.0" y="113.0"/>
+			</BPMNShape>
+			<BPMNShape bpmnElement="channelStart">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="48.0" width="48.0" x="90.0" y="112.0"/>
+			</BPMNShape>
+		</BPMNPlane>
+	</BPMNDiagram>
 
 </definitions>

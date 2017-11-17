@@ -11,8 +11,17 @@ public class FileResponseData {
     private Integer code;
     private String msg;
     private Data data;
+    private String fileType;
 
     private String fileName;
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 
     public String getId() {
         return id;

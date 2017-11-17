@@ -61,7 +61,7 @@
                     </th:block>
 
                     <td>年龄:</td>
-                    <td>2017-09-10</td>
+                    <td id="age"></td>
                 </tr>
 
                 <tr>
@@ -107,12 +107,16 @@
                 <tr>
                     <td>结婚年数:</td>
                     <td th:text="${vr.marryTotal}">2017-09-10</td>
+
                     <td>第一个孩子性别:</td>
                     <th:block th:if="${vr.childSex==0}">
                         <td >女</td>
                     </th:block>
                     <th:block th:if="${vr.childSex==1}">
                         <td >男</td>
+                    </th:block>
+                    <th:block th:if="${vr.childSex==null}">
+                        <td ></td>
                     </th:block>
                 </tr>
                 <tr>
@@ -184,7 +188,12 @@
                     <td>最近一次咨询的地址:</td>
                     <td th:text="${vr.counselingAddress}">2017-09-10</td>
                     <td>是否因心理问题就医:</td>
-                    <td th:text="${vr.medicalTreatment}">2017-09-10</td>
+                    <th:block th:if="${vr.medicalTreatment==2}">
+                        <td >否</td>
+                    </th:block>
+                    <th:block th:if="${vr.medicalTreatment==1}">
+                        <td >是</td>
+                    </th:block>
                 </tr>
                 <tr>
                     <td>最近一次诊断结果:</td>
@@ -233,4 +242,16 @@
 
 </body>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/card.js"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var updateObj =[[${vr}]];
+    /*]]>*/
+</script>
+<script>
+    $(function () {
+        var infos = idCardNoUtil.getBirthDaySexAge(updateObj.idCard);
+        $("#age").html(infos.age);
+    });
+</script>
 </html>
