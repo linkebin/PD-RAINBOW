@@ -94,6 +94,15 @@ public class WebController {
         return "project/cube/todo";
     }
 
+     /**
+     * 跳转到我的特权页面
+     * @return
+     */
+    @RequestMapping(value = {"/prerogative"})
+    public String prerogative(){
+        return "project/cube/vip/prerogative";
+    }
+
     /**
      * 跳转到我的问卷页面
      * @return

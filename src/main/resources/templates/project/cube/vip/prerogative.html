@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>我的问卷</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header(${-1})">Header</div>
+    <div class="eui-area">
+        <div th:replace="project/cube/common/left :: left(${2})">sidebar</div>
+        <div class="eui-body">
+            <!-- 内容主体区域 -->
+            <div class="xymfContent" style="height: 524px">
+                <div class="eui-marginL20">
+                    <div class="eui-elem-quote eui-font22">我的特权</div>
+                    <div class="eui-row eui-marginT20">
+                            <div class="eui-col-xs9">
+                                <div class="eui-font20 eui-color-blue"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt="">您还不是年费会员</div>
+
+                            </div>
+                            <div class="eui-col-xs3">
+                                <a href="/cube/pay" class="eui-btn eui-btn-normal">开通年费会员</a>
+                            </div>
+                    </div>
+                    <div class="eui-row  eui-marginT10">
+                            <div class="eui-col-xs9">
+                                <div class="eui-font14  eui-color-gray3">开通年费会员，即可享受六大特权</div>
+                            </div>
+                            <div class="eui-col-xs3">
+                                <div class="eui-font14 eui-marginL10 eui-color-blue">每天仅需5毛钱</div>
+                            </div>
+                    </div>
+                    <fieldset class="eui-elem-field eui-field-title eui-marginT20 eui-marginR10" >
+                    </fieldset>
+                    <div class="eui-row eui-marginT20">
+                        <div class="eui-col-xs4"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt="">免费使用问卷</div>
+                        <div class="eui-col-xs4"><img src="/Styles/images/xymfImages/xymf/noadv.png" alt="">精彩活动更多优惠</div>
+                        <div class="eui-col-xs4"><img src="/Styles/images/xymfImages/xymf/voucher.png" alt="">VIP专有身份标识</div>
+                    </div>
+                    <div class="eui-row eui-marginT20">
+                        <div class="eui-col-xs4"><img src="/Styles/images/xymfImages/xymf/free.png" alt="">海量专业问卷</div>
+                        <div class="eui-col-xs4"><img src="/Styles/images/xymfImages/xymf/voucher.png" alt="">专享定制问卷</div>
+                        <div class="eui-col-xs4"><img src="/Styles/images/xymfImages/xymf/noadv.png" alt="">专享云心理大数据</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+
+</div>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+
+
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+</body>
+</html>
