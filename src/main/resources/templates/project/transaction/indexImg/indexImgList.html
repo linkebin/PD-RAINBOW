@@ -46,64 +46,6 @@
     </div>
 </div>
 
-<!-- 左滑新建图片开始 -->
-<div class="taskFiltrate">
-</div>
-<div class="filtrateIn">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30 newOrEdit">
-            <i class='eui-icon eui-font24'>&#xe654;</i>
-        </div>
-        <div class="eui-col-md2 eui-textAlignR">
-            <i class='eui-icon eui-font24 pictureClose'>&#x1006;</i>
-        </div>
-    </div>
-    <form class="eui-form eui-marginT10 eui-paddingR10" id="imageNewForm">
-        <input type="hidden" id="indexImgId"/>
-        <div class="eui-form-item">
-            <label class="eui-form-label">图片类型</label>
-            <div class="eui-input-block">
-                <select name="imgType" e-filter="allSelected">
-                    <option value="">请选择图片类型</option>
-                    <option value="1">活动图片</option>
-                    <option value="0">其他图片</option>
-                </select>
-            </div>
-        </div>
-        <div class="eui-form-item promotions">
-            <label class="eui-form-label">展示的活动</label>
-            <div class="eui-input-block">
-                <select name="objectId" id="promotionsId" e-filter="selected">
-                    <option value="">请选择活动</option>
-                </select>
-            </div>
-        </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">首页图片</label>
-            <div class="eui-input-block">
-                <button type="button" class="eui-btn" id="test1">
-                    <i class="eui-icon">&#xe67c;</i>上传图片
-                </button>
-                <div class="eui-upload-list">
-                    <img class="eui-upload-img" id="demo1">
-                    <p id="demoText"></p>
-                </div>
-                <div>推荐图片格式为676 x 128左右</div>
-            </div>
-        </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">是否启用</label>
-            <div class="eui-input-block">
-                <input type="radio" name="state" value="0" title="是" checked/>
-                <input type="radio" name="state" value="1" title="否"/>
-            </div>
-        </div>
-    </form>
-    <div class="taskConfirm"><span onclick="addIndexImg()" class="eui-btn confirm">确认</span></div>
-</div>
-<!-- 左滑新建图片结束 -->
-
-
 <script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
 <script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
 <script src="/pack.ajax.js" type="text/javascript"></script>
@@ -226,11 +168,7 @@
 
     function Buts(indexImg) {
         var id = "'" + indexImg.id + "'";
-        var imgType = "'" + indexImg.imgType + "'";
-        var state = "'" + indexImg.state + "'";
-        var imgPath = "'" + indexImg.imgPath + "'";
-        var objectId="'" + indexImg.objectId + "'";
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="imageEdit(' + id + ',' + imgType + ',' + state + ',' + imgPath + ','+objectId+')"><i class="eui-icon">&#xe642;</i></button> ' +
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="imageEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteIndexImg(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
     }
 
@@ -238,6 +176,17 @@
     // 新建图片
     $(".taskFiltrate").hide();
     $('.pictureNew').click(function () {
+
+        if(parent.$(".eui-tab-title li[e-id='881']").length<=0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '设置首页图片',
+                type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="/web/indexImg/imgAdd"></iframe>'
+                , id: 881 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 881);
+
         $('.newOrEdit').html("新建首页图片");
         $('#indexImgId').val("");
         $(".taskFiltrate").show();
@@ -416,8 +365,17 @@
      * @param Path
      * @param objectId
      */
-    function imageEdit(id, imgType, state, path,objectId) {
-        eui.use(['form'], function () {
+    function imageEdit(id) {
+        if(parent.$(".eui-tab-title li[e-id='882']").length<=0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '修改首页图片',
+                type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="/web/indexImg/imgUpdate/'+id+'"></iframe>'
+                , id: 882 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 882);
+        /*eui.use(['form'], function () {
             var form = eui.form
             $('#indexImgId').val(id);//设置隐藏的id，用来判断是添加还是修改
             $('select[name="imgType"] option').each(function (index, data) {
@@ -458,9 +416,7 @@
             $('.newOrEdit').html("编辑首页图片")
             form.render();
             $(".taskFiltrate").show();
-            $(".filtrateIn").animate({right: '0'}, 400);
-            /* Act on the event */
-        })
+            $(".filtrateIn").animate({right: '0'}, 400);*/
     }
 
     /**

@@ -125,6 +125,7 @@
 <script type="text/javascript">
     var promotionsType = 1;//活动类型
     $(function () {
+        console.log($('#startTime').val());
         $('#startTime').val(new Date($('#startTime').val()).Format("yyyy-MM-dd hh:mm:ss"));
         $('#endTime').val(new Date($('#endTime').val()).Format("yyyy-MM-dd hh:mm:ss"));
         $('#discount').hide();

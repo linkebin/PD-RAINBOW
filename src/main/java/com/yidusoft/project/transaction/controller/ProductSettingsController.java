@@ -101,7 +101,6 @@ public class ProductSettingsController {
 
     /**
      * 查看详情
-     *
      * @param id
      * @return
      */

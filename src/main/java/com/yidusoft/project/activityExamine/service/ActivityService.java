@@ -1,22 +1,16 @@
 package com.yidusoft.project.activityExamine.service;
 
-import com.github.pagehelper.PageHelper;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
-import com.yidusoft.project.business.domain.LaunchActivities;
-import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +18,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jery on 2016/11/23.
@@ -41,8 +38,6 @@ public class ActivityService {
 
     @Autowired
     private HistoryService  historyService ;
-    @Autowired
-    private LaunchActivitiesService launchActivitiesService ;
 
     @Autowired
     private SecUserService secUserService;

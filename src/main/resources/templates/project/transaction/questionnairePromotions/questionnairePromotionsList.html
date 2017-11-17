@@ -166,13 +166,13 @@
             } else if (promotion.promotionsState==3){
                 state="提前终止";
             }
-            var start = new Date(promotion.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
             var end = new Date(promotion.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
             var now = new Date().Format('yyyy-MM-dd hh:mm:ss');
-            if(promotion.promotionsState==2 && now < end){
+            if(promotion.promotionsState==2 && now > end){
                 state="正常结束";
             }
-
+            console.log(now > end);
+            console.log(state);
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="promotionsId" type="hidden" value="' + promotion.id + '"></td>' +
                     '<td>' + promotion.promotionsName + '</td>'
@@ -196,12 +196,14 @@
     }
     function Buts(id,sate,now,end) {
         var id = "'" + id + "'";
+        now = "'" + now + "'";
+        end = "'" + end + "'";
         if(sate==1){
             return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit " title="编辑促销" onclick="promotionEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除促销" onclick="deletePromotion(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ' +
-                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="启用促销" onclick="enableActivity('+"''," + id + ')"><i class="eui-icon">&#xe618;</i></button> ';
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="启用促销" onclick="enableActivity('+"''," + id + ','+end+')"><i class="eui-icon">&#xe618;</i></button> ';
         }else if(sate==2 && now < end){
-            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="enableActivity('+"'termination'," + id + ')"><i class="eui-icon">&#xe6d8;</i></button> ';
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="enableActivity('+"'termination'," + id + ','+end+')"><i class="eui-icon">&#xe6d8;</i></button> ';
         }
     }
 
@@ -271,7 +273,37 @@
     }
 
     //启用促销
-    function enableActivity(data,id) {
+    function enableActivity(data,id,end) {
+        $.post("/product/settings/updateListPage",{page:1,size:10,id:id},function (result) {
+            if(result.code==200){
+                var message="";
+                if(result.data.list.length==0){
+                    message="该活动没有设置套餐参与";
+                }
+                var now = new Date().Format('yyyy-MM-dd hh:mm:ss');
+                if(now>end){
+                    if(message.length!=0){
+                        message += "、活动时间已过，请前往修改"
+                    }else{
+                        message += "活动时间已过，请前往修改";
+                    }
+                }
+                updateState(data,id,message)
+            }else{
+                layer.msg(result.message);
+            }
+        })
+    }
+
+    //修改状态
+    function updateState(data,id,mess) {
+        if(mess.length!=0){
+            return layer.confirm(mess, {
+                btn: ['前往修改', '算了，不启用了']
+            }, function () {
+                promotionEdit(id);
+            })
+        }
         var message = '您确定启用促销吗？';
         var state = 2;
         if(data=='termination'){

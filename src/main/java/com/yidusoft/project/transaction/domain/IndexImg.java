@@ -21,12 +21,17 @@ public class IndexImg {
     @Column(name = "create_time")
     private Date createTime;
 
+    @Column(name = "state")
     private Integer state;
 
+    @Column(name = "creator")
     private String creator;
 
+    @Column(name = "deleted")
     private Integer deleted;
 
+    @Column(name = "image_text")
+    private String imageText;
     /**
      * @return id
      */
@@ -138,4 +143,16 @@ public class IndexImg {
     public void setDeleted(Integer deleted) {
         this.deleted = deleted;
     }
+
+    /**
+     * 设置图文
+     * @return
+     */
+    public String getImageText() { return imageText; }
+
+    /**
+     * 获取图文
+     * @param imageText
+     */
+    public void setImageText(String imageText) { this.imageText = imageText; }
 }

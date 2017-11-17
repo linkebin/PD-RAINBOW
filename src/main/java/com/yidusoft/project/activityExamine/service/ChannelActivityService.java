@@ -2,7 +2,6 @@ package com.yidusoft.project.activityExamine.service;
 
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
-import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.system.domain.SecUser;
@@ -18,7 +17,6 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,8 +40,6 @@ public class ChannelActivityService {
 
     @Autowired
     private HistoryService  historyService ;
-    @Autowired
-    private LaunchActivitiesService launchActivitiesService ;
 
     @Autowired
     private SecUserService secUserService;

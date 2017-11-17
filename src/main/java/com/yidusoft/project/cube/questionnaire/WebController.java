@@ -1,5 +1,8 @@
 package com.yidusoft.project.cube.questionnaire;
 
+import com.yidusoft.project.transaction.domain.IndexImg;
+import com.yidusoft.project.transaction.service.IndexImgService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping(value ={"/cube/"})
 public class WebController {
+    @Autowired
+    private IndexImgService indexImgService;
+
     /**
      * 跳转到订单
      * @return
@@ -68,14 +74,15 @@ public class WebController {
         return "project/cube/questionnaire/activity";
     }
     /**
-     * 跳转到活动页面
+     * 跳转到活动介绍页面
      * @param model
      * @param id
      * @return
      */
     @RequestMapping(value = {"/slideshow/{id}"})
     public String slideshow(Model model,@PathVariable String id){
-        model.addAttribute("id",id);
+        IndexImg indexImg = indexImgService.findById(id);
+        model.addAttribute("indexImg",indexImg);
         return "project/cube/questionnaire/slideshow";
     }
     /**

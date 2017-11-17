@@ -35,7 +35,7 @@
     SELECT  id_,promotions_name,promotions_start,promotions_end
     FROM    questionnaire_promotions
     WHERE   deleted=0
-    AND     promotions_state=0
+    AND     promotions_state=2
 		AND now() BETWEEN promotions_start AND promotions_end
     order by create_time desc
   </select>

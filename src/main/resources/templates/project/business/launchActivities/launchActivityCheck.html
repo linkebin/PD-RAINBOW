@@ -11,6 +11,9 @@
         #activityNewForm input + label, select + label, textarea + label {
             color: red;
         }
+        .eui-disabled, .eui-disabled:hover {
+            color: #333333 !important;
+        }
     </style>
 </head>
 <body>
@@ -47,17 +50,17 @@
                 <label class="eui-form-label">活动地点</label>
                 <div id="ld" data-toggle="distpicker">
                     <div class="eui-input-inline">
-                        <select id="province" class="eui-input" e-ignore name="province">
+                        <select id="province" class="eui-input" name="province" disabled>
 
                         </select>
                     </div>
                     <div class="eui-input-inline">
-                        <select id="city" class="eui-input" e-ignore name="city">
+                        <select id="city" class="eui-input" name="city" disabled>
 
                         </select>
                     </div>
                     <div class="eui-input-inline">
-                        <select id="district" class="eui-input" e-ignore name="district">
+                        <select id="district" class="eui-input" name="district" disabled>
 
                         </select>
                     </div>

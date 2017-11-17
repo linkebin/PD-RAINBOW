@@ -7,7 +7,6 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.ActiveParticipant;
 import com.yidusoft.project.business.service.ActiveParticipantService;
-import com.yidusoft.project.business.service.LaunchActivitiesService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,8 +23,6 @@ public class ActiveParticipantController {
     @Resource
     private ActiveParticipantService activeParticipantService;
 
-    @Resource
-    private LaunchActivitiesService launchActivitiesService;
 
     /**
      * 添加活动参与人的基本信息

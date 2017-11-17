@@ -98,17 +98,17 @@ public class IndexImgController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(IndexImg indexImg) {
-        indexImgService.update(indexImg);
-        return ResultGenerator.genSuccessResult();
-    }
-
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
+    /**
+     * 获取活动详情
+     * @param id
+     * @return
+     */
+    @PostMapping("/detail")
+    public Result detail(String id) {
         IndexImg indexImg = indexImgService.findById(id);
         return ResultGenerator.genSuccessResult(indexImg);
     }
+
 
     @GetMapping
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
