@@ -146,7 +146,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         }else if (item=='edit'){//编辑
             window.open("/web/questionnaire/getUpdateQuestionnaire?id="+id);
         }else if (item=='preview'){//预览问卷
-            window.open("/web/questionnaire/question_horizontal_or_vertital_preview?questionnaireId=" + id);
+            window.open("/web/cube/getQuestionnairePreviewGuide?questionnaireId=" + id);
         }else if(item=='detail'){//问卷详情
             window.open("/web/questionnaire/getQuestionnaireDetail?questionnaireId=" + id);
         }
