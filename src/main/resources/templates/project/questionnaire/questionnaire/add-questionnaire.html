@@ -95,6 +95,31 @@
                            <input type="radio" name="questionSequence" value="1" title="反" >
                        </div>
                     </div>
+                <div class="eui-row" id="showUserList" style="display: none;">
+                    <label class="eui-form-label">可见权限</label>
+                    <div class="eui-form-item">
+                    <table class="eui-table eui-form" id="userTable">
+                        <colgroup>
+                            <col width="180">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>账号</th>
+                            <th>用户名称</th>
+                            <th>手机号码</th>
+                            <th>邮箱</th>
+                            <th>地址</th>
+                            <th>创建人</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    </div>
+                        <div id="pagesUser"></div>
+                </div>
                     <div class="eui-form-item">
                         <label class="eui-form-label">问卷说明</label>
                         <div class="eui-input-block">
@@ -309,42 +334,42 @@
 
 
 <!--咨询师列表展示界面开始-->
-<div class="eui-mn1 eui-bg-white" id="userList" style="display: none">
-    <div class="eui-mn1-type">
-        <div class="eui-row eui-padding10 eui-borderB">
-            <div class="eui-col-md6 eui-font18">
-                <i class='eui-icon eui-font24'>&#xe61d;</i> 咨询师列表
-            </div>
+<!--<div class="eui-mn1 eui-bg-white" id="userList" style="display: none">-->
+    <!--<div class="eui-mn1-type">-->
+        <!--<div class="eui-row eui-padding10 eui-borderB">-->
+            <!--<div class="eui-col-md6 eui-font18">-->
+                <!--<i class='eui-icon eui-font24'>&#xe61d;</i> 咨询师列表-->
+            <!--</div>-->
 
-            <div class="eui-col-md6 eui-font18" style="float:right; margin-right: -280px">
-                <button class="eui-btn eui-btn-radius eui-btn-normal" onclick="loadUserList()">选择咨询师</button>
-            </div>
-            <div class="eui-col-md6 eui-textAlignR">
-            </div>
-        </div>
-        <table class="eui-table eui-form" id="userTable">
-            <colgroup>
-                <col width="60">
-                <col>
-            </colgroup>
-            <thead>
-            <tr>
-                <th>账号</th>
-                <th>用户名称</th>
-                <th>手机号码</th>
-                <th>邮箱</th>
-                <th>地址</th>
-                <th>创建人</th>
-            </tr>
-            </thead>
-            <tbody>
+            <!--&lt;!&ndash;<div class="eui-col-md6 eui-font18" style="float:right; margin-right: -280px">&ndash;&gt;-->
+                <!--&lt;!&ndash;<button class="eui-btn eui-btn-radius eui-btn-normal" onclick="loadUserList()">选择咨询师</button>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--<div class="eui-col-md6 eui-textAlignR">-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;<table class="eui-table eui-form" id="userTable">&ndash;&gt;-->
+            <!--&lt;!&ndash;<colgroup>&ndash;&gt;-->
+                <!--&lt;!&ndash;<col width="60">&ndash;&gt;-->
+                <!--&lt;!&ndash;<col>&ndash;&gt;-->
+            <!--&lt;!&ndash;</colgroup>&ndash;&gt;-->
+            <!--&lt;!&ndash;<thead>&ndash;&gt;-->
+            <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                <!--&lt;!&ndash;<th>账号</th>&ndash;&gt;-->
+                <!--&lt;!&ndash;<th>用户名称</th>&ndash;&gt;-->
+                <!--&lt;!&ndash;<th>手机号码</th>&ndash;&gt;-->
+                <!--&lt;!&ndash;<th>邮箱</th>&ndash;&gt;-->
+                <!--&lt;!&ndash;<th>地址</th>&ndash;&gt;-->
+                <!--&lt;!&ndash;<th>创建人</th>&ndash;&gt;-->
+            <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+            <!--&lt;!&ndash;</thead>&ndash;&gt;-->
+            <!--&lt;!&ndash;<tbody>&ndash;&gt;-->
 
-            </tbody>
-        </table>
-        <div id="pagesUser"></div>
+            <!--&lt;!&ndash;</tbody>&ndash;&gt;-->
+        <!--&lt;!&ndash;</table>&ndash;&gt;-->
+        <!--&lt;!&ndash;<div id="pagesUser"></div>&ndash;&gt;-->
 
-    </div>
-</div>
+    <!--</div>-->
+<!--</div>-->
 <!--咨询师展示列表界面结束-->
 
 
@@ -385,7 +410,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     //前后若干天可选，这里以1天为例
     laydate.render({
         elem: '#times'
-        ,min: 1
+        ,min: 0
     });
 
 
@@ -445,10 +470,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //问卷权限
     form.on('select(questionnairePermission)', function(data){
+        if(data.elem.value=='1'){
+            $('#showUserList').hide();
+        }
          if(data.elem.value=='2'){
            //弹出咨询师列表
-            //loadUserList();
-            showUserList();
+            loadUserList();
+            //showUserList();
         }
     });
 
@@ -509,7 +537,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 type: 2
                 ,title: '指定权限'
                 ,area: ['800px', '500px']
-                ,offset: ['100px', '50px']
                 ,shade: 0
                 ,moveType: 0//拖拽模式，0或者1
                 ,maxmin: true
@@ -521,11 +548,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                     //merge("tag",list)
                     console.log("id = " + list[0].id);
                     getUserList(list);
-                    layer.close(layer.index);
+                    layer.closeAll();
 
                 }
                 ,btn2: function(){
-                    layer.close(layer.index);
+                    layer.closeAll();
                 }
                 ,zIndex: layer.zIndex //重点1
                 ,success: function(layero, index){
@@ -619,6 +646,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //拼接咨询师列表
     function getUserTable(userList) {
+        $('#showUserList').show();
         var tableHtml = '';
         for (var item in userList){
             var user=userList[item];

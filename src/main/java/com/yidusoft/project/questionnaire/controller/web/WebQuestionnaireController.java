@@ -139,4 +139,53 @@ public class WebQuestionnaireController {
         model.addAttribute("ascriptionType",ascriptionType);
         return "project/questionnaire/questionnaire/save-questionnaire-question";
     }
+
+    /**
+     * 跳转到问卷详情
+     * @param questionnaireId
+     * @param model
+     * @return
+     */
+    @RequestMapping("/getQuestionnaireDetail")
+    public String getQuestionnaireDetail(String questionnaireId,Model model){
+        Questionnaire questionnaire=questionnaireService.findById(questionnaireId);
+        //查询量表相关的标签
+        List<QuestionnaireTag> questionnaireTagList= questionnaireTagService.findTagForQuestionnaire(questionnaireId);
+        //相关联的场景
+        List<Scene> sceneList= sceneService.findSceneForQuestionnaire(questionnaireId);
+        //问题因子
+        List<QuestionnaireQuestionFactor>  questionnaireQuestionFactorList= questionnaireQuestionFactorMapper.findQuestionnaireQuestionFactor(questionnaireId);
+        //转载问卷因子里面所有的问题id
+        List<String> questionnaireQuestionIds=new ArrayList<>();
+        for(QuestionnaireQuestionFactor questionFactor:questionnaireQuestionFactorList){
+            questionnaireQuestionIds.add(questionFactor.getQuestionId());
+        }
+        //判断有没有选择量表list3.addAll(list1);  list3.removeAll(list2);
+        if(!"".equals(questionnaire.getGaugeId())){
+            List<GaugeQuestionFactor> gaugeQuestionFactors= gaugeQuestionFactorService.findGaugeQuestionFactor(questionnaire.getGaugeId());
+            List<String> gaugeQuestionIds=new ArrayList<>();
+            for(GaugeQuestionFactor gaugeQuestionFactor:  gaugeQuestionFactors){
+                gaugeQuestionIds.add(gaugeQuestionFactor.getQuestionId());
+            }
+
+            //在量表的基础上新增加的问题
+            List<String> newQuestion=new ArrayList<>();
+            newQuestion.addAll(questionnaireQuestionIds);
+            newQuestion.removeAll(gaugeQuestionIds);
+            //新加问题的id
+            model.addAttribute("newQuestion",newQuestion);
+            //量表的问题id
+            model.addAttribute("gaugeQuestionIds",gaugeQuestionIds);
+
+        }else {
+            //不存在量表，只有新加问题的id
+            model.addAttribute("newQuestion",questionnaireQuestionIds);
+            model.addAttribute("gaugeQuestionIds","");
+        }
+        model.addAttribute("questionnaire",questionnaire);
+        model.addAttribute("questionnaireTagList",questionnaireTagList);
+        model.addAttribute("questionnaireQuestionFactorList",questionnaireQuestionFactorList);
+        model.addAttribute("sceneList",sceneList);
+        return "project/questionnaire/questionnaire/detail-questionnaire";
+    }
 }

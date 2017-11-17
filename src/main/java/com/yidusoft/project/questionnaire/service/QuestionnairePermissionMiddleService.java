@@ -11,4 +11,8 @@ import java.util.List;
  */
 public interface QuestionnairePermissionMiddleService extends Service<QuestionnairePermissionMiddle>{
     List<SecUser> findQuestionnaireSecUser(SecUser secUser);
+
+    List<SecUser> findSecUserByQuestionnaireId(String questionnaireId);
+
+    List<QuestionnairePermissionMiddle> findPermission(String id);
 }

@@ -19,7 +19,7 @@ public interface QuestionnaireService extends Service<Questionnaire> {
      //查询问卷 相关的 标签   场景
     Result  getQuestionnaireInfo(String id);
     //修改问卷信息
-    Result updateQuestionnaire(Questionnaire questionnaire, String questionStr);
+    Result updateQuestionnaire(Questionnaire questionnaire, String questionStr,String userIds);
     //查询问卷即将要上架的 修改状态
     Result setQuestionnaireState();
     //查询使用中的问卷

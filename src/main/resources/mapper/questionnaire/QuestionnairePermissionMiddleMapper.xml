@@ -77,4 +77,20 @@ SELECT su.* FROM sec_user su
 
     </select>
 
+
+    <select id="findSecUserByQuestionnaireId" parameterType="String" resultMap="SecUserResultMap">
+SELECT su.* FROM sec_user su WHERE su.ID_ IN
+(
+SELECT qpm.user_id FROM questionnaire_permission_middle qpm
+WHERE qpm.questionnaire_id = #{questionnaireId}
+)
+ AND su.deleted = 0
+      AND su.STATUS = 1
+      AND su.ACCOUNT_TYPE = 1
+    </select>
+
+
+<select id="findPermission" parameterType="String" resultMap="BaseResultMap">
+    SELECT * FROM  questionnaire_permission_middle WHERE questionnaire_id = #{questionnaireId}
+</select>
 </mapper>

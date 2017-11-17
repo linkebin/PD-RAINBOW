@@ -3,7 +3,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>修改问卷</title>
+    <title>问卷详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -28,7 +28,7 @@
       <form class="eui-form " action=""  id="formQuestionnaire" >
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
-                <span class="eui-panels-title1">修改问卷</span>
+                <span class="eui-panels-title1">问卷详情</span>
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
@@ -52,18 +52,18 @@
                     <div class="eui-form-item">
                         <label class="eui-form-label">名称</label>
                         <div class="eui-input-inline">
-                            <input type="text" id="questionnaireName" name="questionnaireName" e-verify="" autocomplete="off" placeholder="请输入名称" class="eui-input">
+                            <input type="text" id="questionnaireName" name="questionnaireName" e-verify="" autocomplete="off" placeholder="请输入名称" class="eui-input eui-btn-disabled" disabled="disabled">
                         </div>
 
                         <label class="eui-form-label">选择量表</label>
                         <div class="eui-input-inline">
-                            <select name="gaugeId" id="gaugeId" e-filter="gaugeId"  e-verify="" >
+                            <select name="gaugeId" id="gaugeId" e-filter="gaugeId"  e-verify=""  class="eui-btn-disabled" disabled="disabled">
                             </select>
                         </div>
 
                         <label class="eui-form-label">上架时间</label>
                         <div class="eui-input-inline">
-                            <input type="text" class="eui-input" name="shelfTime" id="times" placeholder="请选择时间">
+                            <input type="text" class="eui-input eui-btn-disabled" name="shelfTime" id="times" placeholder="请选择时间" disabled="disabled">
                         </div>
 
                     </div>
@@ -71,13 +71,13 @@
 
                          <label class="eui-form-label">问卷类型</label>
                          <div class="eui-input-inline">
-                             <select name="questionnaireType" id="questionnaireType" e-verify="gaugeType" >
+                             <select name="questionnaireType" id="questionnaireType" e-verify="gaugeType" class="eui-btn-disabled " disabled="disabled" >
                              </select>
                          </div>
 
                          <label class="eui-form-label">模板类型</label>
                          <div class="eui-input-inline">
-                            <select  e-filter="answerModelType" name="answerModelType" id="answerModelType" e-verify="" >
+                            <select  e-filter="answerModelType" name="answerModelType" id="answerModelType" e-verify="" class="eui-btn-disabled " disabled="disabled">
                                  <option value="">请选择</option>
                                  <option value="1">横版</option>
                                  <option value="2">竖版</option>
@@ -85,7 +85,7 @@
                          </div>
                        <label class="eui-form-label">可见权限</label>
                        <div class="eui-input-inline">
-                           <select  e-filter="questionnairePermission" name="questionnairePermission" id="questionnairePermission" e-verify="" >
+                           <select  e-filter="questionnairePermission" name="questionnairePermission" id="questionnairePermission" e-verify="" class="eui-btn-disabled " disabled="disabled">
                                <option value="">请选择</option>
                                <option value="1">全部</option>
                                <option value="2">指定可见</option>
@@ -127,13 +127,13 @@
                         <div class="eui-form-item">
                             <label class="eui-form-label">问卷说明</label>
                             <div class="eui-input-block">
-                                <textarea placeholder="问卷说明"  name="remarks" id="remarks" class="eui-textarea"></textarea>
+                                <textarea placeholder="问卷说明"  name="remarks" id="remarks" class="eui-textarea eui-btn-disabled " disabled="disabled"></textarea>
                             </div>
                         </div>
                         <div class="eui-form-item">
                             <label class="eui-form-label">引导语</label>
                             <div class="eui-input-block">
-                                <textarea placeholder="引导语"  name="guide" id="guide" class="eui-textarea"></textarea>
+                                <textarea placeholder="引导语"  name="guide" id="guide" class="eui-textarea eui-btn-disabled " disabled="disabled"></textarea>
                             </div>
                         </div>
             </div>
@@ -149,7 +149,7 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;" >
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"   class="eui-btn eui-btn-small" onclick="loadTag()">
+                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"   class="eui-btn eui-btn-small eui-btn-disabled " onclick="" disabled="disabled">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加标签</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
@@ -169,7 +169,7 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="loadScene()">
+                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small eui-btn-disabled " onclick="" disabled="disabled">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加场景</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
@@ -191,7 +191,7 @@
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
-                    <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe610;</i> 选择</button>
+                    <button class="eui-btn eui-btn-disabled " onclick="chageQuestion()" disabled="disabled"><i class="eui-icon">&#xe610;</i> 选择</button>
                 </div>
             </div>
         </div>
@@ -217,7 +217,7 @@
                         </div>
                         <div class="eui-input-inline">
                             <span class="eui-btn" onclick="doSearch()">查询</span>
-                            <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                            <span class="eui-btn eui-btn-primary" onclick="resetForm()" >重置</span>
                         </div>
                     </blockquote>
                     <div class="eui-form-item">
@@ -405,7 +405,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     //前后若干天可选，这里以1天为例
     laydate.render({
         elem: '#times'
-        ,min: 0
+        ,min: 1
     });
 
     //日期范围
@@ -495,13 +495,12 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 ,content:"/web/questionnairePermissionMiddle/findQuestionnaireSecUser"
                 ,btn: ['确定', '关闭']
                 ,yes: function(){
-                    layer.closeAll();
                     //得到设置返回的结果
                     list=iframeWin.getCheckTag();
                     //merge("tag",list)
                     console.log("id = " + list[0].id);
                     getUserList(list);
-
+                    layer.closeAll();
 
                 }
                 ,btn2: function(){
@@ -548,7 +547,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 type:"post",
                 success:function(result){
                     //当你在iframe页面关闭自身时
-                 layer.closeAll();
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
                     // 分页
                     laypage.render({
                         elem: 'pagesUser'
@@ -575,7 +575,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                                     },
                                     type: "post",
                                     success: function (result) {
-                                        layer.closeAll();
+                                        //当你在iframe页面关闭自身时
+                                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                        parent.layer.close(index); //再执行关闭
                                         var userList = result.data.list;
                                         //遍历，拼接表格
                                         var tableHtml = getUserTable(userList);
@@ -773,7 +775,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
              context+='<div name="questionIds"  question="'+question.id+'" id="div'+question.id+'" class="eui-colla-item ">';
              context+='  <h2  class="eui-colla-title"><span name="spanNumber"></span>'+question.questionContent;
             if(type=='show'){
-               context+='  <i  title="删除" onclick="deleteQuestion(\''+question.id+'\')" class="eui-icon eui-icon-rigth" >&#xe640;</i> ';
+               context+='  <i  title="删除" onclick="" class="eui-icon eui-icon-rigth eui-btn-disabled" disabled="disabled">&#xe640;</i> ';
              }
              context+='  </h2> ';
              context+=' <div class="eui-colla-content eui-show"> ';
@@ -992,7 +994,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          if(typeAll.length==0 && state==0){
              for(var i=0;i<list.length;i++){
                  context+=  '<span id="'+type+list[i].id+'" name="'+type+'" style="width: 120px; margin: 0px 5px 5px 0px;" ' +
-                     'class="eui-btn eui-btn-primary" '+type+'Id='+list[i].id+'>'+list[i].name+' <i  onclick="deleteTagOrScene(\''+type+'\',\''+list[i].id+'\')" class="eui-icon" name="'+type+'">&#x1006;</i></span>';
+                     'class="eui-btn eui-btn-primary eui-btn-disabled" '+type+'Id='+list[i].id+'>'+list[i].name+' <i  onclick="" class="eui-icon" name="'+type+'">&#x1006;</i></span>';
              }
          }else {
         //去掉重复的 标签或者场景
@@ -1006,7 +1008,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             }
             if(stast==0){
                 context+=  '<span id="'+type+list[i].id+'" name="'+type+'" style="width: 120px; margin: 0px 5px 5px 0px;" ' +
-                    'class="eui-btn eui-btn-primary" '+type+'Id='+list[i].id+'>'+list[i].name+' <i  onclick="deleteTagOrScene(\''+type+'\',\''+list[i].id+'\')" class="eui-icon" name="'+type+'">&#x1006;</i></span>';
+                    'class="eui-btn eui-btn-primary eui-btn-disabled" '+type+'Id='+list[i].id+'>'+list[i].name+' <i  onclick="" class="eui-icon" name="'+type+'">&#x1006;</i></span>';
                 //添加
                 var  ids=list[i].id;
                 //加载层
@@ -1225,7 +1227,12 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          }
     }
 
-
+    //字符串转日期格式，strDate要转为日期格式的字符串
+    function getDate(strDate){
+        var date = eval('new Date(' + strDate.replace(/\d+(?=-[^-]+$)/,
+                function (a) { return parseInt(a, 10) - 1; }).match(/\d+/g) + ')');
+        return date;
+    }
 
     //根据问卷id查找指定咨询师
     function findSecUserByQuestionnaireId(questionnaireId){

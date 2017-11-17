@@ -25,4 +25,14 @@ public class QuestionnairePermissionMiddleServiceImpl extends AbstractService<Qu
     public List<SecUser> findQuestionnaireSecUser(SecUser secUser) {
         return questionnairePermissionMiddleMapper.findQuestionnaireSecUser(secUser);
     }
+
+    @Override
+    public List<SecUser> findSecUserByQuestionnaireId(String questionnaireId) {
+        return questionnairePermissionMiddleMapper.findSecUserByQuestionnaireId(questionnaireId);
+    }
+
+    @Override
+    public List<QuestionnairePermissionMiddle> findPermission(String questionnaireId) {
+        return questionnairePermissionMiddleMapper.findPermission(questionnaireId);
+    }
 }

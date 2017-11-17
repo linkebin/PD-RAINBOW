@@ -46,13 +46,13 @@
                 <colgroup>
                     <col width="50">
                     <col width="110">
-                    <col width="120">
-                    <col width="120">
+                    <col width="210">
+                    <col width="210">
                     <col width="80">
                     <col width="120">
                     <col width="120">
-                    <col width="90">
-                    <col width="220">
+                    <col width="60">
+                    <!--<col width="50">-->
                     <col>
                 </colgroup>
                 <thead>
@@ -65,7 +65,7 @@
                         <th>上架时间</th>
                         <th>量表模板</th>
                         <th>模板类型</th>
-                        <th>备注</th>
+                        <!--<th>备注</th>-->
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -147,6 +147,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             window.open("/web/questionnaire/getUpdateQuestionnaire?id="+id);
         }else if (item=='preview'){//预览问卷
             window.open("/web/questionnaire/question_horizontal_or_vertital_preview?questionnaireId=" + id);
+        }else if(item=='detail'){//问卷详情
+            window.open("/web/questionnaire/getQuestionnaireDetail?questionnaireId=" + id);
         }
     }
 
@@ -251,10 +253,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+ new Date(questionnaire.shelfTime).Format('yyyy-MM-dd')  +'</td>' +
                 '<td>'+questionnaire.gaugeName+'</td>' +
                 '<td>'+answerModel+'</td>' +
-                '<td>'+questionnaire.remarks+'</td>' +
+//                '<td>'+questionnaire.remarks+'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +context+
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="预览" onclick="itemclick('+"'preview','"+questionnaire.id+'\')"><i class="eui-icon">&#xe63c;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="预览" onclick="itemclick('+"'preview','"+questionnaire.id+'\')"><i class="eui-icon">&#xe621;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="详情" onclick="itemclick('+"'detail','"+questionnaire.id+'\')"><i class="eui-icon">&#xe705;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';

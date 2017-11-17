@@ -27,7 +27,7 @@ public class QuestionnairePermissionMiddle {
      * 咨询师id
      */
     @Column(name = "user_id")
-    private String userID;
+    private String userId;
 
     public String getId() {
         return id;
@@ -57,15 +57,15 @@ public class QuestionnairePermissionMiddle {
      * 获取咨询师id
      * @return
      */
-    public String getUserID() {
-        return userID;
+    public String getUserId() {
+        return userId;
     }
 
     /**
      * 设置咨询师id
      * @param userID
      */
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserID(String userId) {
+        this.userId = userId;
     }
 }

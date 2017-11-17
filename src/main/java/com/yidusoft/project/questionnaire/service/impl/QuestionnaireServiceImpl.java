@@ -4,6 +4,7 @@ import com.yidusoft.core.AbstractService;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireMapper;
+import com.yidusoft.project.questionnaire.dao.QuestionnairePermissionMiddleMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionFactorMapper;
 import com.yidusoft.project.questionnaire.domain.*;
 import com.yidusoft.project.questionnaire.service.*;
@@ -38,6 +39,9 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
     private SceneService sceneService;
     @Resource
     private QuestionnairePermissionMiddleService questionnairePermissionMiddleService;
+
+    @Resource
+    private QuestionnairePermissionMiddleMapper questionnairePermissionMiddleMapper;
     //分页条件查询相关的问卷信息
     @Override
     public List<Questionnaire> questionnaireListByPage(Questionnaire questionnaire) {
@@ -111,7 +115,7 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
 
     //修改问卷信息
     @Override
-    public Result updateQuestionnaire(Questionnaire questionnaire, String questionStr) {
+    public Result updateQuestionnaire(Questionnaire questionnaire, String questionStr,String userIds) {
         try{
             questionnaire.setUpdateTime(new Date());
             questionnaire.setModifier(Security.getUser().getUserName());
@@ -132,7 +136,33 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
                    questionnaireQuestionFactorMapper.insert(questionFactor);
                }
          }
+
+
+         // 删除该问卷的权限
+           List<QuestionnairePermissionMiddle> questionnairePermissionMiddles = questionnairePermissionMiddleMapper.findPermission(questionnaire.getId());
+            System.out.println(questionnairePermissionMiddles.size() + "==========");
+            for(QuestionnairePermissionMiddle m : questionnairePermissionMiddles){
+                System.out.println("id = " + m.getId());
+               questionnairePermissionMiddleMapper.delete(m);
+           }
+
+           //添加修改后的问卷权限
+            if (questionnaire.getQuestionnairePermission() != null && questionnaire.getQuestionnairePermission() == 2){
+                if (userIds != null && !"".equals(userIds)){
+                    String[] ids = userIds.split(",");
+                    for (int i = 0; i < ids.length; i++){
+                        QuestionnairePermissionMiddle questionnairePermissionMiddle = new QuestionnairePermissionMiddle();
+                        String permissionId = UUID.randomUUID().toString();
+                        questionnairePermissionMiddle.setId(permissionId);
+                        questionnairePermissionMiddle.setUserID(ids[i]);
+                        questionnairePermissionMiddle.setQuestionnaireId(questionnaire.getId());
+                        questionnairePermissionMiddleService.save(questionnairePermissionMiddle);
+                    }
+                }
+            }
+
         }catch (Exception e){
+            System.out.println(e.toString());
             return ResultGenerator.genFailResult("操作失败");
         }
 

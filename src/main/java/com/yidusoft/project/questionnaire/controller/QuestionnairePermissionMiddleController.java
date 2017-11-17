@@ -66,4 +66,18 @@ public class QuestionnairePermissionMiddleController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+
+    @PostMapping("/findSecUserByQuestionnaireId")
+    public Result findSecUserByQuestionnaireId(String questionnaireId, int page, int size){
+      List<SecUser> list = new ArrayList<>();
+        if (questionnaireId != null && !"".equals(questionnaireId)){
+            list = questionnairePermissionMiddleService.findSecUserByQuestionnaireId(questionnaireId);
+        System.out.println("6666" + questionnaireId);
+        }
+        PageHelper.startPage(page, size);
+        //查询所有的相关数据
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 }
