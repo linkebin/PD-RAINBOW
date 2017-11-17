@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="eui-form-item">
-                        <div id="container" name="content"></div>
+                        <div id="container" name="imageText"></div>
                     </div>
                 </form>
             </div>
@@ -175,7 +175,6 @@
                 });
             }
             params.imgPath = imgPath;
-            params.imageText = ue.getContent();
             add(params);
         }
     });
@@ -194,8 +193,11 @@
                     form.render();
                     layer.msg('添加成功！', {
                         icon: 1,
-                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
                     });
+                    setTimeout(function () {
+                        parent.element.tabDelete("nav-tab", 881);
+                    }, 1500)
                 }else{
                     layer.msg('编辑失败！', {
                         time: 2000 //1秒关闭（如果不配置，默认是3秒）

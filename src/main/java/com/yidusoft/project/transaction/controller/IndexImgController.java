@@ -62,12 +62,7 @@ public class IndexImgController {
     @PostMapping("/update")
     public Result update(String indexImgJson) {
         IndexImg indexImg= JSON.parseObject(indexImgJson,IndexImg.class);
-        IndexImg indexImg1 = indexImgService.findById(indexImg.getId());
-        indexImg1.setImgPath(indexImg.getImgPath());
-        indexImg1.setImgType(indexImg.getImgType());
-        indexImg1.setState(indexImg.getState());
-        indexImg1.setObjectId(indexImg.getObjectId());
-        indexImgService.update(indexImg1);
+        indexImgService.update(indexImg);
         return ResultGenerator.genSuccessResult();
     }
 

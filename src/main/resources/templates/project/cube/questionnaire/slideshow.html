@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -16,8 +16,9 @@
     <div class="eui-area">
         <div th:object="${indexImg}">
             <input type="hidden" th:value="*{imageText}" id="imageText">
+            <div style="width: 800px;height: auto;align-content: center" id="showHtml"></div>
+            <a th:if="*{imgType==1}" class="eui-btn eui-btn-normal" th:href="@{'/cube/activity/'+*{objectId}}">前往购买</a>
         </div>
-        <div style="width: 800px;height: auto;align-content: center" id="showHtml"></div>
     </div>
 </div>
 <script src="/Scripts/module/eui.js"></script>
