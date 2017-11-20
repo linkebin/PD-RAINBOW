@@ -14,10 +14,10 @@
 <div class="eui-layout eui-layout-admin xymfHome xymfPay">
     <div th:replace="project/cube/common/header :: header(${-1})">Header</div>
     <div class="eui-area">
-        <div th:object="${indexImg}" class="eui-bg-white eui-marginT20">
+        <div th:object="${indexImg}" class="eui-marginT20">
             <input type="hidden" th:value="*{imageText}" id="imageText">
-            <div class="eui-marginT20 eui-marginB20" style="width: 1000px;margin-left: 60px" >
-                <div id="showHtml" class="eui-marginB20">
+            <div class="eui-area eui-bg-white xymfShadow eui-borderRadiusLR1" style="width: 1000px;">
+                <div id="showHtml" class="eui-margin10 showTitle eui-marginLR20">
 
                 </div>
                 <a th:if="*{imgType==1}" class="eui-btn eui-btn-normal" th:href="@{'/cube/activity/'+*{objectId}}">前往购买...</a>
