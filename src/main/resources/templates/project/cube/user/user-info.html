@@ -153,14 +153,14 @@
                             <button type="button" class="eui-btn eui-btn-small eui-btn-normal" id="upCertification"><i class="eui-icon">&#xe67c;</i>资质认证上传
                             </button>
                         </p>
-                        <p class="eui-font12">(只支持图片上传,支持jpg,png)</p>
+                        <p class="eui-font12" id="userCertification">(请上传资质证明的相关材料)</p>
                     </div>
 
-                    <div style="width: 33%;float: right;" class="eui-marginT10">
-                        <div style="width: 100px; height: 100px; float: left;">
-                            <img id="certificationImg" th:src="${'/files'+session.userSession.certification+'?t='+'javascript:Math.random()'}" width="90" height="90">
-                        </div>
-                    </div>
+                    <!--<div style="width: 33%;float: right;" class="eui-marginT10">-->
+                        <!--<div style="width: 100px; height: 100px; float: left;">-->
+                            <!--<img id="certificationImg" th:src="${'/files'+session.userSession.certification+'?t='+'javascript:Math.random()'}" width="90" height="90">-->
+                        <!--</div>-->
+                    <!--</div>-->
 
                 </div>
             </div>
@@ -231,16 +231,11 @@
         var $ = eui.jquery
             ,upload = eui.upload;
 
-        //普通图片上传
+
         var uploadInst = upload.render({
             elem: '#upCertification'
             ,url: '/upload/uploadCertification'
-            ,before: function(obj){
-                //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
-                    $('#certificationImg').attr('src', result); //图片链接（base64）
-                });
-            }
+            ,accept: 'file' //普通文件
             ,done: function(res){
                 //如果上传失败
                 if(res.code > 0){
@@ -248,6 +243,7 @@
                 }
                 //上传成功
                 layer.msg('上传成功');
+                $('#userCertification').text('(已上传资质证明的材料)');
             }
             ,error: function(){
                 //演示失败状态，并实现重传
@@ -256,6 +252,19 @@
             }
         });
 
+    });
+
+    $.post('/upload/findUserCertification',{},function (result) {
+        if (result.code == 200){
+           if(result.data.certification != ''){
+               $('#userCertification').text('(已上传资质证明的材料)');
+               console.log(result.data.certification);
+           }else{
+               $('#userCertification').text('(请上传资质证明的相关材料)');
+           }
+        }else {
+
+        }
     });
 
 </script>
