@@ -15,11 +15,13 @@
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="account_surplus" jdbcType="INTEGER" property="accountSurplus"/>
     </resultMap>
-
+<!--SELECT * FROM account_info where account_date > date_add(now(),interval -1 day) -->
     <select id="getAccountByTime" resultMap="BaseResultMap" parameterType="java.util.Map">
         SELECT * FROM account_info
-        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
-          WHERE account_date BETWEEN #{startTime} and #{endTime}
-        </if>
+        <where>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                date(account_date) BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
     </select>
 </mapper>

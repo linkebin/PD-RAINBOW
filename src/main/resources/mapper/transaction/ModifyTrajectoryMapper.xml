@@ -14,16 +14,17 @@
   </resultMap>
   <select id="getAll" resultMap="BaseResultMap" parameterType="com.yidusoft.project.transaction.domain.ModifyTrajectory">
     SELECT content,creator,create_time,product_name FROM modify_trajectory
-    WHERE 1=1
-    <if test="content!=null and content!=''">
-      AND content LIKE '%${content}%'
-    </if>
-    <if test="productName!=null and productName!=''">
-      AND product_name LIKE '%${productName}%'
-    </if>
-    <if test="creator!=null and creator!=''">
-      AND creator LIKE '%${creator}%'
-    </if>
+    <where>
+      <if test="content!=null and content!=''">
+        AND content LIKE '%${content}%'
+      </if>
+      <if test="productName!=null and productName!=''">
+        AND product_name LIKE '%${productName}%'
+      </if>
+      <if test="creator!=null and creator!=''">
+        AND creator LIKE '%${creator}%'
+      </if>
+    </where>
     ORDER BY create_time DESC
   </select>
 </mapper>

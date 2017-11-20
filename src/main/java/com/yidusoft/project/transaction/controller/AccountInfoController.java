@@ -9,7 +9,6 @@ import com.yidusoft.project.transaction.service.AccountInfoService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +22,34 @@ public class AccountInfoController {
     @Resource
     private AccountInfoService accountInfoService;
 
+    /**
+     * 分页获取账户信息
+     * @param page
+     * @param size
+     * @param startTime
+     * @param endTime
+     * @return
+     */
     @PostMapping("/listPage")
-    public Result list(Integer page, Integer size, Date startTime, Date endTime) {
+    public Result list(Integer page, Integer size, String startTime, String endTime) {
         PageHelper.startPage(page, size);
-        Map<String, Date> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("startTime",startTime);
         map.put("endTime",endTime);
         List<AccountInfo> list = accountInfoService.getAccountByTime(map);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    /**
+     * 获取所有的账户信息
+     * @return
+     */
+    @GetMapping("/list")
+    public Result list() {
+        Map<String, String> map = new HashMap<>();
+        List<AccountInfo> list = accountInfoService.getAccountByTime(map);
+        return ResultGenerator.genSuccessResult(list);
     }
 
     @PostMapping

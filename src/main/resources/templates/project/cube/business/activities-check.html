@@ -150,7 +150,7 @@
                                 <table class="eui-table" id="participantTable">
                                     <input type="hidden" id="questionnaireId">
                                     <colgroup>
-                                        <col width="100">
+                                        <col width="150">
                                         <col width="200">
                                         <col width="100">
                                         <col width="100">
@@ -386,7 +386,8 @@
         console.log();
         $.post("/active/participant/getTotal", {activityId: $('#id').val()}, function (result) {
             if(result.code=200){
-                var progressBar = parseInt(result.data/$('input[name="activityTotal"]').val())*100;
+                console.log(result.data/$('input[name="activityTotal"]').val());
+                var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
                 progressBar = progressBar+"%";
                 $('.eui-progress-bar').css("width",progressBar);
                 $('.eui-progress-text').text(progressBar);
