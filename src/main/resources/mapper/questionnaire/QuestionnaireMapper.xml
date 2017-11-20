@@ -90,6 +90,10 @@
         <if test="answerModelType != null and answerModelType !=''">
             AND g.answer_model_type = ${answerModelType}
         </if>
+
+        <if test="shelfTime != null and shelfTime != ''">
+            AND g.shelf_time >= #{start} AND g.shelf_time &lt;= #{end}
+        </if>
         ORDER BY  g.CREATE_TIME DESC
 
     </select>

@@ -36,9 +36,10 @@ public class QuestionnaireController {
     @PostMapping("/questionnaireListByPage")
     @ResponseBody
     public Result questionnaireListByPage(String params, int page, int size) {
-        Questionnaire questionnaire= JSON.parseObject(params,Questionnaire.class);
+        //Questionnaire questionnaire= JSON.parseObject(params,Questionnaire.class);
+        Map<String,Object> map = JSON.parseObject(params, Map.class);
         PageHelper.startPage(page, size);
-        List<Questionnaire> list =questionnaireService.questionnaireListByPage(questionnaire);
+        List<Questionnaire> list =questionnaireService.questionnaireListByPage(map);
         //查询所有的相关数据
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
