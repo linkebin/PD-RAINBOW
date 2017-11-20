@@ -13,16 +13,16 @@
     <div th:replace="project/cube/common/header :: header(${2})">Header</div>
     <div class="eui-area">
         <div class="payLeft eui-row eui-padding20">
-            <div class="eui-col-md1 eui-marginR20">登录账号：</div>
+            <div class="eui-col-md1 eui-marginR20">登录账号 :</div>
             <div class="eui-col-md10" th:text="${session.userSession.userName}"><span class="eui-color-blue">（ID：2017023）</span>
             </div>
-            <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数：</div>
+            <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数 :</div>
             <ul class="eui-col-md10 payTicket" id="pay">
             </ul>
             <div class="eui-col-md12 eui-font12 send"><span class="eui-color-blue"></span></div>
-            <div class="eui-col-md1 eui-marginR20 money">应付金额：</div>
+            <div class="eui-col-md1 eui-marginR20 money">应付金额 :</div>
             <div class="eui-col-md10"><span class="pay-color-red eui-font24"></span>元</div>
-            <div class="eui-col-md1 eui-marginR20 eui-marginT15">支付方式：</div>
+            <div class="eui-col-md1 eui-marginR20 eui-marginT15">支付方式 :</div>
             <ul class="eui-col-md10 payTicket">
                 <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1 payTicketNew">
                     <input type="hidden" value="支付宝">
