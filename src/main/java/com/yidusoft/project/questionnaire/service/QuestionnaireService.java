@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public interface QuestionnaireService extends Service<Questionnaire> {
     //分页条件查询相关的问卷信息
-    List<Questionnaire> questionnaireListByPage(Questionnaire questionnaire);
+    List<Questionnaire> questionnaireListByPage(Map<String, Object> questionnaire);
     //添加问卷
     Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId, String userIds);
 

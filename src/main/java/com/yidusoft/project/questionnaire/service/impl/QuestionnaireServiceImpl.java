@@ -44,7 +44,7 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
     private QuestionnairePermissionMiddleMapper questionnairePermissionMiddleMapper;
     //分页条件查询相关的问卷信息
     @Override
-    public List<Questionnaire> questionnaireListByPage(Questionnaire questionnaire) {
+    public List<Questionnaire> questionnaireListByPage(Map<String, Object> questionnaire) {
         return questionnaireMapper.questionnaireListByPage(questionnaire);
     }
 
