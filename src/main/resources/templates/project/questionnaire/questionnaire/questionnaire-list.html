@@ -25,12 +25,45 @@
     <div class="eui-mn1 eui-bg-white">
         <div class="eui-mn1-type">
             <form class="eui-form" id="searchFrom">
+                <label class="eui-form-label"></label>
                 <div class="eui-input-inline eui-padding10">
                     <input type="text" name="questionnaireCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
                 </div>
+
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="questionnaireType" e-verify="title" value="" autocomplete="off" placeholder="问卷类型" class="eui-input">
+                </div>
+
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="gaugeId" e-verify="title" value="" autocomplete="off" placeholder="量表模板名称" class="eui-input">
+                </div>
+
                 <div class="eui-input-inline">
                     <span class="eui-btn" onclick="doSearch()">查询</span>
                     <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+
+                <div class="eui-form-item eui-padding10">
+                    <label class="eui-form-label"></label>
+                    <div class="eui-input-inline" style="width:185px">
+                        <select name="questionnaireState">
+                            <option value="" >请选择状态</option>
+                            <option value="1" >设计中</option>
+                            <option value="2" >使用中</option>
+                            <option value="3" >已下架</option>
+                        </select>
+                    </div>
+                    <div class="eui-input-inline " style="padding-left: 12px;width:185px">
+
+                        <select name="answerModelType">
+                            <option value="" >请选择模板类型</option>
+                            <option value="1" >横版</option>
+                            <option value="2" >竖版</option>
+                        </select>
+                    </div>
+                    <!--<div class="eui-input-inline" style="padding-left: 15px;width:185px">-->
+                        <!--<input type="text" name="shelfTime" id="shelfTime" e-verify="title" value="" autocomplete="off" placeholder="上架时间" class="eui-input" readonly="readonly">-->
+                    <!--</div>-->
                 </div>
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
@@ -122,6 +155,12 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
     });
 
 
+
+    //上架时间
+    laydate.render({
+        elem: '#shelfTime'
+        ,range: true
+    });
 
 });
 

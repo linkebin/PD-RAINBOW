@@ -70,6 +70,26 @@
         <if test="questionnaireState != null and questionnaireState != ''">
             AND   g.questionnaire_state=#{questionnaireState}
         </if>
+
+        <if test="questionnaireType != null and questionnaireType != ''">
+            AND g.questionnaire_type IN (
+            SELECT qt.id_ FROM questionnaire_type qt WHERE qt.questionnaire_type_name LIKE '%${questionnaireType}%'
+            )
+        </if>
+
+        <if test="gaugeId != null and gaugeId != ''">
+            AND g.gauge_id IN (
+            SELECT gg.id_ FROM  gauge gg WHERE gg.gauge_name LIKE '%${gaugeId}%'
+            )
+        </if>
+
+        <if test="questionnaireState != null and questionnaireState != ''">
+            AND g.questionnaire_state = ${questionnaireState}
+        </if>
+
+        <if test="answerModelType != null and answerModelType !=''">
+            AND g.answer_model_type = ${answerModelType}
+        </if>
         ORDER BY  g.CREATE_TIME DESC
 
     </select>

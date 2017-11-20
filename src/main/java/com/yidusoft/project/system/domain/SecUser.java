@@ -107,6 +107,28 @@ public class SecUser implements Serializable {
     @Column(name = "HEAD_IMG")
     private String headImg;
 
+    /**
+     * 获取资质认证
+     * @return
+     */
+    public String getCertification() {
+        return certification;
+    }
+
+    /**
+     * 设置资质认证
+     * @param certification
+     */
+    public void setCertification(String certification) {
+        this.certification = certification;
+    }
+
+    /**
+     * 资质认证
+     */
+    @Column(name="CERTIFICATION")
+    private String certification;
+
     @Column(name = "COMPANY_ID")
     private String companyId;
 

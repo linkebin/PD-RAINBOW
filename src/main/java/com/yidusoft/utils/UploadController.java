@@ -406,6 +406,63 @@ public class UploadController {
     }
 
     /**
+     * 资质上传
+     * @param request
+     * @param file
+     * @return
+     */
+    @PostMapping("/uploadCertification")
+    @ResponseBody
+    public String uploadCertification(HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+        FileResponseData fileResponseData = null;
+        String userId = Security.getUserId();
+        try {
+            String fileName = file.getOriginalFilename();// 文件原名称
+
+            String type = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+
+            if (type.equals(".jpg") || type.equals(".png")) {
+                String realPath = System.getProperty("user.dir");
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String childPath = "/upload/certification/"+format.format(new Date());
+
+                String path = realPath + childPath;
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+
+                file.transferTo(new File(path + "/" + userId + type));
+
+                fileResponseData = new FileResponseData();
+                fileResponseData.setCode(0);
+                fileResponseData.setMsg("上传成功");
+                Data data = new Data();
+                data.setSrc(childPath + "/" + userId + type);
+                fileResponseData.setData(data);
+
+                SecUser secUser = secUserService.findById(Security.getUserId());
+                secUser.setCertification(childPath + "/" + userId + type);
+                Session session = SecurityUtils.getSubject().getSession();
+                session.setAttribute("userSessionId", secUser.getId());
+                session.setAttribute("userSession", secUser);
+                secUserService.update(secUser);
+
+            } else {
+                fileResponseData.setCode(500);
+                fileResponseData.setMsg("只能上传png与jpg的文件！");
+                return JSON.toJSONString(fileResponseData);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return JSON.toJSONString(fileResponseData);
+    }
+
+
+    /**
      * 百度富文本的配置参数
      *
      * @param request
