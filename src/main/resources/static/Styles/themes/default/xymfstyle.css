@@ -721,6 +721,9 @@ body .eui-layer-title{
 .pagesBg .eui-laypage .eui-laypage-curr .eui-laypage-em{
     background-color: #009688!important;
 }
+.pagesbgBlue .eui-laypage .eui-laypage-curr .eui-laypage-em{
+    background-color: #1e9eff!important;
+}
 .l-tree .l-over span{
     text-decoration: none!important;
 }

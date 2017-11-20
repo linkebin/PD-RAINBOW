@@ -12,50 +12,54 @@
         <div th:replace="project/cube/common/left :: left(${null})">sidebar</div>
         <div class="eui-body">
             <div class="xymfContent">
-                <div class="eui-form eui-margin10">
-                    <div class="eui-row eui-paddingTB10 eui-borderB">
-                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
-                            <i class='eui-icon eui-font24'>&#xe63c;</i> 账户信息
-                        </div>
-                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
-                            <small>剩余问卷使用卷</small>
-                        </div>
-                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
-                            <i class="questionnairesTotal">0张</i>
-                        </div>
+                <div class="visitorTitle">
+                    账户信息
+                </div>
+                <div class="eui-row eui-padding10 eui-font16">
+                    <div class="eui-col-md2">
+                        <a href="#" class="eui-textIn">
+                            <p class="eui-textNum"><span class=" eui-color-green questionnairesTotal">10</span> 个</p>
+                            <p class="name">剩余问卷使用量</p>
+                        </a>
+                    </div>
+                    <div class="eui-col-md2">
+                        <a href="#" class="eui-textIn">
+                            <p class="eui-textNum"><span class="eui-color-blue" id="buyTotal">2</span> 张</p>
+                            <p class="name">购买</p>
+                        </a>
+                    </div>
+                    <div class="eui-col-md2">
+                        <a href="#" class="eui-textIn">
+                            <p class="eui-textNum"><span class="eui-color-orange" id="useTotal">3</span> 张</p>
+                            <p class="name">使用</p>
+                        </a>
                     </div>
                 </div>
-                <div class="eui-form eui-margin10">
+                <div class="eui-margin20">
                     <form id="searchFrom" onsubmit="return false;">
                         <div class="eui-form eui-margin10">
-                            <div class="eui-form-item">
-                                <label class="eui-form-label">交易时间</label>
-                                <div class="eui-input-inline">
+                            <div class="eui-form-item eui-row">
+                                <label class="eui-col-md1 eui-marginT10">交易时间</label>
+                                <div class="eui-input-inline eui-col-md3">
                                     <input type="text" id="startTime" name="startTime" class="eui-input">
                                 </div>
-                                <label class="eui-form-label" style="text-align: center">至</label>
+                                <label class="eui-col-md1 eui-marginT10" style="width:28px;">至</label>
                                 <div class="eui-input-inline">
                                     <input type="text" id="endTime" name="endTime" class="eui-input">
                                 </div>
-                                <label class="eui-form-label">最近</label>
-                                <div class="eui-input-inline">
-                                    <button class="eui-btn eui-btn-normal" id="sevenDays">7天</button>
-                                    <button class="eui-btn eui-btn-normal" id="thirtyDays">30天</button>
+                                <label class="eui-form-label eui-col-md1">最近</label>
+                                <div class="eui-input-inline eui-col-md3 eui-marginT5">
+                                    <button class="eui-btn eui-btn-normal eui-btn-small" id="sevenDays">7天</button>
+                                    <button class="eui-btn eui-btn-normal eui-btn-small" id="thirtyDays">30天</button>
                                 </div>
                             </div>
                         </div>
                     </form>
-                    <div class="eui-row eui-paddingTB10 eui-borderB">
-                        <div class="eui-col-md12 eui-font18 eui-paddingT5">
-                            <small>购买<i class="eui-color-green" id="buyTotal"></i>张</small>
-                            <small>使用<i class="eui-color-red" id="useTotal"></i>张</small>
-                        </div>
-                    </div>
                 </div>
-                <div class="xymfForm">
+                <div class="xymfForm eui-padding10">
                     <table class="eui-table eui-form" e-even e-skin="nob" id="accountTable">
                         <colgroup>
-                            <col width="60">
+                            <col width="50">
                             <col width="100">
                             <col width="200">
                             <col width="100">
@@ -79,7 +83,7 @@
 
                         </tbody>
                     </table>
-                    <div style="margin-left: 30px;" id="pages"></div>
+                    <div style="margin-left: 30px;" id="pages" class="pagesbgBlue"></div>
                 </div>
             </div>
         </div>
@@ -228,7 +232,7 @@
         $.get("/user/questionnaires/list", function (result) {
             if (result.code == 200) {
                 if (result.data != null) {
-                    $('.questionnairesTotal').html(result.data.questionnairesTotal + "张");
+                    $('.questionnairesTotal').html(result.data.questionnairesTotal);
                 }
             }
         })
