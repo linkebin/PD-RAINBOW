@@ -59,7 +59,7 @@ SELECT su.* FROM sec_user su
         </if>
         
         <if test="mobile != null and mobile != ''">
-            AND su.MOBILE = '%${mobile}%'
+            AND su.MOBILE LIKE '%${mobile}%'
         </if>
 
         <if test="email != null and email !=''">
