@@ -386,24 +386,18 @@
         $.post("/active/participant/getTotal", {activityId: $('#id').val()}, function (result) {
             console.log(result);
             if(result.code=200){
-                var num = parseFloat(result.data);
-                var total = parseFloat($('input[name="activityTotal"]').val());
-                var progressBar = total <= 0 ? "0%" : (Math.round(num / total * 100000) / 1000.00 + "%");
+                console.log(result.data/$('input[name="activityTotal"]').val()*100);
+                var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
+                progressBar = parseInt(progressBar);
                 console.log(progressBar);
+                if(progressBar<1){
+                    progressBar=1;
+                }
                 setTimeout(function () {
-                    element.progress('activity', "9.0%");
-                },1500);
+                    element.progress('activity', progressBar+"%");
+                },500);
             }
         })
-    }
-
-    function GetPercent(num, total) {
-        num = parseFloat(num);
-        total = parseFloat(total);
-        if (isNaN(num) || isNaN(total)) {
-            return "-";
-        }
-        return total <= 0 ? "0%" : (Math.round(num / total * 100000) / 1000.00 + "%");
     }
 </script>
 
