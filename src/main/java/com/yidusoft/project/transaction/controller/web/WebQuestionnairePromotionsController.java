@@ -36,6 +36,13 @@ public class WebQuestionnairePromotionsController {
         return "project/transaction/questionnairePromotions/questionnairePromotionsUpdate";
     }
 
+    @RequestMapping("/check/{id}")
+    public String check(@PathVariable String id,Model model) {
+        QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
+        model.addAttribute("promotions", questionnairePromotions);
+        return "project/transaction/questionnairePromotions/questionnairePromotionsCheck";
+    }
+
     @RequestMapping("/choose/{type}")
     public String choose(@PathVariable String type,Model model) {
         model.addAttribute("type",type);

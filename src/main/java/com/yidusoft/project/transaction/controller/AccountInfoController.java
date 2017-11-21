@@ -6,6 +6,7 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.domain.AccountInfo;
 import com.yidusoft.project.transaction.service.AccountInfoService;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -34,6 +35,7 @@ public class AccountInfoController {
     public Result list(Integer page, Integer size, String startTime, String endTime) {
         PageHelper.startPage(page, size);
         Map<String, String> map = new HashMap<>();
+        map.put("userId", Security.getUser().getId());
         map.put("startTime",startTime);
         map.put("endTime",endTime);
         List<AccountInfo> list = accountInfoService.getAccountByTime(map);
@@ -48,6 +50,7 @@ public class AccountInfoController {
     @GetMapping("/list")
     public Result list() {
         Map<String, String> map = new HashMap<>();
+        map.put("userId", Security.getUser().getId());
         List<AccountInfo> list = accountInfoService.getAccountByTime(map);
         return ResultGenerator.genSuccessResult(list);
     }

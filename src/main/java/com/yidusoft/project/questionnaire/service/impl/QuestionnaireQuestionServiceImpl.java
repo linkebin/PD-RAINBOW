@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -389,7 +390,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     //消费扣除活动发起人的使用卷
     public void deleteDuction(String activityId) {
         LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        if(launchActivities.getInitiatorType()!=2){
+        if(launchActivities.getInitiatorType()!=1){
             updateUserQuestionnaires(launchActivities.getUserId());
         }
     }
@@ -422,7 +423,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             accountInfo.setAccountRemarks("使用了问卷");
             accountInfo.setAccountTotal("1张");
             accountInfo.setBuyTotal("--");
-            accountInfo.setCostMoney("--");
+            BigDecimal volumn = new BigDecimal("0");
+            accountInfo.setCostMoney(volumn);
             accountInfo.setUserId(userId);
             UserQuestionnaires uq = userQuestionnairesService.findBy("userId", userId);
             if(uq!=null){

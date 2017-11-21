@@ -78,7 +78,7 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
             content += "数量:" + productSettings.getProductTotal() + "修改为:" + product.getProductTotal() + "、";
             DecimalFormat df = new DecimalFormat("0.0");
         }
-        if (Float.parseFloat(productSettings.getProductPrice().toString()) != Float.parseFloat(productSettings.getProductPrice().toString())) {
+        if (productSettings.getProductPrice().toString().equals(productSettings.getProductPrice().toString())) {
             content += "价格:" + productSettings.getProductPrice() + "修改为:" + product.getProductPrice() + "、";
         }
         if (productSettings.getProductState() != product.getProductState()) {

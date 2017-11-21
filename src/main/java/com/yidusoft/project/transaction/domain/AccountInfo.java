@@ -3,6 +3,7 @@ package com.yidusoft.project.transaction.domain;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "account_info")
@@ -48,7 +49,7 @@ public class AccountInfo {
      * 消费金额
      */
     @Column(name = "cost_money")
-    private String costMoney;
+    private BigDecimal costMoney;
 
     /**
      * 用户ID
@@ -175,7 +176,7 @@ public class AccountInfo {
      *
      * @return cost_money - 消费金额
      */
-    public String getCostMoney() {
+    public BigDecimal getCostMoney() {
         return costMoney;
     }
 
@@ -184,7 +185,7 @@ public class AccountInfo {
      *
      * @param costMoney 消费金额
      */
-    public void setCostMoney(String costMoney) {
+    public void setCostMoney(BigDecimal costMoney) {
         this.costMoney = costMoney;
     }
 

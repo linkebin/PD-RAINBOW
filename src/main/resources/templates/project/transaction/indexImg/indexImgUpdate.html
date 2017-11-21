@@ -256,8 +256,10 @@
     }
     var imageText = "";
     function autoSelected() {
-        eui.use('form', function () {
-            var form = eui.form;
+        eui.use(['form','layer'], function () {
+            var form = eui.form
+                    , layer = eui.layer;
+            var indexs = layer.load(2);
             $.post("/index/img/detail", {id: $('#indexImgId').val()}, function (result) {
                 if (result.code == 200) {
                     var indexImg = result.data;
@@ -280,6 +282,7 @@
                         }
                     })
                     $('#demo1').attr("src", "/files" + indexImg.imgPath);
+                    layer.close(indexs);
                 }
             })
         })

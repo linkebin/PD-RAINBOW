@@ -2,135 +2,132 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>查看活动详情</title>
+    <title>查看企业活动</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
     <style>
-        .default_hide {
-            display: none;
+        #promotionsForm input + label {
+            color: red;
         }
-
         .eui-disabled, .eui-disabled:hover {
             color: #333333 !important;
         }
-
         .eui-form-label {
             width: 100px;
             text-align: left;
         }
-
-        #promotionsForm input + label {
-            color: red;
-        }
     </style>
 </head>
 <body>
-<div class="activityContent xymfMargin">
-    <div class="eui-area">
-        <form id="activityForm" onsubmit="return false;">
-            <input type="hidden" th:value="${id}" id="id" name="id"/>
-            <div class="eui-bg-white eui-padding20 activity">
-                <!--基本-->
-                <div class="eui-bg-white eui-form activityContent">
-                    <div class="eui-form-item">
-                        <label class="eui-form-label">活动名称</label>
-                        <div class="eui-input-inline">
-                            <input type="text" name="activityName" readonly class="eui-input">
-                        </div>
-                        <label class="eui-form-label">联系人</label>
-                        <div class="eui-input-inline">
-                            <input type="text" name="contacts" readonly class="eui-input">
-                        </div>
-                        <label class="eui-form-label">参与方</label>
-                        <div class="eui-input-inline">
-                            <input type="text" name="participant" readonly class="eui-input">
-                        </div>
+<div class="eui-bg-white eui-row eui-paddingT10">
+    <div class="eui-row eui-padding10 eui-borderB">
+        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
+            <i class='eui-icon eui-font24'>&#xe654;</i> 查看企业活动
+        </div>
+    </div>
+    <form class="eui-form eui-marginT10 eui-paddingR10" id="activityForm" onsubmit="return false;">
+        <input type="hidden" th:value="${id}" id="id" name="id"/>
+        <!--基本-->
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动名称</label>
+            <div class="eui-input-inline">
+                <input type="text" name="activityName" readonly class="eui-input">
+            </div>
+            <label class="eui-form-label">联系人</label>
+            <div class="eui-input-inline">
+                <input type="text" name="contacts" readonly class="eui-input">
+            </div>
+            <label class="eui-form-label">参与方</label>
+            <div class="eui-input-inline">
+                <input type="text" name="participant" readonly class="eui-input">
+            </div>
+        </div>
+        <div data-toggle="distpicker">
+            <div class="eui-form-item">
+                <label class="eui-form-label">活动地点</label>
+                <div id="ld" data-toggle="distpicker">
+                    <div class="eui-input-inline">
+                        <select id="province" class="eui-input" name="province" disabled>
+
+                        </select>
                     </div>
-                    <div data-toggle="distpicker">
-                        <div class="eui-form-item">
-                            <label class="eui-form-label">活动地点</label>
-                            <div id="ld" data-toggle="distpicker">
-                                <div class="eui-input-inline">
-                                    <select id="province" class="eui-input" name="province" disabled>
+                    <div class="eui-input-inline">
+                        <select id="city" class="eui-input" name="city" disabled>
 
-                                    </select>
-                                </div>
-                                <div class="eui-input-inline">
-                                    <select id="city" class="eui-input" name="city" disabled>
-
-                                    </select>
-                                </div>
-                                <div class="eui-input-inline">
-                                    <select id="district" class="eui-input" name="district" disabled>
-
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="eui-input-inline">
-                                <input type="text" name="activityAddr" readonly class="eui-input"
-                                       style="width: 250px;">
-                            </div>
-                        </div>
+                        </select>
                     </div>
-                    <div class="eui-form-item">
-                        <label class="eui-form-label">问卷名称</label>
-                        <div class="eui-input-inline">
-                            <select e-filter="uestionnaireId" name="uestionnaireId" disabled>
+                    <div class="eui-input-inline">
+                        <select id="district" class="eui-input" name="district" disabled>
 
-                            </select>
-                        </div>
-                        <label class="eui-form-label">联系电话</label>
-                        <div class="eui-input-inline">
-                            <input type="text" name="phone" readonly class="eui-input">
-                        </div>
-                        <label class="eui-form-label">活动人数</label>
-                        <div class="eui-input-inline">
-                            <input type="text" name="activityTotal" readonly class="eui-input">
-                        </div>
-                    </div>
-                    <div class="eui-form-item">
-
-                        <label class="eui-form-label">活动开始时间</label>
-                        <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly name="activityStart">
-                        </div>
-                        <label class="eui-form-label">活动结束时间</label>
-                        <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly="readonly" name="activityEnd">
-                        </div>
-                    </div>
-                    <div class="eui-form-item">
-                        <label class="eui-form-label">活动邀请码</label>
-                        <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly name="activityPorn">
-                        </div>
-                        <label class="eui-form-label">活动访问网址</label>
-                        <div class="eui-input-inline">
-                            <input type="text" class="eui-input" readonly name="uestionnaireUri" id="url">
-                        </div>
-                        <div class="eui-input-inline">
-                            <button class="eui-btn eui-btn-normal" id="copyBtn">复制链接</button>
-                        </div>
-                    </div>
-
-                    <div class="eui-form-item">
-                        <label class="eui-form-label">活动目的</label>
-                        <div class="eui-input-block">
-                        <textarea class="eui-input" style="height: 100px;width: 850px" name="activityAim" readonly>
-                        </textarea>
-                        </div>
+                        </select>
                     </div>
                 </div>
+                <div class="eui-input-inline">
+                    <input type="text" name="activityAddr" readonly class="eui-input"
+                           style="width: 250px;">
+                </div>
             </div>
-        </form>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">问卷名称</label>
+            <div class="eui-input-inline">
+                <select e-filter="uestionnaireId" name="uestionnaireId" disabled>
+
+                </select>
+            </div>
+            <label class="eui-form-label">联系电话</label>
+            <div class="eui-input-inline">
+                <input type="text" name="phone" readonly class="eui-input">
+            </div>
+            <label class="eui-form-label">活动人数</label>
+            <div class="eui-input-inline">
+                <input type="text" name="activityTotal" readonly class="eui-input">
+            </div>
+        </div>
+        <div class="eui-form-item">
+
+            <label class="eui-form-label">活动开始时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" readonly name="activityStart">
+            </div>
+            <label class="eui-form-label">活动结束时间</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" readonly="readonly" name="activityEnd">
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动邀请码</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" readonly name="activityPorn">
+            </div>
+            <label class="eui-form-label">活动访问网址</label>
+            <div class="eui-input-inline">
+                <input type="text" class="eui-input" readonly name="uestionnaireUri" id="url">
+            </div>
+            <div class="eui-input-inline">
+                <button class="eui-btn eui-btn-normal" id="copyBtn">复制链接</button>
+            </div>
+        </div>
+
+        <div class="eui-form-item">
+            <label class="eui-form-label">活动目的</label>
+            <div class="eui-input-block">
+                            <textarea class="eui-input" style="height: 100px;width: 850px" name="activityAim" readonly>
+                            </textarea>
+            </div>
+        </div>
+    </form>
+    <div class="eui-bg-white eui-padding20">
+        <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+            <div class="eui-col-md12 eui-font16">活动进度</div>
+        </div>
+        <div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="activity">
+            <div class="eui-progress-bar eui-bg-blue"></div>
+        </div>
     </div>
-</div>
-<div class="activityContent xymfMargin">
-    <div class="eui-area">
-        <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
-            <div class="eui-col-md6">
-                <span class="eui-panels-title1"><i class="eui-icon">&#xe632;</i> 活动进度</span>
-            </div>
+    <div class="eui-bg-white eui-padding20">
+        <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
+            <div class="eui-col-md12 eui-font16">填报人信息</div>
         </div>
         <div class="eui-row">
             <div class="eui-col-md12">
@@ -138,16 +135,22 @@
                     <table class="eui-table" id="participantTable">
                         <input type="hidden" id="questionnaireId">
                         <colgroup>
-                            <col width="100">
-                            <col>
+                            <col width="150">
+                            <col width="200">
+                            <col width="60">
+                            <col width="80">
+                            <col width="200">
+                            <col width="200">
+                            <col width="60">
                         </colgroup>
                         <thead>
                         <th>姓名</th>
-                        <th>手机号码</th>
                         <th>性别</th>
                         <th>年龄</th>
+                        <th>手机号码</th>
                         <th>填报时间</th>
                         <th>关注度</th>
+                        <th>操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -179,7 +182,7 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-    var form, laypage, layer;
+    var form, laypage, layer, element;
     $(function () {
         $('#copyBtn').zclip({
             path: "/Scripts/plugins/jqueryZclip/ZeroClipboard.swf",
@@ -187,10 +190,11 @@
                 return $('#url').val();
             }
         });
-        eui.use(['form', 'laypage', 'layer'], function () {
+        eui.use(['form', 'laypage', 'layer', 'element'], function () {
             form = eui.form;
             laypage = eui.laypage;
             layer = eui.layer;
+            element = eui.element;
             getQuestions();//获取问卷名称
             getActivityInfo();//获取填报人的信息
         });
@@ -244,10 +248,11 @@
             var createTime = "'" + new Date(participant.fillingTime).Format("yyyy-MM-dd") + "'";
             tableHtml += '<tr>' +
                     '<td>' + participant.fullName + '</td>' +
-                    '<td>' + participant.phone + '</td>' +
                     '<td>' + sex + '</td>' +
                     '<td>' + participant.age + '</td>' +
+                    '<td>' + participant.phone + '</td>' +
                     '<td>' + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
+                    '<td></td>' +
                     '<td><button class="eui-btn eui-btn-primary eui-btn-mini" title="查看填报详情" onclick="check(' + id + ',' + createTime + ')"><i class="eui-icon">&#xe621;</i></button></td>' +
                     '</tr>';
         }
@@ -288,6 +293,7 @@
                 $('#questionnaireId').val(activity.uestionnaireId);
                 form.render('select');
                 layer.close(index);
+                getTotal();//获取填报的人数
             }
         })
     }
@@ -302,7 +308,7 @@
                 var question = result.data[0];
                 var acquisitionId = question.id;
                 var userId = question.userId;
-                window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId="+$('#questionnaireId').val()+"&userId="+userId+"&acquisitionId="+acquisitionId);
+                window.open("/web/cube/getQuestionnaireForVisitor?questionnaireId=" + $('#questionnaireId').val() + "&userId=" + userId + "&acquisitionId=" + acquisitionId);
             }
         })
     }
@@ -328,6 +334,25 @@
                 }
                 form.render('select');
                 detail();
+            }
+        })
+    }
+
+    /**
+     * 获取已经填报的人数
+     */
+    function getTotal() {
+        console.log();
+        $.post("/active/participant/getTotal", {activityId: $('#id').val()}, function (result) {
+            if(result.code=200){
+                console.log(result);
+                console.log(result.data/$('input[name="activityTotal"]').val());
+                var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
+                progressBar = progressBar+"%";
+                console.log(progressBar);
+                setTimeout(function () {
+                    element.progress('activity', progressBar);
+                },1000);
             }
         })
     }

@@ -33,7 +33,6 @@
         </div>
     </div>
 </div>
-
 <div class="activityContent xymfMargin">
     <div class="eui-area">
         <div class="visitorTitle">
@@ -135,7 +134,7 @@
                     <div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                         <div class="eui-col-md12 eui-font16">活动进度</div>
                     </div>
-                    <div class="eui-progress eui-progress-big" e-showpercent="yes">
+                    <div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="activity">
                         <div class="eui-progress-bar eui-bg-blue"></div>
                     </div>
                 </div>
@@ -152,11 +151,11 @@
                                     <colgroup>
                                         <col width="150">
                                         <col width="200">
-                                        <col width="100">
-                                        <col width="100">
+                                        <col width="60">
+                                        <col width="80">
                                         <col width="200">
                                         <col width="200">
-                                        <col>
+                                        <col width="60">
                                     </colgroup>
                                     <thead>
                                     <th>姓名</th>
@@ -201,7 +200,7 @@
 <script src="/pack.ajax.js"></script>
 <script src="/card.js"></script>
 <script>
-    var form, laypage, layer;
+    var form, laypage, layer ,element;
     $(function () {
         $('#copyBtn').zclip({
             path: "/Scripts/plugins/jqueryZclip/ZeroClipboard.swf",
@@ -213,7 +212,7 @@
             form = eui.form;
             laypage = eui.laypage;
             layer = eui.layer;
-            var element = eui.element;
+            element = eui.element;
             getQuestions();//获取问卷名称
             getActivityInfo();//获取填报人的信息
         });
@@ -385,14 +384,26 @@
     function getTotal() {
         console.log();
         $.post("/active/participant/getTotal", {activityId: $('#id').val()}, function (result) {
+            console.log(result);
             if(result.code=200){
-                console.log(result.data/$('input[name="activityTotal"]').val());
-                var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
-                progressBar = progressBar+"%";
-                $('.eui-progress-bar').css("width",progressBar);
-                $('.eui-progress-text').text(progressBar);
+                var num = parseFloat(result.data);
+                var total = parseFloat($('input[name="activityTotal"]').val());
+                var progressBar = total <= 0 ? "0%" : (Math.round(num / total * 100000) / 1000.00 + "%");
+                console.log(progressBar);
+                setTimeout(function () {
+                    element.progress('activity', "9.0%");
+                },1500);
             }
         })
+    }
+
+    function GetPercent(num, total) {
+        num = parseFloat(num);
+        total = parseFloat(total);
+        if (isNaN(num) || isNaN(total)) {
+            return "-";
+        }
+        return total <= 0 ? "0%" : (Math.round(num / total * 100000) / 1000.00 + "%");
     }
 </script>
 

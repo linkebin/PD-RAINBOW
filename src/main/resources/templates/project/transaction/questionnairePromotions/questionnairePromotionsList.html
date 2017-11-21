@@ -201,9 +201,11 @@
         if(sate==1){
             return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit " title="编辑促销" onclick="promotionEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除促销" onclick="deletePromotion(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ' +
-                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="启用促销" onclick="enableActivity('+"''," + id + ','+end+')"><i class="eui-icon">&#xe618;</i></button> ';
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="启用促销" onclick="enablePromotions('+"''," + id + ','+end+')"><i class="eui-icon">&#xe618;</i></button> ';
         }else if(sate==2 && now < end){
-            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="enableActivity('+"'termination'," + id + ','+end+')"><i class="eui-icon">&#xe6d8;</i></button> ';
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="enablePromotions('+"'termination'," + id + ','+end+')"><i class="eui-icon">&#xe6d8;</i></button> ';
+        }else{
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="checkPromotions(' + id + ')"><i class="eui-icon">&#xe621;</i></button> ';
         }
     }
 
@@ -232,6 +234,19 @@
         }
         parent.element.tabChange("nav-tab", 1002);
 
+    }
+
+    //查看促销
+    function checkPromotions(id) {
+        if(parent.$(".eui-tab-title li[e-id='1003']").length<=0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '查看促销详情',
+                type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="web/promotion/check/' + id + '"></iframe>'
+                , id: 1003 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 1003);
     }
 
     parent.element.on('tab(nav-tab)', function(elem){
@@ -273,7 +288,7 @@
     }
 
     //启用促销
-    function enableActivity(data,id,end) {
+    function enablePromotions(data,id,end) {
         $.post("/product/settings/updateListPage",{page:1,size:10,id:id},function (result) {
             if(result.code==200){
                 var message="";

@@ -70,7 +70,6 @@
                 <th>活动名称</th>
                 <th>活动目的</th>
                 <th>创建人</th>
-                <th>审批状态</th>
                 <th>操 作</th>
             </tr>
             </thead>
@@ -183,7 +182,6 @@
         var tableHtml = '';
         for (var item in activityList) {
             var activity = activityList[item];
-            var status = "不用审批";//审批状态
             var initiatorType="企业活动";//活动类型
             if(activity.initiatorType==2){
                 initiatorType="调研活动";
@@ -194,7 +192,6 @@
                     '<td>' + activity.activityName + '</td>' +
                     '<td>' + activity.activityAim + '</td>' +
                     '<td>' + activity.creator + '</td>' +
-                    '<td>' + status + '</td>' +
                     '<td>' +
                     '<div class="eui-btn-group"> ' +
                     '' + Buts(activity) + '' +
@@ -231,7 +228,7 @@
 
     //查看活动详情
     function checkActivity(id) {
-        var message = '查看活动详情';
+        var message = '查看企业活动详情';
         parent.element.tabAdd('nav-tab', {
             title: message
             ,type: 2

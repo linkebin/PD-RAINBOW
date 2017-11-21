@@ -27,13 +27,10 @@
         SELECT oo.*,ps.promotions_id,ps.product_name FROM order_online oo,product_settings ps
         where oo.deleted=0 AND oo.user_id=#{userId}
         AND oo.product_id=ps.ID_
-        <if test="orderState == null or orderState == ''">
-            ORDER BY create_time DESC
-        </if>
         <if test="orderState != null and orderState != ''">
-            AND order_state=#{orderState} ORDER BY create_time DESC
+            AND order_state=#{orderState}
         </if>
-
+        ORDER BY payment_time DESC
     </select>
 
     <update id="updateOrderOnline" parameterType="String">

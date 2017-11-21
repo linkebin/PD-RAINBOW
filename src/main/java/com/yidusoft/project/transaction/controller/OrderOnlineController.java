@@ -157,7 +157,7 @@ public class OrderOnlineController {
             userQuestionnaire.setUserId(orderOnline.getUserId());
             userQuestionnaire.setQuestionnairesCumulativeTotal(0);
             if (productSettings.getProductType() == 1) {
-                userQuestionnaires.setMember(2);
+                userQuestionnaire.setMember(2);
                 userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
             }else{
                 Date date = new Date();
@@ -165,9 +165,9 @@ public class OrderOnlineController {
                 rightNow.setTime(date);
                 rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
                 date = rightNow.getTime();
-                userQuestionnaires.setBuyTime(new Date());
-                userQuestionnaires.setMember(1);
-                userQuestionnaires.setEndTime(date);
+                userQuestionnaire.setBuyTime(new Date());
+                userQuestionnaire.setMember(1);
+                userQuestionnaire.setEndTime(date);
             }
             userQuestionnairesService.save(userQuestionnaire);
         }
@@ -185,7 +185,7 @@ public class OrderOnlineController {
         }
         accountInfo.setBuyTotal(buyTotal);
         accountInfo.setAccountTotal("--");
-        accountInfo.setCostMoney(orderOnline.getOrderMoney()+"元");
+        accountInfo.setCostMoney(orderOnline.getOrderMoney());
         accountInfo.setUserId(orderOnline.getUserId());
         UserQuestionnaires uq = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
         accountInfo.setAccountSurplus(uq.getQuestionnairesTotal());

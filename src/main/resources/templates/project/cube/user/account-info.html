@@ -18,21 +18,36 @@
                 <div class="eui-row eui-padding10 eui-font16">
                     <div class="eui-col-md2">
                         <a href="#" class="eui-textIn">
-                            <p class="eui-textNum"><span class=" eui-color-green questionnairesTotal">10</span> 个</p>
+                            <p class="eui-textNum"><span class=" eui-color-green questionnairesTotal">0</span> 个</p>
                             <p class="name">剩余问卷使用量</p>
                         </a>
                     </div>
                     <div class="eui-col-md2">
                         <a href="#" class="eui-textIn">
-                            <p class="eui-textNum"><span class="eui-color-blue" id="buyTotal">2</span> 张</p>
+                            <p class="eui-textNum"><span class="eui-color-blue" id="buyTotal">0</span> 张</p>
                             <p class="name">购买</p>
                         </a>
                     </div>
                     <div class="eui-col-md2">
                         <a href="#" class="eui-textIn">
-                            <p class="eui-textNum"><span class="eui-color-orange" id="useTotal">3</span> 张</p>
+                            <p class="eui-textNum"><span class="eui-color-orange" id="useTotal">0</span> 张</p>
                             <p class="name">使用</p>
                         </a>
+                    </div>
+                    <div id="noMember">
+                        <div class="eui-col-md3">
+                            <div class="eui-font20 eui-color-blue">
+                                <img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""> 您还不是会员
+                            </div>
+                        </div>
+                        <div class="eui-col-md2">
+                            <div class="eui-font20 eui-color-blue">
+                                <button class="eui-btn eui-btn-normal">去开通</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="isMember">
+
                     </div>
                 </div>
                 <div class="eui-margin20">
@@ -219,7 +234,7 @@
                     '<td>' + account.accountRemarks + '</td>' +
                     '<td>' + account.buyTotal + '</td>' +
                     '<td>' + account.accountTotal + '</td>' +
-                    '<td>' + account.costMoney + '</td>' +
+                    '<td>' + account.costMoney + '元</td>' +
                     '<td>' + account.accountSurplus + '张</td>' +
                     '</tr>';
 
@@ -227,12 +242,24 @@
         return tableHtml;
     }
 
+    $('#isMember').hide();
+    $('#noMember').hide();
     //获取用户剩余的问卷使用卷
     function getTotal() {
         $.get("/user/questionnaires/list", function (result) {
             if (result.code == 200) {
                 if (result.data != null) {
                     $('.questionnairesTotal').html(result.data.questionnairesTotal);
+                    if(result.data.member == 1){
+                        if(new Date()<new Date(result.data.endTime)){
+                            $('#isMember').show();
+                            $('#isMember').html("会员到期时间："+new Date(result.data.endTime).Format("yyyy-MM-dd hh:mm:ss"));
+                        }else{
+                            $('#noMember').show();
+                        }
+                    }else{
+                        $('#noMember').show();
+                    }
                 }
             }
         })
@@ -250,7 +277,7 @@
                 var usedTotal = 0;
                 for (var index in accountList) {
                     var account = accountList[index];
-                    if (account.buyTotal != '--') {
+                    if (account.buyTotal != '--' && account.buyTotal.indexOf("月")==-1) {
                         buyTotal += parseInt(account.buyTotal);
                     }
                     if (account.accountTotal != '--') {
