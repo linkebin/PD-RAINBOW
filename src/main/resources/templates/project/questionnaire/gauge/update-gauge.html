@@ -497,7 +497,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //保存量表
      function saveGauge(){
-
+        $('#gaugeName').val($('#gaugeName').val().trim());
          var questionId=document.getElementsByName("questionIds");
          var questionArray=new Array();
          for(var i=0;i<questionId.length;i++){

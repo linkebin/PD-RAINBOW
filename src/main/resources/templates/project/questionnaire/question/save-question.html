@@ -279,6 +279,8 @@
     }
     //获取问题的数据
     function  getData() {
+        $("[name='questionContent']").val($("[name='questionContent']").val().trim());
+        $("[name='optionAnswer']").val($("[name='optionAnswer']").val().trim());
        var questionType= $("[name='questionType']").val();
        var obj=new Object();
         obj.answerSequence=1;

@@ -890,6 +890,9 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          var questionStr=questionArray.join(",");
          $("#questionStr").val(questionStr);
 
+         $('#questionnaireName').val($('#questionnaireName').val().trim());
+         $('#guide').val($('#guide').val().trim());
+         $('#remarks').val($('#remarks').val().trim());
        //验证
        if($("#questionnaireName").val()==""){
            layer.msg('请填写名称', {

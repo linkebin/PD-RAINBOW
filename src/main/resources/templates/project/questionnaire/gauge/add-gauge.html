@@ -494,6 +494,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          $("#questionStr").val(questionStr);
 
        //验证
+         $('#gaugeName').val($('#gaugeName').val().trim());
        if($("#gaugeName").val()==""){
            layer.msg('请填写名称', {
                time: 2000
