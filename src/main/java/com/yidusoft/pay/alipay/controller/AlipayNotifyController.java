@@ -6,7 +6,6 @@ import com.yidusoft.pay.alipay.domain.AlipayConfig;
 import com.yidusoft.pay.alipay.domain.OrderOnlineBean;
 import com.yidusoft.pay.alipay.service.AlipayOrderVerifiedServcie;
 import com.yidusoft.project.transaction.controller.OrderOnlineController;
-import com.yidusoft.project.transaction.domain.OrderOnline;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -14,7 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -66,9 +65,8 @@ public class AlipayNotifyController {
 
                 OrderOnlineBean orderOnline = alipayOrderVerifiedServcie.getOrderOnlineByCode(out_trade_no);
                 if (orderOnline != null) {//是否能通过订单号查找到该订单
-                    DecimalFormat df = new DecimalFormat("#.00");
-                    String money = df.format(orderOnline.getOrderMoney());
-                    if (money.equals(total_amount)) {//判断金额是否正确
+                    BigDecimal df = new BigDecimal(total_amount);
+                    if (0==df.compareTo(orderOnline.getOrderMoney())) {//判断金额是否正确
                         //判断是否为商户用户号，商户可能有多个用户号，此处后期稍有变动
                         if (seller_id.equals("2088102171354664")) {
                             //检验商户应用ID
