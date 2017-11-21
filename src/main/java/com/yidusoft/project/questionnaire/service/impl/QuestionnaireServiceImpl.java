@@ -60,6 +60,10 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
             questionnaire.setCreator(Security.getUser().getUserName());
             questionnaire.setCreateTime(new Date());
             questionnaire.setDeleted(0);
+            String shelfTime =TimeStampDate.dateToStr(questionnaire.getShelfTime(),"yyyy-MM-dd");
+            if(shelfTime.equals(TimeStampDate.dateToStr(new Date(),"yyyy-MM-dd"))){
+                questionnaire.setQuestionnaireState(2);
+            }
             this.save(questionnaire);
             //问题
             String [] questionArray=questionStr.split(",");
@@ -95,6 +99,12 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
 
         return ResultGenerator.genSuccessResult();
     }
+   //查询问卷的量表类型
+    @Override
+    public Questionnaire findQuestionnaireType(String id) {
+        return questionnaireMapper.findQuestionnaireType(id);
+    }
+
     //查询问卷 相关的 标签   场景
     @Override
     public Result getQuestionnaireInfo(String id) {
@@ -119,6 +129,10 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
         try{
             questionnaire.setUpdateTime(new Date());
             questionnaire.setModifier(Security.getUser().getUserName());
+            String shelfTime =TimeStampDate.dateToStr(questionnaire.getShelfTime(),"yyyy-MM-dd");
+            if(shelfTime.equals(TimeStampDate.dateToStr(new Date(),"yyyy-MM-dd"))){
+                questionnaire.setQuestionnaireState(2);
+            }
             this.update(questionnaire);
             List<QuestionnaireQuestionFactor> questionnaireQuestionFactors=questionnaireQuestionFactorMapper.findQuestionnaireQuestionFactor(questionnaire.getId());
             //删除所有的问卷问题因子
@@ -178,7 +192,7 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
                 String nowTime= TimeStampDate.dateToStr(new Date(),"yyyy-MM-dd");
                 if(nowTime.equals(shelfTime)){
                     questionnaire.setQuestionnaireState(2);
-                    questionnaireMapper.updateByPrimaryKey(questionnaire);
+                    this.update(questionnaire);
                 }
             }
         }catch (Exception e){

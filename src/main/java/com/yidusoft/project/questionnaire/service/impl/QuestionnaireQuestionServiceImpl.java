@@ -8,6 +8,7 @@ import com.yidusoft.project.business.domain.ActiveParticipant;
 import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.ActiveParticipantService;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
+import com.yidusoft.project.questionnaire.computing.QuestionnaireMethod;
 import com.yidusoft.project.questionnaire.dao.DataAcquisitionMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireAnswerMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireMapper;
@@ -24,6 +25,7 @@ import com.yidusoft.project.transaction.domain.UserQuestionnaires;
 import com.yidusoft.project.transaction.service.AccountInfoService;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
 import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.EntityReflex;
 import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static com.yidusoft.configurer.ResourcesStatic.GAUGE;
 
 
 /**
@@ -185,10 +189,19 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 }
 
             }
+            QuestionnaireAnswer questionnaireAnswer=new QuestionnaireAnswer();
+            questionnaireAnswer.setUserId(userId);
+            questionnaireAnswer.setAcquisitionId(dataAcquisitionId);
+            List<QuestionnaireAnswer>  questionnaireAnswerList=questionnaireAnswerMapper.findAnswerForAcquisition(questionnaireAnswer);
             //判断问卷的类型
-            Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
-            String result = "";
-            if ("症状自评量表-SCL90".equals(questionnaire.getGaugeName())) {
+             Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
+             String result = "";
+             //获得方法名字
+             String method=GAUGE.get(questionnaire.getGaugeName()).toString();
+             Result methodResult= EntityReflex.getMethods(QuestionnaireMethod.class,method,questionnaireAnswerList);
+             result= methodResult.getData().toString();
+            //  result = dataAcquisitionService.gauge_34(dataAcquisitionId, userId, "anxious");
+            /*if ("症状自评量表-SCL90".equals(questionnaire.getGaugeName())) {
                 result = dataAcquisitionService.symptomConclusion(dataAcquisitionId, userId);
 
             } else if ("抑郁自评量表(SDS)".equals(questionnaire.getGaugeName())) {
@@ -196,7 +209,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             } else {
                 result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "anxious");
                 //焦虑自评量表(SAS)
-            }
+            }*/
+
             DataAcquisition dataAcquisition = new DataAcquisition();
             dataAcquisition.setId(dataAcquisitionId);
             //dataAcquisition.setActivityId();
@@ -329,14 +343,16 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             //判断问卷的类型
             Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
             String result = "";
+            EntityReflex.getMethod(dataAcquisitionService.getClass(),"gauge_34",dataAcquisitionId,userId,"anxious");
             if ("症状自评量表-SCL90".equals(questionnaire.getQuestionnaireTypeName())) {
                 result = dataAcquisitionService.symptomConclusion(dataAcquisitionId, userId);
 
             } else if ("抑郁自评量表(SDS)".equals(questionnaire.getQuestionnaireTypeName())) {
                 result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "depressed");
             } else {
-                result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "anxious");
                 //焦虑自评量表(SAS)
+                result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "anxious");
+
             }
             DataAcquisition dataAcquisition = new DataAcquisition();
             dataAcquisition.setId(dataAcquisitionId);

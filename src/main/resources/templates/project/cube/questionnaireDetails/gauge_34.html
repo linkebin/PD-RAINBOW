@@ -55,11 +55,19 @@
             </div>
             <div class="eui-row dataCharts">
                 <div class="eui-col-md6">
-                    <div id="main1"  style="width: 100%;height:320px;"></div>
+                    <div   style="width: 100%;height:320px;" >
+                        <div style="width: 100%;height:70px;">
+
+                        </div>
+                        <div id="main2" style="">
+
+                        </div>
+                    </div>
                 </div>
                 <div class="eui-col-md6">
-                    <div id="main2"  style="width: 100%;height:320px;"></div>
+                    <div id="main1"  style="width: 100%;height:320px;"></div>
                 </div>
+
             </div>
             <div id="dataResult" class="eui-marginTB20">
             </div>
@@ -108,102 +116,6 @@
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
 
 <script>
-    // 基于准备好的dom，初始化echarts实例(风格化图表)
-    var myChart1 = echarts.init(document.getElementById('main1'),'macarons');
-    // 指定图表的配置项和数据
-    var option = {
-        title: {
-            text: '总分'
-        },
-        tooltip : {
-            formatter: "{a} <br/>{b} : {c}"
-        },
-        toolbox: {
-            feature: {
-                restore: {},
-                saveAsImage: {}
-            }
-        },
-        series: [
-            {
-                name: '我的总分',
-                type: 'gauge',
-                detail: {formatter:'{value}'},
-                max: 400,
-                data: [{value: 200, name: '总分'}]
-            }
-        ]
-    };
-    // 使用刚指定的配置项和数据显示图表。
-    myChart1.setOption(option);
-
-    // 基于准备好的dom，初始化echarts实例(风格化图表)
-    var myChart2 = echarts.init(document.getElementById('main2'),'macarons');
-    // 指定图表的配置项和数据
-    var option = {
-        title: {
-            text: '因子分'
-        },
-        legend: {
-            data: ['图一','图二', '张三', '李四']
-        },
-        radar: [
-            {
-
-            },
-            {
-                indicator: [
-                    { text: '躯体化分', max: 5 },
-                    { text: '强迫症状', max: 5 },
-                    { text: '人际敏感', max: 5 },
-                    { text: '抑郁症状', max: 5 },
-                    { text: '焦虑症状', max: 5 },
-                    { text: '敌对症状', max: 5 },
-                    { text: '恐怖症状', max: 5 },
-                    { text: '偏执症状', max: 5 },
-                    { text: '精神症状', max: 5 }
-                ],
-                radius: 100
-            }
-        ],
-        series: [
-            {
-                type: 'radar',
-                radarIndex: 1,
-                data: [
-                    {
-                        value: [1.58, 2.80, 2.66, 2.38, 2.20, 3.33,1.28,1.67,2.40],
-                        label: {
-                            normal: {
-                                show: true,
-                                formatter:function(params) {
-                                    return params.value;
-                                }
-                            }
-                        },
-                        areaStyle: {
-                            normal: {
-                                opacity: 0.8,
-                                color: new echarts.graphic.RadialGradient(0.5, 0.5, 1, [
-                                    {
-                                        color: '#B8D3E4',
-                                        offset: 0
-                                    },
-                                    {
-                                        color: '#1e9eff',
-                                        offset: 1
-                                    }
-                                ])
-                            }
-                        }
-                    }
-                ]
-            }
-        ]
-    }
-    // 使用刚指定的配置项和数据显示图表。
-    myChart2.setOption(option);
-
 
 eui.use(['form', 'layedit', 'laydate','element'], function(){
     var form = eui.form
@@ -242,7 +154,10 @@ $(function () {
 
 //问卷id
 var  questionnaireId=$("#questionnaireId").val();
-
+//总分
+var totalScore=0;
+//因子分
+var  factorScore=new Array;
 //加载问卷
 function  loadQuestion() {
     var  userId=$("#userId").val();
@@ -282,15 +197,19 @@ function  getTable(list) {
     $("#timeConsuming").text(timeStr);
     $("#createTime").text(new Date(list.dataAcquisition.createTime).Format("yyyy-MM-dd"));
 
-    var dataResult=list.dataAcquisition.dataResult.split("#");
     var context="";
-    for(var i in dataResult){
-        context+='<div class="eui-font14 eui-form-item" >';
-        context+=dataResult[i];
-        context+='</div>';
+    var dataResult=list.dataAcquisition.dataResult;
+    if(dataResult!=null && dataResult!=""){
+        var json=eval("("+dataResult+")");
+           totalScore=json.totalScore;
+            context+="<p class='eui-margin10'>标准分:"+json.standardScore+"分</p>";
+            context+="<p class='eui-margin10'>无焦虑：标准分 ＜ 50分</p>";
+            context+="<p class='eui-margin10'>轻度焦虑：标准分 50-59分</p>";
+            context+="<p class='eui-margin10'>中度焦虑：标准分 60-69分</p>";
+            context+="<p class='eui-margin10'>重度焦虑：标准分 70分及以上</p>";
     }
-    $("#dataResult").append(context);
 
+    $("#main2").append(context);
 
     //问题
     var questionList=list.questionList;
@@ -305,7 +224,6 @@ function  getTable(list) {
     context+='</div>';
     var optionAnswer=questionList[i].optionAnswer.split("||");
     var optionScore=questionList[i].optionScore.split("||");
-
        for( var t in answerList){
            if(answerList[t].questionId==questionList[i].id){
                //截取填写的答案
@@ -326,7 +244,42 @@ function  getTable(list) {
        }
        context+=' </div>';
    }
+   //初始化图
+    initEcharts();
+console.info(factorScore);
     return context;
+}
+
+function initEcharts() {
+
+    // 基于准备好的dom，初始化echarts实例(风格化图表)
+    var myChart1 = echarts.init(document.getElementById('main1'),'macarons');
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '总分'
+        },
+        tooltip : {
+            formatter: "{a} <br/>{b} : {c}"
+        },
+        toolbox: {
+            feature: {
+
+            }
+        },
+        series: [
+            {
+                name: '我的总分',
+                type: 'gauge',
+                max: 400,
+                detail: {formatter:'{value}'},
+                data: [{value: totalScore, name: '总分'}]
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+
 }
 
 

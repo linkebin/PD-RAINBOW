@@ -22,7 +22,7 @@ public class QuestionnaireJobs {
     public void cronJob(){
       //查询问卷即将要上架的 修改状态
         questionnaireService.setQuestionnaireState();
-        Session session= SecurityUtils.getSubject().getSession();
+
     }
 
 }

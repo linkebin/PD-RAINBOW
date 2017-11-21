@@ -18,6 +18,8 @@ public interface DataAcquisitionService extends Service<DataAcquisition> {
     String  symptomConclusion(String acquisitionId,String userId);
     //抑郁自评 的规则结论
     String  depressedOrAnxiousConclusion(String acquisitionId,String userId,String type);
+    //焦虑
+    String gauge_34(String acquisitionId, String userId,String type);
     //根据日期查询来访者使用的问卷
     List<DataAcquisition> findQuestionnaireForVisitor (DataAcquisition dataAcquisition);
     //查询活动的填报人数

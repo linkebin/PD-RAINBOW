@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.yidusoft.configurer.ResourcesStatic.GAUGE;
+
 /**
  * Created by zcb on 2017/10/23.
  */
@@ -22,6 +24,7 @@ public class WebCubeQuestionnaireController {
     private QuestionnaireService questionnaireService;
     @Resource
     private QuestionnaireAnswerService questionnaireAnswerService;
+
 
 
     @RequestMapping(value ={"/getQuestionnaireGuide"})
@@ -96,19 +99,39 @@ public class WebCubeQuestionnaireController {
     }
 
     /**
-     * 查看来访者的填写问卷
+     * 查看来访者的填写之后的问卷
+     * @param questionnaireId
+     * @param userId
+     * @param model
+     * @return
+     */
+    @RequestMapping(value ={"/getQuestionnaireForVisitorAll"})
+    public String getQuestionnaireForVisitor(String acquisitionId,String questionnaireId,String userId, Model model){
+        model.addAttribute("questionnaireId",questionnaireId);
+        model.addAttribute("userId",userId);
+        model.addAttribute("acquisitionId",acquisitionId);
+        Questionnaire questionnaire = questionnaireService.findQuestionnaireType(questionnaireId);
+        return "project/cube/customer/vertical-questionnaire-customer";
+    }
+
+    /**
+     * 查看来访者的填写之后的问卷(所有问卷填写详情的跳转)
      * @param questionnaireId
      * @param userId
      * @param model
      * @return
      */
     @RequestMapping(value ={"/getQuestionnaireForVisitor"})
-    public String getQuestionnaireForVisitor(String acquisitionId,String questionnaireId,String userId, Model model){
+    public String getQuestionnaireForVisitorAll(String acquisitionId,String questionnaireId,String userId, Model model){
         model.addAttribute("questionnaireId",questionnaireId);
         model.addAttribute("userId",userId);
         model.addAttribute("acquisitionId",acquisitionId);
-        return "project/cube/customer/vertical-questionnaire-customer";
+        Questionnaire questionnaire = questionnaireService.findQuestionnaireType(questionnaireId);
+        String  htmlName= GAUGE.get(questionnaire.getGaugeName()).toString();
+
+        return "project/cube/questionnaireDetails/"+htmlName;
     }
+
     @RequestMapping(value ={"/getSuccess"})
     public String getSuccess(){
         return "project/cube/questionnaire/questionnaire-fillIn-success";

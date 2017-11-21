@@ -24,43 +24,43 @@ public  class  ResourcesStatic {
     static {
         // 人格评估量表
         GAUGE.put("中国大五人格问卷(简式版)(CBF-PI-B)", "gauge_1");
-        GAUGE.put("中文形容词大五人格量表(简式版)", "gauge_1");
-        GAUGE.put("中庸实践思维方式量表", "gauge_1");
+        GAUGE.put("中文形容词大五人格量表(简式版)", "gauge_2");
+        GAUGE.put("中庸实践思维方式量表", "gauge_3");
         // 一般心理健康与行为问题量表
-        GAUGE.put("90项症状清单(SCL-90)", "gauge_1");
-        GAUGE.put("儿少心理健康量表(MHS-CA)", "gauge_1");
-        GAUGE.put("Achenbach儿童行为量表(CBCL)", "gauge_1");
-        GAUGE.put("长处和困难问卷(SDQ)", "gauge_1");
-        GAUGE.put("初中学生攻击行为的主要心理特征问卷", "gauge_1");
-        GAUGE.put("青春期性心理健康量表", "gauge_1");
-        GAUGE.put("匹兹堡睡眠质量指数(PSQI)", "gauge_1");
-        GAUGE.put("布鲁奈尔心境量表(中文版)(BRUMS-C)", "gauge_1");
+        GAUGE.put("90项症状清单(SCL-90)", "gauge_4");
+        GAUGE.put("儿少心理健康量表(MHS-CA)", "gauge_5");
+        GAUGE.put("Achenbach儿童行为量表(CBCL)", "gauge_6");
+        GAUGE.put("长处和困难问卷(SDQ)", "gauge_7");
+        GAUGE.put("初中学生攻击行为的主要心理特征问卷", "gauge_8");
+        GAUGE.put("青春期性心理健康量表", "gauge_9");
+        GAUGE.put("匹兹堡睡眠质量指数(PSQI)", "gauge_10");
+        GAUGE.put("布鲁奈尔心境量表(中文版)(BRUMS-C)", "gauge_11");
         // 应激及相关行为量表
-        GAUGE.put("生活事件量表(LES)", "gauge_1");
-        GAUGE.put("中学生生活应激评定量表", "gauge_1");
-        GAUGE.put("中学生应激源量表(SSMSS)", "gauge_1");
-        GAUGE.put("大学生恋爱心理压力源量表", "gauge_1");
-        GAUGE.put("中小学教师工作——家庭冲突问卷(WFCS)", "gauge_1");
-        GAUGE.put("简易应对方式问卷", "gauge_1");
-        GAUGE.put("应付方式问卷(CSQ)", "gauge_1");
-        GAUGE.put("社会支持评定量表", "gauge_1");
-        GAUGE.put("青少年社会支持量表", "gauge_1");
-        GAUGE.put("青少年学习倦怠量表", "gauge_1");
-        GAUGE.put("中国心理咨询与治疗专业人员枯竭量表", "gauge_1");
-        GAUGE.put("青少年病理性互联网使用量表(APIUS)", "gauge_1");
-        GAUGE.put("青少年上网成瘾自评量表", "gauge_1");
-        GAUGE.put("中学生网络成瘾诊断量表", "gauge_1");
-        GAUGE.put("IT企业员工工作成瘾问卷", "gauge_1");
-        GAUGE.put("自杀态度问卷(SAQ)", "gauge_1");
-        GAUGE.put("创伤后应激障碍检查表(PCL)", "gauge_1");
+        GAUGE.put("生活事件量表(LES)", "gauge_12");
+        GAUGE.put("中学生生活应激评定量表", "gauge_13");
+        GAUGE.put("中学生应激源量表(SSMSS)", "gauge_14");
+        GAUGE.put("大学生恋爱心理压力源量表", "gauge_15");
+        GAUGE.put("中小学教师工作——家庭冲突问卷(WFCS)", "gauge_16");
+        GAUGE.put("简易应对方式问卷", "gauge_17");
+        GAUGE.put("应付方式问卷(CSQ)", "gauge_18");
+        GAUGE.put("社会支持评定量表", "gauge_19");
+        GAUGE.put("青少年社会支持量表", "gauge_20");
+        GAUGE.put("青少年学习倦怠量表", "gauge_21");
+        GAUGE.put("中国心理咨询与治疗专业人员枯竭量表", "gauge_22");
+        GAUGE.put("青少年病理性互联网使用量表(APIUS)", "gauge_23");
+        GAUGE.put("青少年上网成瘾自评量表", "gauge_24");
+        GAUGE.put("中学生网络成瘾诊断量表", "gauge_25");
+        GAUGE.put("IT企业员工工作成瘾问卷", "gauge_26");
+        GAUGE.put("自杀态度问卷(SAQ)", "gauge_27");
+        GAUGE.put("创伤后应激障碍检查表(PCL)", "gauge_28");
         // 精神病学临床量表
-        GAUGE.put("老年精神评定量表(PAS)", "gauge_1");
-        GAUGE.put("抑郁自评量表(SDS)", "gauge_1");
+        GAUGE.put("老年精神评定量表(PAS)", "gauge_29");
+        GAUGE.put("抑郁自评量表(SDS)", "gauge_30");
         GAUGE.put("流调用抑郁自评量表(CES-D)", "gauge_1");
         GAUGE.put("贝克抑郁自评量表(BDI)", "gauge_1");
         GAUGE.put("抑郁体验问卷(DEQ)", "gauge_1");
+        GAUGE.put("焦虑自评量表(SAS)", "gauge_34");
         GAUGE.put("医院焦虑抑郁量表(HAD)", "gauge_1");
-        GAUGE.put("焦虑自评量表(SAS)", "gauge_1");
         GAUGE.put("状态-特质焦虑问卷(STAI)", "gauge_1");
         GAUGE.put("大学生强迫症状问卷  ", "gauge_1");
         // 家庭与人际关系量表

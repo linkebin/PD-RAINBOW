@@ -15,7 +15,8 @@ public interface QuestionnaireService extends Service<Questionnaire> {
     List<Questionnaire> questionnaireListByPage(Map<String, Object> questionnaire);
     //添加问卷
     Result addQuestionnaire(Questionnaire questionnaire, String questionStr,String tagId,String sceneId, String userIds);
-
+    //查询问卷的类型
+    Questionnaire findQuestionnaireType(String id);
      //查询问卷 相关的 标签   场景
     Result  getQuestionnaireInfo(String id);
     //修改问卷信息

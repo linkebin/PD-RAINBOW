@@ -204,6 +204,29 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
                 stringBuffer.append("中度抑郁：抑郁严重指数 0.6~0.69#");
                 stringBuffer.append("重度抑郁：抑郁严重指数 0.7以上");
             }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return stringBuffer.toString();
+    }
+
+    //焦虑焦虑
+    @Override
+    public String gauge_34(String acquisitionId, String userId,String type) {
+        StringBuffer stringBuffer=new StringBuffer();
+       try{
+            QuestionnaireAnswer questionnaireAnswer=new QuestionnaireAnswer();
+            questionnaireAnswer.setUserId(userId);
+            questionnaireAnswer.setAcquisitionId(acquisitionId);
+            List<QuestionnaireAnswer>  questionnaireAnswerList=questionnaireAnswerMapper.findAnswerForAcquisition(questionnaireAnswer);
+            //总分
+            double totalScore=0;
+            for(int i=0;i<questionnaireAnswerList.size();i++) {
+                totalScore=totalScore+questionnaireAnswerList.get(i).getAnswerScore();
+
+            }
             if(type.equals("anxious")){
 
                 double standardScore=totalScore*1.25;
@@ -212,14 +235,16 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
                 stringBuffer.append("轻度焦虑：标准分 50-59分#");
                 stringBuffer.append("中度焦虑：标准分 60-69分#");
                 stringBuffer.append("重度焦虑：标准分 70分及以上");
-        }
+            }
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+    }catch (Exception e){
+        e.printStackTrace();
+    }
         return stringBuffer.toString();
     }
+
+
+
     //根据日期查询来访者使用的问卷
     @Override
     public List<DataAcquisition> findQuestionnaireForVisitor(DataAcquisition dataAcquisition) {
