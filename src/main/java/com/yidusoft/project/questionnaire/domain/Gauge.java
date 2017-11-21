@@ -36,6 +36,16 @@ public class Gauge {
     @Transient
     private  String questionnaireTypeName;
 
+    public Gauge(String id,String gaugeCode,String gaugeType,String gaugeName){
+        this.id=id;
+        this.gaugeCode=gaugeCode;
+        this.gaugeType=gaugeType;
+        this.gaugeName=gaugeName;
+    }
+    public Gauge(){
+
+    }
+
     public String getQuestionnaireTypeName() {
         return questionnaireTypeName;
     }

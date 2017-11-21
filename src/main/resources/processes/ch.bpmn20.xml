@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.activiti.org/test">
+
+	<process id="channelL" name="渠道审批流程" isExecutable="true">
+
+		<startEvent id="start" name="流程开始" activiti:initiator="applyuser"></startEvent>
+		<sequenceFlow id="flow1" sourceRef="start" targetRef="channelManage"></sequenceFlow>
+		<userTask id="channelManage" name="渠道管理员审批" activiti:candidateUsers="渠道管理员,超级管理员">
+			<extensionElements>
+				<activiti:formProperty id="flag"  type="enum">
+					<activiti:value id="true" name="审批通过"></activiti:value>
+					<activiti:value id="false" name="审批打回"></activiti:value>
+				</activiti:formProperty>
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="flow2" sourceRef="channelManage" targetRef="ChannelAutoTask"></sequenceFlow>
+
+		<serviceTask id="ChannelAutoTask" name="ChannelAutoTask"
+					 activiti:expression="${channelActivityService.channel(execution)}"></serviceTask>
+
+		<sequenceFlow id="flow3" sourceRef="ChannelAutoTask" targetRef="end"></sequenceFlow>
+
+		<endEvent id="end" name="流程结束"></endEvent>
+	</process>
+
+</definitions>

@@ -1,4 +1,4 @@
-package com.yidusoft.project.activityExamine.service;
+package com.yidusoft.project.activitis.service;
 
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
@@ -6,6 +6,7 @@ import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.Security;
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
@@ -43,6 +44,8 @@ public class ActivityService {
     private SecUserService secUserService;
 
 
+    @Autowired
+    private IdentityService identityService;
 
     @Value("${server.port}")
     private String port;
@@ -55,10 +58,11 @@ public class ActivityService {
      * @param launchId
      */
     public void startProcess(String launchId,String launchName) {
+        identityService.setAuthenticatedUserId(Security.getUser().getUserName());
         Map<String, Object> variables = new HashMap<String, Object>();
-        variables.put("ID_S", launchId);
-        variables.put("NAME_S", launchName);
-        runtimeService.startProcessInstanceByKey("launchProcess", variables);
+        variables.put("objid", launchId);
+        variables.put("objname", launchName);
+        runtimeService.startProcessInstanceByKey("launchL",variables);
     }
 
     /**
@@ -77,17 +81,22 @@ public class ActivityService {
     //审批
     public Result completeTasks(Boolean launchApproved, String taskId, String msg) {
         Map<String, Object> taskVariables = new HashMap<String, Object>();
-        taskVariables.put("launchApproved", launchApproved);
-
+        taskVariables.put("flag", launchApproved);
 
         // 使用任务id,获取任务对象，获取流程实例id
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+
+        Map map1=new HashMap();
+        map1.put("userTaskApply",Security.getUser().getUserName());
+        taskService.setVariablesLocal(taskId,map1);
+
         //利用任务对象，获取流程实例id
         String processInstancesId = task.getProcessInstanceId();
         // 添加批注时候的审核人
         Authentication.setAuthenticatedUserId(Security.getUserId());
         //添加批注
         taskService.addComment(taskId, processInstancesId, msg);
+        taskService.setAssignee(taskId,Security.getUser().getUserName());
         //审批
         taskService.complete(taskId, taskVariables);
         return ResultGenerator.genSuccessResult();
@@ -157,11 +166,9 @@ public class ActivityService {
 
 
     public void launch(DelegateExecution execution) {
-        Boolean bool = (Boolean) execution.getVariable("launchApproved");
+        Boolean bool = (Boolean) execution.getVariable("flag");
 
         if (bool) {
-            Long personId = (Long) execution.getVariable("personId");
-            Long compId = (Long) execution.getVariable("compId");
 //            //获取服务器IP
 //            LaunchActivities launchActivities=launchActivitiesService.findById("");
 //            launchActivities.setActivityStatus(2);

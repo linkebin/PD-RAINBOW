@@ -3,7 +3,7 @@ package com.yidusoft.project.channel.controller;
 import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
-import com.yidusoft.project.activityExamine.service.ChannelActivityService;
+import com.yidusoft.project.activitis.service.ChannelActivityService;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.github.pagehelper.PageHelper;

@@ -3,6 +3,7 @@ import com.yidusoft.core.Result;
 import com.yidusoft.project.questionnaire.domain.Gauge;
 import com.yidusoft.core.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,4 +22,8 @@ public interface GaugeService extends Service<Gauge> {
     List<Gauge> findGaugeAll();
     //查询量表 相关的 标签   场景
     Result  getGaugeInfo(String id);
+
+    //excel导入添加量表
+    Result  excelImportAdd(List<ArrayList<String>> lb,List<ArrayList<String>> wt);
+
 }

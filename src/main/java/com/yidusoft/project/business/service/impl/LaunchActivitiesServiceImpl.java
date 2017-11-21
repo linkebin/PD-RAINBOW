@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.AbstractService;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.activitis.service.ActivityService;
 import com.yidusoft.project.business.dao.LaunchActivitiesMapper;
 import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
@@ -33,6 +34,8 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
     @Resource
     LaunchActivitiesService launchActivitiesService;
 
+    @Resource
+    private ActivityService activityService;
     /**
      * 添加活动
      *
@@ -59,6 +62,7 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
             launchActivities.setActivityPorn(CodeHelper.randomCode(8));
         }
         launchActivitiesService.save(launchActivities);
+        activityService.startProcess(launchActivities.getId(),launchActivities.getActivityName()+"  活动申请");
         return ResultGenerator.genSuccessResult();
     }
 

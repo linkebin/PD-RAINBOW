@@ -4,6 +4,7 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.dao.GaugeMapper;
 import com.yidusoft.project.questionnaire.dao.GaugeQuestionFactorMapper;
+import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionFactorMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionMapper;
 import com.yidusoft.project.questionnaire.domain.*;
 import com.yidusoft.project.questionnaire.service.*;
@@ -29,12 +30,18 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
 
     @Resource
     private GaugeQuestionFactorMapper gaugeQuestionFactorMapper;
+
+
     @Resource
     private GaugeTagMiddleService gaugeTagMiddleService;
     @Resource
     private GaugeSceneService gaugeSceneService;
     @Resource
     private QuestionnaireTagService questionnaireTagService;
+
+    @Resource
+    private QuestionnaireQuestionMapper questionnaireQuestionMapper;
+
     @Resource
     private SceneService sceneService;
 
@@ -124,8 +131,50 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
         return ResultGenerator.genSuccessResult(map);
     }
 
+    @Override
+    public Result excelImportAdd(List<ArrayList<String>> lb, List<ArrayList<String>> wt) {
 
+        Gauge gauge = new Gauge(UUID.randomUUID().toString(),CodeHelper.getCode("LB"),"2",lb.get(0).get(0));
+        gauge.setCreateTime(new Date());
+        gauge.setCreator(Security.getUser().getUserName());
+        gauge.setDeleted(0);
+        gauge.setGaugeState(0);
 
+//        List<QuestionnaireQuestion> questions = new ArrayList<QuestionnaireQuestion>();
+//        List<GaugeQuestionFactor> gaugeQuestionFactors = new ArrayList<GaugeQuestionFactor>();
+        this.save(gauge);
+        try {
+
+            for(int i=0;i<wt.size();i++){
+            QuestionnaireQuestion question = new QuestionnaireQuestion();
+            question.setId(lb.get(0).get(2)+"#"+(i+1));
+            question.setQuestionContent(wt.get(i).get(0));
+            question.setQuestionCode(CodeHelper.getCode("WT"));
+            question.setAnswer(wt.get(i).get(1));
+            question.setOptionAnswer(wt.get(i).get(2));
+            question.setOptionScore(wt.get(i).get(3));
+            question.setQuestionType(2);
+            question.setCreator(Security.getUser().getUserName());
+            question.setDeleted(0);
+            question.setCreateTime(new Date());
+//            questions.add(question);
+
+            GaugeQuestionFactor gaugeQuestionFactor = new GaugeQuestionFactor();
+            gaugeQuestionFactor.setId(UUID.randomUUID().toString());
+            gaugeQuestionFactor.setGaugeId(gauge.getId());
+            gaugeQuestionFactor.setQuestionId(question.getId());
+//            gaugeQuestionFactors.add(gaugeQuestionFactor);
+            questionnaireQuestionMapper.insert(question);
+
+            gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
+        }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("导入失败");
+        }
+        return ResultGenerator.genSuccessResult("导入成功");
+    }
 
 
 }

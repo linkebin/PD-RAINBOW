@@ -13,23 +13,27 @@
     <div class="eui-col-md12 eui-paddingR10">
         <div class="eui-row eui-padding10 eui-borderB">
             <div class="eui-col-md6 eui-font18">
-                <i class='eui-icon eui-font24'>&#xe61d;</i> 待审批任务
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 待办任务
             </div>
         </div>
         <table  class="eui-table eui-form" id="userTable">
             <colgroup>
                 <col width="100">
                 <col width="250">
-                <col width="100">
+                <col width="200">
+                <col width="180">
+                <col width="180">
                 <col width="180">
                 <col>
             </colgroup>
             <thead>
             <tr>
                 <th>编号</th>
-                <th>任务名称</th>
-                <th>任务类型</th>
-                <th>创建时间</th>
+                <th>待办事项</th>
+                <th>申请人</th>
+                <th>流程名称</th>
+                <th>节点名称</th>
+                <th>任务开始时间</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -38,6 +42,46 @@
             </tbody>
         </table>
         <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+<div class="eui-bg-white eui-row eui-padding15">
+    <div class="eui-col-md12 eui-paddingR10">
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 已办任务
+            </div>
+        </div>
+        <table  class="eui-table eui-form" id="userTable1">
+            <colgroup>
+                <col width="100">
+                <col width="250">
+                <col width="120">
+                <col width="120">
+                <col width="180">
+                <col width="180">
+                <col width="180">
+                <col width="120">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>已办事项</th>
+                <th>申请人</th>
+                <th>处理人</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>节点名称</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages2"></div>
     </div>
 </div>
 
@@ -51,6 +95,7 @@
 <script>
     $(function () {
         doSearch();
+        doSearch2();
     });
 
     function resetForm() {
@@ -73,7 +118,7 @@
                     roleJson:JSON.stringify(params),
                     page:1,
                     pagesize: 10,
-                    assignee:'admin'
+                    assignee:'超级管理员'
                 },
                 type:"post",
                 success:function(result){
@@ -101,7 +146,7 @@
                                         roleJson: JSON.stringify(params),
                                         page: obj.curr,
                                         pagesize: obj.limit,
-                                        assignee:'admin'
+                                        assignee:'超级管理员'
                                     },
                                     type: "post",
                                     success: function (result) {
@@ -122,6 +167,67 @@
         });
     }
 
+    function doSearch2() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+
+            var params = new Object();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/historyTaskList",
+                data: {
+                    roleJson:JSON.stringify(params),
+                    page:1,
+                    pagesize: 10
+                },
+                type:"post",
+                success:function(result){
+                    console.log(result);
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages2'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable2(userList);
+                                $("#userTable1 tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = new Object();
+                                $.ajax({
+                                    url: "/historyTaskList",
+                                    data: {
+                                        roleJson: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable2(userList);
+                                        $("#userTable1 tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
     //渲染数据，拼接表格
     function getTable(userList) {
         var tableHtml = '';
@@ -130,6 +236,8 @@
             tableHtml +=  '<tr>' +
                 '<td>'+ secUser.taskId +'</td>' +
                 '<td>'+ secUser.name_ +'</td>' +
+                '<td>'+ secUser.startName +'</td>' +
+                '<td>'+ secUser.processInstanceName +'</td>' +
                 '<td>'+ secUser.taskName +'</td>' +
                 '<td>'+ new Date(secUser.taskTime).Format('yyyy-MM-dd hh:mm:ss') +'</td>' +
                 '<td>' +
@@ -142,23 +250,120 @@
         return tableHtml;
     }
 
+    function getTable2(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            var flag = '通过';
+            if (secUser.flag == false){
+                flag = '驳回';
+            }
+            tableHtml +=  '<tr>' +
+                '<td>'+ secUser.taskId +'</td>' +
+                '<td>'+ secUser.name_ +'</td>' +
+                '<td>'+ secUser.startName +'</td>' +
+                '<td>'+ secUser.assignee +'</td>' +
+                '<td>'+ new Date(secUser.startTime).Format('yyyy-MM-dd hh:mm:ss') +'</td>' +
+                '<td>'+ new Date(secUser.endTime).Format('yyyy-MM-dd hh:mm:ss') +'</td>' +
+                '<td>'+ secUser.taskName +'</td>' +
+                '<td>'+ flag +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> '+
+                ''+Buts2(secUser)+'' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+
     function Buts(secUser) {
             var taskId = "'"+secUser.taskId+"'";
-            return '<button onclick="approveYes('+taskId+')" class="eui-btn eui-btn-primary eui-btn-mini" title="通过"><i class="eui-icon">&#xe605;</i></button> ' +
-                '<button onclick="approveNo('+taskId+')" class="eui-btn eui-btn-primary eui-btn-mini" title="打回" ><i class="eui-icon">&#x1006;</i></button> ';
+        var processDefinitionKey = "'"+secUser.processDefinitionKey+"'";
+                return '<button onclick="approveYes('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="通过"><i class="eui-icon">&#xe605;</i></button> ' +
+                    '<button onclick="approveNo('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="打回" ><i class="eui-icon">&#x1006;</i></button> ' +
+                    '<button  class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
+
+    }
+    function Buts2(secUser) {
+        var taskId = "'"+secUser.taskId+"'";
+        return '<button  class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
     }
     
-    function approveYes(taskId) {
-        $.post('/channelComplete/true/'+taskId+'/22',function (result) {
-            location.reload();
+    function approveYes(taskId,processDefinitionKey) {
+        layer.confirm('确定通过吗？', {icon: 3, title:'提示'}, function(index){
+            layer.closeAll();
+            getPizuY(taskId,processDefinitionKey);
+        });
+
+    }
+
+    function approveNo(taskId,processDefinitionKey) {
+        layer.confirm('确定驳回吗？', {icon: 3, title:'提示'}, function(index){
+            layer.closeAll();
+
+            getPizuN(taskId,processDefinitionKey);
         });
     }
 
-    function approveNo(taskId) {
-        $.post('/channelComplete/false/'+taskId+'/22',function (result) {
-            location.reload();
+    function getPizuY(taskId,processDefinitionKey) {
+        $("#ppzz").val('');
+        var index = layer.open({
+            title: '添加批注'
+            , type: 1
+            , area: ['400px', '250px']
+            , content: $("#pizu")
+            , btn: ['保存', '取消']
+            , yes: function (index, layero) {
+                if (processDefinitionKey == 'channelL'){
+                    $.post('/channelComplete/true/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                        location.reload();
+                    });
+                }
+                if (processDefinitionKey == 'launchL'){
+                    $.post('/complete/true/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                        location.reload();
+                    });
+                }
+                layer.closeAll();
+            }
+            , btn2: function (index, layero) {
+            }
         });
     }
+
+        function getPizuN(taskId,processDefinitionKey) {
+            $("#ppzz").val('');
+            var index = layer.open({
+                title: '添加批注'
+                , type: 1
+                , area: ['400px', '250px']
+                , content: $("#pizu")
+                , btn: ['保存', '取消']
+                , yes: function (index, layero) {
+                    if (processDefinitionKey == 'channelL'){
+                        $.post('/channelComplete/false/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                            location.reload();
+                        });
+                    }
+                    if (processDefinitionKey == 'launchL'){
+                        $.post('/complete/false/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                            location.reload();
+                        });
+                    }
+
+                    layer.closeAll();
+                }
+                , btn2: function (index, layero) {
+                }
+            });
+        }
 </script>
+<div style="display: none" id="pizu">
+    <p class="eui-margin20 eui-lineHeight24">
+        <textarea id="ppzz" class="eui-textarea"></textarea>
+    </p>
+</div>
 </body>
 </html>
