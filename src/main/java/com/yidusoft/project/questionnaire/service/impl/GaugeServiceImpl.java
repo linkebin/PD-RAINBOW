@@ -174,7 +174,7 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
 
             for(int i=0;i<wt.size();i++){
             QuestionnaireQuestion question = new QuestionnaireQuestion();
-            question.setId(lb.get(0).get(2)+"#"+(i+1));
+            question.setId(lb.get(0).get(2)+"_"+(i+1));
             question.setQuestionContent(wt.get(i).get(0));
             question.setQuestionCode(CodeHelper.getCode("WT"));
             question.setAnswer(wt.get(i).get(1));
@@ -188,16 +188,16 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
             question.setCreator(Security.getUser().getUserName());
             question.setDeleted(0);
             question.setCreateTime(new Date());
-//            questions.add(question);
 
             GaugeQuestionFactor gaugeQuestionFactor = new GaugeQuestionFactor();
             gaugeQuestionFactor.setId(UUID.randomUUID().toString());
             gaugeQuestionFactor.setGaugeId(gauge.getId());
             gaugeQuestionFactor.setQuestionId(question.getId());
-//            gaugeQuestionFactors.add(gaugeQuestionFactor);
-            questionnaireQuestionMapper.insert(question);
 
-            gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
+            if (!"".equals(question.getQuestionContent())){
+                questionnaireQuestionMapper.insert(question);
+                gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
+            }
         }
 
         }catch (Exception e){

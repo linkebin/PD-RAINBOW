@@ -60,8 +60,10 @@ public class CheckFileTypeUtil {
         FILE_TYPE_MAP.put("cafebabe0000002e0041", "class");//bat文件
         FILE_TYPE_MAP.put("49545346030000006000", "chm");//bat文件
         FILE_TYPE_MAP.put("04000000010000001300", "mxp");//bat文件
-        FILE_TYPE_MAP.put("504b0304140006000800", "docx");//docx文件
-        FILE_TYPE_MAP.put("d0cf11e0a1b11ae10000", "wps");//WPS文字wps、表格et、演示dps都是一样的
+
+        FILE_TYPE_MAP.put("FFFE3C00680074006D00", "doc");//doc文件
+        FILE_TYPE_MAP.put("504B0304140006000800", "xlsx");//xlsx文件
+        FILE_TYPE_MAP.put("d0cf11e0a1b11ae10000", "xls");//WPS文字wps、表格et、演示dps都是一样的
         FILE_TYPE_MAP.put("6431303a637265617465", "torrent");
 
         FILE_TYPE_MAP.put("3c68746d6c20786d6c6e", "htm");//猎聘、智联简历。htm
@@ -132,7 +134,7 @@ public class CheckFileTypeUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        File file = new File("C:\\Users\\smy\\Desktop\\记录.jpg");
+        File file = new File("C:\\Users\\smy\\Desktop\\aa.xls");
 
         FileInputStream is = new FileInputStream(file);
         final String fileType = getFileType(is);
