@@ -16,6 +16,7 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -64,6 +65,22 @@ public class ActivityController {
 		PageInfo pageInfo = new PageInfo(dtos);
 		pageInfo.setTotal(myService.getTasksCount(assignee));
 		return ResultGenerator.genSuccessResult(pageInfo);
+	}
+
+	//获取历史任务批注
+	@RequestMapping(value = "/taskcomment/{taskId}", method = RequestMethod.POST)
+	public Result taskcomment(@PathVariable String taskId) {
+		List<org.activiti.engine.task.Comment> list = taskService.getTaskComments(taskId);
+
+		List<TaskRepresentation> dtos = new ArrayList<TaskRepresentation>();
+		for (Comment comment : list) {
+			TaskRepresentation representation = new TaskRepresentation();
+			representation.setTaskTime(comment.getTime());
+			representation.setAssignee(comment.getUserId());
+			representation.setName_(comment.getFullMessage());
+			dtos.add(representation);
+		}
+		return ResultGenerator.genSuccessResult(dtos);
 	}
 
 	//获取当前人的任务

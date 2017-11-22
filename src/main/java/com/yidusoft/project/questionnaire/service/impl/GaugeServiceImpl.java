@@ -194,7 +194,7 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
             gaugeQuestionFactor.setGaugeId(gauge.getId());
             gaugeQuestionFactor.setQuestionId(question.getId());
 
-            if (!"".equals(question.getQuestionContent())){
+            if (question.getQuestionType()!=null){
                 questionnaireQuestionMapper.insert(question);
                 gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
             }

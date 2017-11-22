@@ -4,6 +4,7 @@
              typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
              targetNamespace="http://www.activiti.org/test">
 
+
 	<process id="channelL" name="渠道审批流程" isExecutable="true">
 
 		<startEvent id="start" name="流程开始" activiti:initiator="applyuser"></startEvent>
@@ -25,5 +26,20 @@
 
 		<endEvent id="end" name="流程结束"></endEvent>
 	</process>
-
+	<BPMNDiagram xmlns="http://www.omg.org/spec/BPMN/20100524/DI">
+		<BPMNPlane>
+			<BPMNShape bpmnElement="end">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="48.0" width="48.0" x="628.0" y="46.0"/>
+			</BPMNShape>
+			<BPMNShape bpmnElement="channelManage">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="52.0" width="155.0" x="148.0" y="43.0"/>
+			</BPMNShape>
+			<BPMNShape bpmnElement="ChannelAutoTask">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="60.0" width="120.0" x="376.0" y="40.0"/>
+			</BPMNShape>
+			<BPMNShape bpmnElement="start">
+				<Bounds xmlns="http://www.omg.org/spec/DD/20100524/DC" height="48.0" width="48.0" x="31.0" y="44.0"/>
+			</BPMNShape>
+		</BPMNPlane>
+	</BPMNDiagram>
 </definitions>

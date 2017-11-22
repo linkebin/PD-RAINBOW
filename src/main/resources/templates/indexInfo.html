@@ -84,7 +84,9 @@
         <div style="margin-left: 30px;" id="pages2"></div>
     </div>
 </div>
+<div id="excelForm" style="display: none;">
 
+</div>
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
@@ -282,13 +284,38 @@
             var taskId = "'"+secUser.taskId+"'";
         var processDefinitionKey = "'"+secUser.processDefinitionKey+"'";
                 return '<button onclick="approveYes('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="通过"><i class="eui-icon">&#xe605;</i></button> ' +
-                    '<button onclick="approveNo('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="打回" ><i class="eui-icon">&#x1006;</i></button> ' +
-                    '<button  class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
+                    '<button onclick="approveNo('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="打回" ><i class="eui-icon">&#x1006;</i></button> ';
+//                    '<button  class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
 
     }
+
+    function historyComment(taskId) {
+        $.post('/taskcomment/'+taskId,{},function (result) {
+            console.log(result)
+            $("#excelForm").html('');
+            $.each(result.data,function (index,item) {
+                $("#excelForm").append('<div class="eui-padding10"> <p> ' +
+                    '<span >'+item.assignee+'</span><span style="margin-left: 20px;">'+new Date(item.taskTime).Format("yyyy-MM-dd hh:mm:ss")+'</span> ' +
+                    '<p class="eui-padding10">'+item.name_+'</p> ' +
+                    '</p> </div>');
+            });
+        });
+
+
+
+        layer.open({
+            type: 1
+            ,title: '批注信息'
+            ,content:$("#excelForm")
+            ,area: ['400px', '200px']
+            ,shade: 0
+        });
+    }
+
+
     function Buts2(secUser) {
         var taskId = "'"+secUser.taskId+"'";
-        return '<button  class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
+        return '<button onclick="historyComment('+taskId+');"   class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
     }
     
     function approveYes(taskId,processDefinitionKey) {
