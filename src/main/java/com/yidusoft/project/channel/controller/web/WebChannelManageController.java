@@ -45,4 +45,8 @@ public class WebChannelManageController {
         return "project/channel/channel-counselor";
     }
 
+    @RequestMapping("/certificationCounselor")
+    public String certificationCounselor(){
+        return "project/channel/channel-counselor-certification";
+    }
 }

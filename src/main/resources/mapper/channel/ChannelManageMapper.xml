@@ -162,4 +162,25 @@
 
 
   </select>
+
+  <!--查找未通过认证的咨询师-->
+  <select id="findNotCertificationUser" parameterType="Map" resultType="java.util.Map">
+    SELECT * FROM sec_user su WHERE
+        su.STATUS = 1
+          AND su.DELETED = 0
+          AND su.ACCOUNT_TYPE = 1
+          AND su.certification_status = 0
+            <if test="account != null and account != ''">
+                AND su.account LIKE "%${account}%"
+             </if>
+
+    <if test="userName != null and userName != ''">
+      AND  su.user_name LIKE "%${userName}%"
+    </if>
+
+    <if test="mobile != null and mobile != ''">
+      AND su.mobile LIKE "%${mobile}%"
+    </if>
+
+  </select>
 </mapper>

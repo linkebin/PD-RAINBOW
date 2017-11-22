@@ -61,12 +61,12 @@
                         <button type="button" class="eui-btn eui-btn-small eui-btn-normal" id="upCertification"><i class="eui-icon">&#xe67c;</i>资质认证上传
                         </button>
                     </p>
-                    <p class="eui-font12" id="userCertification">(请上传资质证明的相关材料)</p>
-                    <!--<div style="width: 33%;" class="eui-marginT10">-->
-                        <!--<div style="width: 100px; height: 100px;">-->
-                            <!--<img id="certificationImg" src="/Styles/images/default-pic.png" width="90" height="90">-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    <p class="eui-font12" id="userCertification">(请上传资质证明的相关材料,只支持图片上传,支持jpg,png)</p>
+                    <div style="width: 33%;" class="eui-marginT10">
+                        <div style="width: 100px; height: 100px;">
+                            <img id="certificationImg" src="/Styles/images/default-pic.png" width="90" height="90">
+                        </div>
+                    </div>
                 </div>
 
 
@@ -205,7 +205,12 @@
         var uploadInst = upload.render({
             elem: '#upCertification'
             ,url: '/upload/uploadCertification'
-            ,accept: 'file' //普通文件
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#certificationImg').attr('src', result); //图片链接（base64）
+                });
+            }
             ,done: function(res){
                 //如果上传失败
                 if(res.code > 0){
@@ -213,7 +218,7 @@
                 }
                 //上传成功
                 layer.msg('上传成功');
-                $('#userCertification').text('(已上传资质证明的材料)');
+               // $('#userCertification').text('(已上传资质证明的材料)');
             }
             ,error: function(){
                 //演示失败状态，并实现重传

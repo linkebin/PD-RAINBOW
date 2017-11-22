@@ -35,4 +35,10 @@ public interface ChannelManageMapper extends Mapper<ChannelManage> {
      */
     List<Map<String,Object>> findChannelOrAccountCounselorListByParameter(Map<String,Object> map);
 
+    /**
+     * 查找未通过认证的咨询师
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> findNotCertificationUser(Map<String, Object> map);
 }

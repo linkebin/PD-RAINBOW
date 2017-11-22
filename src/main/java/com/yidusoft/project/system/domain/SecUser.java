@@ -129,6 +129,20 @@ public class SecUser implements Serializable {
     @Column(name="CERTIFICATION")
     private String certification;
 
+    public Integer getCertificationStatus() {
+        return certificationStatus;
+    }
+
+    public void setCertificationStatus(Integer certificationStatus) {
+        this.certificationStatus = certificationStatus;
+    }
+
+    /**
+     * 资质认证状态 0 ： 未通过 1：通过
+     */
+    @Column(name = "certification_status")
+    private Integer certificationStatus;
+
     @Column(name = "COMPANY_ID")
     private String companyId;
 

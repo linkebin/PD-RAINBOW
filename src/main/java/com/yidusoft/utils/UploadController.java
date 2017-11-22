@@ -12,6 +12,7 @@ import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisSubscribedConnectionException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -422,6 +423,7 @@ public class UploadController {
 
             String type = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
 
+            if (type.equals(".jpg") || type.equals(".png")) {
                 String realPath = System.getProperty("user.dir");
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 String childPath = "/upload/certification/"+format.format(new Date());
@@ -446,16 +448,16 @@ public class UploadController {
                 Session session = SecurityUtils.getSubject().getSession();
                 session.setAttribute("userSessionId", secUser.getId());
                 session.setAttribute("userSession", secUser);
-                session.setAttribute("cetification","已上传相关资质证明" + fileName);
                 secUserService.update(secUser);
 
-
+            } else {
+                fileResponseData.setCode(500);
+                fileResponseData.setMsg("只能上传png与jpg的文件！");
+                return JSON.toJSONString(fileResponseData);
+            }
 
         } catch (Exception e) {
-            fileResponseData.setCode(500);
-            fileResponseData.setMsg("上传文件出错！");
-            return JSON.toJSONString(fileResponseData);
-
+            e.printStackTrace();
         }
 
         return JSON.toJSONString(fileResponseData);
@@ -466,13 +468,38 @@ public class UploadController {
      * @return
      */
     @PostMapping("/findUserCertification")
-    public Result findUserCertification(){
+    public Result findUserCertification(String id){
         try {
-            String userId = Security.getUserId();
+            String userId = id;
             SecUser secUser = secUserService.findById(userId);
             return ResultGenerator.genSuccessResult(secUser);
         }catch (Exception e){
             return ResultGenerator.genFailResult("请上传资质证明的材料！");
+        }
+    }
+
+    @PostMapping("/findCertification")
+    public Result findCertification(){
+        String userId = Security.getUserId();
+        SecUser secUser = secUserService.findById(userId);
+        return ResultGenerator.genSuccessResult(secUser);
+    }
+
+    /**
+     * 资质审核
+     * @param id
+     * @param
+     * @return
+     */
+    @PostMapping("/updateUserCertification")
+    public Result updateUserCertification(String id){
+        try {
+            SecUser secUser = secUserService.findById(id);
+            secUser.setCertificationStatus(1);
+            secUserService.update(secUser);
+            return ResultGenerator.genSuccessResult("审核通过");
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("审核失败");
         }
     }
 

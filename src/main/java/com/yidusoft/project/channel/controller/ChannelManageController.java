@@ -192,4 +192,22 @@ public class ChannelManageController {
 
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
     }
+    /**
+     * 查找未通过认证的咨询师
+     * @param params
+     * @param page
+     * @param limit
+     * @return
+     */
+    @PostMapping("/findNotCertificationUser")
+    public Result findNotCertificationUser(String params,Integer page,Integer limit){
+        Map<String,Object> map = JSON.parseObject(params,Map.class);
+        PageHelper.startPage(page,limit);
+        try {
+            List<Map<String,Object>> list = channelManageService.findNotCertificationUser(map);
+            return ResultGenerator.genSuccessResult(list);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("出错了");
+        }
+    }
 }

@@ -52,4 +52,14 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     public Result updateChannelApproveStatus(Map<String, Object> map) {
         return null;
     }
+
+    /**
+     * 查找未通过认证的咨询师
+     * @param map
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> findNotCertificationUser(Map<String, Object> map) {
+        return channelManageMapper.findNotCertificationUser(map);
+    }
 }

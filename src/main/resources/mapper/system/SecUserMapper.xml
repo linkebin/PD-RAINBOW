@@ -32,6 +32,7 @@
       <result column="city" jdbcType="VARCHAR" property="city" />
       <result column="district" jdbcType="VARCHAR" property="district" />
       <result column="CERTIFICATION" jdbcType="VARCHAR" property="certification"/>
+      <result column="certification_status" jdbcType="INTEGER" property="certificationStatus"/>
   </resultMap>
 
   <resultMap id="userTree" type="com.yidusoft.utils.TreeNode">

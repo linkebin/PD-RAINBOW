@@ -673,6 +673,9 @@
             ,closeBtn: 0
             , content: '/web/customer/dna'
         });
+        if(isCertification()){
+            parent.window.close();
+        }
     });
     function timeout() {
         layer.closeAll()
@@ -938,7 +941,53 @@
         $("#ys").find('div').eq(index).addClass('updateProcess-this');
     }
 
+    //是否通过资质认证
+    function isCertification() {
+        $.post("/upload/findCertification", {}, function (result) {
+            if (result.code == 200) {
+                if (result.data.certificationStatus == 0){
+                    layer.closeAll();
+                    //询问框
+//                    layer.confirm('', {
+//                        btn: ['确定','取消'] //按钮
+//                    }, function(){
+//                        layer.closeAll();
+//                        window.location.href="/web/user/userInfo";
+//                    }, function(){
+//                        layer.closeAll();
+//                        parent.window.close();
+//                    }, function(index, layero){
+//                        layer.closeAll();
+//                        parent.window.close();
+//                    });
+                    layer.open({
+                        title:'提示'
+                        ,content: '请上传资质证明'
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            layer.closeAll();
+                            window.location.href="/web/user/userInfo";
+                        }
+                        ,btn2: function(index, layero){
+                            layer.closeAll();
+                            parent.window.close();
+                        }
+                        ,cancel: function(){
+                            layer.closeAll();
+                            parent.window.close();
+                        }
+                    });
+                    return true;
+                }else{
+                    return false;
+                }
 
+            } else {
+
+            }
+        });
+
+    }
 
 </script>
 </html>
