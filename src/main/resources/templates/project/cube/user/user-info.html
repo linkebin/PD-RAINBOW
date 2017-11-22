@@ -261,11 +261,12 @@
 
     $.post("/upload/findCertification", {}, function (result) {
         if (result.code == 200) {
-            if (result.data.certification != null && result.data.certificationStatus == 0){
+            if (result.data.certification != null && result.data.certificationStatus == 0 && result.data.certification != ''){
                 $('#userCertification').text('(已上传资质证明的材料，审核中)');
                 layer.closeAll();
             }else if (result.data.certificationStatus == 1){
                 $('#userCertification').text('(已通过审核)');
+                layer.closeAll();
             }
 
         } else {
