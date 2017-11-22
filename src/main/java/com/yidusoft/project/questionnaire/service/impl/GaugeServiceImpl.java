@@ -134,6 +134,27 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
         return ResultGenerator.genSuccessResult(map);
     }
 
+    public void changeType(String str,QuestionnaireQuestion question){
+        if ("评分单选".equals(str)){
+            question.setQuestionType(3);
+            question.setAnswer("");
+        }
+        if ("单选".equals(str)){
+            question.setQuestionType(2);
+        }
+        if ("多选".equals(str)){
+            question.setQuestionType(2);
+        }
+        if ("收集单选".equals(str)){
+            question.setQuestionType(4);
+            question.setAnswer("");
+        }
+        if ("收集多选".equals(str)){
+            question.setQuestionType(5);
+            question.setAnswer("");
+        }
+    }
+
     @Override
     public Result excelImportAdd(List<ArrayList<String>> lb, List<ArrayList<String>> wt) {
 
@@ -159,7 +180,11 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
             question.setAnswer(wt.get(i).get(1));
             question.setOptionAnswer(wt.get(i).get(2));
             question.setOptionScore(wt.get(i).get(3));
-            question.setQuestionType(2);
+                //答案类型
+                changeType(wt.get(i).get(4),question);
+
+            question.setAscriptionType(2);
+            question.setAnswerSequence(1);
             question.setCreator(Security.getUser().getUserName());
             question.setDeleted(0);
             question.setCreateTime(new Date());

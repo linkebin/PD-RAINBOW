@@ -251,29 +251,35 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         doSearch();
 
         $("#uploadExcel").click(function () {
-            var index = layer.load();
-            var formData = new FormData();
-            formData.append('excelFile', $('#file')[0].files[0]);
-            $.ajax({
-                url: '/gauge/readExcel',
-                type: 'POST',
-                cache: false,
-                data: formData,
-                processData: false,
-                contentType: false
-            }).done(function(data) {
-                if (data.code==200){
-                    layer.closeAll();
-                    layer.msg('导入成功');
-                    doSearch();
-                }else {
-                    layer.msg('导入失败');
-                    layer.close(index)
+            var file = document.getElementById('file');
+            if (file.value == "") {
+                layer.msg('请选择您需要上传的文件');
+            }else{
+                var index = layer.load();
+                var formData = new FormData();
+                formData.append('excelFile', $('#file')[0].files[0]);
+                console.log(formData)
+                $.ajax({
+                    url: '/gauge/readExcel',
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    processData: false,
+                    contentType: false
+                }).done(function(data) {
+                    if (data.code==200){
+                        layer.closeAll();
+                        layer.msg('导入成功');
+                        doSearch();
+                    }else {
+                        layer.msg(data.message);
+                        layer.close(index)
 
-                }
-            }).fail(function(res) {
+                    }
+                }).fail(function(res) {
 
-            });
+                });
+            }
         });
     });
 
