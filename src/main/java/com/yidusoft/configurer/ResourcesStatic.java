@@ -56,9 +56,9 @@ public  class  ResourcesStatic {
         // 精神病学临床量表
         GAUGE.put("老年精神评定量表(PAS)", "gauge_29");
         GAUGE.put("抑郁自评量表(SDS)", "gauge_30");
-        GAUGE.put("流调用抑郁自评量表(CES-D)", "gauge_1");
-        GAUGE.put("贝克抑郁自评量表(BDI)", "gauge_1");
-        GAUGE.put("抑郁体验问卷(DEQ)", "gauge_1");
+        GAUGE.put("流调用抑郁自评量表(CES-D)", "gauge_31");
+        GAUGE.put("贝克抑郁自评量表(BDI)", "gauge_32");
+        GAUGE.put("抑郁体验问卷(DEQ)", "gauge_33");
         GAUGE.put("焦虑自评量表(SAS)", "gauge_34");
         GAUGE.put("医院焦虑抑郁量表(HAD)", "gauge_1");
         GAUGE.put("状态-特质焦虑问卷(STAI)", "gauge_1");
