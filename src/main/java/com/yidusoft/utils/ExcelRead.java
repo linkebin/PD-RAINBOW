@@ -35,7 +35,7 @@ public class ExcelRead {
             String postfix = ExcelUtil.getPostfix(file.getOriginalFilename());
             if(!ExcelUtil.EMPTY.equals(postfix)){
                 if(ExcelUtil.OFFICE_EXCEL_2003_POSTFIX.equals(postfix)){
-//                    return readXls(file,rowNumStart,rowNumEnd);
+                    return readXls(file,rowNumStart,rowNumEnd);
                 }else if(ExcelUtil.OFFICE_EXCEL_2010_POSTFIX.equals(postfix)){
                     return readXlsx(file,rowNumStart,rowNumEnd);
                 }else{
@@ -71,7 +71,7 @@ public class ExcelRead {
                 if(xssfSheet == null){
                     continue;
                 }
-                totalRows = xssfSheet.getLastRowNum();
+//                totalRows = xssfSheet.getLastRowNum();
                 //读取Row,从第二行开始
                 for(int rowNum = rowNumStart-1;rowNum <= rowNumEnd-1;rowNum++){
                     XSSFRow xssfRow = xssfSheet.getRow(rowNum);
@@ -113,7 +113,7 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public List<ArrayList<String>> readXls(MultipartFile file){
+    public List<ArrayList<String>> readXls(MultipartFile file,int rowNumStart,int rowNumEnd){
         List<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
         // IO流读取文件
         InputStream input = null;
@@ -129,9 +129,9 @@ public class ExcelRead {
                 if(hssfSheet == null){
                     continue;
                 }
-                totalRows = hssfSheet.getLastRowNum();
+//                totalRows = hssfSheet.getLastRowNum();
                 //读取Row,从第二行开始
-                for(int rowNum = 1;rowNum <= totalRows;rowNum++){
+                for(int rowNum = rowNumStart;rowNum <= rowNumEnd;rowNum++){
                     HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                     if(hssfRow!=null){
                         rowList = new ArrayList<String>();

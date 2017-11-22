@@ -38,6 +38,7 @@
                     <i class='eui-icon eui-font24'>&#xe61d;</i> 量表列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
+                    <a onclick="ExcelImport()" class="eui-btn eui-btn-small">导入</a>
                     <a href="/web/gauge/getAddGauge" target="_blank" class="eui-btn eui-btn-small userAdd">添加量表</a>
                     <a href="###" onclick="deleteQuestion('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
@@ -69,6 +70,13 @@
     </div>
 </div>
 
+<div id="excelForm" style="display: none;">
+
+    <form onsubmit="return false;" class="eui-padding20">
+        <input id="file" type="file" name="excelFile" />
+        <input type="button" id="uploadExcel" value="上传" class="eui-btn eui-btn-small">
+    </form>
+</div>
 
 
 <!--添加的界面-->
@@ -241,7 +249,43 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     $(function () {
         doSearch();
+
+        $("#uploadExcel").click(function () {
+            var index = layer.load();
+            var formData = new FormData();
+            formData.append('excelFile', $('#file')[0].files[0]);
+            $.ajax({
+                url: '/gauge/readExcel',
+                type: 'POST',
+                cache: false,
+                data: formData,
+                processData: false,
+                contentType: false
+            }).done(function(data) {
+                if (data.code==200){
+                    layer.closeAll();
+                    layer.msg('导入成功');
+                    doSearch();
+                }else {
+                    layer.msg('导入失败');
+                    layer.close(index)
+
+                }
+            }).fail(function(res) {
+
+            });
+        });
     });
+
+    function ExcelImport() {
+        layer.open({
+            type: 1
+            ,title: '量表导入'
+            ,content:$("#excelForm")
+            ,area: ['400px', '200px']
+            ,shade: 0
+        });
+    }
     //删除问题
     function deleteQuestion(ids) {
         if (ids==''){

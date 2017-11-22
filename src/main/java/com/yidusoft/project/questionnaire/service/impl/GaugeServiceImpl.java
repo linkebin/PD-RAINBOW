@@ -45,6 +45,9 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
     @Resource
     private SceneService sceneService;
 
+    @Resource
+    private QuestionnaireTypeService questionnaireTypeService;
+
     //分页条件查询量表
     @Override
     public List<Gauge> gaugeListByPage(Gauge gauge) {
@@ -134,7 +137,10 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
     @Override
     public Result excelImportAdd(List<ArrayList<String>> lb, List<ArrayList<String>> wt) {
 
-        Gauge gauge = new Gauge(UUID.randomUUID().toString(),CodeHelper.getCode("LB"),"2",lb.get(0).get(0));
+        QuestionnaireType  questionnaireType = questionnaireTypeService.findBy("questionnaireTypeName",lb.get(0).get(1));
+
+        Gauge gauge = new Gauge(UUID.randomUUID().toString(),CodeHelper.getCode("LB"),questionnaireType.getId()
+                ,lb.get(0).get(0));
         gauge.setCreateTime(new Date());
         gauge.setCreator(Security.getUser().getUserName());
         gauge.setDeleted(0);

@@ -4,13 +4,18 @@ import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.domain.Gauge;
-import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.project.questionnaire.service.GaugeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.utils.CheckFileTypeUtil;
+import com.yidusoft.utils.ExcelRead;
+import com.yidusoft.utils.ExcelUtil;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +27,30 @@ public class GaugeController {
     @Resource
     private GaugeService gaugeService;
 
+
+    //量表导入
+    @PostMapping(value="/readExcel")
+    public Result readExcel(@RequestParam(value="excelFile") MultipartFile file) {
+
+        try {
+            String type = CheckFileTypeUtil.getFileType((FileInputStream) file.getInputStream());
+            if (type ==null){
+                return ResultGenerator.genFailResult("不允许上传此文件类型");
+            }
+            if (!type.equals("xls") && !type.equals("xlsx")){
+                return ResultGenerator.genFailResult("请上传Excel文件");
+            }
+
+            //读取量表
+            List<ArrayList<String>> lb = new ExcelRead().readExcel(file,3,3);
+            //读取量表问题
+            List<ArrayList<String>> wt = new ExcelRead().readExcel(file,6,ExcelUtil.getExcelTotalRows(file));
+            return gaugeService.excelImportAdd(lb,wt);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("导入失败了");
+        }
+    }
 
     /**
      * 分页条件查询所有的量表
