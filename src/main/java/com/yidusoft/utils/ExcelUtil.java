@@ -53,7 +53,7 @@ public class ExcelUtil {
             // 创建文档
             wb = new XSSFWorkbook(input);
             XSSFSheet xssfSheet = wb.getSheetAt(0);
-            count = xssfSheet.getLastRowNum();
+            count = xssfSheet.getLastRowNum()+5;
         }catch (Exception e){
             e.printStackTrace();
         }

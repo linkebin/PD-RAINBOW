@@ -153,6 +153,12 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
             question.setQuestionType(5);
             question.setAnswer("");
         }
+        if ("填空题".equals(str)){
+            question.setQuestionType(6);
+            question.setAnswer("");
+            question.setOptionScore("");
+            question.setOptionAnswer("");
+        }
     }
 
     @Override
