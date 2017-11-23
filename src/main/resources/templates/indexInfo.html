@@ -283,12 +283,22 @@
     function Buts(secUser) {
             var taskId = "'"+secUser.taskId+"'";
         var processDefinitionKey = "'"+secUser.processDefinitionKey+"'";
+        var objuri  = "'"+secUser.objuri+"'";
                 return '<button onclick="approveYes('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="通过"><i class="eui-icon">&#xe605;</i></button> ' +
-                    '<button onclick="approveNo('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="打回" ><i class="eui-icon">&#x1006;</i></button> ';
-//                    '<button  class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
+                    '<button onclick="approveNo('+taskId+','+processDefinitionKey+')" class="eui-btn eui-btn-primary eui-btn-mini" title="打回" ><i class="eui-icon">&#x1006;</i></button> '+
+                    '<button onclick="eyeLook('+objuri+')"  class="eui-btn eui-btn-primary eui-btn-mini" title="详情" ><i class="eui-icon">&#xe621;</i></button>';
 
     }
 
+    function eyeLook(uri) {
+        var index = layer.open({
+            type: 2 //此处以iframe举例
+            ,title: '详情信息'
+            ,area: ['800px', '300px']
+            ,shade: 0
+            ,content: uri
+        });
+    }
     function historyComment(taskId) {
         $.post('/taskcomment/'+taskId,{},function (result) {
             console.log(result)
@@ -315,7 +325,9 @@
 
     function Buts2(secUser) {
         var taskId = "'"+secUser.taskId+"'";
-        return '<button onclick="historyComment('+taskId+');"   class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>';
+        var objuri  = "'"+secUser.objuri+"'";
+        return '<button onclick="historyComment('+taskId+');"   class="eui-btn eui-btn-primary eui-btn-mini" title="批注信息" ><i class="eui-icon">&#xe63c;</i></button>' +
+            '<button onclick="eyeLook('+objuri+')"  class="eui-btn eui-btn-primary eui-btn-mini" title="详情" ><i class="eui-icon">&#xe621;</i></button>';
     }
     
     function approveYes(taskId,processDefinitionKey) {

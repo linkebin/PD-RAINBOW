@@ -2,8 +2,11 @@ package com.yidusoft.project.activitis.service;
 
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.business.domain.LaunchActivities;
+import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
+import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -46,6 +49,9 @@ public class ActivityService {
 
     @Autowired
     private IdentityService identityService;
+
+    @Autowired
+    private LaunchActivitiesService launchActivitiesService;
 
     @Value("${server.port}")
     private String port;
@@ -93,7 +99,7 @@ public class ActivityService {
         //利用任务对象，获取流程实例id
         String processInstancesId = task.getProcessInstanceId();
         // 添加批注时候的审核人
-        Authentication.setAuthenticatedUserId(Security.getUserId());
+        Authentication.setAuthenticatedUserId(Security.getUser().getUserName());
         //添加批注
         taskService.addComment(taskId, processInstancesId, msg);
         taskService.setAssignee(taskId,Security.getUser().getUserName());
@@ -167,18 +173,18 @@ public class ActivityService {
 
     public void launch(DelegateExecution execution) {
         Boolean bool = (Boolean) execution.getVariable("flag");
-
+        String launchId = (String) execution.getVariable("objid");
+        LaunchActivities launchActivities=launchActivitiesService.findById(launchId);
         if (bool) {
-//            //获取服务器IP
-//            LaunchActivities launchActivities=launchActivitiesService.findById("");
-//            launchActivities.setActivityStatus(2);
-//            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-//            launchActivities.setUestionnaireUri("http://"+ip+":"+port+"/web/activities/fillingPage");
-//            launchActivitiesService.update(launchActivities);
+            launchActivities.setActivityStatus(2);
+            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
+            launchActivities.setUestionnaireUri("http://"+ip+":"+port+"/web/activities/fillingPage");
             logger.info("活动审批通过");
         } else {
+            launchActivities.setActivityStatus(3);
             logger.info("活动审批退回");
         }
+        launchActivitiesService.update(launchActivities);
     }
 
 }

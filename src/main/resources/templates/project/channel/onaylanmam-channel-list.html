@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>渠道管理</title>
+    <title>待审批渠道</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
     <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
     <style>
         #channelAdd input + label{color: red; font-size: 12px;}
+        .error{
+            color: red; font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -65,6 +68,7 @@
                 <col width="300">
                 <col width="110">
                 <col width="120">
+                <col width="100">
                 <col>
             </colgroup>
             <thead>
@@ -77,6 +81,7 @@
                 <th>联系人住址</th>
                 <th>渠道负责人</th>
                 <th>加入时间</th>
+                <th>状态</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -92,7 +97,7 @@
 <!-- 左滑添加渠道商开始 -->
 <div class="taskFiltrate">
 </div>
-<div class="filtrateIn">
+<div  class="filtrateIn">
     <div class="eui-row eui-padding10 eui-borderB">
         <div class="eui-col-md10 eui-font18 eui-lineHeight30">
             <i class='eui-icon eui-font24'>&#xe654;</i> <span class="title-add-edit">添加渠道商</span>
@@ -127,22 +132,42 @@
                 <input type="text" name="linkmanTell" e-verify="title" autocomplete="off" placeholder="请输入联系人手机" class="eui-input">
             </div>
         </div>
+        <div  data-toggle="distpicker">
+        <div class="eui-form-item">
+            <label class="eui-form-label">省</label>
+            <div class="eui-input-block">
+                <select  name="province"  data-province="" e-ignore class="eui-input"></select>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">市</label>
+            <div class="eui-input-block">
+                <select  name="city" data-province="" e-ignore class="eui-input"></select>
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">区</label>
+            <div class="eui-input-block">
+                <select  name="district"  data-province="" e-ignore class="eui-input"></select>
+            </div>
+        </div>
+        </div>
 
         <div class="eui-form-item">
             <label class="eui-form-label">联系人住址</label>
             <div class="eui-input-block">
-                <input type="text" name="linkmanAddr" e-verify="title" autocomplete="off" placeholder="选填" class="eui-input">
+                <input type="text" name="linkmanAddr"  class="eui-input">
             </div>
         </div>
         <div class="eui-form-item">
             <label class="eui-form-label">渠道负责人</label>
             <div class="eui-input-block">
-                <input type="text" name="channelManager" e-verify="title" autocomplete="off" placeholder="请输入渠道负责人" class="eui-input" >
+                <input type="text" name="channelManager"  placeholder="请输入渠道负责人" class="eui-input" >
             </div>
         </div>
 
         <div class="eui-form-item">
-            <label class="eui-form-label">渠道入驻时间</label>
+            <label class="eui-form-label">入驻时间</label>
             <div class="eui-input-block">
                 <input type="text" name="createTime" class="eui-input" id="joinTime" placeholder="加入时间" readonly="readonly">
             </div>
@@ -164,7 +189,8 @@
 <script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
-
+<script src="/Scripts/plugins/distpicker.data.js"></script>
+<script src="/Scripts/plugins/distpicker.js"></script>
 
 <script type="text/javascript">
 
@@ -193,13 +219,30 @@
 
     $(function () {
         doSearch();
+        jQuery.validator.addMethod("isMobile", function(value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "请正确填写您的手机号码");
+        jQuery.validator.addMethod("isProvincePNo", function(value, element) {
+            return this.optional(element) || value!='—— 省 ——';
+        }, "请选择省份");
         $("#channelAdd").validate({
             rules: {
                 channelName: {
                     required : true
                 },
+                province:{
+                    required:true,
+                    isProvincePNo:true
+                },
                 linkman:"required",
-                linkmanTell:"required",
+                linkmanAddr:"required",
+                linkmanTell:{
+                    required : true,
+                    minlength : 11,
+                    isMobile : true
+                },
                 channelManager:"required",
                 createTime:"required"
 
@@ -209,7 +252,16 @@
                     required : "请输入渠道名称",
                 },
                 linkman: "请输入联系人",
-                linkmanTell:"请输入联系人手机",
+                province:{
+                    required:'请选择省',
+                    isProvincePNo:'请选择省份'
+                },
+                linkmanAddr:"请输入详细地址",
+                linkmanTell:{
+                    required : "请输入手机号",
+                    minlength : "确认手机不能小于11个字符",
+                    isMobile : "请正确填写您的手机号码"
+                },
                 channelManager:"请输入渠道负责人",
                 createTime:"请选择加入时间"
             },
@@ -365,6 +417,16 @@
         for (var item in userList){
             var secUser = userList[item];
             var id = "'" + secUser.id + "'";
+            var name = "'" + secUser.channelName + "'";
+            var status2 = "未申请";
+            var status = secUser.status;
+            if (secUser.status==1){
+                status2='审批中';
+            }
+            if (secUser.status==4){
+                status2='被驳回';
+            }
+
             var channelManager = secUser.channelManager;
             if (secUser.channelManager==undefined || secUser.channelManager==''){
                 channelManager='无';
@@ -380,18 +442,35 @@
                 '<td>'+ linkmanAddr +'</td>' +
                 '<td>'+ channelManager +'</td>' +
                 '<td>'+ new Date(secUser.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>'+ status2 +'</td>' +
                 '<td>' +
-                '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="Pass('+id+')" title="审批通过"><i class="eui-icon">&#xe618;</i></button> ' +
-                '</div>' +
+                '<div class="eui-btn-group"> ' +forBut(status,id,name)+
+               '</div>' +
                 '</td>' +
                 '</tr>';
         }
         return tableHtml;
     }
+
+    function forBut(status,id,name) {
+        if (status == 3){
+            return  '<button class="eui-btn eui-btn-primary eui-btn-mini" ' +
+                'onclick="Pass('+id+','+name+')" title="申请"><i class="eui-icon">&#xe609;</i></button> ';
+        }
+        if (status == 4){
+            return  '<button class="eui-btn eui-btn-primary eui-btn-mini" ' +
+                'onclick="Pass('+id+','+name+')" title="重新申请"><i class="eui-icon">&#xe609;</i></button> ';
+        }
+        return '';
+    }
     
-    function Pass() {
-        
+    function Pass(id,name) {
+        layer.load();
+        $.post('/channelProcess',{channelId:id,
+            channelName:name+"   申请入驻平台"},function (result) {
+            doSearch();
+            layer.closeAll();
+        });
     }
 </script>
 </body>

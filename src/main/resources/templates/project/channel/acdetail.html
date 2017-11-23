@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>详情</title>
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="entirety eui-bg-white">
+    <table class="eui-table">
+        <colgroup>
+            <col width="200">
+            <col>
+            <col width="200">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <td>渠道商名称:</td>
+            <td th:text="${acdetail.channelName}"></td>
+            <td>渠道编号:</td>
+            <td th:text="${acdetail.channelCode}"></td>
+        </tr>
+        <tr>
+            <td>联系人姓名:</td>
+            <td th:text="${acdetail.linkman}"></td>
+            <td>联系人手机:</td>
+            <td th:text="${acdetail.linkmanTell}"></td>
+
+        </tr>
+        <tr>
+            <td>联系人住址:</td>
+            <td th:text="${acdetail.province+acdetail.city+acdetail.district+acdetail.linkmanAddr}" colspan="3"></td>
+        </tr>
+        <tr>
+            <td>渠道负责人:</td>
+            <td th:text="${acdetail.channelManager}" ></td>
+            <td>入驻时间:</td>
+            <td th:text="${#dates.format(acdetail.createTime, 'yyyy-MM-dd')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

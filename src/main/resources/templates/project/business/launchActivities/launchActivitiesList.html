@@ -195,7 +195,10 @@
                 status = "待审批"
             } else if (activity.activityStatus == 2 && activity.initiatorType == 2) {
                 status = "审批通过"
+            }else if (activity.activityStatus == 3 && activity.initiatorType == 2) {
+                status = "审批驳回"
             }
+
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
                     '<td>' + activity.activityCode + '</td>' +
@@ -220,8 +223,8 @@
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
         }
         return  '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="activityEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="审批" onclick="checkActivity('+"'approval'," + id + ')"><i class="eui-icon tb">&#x1005;</i></button>';
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+//                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="审批" onclick="checkActivity('+"'approval'," + id + ')"><i class="eui-icon tb">&#x1005;</i></button>';
     }
 
     parent.element.on('tab(nav-tab)', function(elem){

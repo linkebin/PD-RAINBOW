@@ -24,7 +24,16 @@
   </resultMap>
 
   <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">
-      SELECT cm.* FROM channel_manage cm WHERE cm.deleted=0 AND cm.status=#{status}
+      SELECT cm.* FROM channel_manage cm WHERE cm.deleted=0
+
+    <if test="status ==2 ">
+      AND cm.status=#{status}
+    </if>
+
+    <if test="status!=2">
+      AND cm.status !=2
+    </if>
+
 
     <if test="channelName!='' and channelName!=null">
       AND cm.channel_name LIKE  '%${channelName}%'
@@ -65,12 +74,12 @@
   <select id="findChannelAccountTree" parameterType="Map" resultType="java.util.Map">
     SELECT b.* FROM(
 
-    SELECT  cm.id_ id,  cm.channel_name name, 0 parentId FROM channel_manage cm WHERE cm.deleted=0
+    SELECT  cm.id_ id,  cm.channel_name name, 0 parentId FROM channel_manage cm WHERE cm.deleted=0 AND cm.`status`=2
     UNION ALL
 
     SELECT su.ID_ id , su.USER_NAME name, cc.id_ parentId FROM   channel_manage cc
 
-    LEFT JOIN sec_user su  on cc.id_=su.channel_id WHERE su.DELETED=0 AND cc.deleted=0
+    LEFT JOIN sec_user su  on cc.id_=su.channel_id WHERE su.DELETED=0 AND cc.deleted=0 AND cc.`status`=2
     ) b WHERE 1=1
 
     <if test="parentId =='one'">

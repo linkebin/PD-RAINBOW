@@ -58,9 +58,12 @@ public class ActivityController {
 				String NAME_ = (String) taskService.getVariable(task.getId(), "objname");
 				String startName = (String) taskService.getVariable(task.getId(), "applyuser");
 			    String userTaskApply = (String) taskService.getVariableLocal(task.getId(),"userTaskApply");
+				String uri = (String) taskService.getVariable(task.getId(),"objuri");
 			ProcessInstance processInstance = getProcessInstance(task);
-				dtos.add(new TaskRepresentation(task.getId(),task.getName(),task.getCreateTime(),ID_,NAME_,startName
-				,processInstance.getProcessDefinitionName(),processInstance.getProcessDefinitionKey()));
+			TaskRepresentation taskRepresentation = new TaskRepresentation(task.getId(),task.getName(),task.getCreateTime(),ID_,NAME_,startName
+					,processInstance.getProcessDefinitionName(),processInstance.getProcessDefinitionKey());
+			    taskRepresentation.setObjuri(uri);
+				dtos.add(taskRepresentation);
 		}
 		PageInfo pageInfo = new PageInfo(dtos);
 		pageInfo.setTotal(myService.getTasksCount(assignee));
@@ -83,7 +86,7 @@ public class ActivityController {
 		return ResultGenerator.genSuccessResult(dtos);
 	}
 
-	//获取当前人的任务
+	//获取历史的任务
 	@RequestMapping(value = "/historyTaskList", method = RequestMethod.POST)
 	public Result historyTaskList(Integer page,Integer pagesize) {
 		String assignee = Security.getUser().getUserName();
@@ -121,6 +124,9 @@ public class ActivityController {
 					if (hvi.getVariableName().equals("applyuser")){
 						representation.setStartName((String) hvi.getValue());
 					}
+					if (hvi.getVariableName().equals("objuri")){
+						representation.setObjuri((String) hvi.getValue());
+					}
 				}
 			}
 			dtos.add(representation);
@@ -152,7 +158,6 @@ public class ActivityController {
 	//用户审批活动
 	@RequestMapping(value = "/complete/{launchApproved}/{taskId}/{msg}", method = RequestMethod.POST)
 	public Result complete(@PathVariable Boolean launchApproved, @PathVariable String taskId, @PathVariable String msg) {
-		System.out.println(1222);
 		 return myService.completeTasks(launchApproved, taskId,msg);
 	}
 
@@ -166,6 +171,8 @@ public class ActivityController {
 		private String name_;
 		private String startName;
 		private String processInstanceName;
+
+		private String objuri;
 
 		private Date startTime;
 		private Date endTime;
@@ -190,6 +197,14 @@ public class ActivityController {
 			this.startName=startName;
 			this.processInstanceName=processInstanceName;
 			this.processDefinitionKey=processDefinitionKey;
+		}
+
+		public String getObjuri() {
+			return objuri;
+		}
+
+		public void setObjuri(String objuri) {
+			this.objuri = objuri;
 		}
 
 		public String getProcessDefinitionKey() {

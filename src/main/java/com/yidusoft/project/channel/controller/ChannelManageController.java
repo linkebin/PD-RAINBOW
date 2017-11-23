@@ -74,7 +74,7 @@ public class ChannelManageController {
             }
         }
 
-        channelActivityService.startProcess(channelManage.getId(),channelManage.getChannelName()+" 申请入驻平台");
+//        channelActivityService.startProcess(channelManage.getId(),channelManage.getChannelName()+" 申请入驻平台");
 
         return ResultGenerator.genSuccessResult("添加成功");
     }

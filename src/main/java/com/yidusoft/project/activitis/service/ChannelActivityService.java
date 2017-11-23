@@ -55,12 +55,18 @@ public class ChannelActivityService {
      * 开始流程 输入渠道ID
      * @param channelId
      */
-    public void startProcess(String channelId,String channelName) {
+    public void startProcess(String channelId,String channelName,String objuri) {
+
+        ChannelManage channelManage = channelManageService.findById(channelId);
+        channelManage.setStatus(1);
+        channelManageService.update(channelManage);
+
         //设置流程的启动人
         identityService.setAuthenticatedUserId(Security.getUser().getUserName());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("objid", channelId);
         variables.put("objname", channelName);
+        variables.put("objuri", objuri);
         runtimeService.startProcessInstanceByKey("channelL", variables);
     }
 
@@ -89,17 +95,18 @@ public class ChannelActivityService {
 
     public void channel(DelegateExecution execution) {
         Boolean bool = (Boolean) execution.getVariable("flag");
+        String channelId = (String) execution.getVariable("objid");
+        ChannelManage channelManage = channelManageService.findById(channelId);
         if (bool) {
-            String channelId = (String) execution.getVariable("objid");
-            ChannelManage channelManage = channelManageService.findById(channelId);
             channelManage.setStatus(2);
-            channelManageService.update(channelManage);
             SecUser secUser = secUserService.findChannelDefaultAccount(channelManage.getId());
             secUser.setStatus(1);
             secUserService.update(secUser);
             logger.info("渠道审批通过");
         } else {
+            channelManage.setStatus(4);
             logger.info("渠道审批退回");
         }
+        channelManageService.update(channelManage);
     }
 }

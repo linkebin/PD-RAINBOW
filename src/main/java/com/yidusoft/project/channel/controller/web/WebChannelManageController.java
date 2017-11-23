@@ -49,4 +49,17 @@ public class WebChannelManageController {
     public String certificationCounselor(){
         return "project/channel/channel-counselor-certification";
     }
+
+    @RequestMapping("/xxxx")
+    public String xxxx() {
+        return "project/channel/xxxx";
+    }
+
+    @RequestMapping("/acdetail")
+    public String acdetail(String id,Model model) {
+
+        model.addAttribute("acdetail",channelManageService.findById(id));
+
+        return "project/channel/acdetail";
+    }
 }
