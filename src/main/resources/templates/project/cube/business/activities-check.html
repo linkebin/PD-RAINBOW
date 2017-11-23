@@ -389,12 +389,14 @@
                 console.log(result.data/$('input[name="activityTotal"]').val()*100);
                 var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
                 progressBar = parseInt(progressBar);
-                console.log(progressBar);
                 if(progressBar<1){
-                    progressBar=1;
+                    progressBar="1%";
+                }else{
+                    progressBar+="%";
                 }
+                console.log(progressBar);
                 setTimeout(function () {
-                    element.progress('activity', progressBar+"%");
+                    element.progress('activity', progressBar);
                 },500);
             }
         })

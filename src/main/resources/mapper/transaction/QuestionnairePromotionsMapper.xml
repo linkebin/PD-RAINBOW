@@ -51,4 +51,7 @@
     AND 	pro.id_=#{id}
   </select>
 
+  <select id="getState" resultMap="BaseResultMap">
+    SELECT * FROM questionnaire_promotions WHERE deleted=0 AND promotions_state=1
+  </select>
 </mapper>

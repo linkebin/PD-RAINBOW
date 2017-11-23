@@ -15,4 +15,6 @@ public interface ProductSettingsMapper extends Mapper<ProductSettings> {
     List<ProductSettings> getProductByTime();
 
     List<ProductSettings> getUpdateUnion(String id);
+
+    void updateProductPromotions(String promotionsId);
 }

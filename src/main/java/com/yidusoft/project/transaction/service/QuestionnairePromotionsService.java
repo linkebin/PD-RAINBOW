@@ -1,5 +1,6 @@
 package com.yidusoft.project.transaction.service;
 
+import com.yidusoft.core.Result;
 import com.yidusoft.core.Service;
 import com.yidusoft.project.transaction.domain.QuestionnairePromotions;
 
@@ -27,4 +28,10 @@ public interface QuestionnairePromotionsService extends Service<QuestionnairePro
      * @return
      */
     List<QuestionnairePromotions> getPromotionState();
+
+    /**
+     * 获取设计中的活动
+     * @return
+     */
+    Result getState();
 }

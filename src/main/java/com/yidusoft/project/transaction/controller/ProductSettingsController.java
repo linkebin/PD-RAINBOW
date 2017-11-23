@@ -147,4 +147,21 @@ public class ProductSettingsController {
         productSettingsService.update(productSettings);
         return ResultGenerator.genSuccessResult();
     }
+
+    /**
+     * 根据多个id获取多个套餐
+     * @param ids
+     * @return
+     */
+    @PostMapping("/getMoreProduct")
+    public Result getMoreProduct(int page, int size, String ids){
+        PageHelper.startPage(page, size);
+        List<ProductSettings> list = new ArrayList<>();
+        String arr[] = ids.split(",");
+        for(String id : arr){
+            list.add(productSettingsService.findById(id));
+        }
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 }

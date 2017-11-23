@@ -387,30 +387,46 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
         return ResultGenerator.genSuccessResult();
     }
 
-    //消费扣除活动发起人的使用卷
+    /**
+     * 判断是调研活动还是企业活动
+     * @param activityId
+     */
     public void deleteDuction(String activityId) {
         LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        if(launchActivities.getInitiatorType()!=1){
+        if(launchActivities.getInitiatorType()!=1){//如果是企业活动
             updateUserQuestionnaires(launchActivities.getUserId());
         }
     }
 
-    public void updateUserQuestionnaires(String userId){
+    /**
+     * 判断用户余额和是否是会员
+     * 来决定是否扣除问卷
+     * @param userId
+     */
+    public Result updateUserQuestionnaires(String userId){
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
-        if(userQuestionnaires.getMember()!=1){
-            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
-            userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
-        }else{
-            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){
+        if(userQuestionnaires.getMember()!=1){//如果不是会员
+            if(userQuestionnaires.getQuestionnairesTotal()>0){//如果使用券大于0
+                userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+                userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+            }else{//如果使用卷小于0
+                return ResultGenerator.genFailResult("使用券不足");
+            }
+        }else{//如果是会员
+            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){//如果会员到期
                 userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
                 userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
             }
         }
         userQuestionnairesService.update(userQuestionnaires);
-        addAccount(userId);
+        return addAccount(userId);
     }
 
-    public void addAccount(String userId){
+    /**
+     * 添加到账户信息
+     * @param userId
+     */
+    public Result addAccount(String userId){
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
         if(userQuestionnaires!=null && userQuestionnaires.getMember()!=1){
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -432,6 +448,6 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             }
             accountInfoService.save(accountInfo);
         }
-
+        return ResultGenerator.genSuccessResult();
     }
 }

@@ -30,7 +30,12 @@
         <if test="orderState != null and orderState != ''">
             AND order_state=#{orderState}
         </if>
-        ORDER BY payment_time DESC
+        <if test="orderState==2 or orderState==3">
+            ORDER BY create_time DESC
+        </if>
+        <if test="orderState==1">
+            ORDER BY payment_time DESC
+        </if>
     </select>
 
     <update id="updateOrderOnline" parameterType="String">

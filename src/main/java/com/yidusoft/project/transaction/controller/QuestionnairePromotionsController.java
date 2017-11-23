@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -68,7 +69,6 @@ public class QuestionnairePromotionsController {
 
     /**
      * 添加活动
-     *
      * @param promotionsJson
      * @return
      */
@@ -81,6 +81,12 @@ public class QuestionnairePromotionsController {
         promotions.setCreateTime(new Date());
         promotions.setDeleted(0);
         promotions.setPromotionsState(1);
+        if(promotions.getPromotionsType()==1){
+            promotions.setPromotionsBuySend(0);
+        }else{
+            BigDecimal decimal = new BigDecimal("0");
+            promotions.setPromotionsDiscount(decimal);
+        }
         questionnairePromotionsService.save(promotions);
         if(ids!=null && ids!=""){
             String arr[] = ids.split(",");
@@ -222,6 +228,9 @@ public class QuestionnairePromotionsController {
         QuestionnairePromotions questionnairePromotions = questionnairePromotionsService.findById(id);
         questionnairePromotions.setPromotionsState(state);
         questionnairePromotionsService.update(questionnairePromotions);
+        if(state==3){
+            productSettingsService.updateProductPromotions(questionnairePromotions.getId());
+        }
         return ResultGenerator.genSuccessResult(questionnairePromotions);
     }
 }

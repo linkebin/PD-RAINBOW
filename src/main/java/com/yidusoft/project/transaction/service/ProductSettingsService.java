@@ -27,4 +27,6 @@ public interface ProductSettingsService extends Service<ProductSettings> {
     Result deleteBacth(String ids);
 
     void addTrajectory(String content,String uuId,String productId,String name);
+
+    void updateProductPromotions(String promotionsId);
 }

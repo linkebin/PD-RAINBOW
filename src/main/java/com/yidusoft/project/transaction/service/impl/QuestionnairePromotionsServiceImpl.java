@@ -1,6 +1,8 @@
 package com.yidusoft.project.transaction.service.impl;
 
 import com.yidusoft.core.AbstractService;
+import com.yidusoft.core.Result;
+import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.transaction.dao.QuestionnairePromotionsMapper;
 import com.yidusoft.project.transaction.domain.QuestionnairePromotions;
 import com.yidusoft.project.transaction.service.QuestionnairePromotionsService;
@@ -42,4 +44,18 @@ public class QuestionnairePromotionsServiceImpl extends AbstractService<Question
      */
     @Override
     public List<QuestionnairePromotions> getPromotionState() { return questionnairePromotionsMapper.getPromotionState(); }
+
+
+    /**
+     * 获取设计中的活动
+     * @return
+     */
+    public Result getState(){
+        List<QuestionnairePromotions> list = questionnairePromotionsMapper.getState();
+        for(QuestionnairePromotions questionnairePromotions : list){
+            questionnairePromotions.setPromotionsState(2);
+            this.update(questionnairePromotions);
+        }
+        return ResultGenerator.genSuccessResult();
+    }
 }

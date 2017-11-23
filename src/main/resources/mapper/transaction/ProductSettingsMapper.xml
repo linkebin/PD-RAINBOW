@@ -51,5 +51,9 @@
         FROM product_settings WHERE promotions_id=#{id} AND deleted=0
         AND product_state=0 AND product_total!=1
     </select>
+
+    <update id="updateProductPromotions" parameterType="String">
+        UPDATE product_settings SET promotions_id='',promotions_name='' WHERE promotions_id=#{promotionsId}
+    </update>
 </mapper>
 

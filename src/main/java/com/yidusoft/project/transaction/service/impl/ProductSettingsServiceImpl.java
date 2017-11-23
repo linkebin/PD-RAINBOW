@@ -165,4 +165,7 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
         mt.setCreateTime(new Date());
         modifyTrajectoryService.save(mt);
     }
+
+    @Override
+    public void updateProductPromotions(String promotionsId) { productSettingsMapper.updateProductPromotions(promotionsId); }
 }

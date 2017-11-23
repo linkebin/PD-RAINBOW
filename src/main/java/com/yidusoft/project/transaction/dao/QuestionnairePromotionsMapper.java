@@ -23,4 +23,10 @@ public interface QuestionnairePromotionsMapper extends Mapper<QuestionnairePromo
      * @return
      */
     List<QuestionnairePromotions> getPromotionState();
+
+    /**
+     * 获取设计中的活动
+     * @return
+     */
+    List<QuestionnairePromotions> getState();
 }

@@ -166,6 +166,13 @@
             } else if (promotion.promotionsState==3){
                 state="提前终止";
             }
+            var buySend = '--';
+            var discount = "--";
+            if(promotion.promotionsType==1){
+                discount = (promotion.promotionsDiscount * 10).toFixed(1) + "折";
+            }else{
+                buySend = promotion.promotionsBuySend+"张";
+            }
             var end = new Date(promotion.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
             var now = new Date().Format('yyyy-MM-dd hh:mm:ss');
             if(promotion.promotionsState==2 && now > end){
@@ -181,7 +188,7 @@
                     '<td>' + new Date(promotion.promotionsStart).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' + new Date(promotion.promotionsEnd).Format('yyyy-MM-dd') + '</td>' +
                     '<td>' + discount + '</td>' +
-                    '<td>' + promotion.promotionsBuySend + '</td>' +
+                    '<td>' + buySend + '</td>' +
                     '<td>' + state + '</td>' +
                     '<td>' + promotion.creator + '</td>' +
                     '<td>' + new Date(promotion.createTime).Format('yyyy-MM-dd') + '</td>' +
@@ -205,7 +212,7 @@
         }else if(sate==2 && now < end){
             return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="enablePromotions('+"'termination'," + id + ','+end+')"><i class="eui-icon">&#xe6d8;</i></button> ';
         }else{
-            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="checkPromotions(' + id + ')"><i class="eui-icon">&#xe621;</i></button> ';
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkPromotions(' + id + ')"><i class="eui-icon">&#xe621;</i></button> ';
         }
     }
 
