@@ -118,6 +118,11 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
         product.setDeleted(0);
         product.setPromotionsId("");
         product.setPromotionsName("");
+        if(product.getProductType()==1){
+            product.setTimeLimit(0);
+        }else{
+            product.setProductTotal(0);
+        }
         productSettingsService.save(product);
         return ResultGenerator.genSuccessResult();
     }

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>行为记录</title>
+    <title>套餐修改轨迹</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
 </head>
 <body>
@@ -84,7 +84,7 @@
                 data: {
                     page: 1,
                     size: 10,
-                    params: JSON.stringify($("#searchFrom").serializeObject())
+                    json: JSON.stringify($("#searchFrom").serializeObject())
                 },
                 type: "post",
                 success: function (result) {
@@ -112,7 +112,7 @@
                                     data: {
                                         page: obj.curr,
                                         size: obj.limit,
-                                        params: JSON.stringify($("#searchFrom").serializeObject())
+                                        json: JSON.stringify($("#searchFrom").serializeObject())
                                     },
                                     type: "post",
                                     success: function (result) {

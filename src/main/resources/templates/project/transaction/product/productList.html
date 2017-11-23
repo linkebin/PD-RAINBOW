@@ -449,13 +449,22 @@
             if (product.productType == 2) {
                 type = "会员";
             }
+            var timeLimit = product.timeLimit.toString()+"个月";
+            if(product.timeLimit == 0){
+                timeLimit = "--";
+            }
+            var total = product.productTotal.toString()+"张";
+            if(product.productTotal == 0){
+                total = "--";
+            }
+
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="productId" type="hidden" value="' + product.id + '"></td>' +
                     '<td>' + product.productCode + '</td>' +
                     '<td>' + product.productName + '</td>' +
                     '<td>' + type + '</td>' +
-                    '<td>' + product.productTotal + '</td>' +
-                    '<td>' + product.timeLimit + '月</td>' +
+                    '<td>' + total + '</td>' +
+                    '<td>' + timeLimit + '</td>' +
                     '<td>' + product.productPrice + '元</td>' +
                     '<td>' + product.creator + '</td>' +
                     '<td>' + new Date(product.createTime).Format('yyyy-MM-dd') + '</td>';
@@ -514,6 +523,8 @@
             if(total==1){
                 $('#total').hide();
                 $('#state').hide();
+            }else{
+                $('#state').show();
             }
             $('input[name="productType"]').each(function (i, data) {
                 if (data.value == type) {
