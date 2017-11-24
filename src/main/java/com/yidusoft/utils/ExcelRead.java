@@ -28,16 +28,16 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public List<ArrayList<String>> readExcel(MultipartFile file,int rowNumStart,int rowNumEnd) throws IOException {
+    public List<ArrayList<String>> readExcel(MultipartFile file,int rowNumStart,int rowNumEnd,int numSheet) throws IOException {
         if(file==null||ExcelUtil.EMPTY.equals(file.getOriginalFilename().trim())){
             return null;
         }else{
             String postfix = ExcelUtil.getPostfix(file.getOriginalFilename());
             if(!ExcelUtil.EMPTY.equals(postfix)){
                 if(ExcelUtil.OFFICE_EXCEL_2003_POSTFIX.equals(postfix)){
-                    return readXls(file,rowNumStart,rowNumEnd);
+                    return readXls(file,rowNumStart,rowNumEnd,numSheet);
                 }else if(ExcelUtil.OFFICE_EXCEL_2010_POSTFIX.equals(postfix)){
-                    return readXlsx(file,rowNumStart,rowNumEnd);
+                    return readXlsx(file,rowNumStart,rowNumEnd,numSheet);
                 }else{
                     return null;
                 }
@@ -55,7 +55,7 @@ public class ExcelRead {
      * @throws IOException
      */
     @SuppressWarnings("deprecation")
-    public List<ArrayList<String>> readXlsx(MultipartFile file,int rowNumStart,int rowNumEnd){
+    public List<ArrayList<String>> readXlsx(MultipartFile file,int rowNumStart,int rowNumEnd,int numSheet){
         List<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
         // IO流读取文件
         InputStream input = null;
@@ -66,12 +66,10 @@ public class ExcelRead {
             // 创建文档
             wb = new XSSFWorkbook(input);
             //读取sheet(页)
-            for(int numSheet=0;numSheet<wb.getNumberOfSheets();numSheet++){
+            if(wb.getNumberOfSheets() < numSheet){
+                return null;
+            }
                 XSSFSheet xssfSheet = wb.getSheetAt(numSheet);
-                if(xssfSheet == null){
-                    continue;
-                }
-//                totalRows = xssfSheet.getLastRowNum();
                 //读取Row,从第二行开始
                 for(int rowNum = rowNumStart-1;rowNum <= rowNumEnd-1;rowNum++){
                     XSSFRow xssfRow = xssfSheet.getRow(rowNum);
@@ -90,7 +88,6 @@ public class ExcelRead {
                         list.add(rowList);
                     }
                 }
-            }
             return list;
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,7 +110,7 @@ public class ExcelRead {
      * @return
      * @throws IOException
      */
-    public List<ArrayList<String>> readXls(MultipartFile file,int rowNumStart,int rowNumEnd){
+    public List<ArrayList<String>> readXls(MultipartFile file,int rowNumStart,int rowNumEnd,int numSheet){
         List<ArrayList<String>> list = new ArrayList<ArrayList<String>>();
         // IO流读取文件
         InputStream input = null;
@@ -124,11 +121,11 @@ public class ExcelRead {
             // 创建文档
             wb = new HSSFWorkbook(input);
             //读取sheet(页)
-            for(int numSheet=0;numSheet<wb.getNumberOfSheets();numSheet++){
+            if(wb.getNumberOfSheets() < numSheet){
+                return null;
+            }
                 HSSFSheet hssfSheet = wb.getSheetAt(numSheet);
-                if(hssfSheet == null){
-                    continue;
-                }
+
 //                totalRows = hssfSheet.getLastRowNum();
                 //读取Row,从第二行开始
                 for(int rowNum = rowNumStart;rowNum <= rowNumEnd;rowNum++){
@@ -148,7 +145,6 @@ public class ExcelRead {
                         list.add(rowList);
                     }
                 }
-            }
             return list;
         } catch (IOException e) {
             e.printStackTrace();

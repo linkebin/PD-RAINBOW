@@ -64,6 +64,7 @@
                 <col width="300">
                 <col width="110">
                 <col width="120">
+                <col width="120">
                 <col>
             </colgroup>
             <thead>
@@ -76,6 +77,7 @@
                 <th>联系人住址</th>
                 <th>渠道负责人</th>
                 <th>加入时间</th>
+                <th>渠道账号</th>
                 <!--<th>创建人</th>-->
                 <th>操作</th>
             </tr>
@@ -471,6 +473,7 @@
                 '<td>'+ linkmanAddr +'</td>' +
                 '<td>'+ channelManager +'</td>' +
                 '<td>'+ new Date(secUser.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>'+ secUser.account +'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="编辑渠道商"><i class="eui-icon">&#xe642;</i></button> ' +

@@ -24,7 +24,9 @@
   </resultMap>
 
   <select id="finndChannelByParameterList" parameterType="com.yidusoft.project.channel.domain.ChannelManage" resultMap="BaseResultMap">
-      SELECT cm.* FROM channel_manage cm WHERE cm.deleted=0
+      SELECT cm.*,
+    (SELECT su.ACCOUNT  FROM sec_user su WHERE su.deleted=0 AND su.channel_id=cm.id_ AND su.ACCOUNT_TYPE=2) account
+    FROM channel_manage cm WHERE cm.deleted=0
 
     <if test="status ==2 ">
       AND cm.status=#{status}
