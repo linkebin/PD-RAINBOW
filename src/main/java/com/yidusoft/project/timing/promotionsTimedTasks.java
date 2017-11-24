@@ -19,7 +19,7 @@ public class promotionsTimedTasks {
 
     @Resource
     private QuestionnairePromotionsService questionnairePromotionsService;
-    @Scheduled(cron="0 0/1 * * * ?")
+    @Scheduled(cron="0 0 */1 * * ?")
     public void timedTasks(){
         logger.info("每小时执行一次。开始……");
         //查询问卷即将要上架的 修改状态
