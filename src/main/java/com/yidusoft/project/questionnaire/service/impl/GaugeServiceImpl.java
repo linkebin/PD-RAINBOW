@@ -256,7 +256,7 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
                     gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
                     for(int j=0;j<zwt.size();j++){
                         QuestionnaireQuestion z = new QuestionnaireQuestion();
-                        z.setId(question.getId()+"_"+j);
+                        z.setId(question.getId()+"_"+(j+1));
                         z.setQuestionContent(zwt.get(j).get(0));
                         z.setQuestionCode(CodeHelper.getCode("WT"));
                         z.setAnswer(zwt.get(j).get(1));
@@ -270,11 +270,12 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
                         z.setCreator(Security.getUser().getUserName());
                         z.setDeleted(0);
                         z.setCreateTime(new Date());
-                        questionnaireQuestionMapper.insert(z);
+
                         GaugeQuestionFactor g = new GaugeQuestionFactor();
                         g.setId(UUID.randomUUID().toString());
                         g.setGaugeId(gauge.getId());
                         g.setQuestionId(z.getId());
+                        questionnaireQuestionMapper.insert(z);
                         gaugeQuestionFactorMapper.insert(g);
                     }
                 }
