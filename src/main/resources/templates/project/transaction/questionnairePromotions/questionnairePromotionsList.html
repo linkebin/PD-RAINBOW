@@ -92,7 +92,7 @@
             //全选
             form.on('checkbox(allChoose)', function (data) {
                 var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
-                console.log(child);
+//                console.log(child);
                 child.each(function (index, item) {
                     item.checked = data.elem.checked;
                 });
@@ -135,7 +135,7 @@
                                     },
                                     type: "post",
                                     success: function (result) {
-                                        console.log(result);
+//                                        console.log(result);
                                         var promotionList = result.data.list;
                                         //遍历，拼接表格
                                         var tableHtml = getTable(promotionList);
@@ -154,7 +154,7 @@
     }
     //渲染数据，拼接表格
     function getTable(userList) {
-        console.log(userList);
+//        console.log(userList);
         var tableHtml = '';
         for (var item in userList) {
             var promotion = userList[item];
@@ -178,8 +178,8 @@
             if(promotion.promotionsState==2 && now > end){
                 state="正常结束";
             }
-            console.log(now > end);
-            console.log(state);
+//            console.log(now > end);
+//            console.log(state);
             tableHtml += '<tr>' +
                     '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="promotionsId" type="hidden" value="' + promotion.id + '"></td>' +
                     '<td>' + promotion.promotionsName + '</td>'
@@ -374,7 +374,7 @@
                 s++;
             });
             ids = idArray.join(",");
-            console.log(ids);
+//            console.log(ids);
         }
         if (ids == "") {
             layer.msg('请选择要删除的促销', {

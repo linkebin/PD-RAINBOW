@@ -32,11 +32,11 @@
         </div>
         <label class="eui-form-label">开始时间</label>
         <div class="eui-input-inline">
-            <input type="text" class="eui-input" name="promotionsStart" id="startTime" placeholder="年-月-日 时:分:秒">
+            <input type="text" class="eui-input" name="promotionsStart" id="startTime" placeholder="年-月-日 时">
         </div>
         <label class="eui-form-label">结束时间</label>
         <div class="eui-input-inline">
-            <input type="text" class="eui-input" name="promotionsEnd" id="endTime" placeholder="年-月-日 时:分:秒">
+            <input type="text" class="eui-input" name="promotionsEnd" id="endTime" placeholder="年-月-日 时">
         </div>
     </div>
     <div class="eui-form-item">
@@ -108,6 +108,7 @@
     var promotionsType = 1;//活动类型
     var ids = "";//套餐字符串
     $(function () {
+
         $("#buySend").hide();
         eui.use(['form', 'laydate'], function () {
             var form = eui.form
@@ -116,11 +117,13 @@
             //常规用法
             laydate.render({
                 elem: '#startTime',
-                type: 'datetime'
+                type: 'datetime',
+                format: 'yyyy年MM月dd日 HH点'
             });
             laydate.render({
-                elem: '#endTime',
-                type: 'datetime'
+                elem: '#endTime'
+                ,type: 'datetime',
+                format: 'yyyy年MM月dd日 HH点'
             });
 
             form.on('radio(allChoose)', function (data) {
