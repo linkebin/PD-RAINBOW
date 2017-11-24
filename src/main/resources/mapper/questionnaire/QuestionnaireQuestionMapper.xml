@@ -17,6 +17,8 @@
     <result column="question_content" jdbcType="LONGVARCHAR" property="questionContent" />
     <result column="answer_sequence" jdbcType="INTEGER" property="answerSequence" />
     <result column="ascription_type" jdbcType="INTEGER" property="ascriptionType" />
+    <result column="pid" jdbcType="VARCHAR" property="pid" />
+
 
   </resultMap>
 

@@ -195,6 +195,8 @@ public class QuestionnaireMethod {
 
         return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
     }
+
+
     //贝克抑郁自评量表gauge_32(BDI)
     public Result gauge_32(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
         //总分
@@ -203,7 +205,7 @@ public class QuestionnaireMethod {
         return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
     }
    //流调用抑郁自评量表(CES-D)
-   public Result gauge_31(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
+    public Result gauge_31(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
        //总分
        Map<String,Object> map =getTotalScore("totalScore",questionnaireAnswerList);
 
@@ -211,7 +213,7 @@ public class QuestionnaireMethod {
    }
 
    // 儿少心理健康量表(MHS-CA)
-   public Result gauge_5(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
+    public Result gauge_5(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
         //认知维度 认知维度=感知觉+注意力+记忆力+智力+学习与工作
         Map<String,Object> cognitiveDimensionMap  =getFactorScore("认知维度","1,2,3,4,5",questionnaireAnswerList);
         //思维维度  思维维度=思维过程+思维内容+思维自主性+语言表达+语言理解
@@ -234,7 +236,7 @@ public class QuestionnaireMethod {
    }
 
    //简易应对方式问卷
-   public Result gauge_17(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
+    public Result gauge_17(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
       //积极应对因子总分
        Map<String,Object> positiveCopingFactorMap=getFactorScore("积极应对","1,2,3,4,5,6,7,8,9,10,11,12",questionnaireAnswerList);
        // 积极应对标准分
@@ -307,7 +309,7 @@ public class QuestionnaireMethod {
         return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
     }
    // 自杀态度问卷(SAQ)
-   public Result gauge_27(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
+    public Result gauge_27(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
        //  1、对自杀行为的态度（F1）：条目1、7、12、17、19、22、23、26、29，共9项。
        Map<String,Object> f1Map=getFactorScore("F1","1,7,12,17,19,22,23,26,29",questionnaireAnswerList);
        // F1均分=该条目总分除以条目数
@@ -336,6 +338,104 @@ public class QuestionnaireMethod {
        return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
    }
 
+    /**
+     * 生活事件量表(LES)
+     *
+     * 事件发生时间  1
+     * 次            2
+     * 性质          3
+     *精神影响程度   4
+     * 影响持续时间  5
+     */
+    public Result gauge_12(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
+
+         //4个维度
+        //1、	事件发生时间
+        double dimension1=0;
+        //2、	性质  （1.好事  2.坏事）
+        double dimension2=0;
+           //好事   正性事件
+          double  goodDeed=0;
+          //正性事件得分及次序列表
+          Map<String,Object> goodDeedMap=new HashMap<>();
+          //坏事  正性事件
+          double  badThing=0;
+          //负性事件得分及次序列表
+           Map<String,Object> badThingMap=new HashMap<>();
+        //3、	精神影响程度：
+        double dimension3=0;
+        //4、	影响持续时间
+        double dimension4=0;
+        //5、某事件刺激=该事件影响程分x该事件持续时间分x该事件发生次数
+        //6、总分：以上四个维度之和
+        double totalScore=0;
+        for(QuestionnaireAnswer qa :questionnaireAnswerList){
+             String[] idSplit= qa.getQuestionId().split("_");
+               switch(Integer.valueOf(idSplit[2])){
+                 case 1:
+                     if(qa.getAnswerScore()>0){
+                         dimension1++;
+                     }
+                     break;
+                 case 3:
+                     //精神影响程度(4)x该事件持续时间分(5)x该事件发生次数(2)
+                     double num1=0;
+                     double num2=0;
+                     double num3=0;
+                     String ids=idSplit[0]+"_"+idSplit[1]+"_";
+                     for(int i=0;i<questionnaireAnswerList.size();i++){
+                       String questionId=  questionnaireAnswerList.get(i).getQuestionId();
+                          if(questionId.equals(ids+4)){
+                              num1=questionnaireAnswerList.get(i).getAnswerScore();
+                          }else  if(questionId.equals(ids+5)){
+                              num2=questionnaireAnswerList.get(i).getAnswerScore();
+                          } else if(questionId.equals(ids+2)){
+                              num3=Double.valueOf(questionnaireAnswerList.get(i).getAnswer());
+                          }
+                     }
+                     if(qa.getAnswer().equals("好事")){
+                         goodDeed++;
+                         //得到好事的 问题序号   和正性事件得分 idSplit[1]:为题目的序号
+                         goodDeedMap.put(idSplit[1],num1*num2*num3);
+                     }else if(qa.getAnswer().equals("坏事")){
+                         badThing++;
+                         //得到坏事的 问题序号   和负性事件得分 idSplit[1]:为题目的序号
+                         badThingMap.put(idSplit[1],num1*num2*num3);
+
+                     }
+                     break;
+                 case 4:
+                     if(qa.getAnswerScore()>=2){
+                         dimension3++;
+                     }
+                     break;
+                 case 5:
+                     if(qa.getAnswerScore()>=3){
+                         dimension4++;
+                     }
+                     break;
+           }
+            totalScore+=qa.getAnswerScore();
+        }
+        Map<String,Object> map=new HashMap<>();
+        //长期性事件
+        map.put("dimension1",dimension1);
+        //生活事件总刺激量
+        map.put("dimension2",goodDeed+badThing);
+        //正性事件
+        map.put("goodDeed",goodDeed);
+        //负性事件
+        map.put("badThing",badThing);
+       //正性事件得分及次序列表
+        map.put("goodDeedMap",goodDeedMap);
+        //负性事件得分及次序列表
+        map.put("badThingMap",badThingMap);
+        //精神影响程度在中度以上（包括中度）
+        map.put("dimension3",dimension3);
+        //影响持续时间在半年以上
+        map.put("dimension4",dimension4);
+        return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
+    }
   //计算总分
     public  Map<String,Object>  getTotalScore(String key,ArrayList<QuestionnaireAnswer>  questionnaireAnswerList){
         //总分
@@ -348,7 +448,12 @@ public class QuestionnaireMethod {
 
         return map ;
     }
-    //计算因子分
+    /**
+     *  计算因子分
+     *  用到的场景：问卷计算分数的标准，分为各个因子，如 某某因子：1，13，15 这三个为题目的序号
+     *    需要相加，得到某某因子的总分
+     *
+     */
    public  Map<String,Object> getFactorScore(String key ,String questionNumber ,ArrayList<QuestionnaireAnswer>  questionnaireAnswerList){
             String[] questionNumberArray=questionNumber.split(",");
             Map<String,Object> map=new HashMap<>();
@@ -356,8 +461,8 @@ public class QuestionnaireMethod {
            for(int i=0;i<questionNumberArray.length;i++){
                 for(QuestionnaireAnswer questionnaireAnswer :questionnaireAnswerList ){
                     String questionId= questionnaireAnswer.getQuestionId();
-                    //问题的id 格式  如：dsdasda#1   1为问题的序号
-                     String sequence=questionId.split("#")[1];
+                    //问题的id 格式  如：dsdasda_1   1为问题的序号
+                     String sequence=questionId.split("_")[1];
                     if(sequence.equals(questionNumberArray[i]+"")){
                         factorScore+=questionnaireAnswer.getAnswerScore();
                     }
@@ -367,6 +472,7 @@ public class QuestionnaireMethod {
 
        return  map;
    }
+   //针对 生活事件量表(LES) 设计计算个维度的分数
 
 
     //保留两位小数 不四舍五入

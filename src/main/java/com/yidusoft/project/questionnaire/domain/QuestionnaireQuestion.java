@@ -85,6 +85,20 @@ public class QuestionnaireQuestion {
     @Column(name = "answer_sequence")
     private Integer answerSequence;
 
+    /**
+     * 父问题Id
+     */
+    @Column(name = "pid")
+    private String  pid;
+
+    public String getPid() {
+        return pid;
+    }
+
+    public void setPid(String pid) {
+        this.pid = pid;
+    }
+
     public Integer getAnswerSequence() {
         return answerSequence;
     }
