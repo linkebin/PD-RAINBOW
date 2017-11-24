@@ -63,11 +63,12 @@ public class ActivityService {
      * 开始流程 输入活动ID
      * @param launchId
      */
-    public void startProcess(String launchId,String launchName) {
+    public void startProcess(String launchId,String launchName,String objuri) {
         identityService.setAuthenticatedUserId(Security.getUser().getUserName());
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("objid", launchId);
         variables.put("objname", launchName);
+        variables.put("objuri", objuri);
         runtimeService.startProcessInstanceByKey("launchL",variables);
     }
 

@@ -19,6 +19,13 @@ public class WebLaunchActivitiesController {
     @Resource
     private LaunchActivitiesService launchActivitiesService;
 
+    @RequestMapping("/acdetail")
+    public String acdetail(String id,Model model) {
+        LaunchActivities launchActivities = launchActivitiesService.findById(id);
+        model.addAttribute("acdetail",launchActivities);
+        return "project/business/launchActivities/acdetail";
+    }
+
     @RequestMapping("/linkList")
     public String linkList() {
         return "project/business/launchActivities/launchActivitiesList";
