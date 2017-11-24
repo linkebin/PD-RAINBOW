@@ -159,6 +159,12 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
             question.setOptionScore("");
             question.setOptionAnswer("");
         }
+        if ("矩阵类型".equals(str)){
+            question.setQuestionType(7);
+            question.setAnswer("");
+            question.setOptionScore("");
+            question.setOptionAnswer("");
+        }
     }
 
     @Override
@@ -172,9 +178,6 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
         gauge.setCreator(Security.getUser().getUserName());
         gauge.setDeleted(0);
         gauge.setGaugeState(0);
-
-//        List<QuestionnaireQuestion> questions = new ArrayList<QuestionnaireQuestion>();
-//        List<GaugeQuestionFactor> gaugeQuestionFactors = new ArrayList<GaugeQuestionFactor>();
         this.save(gauge);
         try {
 
@@ -186,8 +189,7 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
             question.setAnswer(wt.get(i).get(1));
             question.setOptionAnswer(wt.get(i).get(2));
             question.setOptionScore(wt.get(i).get(3));
-                //答案类型
-                changeType(wt.get(i).get(4),question);
+            changeType(wt.get(i).get(4),question);
 
             question.setAscriptionType(2);
             question.setAnswerSequence(1);
@@ -205,6 +207,79 @@ public class GaugeServiceImpl extends AbstractService<Gauge> implements GaugeSer
                 gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
             }
         }
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("导入失败");
+        }
+        return ResultGenerator.genSuccessResult("导入成功");
+    }
+
+    @Override
+    public Result excelImportAdd(List<ArrayList<String>> lb, List<ArrayList<String>> wt, List<ArrayList<String>> zwt) {
+        QuestionnaireType  questionnaireType = questionnaireTypeService.findBy("questionnaireTypeName",lb.get(0).get(1));
+
+        Gauge gauge = new Gauge(UUID.randomUUID().toString(),CodeHelper.getCode("LB"),questionnaireType.getId()
+                ,lb.get(0).get(0));
+        gauge.setCreateTime(new Date());
+        gauge.setCreator(Security.getUser().getUserName());
+        gauge.setDeleted(0);
+        gauge.setGaugeState(0);
+
+        try {
+            this.save(gauge);
+            for(int i=0;i<wt.size();i++){
+                QuestionnaireQuestion question = new QuestionnaireQuestion();
+                question.setId(lb.get(0).get(2)+"_"+(i+1));
+                question.setQuestionContent(wt.get(i).get(0));
+                question.setQuestionCode(CodeHelper.getCode("WT"));
+                question.setAnswer(wt.get(i).get(1));
+                question.setOptionAnswer(wt.get(i).get(2));
+                question.setOptionScore(wt.get(i).get(3));
+                changeType(wt.get(i).get(4),question);
+
+                question.setAscriptionType(2);
+                question.setAnswerSequence(1);
+                question.setCreator(Security.getUser().getUserName());
+                question.setDeleted(0);
+                question.setCreateTime(new Date());
+                question.setPid("0");
+
+                //中间表
+                GaugeQuestionFactor gaugeQuestionFactor = new GaugeQuestionFactor();
+                gaugeQuestionFactor.setId(UUID.randomUUID().toString());
+                gaugeQuestionFactor.setGaugeId(gauge.getId());
+                gaugeQuestionFactor.setQuestionId(question.getId());
+
+                if (question.getQuestionType()!=null){
+                    questionnaireQuestionMapper.insert(question);
+                    gaugeQuestionFactorMapper.insert(gaugeQuestionFactor);
+                    for(int j=0;j<zwt.size();j++){
+                        QuestionnaireQuestion z = new QuestionnaireQuestion();
+                        z.setId(question.getId()+"_"+(j+1));
+                        z.setQuestionContent(zwt.get(j).get(0));
+                        z.setQuestionCode(CodeHelper.getCode("WT"));
+                        z.setAnswer(zwt.get(j).get(1));
+                        z.setOptionAnswer(zwt.get(j).get(2));
+                        z.setOptionScore(zwt.get(j).get(3));
+                        z.setPid(question.getId());
+                        changeType(zwt.get(j).get(4),z);
+
+                        z.setAscriptionType(2);
+                        z.setAnswerSequence(1);
+                        z.setCreator(Security.getUser().getUserName());
+                        z.setDeleted(0);
+                        z.setCreateTime(new Date());
+
+                        GaugeQuestionFactor g = new GaugeQuestionFactor();
+                        g.setId(UUID.randomUUID().toString());
+                        g.setGaugeId(gauge.getId());
+                        g.setQuestionId(z.getId());
+                        questionnaireQuestionMapper.insert(z);
+                        gaugeQuestionFactorMapper.insert(g);
+                    }
+                }
+            }
 
         }catch (Exception e){
             e.printStackTrace();

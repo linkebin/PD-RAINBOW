@@ -42,9 +42,15 @@ public class GaugeController {
             }
 
             //读取量表
-            List<ArrayList<String>> lb = new ExcelRead().readExcel(file,3,3);
+            List<ArrayList<String>> lb = new ExcelRead().readExcel(file,3,3,0);
             //读取量表问题
-            List<ArrayList<String>> wt = new ExcelRead().readExcel(file,6,ExcelUtil.getExcelTotalRows(file));
+            List<ArrayList<String>> wt = new ExcelRead().readExcel(file,6,ExcelUtil.getExcelTotalRows(file),0);
+
+            if (wt.get(0).get(4).equals("矩阵类型")){
+                List<ArrayList<String>> zwt = new ExcelRead().readExcel(file,3,ExcelUtil.getExcelTotalRows(file),1);
+                return gaugeService.excelImportAdd(lb,wt,zwt);
+            }
+
             return gaugeService.excelImportAdd(lb,wt);
         }catch (Exception e){
             e.printStackTrace();

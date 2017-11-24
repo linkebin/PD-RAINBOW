@@ -81,7 +81,7 @@
                 ,{field: 'SEX', title: '性别', width: 100,templet:'<div>{{# if(d.SEX=="1"){ }} 男  {{#  }else{   }} 女 {{# } }}</div>'}
                 ,{field: 'MOBILE', title: '手机', width: 150}
                 ,{field: 'EMAIL', title: '邮箱', width: 150}
-                ,{fixed: 'right', width:154,  toolbar: '#barDemo'}
+                ,{field: '操作', width:154,  templet: '#barDemo'}
             ]]
             ,response: {
                 statusName: 'code' //数据状态的字段名称，默认：code
@@ -186,7 +186,7 @@
                 time: 2000
             });
         }else {
-            layer.confirm('您确定删除该账号吗？', {
+            layer.confirm('您确定删除该用户吗？', {
                 btn: ['确认', '取消'],
                 shade: 0,
                 title:'提示'
@@ -253,10 +253,13 @@
 
 <script type="text/html" id="barDemo">
     <div class="eui-btn-group">
+
         <button e-event="edit" class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="修改用户">
             <i class="eui-icon">&#xe642;</i></button>
-        <button e-event="del"  class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="删除用户">
-            <i class="eui-icon">&#xe640;</i></button>
+        {{#  if(d.ACCOUNT_TYPE == "999"){ }}
+            <button e-event="del"  class="eui-btn eui-btn-primary eui-btn-mini proEdit" title="删除用户">
+                <i class="eui-icon">&#xe640;</i></button>
+        {{#  } }}
     </div>
 </script>
 </body>

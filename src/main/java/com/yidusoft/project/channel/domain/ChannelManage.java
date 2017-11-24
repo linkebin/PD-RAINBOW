@@ -88,6 +88,9 @@ public class ChannelManage {
      */
     private String creator;
 
+    @Transient
+    private String account;
+
     @Column(name = "status")
     private Integer status;
 
@@ -108,6 +111,14 @@ public class ChannelManage {
 
     public void setDeleted(Integer deleted) {
         this.deleted = deleted;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     /**

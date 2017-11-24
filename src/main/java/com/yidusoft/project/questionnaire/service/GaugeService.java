@@ -26,4 +26,5 @@ public interface GaugeService extends Service<Gauge> {
     //excel导入添加量表
     Result  excelImportAdd(List<ArrayList<String>> lb,List<ArrayList<String>> wt);
 
+    Result  excelImportAdd(List<ArrayList<String>> lb,List<ArrayList<String>> wt,List<ArrayList<String>> zwt);
 }
