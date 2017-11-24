@@ -18,79 +18,28 @@ import java.util.Map;
 
 public class QuestionnaireMethod {
 
-    // 症状自评量表-SCL90  的规则结论
+        // 症状自评量表-SCL90  的规则结论
     public Result gauge_4(ArrayList<QuestionnaireAnswer> questionnaireAnswerList) throws  Exception{
-        Map<String,Object> map=new HashMap<>();
-        for(int i=0;i<questionnaireAnswerList.size();i++){
-            String ids=(i+1)+"";
-            for(int j=0;j<questionnaireAnswerList.size();j++){
-                if(questionnaireAnswerList.get(j).getQuestionId().equals(ids)){
-                    map.put(ids,questionnaireAnswerList.get(j));
-                }
-            }
-        }
         //1.躯体化
-        String [] factor1={"1","4","12","27","40","42","48","49","52","53","56","58"};
+       Map<String,Object> factor1=getFactorScore("躯体化分","1,4,12,27,40,42,48,49,52,53,56,58",questionnaireAnswerList);
         //2.强迫症状
-        String [] factor2={"3","9","10","28","38","45","46","51","55","65"};
+        Map<String,Object> factor2=getFactorScore("强迫症状","3,9,10,28,38,45,46,51,55,65",questionnaireAnswerList);
         //3.人际关系敏感
-        String [] factor3={"6","21","34","36","37","41","61","69","73"};
+        Map<String,Object> factor3=getFactorScore("人际敏感","6,21,34,36,37,41,61,69,73",questionnaireAnswerList);
         // 4.抑郁
-        String [] factor4={"5","14","15","20","22","26","29","30","31","32","54","71","79"};
+        Map<String,Object>factor4=getFactorScore("抑郁症状","5,14,15,20,22,26,29,30,31,32,54,71,79",questionnaireAnswerList);
         // 5.焦虑
-        String [] factor5={"2","17","23","33","39","57","72","78","80","86"};
+        Map<String,Object>factor5=getFactorScore("焦虑症状","2,17,23,33,39,57,72,78,80,86",questionnaireAnswerList);
         //6.敌对
-        String [] factor6={"11","24","63","67","74","81"};
+        Map<String,Object>factor6=getFactorScore("敌对症状","11,24,63,67,74,81",questionnaireAnswerList);
         //7.恐怖
-        String [] factor7={"13","25","47","50","70","75","82"};
+        Map<String,Object>factor7=getFactorScore("恐怖症状","13,25,47,50,70,75,82",questionnaireAnswerList);
         //8.偏执
-        String [] factor8={"8","18","43","68","76","83"};
+        Map<String,Object>factor8=getFactorScore("偏执症状","8,18,43,68,76,83",questionnaireAnswerList);
         //9.精神病性
-        String [] factor9={"7","16","35","62","77","84","85","87","88","90"};
+        Map<String,Object>factor9=getFactorScore("精神症状","7,16,35,62,77,84,85,87,88,90",questionnaireAnswerList);
         //10.其他
-        String [] factor10={"19","44","59","60","64","66","89"};
-        Map<String,Map<String,Object>> factor=new HashMap<>();
-        Map<String,Object> map1=new  HashMap<>();
-        map1.put("factorMean","");
-        map1.put("factor",factor1);
-        factor.put("1",map1);
-        Map<String,Object> map2=new  HashMap<>();
-        map2.put("factorMean","");
-        map2.put("factor",factor2);
-        factor.put("2",map2);
-        Map<String,Object> map3=new  HashMap<>();
-        map3.put("factorMean","");
-        map3.put("factor",factor3);
-        factor.put("3",map3);
-        Map<String,Object> map4=new  HashMap<>();
-        map4.put("factorMean","");
-        map4.put("factor",factor4);
-        factor.put("4",map4);
-        Map<String,Object> map5=new  HashMap<>();
-        map5.put("factorMean","");
-        map5.put("factor",factor5);
-        factor.put("5",map5);
-        Map<String,Object> map6=new  HashMap<>();
-        map6.put("factorMean","");
-        map6.put("factor",factor6);
-        factor.put("6",map6);
-        Map<String,Object> map7=new  HashMap<>();
-        map7.put("factorMean","");
-        map7.put("factor",factor7);
-        factor.put("7",map7);
-        Map<String,Object> map8=new  HashMap<>();
-        map8.put("factorMean","");
-        map8.put("factor",factor8);
-        factor.put("8",map8);
-        Map<String,Object> map9=new  HashMap<>();
-        map9.put("factorMean","");
-        map9.put("factor",factor9);
-        factor.put("9",map9);
-        Map<String,Object> map10=new  HashMap<>();
-        map10.put("factorMean","");
-        map10.put("factor",factor10);
-        factor.put("10",map10);
-
+        Map<String,Object>factor10=getFactorScore("其他","19,44,59,60,64,66,89",questionnaireAnswerList);
         //总分
         double totalScore=0;
         //阳性项目数
@@ -123,24 +72,6 @@ public class QuestionnaireMethod {
         if(negativeTotalScore>0){
             double negativeMean=decimal(negativeTotalScore/negativeTotal);
         }
-        //因子平均分factorMean
-        for(int i=0;i<factor.size();i++){
-            Map<String,Object>factorMap=factor.get((i+1)+"");
-            String [] factorArray=(String []) factorMap.get("factor");
-            //因子总分
-            double factorTotalScore=0;
-            for(int j=0;j<factorArray.length;j++){
-                QuestionnaireAnswer q= (QuestionnaireAnswer)map.get(factorArray[j]);
-                factorTotalScore=factorTotalScore+q.getAnswerScore();
-            }
-            //因子平均分
-            double  factorMean=0;
-            if(factorTotalScore>0){
-                factorMean= decimal(factorTotalScore/factorArray.length);
-            }
-            factor.get((i+1)+"").put("factorMean",factorMean);
-            factor.get((i+1)+"").put("factorTotalScore",factorTotalScore);
-        }
 
         //标准分
         double standard=totalScore*1.25;
@@ -149,25 +80,25 @@ public class QuestionnaireMethod {
         score.put("总分",totalScore);
         score.put("总均分",decimal(totalScore/90));
         score.put("标准分",standardPoints);
-        score.put("躯体化分",factor.get("1").get("factorTotalScore"));
-        score.put("强迫症状",factor.get("2").get("factorTotalScore"));
-        score.put("人际敏感",factor.get("3").get("factorTotalScore"));
-        score.put("抑郁症状",factor.get("4").get("factorTotalScore"));
-        score.put("焦虑症状",factor.get("5").get("factorTotalScore"));
-        score.put("敌对症状",factor.get("6").get("factorTotalScore"));
-        score.put("恐怖症状",factor.get("7").get("factorTotalScore"));
-        score.put("偏执症状",factor.get("8").get("factorTotalScore"));
-        score.put("精神症状",factor.get("9").get("factorTotalScore"));
+        score.put("躯体化分",factor1.get("躯体化分"));
+        score.put("强迫症状",factor2.get("强迫症状"));
+        score.put("人际敏感",factor3.get("人际敏感"));
+        score.put("抑郁症状",factor4.get("抑郁症状"));
+        score.put("焦虑症状",factor5.get("焦虑症状"));
+        score.put("敌对症状",factor6.get("敌对症状"));
+        score.put("恐怖症状",factor7.get("恐怖症状"));
+        score.put("偏执症状",factor8.get("偏执症状"));
+        score.put("精神症状",factor9.get("精神症状"));
         Map<String,Object>  average=new HashMap<>();
-        average.put("躯体化分",factor.get("1").get("factorMean"));
-        average.put("强迫症状",factor.get("2").get("factorMean"));
-        average.put("人际敏感",factor.get("3").get("factorMean"));
-        average.put("抑郁症状",factor.get("4").get("factorMean"));
-        average.put("焦虑症状",factor.get("5").get("factorMean"));
-        average.put("敌对症状",factor.get("6").get("factorMean"));
-        average.put("恐怖症状",factor.get("7").get("factorMean"));
-        average.put("偏执症状",factor.get("8").get("factorMean"));
-        average.put("精神症状",factor.get("9").get("factorMean"));
+        average.put("躯体化分",decimal(Double.valueOf(factor1.get("躯体化分").toString())/12));
+        average.put("强迫症状",decimal(Double.valueOf(factor2.get("强迫症状").toString())/10));
+        average.put("人际敏感",decimal(Double.valueOf(factor3.get("人际敏感").toString())/9));
+        average.put("抑郁症状",decimal(Double.valueOf(factor4.get("抑郁症状").toString())/13));
+        average.put("焦虑症状",decimal(Double.valueOf(factor5.get("焦虑症状").toString())/10));
+        average.put("敌对症状",decimal(Double.valueOf(factor6.get("敌对症状").toString())/6));
+        average.put("恐怖症状",decimal(Double.valueOf(factor7.get("恐怖症状").toString())/7));
+        average.put("偏执症状",decimal(Double.valueOf(factor8.get("偏执症状").toString())/6));
+        average.put("精神症状",decimal(Double.valueOf(factor9.get("精神症状").toString())/10));
         Map<String,Object>  maps=new HashMap<>();
         maps.put("score",score);
         maps.put("average",average);

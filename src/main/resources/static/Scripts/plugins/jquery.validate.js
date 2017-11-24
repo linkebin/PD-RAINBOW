@@ -684,10 +684,16 @@ $.extend($.validator, {
 				label.html(message);
 			} else {
 				// create label
-				label = $("<" + this.settings.errorElement + ">")
+				/*label = $("<" + this.settings.errorElement + ">")
 					.attr("for", this.idOrName(element))
 					.addClass(this.settings.errorClass)
-					.html(message || "");
+					.html(message || "");*/
+				var names="'"+this.idOrName(element)+"'";
+                layer.tips(message, $("[name="+names+"]"), {
+                    tips: [1, '#3595CC'],
+                    zIndex: layer.zIndex, //重点1
+                });
+                layer.setTop(layero); //重点2
 				if ( this.settings.wrapper ) {
 					// make sure the element is visible, even in IE
 					// actually showing the wrapped element is handled elsewhere

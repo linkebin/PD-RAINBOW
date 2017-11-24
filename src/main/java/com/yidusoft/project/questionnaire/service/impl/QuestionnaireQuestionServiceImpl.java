@@ -141,7 +141,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 activeParticipantService.update(activeParticipant);
             }*/
             //扣除余额
-            userQuestionnairesService.deduction();
+           userQuestionnairesService.deduction();
         } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
