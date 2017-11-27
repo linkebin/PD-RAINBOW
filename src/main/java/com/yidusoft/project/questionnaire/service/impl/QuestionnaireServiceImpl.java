@@ -153,13 +153,14 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
 
 
          // 删除该问卷的权限
-           List<QuestionnairePermissionMiddle> questionnairePermissionMiddles = questionnairePermissionMiddleMapper.findPermission(questionnaire.getId());
-            System.out.println(questionnairePermissionMiddles.size() + "==========");
-            for(QuestionnairePermissionMiddle m : questionnairePermissionMiddles){
-                System.out.println("id = " + m.getId());
-               questionnairePermissionMiddleMapper.delete(m);
-           }
-
+            if(userIds != null && !"".equals(userIds)) {
+                List<QuestionnairePermissionMiddle> questionnairePermissionMiddles = questionnairePermissionMiddleMapper.findPermission(questionnaire.getId());
+                System.out.println(questionnairePermissionMiddles.size() + "==========");
+                for (QuestionnairePermissionMiddle m : questionnairePermissionMiddles) {
+                    System.out.println("id = " + m.getId());
+                    questionnairePermissionMiddleMapper.delete(m);
+                }
+            }
            //添加修改后的问卷权限
             if (questionnaire.getQuestionnairePermission() != null && questionnaire.getQuestionnairePermission() == 2){
                 if (userIds != null && !"".equals(userIds)){
