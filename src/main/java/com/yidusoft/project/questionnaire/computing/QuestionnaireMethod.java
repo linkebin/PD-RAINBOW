@@ -409,7 +409,23 @@ public class QuestionnaireMethod {
         }
 
         //4、睡眠效率(sleepEfficiency) 1,3,4 共三项
+            double sleepEfficiency = 0;
+            String t1 = getQuestionAnswer(1,questionnaireAnswerList);
+            String t2 = getQuestionAnswer(3,questionnaireAnswerList);
+            String t3 = getQuestionAnswer(4,questionnaireAnswerList);
+            String time = String.valueOf(Integer.parseInt(t2) - Integer.parseInt(t1));
+            double d = decimal(Double.parseDouble(t3) / Double.parseDouble(time)) * 100;
+            System.out.println("t2 = " + t2 + " " + "time = " + time + "  " +d + "sleep =   ");
 
+            if (d > 85){
+                sleepEfficiency = 0;
+            }else if (d >= 75 && d <= 84){
+                sleepEfficiency = 1;
+            }else if (d >= 65 && d <= 74){
+                sleepEfficiency = 2;
+            }else {
+                sleepEfficiency = 3;
+            }
 
         //5、睡眠障碍(dyssomnia) 6,7,8,9,10,11,12,13,14 共九项
         Map<String, Object> dyssomniaMap = getFactorScore("dyssomnia","6,7,8,9,10,11,12,13,14",questionnaireAnswerList);
@@ -454,6 +470,10 @@ public class QuestionnaireMethod {
         double totalScore = sleepQuan + fallSleepTime + sleepTime + fallSleepTime + sleepTime
                 + dyssomnia + sodiumAmytal + daytimeDysfunction;
         Map<String,Object> map = new HashMap<>();
+        System.out.println(sodiumAmytal + "======"
+        + sleepQuan + "==" + fallSleepTime + "=====" + sleepTime + "==="
+                + dyssomnia + "===" + daytimeDysfunction + "===" + t1 + "----"
+        );
         map.put("totalScore",totalScore);
         map.put("sleepQuan",sleepQuan);
         map.put("fallSleepTime",fallSleepTime);
@@ -461,9 +481,11 @@ public class QuestionnaireMethod {
         map.put("dyssomnia",dyssomnia);
         map.put("sodiumAmytal",sodiumAmytal);
         map.put("daytimeDysfunction",daytimeDysfunction);
+        map.put("sleepEfficiency",sleepEfficiency);
         return ResultGenerator.genSuccessResult(JSON.toJSONString(map));
 
     }
+
 
     //长处和困难问卷(SDQ)
     public Result gauge_7(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception{
@@ -493,7 +515,7 @@ public class QuestionnaireMethod {
 
         //问题困扰时间 （problemPlaguedTime）27 共一项
         String problemPlaguedTime = getQuestionAnswer(27,questionnaireAnswerList);
-
+        System.out.println(problemPlaguedTime + "=============");
 
         //总分
         Map<String,Object> map =getTotalScore("totalScore",questionnaireAnswerList);

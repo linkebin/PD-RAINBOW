@@ -56,7 +56,7 @@
             <div class="eui-row dataCharts">
                 <div class="eui-col-md6">
                     <div   style="width: 100%;height:320px;" >
-                        <div style="width: 100%;height:70px;">
+                        <div style="width: 100%;height:30px;">
 
                         </div>
                         <div id="main2" style="">
@@ -68,13 +68,15 @@
                     <div id="main1"  style="width: 100%;height:320px;"></div>
                 </div>
             </div>
-            <div id="dataResult" class="eui-marginTB20">
+            <div id="dataResult" class="eui-marginTB20" style="height: 50px">
             </div>
             <form class="eui-paddingT20">
                 <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
                 <input type="hidden" th:value="${userId}"  id="userId"/>
                 <input type="hidden" th:value="${acquisitionId}"  id="acquisitionId"/>
-
+                <input type="hidden" id="t1">
+                <input type="hidden" id="t2">
+                <input type="hidden" id="t3">
                 <div class="eui-bg-white eui-form" id="divTable">
                     <div class="eui-form-item eui-padding20">
                         <!--<div class="eui-font18">
@@ -169,6 +171,10 @@
                 console.info(result);
                 var context=  getTable(result.data);
                 $("#divTable").html(context);
+                $("[name='selectTime']").eq(0).val($("#t1").val());
+                $("[name='selectTime']").eq(1).val($("#t2").val());
+                $("[name='selectTime']").eq(2).val($("#t3").val());
+                console.log($("[name='selectTime']").eq(0).val() +"   " + $("#t1").val() + " " +  $("#t2").val()+ "  " +  $("#t3").val() + "=====---====");
                 formRender();
             });
     }
@@ -201,17 +207,17 @@
         if(dataResult!=null && dataResult!=""){
             var json=eval("("+dataResult+")");
             totalScore=json.totalScore;
-
+            console.log(totalScore + "====");
             context+="<p class='eui-margin10'>匹兹堡睡眠质量指数（PSQI）的总分区间为0~21分，我国以“PSQI>7分”作为成人睡眠质量问题的参考值，且得分越高表示睡眠质量越差。：</p>";
 
             context+="<p class='eui-margin10'>您的得分：</p>";
             context+="<p class='eui-margin10'>1、	睡眠质量："+json.sleepQuan+"分</p>";
             context+="<p class='eui-margin10'>2、	入睡时间："+json.fallSleepTime+"分</p>";
             context+="<p class='eui-margin10'>3、	睡眠时间："+json.sleepTime+"分</p>";
-            context+="<p class='eui-margin10'>4、	睡眠效率："+0+"分</p>";
-            context+="<p class='eui-margin10'>5、	睡眠障碍："+dyssomnia"分</p>";
-            context+="<p class='eui-margin10'>6、	催眠药物："+sodiumAmytal+"分</p>";
-            context+="<p class='eui-margin10'>7、	日间功能障碍："+daytimeDysfunction+"分</p>";
+            context+="<p class='eui-margin10'>4、	睡眠效率："+json.sleepEfficiency+"分</p>";
+           context+="<p class='eui-margin10'>5、	睡眠障碍："+json.dyssomnia+"分</p>";
+            context+="<p class='eui-margin10'>6、	催眠药物："+json.sodiumAmytal+"分</p>";
+            context+="<p class='eui-margin10'>7、	日间功能障碍："+json.daytimeDysfunction+"分</p>";
             context+="<p class='eui-margin10'>8、	PSQI总分："+totalScore+"分</p>";
 
         }
@@ -232,21 +238,89 @@
             var optionAnswer=questionList[i].optionAnswer.split("||");
             var optionScore=questionList[i].optionScore.split("||");
             for( var t in answerList){
-                if(answerList[t].questionId==questionList[i].id){
+                if(answerList[t].questionId==questionList[i].id) {
                     //截取填写的答案
-                    var answers= answerList[t].answer.split("||");
-                    for(var j in optionAnswer){
-                        var num=0;
-                        for( var a in answers){
-                            if(answers[a]==optionAnswer[j] ){
-                                context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" checked >';
+                    var answers = answerList[t].answer.split("||");
+                    if (i == 0) {
+                        console.log(answers[0] + "======");
+                        $("#t1").val(answers[0]);
+                        context += '<select name="selectTime" disabled="disabled"> ' +
+                            '<option value="" >请选择</option>' +
+                            '<option value="6" >18:00</option>' +
+                            '<option value="7" >19:00</option>' +
+                            '<option value="8" >20:00</option>' +
+                            '<option value="9" >21:00</option>' +
+                            '<option value="10" >22:00</option>' +
+                            '<option value="11" >23:00</option>' +
+                            '<option value="12" >24:00</option>' +
+                            '<option value="13" >01:00</option>' +
+                            '<option value="14" >02:00</option>' +
+                            '<option value="15" >03:00</option>' +
+                            '<option value="16" >04:00</option>' +
+                            '<option value="17" >05:00</option>' +
+                            '<option value="18" >06:00</option>' +
+                            '</select>';
+                    } else if (i == 2) {
+                        $("#t2").val(answers[0]);
+                        context += '<select name="selectTime" disabled="disabled"> ' +
+                            '<option value="" >请选择</option>' +
+                            '<option value="12" >24:00</option>' +
+                            '<option value="13" >01:00</option>' +
+                            '<option value="14" >02:00</option>' +
+                            '<option value="15" >03:00</option>' +
+                            '<option value="16" >04:00</option>' +
+                            '<option value="17" >05:00</option>' +
+                            '<option value="18" >06:00</option>' +
+                            '<option value="19" >07:00</option>' +
+                            '<option value="20" >08:00</option>' +
+                            '<option value="21" >09:00</option>' +
+                            '<option value="22" >10:00</option>' +
+                            '<option value="23" >11:00</option>' +
+                            '<option value="24" >12:00</option>' +
+                            '</select>';
+                    } else if (i == 3) {
+                        $("#t3").val(answers[0]);
+                        context += '<select name="selectTime" disabled="disabled"> ' +
+                            '<option value="" >请选择</option>' +
+                            '<option value="1" >1</option>' +
+                            '<option value="2" >2</option>' +
+                            '<option value="3" >3</option>' +
+                            '<option value="4" >4</option>' +
+                            '<option value="5" >5</option>' +
+                            '<option value="6" >6</option>' +
+                            '<option value="7" >7</option>' +
+                            '<option value="8" >8</option>' +
+                            '<option value="9" >9</option>' +
+                            '<option value="10" >10</option>' +
+                            '<option value="11" >11</option>' +
+                            '<option value="12" >12</option>' +
+                            '<option value="13" >13</option>' +
+                            '<option value="14" >14</option>' +
+                            '<option value="15" >15</option>' +
+                            '<option value="16" >16</option>' +
+                            '<option value="17" >17</option>' +
+                            '<option value="18" >18</option>' +
+                            '<option value="19" >19</option>' +
+                            '<option value="20" >20</option>' +
+                            '<option value="21" >21</option>' +
+                            '<option value="22" >22</option>' +
+                            '<option value="23" >23</option>' +
+                            '<option value="24" >24</option>' +
+                            '</select>';
+                    }else{
+                    for (var j in optionAnswer) {
+                        var num = 0;
+                        for (var a in answers) {
+                            if (answers[a] == optionAnswer[j]) {
+                                context += '  <input type="radio"  optionScore="' + optionScore[j] + '" name="answer' + questionList[i].id + j + '" value="' + optionAnswer[j] + '" title="' + optionAnswer[j] + '" checked >';
                                 num++;
                             }
                         }
-                        if(num==0){
-                            context+='  <input type="radio"  optionScore="'+optionScore[j]+'" name="answer'+questionList[i].id+j+'" value="'+optionAnswer[j]+'" title="'+optionAnswer[j]+'" disabled>';
+                        if (num == 0) {
+                            context += '  <input type="radio"  optionScore="' + optionScore[j] + '" name="answer' + questionList[i].id + j + '" value="' + optionAnswer[j] + '" title="' + optionAnswer[j] + '" disabled>';
                         }
                     }
+                }
                 }
             }
             context+=' </div>';
