@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body class="questionBody">
 
 <div class="questionHeader">
     <div class="eui-row eui-area">
@@ -18,35 +18,211 @@
 </div>
 
 <div class="visitorContent xymfMargin">
-    <div class="eui-area" style="width: 800px">
+    <div class="eui-area" style="width: 1000px">
         <div class="eui-row visitorTitle">
             <div class="eui-col-xs7">
-                <div> 问题卡</div>
+                <div>生活事件量表</div>
             </div>
-            <div class="eui-col-xs2">
-                <div style="float: right"> 计时:</div>
+            <div class="eui-col-xs5 eui-textAlignR">
+                计时: <span id="timer" eui-input-inline>00:00:00</span>
             </div>
-            <div class="eui-col-xs3">
-               <div id="timer" eui-input-inline>00:00:00</div>
-            </div>
+        </div>
+        <ul class="eui-bg-white eui-padding20 eui-overflow">
+            <li class="eui-form">
+                <h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">1.恋爱或订婚</h4>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="未发生" title="未发生">
+                        <input type="radio" name="sex" value="一年内" title="一年内">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生次数</label>
+                    <div class="eui-input-inline" style="width: 80px;">
+                        <input type="text" name="" class="eui-input">
+                    </div>
+                    <div class="eui-form-mid eui-word-aux">次</div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生性质</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="好事" title="好事">
+                        <input type="radio" name="sex" value="坏事" title="坏事">
+                        <input type="radio" name="sex" value="无影响" title="无影响">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">精神影响程度</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="轻度" title="轻度">
+                        <input type="radio" name="sex" value="中度" title="中度">
+                        <input type="radio" name="sex" value="重度" title="重度">
+                        <input type="radio" name="sex" value="极重" title="极重">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">影响持续时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="三个月内" title="未发生">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="一年内" title="一年内">
+                        <input type="radio" name="sex" value="一年以上" title="一年以上">
+                    </div>
+                </div>
+            </li>
+            <li class="eui-form">
+                <h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">2.恋爱失败或破裂</h4>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="未发生" title="未发生">
+                        <input type="radio" name="sex" value="一年内" title="一年内">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生次数</label>
+                    <div class="eui-input-inline" style="width: 80px;">
+                        <input type="text" name="" class="eui-input">
+                    </div>
+                    <div class="eui-form-mid eui-word-aux">次</div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生性质</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="好事" title="好事">
+                        <input type="radio" name="sex" value="坏事" title="坏事">
+                        <input type="radio" name="sex" value="无影响" title="无影响">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">精神影响程度</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="轻度" title="轻度">
+                        <input type="radio" name="sex" value="中度" title="中度">
+                        <input type="radio" name="sex" value="重度" title="重度">
+                        <input type="radio" name="sex" value="极重" title="极重">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">影响持续时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="三个月内" title="未发生">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="一年内" title="一年内">
+                        <input type="radio" name="sex" value="一年以上" title="一年以上">
+                    </div>
+                </div>
+            </li>
+            <li class="eui-form">
+                <h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">3.结婚</h4>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="未发生" title="未发生">
+                        <input type="radio" name="sex" value="一年前" title="一年前">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生次数</label>
+                    <div class="eui-input-inline" style="width: 80px;">
+                        <input type="text" name="" class="eui-input">
+                    </div>
+                    <div class="eui-form-mid eui-word-aux">次</div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生性质</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="好事" title="好事">
+                        <input type="radio" name="sex" value="坏事" title="坏事">
+                        <input type="radio" name="sex" value="无影响" title="无影响">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">精神影响程度</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="轻度" title="轻度">
+                        <input type="radio" name="sex" value="中度" title="中度">
+                        <input type="radio" name="sex" value="重度" title="重度">
+                        <input type="radio" name="sex" value="极重" title="极重">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">影响持续时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="三个月内" title="未发生">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="一年内" title="一年内">
+                        <input type="radio" name="sex" value="一年以上" title="一年以上">
+                    </div>
+                </div>
+            </li>
+            <li class="eui-form">
+                <h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">4.自己（爱人）怀孕</h4>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="未发生" title="未发生">
+                        <input type="radio" name="sex" value="一年内" title="一年内">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生次数</label>
+                    <div class="eui-input-inline" style="width: 80px;">
+                        <input type="text" name="" class="eui-input">
+                    </div>
+                    <div class="eui-form-mid eui-word-aux">次</div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">事件发生性质</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="好事" title="好事">
+                        <input type="radio" name="sex" value="坏事" title="坏事">
+                        <input type="radio" name="sex" value="无影响" title="无影响">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">精神影响程度</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="轻度" title="轻度">
+                        <input type="radio" name="sex" value="中度" title="中度">
+                        <input type="radio" name="sex" value="重度" title="重度">
+                        <input type="radio" name="sex" value="极重" title="极重">
+                    </div>
+                </div>
+                <div class="eui-form-item" pane="">
+                    <label class="eui-form-label eui-width100">影响持续时间</label>
+                    <div class="eui-input-block">
+                        <input type="radio" name="sex" value="三个月内" title="未发生">
+                        <input type="radio" name="sex" value="半年内" title="半年内">
+                        <input type="radio" name="sex" value="一年内" title="一年内">
+                        <input type="radio" name="sex" value="一年以上" title="一年以上">
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="eui-textAlignC eui-bg-white eui-padding20">
+            <button class="eui-btn eui-btn-normal eui-btn-big">下一页</button>
         </div>
 
-        <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-           <form>
-               <div class="eui-form-item eui-padding20">
-                  <span id="remarks">
-                      下面列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。
-                 </span>
-                 <hr/>
-               </div>
-             <div class="eui-bg-white eui-form visitorContent" id="divTable" >
-                  <!--  问题内容-->
-             </div>
-           </form>
-        </div>
-        <div class="eui-textAlignC eui-bg-white eui-padding20" id="submitBnt" disabled="true">
+
+
+
+        <!--<div class="eui-textAlignC eui-bg-white eui-padding20" id="submitBnt" disabled="true">
             <button id="submitQuestionnaire"  onclick="" class="eui-btn eui-btn-normal eui-btn-big"><img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷</button>
-        </div>
+        </div>-->
     </div>
 </div>
 <!--<div class="xymfFooter">-->
