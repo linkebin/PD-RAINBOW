@@ -80,7 +80,7 @@
 
     </select>
 
-    <select id="findQuestionnaireForTagNum"  resultMap="BaseResultMap1">
+    <select id="findQuestionnaireForTagNum"  parameterType="String" resultMap="BaseResultMap1">
           SELECT
               t.id_,t.tag_name,sum(1)as  nums
             FROM    questionnaire_tag t
@@ -90,6 +90,13 @@
               ON    q.id_ =m.questionnaire_id
             WHERE q.deleted=0
              AND   q.questionnaire_state=2
+             AND (q.questionnaire_permission = 1 OR  q.id_
+                 IN (
+                       SELECT questionnaire_id
+                         FROM questionnaire_permission_middle
+                          where user_id = #{userId}
+                        )
+                     )
              GROUP BY   t.tag_name,t.id_
      </select>
 

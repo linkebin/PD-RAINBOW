@@ -77,7 +77,7 @@
     AND SCENE_NAME = #{sceneName}
   </select>
 
-    <select id="findQuestionnaireForSceneNum"  resultMap="BaseResultMap1">
+    <select id="findQuestionnaireForSceneNum"  parameterType="String" resultMap="BaseResultMap1">
            SELECT
                 s.id_,s.scene_name,sum(1)as  nums
                FROM
@@ -90,6 +90,13 @@
                 ON    q.id_ =c.questionnaire_id
                 WHERE q.deleted=0
                 AND   q.questionnaire_state=2
+                AND (q.questionnaire_permission = 1 OR  q.id_
+                 IN (
+                       SELECT questionnaire_id
+                         FROM questionnaire_permission_middle
+                          where user_id = #{userId}
+                        )
+                     )
                 GROUP BY   s.scene_name,s.id_
     </select>
 

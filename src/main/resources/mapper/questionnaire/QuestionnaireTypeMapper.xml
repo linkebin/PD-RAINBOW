@@ -81,7 +81,7 @@
         AND PID = #{id}
     </select>
 
-    <select id="findQuestionnaireForTypeNum" resultMap="typeNum">
+    <select id="findQuestionnaireForTypeNum" parameterType="String"  resultMap="typeNum">
            SELECT
               t.id_,t.questionnaire_type_name,sum(1)as  nums
              FROM
@@ -91,6 +91,14 @@
               ON t.id_=q.questionnaire_type
                WHERE q.deleted=0
                AND   q.questionnaire_state=2
+               AND (q.questionnaire_permission = 1 OR  q.id_
+                 IN (
+                       SELECT questionnaire_id
+                         FROM questionnaire_permission_middle
+                          where user_id = #{userId}
+                        )
+                     )
+
                GROUP BY    t.id_,t.questionnaire_type_name
     </select>
 

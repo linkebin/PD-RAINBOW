@@ -5,6 +5,7 @@ import com.yidusoft.project.questionnaire.domain.QuestionnaireType;
 import com.yidusoft.project.questionnaire.service.QuestionnaireTypeService;
 import com.yidusoft.core.AbstractService;
 
+import com.yidusoft.utils.Security;
 import com.yidusoft.utils.TreeNode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,6 +75,6 @@ public class QuestionnaireTypeServiceImpl extends AbstractService<QuestionnaireT
     //查询类型相关联问卷的数量
     @Override
     public  List<QuestionnaireType> findQuestionnaireForTypeNum() {
-        return questionnaireTypeMapper.findQuestionnaireForTypeNum();
+        return questionnaireTypeMapper.findQuestionnaireForTypeNum(Security.getUserId());
     }
 }
