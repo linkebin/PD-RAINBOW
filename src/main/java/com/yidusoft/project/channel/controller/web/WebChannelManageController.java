@@ -6,12 +6,16 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
+import com.yidusoft.project.system.domain.SecUser;
+import com.yidusoft.project.system.service.SecUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -21,6 +25,9 @@ import java.util.List;
 public class WebChannelManageController {
     @Resource
     private ChannelManageService channelManageService;
+
+    @Autowired
+    private SecUserService secUserService;
 
     @RequestMapping("/openlist")
     public String openlist() {
@@ -61,5 +68,29 @@ public class WebChannelManageController {
         model.addAttribute("acdetail",channelManageService.findById(id));
 
         return "project/channel/acdetail";
+    }
+
+    @RequestMapping("/counselorInfo")
+    public String opencounselorInfo(String id,Model model) {
+       SecUser user = secUserService.findById(id);
+        model.addAttribute("user",user);
+        return "project/channel/user-info";
+    }
+
+    @RequestMapping("/rulechannel")
+    public String linkAdd(Model model) {
+        model.addAttribute("UUID", UUID.randomUUID().toString());
+        return "project/channel/rule-channel";
+    }
+
+    @RequestMapping("/rulechannelupdate")
+    public String rulechannelupdate(Model model,String id) {
+        model.addAttribute("ruleId", id);
+        return "project/channel/rule-channel-update";
+    }
+
+    @RequestMapping("/selectchannel")
+    public String selectchannel() {
+        return "project/channel/select-channel";
     }
 }

@@ -42,7 +42,7 @@
                 <i class='eui-icon eui-font24'>&#xe61d;</i> 结算规则列表
             </div>
             <div class="eui-col-md6 eui-textAlignR">
-                <a href="###" class="eui-btn eui-btn-small userAdd">添加规则</a>
+                <a href="###" onclick="newTab()" class="eui-btn eui-btn-small userAdd1">添加规则</a>
                 <a href="###" onclick="deleteB('')" class="eui-btn eui-btn-small">批量删除</a>
             </div>
         </div>
@@ -184,6 +184,18 @@
         $("#joinEndTime").val('');
     }
 
+    function newTab() {
+        if(parent.$(".eui-tab-title li[e-id='xdcvb']").length<=0) {
+            parent.element.tabAdd("nav-tab", {
+                title:'新建规则'
+                ,content: '<iframe frameborder=0' +
+                ' class="contentIframe" src="/web/channel/manage/rulechannel"></iframe>'
+                ,id: 'xdcvb'
+            });
+        }
+        parent.element.tabChange("nav-tab", 'xdcvb');
+    }
+
     $(function () {
         doSearch();
         jQuery.validator.methods.compareDate = function(value, element, param) {
@@ -228,22 +240,17 @@
     });
 
     function loadOneData(id) {
-        document.getElementById('channelAdd').reset();
-        $.post('/account/rule/detail',{id:id},function (result) {
-                $(".title-add-edit").html("编辑结算规则");
-                $('#flag').val('edit');
-                $('#channelAdd input + label').remove();
-                result.data.startTime=new Date(result.data.startTime).Format('yyyy-MM-dd');
-                result.data.endTime=new Date(result.data.endTime).Format('yyyy-MM-dd');
-                $("#channelAdd").setForm(result.data);
-            eui.use(['form'], function(){
-                var form = eui.form;
-                form.render('radio');
+        if(parent.$(".eui-tab-title li[e-id='xdfvvv']").length<=0) {
+            parent.element.tabAdd("nav-tab", {
+                title:'修改规则'
+                ,content: '<iframe frameborder=0' +
+                ' class="contentIframe" src="/web/channel/manage/rulechannelupdate?id='+id+'"></iframe>'
+                ,id: 'xdfvvv'
             });
-                $(".taskFiltrate").show();
-                $(".filtrateIn").animate({right:'0'},400);
+        }
+        parent.element.tabChange("nav-tab", 'xdfvvv');
 
-            });
+//        document.getElementById('channelAdd').reset();
     }
 
     function addAccountRule() {

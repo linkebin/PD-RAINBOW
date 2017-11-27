@@ -82,7 +82,10 @@
                 ,{field: 'ACCOUNT', title: '咨询师账号', width: 180}
                 ,{field: 'MOBILE', title: '联系方式', width: 180}
                 ,{field: 'inviter_user', title: '邀请人', width: 150,templet:'<div>{{# if(d.inviter_user==undefined){ }} 无邀请人  {{#  }else{   }} {{d.inviter_user}} {{# } }}</div>'}
-            ]]
+                 ,{field: '操作', title: '操作', width: 150,templet:'<div class="eui-btn-group"> <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
+                 'title="详情信息" e-event="edit" ><i class="eui-icon">&#xe621;</i>' +
+                 '</button></div>'}
+                ]]
             ,response: {
                 statusName: 'code' //数据状态的字段名称，默认：code
                 ,statusCode: 200 //成功的状态码，默认：0
@@ -162,8 +165,29 @@
                 }
             }
         });
+
+        //监听工具条
+        table.on('tool(idTest)', function(obj){
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if(layEvent === 'edit'){ //编辑
+                parent.element.tabAdd("nav-tab", {
+                    title:"咨询师信息"
+                    ,content: '<iframe frameborder=0 class="contentIframe" src="/web/channel/manage/counselorInfo?id='+data.ID_+'"></iframe>'
+                    ,id: "zxs"
+                });
+                parent.element.tabChange("nav-tab", "zxs");
+            }
+        });
     });
 
+
+
+    function VV(id) {
+
+
+    }
     function resetForm() {
         $('#searchFrom')[0].reset();
     }

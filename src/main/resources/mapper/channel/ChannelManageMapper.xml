@@ -92,7 +92,7 @@
 
   <select id="findChannelOrAccountCounselorListByParameter" parameterType="Map" resultType="java.util.Map">
      <if test="type == 1">
-       SELECT su.ACCOUNT,su.USER_NAME,su.MOBILE,
+       SELECT su.ID_, su.ACCOUNT,su.USER_NAME,su.MOBILE,
        (SELECT su1.USER_NAME FROM sec_user su1
        WHERE su1.DELETED=0 AND su1.ID_=#{inviter_user}) inviter_user
        FROM sec_user su
@@ -117,7 +117,7 @@
 
     <if test="type == 2">
 
-      SELECT su.ACCOUNT,su.USER_NAME,su.MOBILE,
+      SELECT su.ID_, su.ACCOUNT,su.USER_NAME,su.MOBILE,
       (
       SELECT su1.USER_NAME FROM sec_user su1
       WHERE su1.DELETED=0 AND su1.ID_
@@ -147,7 +147,7 @@
     </if>
 
     <if test="type == 3">
-      SELECT su.ACCOUNT,su.USER_NAME,su.MOBILE,
+      SELECT su.ID_, su.ACCOUNT,su.USER_NAME,su.MOBILE,
       (SELECT su1.USER_NAME FROM sec_user su1
       WHERE su1.DELETED=0 AND su1.ID_=su.inviter_user) inviter_user
       FROM sec_user su

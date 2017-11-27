@@ -47,7 +47,7 @@
                 </tr>
                 <tr>
                     <td>出生年月:</td>
-                    <td th:text="${vr.birthday}">2017-07-29</td>
+                    <td th:text="${#dates.format(vr.birthday, 'yyyy-MM-dd')}">2017-07-29</td>
                     <td>籍贯:</td>
                     <td th:text="${vr.nativePlace}">2017-07-29</td>
                 </tr>
