@@ -497,17 +497,21 @@
     }
     //选择问卷
     function useQuestionnaire (questionnaireName) {
-        var nameAndId = questionnaireName.split(',');
-        $('#questionnaireName').val(nameAndId[0]);
-        $('#questionnaireId').val(nameAndId[1]);
-        console.log($('#questionnaireName').val() + "  " + $('#questionnaireId').val())
-            layer.closeAll();
+            var nameAndId = questionnaireName.split(',');
+            $('#questionnaireName').val(nameAndId[0]);
+            $('#questionnaireId').val(nameAndId[1]);
+            console.log($('#questionnaireName').val() + "  " + $('#questionnaireId').val())
+            var obj = new Object();
+            obj.questionnaireName = $('#questionnaireName').val();
+            obj.questionnaireId = $('#questionnaireId').val();
+            $(window.parent.setQuestionnaireNameAndId(obj));
     }
 
     function getQuestionnaireNameAndId() {
         var obj = new Object();
         obj.questionnaireName =  $('#questionnaireName').val();
         obj.questionnaireId =  $('#questionnaireId').val();
+        layer.closeAll();
         return obj;
     }
 
