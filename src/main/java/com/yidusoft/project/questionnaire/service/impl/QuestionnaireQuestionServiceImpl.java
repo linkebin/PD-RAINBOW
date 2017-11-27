@@ -140,8 +140,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 activeParticipant.setFillingTime(new Date());
                 activeParticipantService.update(activeParticipant);
             }*/
-            //扣除余额
-            userQuestionnairesService.deduction();
+            //活动扣除余额
+            deleteDuction(activityId);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
@@ -258,103 +258,22 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             //问卷使用的id
             String dataAcquisitionId = UUID.randomUUID().toString();
             //总分
-            int totalScore = 0;
-            for (Map map : mapList) {
-                //分数
-                String score = map.get("score").toString();
-                //问题id
-                String questionId = map.get("questionId").toString();
-                //答案
-                String answer = map.get("answer").toString();
-                //答案类型
-                String questionType = map.get("questionType").toString();
+            int totalScore =getQuestionnaireTotalScore(mapList, dataAcquisitionId, userName,userId);
 
-                //   判断正确的答案  与填写答案
-                int state = 0;
-                String[] correctAnswerArray;
-                String[] answerArray;
-                String[] scoreArray;
-
-                if (answer.contains("||")) {
-                    answerArray = answer.split("\\|\\|");
-                } else {
-                    answerArray = new String[]{answer};
-                }
-
-                if (score.contains("||")) {
-                    scoreArray = score.split("\\|\\|");
-                } else {
-                    scoreArray = new String[]{score};
-                }
-                if (map.get("correctAnswer") != null) {
-                    if (map.get("correctAnswer").toString().contains("||")) {
-                        correctAnswerArray = map.get("correctAnswer").toString().split("\\|\\|");
-                    } else {
-                        correctAnswerArray = new String[]{map.get("correctAnswer").toString()};
-                    }
-                    for (int j = 0; j < answerArray.length; j++) {
-                        for (int i = 0; i < correctAnswerArray.length; i++) {
-                            if (correctAnswerArray[i].equals(answerArray[j])) {
-                                state += 1;
-                            }
-                        }
-                    }
-                }
-
-                QuestionnaireAnswer questionnaireAnswer = new QuestionnaireAnswer();
-                questionnaireAnswer.setId(UUID.randomUUID().toString());
-                questionnaireAnswer.setAcquisitionId(dataAcquisitionId);
-                questionnaireAnswer.setAnswer(answer);
-                questionnaireAnswer.setQuestionId(questionId);
-                questionnaireAnswer.setCreateTime(new Date());
-                questionnaireAnswer.setCreator(userName);
-                questionnaireAnswer.setDeleted(0);
-                questionnaireAnswer.setUserId(userId);
-                //判断  1  单选  2多选  3评分单选
-                if (!questionType.equals("3")) {
-                    //答案正确
-                    if (answerArray.length == state) {
-                        int scores = 0;
-                        for (int i = 0; i < answerArray.length; i++) {
-                            totalScore += Integer.valueOf(scoreArray[i]);
-                            scores += Integer.valueOf(scoreArray[i]);
-                        }
-
-                        questionnaireAnswer.setAnswerScore(scores);
-
-                    } else {
-                        //答案错误
-                        questionnaireAnswer.setAnswerScore(0);
-                    }
-
-                    questionnaireAnswerMapper.insert(questionnaireAnswer);
-
-                } else {
-                    int scores = 0;
-                    for (int i = 0; i < answerArray.length; i++) {
-                        totalScore += Integer.valueOf(scoreArray[i]);
-                        scores += Integer.valueOf(scoreArray[i]);
-                    }
-                    questionnaireAnswer.setAnswerScore(scores);
-                    questionnaireAnswerMapper.insert(questionnaireAnswer);
-
-                }
-
-            }
+            //查询问卷的相关答案
+            QuestionnaireAnswer questionnaireAnswer=new QuestionnaireAnswer();
+            questionnaireAnswer.setUserId(userId);
+            questionnaireAnswer.setAcquisitionId(dataAcquisitionId);
+            List<QuestionnaireAnswer>  questionnaireAnswerList=questionnaireAnswerMapper.findAnswerForAcquisition(questionnaireAnswer);
             //判断问卷的类型
             Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
             String result = "";
-            EntityReflex.getMethod(dataAcquisitionService.getClass(),"gauge_34",dataAcquisitionId,userId,"anxious");
-            if ("症状自评量表-SCL90".equals(questionnaire.getQuestionnaireTypeName())) {
-                result = dataAcquisitionService.symptomConclusion(dataAcquisitionId, userId);
+            //获得方法名字
+            String method=GAUGE.get(questionnaire.getGaugeName()).toString();
+            //调QuestionnaireMethod 类里面method的方法 得到返回的分析结果
+            Result methodResult= EntityReflex.getMethods(QuestionnaireMethod.class,method,questionnaireAnswerList);
+            result= methodResult.getData().toString();
 
-            } else if ("抑郁自评量表(SDS)".equals(questionnaire.getQuestionnaireTypeName())) {
-                result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "depressed");
-            } else {
-                //焦虑自评量表(SAS)
-                result = dataAcquisitionService.depressedOrAnxiousConclusion(dataAcquisitionId, userId, "anxious");
-
-            }
             DataAcquisition dataAcquisition = new DataAcquisition();
             dataAcquisition.setId(dataAcquisitionId);
             //dataAcquisition.setActivityId();
