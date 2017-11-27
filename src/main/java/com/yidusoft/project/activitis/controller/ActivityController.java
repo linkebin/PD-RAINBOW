@@ -45,7 +45,7 @@ public class ActivityController {
 	//开启活动审批流程实例
 	@RequestMapping(value = "/launchProcess", method = RequestMethod.POST)
 	public void startProcessInstance( String launchId, String launchName) {
-		myService.startProcess(launchId,launchName);
+		myService.startProcess(launchId,launchName,"");
 	}
 	
 	//获取当前人的任务

@@ -367,6 +367,165 @@ public class QuestionnaireMethod {
         map.put("dimension4",dimension4);
         return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
     }
+
+    //匹兹堡睡眠质量指数(PSQI)
+    public Result gauge_10(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception{
+        //1、睡眠质量（sleepQuan）15 共一项
+        Map<String ,Object> sleepQuanMap = getFactorScore("sleepQuan","15",questionnaireAnswerList);
+        double sleepQuan = Double.valueOf(sleepQuanMap.get("sleepQuan").toString());
+
+
+        //2、入睡时间 （fallSleepTime）2,5 共两项
+        Map<String, Object> fallSleepTimeMap = getFactorScore("fallSleepTime","2,5",questionnaireAnswerList);
+        double fallSleepTime = Double.valueOf(fallSleepTimeMap.get("fallSleepTime").toString());
+//       将第2条目和第5条目得分相加，累计得分为 “0”  则记0分
+//       累计得分为“1~2” 则记1分
+//       累计得分为“3~4” 则记2分
+//       累计得分为“5~6” 则记3分
+        if (fallSleepTime == 1 || fallSleepTime == 2){
+            fallSleepTime = 1;
+        }else if (fallSleepTime == 3 || fallSleepTime == 4){
+            fallSleepTime = 2;
+        }else if (fallSleepTime == 5 || fallSleepTime == 6){
+            fallSleepTime = 3;
+        }else {
+            fallSleepTime = 0;
+        }
+
+
+
+
+        //3、睡眠时间(sleepTime) 4 共一项
+        String sleepTimeStr = getQuestionAnswer(4,questionnaireAnswerList);
+        int sleepTime = 0;
+        if (Integer.valueOf(sleepTimeStr) > 7){
+            sleepTime = 0;
+        }else if (Integer.valueOf(sleepTimeStr) >=6 && Integer.valueOf(sleepTimeStr) <= 7){
+            sleepTime = 1;
+        }else if (Integer.valueOf(sleepTimeStr) >=5 && Integer.valueOf(sleepTimeStr) <= 6){
+            sleepTime = 2;
+        }else{
+            sleepTime = 3;
+        }
+
+        //4、睡眠效率(sleepEfficiency) 1,3,4 共三项
+
+
+        //5、睡眠障碍(dyssomnia) 6,7,8,9,10,11,12,13,14 共九项
+        Map<String, Object> dyssomniaMap = getFactorScore("dyssomnia","6,7,8,9,10,11,12,13,14",questionnaireAnswerList);
+        double dyssomnia = Double.valueOf(dyssomniaMap.get("dyssomnia").toString());
+//       累计得分为 “0” ， 则记0分
+//       累计得分为 “1~9” ，则记1分
+//       累计得分为“10~18”，则记2分
+//       累计得分为“19~27”，则记3分
+        if (dyssomnia == 0){
+            dyssomnia = 0;
+        }else if (dyssomnia >= 1 && dyssomnia <= 9){
+            dyssomnia = 1;
+        }else if (dyssomnia >= 10 && dyssomnia <= 18){
+            dyssomnia = 2;
+        }else if (dyssomnia >= 19 && dyssomnia <= 27){
+            dyssomnia = 3;
+        }
+
+
+
+        //6、催眠药物 (sodiumAmytal;)16 共一项
+        Map<String,Object> sodiumAmytalMap = getFactorScore("sodiumAmytal","16",questionnaireAnswerList);
+        double sodiumAmytal = Double.valueOf(sodiumAmytalMap.get("sodiumAmytal").toString());
+
+        //7、	日间功能障碍(daytimeDysfunction) 17,18 共两项
+        Map<String,Object> daytimeDysfunctionMap = getFactorScore("daytimeDysfunction","17,18",questionnaireAnswerList);
+        double daytimeDysfunction = Double.valueOf(daytimeDysfunctionMap.get("daytimeDysfunction").toString());
+//       累计得分为 “0” ，则记0分
+//       累计得分为“1~2”，则记1分
+//       累计得分为“3~4”，则记2分
+//       累计得分为“5~6”，则记3分
+        if (daytimeDysfunction == 0){
+            daytimeDysfunction = 0;
+        }else if (daytimeDysfunction == 1 || daytimeDysfunction == 2){
+            daytimeDysfunction = 1;
+        }else if (daytimeDysfunction == 3 || daytimeDysfunction == 4){
+            daytimeDysfunction = 2;
+        }else if (daytimeDysfunction == 5 || daytimeDysfunction == 6){
+            daytimeDysfunction = 3;
+        }
+
+        double totalScore = sleepQuan + fallSleepTime + sleepTime + fallSleepTime + sleepTime
+                + dyssomnia + sodiumAmytal + daytimeDysfunction;
+        Map<String,Object> map = new HashMap<>();
+        map.put("totalScore",totalScore);
+        map.put("sleepQuan",sleepQuan);
+        map.put("fallSleepTime",fallSleepTime);
+        map.put("sleepTime",sleepTime);
+        map.put("dyssomnia",dyssomnia);
+        map.put("sodiumAmytal",sodiumAmytal);
+        map.put("daytimeDysfunction",daytimeDysfunction);
+        return ResultGenerator.genSuccessResult(JSON.toJSONString(map));
+
+    }
+
+    //长处和困难问卷(SDQ)
+    public Result gauge_7(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception{
+        //情绪症状 （emotionalSym）3，8,13,16,24共五项
+        Map<String,Object> emotionalSymMap = getFactorScore("emotionalSym","3,8,13,16,24",questionnaireAnswerList);
+        double emotionalSym = Double.valueOf(emotionalSymMap.get("emotionalSym").toString());
+
+        //品行问题( conductPro)5,7,12,18,22 共五项
+        Map<String,Object> conductProMap = getFactorScore("conductPro","5,7,12,18,22",questionnaireAnswerList);
+        double conductPro = Double.valueOf(conductProMap.get("conductPro").toString());
+
+        //多动(hyperactivity)2,10,15,21,25 共五项
+        Map<String, Object> hyperactivityMap = getFactorScore("hyperactivity","2,10,15,21,25",questionnaireAnswerList);
+        double hyperactivity = Double.valueOf(hyperactivityMap.get("hyperactivity").toString());
+
+        //同伴交往问题(peerCommunicationProblem)6,11,14,19,23 共五项
+        Map<String,Object> peerCommunicationProblemMap = getFactorScore("peerCommunicationProblem","6,11,14,19,23",questionnaireAnswerList);
+        double peerCommunicationProblem = Double.valueOf(peerCommunicationProblemMap.get("peerCommunicationProblem").toString());
+
+        //亲社会行为 (prosocialBehavior)1,4,9,17,20 共五项
+        Map<String,Object> prosocialBehaviorMap = getFactorScore("prosocialBehavior","1,4,9,17,20",questionnaireAnswerList);
+        double prosocialBehavior = Double.valueOf(prosocialBehaviorMap.get("prosocialBehavior").toString());
+
+        //影响因子 (influence) 28,29,30,31,32 共五项
+        Map<String,Object> influenceMap = getFactorScore("influence","28,29,30,31,32",questionnaireAnswerList);
+        double influence = Double.valueOf(influenceMap.get("influence").toString());
+
+        //问题困扰时间 （problemPlaguedTime）27 共一项
+        String problemPlaguedTime = getQuestionAnswer(27,questionnaireAnswerList);
+
+
+        //总分
+        Map<String,Object> map =getTotalScore("totalScore",questionnaireAnswerList);
+        map.put("emotionalSym",emotionalSym);
+        map.put("conductPro",conductPro);
+        map.put("hyperactivity",hyperactivity);
+        map.put("peerCommunicationProblem",peerCommunicationProblem);
+        map.put("prosocialBehavior",prosocialBehavior);
+        map.put("influence",influence);
+        map.put("problemPlaguedTime",problemPlaguedTime);
+        return ResultGenerator.genSuccessResult(JSON.toJSONString(map));
+    }
+
+    /**
+     * 获取问题答案
+     * @param num
+     * @param questionnaireAnswerList
+     * @return
+     */
+    private String getQuestionAnswer(int num, ArrayList<QuestionnaireAnswer> questionnaireAnswerList) {
+        String str = "";
+        for(QuestionnaireAnswer questionnaireAnswer :questionnaireAnswerList ){
+            String questionId= questionnaireAnswer.getQuestionId();
+            //问题的id 格式  如：dsdasda#1   1为问题的序号
+            String sequence=questionId.split("_")[1];
+            if(sequence.equals(num+"")){
+                str+=questionnaireAnswer.getAnswer();
+            }
+        }
+        return str;
+    }
+
   //计算总分
     public  Map<String,Object>  getTotalScore(String key,ArrayList<QuestionnaireAnswer>  questionnaireAnswerList){
         //总分

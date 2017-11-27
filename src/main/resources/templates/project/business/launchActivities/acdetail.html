@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>详情</title>
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+    <style>
+        tr td:nth-child(1){
+            font-weight:bold;
+            text-align: right;
+        }
+        tr td:nth-child(3){
+            font-weight:bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="entirety eui-bg-white eui-padding15">
+    <table class="eui-table">
+        <colgroup>
+            <col width="200">
+            <col>
+            <col width="200">
+            <col>
+        </colgroup>
+        <tbody>
+        <tr>
+            <td>活动名称:</td>
+            <td th:text="${acdetail.activityName}"></td>
+            <td>活动编号:</td>
+            <td th:text="${acdetail.activityCode}"></td>
+        </tr>
+        <tr>
+            <td>联系人:</td>
+            <td th:text="${acdetail.contacts}"></td>
+            <td>参与方:</td>
+            <td th:text="${acdetail.participant}"></td>
+
+        </tr>
+        <tr>
+            <td>活动地点:</td>
+            <td th:text="${acdetail.activityAddr}" colspan="3"></td>
+        </tr>
+        <tr>
+            <td>问卷名:</td>
+            <td  th:text="${acdetail.uestionnaireName}"></td>
+            <td>联系电话:</td>
+            <td th:text="${acdetail.phone}"></td>
+        </tr>
+
+        <tr>
+            <td>活动开始时间:</td>
+            <td  th:text="${#dates.format(acdetail.activityStart, 'yyyy-MM-dd hh:mm')}" ></td>
+            <td>活动结束时间:</td>
+            <td th:text="${#dates.format(acdetail.activityEnd, 'yyyy-MM-dd hh:mm')}"></td>
+        </tr>
+
+        <tr>
+            <td>活动人数:</td>
+            <td  th:text="${acdetail.activityTotal}" ></td>
+
+            <td>活动邀请码:</td>
+            <td  th:text="${acdetail.activityPorn}" ></td>
+        </tr>
+        <tr>
+            <td>问卷访问网址:</td>
+            <td colspan="3" th:text="${acdetail.uestionnaireUri}" ></td>
+        </tr>
+        <tr>
+            <td>活动目的:</td>
+            <td colspan="3" th:text="${acdetail.activityAim}" ></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

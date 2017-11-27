@@ -194,10 +194,10 @@ public class SecUserController {
             //更新
             SecUser user = secUserService.getSecUserInfo(Security.getUser().getAccount());
             if (user!=null){
-                if(user.getHeadImg()!=null && !"".equals(user.getHeadImg())){
-                    //将图片转换成base64
-                    user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
-                }
+//                if(user.getHeadImg()!=null && !"".equals(user.getHeadImg())){
+//                    //将图片转换成base64
+//                    user.setHeadImg(Base64ToImage.getImageStr(user.getHeadImg()));
+//                }
 
             Session session = SecurityUtils.getSubject().getSession();
             session.setAttribute("userSessionId", user.getId());

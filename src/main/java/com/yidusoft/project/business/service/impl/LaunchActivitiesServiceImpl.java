@@ -62,7 +62,8 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
             launchActivities.setActivityPorn(CodeHelper.randomCode(8));
         }
         launchActivitiesService.save(launchActivities);
-        activityService.startProcess(launchActivities.getId(),launchActivities.getActivityName()+"  活动申请");
+        String uri = "/web/launchActivities/acdetail?id="+launchActivities.getId();
+        activityService.startProcess(launchActivities.getId(),launchActivities.getActivityName()+"  活动申请",uri);
         return ResultGenerator.genSuccessResult();
     }
 
