@@ -742,10 +742,17 @@ body .eui-layer-title{
 
 }
 
-
-
-
-
+/* 2017-11-27 */
+#tagScene p{
+    margin: 5px;
+}
+#noMember{
+    overflow: hidden;
+    margin-top: 14px;
+}
+#isMember{
+    margin-top: 20px;
+}
 
 
 

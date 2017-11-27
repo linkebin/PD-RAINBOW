@@ -50,16 +50,16 @@
     border:none;
 }
 .loginTxt{
-    background: url(images/account.png) no-repeat left center;
+    background: url(images/account.png) no-repeat 5px center;
 }
 .signTxt{
-    background: url(images/mobile.png) no-repeat left center;
+    background: url(images/mobile.png) no-repeat 5px center;
 }
 .loginPword{
-    background: url(images/password.png) no-repeat left center;
+    background: url(images/password.png) no-repeat 5px center;
 }
 .loginVerifCode{
-    background: url(images/verifcode.png) no-repeat left center;
+    background: url(images/verifcode.png) no-repeat 5px center;
 }
 
 
