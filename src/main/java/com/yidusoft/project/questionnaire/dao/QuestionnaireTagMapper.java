@@ -14,5 +14,5 @@ public interface QuestionnaireTagMapper extends Mapper<QuestionnaireTag> {
     //查询是否有相同的标签
     QuestionnaireTag findSameTag(String tagName);
     //查询这个标签有多少个问卷使用
-    List<QuestionnaireTag> findQuestionnaireForTagNum();
+    List<QuestionnaireTag> findQuestionnaireForTagNum(String userId);
 }

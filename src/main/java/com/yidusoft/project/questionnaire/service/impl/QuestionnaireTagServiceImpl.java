@@ -5,6 +5,7 @@ import com.yidusoft.project.questionnaire.domain.QuestionnaireTag;
 import com.yidusoft.project.questionnaire.service.QuestionnaireTagService;
 import com.yidusoft.core.AbstractService;
 
+import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,6 @@ public class QuestionnaireTagServiceImpl extends AbstractService<QuestionnaireTa
     //查询这个标签有多少个问卷使用
     @Override
     public List<QuestionnaireTag> findQuestionnaireForTagNum() {
-        return questionnaireTagMapper.findQuestionnaireForTagNum();
+        return questionnaireTagMapper.findQuestionnaireForTagNum(Security.getUserId());
     }
 }

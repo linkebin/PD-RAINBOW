@@ -126,6 +126,14 @@ public class WebCubeQuestionnaireController {
         model.addAttribute("questionnaireId",questionnaireId);
         model.addAttribute("userId",userId);
         model.addAttribute("acquisitionId",acquisitionId);
+        Questionnaire questionnaires=questionnaireService.findById(questionnaireId);
+        if("长处和困难问卷(SDQ)家长版".equals(questionnaires.getQuestionnaireName())){
+            return "project/cube/questionnaireDetails/gauge_7_a";
+        }else if("长处和困难问卷(SDQ)老师版".equals(questionnaires.getQuestionnaireName())) {
+            return "project/cube/questionnaireDetails/gauge_7_b";
+        }else if("长处和困难问卷(SDQ)学生版".equals(questionnaires.getQuestionnaireName())){
+            return "project/cube/questionnaireDetails/gauge_7_c";
+        }
         Questionnaire questionnaire = questionnaireService.findQuestionnaireType(questionnaireId);
         String  htmlName= GAUGE.get(questionnaire.getGaugeName()).toString();
 

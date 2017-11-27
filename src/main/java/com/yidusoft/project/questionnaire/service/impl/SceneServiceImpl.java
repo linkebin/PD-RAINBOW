@@ -5,6 +5,7 @@ import com.yidusoft.project.questionnaire.domain.Scene;
 import com.yidusoft.project.questionnaire.service.SceneService;
 import com.yidusoft.core.AbstractService;
 
+import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +46,6 @@ public class SceneServiceImpl extends AbstractService<Scene> implements SceneSer
     //查询场景里面问卷的数量
     @Override
     public List<Scene> findQuestionnaireForSceneNum() {
-        return sceneMapper.findQuestionnaireForSceneNum();
+        return sceneMapper.findQuestionnaireForSceneNum(Security.getUserId());
     }
 }

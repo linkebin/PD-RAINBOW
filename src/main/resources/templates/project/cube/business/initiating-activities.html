@@ -382,12 +382,12 @@
                 ,moveType: 0//拖拽模式，0或者1
                 ,maxmin: true
                 ,content:"/web/customer/getCheckQuestionnaireForAct"
-                ,btn: ['确定', '关闭'] //只是为了演示
+               // ,btn: ['确定', '关闭'] //只是为了演示
                 ,yes: function(){
-                    var obj =  iframeWin.getQuestionnaireNameAndId();
-                    queName = obj.questionnaireId;
-                    $('#uestionnaireId').val(obj.questionnaireName);
-                    console.log("questionnaireName = " + obj.questionnaireName);
+//                    var obj =  iframeWin.getQuestionnaireNameAndId();
+//                    queName = obj.questionnaireId;
+//                    $('#uestionnaireId').val(obj.questionnaireName);
+//                    console.log("questionnaireName = " + obj.questionnaireName);
                     layer.closeAll();
                 }
                 ,btn2: function(){
@@ -399,6 +399,12 @@
             });
         });
 
+    }
+    function setQuestionnaireNameAndId(obj) {
+        queName = obj.questionnaireId;
+        $('#uestionnaireId').val(obj.questionnaireName);
+        console.log("questionnaireName = " + obj.questionnaireName);
+        layer.closeAll();
     }
 </script>
 
