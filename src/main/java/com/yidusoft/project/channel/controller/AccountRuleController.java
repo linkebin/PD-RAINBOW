@@ -29,7 +29,7 @@ public class AccountRuleController {
     @PostMapping("/add")
     public Result add(String json) {
         AccountRule accountRule = JSON.parseObject(json,AccountRule.class);
-        accountRule.setRuleId(UUID.randomUUID().toString());
+//        accountRule.setRuleId(UUID.randomUUID().toString());
         accountRule.setCreator(Security.getUser().getUserName());
         accountRule.setDeleted(0);
         accountRule.setCreateTime(new Date());

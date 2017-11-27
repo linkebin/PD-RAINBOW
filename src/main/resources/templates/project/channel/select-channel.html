@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>渠道管理</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="/Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+    <style>
+        #channelAdd input + label{color: red; font-size: 12px;}
+    </style>
+</head>
+<body>
+
+<div class="eui-bg-white eui-row eui-padding15">
+    <div class="eui-col-md12 eui-paddingR10">
+        <form class="eui-form" id="searchFrom">
+            <input type="hidden" name="status" value="2" />
+            <div class="eui-input-inline eui-padding10">
+
+                <input type="text" name="channelName" e-verify="title" value=""
+                       autocomplete="off" placeholder="渠道名称/关键字" class="eui-input">
+            </div>
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="linkman" e-verify="title" value=""
+                       autocomplete="off" placeholder="联系人/关键字" class="eui-input">
+            </div>
+
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="channelManager" e-verify="title" value=""
+                       autocomplete="off" placeholder="渠道负责人/关键字" class="eui-input">
+            </div>
+
+
+            <div class="eui-inline">
+                <div class="eui-input-inline">
+                    <input type="text" class="eui-input eui-width200" id="joinTime6" placeholder="加入时间/起始-结束">
+
+                </div>
+            </div>
+            <input name="joinStartTime" type="hidden" id="joinStartTime" />
+            <input name="joinEndTime" type="hidden" id="joinEndTime" />
+            <div class="eui-input-inline">
+                <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
+                <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+            </div>
+        </form>
+
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 已审批渠道列表
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+            </div>
+        </div>
+        <table class="eui-table eui-form" id="userTable">
+            <colgroup>
+                <col width="50">
+                <col width="100">
+                <col width="120">
+                <col width="80">
+                <col width="120">
+                <col width="300">
+                <col width="110">
+                <col width="120">
+                <!--<col width="120">-->
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+                <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                <th>渠道编号</th>
+                <th>渠道名称</th>
+                <th>联系人</th>
+                <th>联系人电话</th>
+                <th>联系人住址</th>
+                <th>渠道负责人</th>
+                <th>加入时间</th>
+                <th>渠道账号</th>
+                <!--<th>创建人</th>-->
+                <!--<th>操作</th>-->
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <div style="margin-left: 30px;" id="pages"></div>
+    </div>
+</div>
+
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script src="/Scripts/plugins/distpicker.data.js"></script>
+<script src="/Scripts/plugins/distpicker.js"></script>
+
+<script type="text/javascript">
+
+
+    eui.use('laydate', function() {
+        var laydate = eui.laydate;
+        //常规用法
+        laydate.render({
+            elem: '#joinTime'
+        });
+
+        laydate.render({
+            elem: '#joinTime6'
+            ,range: true
+            ,change: function(value, date, endDate){
+                var startTime=value.split(' - ')[0];
+                var endTime=value.split(' - ')[1];
+                $("#joinStartTime").val(startTime);
+                $("#joinEndTime").val(endTime);
+            }
+        });
+
+    });
+
+
+
+    $(function () {
+        doSearch();
+    });
+
+    function resetForm() {
+        $('#searchFrom')[0].reset();
+        $("#joinStartTime").val('');
+        $("#joinEndTime").val('');
+    }
+
+    function addChannel() {
+        var obj = $("#channelAdd").serializeObject();
+        var flag = $('#flag').val();
+
+        if (flag == 'add'){
+            $.post('/channel/manage/add',{json:JSON.stringify(obj)},function (resuslt) {
+                resultHint(resuslt);
+            });
+        }else {
+            $.post('/channel/manage/update',{json:JSON.stringify(obj)},function (resuslt) {
+                resultHint(resuslt);
+            });
+        }
+    }
+    
+    function resultHint(resuslt) {
+        var msg = resuslt.message;
+        if(msg=="SUCCESS"){
+            layer.msg('添加成功', {
+                icon: 1,
+                time: 2000
+            });
+            $(".filtrateIn").animate({right:'-400px'},400);
+            $(".taskFiltrate").hide();
+            doSearch();
+        }else{
+            layer.msg(msg, {
+                time: 2000
+            });
+        }
+    }
+    
+
+    function selectIds() {
+        var ids='';
+        $(".mycheckbox:checked").each(function(i){
+            var id = $(this).parent().find("input[name='userId']").val();
+            ids += id + ',';
+        });
+        return ids;
+    }
+
+
+    //删除用户
+    function deleteB(ids) {
+        if (ids==''){
+            $(".mycheckbox:checked").each(function(i){
+                var id = $(this).parent().find("input[name='userId']").val();
+                ids += id + ',';
+            });
+        }
+        if (ids==''){
+            layer.msg('请选择要删除的用户', {
+                time: 2000
+            });
+        }else {
+            layer.confirm('您确定删除该渠道商吗？', {
+                btn: ['确认', '取消'],
+                shade: 0,
+                title:'提示'
+            }, function(){
+                $.ajax({
+                    url:"/channel/manage/deleteBacth",
+                    data: {
+                        ids:ids
+                    },
+                    type:"post",
+                    success:function(result){
+                        layer.msg('删除成功', {
+                            icon: 1,
+                            time: 2000
+                        });
+                        doSearch();
+                    }
+                });
+            });
+        }
+    }
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/channel/manage/listByparameter",
+                data: {
+                    json:JSON.stringify(params),
+                    page:1,
+                    pagesize:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/channel/manage/listByparameter",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            var id = "'" + secUser.id + "'";
+            var channelManager = secUser.channelManager;
+            if (secUser.channelManager==undefined || secUser.channelManager==''){
+                channelManager='无';
+            }
+            var linkmanAddr = secUser.province+secUser.city+secUser.district+secUser.linkmanAddr;
+            tableHtml +=  '<tr>' +
+                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" ' +
+                'type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.channelCode +'</td>' +
+                '<td>'+ secUser.channelName +'</td>' +
+                '<td>'+ secUser.linkman +'</td>' +
+                '<td>'+ secUser.linkmanTell +'</td>' +
+                '<td>'+ linkmanAddr +'</td>' +
+                '<td>'+ channelManager +'</td>' +
+                '<td>'+ new Date(secUser.createTime).Format('yyyy-MM-dd') +'</td>' +
+                '<td>'+ secUser.account +'</td>' +
+//                '<td>' +
+//                '<div class="eui-btn-group"> ' +
+//                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="编辑渠道商"><i class="eui-icon">&#xe642;</i></button> ' +
+//                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteB('+id+')" title="删除渠道商"><i class="eui-icon">&#xe640;</i></button> ' +
+//                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="openAccountList('+id+')" title="渠道商用户"><i class="eui-icon">&#xe612;</i></button> ' +
+//                '</div>' +
+//                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+</script>
+</body>
+</html>

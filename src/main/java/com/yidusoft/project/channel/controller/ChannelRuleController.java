@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -20,9 +21,16 @@ public class ChannelRuleController {
     @Resource
     private ChannelRuleService channelRuleService;
 
-    @PostMapping
-    public Result add(ChannelRule channelRule) {
-        channelRuleService.save(channelRule);
+    @PostMapping("/add")
+    public Result add(String channelIds,String ruleId) {
+           String arr [] = channelIds.split(",");
+        for (String s:arr) {
+            ChannelRule channelRule = new ChannelRule();
+            channelRule.setId(UUID.randomUUID().toString());
+            channelRule.setChannelId(s);
+            channelRule.setRuleId(ruleId);
+            channelRuleService.save(channelRule);
+        }
         return ResultGenerator.genSuccessResult();
     }
 
