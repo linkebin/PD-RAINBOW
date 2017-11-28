@@ -35,12 +35,6 @@ public class WebQuestionnaireController {
     @Resource
     private QuestionnaireAnswerService questionnaireAnswerService;
 
-    //测试页面
-    @RequestMapping("/getQuestionnaireTo")
-    public String getQuestionnaireTo() {
-        return "project/cube/questionnaire/vertical-questionnaire-1";
-    }
-
     //跳转问卷查询页面
     @RequestMapping("/getQuestionnaire")
     public String getQuestionnaire() {
@@ -51,7 +45,6 @@ public class WebQuestionnaireController {
     public String addQuestionnaire() {
         return "project/questionnaire/questionnaire/add-questionnaire";
     }
-    //跳转到修改页面
     //跳转量表修改页面
     @RequestMapping("/getUpdateQuestionnaire")
     public  String  getUpdateQuestionnaire(String id, Model model){

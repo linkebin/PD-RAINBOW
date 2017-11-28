@@ -39,7 +39,10 @@
                <input type="hidden" th:value="${userId}"  id="userId"/>
                <input type="hidden" th:value="${visitorTimes}"  id="visitorTimes"/>
                <div class="eui-form-item eui-padding20">
-
+                  <span id="remarks">
+                      下面列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。
+                 </span>
+                 <hr/>
                </div>
              <div class="eui-bg-white eui-form visitorContent" id="divTable" >
                   <!--  问题内容-->
@@ -51,7 +54,38 @@
         </div>
     </div>
 </div>
-
+<!--<div class="xymfFooter">-->
+    <!--<div class="eui-area eui-row">-->
+        <!--<div class="eui-col-md2">-->
+            <!--<dl class="eui-lineHeight24 eui-color-gray3">-->
+                <!--<dt class="eui-darkgreen eui-font16 eui-paddingTB20">关于我们</dt>-->
+                <!--<dd>关于我们</dd>-->
+                <!--<dd>注册协议</dd>-->
+                <!--<dd>保密协议</dd>-->
+                <!--<dd>帮助中心</dd>-->
+            <!--</dl>-->
+        <!--</div>-->
+        <!--<div class="eui-col-md3">-->
+            <!--<dl>-->
+                <!--<dt class="eui-darkgreen eui-font16 eui-paddingTB20">联系我们</dt>-->
+                <!--<dd class="visitorPhone1 eui-marginB20">-->
+                    <!--<p class="eui-darkgreen eui-font16">020-82314165</p>-->
+                    <!--<p class="eui-color-gray3 eui-font12">平台全国服务热线</p>-->
+                <!--</dd>-->
+                <!--<dd class="visitorPhone2">-->
+                    <!--<p class="eui-darkgreen eui-font16">15622183952</p>-->
+                    <!--<p class="eui-color-gray3 eui-font12">24小时移动热线，实时在您的身边</p>-->
+                <!--</dd>-->
+            <!--</dl>-->
+        <!--</div>-->
+        <!--<div class="eui-col-md2 eui-col-md-offset5 eui-textAlignR">-->
+            <!--<dl>-->
+                <!--<dt class="eui-darkgreen eui-font16 eui-padding20">微信公众号</dt>-->
+                <!--<dd><img src="/Styles/images/xymfImages/QRcode.png" alt=""></dd>-->
+            <!--</dl>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 
 <div class="xymfFooter">
     <!-- 底部固定区域 -->
@@ -68,6 +102,7 @@
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 <script th:inline="javascript">
+    var flag = "";
 eui.use(['form', 'layedit', 'laydate'], function(){
     var form = eui.form
     ,layer = eui.layer
@@ -81,18 +116,29 @@ eui.use(['form', 'layedit', 'laydate'], function(){
 
 //radio的事件监听
     form.on('radio(filter)',function(data){
-        console.log(data.elem); //得到radio原始DOM对象
+        console.log(data.elem + "======="); //得到radio原始DOM对象
+        console.log(data.value + "----=====---"); //被点击的radio的value
+        if(data.elem.value == "否"){
+            $(":radio:gt(78)").attr("disabled","disabled");
+            $(":radio:gt(78)").removeAttr("checked");
+            flag = true;
+            form.render();
+        }else if(data.elem.value == "是(有少许困难)" || data.elem.value == "是（有困难）" || data.elem.value == "是（有很大的困难）"){
+            $(":radio:gt(78)").removeAttr("disabled");
+            flag = false;
+            form.render();
+        }
 
-            if(data.elem.attributes.states.value=='0'){
-                data.elem.checked=true;
-                form.render();
-                data.elem.attributes.states.value='1';
-            }else {
-                data.elem.checked=false;
-                form.render();
-                data.elem.attributes.states.value='0';
-            }
-
+//            if(data.elem.attributes.states.value=='0'){
+//                data.elem.checked=true;
+//
+//                data.elem.attributes.states.value='1';
+//            }else {
+//                data.elem.checked=false;
+//                form.render();
+//                data.elem.attributes.states.value='0';
+//            }
+//
 
 
 
@@ -123,6 +169,7 @@ $(function () {
    if(questionnaire.remarks!=""){
        $("#remarks").text(questionnaire.remarks);
 }
+
 });
 
 //问卷id
@@ -179,9 +226,19 @@ function  getTable(questionList) {
             if(questionList[i].questionType==2 || questionList[i].questionType==5){
                 radioName='answer'+questionList[i].id+j;
                 context+='  <input e-filter="filter" type="radio" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
-            }else {
+           }
+// else if(i == 25 && questionList[i].questionType!=2 && questionList[i].questionType!=5){
+//                radioName='answer'+questionList[i].id;
+//                context+='  <input e-filter="filter" type="radio" id="selectRadio" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
+//            }
+//
+                else if(i > 25 && questionList[i].questionType!=2 && questionList[i].questionType!=5){
                 radioName='answer'+questionList[i].id;
-                context+='  <input type="radio" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
+                context+='  <input e-filter="filter" type="radio"  disabled="disabled" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
+            }
+            else {
+                radioName='answer'+questionList[i].id;
+                context+='  <input e-filter="filter"  type="radio" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
             }
 
 
@@ -200,7 +257,6 @@ function  getTable(questionList) {
             $(this).prop("checked",false);
         }*/
 
-
 //判断计算那些问题没有做
   function  flg() {
       var result="";
@@ -214,16 +270,29 @@ function  getTable(questionList) {
            var size=question.children("input").length;
            //循环当前问题的选项 看有没有被选中
            var state=0;
-           for(var j=0;j<size;j++){
+           if (!flag){
+               for(var j=0;j<size;j++){
+                   if (question.children("input").eq(j).prop("checked")) {
+                       state=1;
+                   }
+               }
+               if (state == 0) {
+                   //state=0 说明没有做这道题
+                   result += num + ","
+               }
+           }else if(flag && i < 26){
+               for(var j=0;j<size;j++){
 
-               if (question.children("input").eq(j).prop("checked")) {
-                   state=1;
+                   if (question.children("input").eq(j).prop("checked")) {
+                       state=1;
+                   }
+               }
+               if (state == 0) {
+                   //state=0 说明没有做这道题
+                   result += num + ","
                }
            }
-           if(state==0){
-              //state=0 说明没有做这道题
-               result+=num+","
-           }
+
 
        }
        if(result!=""){
@@ -240,33 +309,49 @@ function  getTable(questionList) {
 
           var state=flg();
           //state=""  则是题目都已经做完
-          if(state==""){
-           var divQuestions=$("[name='divQuestion']");
-              var  array=new Array;
-              for(var i=0;i<divQuestions.length;i++){
+          if(state=="") {
+              var divQuestions = $("[name='divQuestion']");
+              var array = new Array;
+
+              for (var i = 0; i < divQuestions.length; i++) {
+                  if (flag && i < 26) {
                   //获取所有被选中的radio元素
-                  var radios=divQuestions.eq(i).children("input:radio:checked");
-                  var answer="";
-                  var score="";
-                  for(var r=0;r<radios.length;r++){
-                      answer=answer+"||"+radios.eq(r).val();
-                      score=score+"||"+radios.eq(r).attr("optionScore");
+                  var radios = divQuestions.eq(i).children("input:radio:checked");
+                  var answer = "";
+                  var score = "";
+                  for (var r = 0; r < radios.length; r++) {
+                      answer = answer + "||" + radios.eq(r).val();
+                      score = score + "||" + radios.eq(r).attr("optionScore");
                   }
-                  answer=answer.substring(2,answer.length);
-                  score=score.substring(2,score.length);
-                  var  obj=new Object();
+                  answer = answer.substring(2, answer.length);
+                  score = score.substring(2, score.length);
+                  var obj = new Object();
                   //分数
-                  obj.score=score;
+                  obj.score = score;
                   //问题
-                  obj.questionId=divQuestions.eq(i).attr("questionId");
+                  obj.questionId = divQuestions.eq(i).attr("questionId");
                   //选择的答案（列子：A:1  B:2  答案： A:1  或者多选  ）
-                  obj.answer=answer;
+                  obj.answer = answer;
                   //正确答案
-                  obj.correctAnswer=divQuestions.eq(i).attr("correctAnswer");
+                  obj.correctAnswer = divQuestions.eq(i).attr("correctAnswer");
                   //答案类型
-                  obj.questionType=divQuestions.eq(i).attr("questionType");
+                  obj.questionType = divQuestions.eq(i).attr("questionType");
                   array.push(obj);
-              }
+              }else{
+                      var obj = new Object();
+                      //分数
+                      obj.score = 0;
+                      //问题
+                      obj.questionId = divQuestions.eq(i).attr("questionId");
+                      //选择的答案（列子：A:1  B:2  答案： A:1  或者多选  ）
+                      obj.answer = "";
+                      //正确答案
+                      obj.correctAnswer = divQuestions.eq(i).attr("correctAnswer");
+                      //答案类型
+                      obj.questionType = divQuestions.eq(i).attr("questionType");
+                      array.push(obj);
+                  }
+          }
               //耗时
                var visitorTimes=$("#visitorTimes").val();
                var questionnaireId=$("#questionnaireId").val();

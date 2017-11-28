@@ -320,7 +320,10 @@ public class QuestionnaireMethod {
                               num1=questionnaireAnswerList.get(i).getAnswerScore();
                           }else  if(questionId.equals(ids+5)){
                               num2=questionnaireAnswerList.get(i).getAnswerScore();
-                          } else if(questionId.equals(ids+2)){
+                          } else if(questionId.equals(ids+2) &&
+                                  questionnaireAnswerList.get(i)!=null &&
+                                  !("").equals(questionnaireAnswerList.get(i).getAnswer()))
+                          {
                               num3=Double.valueOf(questionnaireAnswerList.get(i).getAnswer());
                           }
                      }
@@ -349,6 +352,7 @@ public class QuestionnaireMethod {
             totalScore+=qa.getAnswerScore();
         }
         Map<String,Object> map=new HashMap<>();
+        map.put("totalScore",totalScore);
         //长期性事件
         map.put("dimension1",dimension1);
         //生活事件总刺激量

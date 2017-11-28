@@ -80,8 +80,15 @@ public class CubeQuestionnaireQuestionController {
             activeParticipant = activeParticipantService.findById(userId);
         }
         Map<String, Object> map = new HashMap<>();
+        //对于生活事件量表的特殊数据 将答案封装成map
+        Map<String,Object> answerMap=new HashMap<>();
+         for(QuestionnaireAnswer qa : questionnaireAnswerList){
+             answerMap.put(qa.getQuestionId(),qa.getAnswer());
+         }
         map.put("questionList", questionnaireQuestionList);
         map.put("answerList", questionnaireAnswerList);
+        //生活事件量表的答案map
+        map.put("answerMap", answerMap);
         map.put("dataAcquisition", dataAcquisition);
         map.put("questionnaire", questionnaire);
         map.put("visitorRegister", visitorRegister);

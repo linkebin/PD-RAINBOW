@@ -90,5 +90,8 @@
                     WHERE f.questionnaire_id =#{id}
 
   </select>
+  <select id="findQuestionForParent">
+      SELECT
+  </select>
 
 </mapper>

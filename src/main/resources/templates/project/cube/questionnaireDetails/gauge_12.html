@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>问卷填写详情</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+    <script src="../../../../static/pack.ajax.js"></script>
+</head>
+<body class="questionBody">
+<div class="questionHeader">
+    <div class="eui-row eui-area xymf-width">
+        <div class="xymfLogo eui-col-md12">
+            <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">问卷详情</span>
+        </div>
+    </div>
+</div>
+
+<div class="visitorContent" >
+    <div class="eui-area xymf-width xymf-marginB60">
+        <div class="visitorTitle">
+            <span id="questionnaireName"></span>
+        </div>
+        <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
+            <div class="eui-row eui-font16">
+                <div class="eui-col-md5">
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">客户名称：</span>
+                        <span id="visitorName">张三</span>
+                    </p>
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">填写日期：</span>
+                        <span id="createTime"></span>
+                    </p>
+                </div>
+                <div class="eui-col-md7">
+                   <!-- <p class="eui-marginB10">
+                        <span class="eui-color-gray3">结果：</span>
+                        <span class="eui-color-blue">轻度焦虑</span>
+                    </p>
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">标准分：</span>
+                        <span class="eui-color-blue">55.5</span>
+                    </p>-->
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">总分：</span>
+                        <span id="totalScore"></span>
+                    </p>
+                    <p class="eui-marginB10">
+                        <span class="eui-color-gray3">耗时：</span>
+                        <span id="timeConsuming"></span>
+                    </p>
+                </div>
+            </div>
+            <div class="eui-row dataCharts">
+                <div class="eui-col-md6">
+                    <div   style="width: 100%;height:400px;" >
+                        <div style="width: 100%;height:30px;">
+
+                        </div>
+                        <div id="main2" style="">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="eui-col-md6">
+                    <div id="main1"  style="width: 100%;height:320px;"></div>
+                </div>
+            </div>
+            <div>
+                <div class="eui-col-md3">
+                    正性事件得分及次序列表
+                </div>
+                <div class="eui-col-md3">
+                    <table border="1" id="goodDeed">
+                        <tr>
+                            <th>序号</th>
+                            <th>得分</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="eui-col-md3">
+                    负性事件得分及次序列表:
+                </div>
+                <div class="eui-col-md3" >
+                    <table border="1" id="badThing">
+                        <tr>
+                            <th>序号</th>
+                            <th>得分</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="dataResult" class="eui-marginTB20">
+            </div>
+           <form class="eui-paddingT20">
+               <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
+               <input type="hidden" th:value="${userId}"  id="userId"/>
+               <input type="hidden" th:value="${acquisitionId}"  id="acquisitionId"/>
+
+             <div class="eui-bg-white eui-form" id="divTable">
+                 <div class="eui-form-item eui-padding20">
+                    <!--<div class="eui-font18">
+                        1.你经常头痛吗？
+                    </div>
+                    <input type="radio" name="sex" value="男" title="男" >
+                    <input type="radio" name="sex" value="女" title="女">
+                    <input type="radio" name="sex" value="男" title="男" >
+                    <input type="radio" name="sex" value="女" title="女">
+                    -->
+                   </div>
+             </div>
+           </form>
+
+        </div>
+        <!--<div class="eui-textAlignC eui-bg-white eui-padding20" id="submitBnt">
+        </div>-->
+    </div>
+</div>
+<div class="xymfFooter">
+    <!-- 底部固定区域 -->
+    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+</div>
+
+
+
+
+
+<!-- 返回顶部按钮 -->
+<span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>
+
+<script src="/Scripts/module/eui.js"></script>
+<script src="/date2format.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/Scripts/plugins/echarts/echarts.min.js"></script>
+<!-- 引入 macarons 主题 -->
+<script src="/Scripts/plugins/echarts/macarons.js"></script>
+
+<script>
+
+eui.use(['form', 'layedit', 'laydate','element'], function(){
+    var form = eui.form
+    ,layer = eui.layer
+    ,layedit = eui.layedit
+    ,laydate = eui.laydate
+    ,element = eui.element;
+
+    //常规用法
+    laydate.render({
+        elem: '#test1'
+    });
+
+});
+// 返回顶部
+var winH = $(window).height();
+
+$('.eui-backTop').hide();
+$(window).scroll(function(e) {
+    var winT = $(window).scrollTop();
+    if(winT>winH){
+        $('.eui-backTop').fadeIn()
+    }else{
+        $('.eui-backTop').fadeOut()
+    }
+});
+
+$('.eui-backTop').click(function(e) {
+    $('html,body').animate({scrollTop:0},500)
+});
+
+$(function () {
+    loadQuestion();
+
+});
+
+//问卷id
+var  questionnaireId=$("#questionnaireId").val();
+//总分
+var totalScore=0;
+//因子分
+var  factorScore=new Array;
+//加载问卷
+function  loadQuestion() {
+    var  userId=$("#userId").val();
+    var  acquisitionId=$("#acquisitionId").val();
+    //var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
+    $.post("/cube/questionnaire/question/findQuestionForVisitor"
+      ,{"questionnaireId":questionnaireId,"acquisitionId":acquisitionId,"userId":userId}
+      ,function (result) {
+       //layer.closeAll();
+        console.info(result);
+        var context=  getTable(result.data);
+        $("#divTable").html(context);
+        formRender();
+    });
+}
+
+//拼接问题
+function  getTable(list) {
+    if(list.visitorRegister==null){
+        $("#visitorName").text(list.activeParticipant.fullName);
+    }else{
+        $("#visitorName").text(list.visitorRegister.visitorName);
+    }
+    $("#questionnaireName").text(list.questionnaire.questionnaireName);
+    $("#totalScore").text(list.dataAcquisition.totalScore);
+    var timeConsuming=list.dataAcquisition.timeConsuming;
+    var array=timeConsuming.split(":");
+    var  timeStr='';
+    for(var i in array){
+        if(array[i]=="00" || array[i]==""){
+            array[i]="0";
+        }
+    }
+         timeStr+= array[0]+"时";
+         timeStr+= array[1]+"分";
+         timeStr+= array[2]+"秒";
+    $("#timeConsuming").text(timeStr);
+    $("#createTime").text(new Date(list.dataAcquisition.createTime).Format("yyyy-MM-dd"));
+
+    var context="";
+    var dataResult=list.dataAcquisition.dataResult;
+    if(dataResult!=null && dataResult!=""){
+        var json=eval("("+dataResult+")");
+           totalScore=json.totalScore;
+
+            context+="<p class='eui-margin10'>您的得分：</p>";
+            context+="<p class='eui-margin10'>1、正性事件:"+json.goodDeed+"件</p>";
+            context+="<p class='eui-margin10'>2、负性事件:"+json.badThing+"件</p>";
+            context+="<p class='eui-margin10'>3、生活事件总刺激量："+json.dimension2+"件</p>";
+            context+="<p class='eui-margin10'>4、长期性事件："+json.dimension1+"件</p>";
+            context+="<p class='eui-margin10'>5、精神影响程度在中度以上（包括中度）:"+json.dimension3+"件</p>";
+            context+="<p class='eui-margin10'>6、影响持续时间在半年以上："+json.dimension4+"件</p>";
+            context+="<p class='eui-margin10'> LES的总分越高反映个体承受的精神压力越大，95%的正常人1年内的LES总分不超过20分，99%的正常人1年内的LES总分不超过32分。如分数过高，需寻求专业人士帮助</p>";
+        var table1="";
+        for(var k in json.goodDeedMap){
+            table1+="<tr><td>"+k+"</td><td>"+json.goodDeedMap[k]+"</td></tr>";
+            }
+            $("#goodDeed").append(table1);
+        var table2="";
+        for(var k in json.badThingMap){
+            table2+="<tr><td>"+k+"</td><td>"+json.badThingMap[k]+"</td></tr>";
+        }
+        $("#badThing").append(table2);
+    }
+
+    $("#main2").append(context);
+    //问题
+    var questionList=list.questionList;
+    //答案
+    var answerList=list.answerList;
+    //答案 问题ID为key  问题答案为value
+    var answerMap  =list.answerMap;
+    var context="";
+    var questionArrayParent=new Array;
+    var questionArrayChildren=new Array;
+    //区分子父问题
+    for(var i in questionList){
+        if(questionList[i].id.split("_").length==2){
+            questionArrayParent.push(questionList[i]);
+        }else  if(questionList[i].id.split("_").length==3){
+            questionArrayChildren.push(questionList[i]);
+        }
+
+    }
+    for(var i=0; i< questionArrayParent.length;i++){
+        context+=' <li class="eui-form" id="'+questionArrayParent[i].id+'" name="nameLi">';
+        context+='<h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">'+(parseInt(i)+1)+'.'+questionArrayParent[i].questionContent+'</h4>';
+        //循环子问题
+        for(var j=0;j< questionArrayChildren.length;j++) {
+            if (questionArrayChildren[j].pid == questionArrayParent[i].id) {
+                var optionAnswerArray = questionArrayChildren[j].optionAnswer.split("||");
+                var optionScoreArray = questionArrayChildren[j].optionScore.split("||");
+                var num = parseInt(questionArrayChildren[j].id.split("_")[2]);
+                switch (num) {
+                    case 1:
+                        context += '<div class="eui-form-item" pane="">';
+                        context += '  <label class="eui-form-label eui-width100">事件发生时间</label>';
+                        context += '  <div class="eui-input-block">';
+                        for (var t = 0; t < optionAnswerArray.length; t++) {
+
+                            if(answerMap[questionArrayChildren[j].id]==optionAnswerArray[t]){
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" checked>';
+                            }else {
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" disabled>';
+                            }
+                        }
+                        context += '  </div>';
+                        context += '  </div>';
+                        break;
+                    case 2:
+                        context += '   <div class="eui-form-item" pane="">';
+                        context += '  <label class="eui-form-label eui-width100">事件发生次数</label>';
+                        context += '   <div class="eui-input-inline" style="width: 80px;">';
+                        context += '  <input type="text" value="'+answerMap[questionArrayChildren[j].id]+'"  name="' + questionArrayChildren[j].id + 'name" class="eui-input" disabled>';
+                        context += '  </div>';
+                        context += '  <div class="eui-form-mid eui-word-aux">次</div>';
+                        context += '  </div>';
+                        break;
+                    case 3:
+                        context += '  <div class="eui-form-item" pane="">';
+                        context += '  <label class="eui-form-label eui-width100">事件发生性质</label>';
+                        context += '  <div class="eui-input-block">';
+                        for (var t = 0; t < optionAnswerArray.length; t++) {
+                            if(answerMap[questionArrayChildren[j].id]==optionAnswerArray[t]){
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" checked>';
+                            }else {
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" disabled>';
+                            }
+                        }
+                        context += ' </div>';
+                        context += '   </div>';
+                        break;
+                    case 4:
+                        context += '  <div class="eui-form-item" pane="">';
+                        context += ' <label class="eui-form-label eui-width100">精神影响程度</label>';
+                        context += '  <div class="eui-input-block">';
+                        for (var t = 0; t < optionAnswerArray.length; t++) {
+                            if(answerMap[questionArrayChildren[j].id]==optionAnswerArray[t]){
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" checked>';
+                            }else {
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" disabled>';
+                            }
+                        }
+                        context += '  </div>';
+                        context += ' </div>';
+                        break;
+                    case 5:
+                        context += ' <div class="eui-form-item" pane="">';
+                        context += ' <label class="eui-form-label eui-width100">影响持续时间</label>';
+                        context += ' <div class="eui-input-block">';
+                        for (var t = 0; t < optionAnswerArray.length; t++) {
+                            if(answerMap[questionArrayChildren[j].id]==optionAnswerArray[t]){
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" checked>';
+                            }else {
+                                context += '   <input type="radio" name="' + questionArrayChildren[j].id + 'name"   title="' + optionAnswerArray[t] + '" disabled>';
+                            }
+                        }
+                        context += '    </div>';
+
+                        break;
+                }
+            }
+
+        }
+        context += '   </div>';
+        context += '  </li>';
+    }
+
+   //初始化图
+    initEcharts();
+    return context;
+}
+
+function initEcharts() {
+
+    // 基于准备好的dom，初始化echarts实例(风格化图表)
+    var myChart1 = echarts.init(document.getElementById('main1'),'macarons');
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '总分'
+        },
+        tooltip : {
+            formatter: "{a} <br/>{b} : {c}"
+        },
+        toolbox: {
+            feature: {
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        series: [
+            {
+                name: '我的总分',
+                type: 'gauge',
+                max: 400,
+                detail: {formatter:'{value}'},
+                data: [{value: totalScore, name: '总分'}]
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option);
+
+}
+
+
+
+//form表单  select,checkbox,radio 动态添加  需要更新
+function   formRender() {
+    eui.use(['form'], function(){
+        var form = eui.form;
+        form.render();
+    });
+}
+//打印功能
+function questionnairePrint () {
+    $("#divTable").hide();
+    window.print();
+}
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
