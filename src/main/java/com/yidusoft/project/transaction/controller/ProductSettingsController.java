@@ -164,4 +164,24 @@ public class ProductSettingsController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     * 获取销售排名
+     * @return
+     */
+    @GetMapping("/findTotal")
+    public Result findTotal(){
+        List<ProductSettings> list = productSettingsService.findProductTotal();
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    /**
+     * 获取已购买的套餐
+     * @return
+     */
+    @GetMapping("/findProduct")
+    public Result findProduct(){
+        List<ProductSettings> list = productSettingsService.findProductByOrder();
+        return ResultGenerator.genSuccessResult(list);
+    }
 }

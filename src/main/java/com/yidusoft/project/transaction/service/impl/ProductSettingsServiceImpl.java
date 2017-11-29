@@ -63,6 +63,7 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
 
     /**
      * 修改套餐
+     *
      * @param json
      * @return
      */
@@ -82,24 +83,25 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
             content += "价格:" + productSettings.getProductPrice() + "修改为:" + product.getProductPrice() + "、";
         }
         if (productSettings.getProductState() != product.getProductState()) {
-            String yes="是";
-            String no="否";
-            if(productSettings.getProductState()==1){
-                yes="否";
-                no="是";
+            String yes = "是";
+            String no = "否";
+            if (productSettings.getProductState() == 1) {
+                yes = "否";
+                no = "是";
             }
             content += "是否启用:" + yes + "修改为:" + no + "、";
         }
-        if(content.length()>1){
+        if (content.length() > 1) {
             content = content.substring(0, content.length() - 1);
         }
-        addTrajectory(content,UUID.randomUUID().toString(),product.getId(),product.getProductName());
+        addTrajectory(content, UUID.randomUUID().toString(), product.getId(), product.getProductName());
         productSettingsService.update(product);
         return ResultGenerator.genSuccessResult();
     }
 
     /**
      * 添加套餐
+     *
      * @param json
      * @return
      */
@@ -110,7 +112,7 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
         ModifyTrajectory mt = new ModifyTrajectory();
         String id = UUID.randomUUID().toString();
         //添加修改轨迹
-        addTrajectory(content,id,product.getId(),product.getProductName());
+        addTrajectory(content, id, product.getId(), product.getProductName());
         product.setId(id);
         product.setProductCode(CodeHelper.getCode("P"));
         product.setCreator(Security.getUser().getUserName());
@@ -118,9 +120,9 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
         product.setDeleted(0);
         product.setPromotionsId("");
         product.setPromotionsName("");
-        if(product.getProductType()==1){
+        if (product.getProductType() == 1) {
             product.setTimeLimit(0);
-        }else{
+        } else {
             product.setProductTotal(0);
         }
         productSettingsService.save(product);
@@ -129,6 +131,7 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
 
     /**
      * 批量删除套餐
+     *
      * @param ids
      * @return
      */
@@ -140,7 +143,7 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
             product.setDeleted(1);
             String content = "删除了套餐:" + product.getProductName();
             //添加修改轨迹
-            addTrajectory(content,UUID.randomUUID().toString(),product.getId(),product.getProductName());
+            addTrajectory(content, UUID.randomUUID().toString(), product.getId(), product.getProductName());
             productSettingsService.update(product);
             orderOnlineService.updateOrderOnline(str);
         }
@@ -149,13 +152,14 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
 
     /**
      * 添加套餐修改轨迹
+     *
      * @param content
      * @param uuId
      * @param productId
      * @param name
      */
     @Override
-    public void addTrajectory(String content,String uuId,String productId,String name) {
+    public void addTrajectory(String content, String uuId, String productId, String name) {
         ModifyTrajectory mt = new ModifyTrajectory();
         mt.setContent(content);
         mt.setId(uuId);
@@ -167,5 +171,15 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
     }
 
     @Override
-    public void updateProductPromotions(String promotionsId) { productSettingsMapper.updateProductPromotions(promotionsId); }
+    public void updateProductPromotions(String promotionsId) {
+        productSettingsMapper.updateProductPromotions(promotionsId);
+    }
+
+    @Override
+    public List<ProductSettings> findProductTotal() {
+        return productSettingsMapper.findProductTotal();
+    }
+
+    @Override
+    public List<ProductSettings> findProductByOrder() { return productSettingsMapper.findProductByOrder(); }
 }

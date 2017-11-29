@@ -56,7 +56,10 @@
                         </div>
                     </form>
                     <div class="eui-textAlignR eui-marginR20">
-                        <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal" th:href="'/web/customer/checkIn?creator='+${session.userSession.id}">客户登记</a>
+                        <div class="eui-btn-group">
+                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal" href="/web/customer/count">客户统计</a>
+                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal" th:href="'/web/customer/checkIn?creator='+${session.userSession.id}">客户登记</a>
+                        </div>
                     </div>
 
                     <div class="xymfForm eui-marginLR20">

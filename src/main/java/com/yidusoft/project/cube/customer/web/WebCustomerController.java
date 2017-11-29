@@ -198,5 +198,12 @@ public class WebCustomerController {
         return "project/cube/customer/costomer-dna";
     }
 
-
+    /**
+     * 跳转到客户统计页面
+     * @return
+     */
+    @RequestMapping("/count")
+    public String customerCount(){
+        return "project/cube/customer/customer-count";
+    }
 }

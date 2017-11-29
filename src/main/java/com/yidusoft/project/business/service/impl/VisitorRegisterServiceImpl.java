@@ -61,4 +61,8 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
         return visitorRegisterMapper.findViitorByCounselorIdSortTime(visitorRegister);
     }
 
+    @Override
+    public List<VisitorRegister> findVitorByCreator(String creator) {
+        return visitorRegisterMapper.findVitorByCreator(creator);
+    }
 }

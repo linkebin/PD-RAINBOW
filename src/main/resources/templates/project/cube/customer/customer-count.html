@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>客户统计</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div th:replace="project/cube/common/header :: header(${3})">Header</div>
+    <div class="eui-area">
+        <div class="eui-row eui-padding10 eui-font16">
+            <div class="eui-col-md2">
+                <a href="#" class="eui-textIn">
+                    <p class="eui-textNum"><span class="eui-color-blue" id="customerSum">0</span>个</p>
+                    <p class="name">客户总数</p>
+                </a>
+            </div>
+        </div>
+        <div class="eui-row eui-padding10 eui-font16">
+            <div class="eui-row dataCharts">
+                <div class="eui-col-md12">
+                    <div id="sum" style="width: 100%;height:100%;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="eui-row eui-padding10 eui-font26">
+            <div class="eui-col-md12">
+                <div class="eui-tab">
+                    <ul class="eui-tab-title">
+                        <li class="eui-this">占比</li>
+                        <li>折线</li>
+                        <li>分析</li>
+                    </ul>
+                    <div class="eui-tab-content">
+                        <div class="eui-tab-item eui-show">
+                            <div class="eui-row dataCharts">
+                                <div class="eui-col-md6">
+                                    <div id="sex" style="width: 100%;height:320px;"></div>
+                                </div>
+                                <div class="eui-col-md6">
+                                    <div id="occupation" style="width: 100%;height:320px;"></div>
+                                </div>
+                            </div>
+                            <div class="eui-row dataCharts">
+                                <div class="eui-col-md6">
+                                    <div id="income" style="width: 100%;height:320px;"></div>
+                                </div>
+                                <div class="eui-col-md6">
+                                    <div id="level" style="width: 100%;height:320px;"></div>
+                                </div>
+                            </div>
+                            <div class="eui-col-md6">
+                                <div id="status" style="width: 100%;height:320px;"></div>
+                            </div>
+                        </div>
+                        <div class="eui-tab-item">
+                            <div class="eui-area eui-textAlignC eui-marginT20">
+                                <img src="/Styles/images/todo.png" width="380">
+                            </div>
+                        </div>
+                        <div class="eui-tab-item">
+                            <div class="eui-area eui-textAlignC eui-marginT20">
+                                <img src="/Styles/images/todo.png" width="380">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+</div>
+</body>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/Scripts/plugins/echarts/echarts.min.js"></script>
+<!-- 引入 macarons 主题 -->
+<script src="/Scripts/plugins/echarts/macarons.js"></script>
+<script>
+    var form, layer;
+    eui.use(['form', 'layer', 'element'], function () {
+        form = eui.form;
+        layer = eui.layer;
+        var element = eui.element;
+    })
+
+    var sexData = [
+        {value: 0, name: '男'},
+        {value: 0, name: '女'}
+    ]
+    var occupation = [
+        {value: 0, name: '计算机/互联网/通信/电子'},
+        {value: 0, name: '会计/金融/银行/保险'},
+        {value: 0, name: '贸易/消费/制造/运营'},
+        {value: 0, name: '制药/医疗'},
+        {value: 0, name: '广告/媒体'},
+        {value: 0, name: '房地产/建筑'},
+        {value: 0, name: '专业服务/教育/培训'},
+        {value: 0, name: '服务业'},
+        {value: 0, name: '物流/运输'},
+        {value: 0, name: '能源/新材料'},
+        {value: 0, name: '政府/非盈利机构'},
+        {value: 0, name: '自由职业/其他'},
+        {value: 0, name: '暂无任职'},
+    ]
+    $(function () {
+        $.get("/visitor/register/customerCount", function (result) {
+            console.log(result);
+            if (result.code == 200) {
+                var visitorList = result.data;
+                $('#customerSum').html(visitorList.length);
+                for (var i in visitorList) {
+                    var visitor = visitorList[i];
+                    //判断性别
+                    if (visitor.sex == 1) {
+                        sexData[0].value++;
+                    } else {
+                        sexData[1].value++;
+                    }
+                    //判断职业
+                    if (visitor.occupation == '计算机/互联网/通信/电子') {
+                        occupation[0].value++;
+                    } else if (visitor.occupation == '会计/金融/银行/保险') {
+                        occupation[1].value++;
+                    } else if (visitor.occupation == '贸易/消费/制造/运营') {
+                        occupation[2].value++;
+                    } else if (visitor.occupation == '制药/医疗') {
+                        occupation[3].value++;
+                    } else if (visitor.occupation == '广告/媒体') {
+                        occupation[4].value++;
+                    } else if (visitor.occupation == '房地产/建筑') {
+                        occupation[5].value++;
+                    } else if (visitor.occupation == '专业服务/教育/培训') {
+                        occupation[6].value++;
+                    } else if (visitor.occupation == '服务业') {
+                        occupation[7].value++;
+                    } else if (visitor.occupation == '物流/运输') {
+                        occupation[8].value++;
+                    } else if (visitor.occupation == '能源/新材料') {
+                        occupation[9].value++;
+                    } else if (visitor.occupation == '政府/非盈利机构') {
+                        occupation[10].value++;
+                    } else if (visitor.occupation == '自由职业/其他') {
+                        occupation[11].value++;
+                    } else if (visitor.occupation == '暂无任职') {
+                        occupation[12].value++;
+                    }
+                }
+                calculation(visitorList);
+                customerSum(visitorList);//客户总数折线图
+                pieChart('sex', '性别', '男女比例',['男','女'], sexData);
+                var data = [
+                    '计算机/互联网/通信/电子',
+                    '会计/金融/银行/保险',
+                    '贸易/消费/制造/运营',
+                    '制药/医疗',
+                    '广告/媒体',
+                    '房地产/建筑',
+                    '专业服务/教育/培训',
+                    '服务业',
+                    '物流/运输',
+                    '能源/新材料',
+                    '政府/非盈利机构',
+                    '自由职业/其他',
+                    '暂无任职'
+                ]
+                initRingGraph('occupation', '职业','职业比例',data , occupation);
+            } else {
+                layer.msg(result.message, {
+                    icon: 2,
+                    time: 1500
+                });
+            }
+        })
+    })
+
+    var income = [
+        {value: 0, name: '3000元以下'},
+        {value: 0, name: '3000 - 6000元'},
+        {value: 0, name: '6000 - 10000元'},
+        {value: 0, name: '10000元以上'},
+    ]
+    var level = [
+        {value: 0, name: '小学'},
+        {value: 0, name: '初中'},
+        {value: 0, name: '高中'},
+        {value: 0, name: '专科'},
+        {value: 0, name: '本科'},
+        {value: 0, name: '研究生'},
+        {value: 0, name: '博士'},
+    ]
+    /*var maritalStatus = [
+        {value: 0, name: '未婚'},
+        {value: 0, name: '已婚'},
+        {value: 0, name: '分居'},
+        {value: 0, name: '再婚'},
+        {value: 0, name: '离婚独居'},
+        {value: 0, name: '丧偶独居'},
+    ]*/
+    var maritalStatus = [0,0,0,0,0,0]
+    function calculation(visitorList) {
+        for (var i in visitorList) {
+            var visitor = visitorList[i];
+            //判断收入
+            if (visitor.income == '3000元以下') {
+                income[0].value++;
+            } else if (visitor.income == '3000 - 6000元') {
+                income[1].value++;
+            } else if (visitor.income == '6000 - 10000元') {
+                income[2].value++;
+            } else {
+                income[3].value++;
+            }
+
+            //判断教育程度
+            if (visitor.educationLevel == 1) {
+                level[0].value++;
+            } else if (visitor.educationLevel == 2) {
+                level[1].value++;
+            } else if (visitor.educationLevel == 3) {
+                level[2].value++;
+            } else if (visitor.educationLevel == 4) {
+                level[3].value++;
+            } else if (visitor.educationLevel == 5) {
+                level[4].value++;
+            } else if (visitor.educationLevel == 6) {
+                level[5].value++;
+            } else if (visitor.educationLevel == 7) {
+                level[6].value++;
+            } else if (visitor.educationLevel == 8) {
+                level[7].value++;
+            }
+            
+            if (visitor.maritalStatus == 1) {
+                maritalStatus[0]++;
+            } else if (visitor.maritalStatus == 2) {
+                maritalStatus[1]++;
+            } else if (visitor.maritalStatus == 3) {
+                maritalStatus[2]++;
+            } else if (visitor.maritalStatus == 4) {
+                maritalStatus[3]++;
+            } else if (visitor.maritalStatus == 5) {
+                maritalStatus[4]++;
+            } else {
+                maritalStatus[5]++;
+            }
+        }
+        initRingGraph('income', '收入','收入比例', ['3000元以下','3000 - 6000元','6000 - 10000元','10000元以上'], income);
+        init('level', '教育程度','教育程度比例', ['小学','初中','高中','专科','本科','研究生','博士'], level);
+        /*initRingGraph('status', '婚姻状况','婚姻状况比例',['未婚','已婚','分居','再婚','离婚独居','丧偶独居'] , maritalStatus);*/
+        test('status', '婚姻状况','婚姻状况比例',['未婚','已婚','分居','再婚','离婚独居','丧偶独居'],maritalStatus);
+    }
+
+    //初始化饼图
+    function pieChart(id,text,name,data,data1) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById(id), 'macarons');
+        option = {
+            title : {
+                text: text,
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: data
+            },
+            series : [
+                {
+                    name: name,
+                    type: 'pie',
+                    radius : '70%',
+                    center: ['50%', '50%'],
+                    data: data1,
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    //初始化环形图
+    function initRingGraph(id, text ,name, data, data1) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById(id), 'macarons');
+        option = {
+            title: {
+                text: text,
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data:data
+            },
+            series: [
+                {
+                    name:name,
+                    type:'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data:data1
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+    //初始化南丁格尔玫瑰图
+    function init(id,text,name,data,data1) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById(id), 'macarons');
+        option = {
+            title : {
+                text: text,
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x : 'left',
+                data:data
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    magicType : {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                }
+            },
+            calculable : true,
+            series : [
+                {
+                    name:name,
+                    type:'pie',
+                    radius : [20, 110],
+                    roseType : 'radius',
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    lableLine: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    data:data1
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+
+    var sum = [0,0,0,0,0,0,0,0,0,0,0,0];
+    //客户总数曲线图
+    function customerSum(visitorList) {
+        for (var i in visitorList) {
+            var visitor = visitorList[i];
+            var date = new Date(visitor.createTime).getMonth()+1;
+            if(date==1){
+                sum[0]++;
+            }else if(date==2){
+                sum[1]++;
+            }else if(date==3){
+                sum[2]++;
+            }else if(date==4){
+                sum[3]++;
+            }else if(date==5){
+                sum[4]++;
+            }else if(date==6){
+                sum[5]++;
+            }else if(date==7){
+                sum[6]++;
+            }else if(date==8){
+                sum[7]++;
+            }else if(date==9){
+                sum[8]++;
+            }else if(date==10){
+                sum[9]++;
+            }else if(date==11){
+                sum[10]++;
+            }else if(date==12){
+                sum[11]++;
+            }
+        }
+        brokenLineGraph('sum','客户增长曲线图',['客户增长'],'客户增长',sum);
+    }
+
+    //初始化折线图
+    function brokenLineGraph(id,text,data,name,data1) {
+        var myChart = echarts.init(document.getElementById(id), 'macarons');
+        option = {
+            title: {
+                text: text
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:data
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:name,
+                    type:'line',
+                    stack: '总量',
+                    data:data1
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    function test(id,text,name,data,data1) {
+        var myChart = echarts.init(document.getElementById(id), 'macarons');
+        option = {
+            title : {
+                text: text,
+                x:'center'
+            },
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : data,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name: name,
+                    type:'bar',
+                    barWidth: '60%',
+                    data:data1
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>
+</html>

@@ -20,7 +20,8 @@ public class WebProductSettingsController {
     }
 
     @RequestMapping("/trajectory")
-    public String trajectory(){
-        return "project/transaction/product/productTrajectory";
-    }
+    public String trajectory(){ return "project/transaction/product/productTrajectory"; }
+
+    @RequestMapping("/sales")
+    public String sales(){ return "project/transaction/product/productSales"; }
 }

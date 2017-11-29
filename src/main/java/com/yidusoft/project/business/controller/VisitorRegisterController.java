@@ -103,4 +103,14 @@ public class VisitorRegisterController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+    /**
+     * 获取客户信息
+     * @return
+     */
+    @GetMapping("/customerCount")
+    public Result count(){
+        List<VisitorRegister> list = visitorRegisterService.findVitorByCreator(Security.getUserId());
+        return ResultGenerator.genSuccessResult(list);
+    }
 }

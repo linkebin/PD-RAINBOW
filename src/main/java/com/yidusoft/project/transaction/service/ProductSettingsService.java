@@ -29,4 +29,8 @@ public interface ProductSettingsService extends Service<ProductSettings> {
     void addTrajectory(String content,String uuId,String productId,String name);
 
     void updateProductPromotions(String promotionsId);
+
+    List<ProductSettings> findProductTotal();
+
+    List<ProductSettings> findProductByOrder();
 }

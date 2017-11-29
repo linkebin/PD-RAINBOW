@@ -21,4 +21,11 @@ public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
      * @return
      */
     List<Map<String,Object>> findViitorByCounselorIdSortTime(VisitorRegister visitorRegister);
+
+    /**
+     * 根据创建人id获取其客户的信息
+     * @param creator
+     * @return
+     */
+    List<VisitorRegister> findVitorByCreator(String creator);
 }

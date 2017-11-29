@@ -32,13 +32,12 @@
                 <i class='eui-icon eui-font24'>&#xe61d;</i> 套餐
             </div>
             <div class="eui-col-md6 eui-textAlignR">
-                <a href="###" class="eui-btn eui-btn-small productNew"><i class='eui-icon eui-font24'>&#xe654;</i> 设置套餐</a>
-                <a href="###" class="eui-btn eui-btn-small productDelete"><i class='eui-icon eui-font24'>&#xe640;</i>
-                    批量删除</a>
-                <a href="###" class="eui-btn eui-btn-small checkRecord">
-                    <i class='eui-icon eui-font24'>&#xe60e;</i>
-                    套餐修改轨迹
-                </a>
+                <div class="eui-btn-group">
+                    <a href="###" class="eui-btn eui-btn-small productNew"><i class='eui-icon eui-font24'>&#xe654;</i> 设置套餐</a>
+                    <a href="###" class="eui-btn eui-btn-small productDelete"><i class='eui-icon eui-font24'>&#xe640;</i>批量删除</a>
+                    <a href="###" class="eui-btn eui-btn-small checkRecord"><i class='eui-icon eui-font24'>&#xe60e;</i>套餐修改轨迹</a>
+                    <a href="###" class="eui-btn eui-btn-small salesAnalysis"><i class='eui-icon eui-font24'>&#xe62c;</i>销售分析</a>
+                </div>
             </div>
         </div>
         <table class="eui-table eui-form" id="userTable">
@@ -664,6 +663,9 @@
         }
     }
 
+    /**
+     * 套餐修改轨迹
+     */
     $('.checkRecord').click(function () {
         if (parent.$(".eui-tab-title li[e-id='999']").length <= 0) {
             parent.element.tabAdd('nav-tab', {
@@ -674,6 +676,21 @@
             })
         }
         parent.element.tabChange("nav-tab", 999);
+    })
+
+    /**
+     * 销售分析
+     */
+    $('.salesAnalysis').click(function () {
+        if (parent.$(".eui-tab-title li[e-id='998']").length <= 0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '销售分析',
+                type: 2
+                , content: '<iframe frameborder=0 class="contentIframe" src="web/product/sales"></iframe>'
+                , id: 998 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 998);
     })
 </script>
 </body>

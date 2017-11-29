@@ -53,5 +53,6 @@
 
   <select id="getState" resultMap="BaseResultMap">
     SELECT * FROM questionnaire_promotions WHERE deleted=0 AND promotions_state=1
+    AND now() BETWEEN promotions_start AND promotions_end
   </select>
 </mapper>

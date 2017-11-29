@@ -3,6 +3,8 @@ package com.yidusoft.project.transaction.domain;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -80,6 +82,16 @@ public class ProductSettings {
      */
     @Column(name = "time_limit")
     private Integer timeLimit;
+
+
+    /**
+     * 套餐的销售数量
+     */
+    @javax.persistence.Transient
+    private Integer count;
+
+    @javax.persistence.Transient
+    private Date paymentTime;
 
     /**
      * @return ID_
@@ -297,5 +309,33 @@ public class ProductSettings {
      */
     public void setTimeLimit(Integer timeLimit) {
         this.timeLimit = timeLimit;
+    }
+
+    /**
+     * 获取销售数量
+     * @return
+     */
+    public Integer getCount() { return count; }
+
+    /**
+     * 设置销售数量
+     * @param count
+     */
+    public void setCount(Integer count) { this.count = count; }
+
+    /**
+     * 获取支付时间
+     * @return
+     */
+    public Date getPaymentTime() {
+        return paymentTime;
+    }
+
+    /**
+     * 设置支付时间
+     * @param paymentTime
+     */
+    public void setPaymentTime(Date paymentTime) {
+        this.paymentTime = paymentTime;
     }
 }

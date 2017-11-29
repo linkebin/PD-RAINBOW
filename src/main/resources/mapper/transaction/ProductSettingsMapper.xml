@@ -18,6 +18,8 @@
         <result column="product_state" jdbcType="INTEGER" property="productState"/>
         <result column="product_type" jdbcType="INTEGER" property="productType"/>
         <result column="time_limit" jdbcType="INTEGER" property="timeLimit"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+        <result column="payment_time" jdbcType="INTEGER" property="paymentTime"/>
     </resultMap>
 
     <select id="getProductAll" resultMap="BaseResultMap" parameterType="Integer">
@@ -55,5 +57,14 @@
     <update id="updateProductPromotions" parameterType="String">
         UPDATE product_settings SET promotions_id='',promotions_name='' WHERE promotions_id=#{promotionsId}
     </update>
+
+    <select id="findProductTotal" resultMap="BaseResultMap">
+        SELECT COUNT(pro.ID_) as count,product_id,product_name FROM product_settings pro JOIN order_online oo
+          WHERE pro.ID_=oo.product_id AND order_state=1 AND pro.deleted=0 GROUP BY pro.ID_ ORDER BY count desc
+    </select>
+    <select id="findProductByOrder" resultMap="BaseResultMap">
+        SELECT pro.ID_,pro.product_name,oo.payment_time FROM product_settings pro JOIN order_online oo
+          WHERE pro.ID_=oo.product_id AND order_state=1 AND pro.deleted=0
+    </select>
 </mapper>
 

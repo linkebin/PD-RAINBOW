@@ -161,6 +161,7 @@
             /*var id = "'" + promotion.id + "'";*/
             var discount = (promotion.promotionsDiscount * 10).toFixed(1) + "折";
             var state="设计中";
+            console.log(promotion.promotionsState);
             if(promotion.promotionsState==2){
                 state="活动中";
             } else if (promotion.promotionsState==3){
@@ -208,7 +209,7 @@
         if(sate==1){
             return '<button class="eui-btn eui-btn-primary eui-btn-mini promotionEdit " title="编辑促销" onclick="promotionEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除促销" onclick="deletePromotion(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ' +
-                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="启用促销" onclick="enablePromotions('+"''," + id + ','+end+')"><i class="eui-icon">&#xe618;</i></button> '+
+                    /*'<button class="eui-btn eui-btn-primary eui-btn-mini" title="启用促销" onclick="enablePromotions('+"''," + id + ','+end+')"><i class="eui-icon">&#xe618;</i></button> '+*/
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkPromotions(' + id + ')"><i class="eui-icon">&#xe621;</i></button> ';
         }else if(sate==2 && now < end){
             return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="提前终止" onclick="enablePromotions('+"'termination'," + id + ','+end+')"><i class="eui-icon">&#xe6d8;</i></button> '+

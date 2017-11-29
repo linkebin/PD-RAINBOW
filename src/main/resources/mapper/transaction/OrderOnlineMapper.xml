@@ -36,6 +36,9 @@
         <if test="orderState==1">
             ORDER BY payment_time DESC
         </if>
+        <if test="orderState==null || orderState==''">
+            ORDER BY create_time DESC
+        </if>
     </select>
 
     <update id="updateOrderOnline" parameterType="String">

@@ -93,4 +93,8 @@
   ORDER BY b.now_time DESC
 
   </select>
+
+  <select id="findVitorByCreator" resultMap="BaseResultMap" parameterType="String">
+    SELECT * FROM visitor_register WHERE deleted=0 AND creator=#{creator}
+  </select>
 </mapper>
