@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body class="questionBody">
 
 <div class="questionHeader">
     <input type="hidden" th:value="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireId"/>
@@ -30,7 +30,7 @@
                 <input type="hidden" th:value="${userId}"  id="userId"/>
                 <input type="hidden" th:value="${visitorTimes}"  id="visitorTimes"/>
 
-                <div class="eui-bg-white eui-form visitorContent" id="divTable" >
+                <div class="eui-bg-white eui-form" id="divTable">
 
                 </div>
             </form>

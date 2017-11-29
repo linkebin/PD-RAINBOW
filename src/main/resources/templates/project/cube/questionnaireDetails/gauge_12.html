@@ -55,41 +55,41 @@
             </div>
             <div class="eui-row dataCharts">
                 <div class="eui-col-md6">
-                    <div   style="width: 100%;height:400px;" >
-                        <div style="width: 100%;height:30px;">
-
-                        </div>
-                        <div id="main2" style="">
+                    <div class="eui-marginB20">
+                        <div id="main2">
 
                         </div>
                     </div>
                 </div>
                 <div class="eui-col-md6">
-                    <div id="main1"  style="width: 100%;height:320px;"></div>
+                    <div id="main1" style="width: 100%;height:340px;"></div>
                 </div>
             </div>
-            <div>
-                <div class="eui-col-md3">
+            <div class="eui-row">
+                <div class="eui-col-md5">
                     正性事件得分及次序列表
                 </div>
+                <div class="eui-col-md7">
+                    负性事件得分及次序列表
+                </div>
                 <div class="eui-col-md3">
-                    <table border="1" id="goodDeed">
-                        <tr>
-                            <th>序号</th>
-                            <th>得分</th>
-                        </tr>
+                    <table id="goodDeed" class="eui-table" e-skin="nob" e-even>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>得分</th>
+                            </tr>
+                        </thead>
                     </table>
                 </div>
-
-                <div class="eui-col-md3">
-                    负性事件得分及次序列表:
-                </div>
-                <div class="eui-col-md3" >
-                    <table border="1" id="badThing">
-                        <tr>
-                            <th>序号</th>
-                            <th>得分</th>
-                        </tr>
+                <div class="eui-col-md3 eui-col-md-offset2" >
+                    <table id="badThing" class="eui-table" e-skin="nob" e-even>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>得分</th>
+                            </tr>
+                        </thead>
                     </table>
                 </div>
             </div>
@@ -234,7 +234,7 @@ function  getTable(list) {
             context+="<p class='eui-margin10'>4、长期性事件："+json.dimension1+"件</p>";
             context+="<p class='eui-margin10'>5、精神影响程度在中度以上（包括中度）:"+json.dimension3+"件</p>";
             context+="<p class='eui-margin10'>6、影响持续时间在半年以上："+json.dimension4+"件</p>";
-            context+="<p class='eui-margin10'> LES的总分越高反映个体承受的精神压力越大，95%的正常人1年内的LES总分不超过20分，99%的正常人1年内的LES总分不超过32分。如分数过高，需寻求专业人士帮助</p>";
+            context+="<p class='eui-margin10 eui-lineHeight24'> LES的总分越高反映个体承受的精神压力越大，95%的正常人1年内的LES总分不超过20分，99%的正常人1年内的LES总分不超过32分。如分数过高，需寻求专业人士帮助</p>";
         var table1="";
         for(var k in json.goodDeedMap){
             table1+="<tr><td>"+k+"</td><td>"+json.goodDeedMap[k]+"</td></tr>";
