@@ -25,7 +25,7 @@
     <div class="eui-mn1 eui-bg-white">
         <div class="eui-mn1-type">
             <form class="eui-form" id="searchFrom">
-                <label class="eui-form-label"></label>
+
                 <div class="eui-input-inline eui-padding10">
                     <input type="text" name="questionnaireCode" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
                 </div>
@@ -44,7 +44,6 @@
                 </div>
 
                 <div class="eui-form-item eui-padding10">
-                    <label class="eui-form-label"></label>
                     <div class="eui-input-inline" style="width:185px">
                         <select name="questionnaireState">
                             <option value="" >请选择状态</option>
@@ -72,25 +71,25 @@
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
                     <a href="/web/questionnaire/addQuestionnaire" target="_blank" class="eui-btn eui-btn-small userAdd">添加问卷</a>
-                    <a href="###" onclick="deleteQuestionnaire('')" class="eui-btn eui-btn-small">批量删除</a>
+                   <!-- <a href="###" onclick="deleteQuestionnaire('')" class="eui-btn eui-btn-small">批量删除</a>-->
                 </div>
             </div>
-            <table class="eui-table eui-form" id="questionTable">
+            <table class="eui-table eui-form"  id="questionTable">
                 <colgroup>
                     <col width="50">
                     <col width="110">
                     <col width="210">
-                    <col width="210">
+                    <col width="80">
                     <col width="80">
                     <col width="120">
                     <col width="120">
-                    <col width="60">
+                    <col width="30">
                     <!--<col width="50">-->
                     <col>
                 </colgroup>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
+                       <!-- <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>-->
                         <th>问卷编号</th>
                         <th>问卷名称</th>
                         <th>问卷类型</th>
@@ -289,11 +288,13 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             var answerModel="";
             if(questionnaire.answerModelType==1){
                 answerModel="横版";
-            }else {
+            }else if(questionnaire.answerModelType==2) {
                 answerModel="竖版";
+            }else if(questionnaire.answerModelType==3){
+                answerModel="固定模板";
             }
             tableHtml +=  '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireId" type="hidden" value="' + questionnaire.id + '"></td>' +
+               /* '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="questionnaireId" type="hidden" value="' + questionnaire.id + '"></td>' +*/
                 '<td>'+ questionnaire.questionnaireCode +'</td>' +
                 '<td>'+ questionnaire.questionnaireName +'</td>' +
                 '<td>'+ questionnaire.questionnaireTypeName +'</td>'   +

@@ -132,7 +132,7 @@
 
 
 <!-- 左滑添加用户开始 -->
-<div class="filtrateIn">
+<!--<div class="filtrateIn">
     <div class="eui-row eui-padding10 eui-borderB">
         <div class="eui-col-md10 eui-font18 eui-lineHeight30">
             <i class='eui-icon eui-font24'>&#xe654;</i> 添加用户
@@ -202,7 +202,7 @@
         <div class="taskConfirm"><button type="submit" onclick="openTab('userInfoAdd')" class="eui-btn">确定</button>
             </div>
     </form>
-</div>
+</div>-->
 
 
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
@@ -442,8 +442,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 '<td>'+ new Date(gauge.createTime).Format('yyyy-MM-dd') +'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick('+"'edit','"+gauge.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick('+"'delete','"+gauge.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="修改" onclick="itemclick('+"'edit','"+gauge.id+'\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除" onclick="itemclick('+"'delete','"+gauge.id+'\')"><i class="eui-icon">&#xe640;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';

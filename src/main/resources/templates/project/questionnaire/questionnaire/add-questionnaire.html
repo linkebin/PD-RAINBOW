@@ -41,7 +41,8 @@
                     <input type="hidden" id="sceneId" name="sceneId"/>
                     <input type="hidden" id="tagId" name="tagId"/>
                     <input type="hidden" id="questionStr" name="questionStr"/>
-                <input type="hidden" id="userIds" name="userIds">
+                    <input type="hidden" name="answerModelType"/>
+                    <input type="hidden" id="userIds" name="userIds">
                     <div class="eui-form-item">
                         <label class="eui-form-label">名称</label>
                         <div class="eui-input-inline">
@@ -73,7 +74,7 @@
 
                          <label class="eui-form-label">模板类型</label>
                          <div class="eui-input-inline">
-                            <select  e-filter="answerModelType" name="answerModelType" id="answerModelType" e-verify="" >
+                            <select  e-filter="answerModelType"  id="answerModelType" e-verify="" >
                                  <option value="">请选择</option>
                                  <option value="1">横版</option>
                                  <option value="2">竖版</option>
@@ -252,7 +253,7 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
-                                <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
+                                <p  id="pDom" style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
                                 <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>自定义问题</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
@@ -276,61 +277,6 @@
     </div>
 </div>
 
-<!--添加问题的界面-->
-<form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane" id="questionForm"  style="display: none">
-    <input  type="hidden" name="id"/>
-    <input  type="hidden" name="createTime"/>
-    <input  type="hidden" name="creator"/>
-    <input  type="hidden" name="deleted"/>
-    <input  type="hidden" name="questionCode"/>
-    <div class="eui-form-item" style="width: 700px">
-        <div class="eui-form-item eui-form-text" >
-            <label class="eui-form-label">问题内容 </label>
-            <div class="eui-input-block">
-                <textarea name="questionContent" placeholder="请输入内容" class="eui-textarea"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="eui-form-item" style="width: 700px">
-        <div class="eui-form-item eui-form-text">
-            <label class="eui-form-label">选项</label>
-            <div class="eui-input-block">
-                <textarea name="optionAnswer"  placeholder="例:A:一般||B:好||C:非常好" class="eui-textarea"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="eui-form-item"  style="width: 700px">
-        <div class="eui-form-item eui-form-text">
-            <label class="eui-form-label">选项对应分数</label>
-            <div class="eui-input-block">
-                <textarea name="optionScore" placeholder="例:10||20||30" class="eui-textarea"></textarea>
-            </div>
-        </div>
-    </div>
-    <div class="eui-form-item"  style="width: 700px">
-
-        <label class="eui-form-label">答案顺序</label>
-        <div class="eui-input-inline" >
-            <input type="radio" id="answerSequence1" name="answerSequence" value="1" title="正" checked>
-            <input type="radio" id="answerSequence2" name="answerSequence" value="2" title="反" >
-        </div>
-
-        <label class="eui-form-label">答案类型</label>
-        <div class="eui-input-inline">
-            <select name="questionType">
-                <option value="0" >请选择类型</option>
-                <option value="1" >单选</option>
-                <option value="2" >多选</option>
-                <option value="3" >评分单选</option>
-            </select>
-        </div>
-        <label name="answer1" class="eui-form-label">答案</label>
-        <div class="eui-input-inline" name="answer1">
-            <input type="text" name="answer" required placeholder="例:A:一般||B:好" autocomplete="off" class="eui-input">
-        </div>
-    </div>
-</form>
-<!--添加问题的界面end-->
 
 
 <!--咨询师列表展示界面开始-->
@@ -453,18 +399,48 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         $("#questionCollapse").children().remove();
         $("#addQuestionCollapse").children().remove();
         checkGauge(data.value);
+        var gaugeName=$("#gaugeId").find("option:selected").text().trim();
+        //选择的如果是特定的量表 则模板类型为固定模板
+        if(gaugeName=="生活事件量表(LES)" || gaugeName=="长处和困难问卷(SDQ)" || gaugeName=="匹兹堡睡眠质量指数(PSQI)"){
+            $("#options").remove();
+            var options='<option id="options" value="3">固定模版</option>';
+            $("#answerModelType").append(options);
+            $("#answerModelType").find("option[value ='3']").attr("selected","selected");
+            $("#answerModelType").attr("disabled","true");
+            $("[name='answerModelType']").val("3");
+            //隐藏可选问题
+            $("[name='transverse']").hide();
+            var questionList= $("#addQuestionCollapse").children();
+            for(var i=0;i< questionList.length;i++ ){
+                deleteQuestion( questionList.eq(i).attr("question"));
+            }
+            $("#pDom").hide();
+
+        }else {
+            $("#answerModelType").val("0");
+            $("#answerModelType").removeAttr("disabled");
+            $("#options").remove();
+            $("[name='answerModelType']").val("");
+            $("[name='transverse']").show();
+            $("#pDom").show();
+        }
+        formRender();
+
     });
 
     //模板类型
     form.on('select(answerModelType)', function(data){
+        $("[name='answerModelType']").val(data.elem.value);
         if(data.elem.value=='1'){
            $("[name='transverse']").hide();
            var questionList= $("#addQuestionCollapse").children();
            for(var i=0;i< questionList.length;i++ ){
                deleteQuestion( questionList.eq(i).attr("question"));
            }
+            $("#pDom").hide();
         }else if(data.elem.value=='2'){
             $("[name='transverse']").show();
+            $("#pDom").show();
         }
     });
 
@@ -916,7 +892,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
            });
 
            return;
-       }else if($("#answerModelType").val()==""){
+       }else if($("[name='answerModelType']").val()==""){
            layer.msg('请选择模板类型', {
                time: 2000
            });

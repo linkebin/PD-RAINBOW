@@ -44,6 +44,8 @@
                     <input type="hidden"  name="creator"/>
                     <input type="hidden"  name="createTime" id="createTime"/>
                     <input type="hidden"  name="deleted"/>
+                    <input type="hidden" name="answerModelType"/>
+
                 <!--
                     <input type="hidden" id="sceneId" name="sceneId"/>
                     <input type="hidden" id="tagId" name="tagId"/>-->
@@ -77,7 +79,7 @@
 
                          <label class="eui-form-label">模板类型</label>
                          <div class="eui-input-inline">
-                            <select  e-filter="answerModelType" name="answerModelType" id="answerModelType" e-verify="" >
+                            <select   e-filter="answerModelType"  id="answerModelType" e-verify="" >
                                  <option value="">请选择</option>
                                  <option value="1">横版</option>
                                  <option value="2">竖版</option>
@@ -255,8 +257,8 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
-                       <!-- <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
-                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>自定义问题</p>-->
+                        <p  id="pDom" style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
+                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>自定义问题</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
                 </div>
@@ -420,18 +422,47 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         $("#questionCollapse").children().remove();
         $("#addQuestionCollapse").children().remove();
         checkGauge(data.value);
+        var gaugeName=$("#gaugeId").find("option:selected").text().trim();
+        //选择的如果是特定的量表 则模板类型为固定模板
+        if(gaugeName=="生活事件量表(LES)" || gaugeName=="长处和困难问卷(SDQ)" || gaugeName=="匹兹堡睡眠质量指数(PSQI)"){
+            $("#options").remove();
+            var options='<option id="options" value="3">固定模版</option>';
+            $("#answerModelType").append(options);
+            $("#answerModelType").find("option[value ='3']").attr("selected","selected");
+            $("#answerModelType").attr("disabled","true");
+            $("[name='answerModelType']").val("3");
+            //隐藏可选问题
+            $("[name='transverse']").hide();
+            var questionList= $("#addQuestionCollapse").children();
+            $("#pDom").hide();
+            for(var i=0;i< questionList.length;i++ ){
+                deleteQuestion( questionList.eq(i).attr("question"));
+            }
+
+        }else {
+            $("#answerModelType").val("0");
+            $("[name='answerModelType']").val("");
+            $("#answerModelType").removeAttr("disabled");
+            $("#options").remove();
+            $("[name='transverse']").show();
+            $("#pDom").show();
+        }
+        formRender();
     });
 
     //模板类型
     form.on('select(answerModelType)', function(data){
+        $("[name='answerModelType']").val(data.elem.value);
         if(data.elem.value=='1'){
             $("[name='transverse']").hide();
             var questionList= $("#addQuestionCollapse").children();
             for(var i=0;i< questionList.length;i++ ){
                 deleteQuestion( questionList.eq(i).attr("question"));
             }
+            $("#pDom").hide();
         }else if(data.elem.value=='2'){
             $("[name='transverse']").show();
+            $("#pDom").show();
         }
     });
 
@@ -863,7 +894,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
            });
 
            return;
-       }else if($("#answerModelType").val()==""){
+       }else if($("[name='answerModelType']").val()==""){
            layer.msg('请选择模板类型', {
                time: 2000
            });
@@ -880,6 +911,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
        //  $("#sceneId").val(getTagOrSceneId("scene"));
 
          var formQuestionnaire=$("#formQuestionnaire").serialize();
+
          //加载层
          var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
         $.post("/questionnaire/updateQuestionnaire",formQuestionnaire,function (result) {
@@ -1197,6 +1229,20 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         }
          $("#formQuestionnaire [name='shelfTime']").val(format(questionnaires.shelfTime).replace("00:00:00","").trim());
          $("#formQuestionnaire [name='questionnaireType']").val(questionnaires.questionnaireType);
+         if(questionnaires.answerModelType==3){
+             //固定模板
+             var options='<option id="options" value="3">固定模版</option>';
+             $("#answerModelType").append(options);
+             $("#answerModelType").attr("disabled","true");
+             //隐藏可选问题
+             $("[name='transverse']").hide();
+             var questionList= $("#addQuestionCollapse").children();
+             for(var i=0;i< questionList.length;i++ ){
+                 deleteQuestion( questionList.eq(i).attr("question"));
+             }
+             $("#pDom").hide();
+         }
+         $("#answerModelType").val(questionnaires.answerModelType);
          $("#formQuestionnaire [name='answerModelType']").val(questionnaires.answerModelType);
          $("#formQuestionnaire [name='remarks']").val(questionnaires.remarks);
          $("#formQuestionnaire [name='guide']").val(questionnaires.guide);

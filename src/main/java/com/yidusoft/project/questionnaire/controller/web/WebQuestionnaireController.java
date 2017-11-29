@@ -95,14 +95,17 @@ public class WebQuestionnaireController {
     public String questionnaireHorizontalPreview(String questionnaireId, Model model){
         model.addAttribute("questionnaireId",questionnaireId);
 
-        Questionnaire questionnaire= questionnaireService.findById(questionnaireId);
+        Questionnaire questionnaire= questionnaireService.findQuestionnaireType(questionnaireId);
         //判断问卷的类型 1 左右滑动 2  平铺
-        if(questionnaire.getAnswerModelType()==1){
+        if(questionnaire.getAnswerModelType()==1
+                && !("生活事件量表(LES)").equals(questionnaire.getGaugeName())
+                && !("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())
+                && !("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())
+                ){
             List<QuestionnaireQuestion> questionnaireQuestions = null;
             if (questionnaireId != null && questionnaireId != "") {
                 questionnaireQuestions = questionnaireAnswerService.questionList(questionnaireId);
             }
-
             //获取选项
             List<String> optionAnswers = questionnaireAnswerService.getOptionAnswer(questionnaireQuestions);
 
@@ -121,8 +124,14 @@ public class WebQuestionnaireController {
             model.addAttribute("scoreList", answers);
             return "project/questionnaire/questionnairePreview/questionnaire_horizontal_preview";
 
+        }else if(("生活事件量表(LES)").equals(questionnaire.getGaugeName())){
+            return "project/questionnaire/questionnairePreview/fillIn_gauge_12_preview";
+        }else if(("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())){
+            return "project/questionnaire/questionnairePreview/fillIn_gauge_7_preview";
+        }else  if(("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())){
+            return "project/questionnaire/questionnairePreview/fillIn_gauge_10_preview";
         }else {
-            return "project/questionnaire/questionnairePreview/questionnaire_vertical_preview";
+            return "project/cube/questionnaire/vertical-questionnaire";
         }
 
     }
