@@ -756,9 +756,14 @@ body .eui-layer-title{
 }
 
 /* 2017.11.29  */
-#dataResult .eui-table tr:first-child{
+
+#dataResult .eui-table tr:last-child{
     background: #f4f9fd;
 }
-
-
-
+#dataResult .eui-table tr:last-child td{
+    color: #1e9eff;
+    font-weight: 800;
+}
+#dataResult .eui-table tr:last-child:hover{
+    background: #f4f9fd;
+}
