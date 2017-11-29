@@ -648,7 +648,8 @@ body .eui-layer-title{
     bottom:20px;
     margin-left: -83px;
 }
-.xymf-width{ width: 800px;}
+.xymf-width800{ width: 800px;}
+.xymf-width1000{ width: 1000px;}
 
 .xymf-marginB60{
     margin-bottom: 60px;
@@ -754,8 +755,10 @@ body .eui-layer-title{
     margin-top: 20px;
 }
 
-
-
+/* 2017.11.29  */
+#dataResult .eui-table tr:first-child{
+    background: #f4f9fd;
+}
 
 
 

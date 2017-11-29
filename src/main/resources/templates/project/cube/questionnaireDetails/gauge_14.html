@@ -9,7 +9,7 @@
 </head>
 <body class="questionBody">
 <div class="questionHeader">
-    <div class="eui-row eui-area xymf-width">
+    <div class="eui-row eui-area xymf-width1000">
         <div class="xymfLogo eui-col-md12">
             <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
             <span class="payCentre">问卷详情</span>
@@ -17,8 +17,8 @@
     </div>
 </div>
 
-<div class="visitorContent" >
-    <div class="eui-area xymf-width xymf-marginB60">
+<div class="visitorContent">
+    <div class="eui-area xymf-width1000 xymf-marginB60">
         <div class="visitorTitle">
             <span id="questionnaireName"></span>
         </div>
@@ -62,7 +62,12 @@
                 </div>
             </div>
             <div id="dataResult" class="eui-marginTB20">
-                <table>
+                <table class="eui-table" e-even e-skin="nob">
+                    <colgroup>
+                        <col width="60">
+                        <col>
+                        <col>
+                    </colgroup>
                    <tr>
                        <th></th>
                        <th>N</th>
@@ -257,7 +262,7 @@ function  getTable(list) {
             factorScore.push(json.classmateStress);
             factorScore.push(json.societyStress);
             factorScore.push(json.selfStress);
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-form-item eui-lineHeight24 eui-paddingT10">';
             context+="<p>总均分为"+json.totalScoreAverage+"分</p>";
 
             context+="<p>学习压力因子均分:"+json.learningStress+"分</p>";
