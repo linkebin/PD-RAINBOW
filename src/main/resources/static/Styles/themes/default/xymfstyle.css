@@ -551,11 +551,16 @@
 /* 2017-11-10 */
 /* 选择问卷模版弹窗 */
 .classify .eui-colla-title{
-    background-color: #fcfcfc;
+    background-color: #ffffff;
 }
 .classify h2{
     font-weight: 400;
 }
+.classify .eui-collapse{
+    border: 0;
+}
+
+
 #checkQuestionnaire{
     background: #ffffff!important;
 }
@@ -766,4 +771,9 @@ body .eui-layer-title{
 }
 #dataResult .eui-table tr:last-child:hover{
     background: #f4f9fd;
+}
+
+.classify .eui-colla-content p{
+    font-size: 14px!important;
+    color: #888888;
 }
