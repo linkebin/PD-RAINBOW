@@ -1,7 +1,9 @@
 package com.yidusoft.project.channel.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.domain.ChannelRule;
 import com.yidusoft.project.channel.service.ChannelRuleService;
 import com.github.pagehelper.PageHelper;
@@ -9,7 +11,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -34,10 +38,25 @@ public class ChannelRuleController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @DeleteMapping("/{id}")
-    public Result delete(@PathVariable String  id) {
-        channelRuleService.deleteById(id);
+    @PostMapping(value = "/deleteAll")
+    public Result deleteAll(String  ruleId) {
+        try {
+            channelRuleService.deleteRuleChannelAll(ruleId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("切换时间失败");
+        }
         return ResultGenerator.genSuccessResult();
+    }
+
+    @PostMapping("/channelRuleList")
+    public Result listByparameterSelect(int page,  int pagesize,String json) {
+        Map map = JSON.parseObject(json,Map.class);
+        PageHelper.startPage(page, pagesize);
+        List<Map<String,Object>> maps = channelRuleService.findChannelByRuleIdList(map);
+
+        PageInfo pageInfo = new PageInfo(maps);
+        return ResultGenerator.genSuccessResult(pageInfo);
     }
 
     @PutMapping

@@ -8,6 +8,7 @@ import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.project.channel.service.ChannelRuleService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.CodeHelper;
@@ -17,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -29,6 +30,9 @@ import java.util.UUID;
 public class ChannelManageController {
     @Resource
     private ChannelManageService channelManageService;
+
+    @Resource
+    private ChannelRuleService channelRuleService;
 
     @Autowired
     private ChannelActivityService channelActivityService;
@@ -120,6 +124,55 @@ public class ChannelManageController {
         PageInfo pageInfo = new PageInfo(list);
 
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/listByparameterSelect")
+    public Result listByparameterSelect(int page,  int pagesize,String json) {
+        Map map = JSON.parseObject(json,Map.class);
+
+        List<String>  ids = new ArrayList<String>();
+        List<Map<String,Object>> maps = channelRuleService.findChannelRuleTimeClashList(map);
+        for (Map<String,Object> m : maps){
+           boolean flag = isOverlap(map.get("start").toString(),map.get("end").toString(),
+                    m.get("start_time").toString(), m.get("end_time").toString());
+            System.out.println(flag +":"+m.get("start_time").toString()+"---"+m.get("end_time").toString());
+           if (flag){
+               ids.add(m.get("channel_id").toString());
+           }
+        }
+        PageHelper.startPage(page, pagesize);
+        List<ChannelManage> list = channelManageService.finndChannelNotInIdAndParameter(ids,map);
+
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
+    public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private  boolean isOverlap(String startdate1, String enddate1,String startdate2, String enddate2) {
+        Date leftStartDate = null;
+        Date leftEndDate = null;
+        Date rightStartDate = null;
+        Date rightEndDate = null;
+        try {
+            leftStartDate = format.parse(startdate1);
+            leftEndDate = format.parse(enddate1);
+            rightStartDate = format.parse(startdate2);
+            rightEndDate = format.parse(enddate2);
+        } catch (ParseException e) {
+            return false;
+        }
+        return
+                ((leftStartDate.getTime() >= rightStartDate.getTime())
+                        && leftStartDate.getTime() < rightEndDate.getTime())
+                        ||
+                        ((leftStartDate.getTime() > rightStartDate.getTime())
+                                && leftStartDate.getTime() <= rightEndDate.getTime())
+                        ||
+                        ((rightStartDate.getTime() >= leftStartDate.getTime())
+                                && rightStartDate.getTime() < leftEndDate.getTime())
+                        ||
+                        ((rightStartDate.getTime() > leftStartDate.getTime())
+                                && rightStartDate.getTime() <= leftEndDate.getTime());
+
     }
 
     @PostMapping("/listByaccounts")

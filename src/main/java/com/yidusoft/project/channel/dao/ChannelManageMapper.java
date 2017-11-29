@@ -2,6 +2,7 @@ package com.yidusoft.project.channel.dao;
 
 import com.yidusoft.core.Mapper;
 import com.yidusoft.project.channel.domain.ChannelManage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,9 @@ public interface ChannelManageMapper extends Mapper<ChannelManage> {
      * @return
      */
     List<ChannelManage> finndChannelByParameterList(ChannelManage channelManage);
+
+
+    List<ChannelManage> finndChannelNotInIdAndParameter(@Param("ids")List<String> ids, @Param("map")Map<String,Object> map);
 
     /**
      * 查询渠道商下的账号

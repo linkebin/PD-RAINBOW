@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -20,4 +22,18 @@ public class ChannelRuleServiceImpl extends AbstractService<ChannelRule> impleme
     @Resource
     private ChannelRuleMapper channelRuleMapper;
 
+    @Override
+    public List<Map<String, Object>> findChannelRuleTimeClashList(Map<String, Object> map) {
+        return channelRuleMapper.findChannelRuleTimeClashList(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> findChannelByRuleIdList(Map<String, Object> map) {
+        return channelRuleMapper.findChannelByRuleIdList(map);
+    }
+
+    @Override
+    public void deleteRuleChannelAll(String ruleId) {
+        channelRuleMapper.deleteRuleChannelAll(ruleId);
+    }
 }

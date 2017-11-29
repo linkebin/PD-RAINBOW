@@ -117,6 +117,12 @@
                             <span class="eui-font16">来访时间</span>
                             <span  class="eui-marginL15 visitorTime"></span>
                         </p>
+
+                        <p class="eui-marginT15"><i class="eui-icon eui-color-blue eui-font18">&#xe60e;</i>
+                            <span class="eui-font16">来访目的</span>
+                            <span  class="eui-marginL15 visitorGoal"></span>
+                        </p>
+
                         <div class="eui-marginT15 eui-row">
                             <div class="eui-col-md2 eui-marginT5 eui-font16 questionWhite">
                                 <i class="eui-icon eui-color-blue eui-font18">&#xe622;</i> 问卷填写
@@ -182,7 +188,7 @@
                     <form id="DivAddForm" onsubmit="return false;">
                         <input type="hidden" name="visitorId" th:value="${id}" />
                         <div style="display: none;" class="DivAdd">
-
+                        <div style="width: 100%; height: 38px;">
                             <p style="float: left;" class="">
                                 <i class="eui-icon eui-color-blue">&#xe60e;</i>
                                 <span class="eui-font16">来访时间</span>
@@ -191,6 +197,21 @@
                                        class="eui-input eui-width200">
                             </div>
                             </p>
+                        </div>
+                            <div class="eui-marginT10" style="width: 100%; height: 38px;">
+                                <p style="float: left;" class="">
+                                    <i class="eui-icon eui-color-blue">&#xe60e;</i>
+                                    <span class="eui-font16">来访目的</span>
+                                <div style=" float: left; margin-left: 12px; margin-top: -5px; ">
+                                   <select class="eui-input eui-width200" name="visitorGoal">
+                                       <option value="">请选择</option>
+                                       <option th:each="category:${selectOptionList}" th:value="${category.optionName}"
+                                               th:text="${category.optionName}"  ></option>
+                                   </select>
+                                </div>
+                                </p>
+                            </div>
+
                             <div class="eui-marginT10 eui-row">
                             </div>
                             <div class="eui-marginT20 eui-form">
@@ -238,14 +259,14 @@
                             <div class="eui-marginT20 eui-form">
                                 <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 咨询过程记录</p>
                                 <p class="eui-marginT20 eui-lineHeight24">
-                                    <textarea id="processLogA" name="processLog" placeholder="咨询过程记录" class="eui-textarea"></textarea>
+                                    <textarea id="processLogA" name="processLog" placeholder="咨询过程记录" class=""></textarea>
                                 </p>
                             </div>
 
                             <div class="eui-marginT20 eui-form">
                                 <p class="eui-font16 eui-paddingB10 eui-borderB"><img src="/Styles/images/xymfImages/cloud.png" alt=""> 备注</p>
                                 <p class="eui-marginT20 eui-lineHeight24">
-                                    <textarea id="remarksA" name="remarks" placeholder="备注" class="eui-textarea"></textarea>
+                                    <textarea id="remarksA" name="remarks" placeholder="备注" ></textarea>
                                 </p>
                             </div>
 
@@ -742,6 +763,11 @@ var processLogA=null;
 
             $(".DivInfo .visitorTime").html(new Date(obj.visitorTime)
                 .Format('yyyy-MM-dd hh:mm:ss'));
+
+            $(".DivInfo .visitorGoal").html(obj.visitorGoal);
+
+//            $('#city').val(obj.visitorGoal);
+//            $('#city').trigger("change");
 
             var visitingRecordFileList = obj.visitingRecordFileList;
             $("#demoList").html('');

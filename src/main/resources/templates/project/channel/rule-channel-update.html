@@ -17,6 +17,7 @@
 
 <form class="eui-form eui-padding10" id="channelAdd" onsubmit="return false;">
     <input type="hidden" name="ruleId" id="ruleId" th:value="${ruleId}" />
+    <input type="hidden" name="add"  value="0" />
     <div class="eui-form-item">
         <label class="eui-form-label">规则比例</label>
         <div class="eui-input-inline">
@@ -60,7 +61,7 @@
                     class='eui-icon eui-font24'>&#xe61d;</i>添加渠道</a>
         </div>
     </div>
-    <table class="eui-table eui-form" id="productTable">
+    <table class="eui-table eui-form" id="userTable">
         <colgroup>
             <col width="120">
             <col>
@@ -72,6 +73,7 @@
             <th>联系人</th>
             <th>联系人电话</th>
             <th>渠道负责人</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -108,9 +110,15 @@
         //常规用法
         laydate.render({
             elem: '#startTime'
+            ,done: function(value, date, endDate){
+                delededAll();
+            }
         });
         laydate.render({
             elem: '#endTime'
+            ,done: function(value, date, endDate){
+                delededAll();
+            }
         });
         laydate.render({
             elem: '#joinTime6'
@@ -168,6 +176,17 @@
         });
     });
 
+    function delededAll() {
+        $.post('/channel/rule/deleteAll',{"ruleId":$("#ruleId").val()},function (res) {
+            if (res.code==200){
+                doSearch();
+            }else{
+                layer.msg(res.message);
+                location.reload();
+            }
+        });
+    }
+
     $(function () {
         $.post('/account/rule/detail',{id:$("#ruleId").val()},function (result) {
             result.data.startTime=new Date(result.data.startTime).Format('yyyy-MM-dd');
@@ -178,10 +197,20 @@
                 form.render('radio');
             });
         });
+        doSearch();
     });
+    function getRuleObj() {
+        return $("#channelAdd").serializeObject();
+    }
 
     var taskTeamInfoiframeWin =null ;
     function selectChannel() {
+        var obj = getRuleObj();
+        if (obj.startTime==''&&obj.endTime==''){
+            layer.msg("请选择开始时间和结束时间！")
+            return;
+        }
+
         var index = layer.open({
             type: 2 //此处以iframe举例
             ,title: '渠道商选择'
@@ -199,6 +228,7 @@
                 if (ids!=''){
                     $.post('/channel/rule/add',{channelIds:ids,ruleId:$("#ruleId").val()},function (result) {
                         layer.closeAll();
+                        doSearch();
                     });
                 }else {
                     layer.msg("请选择数据！")
@@ -255,6 +285,109 @@
             });
         }
         layer.closeAll();
+    }
+
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            //全选
+            form.on('checkbox(allChoose)', function(data){
+                var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+                child.each(function(index, item){
+                    item.checked = data.elem.checked;
+                });
+                form.render('checkbox');
+            });
+
+//            var params = $("#searchFrom").serializeObject();
+              var params = new Object();
+              params.rule_id=$("#ruleId").val();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/channel/rule/channelRuleList",
+                data: {
+                    json:JSON.stringify(params),
+                    page:1,
+                    pagesize:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/channel/rule/channelRuleList",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            var id = "'" + secUser.id_ + "'";
+            var channelManager = secUser.channel_manager;
+            if (secUser.channel_manager==undefined || secUser.channel_manager==''){
+                channelManager='无';
+            }
+            tableHtml +=  '<tr>' +
+//                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" ' +
+//                'type="hidden" value="' + secUser.id + '"></td>' +
+                '<td>'+ secUser.channel_code +'</td>' +
+                '<td>'+ secUser.channel_name +'</td>' +
+                '<td>'+ secUser.linkman +'</td>' +
+                '<td>'+ secUser.linkman_tell +'</td>' +
+                '<td>'+ channelManager +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+//                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="编辑渠道商"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteB('+id+')" title="移除渠道商"><i class="eui-icon">&#xe640;</i></button> ' +
+//                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="openAccountList('+id+')" title="渠道商用户"><i class="eui-icon">&#xe612;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
     }
 </script>
 </html>

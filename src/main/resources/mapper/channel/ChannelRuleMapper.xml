@@ -2,10 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yidusoft.project.channel.dao.ChannelRuleMapper">
   <resultMap id="BaseResultMap" type="com.yidusoft.project.channel.domain.ChannelRule">
-    <!--
+    <!--GROUP BY ar.start_time
       WARNING - @mbg.generated
     -->
     <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
     <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
   </resultMap>
+
+  <select id="findChannelRuleTimeClashList" parameterType="java.util.Map" resultType="Map">
+        SELECT cr.channel_id,ar.start_time,ar.end_time FROM channel_rule cr ,  account_rule ar  WHERE  cr.rule_id=ar.rule_id AND
+          ar.default_rule=0
+
+           <if test="add==1">
+--              GROUP BY ar.start_time
+           </if>
+
+
+
+  </select>
+
+  <select id="findChannelByRuleIdList" parameterType="java.util.Map" resultType="Map">
+      SELECT cm.* FROM channel_manage cm WHERE cm.deleted=0 AND cm.id_ in(
+		SELECT cr.channel_id FROM channel_rule cr WHERE cr.rule_id=#{rule_id}
+)
+  </select>
+
+    <delete id="deleteRuleChannelAll" parameterType="String">
+        DELETE FROM channel_rule WHERE rule_id=#{rule_id}
+    </delete>
 </mapper>

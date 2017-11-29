@@ -2,6 +2,7 @@ package com.yidusoft.project.channel.service;
 import com.yidusoft.core.Result;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.core.Service;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,15 @@ public interface ChannelManageService extends Service<ChannelManage> {
      * @return
      */
     List<ChannelManage> finndChannelByParameterList(ChannelManage channelManage);
+
+    /**
+     * 结算规则查询可用的渠道商列表
+     * @param map
+     * @return
+     */
+    List<ChannelManage> finndChannelNotInIdAndParameter(List<String> ids,Map<String,Object> map);
+
+
 
     /**
      * 查询渠道商下的账号

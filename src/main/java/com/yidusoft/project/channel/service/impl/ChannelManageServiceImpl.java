@@ -34,6 +34,13 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     }
 
     @Override
+    public List<ChannelManage> finndChannelNotInIdAndParameter(List<String> ids, Map<String, Object> map) {
+        return channelManageMapper.finndChannelNotInIdAndParameter(ids,map);
+    }
+
+
+
+    @Override
     public List<Map<String, Object>> findChannelAccountListByChannelId(Map<String, Object> map) {
         return channelManageMapper.findChannelAccountListByChannelId(map);
     }

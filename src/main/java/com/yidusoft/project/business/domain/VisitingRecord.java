@@ -141,6 +141,9 @@ public class VisitingRecord {
      */
     private String remarks;
 
+    @Column(name = "visitor_goal")
+    private String visitorGoal;
+
     @Transient
     private Integer flag;
 
@@ -192,6 +195,14 @@ public class VisitingRecord {
      */
     public String getRecordCode() {
         return recordCode;
+    }
+
+    public String getVisitorGoal() {
+        return visitorGoal;
+    }
+
+    public void setVisitorGoal(String visitorGoal) {
+        this.visitorGoal = visitorGoal;
     }
 
     /**

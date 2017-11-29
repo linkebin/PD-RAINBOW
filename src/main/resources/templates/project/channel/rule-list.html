@@ -195,6 +195,9 @@
         }
         parent.element.tabChange("nav-tab", 'xdcvb');
     }
+    parent.element.on('tab(nav-tab)', function(elem){
+        doSearch();
+    });
 
     $(function () {
         doSearch();

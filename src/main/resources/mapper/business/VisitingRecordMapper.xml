@@ -21,6 +21,8 @@
     <result column="evaluate" jdbcType="VARCHAR" property="evaluate" />
     <result column="this_time" jdbcType="VARCHAR" property="thisTime" />
     <result column="resolved" jdbcType="VARCHAR" property="resolved" />
+    <result column="visitor_goal" jdbcType="VARCHAR" property="visitorGoal" />
+
 
   </resultMap>
   <!--AND visitor_time &gt;=#{startTime} AND visitor_time &lt;=#{endTime}-->

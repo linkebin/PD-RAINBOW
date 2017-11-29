@@ -177,6 +177,8 @@ public class WebCustomerController {
         model.addAttribute("id",id);
         VisitorRegister visitorRegister = visitorRegisterService.findById(id);
         model.addAttribute("visitorRegister",visitorRegister);
+        List<SelectOption> selectOptionList =selectOptionService.findSelectOptionByType("goal");
+        model.addAttribute("selectOptionList",selectOptionList);
 
         return "project/cube/customer/consultant";
     }
