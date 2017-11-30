@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,5 +29,10 @@ public class OrderOnlineServiceImpl extends AbstractService<OrderOnline> impleme
 
     @Override
     public String getOrderState(String id) { return orderOnlineMapper.getOrderState(id); }
+
+    @Override
+    public List<Map<String, Object>> findOrderByUserId(List<String> ids,Map<String,Object> map) {
+        return orderOnlineMapper.findOrderByUserId(ids,map);
+    }
 
 }

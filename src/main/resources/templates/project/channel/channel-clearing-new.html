@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>渠道结算</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body>
+<input type="hidden" id="channelId">
+<div class="eui-bd eui-padding15">
+    <div class="eui-sd1 eui-sd1-type3">
+        <div class="eui-col-md3 etree">
+            <p>渠道用户结构树</p>
+            <ul style="padding: 10px;" id="channelTree"></ul>
+        </div>
+    </div>
+    <div class="eui-mn1 eui-bg-white">
+
+        <div class="eui-mn1-type3">
+            <form class="eui-form" id="searchFrom">
+                <input type="hidden" id="id"  name="parentId"/>
+                <input type="hidden"   name="type" value="3"/>
+                <div class="eui-input-inline eui-padding10">
+
+                    <input type="text" name="creator"  value=""
+                            placeholder="支付人/关键字" class="eui-input">
+                </div>
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="startTime" id="startTime"  value=""
+                            placeholder="起始时间" class="eui-input">
+                </div>
+
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="endTime" id="endTime"  value=""
+                            placeholder="结束时间" class="eui-input">
+                </div>
+                <div class="eui-input-inline">
+                    <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 待结算订单
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                    <a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>
+                    <a class="eui-btn eui-btn-small" href="###">结算全部</a>
+                </div>
+            </div>
+            <table id="test2"></table>
+        </div>
+    </div>
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
+
+<script>
+
+    var tableIns;
+    var table;
+
+    function dynamicTable(obj) {
+        eui.use(['table', 'laydate','layer'], function(){
+            table = eui.table;
+            var laydate = eui.laydate;
+            var layer = eui.layer;
+            laydate.render({
+                elem: '#startTime'
+                ,done: function(value, date, endDate){
+                }
+            });
+            laydate.render({
+                elem: '#endTime'
+                ,done: function(value, date, endDate){
+                }
+            });
+
+            tableIns = table.render({
+                id: 'idTest'
+                ,elem: '#test2'
+                ,url:'/channel/rule/listNoClearing'
+                ,method:'post'
+                ,where: {json: JSON.stringify(obj)}
+                ,height: 420
+                ,cols: [[ //标题栏
+                {checkbox: true},
+                    {field: 'order_code', title: '订单编号', width: 150}
+                    ,{field: 'serial_number', title: '订单流水号', width: 150}
+                    ,{field: 'questionnaire_total', title: '问卷购买数量', width: 100}
+                    ,{field: 'order_money', title: '付款金额', width: 100}
+                    ,{field: 'creator', title: '支付人', width: 100,templet:'<div>{{# if(d.creator==undefined){ }} 无邀请人  {{#  }else{   }} {{d.creator}} {{# } }}</div>'}
+                    ,{field: 'payment_time', title: '支付时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: '', title: '操作', width: 150,templet:'<div class="eui-btn-group">' +
+                    ' <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
+                        'title="结算" e-event="edit" ><i class="eui-icon">&#xe65e;</i>' +
+                    '</button></div>'}
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+
+                }
+            });
+            jQuery.validator.addMethod("isMobile", function(value, element) {
+                var length = value.length;
+                var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+                return this.optional(element) || (length == 11 && mobile.test(value));
+            }, "请正确填写您的手机号码");
+            $("#channelAccountAddForm").validate({
+                rules: {
+                    account: {
+                        required : true,
+                        minlength : 11,
+                        isMobile : true
+                    },
+                    userPass: {
+                        required: true,
+                    },
+                    userName: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    account: {
+                        required : "请输入手机号",
+                        minlength : "确认手机不能小于11个字符",
+                        isMobile : "请正确填写您的手机号码"
+                    },
+                    userPass: {
+                        required: "请输入密码",
+                    },
+                    userName: {
+                        required: "请输入姓名",
+                    }
+                },
+                submitHandler: function() {
+                    var obj = $("#channelAccountAdd form").serializeObject();
+                    if ($("#channelAccountAddForm input[name='id']").val()==''){
+                        obj.userPass=md5(obj.userPass);
+                        obj.mobile=obj.account;
+                        obj.accountType=1;
+                        obj.sex=0;
+                        $.post('/channel/manage/channelAccountAdd',{params:JSON.stringify(obj)},function (result) {
+                            if (result.code==200){
+                                layer.closeAll();
+                                location.reload();
+                            }else {
+                                layer.msg(result.message);
+                            }
+                        });
+                    }else {
+                        if (obj.userPass=='1234'){
+                            obj.userPass=null;
+                        }
+                        $.post('/channel/manage/updateaccountInfo',{json:JSON.stringify(obj)},function (result) {
+                            if (result.code==200){
+                                layer.closeAll();
+                                location.reload();
+                            }else {
+                                layer.msg(result.message);
+                            }
+                        });
+                    }
+                }
+            });
+
+            //监听工具条
+            table.on('tool(idTest)', function(obj){
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                if(layEvent === 'edit'){ //编辑
+
+                }
+            });
+        });
+    }
+
+
+
+
+
+    function resetForm() {
+        $('#searchFrom')[0].reset();
+    }
+    function doSearch() {
+        var obj =$("#searchFrom").serializeObject();
+
+        if(obj.parentId!=''){
+            if (obj.parentId =='0'){
+                obj.type=2;
+                obj.channel_id=$("#id").attr('searchId');
+            }else {
+                obj.type=1;
+                obj.inviter_user=$("#id").attr('searchId');
+            }
+        }
+
+        dataList(obj);
+    }
+
+    function dataList(obj) {
+        layer.load();
+        tableIns.reload({
+            where: {json: JSON.stringify(obj)}
+        });
+        layer.closeAll();
+    }
+
+    var channelTree;
+    $(function () {
+       loadTree();
+    });
+
+    function loadTree() {
+        $.ajax({
+            url:"/channel/manage/accounttree",
+            type:"post",
+            success:function(result){
+                //菜单树
+                channelTree =   $("#channelTree").ligerTree({
+                    data:result.data,
+                    checkbox: false,
+                    parentIcon: 'folder',
+                    childIcon: 'leaf' ,
+                    slide: false, //是否显示动画
+                    nodeWidth: 200,
+                    isExpand:2,
+                    idFieldName: 'id',
+                    textFieldName:'name',
+                    parentIDFieldName: 'parentId',
+                    onSelect: function (node)
+                    {
+                        var obj =$("#searchFrom").serializeObject();
+                        $("#id").val(node.data.parentId)
+                        $("#id").attr('searchId',node.data.id);
+                        if (node.data.parentId =='0'){
+                            obj.type=2;
+                            obj.channel_id=node.data.id;
+                        }else {
+                            obj.type=1;
+                            obj.inviter_user=node.data.id;
+                        }
+                        dataList(obj);
+                    },
+                    onAfterAppend:function (parentNode, newdata) {
+                        console.log(newdata)
+                        var oj = new Object();
+                        oj.type=2;
+                        oj.channel_id=newdata[0].id;
+                        dynamicTable(oj);
+
+                    }
+                });
+                channelTree.selectNode(channelTree.getNodeDom (0))
+                $("#channelTree .l-body").mouseover(function(){
+                    var text =$(this).find('span').html();
+                    $(this).attr("title",text);
+                });
+            }
+        });
+    }
+
+
+    function selectClearing() {
+        var checkStatus = table.checkStatus('idTest');
+        console.log(checkStatus.data) //获取选中行的数据
+    }
+
+</script>
+</body>
+</html>

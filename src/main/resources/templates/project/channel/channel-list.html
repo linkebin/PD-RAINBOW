@@ -479,11 +479,21 @@
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="编辑渠道商"><i class="eui-icon">&#xe642;</i></button> ' +
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteB('+id+')" title="删除渠道商"><i class="eui-icon">&#xe640;</i></button> ' +
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="openAccountList('+id+')" title="渠道商用户"><i class="eui-icon">&#xe612;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="clearing('+id+')" title="结算"><i class="eui-icon">&#xe659;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';
         }
         return tableHtml;
+    }
+
+    function clearing(id) {
+        var index = layer.open({
+            title: '渠道结算'
+            , type: 2
+            , area: ['1000px', '550px']
+            , content: '/web/account/rule/clearing?channelId='+id
+        });
     }
 
     function openAccountList(id) {

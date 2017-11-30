@@ -2,8 +2,10 @@ package com.yidusoft.project.transaction.dao;
 
 import com.yidusoft.core.Mapper;
 import com.yidusoft.project.transaction.domain.OrderOnline;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderOnlineMapper extends Mapper<OrderOnline> {
     /**
@@ -31,4 +33,8 @@ public interface OrderOnlineMapper extends Mapper<OrderOnline> {
      * @param id
      */
     void updateState(String id);
+
+    //查询渠道全部咨询师的订单
+    List<Map<String,Object>> findOrderByUserId(@Param("ids")List<String> ids,
+                                               @Param("map")Map<String,Object> map);
 }

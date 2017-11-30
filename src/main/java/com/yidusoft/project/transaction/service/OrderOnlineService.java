@@ -4,6 +4,7 @@ import com.yidusoft.core.Service;
 import com.yidusoft.project.transaction.domain.OrderOnline;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -30,4 +31,7 @@ public interface OrderOnlineService extends Service<OrderOnline> {
      * @return
      */
     String getOrderState(String id);
+
+    //查询渠道全部咨询师的订单
+    List<Map<String,Object>> findOrderByUserId(List<String> ids,Map<String,Object> map);
 }

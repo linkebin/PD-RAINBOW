@@ -48,6 +48,9 @@ public class OrderOnline {
      */
     private String creator;
 
+    @Column(name = "clearing_status")
+    private String clearingStatus;
+
     /**
      * 是否删除
      */
@@ -94,6 +97,14 @@ public class OrderOnline {
      */
     @Transient
     private String productName;
+
+    public String getClearingStatus() {
+        return clearingStatus;
+    }
+
+    public void setClearingStatus(String clearingStatus) {
+        this.clearingStatus = clearingStatus;
+    }
 
     /**
      * @return ID_

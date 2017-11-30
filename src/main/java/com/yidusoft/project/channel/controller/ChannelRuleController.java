@@ -5,16 +5,15 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.domain.ChannelRule;
+import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.channel.service.ChannelRuleService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.project.transaction.service.OrderOnlineService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -24,6 +23,12 @@ import java.util.UUID;
 public class ChannelRuleController {
     @Resource
     private ChannelRuleService channelRuleService;
+
+    @Resource
+    private ChannelManageService channelManageService;
+
+    @Resource
+    private OrderOnlineService orderOnlineService;
 
     @PostMapping("/add")
     public Result add(String channelIds,String ruleId) {
@@ -65,17 +70,37 @@ public class ChannelRuleController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        ChannelRule channelRule = channelRuleService.findById(id);
-        return ResultGenerator.genSuccessResult(channelRule);
+    @PostMapping("/deleteOne")
+    public Result deleteOne(String json) {
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+        channelRuleService.deletedOne(map);
+        return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<ChannelRule> list = channelRuleService.findAll();
+    @PostMapping("/listNoClearing")
+    public Result listNoClearing(Integer page,  Integer limit,String json) {
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+
+        List<String> ids = getChannelConsultIds(map);
+        List<Map<String,Object>> list = null;
+        if (ids.size()>0){
+            PageHelper.startPage(page, limit);
+             list = orderOnlineService.findOrderByUserId(ids,map);
+        }
+
         PageInfo pageInfo = new PageInfo(list);
-        return ResultGenerator.genSuccessResult(pageInfo);
+
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
     }
+
+    public List<String> getChannelConsultIds(Map<String,Object> map){
+        List<String> ids = new ArrayList<String>();
+        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(map);
+        for (Map<String,Object> m : list){
+            ids.add(m.get("ID_").toString());
+        }
+        return ids;
+    }
+
+
 }

@@ -17,4 +17,9 @@ public interface ChannelRuleService extends Service<ChannelRule> {
     List<Map<String,Object>> findChannelByRuleIdList(Map<String,Object> map);
 
     void deleteRuleChannelAll(String ruleId);
+
+    void deletedOne(Map<String,Object> map);
+
+    //根据渠道获取结算规则
+    List<Map<String,Object>> findRuleByChannel(Map<String,Object> map);
 }

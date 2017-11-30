@@ -27,7 +27,20 @@
 )
   </select>
 
+
+
     <delete id="deleteRuleChannelAll" parameterType="String">
         DELETE FROM channel_rule WHERE rule_id=#{rule_id}
     </delete>
+
+    <delete id="deletedOne" parameterType="java.util.Map">
+         DELETE FROM channel_rule WHERE rule_id=#{rule_id} AND channel_id=#{channel_id};
+    </delete>
+
+    <select id="findRuleByChannel" parameterType="java.util.Map" resultType="Map">
+        SELECT ar.* FROM channel_rule cr LEFT JOIN account_rule ar ON cr.rule_id=ar.rule_id
+
+          WHERE channel_id=#{channel_id}
+
+    </select>
 </mapper>

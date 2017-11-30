@@ -20,7 +20,28 @@
         <result column="serial_number" jdbcType="VARCHAR" property="serialNumber"/>
         <result column="promotions_id" jdbcType="VARCHAR" property="promotionsId"/>
         <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="clearing_status" jdbcType="VARCHAR" property="clearingStatus"/>
+
     </resultMap>
+
+    <select id="findOrderByUserId" resultType="Map">
+        SELECT oo.* FROM order_online oo WHERE oo.deleted=0 AND oo.clearing_status=1
+        <if test="null != ids">
+            AND oo.user_id in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="map.startTime != '' and map.endTime!=null">
+            AND oo.payment_time  &gt;  #{map.startTime} AND oo.payment_time  &lt;  #{map.endTime}
+        </if>
+
+        <if test="map.creator != null and map.creator!=''">
+            AND oo.creator LIKE '%${map.creator}%'
+        </if>
+
+        ORDER BY oo.payment_time DESC
+    </select>
 
     <select id="getUserOderById" resultMap="BaseResultMap"
             parameterType="com.yidusoft.project.transaction.domain.OrderOnline">

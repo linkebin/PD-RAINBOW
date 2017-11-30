@@ -36,4 +36,14 @@ public class ChannelRuleServiceImpl extends AbstractService<ChannelRule> impleme
     public void deleteRuleChannelAll(String ruleId) {
         channelRuleMapper.deleteRuleChannelAll(ruleId);
     }
+
+    @Override
+    public void deletedOne(Map<String, Object> map) {
+        channelRuleMapper.deletedOne(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> findRuleByChannel(Map<String, Object> map) {
+        return channelRuleMapper.findRuleByChannel(map);
+    }
 }

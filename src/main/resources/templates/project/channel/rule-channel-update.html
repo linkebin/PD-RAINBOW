@@ -362,10 +362,12 @@
 
     //渲染数据，拼接表格
     function getTable(userList) {
+        console.log(userList)
         var tableHtml = '';
         for (var item in userList){
             var secUser = userList[item];
             var id = "'" + secUser.id_ + "'";
+
             var channelManager = secUser.channel_manager;
             if (secUser.channel_manager==undefined || secUser.channel_manager==''){
                 channelManager='无';
@@ -388,6 +390,16 @@
                 '</tr>';
         }
         return tableHtml;
+    }
+
+    function deleteB(id) {
+        var data =new Object();
+        data.rule_id = $("#ruleId").val();
+        data.channel_id = id;
+
+        $.post("/channel/rule/deleteOne",{json:JSON.stringify(data)},function (res) {
+            doSearch();
+        });
     }
 </script>
 </html>
