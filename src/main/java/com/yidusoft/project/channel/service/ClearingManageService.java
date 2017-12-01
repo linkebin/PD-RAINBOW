@@ -1,8 +1,10 @@
 package com.yidusoft.project.channel.service;
 import com.yidusoft.project.channel.domain.ClearingManage;
 import com.yidusoft.core.Service;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -11,5 +13,8 @@ import java.util.List;
 public interface ClearingManageService extends Service<ClearingManage> {
 
     void clearingOrder(List<ClearingManage> list);
+
+    List<Map<String,Object>> findHasClearingByChannelCounselorId(List<String> ids,
+                                                                 Map<String,Object> map);
 
 }

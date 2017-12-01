@@ -39,4 +39,9 @@ public class WebAccountRuleController {
     public String clearingNew() {
         return "project/channel/channel-clearing-new";
     }
+
+    @RequestMapping("/clearing-manage")
+    public String clearingManage() {
+        return "project/channel/clearing-manage";
+    }
 }

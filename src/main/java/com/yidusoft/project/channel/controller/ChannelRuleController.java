@@ -117,6 +117,21 @@ public class ChannelRuleController {
         return ids;
     }
 
+    @PostMapping("/clearingAll")
+    public Result clearingAll(String channelId) {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("channel_id",channelId);
+        map.put("type",2);
+        List<String> ids = getChannelConsultIds(map);
+        List<Map<String,Object>> list = null;
+        if (ids.size()>0){
+            list = orderOnlineService.findOrderByUserId(ids,map);
+        }
+        if (list.size()==0){
+            return ResultGenerator.genFailResult("无数据可结算");
+        }
+        return  saveClearing(JSON.toJSONString(list),channelId);
+    }
 
     @PostMapping("/saveClearing")
     public Result saveClearing(String listMap,String channelId) {
@@ -129,15 +144,15 @@ public class ChannelRuleController {
         List<ClearingManage> clearingManageList = new ArrayList<ClearingManage>();
 
         for(Map<String,Object> m :maps){
-            String sdata1 = m.get("paymentTime").toString();
+            String sdata1 = m.get("payment_time").toString();
             ClearingManage clearingManage = new ClearingManage();
             clearingManage.setClearId(UUID.randomUUID().toString());
-            clearingManage.setOrderId(m.get("orderId").toString());
+            clearingManage.setOrderId(m.get("ID_").toString());
             clearingManage.setChannelId(channelId);
             clearingManage.setCreateTime(new Date());
             clearingManage.setCreator(Security.getUser().getUserName());
             clearingManage.setStatus(1);
-            BigDecimal money=new BigDecimal(m.get("orderMoney").toString());
+            BigDecimal money=new BigDecimal(m.get("order_money").toString());
 
             boolean isIn = true;
             for(Map<String,Object> ru :rules){

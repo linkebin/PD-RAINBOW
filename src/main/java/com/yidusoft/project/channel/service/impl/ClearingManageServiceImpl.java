@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -35,5 +36,10 @@ public class ClearingManageServiceImpl extends AbstractService<ClearingManage> i
             orderOnlineService.update(orderOnline);
             clearingManageMapper.insert(c);
         }
+    }
+
+    @Override
+    public List<Map<String, Object>> findHasClearingByChannelCounselorId(List<String> ids, Map<String, Object> map) {
+        return clearingManageMapper.findHasClearingByChannelCounselorId(ids,map);
     }
 }

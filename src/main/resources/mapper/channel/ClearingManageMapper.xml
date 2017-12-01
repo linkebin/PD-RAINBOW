@@ -14,4 +14,29 @@
     <result column="brokerage" jdbcType="DECIMAL" property="brokerage" />
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
+
+  <select id="findHasClearingByChannelCounselorId"  resultType="Map">
+        SELECT cm.*,oo.order_money,oo.order_code,
+        (SELECT channel_name FROM channel_manage WHERE id_=cm.channel_id) channel_name,
+        ar.rule,ar.rule_name
+
+         FROM clearing_manage cm LEFT JOIN order_online oo ON oo.ID_=cm.order_id LEFT JOIN account_rule ar ON ar.rule_id=cm.rule_id
+
+        WHERE 1=1
+        <if test="null != ids">
+          AND oo.user_id in
+          <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+
+        <if test="map.startTime != '' and map.endTime!=null">
+          AND cm.create_time  &gt;  #{map.startTime} AND cm.create_time  &lt;  #{map.endTime}
+        </if>
+
+        <if test="map.creator != null and map.creator!=''">
+          AND cm.creator LIKE '%${map.creator}%'
+        </if>
+
+  </select>
 </mapper>
