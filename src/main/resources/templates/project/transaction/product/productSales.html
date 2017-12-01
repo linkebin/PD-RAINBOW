@@ -25,8 +25,20 @@
                     <div id="situation" style="width: 100%;height:100%;"></div>
                 </div>
             </div>
+            <form class="eui-form eui-marginT10 eui-paddingR10" id="productSalesForm">
+                <div class="eui-form-item">
+                    <label class="eui-form-label">开始时间</label>
+                    <div class="eui-input-inline">
+                        <input type="text" class="eui-input" name="startTime" id="startTime" placeholder="年-月">
+                    </div>
+                    <label class="eui-form-label">结束时间</label>
+                    <div class="eui-input-inline">
+                        <input type="text" class="eui-input" name="endTime" id="endTime" placeholder="年-月">
+                    </div>
+                </div>
+            </form>
             <div class="eui-row eui-padding10 eui-font16">
-                <div class="eui-col-md5" style="height: 500px">
+                <div class="eui-col-md12" style="height: 500px">
                     <div id="test" style="width: 100%;height:100%;"></div>
                 </div>
             </div>
@@ -40,14 +52,45 @@
 <script src="/Scripts/plugins/echarts/echarts.min.js"></script>
 <!-- 引入 macarons 主题 -->
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script type="text/javascript">
     var monthDate = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var nameData = [];
     var data = [];
     $(function () {
-        eui.use(['form', 'layer'], function () {
+        var startTime = new Date();
+        startTime = startTime.setMonth(startTime.getMonth()-1);
+        $('#startTime').val(new Date(startTime).Format("yyyy-MM-dd"));
+        $('#endTime').val(new Date().Format("yyyy-MM-dd"));
+        doSearch();
+        eui.use(['form', 'layer', 'laydate'], function () {
             var form = eui.form,
-                    layer = eui.layer;
+                    layer = eui.layer
+                    , laydate = eui.laydate;
+
+            //常规用法
+            laydate.render({
+                elem: '#startTime',
+                type: 'date'
+                , format: 'yyyy-MM-dd'
+                , done: function (value, date) {
+                    if (value > $('#endTime').val()) {
+                        return layer.alert('亲！开始时间不能大于结束时间哦！');
+                    }
+                    doSearch();
+                }
+            });
+            laydate.render({
+                elem: '#endTime'
+                , type: 'date'
+                , format: 'yyyy-MM-dd'
+                , done: function (value, date) {
+                    if (value < $('#startTime').val()) {
+                        return layer.alert('亲！结束时间不能小于开始时间哦！');
+                    }
+                    doSearch();
+                }
+            });
             $.get("/product/settings/findTotal", function (result) {
                 if (result.code == 200) {
                     var productList = result.data;
@@ -58,7 +101,6 @@
                         nameData.push(product.productName);
                         data.push(product.count);
                         init('ranking', '套餐销售排名', nameData, data);
-                        init('test', '套餐销售排名', data, nameData);
                     }
                     $('#salesTotal').html(salesTotal);
                 } else {
@@ -75,7 +117,7 @@
                     for (var i in productList) {
                         var product = productList[i];
                         var paymentTime = new Date(product.paymentTime).getMonth() + 1
-                        console.log(paymentTime);
+                        var time = new Date(product.paymentTime).Format('yyyy-MM-dd')
                         if (paymentTime == 1) {
                             monthDate[0]++;
                         } else if (paymentTime == 2) {
@@ -102,8 +144,7 @@
                             monthDate[11]++;
                         }
                     }
-                    console.log(monthDate);
-                    initSituation(monthDate);
+                    initSituation('situation', '月增长情况', '数量', ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'], monthDate);
                 } else {
                     layer.msg(result.message, {
                         icon: 1,
@@ -183,42 +224,55 @@
         myChart.setOption(option);
     }
 
-    function initSituation(data) {
-        var myChart = echarts.init(document.getElementById('situation'), 'macarons');
+    function initSituation(id, text, name, nameDate, data) {
+        var myChart = echarts.init(document.getElementById(id), 'macarons');
         option = {
             title: {
-                text: '月增长情况',
+                text: text,
                 x: 'center'
             },
             tooltip: {
                 trigger: 'axis'
             },
-            visualMap: {
-                show: true,
-                min: 0,
-                max: 1000,
-                left: 'right',
-                bottom: '20',
-                text: ['高', '低'],
-                calculable: false, //手柄
-                color: ['red', 'yellow', 'lime', 'cyan'],
-            },
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+                data: nameDate
             },
             yAxis: {
                 type: 'value'
             },
             series: [{
-                name: '数量',
+                name: name,
                 type: 'line',
                 smooth: true,
                 data: data
             }]
         };
         myChart.setOption(option);
+    }
+
+
+    function doSearch() {
+        var total=[];
+        var timeData=[];
+        var params = $("#productSalesForm").serializeObject();
+        console.log(params)
+        $.post("/product/settings/findProductByTime", {
+            startTime: params.startTime,
+            endTime: params.endTime
+        }, function (result) {
+            if (result.code == 200) {
+                var productList = result.data;
+                for (var i in productList) {
+                    var product = productList[i];
+                    total.push(product.count);
+                    timeData.push(new Date(product.paymentTime).Format('yyyy-MM-dd'));
+                }
+                console.log(timeData);
+                initSituation('test', '销售情况分析', '数量', timeData, total);
+            }
+        })
     }
 </script>
 </body>

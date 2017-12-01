@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -182,4 +183,6 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
 
     @Override
     public List<ProductSettings> findProductByOrder() { return productSettingsMapper.findProductByOrder(); }
+
+    public List<ProductSettings> findProductByTime(Map map){ return productSettingsMapper.findProductByTime(map); }
 }

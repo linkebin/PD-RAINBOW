@@ -19,7 +19,7 @@
         <result column="product_type" jdbcType="INTEGER" property="productType"/>
         <result column="time_limit" jdbcType="INTEGER" property="timeLimit"/>
         <result column="count" jdbcType="INTEGER" property="count"/>
-        <result column="payment_time" jdbcType="INTEGER" property="paymentTime"/>
+        <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime"/>
     </resultMap>
 
     <select id="getProductAll" resultMap="BaseResultMap" parameterType="Integer">
@@ -63,8 +63,16 @@
           WHERE pro.ID_=oo.product_id AND order_state=1 AND pro.deleted=0 GROUP BY pro.ID_ ORDER BY count desc
     </select>
     <select id="findProductByOrder" resultMap="BaseResultMap">
-        SELECT pro.ID_,pro.product_name,oo.payment_time FROM product_settings pro JOIN order_online oo
+        SELECT pro.ID_,pro.product_name,DATE(payment_time) payment_time FROM product_settings pro JOIN order_online oo
           WHERE pro.ID_=oo.product_id AND order_state=1 AND pro.deleted=0
+    </select>
+
+    <select id="findProductByTime" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT pro.ID_,pro.product_name,count(date(payment_time)) count,DATE(payment_time) payment_time FROM product_settings pro JOIN order_online oo
+        WHERE pro.ID_=oo.product_id AND order_state=1 AND pro.deleted=0
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            AND date(payment_time) BETWEEN #{startTime} AND #{endTime}  GROUP BY date(payment_time)
+        </if>
     </select>
 </mapper>
 

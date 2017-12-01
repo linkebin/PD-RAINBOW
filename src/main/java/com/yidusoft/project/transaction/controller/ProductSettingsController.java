@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by CodeGenerator on 2017/10/11.
@@ -182,6 +184,19 @@ public class ProductSettingsController {
     @GetMapping("/findProduct")
     public Result findProduct(){
         List<ProductSettings> list = productSettingsService.findProductByOrder();
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+    /**
+     * 根据时间获取已购买的套餐
+     * @return
+     */
+    @PostMapping("/findProductByTime")
+    public Result findProductByTime(String startTime,String endTime){
+        Map<String ,String > map = new HashMap<>();
+        map.put("startTime",startTime);
+        map.put("endTime",endTime);
+        List<ProductSettings> list = productSettingsService.findProductByTime(map);
         return ResultGenerator.genSuccessResult(list);
     }
 }

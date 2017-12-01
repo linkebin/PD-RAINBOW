@@ -6,6 +6,7 @@ import com.yidusoft.project.transaction.domain.ProductSettings;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -33,4 +34,6 @@ public interface ProductSettingsService extends Service<ProductSettings> {
     List<ProductSettings> findProductTotal();
 
     List<ProductSettings> findProductByOrder();
+
+    List<ProductSettings> findProductByTime(Map map);
 }
