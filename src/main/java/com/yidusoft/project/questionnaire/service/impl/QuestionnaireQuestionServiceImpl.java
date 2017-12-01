@@ -104,6 +104,10 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     @Override
     public Result submitQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
         try {
+            Result judg = judgeBalance(Security.getUserId());//判断余额
+            if(judg.getCode()!=200){
+                return judgeBalance(Security.getUserId());
+            }
             List<Map<String, Object>> mapList = (List<Map<String, Object>>) JSON.parse(param);
             //问卷使用的id
             String dataAcquisitionId = UUID.randomUUID().toString();
@@ -145,14 +149,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setCreateTime(date);
             dataAcquisitionMapper.insert(dataAcquisition);
 
-           /*    //添加填报时间
-            ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
-            if(activeParticipant!=null){
-                activeParticipant.setFillingTime(new Date());
-                activeParticipantService.update(activeParticipant);
-            }*/
-            //活动扣除余额
-            //deleteDuction(activityId);
+            //扣除余额
+            updateUserQuestionnaires(Security.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());

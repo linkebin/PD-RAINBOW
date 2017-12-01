@@ -21,4 +21,6 @@ public interface DataAcquisitionMapper extends Mapper<DataAcquisition> {
     List<DataAcquisition> getQuestionnaireTypeTotal(String userId);
     //查询来访者的填写结果
     List<DataAcquisition>findDataAcquistionForVisitor(DataAcquisition dataAcquisition);
+    //查询来访者的填写的问卷 不重复
+    List<DataAcquisition>  findQuestionnaireForVisitorAll(String userId);
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 /**
@@ -32,10 +33,25 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
     public boolean flgBalance() {
         boolean state=false;
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(Security.getUserId());
-        int  total=userQuestionnaires.getQuestionnairesTotal();
-        if(total>0){
-            state=true;
+        if(userQuestionnaires.getMember()!=1){
+            //如果不是会员
+            int  total=userQuestionnaires.getQuestionnairesTotal();
+            if(total>0){
+                state=true;
+            }
+        }else{
+            //如果是会员
+            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){
+                //如果会员到期
+                int  total=userQuestionnaires.getQuestionnairesTotal();
+                if(total>0){
+                    state=true;
+                }
+            }else {
+                state=true;
+            }
         }
+
         return state;
     }
     //消费扣除问卷
