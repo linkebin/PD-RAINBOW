@@ -67,11 +67,14 @@
     var tableIns;
     var table;
 
+
+
     function dynamicTable(obj) {
-        eui.use(['table', 'laydate','layer'], function(){
+
+        eui.use(['table', 'laydate'], function(){
             table = eui.table;
             var laydate = eui.laydate;
-            var layer = eui.layer;
+
             laydate.render({
                 elem: '#startTime'
                 ,done: function(value, date, endDate){
@@ -120,68 +123,6 @@
 
                 }
             });
-            jQuery.validator.addMethod("isMobile", function(value, element) {
-                var length = value.length;
-                var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-                return this.optional(element) || (length == 11 && mobile.test(value));
-            }, "请正确填写您的手机号码");
-            $("#channelAccountAddForm").validate({
-                rules: {
-                    account: {
-                        required : true,
-                        minlength : 11,
-                        isMobile : true
-                    },
-                    userPass: {
-                        required: true,
-                    },
-                    userName: {
-                        required: true,
-                    }
-                },
-                messages: {
-                    account: {
-                        required : "请输入手机号",
-                        minlength : "确认手机不能小于11个字符",
-                        isMobile : "请正确填写您的手机号码"
-                    },
-                    userPass: {
-                        required: "请输入密码",
-                    },
-                    userName: {
-                        required: "请输入姓名",
-                    }
-                },
-                submitHandler: function() {
-                    var obj = $("#channelAccountAdd form").serializeObject();
-                    if ($("#channelAccountAddForm input[name='id']").val()==''){
-                        obj.userPass=md5(obj.userPass);
-                        obj.mobile=obj.account;
-                        obj.accountType=1;
-                        obj.sex=0;
-                        $.post('/channel/manage/channelAccountAdd',{params:JSON.stringify(obj)},function (result) {
-                            if (result.code==200){
-                                layer.closeAll();
-                                location.reload();
-                            }else {
-                                layer.msg(result.message);
-                            }
-                        });
-                    }else {
-                        if (obj.userPass=='1234'){
-                            obj.userPass=null;
-                        }
-                        $.post('/channel/manage/updateaccountInfo',{json:JSON.stringify(obj)},function (result) {
-                            if (result.code==200){
-                                layer.closeAll();
-                                location.reload();
-                            }else {
-                                layer.msg(result.message);
-                            }
-                        });
-                    }
-                }
-            });
 
             //监听工具条
             table.on('tool(idTest)', function(obj){
@@ -213,17 +154,22 @@
                 obj.type=1;
                 obj.inviter_user=$("#id").attr('searchId');
             }
+            dataList(obj);
         }
-
-        dataList(obj);
     }
 
     function dataList(obj) {
-        layer.load();
-        tableIns.reload({
-            where: {json: JSON.stringify(obj)}
+        eui.use(['form','layer'], function(){
+            var form = eui.form,
+                layer = eui.layer;
+            layer.load();
+            if (tableIns!=undefined){
+                tableIns.reload({
+                    where: {json: JSON.stringify(obj)}
+                });
+            }
+            layer.closeAll();
         });
-        layer.closeAll();
     }
 
     var channelTree;
@@ -260,22 +206,21 @@
                             obj.type=1;
                             obj.inviter_user=node.data.id;
                         }
-                        dataList(obj);
+                        doSearch();
                     },
                     onAfterAppend:function (parentNode, newdata) {
-                        console.log(newdata)
                         var oj = new Object();
                         oj.type=2;
                         oj.channel_id=newdata[0].id;
                         dynamicTable(oj);
-
                     }
                 });
-                channelTree.selectNode(channelTree.getNodeDom (0))
+                channelTree.selectNode(channelTree.getNodeDom(0));
                 $("#channelTree .l-body").mouseover(function(){
                     var text =$(this).find('span').html();
                     $(this).attr("title",text);
                 });
+
             }
         });
     }
@@ -283,7 +228,25 @@
 
     function selectClearing() {
         var checkStatus = table.checkStatus('idTest');
-        console.log(checkStatus.data) //获取选中行的数据
+        var parentId = channelTree.getSelected().data.parentId;
+
+        var selectData = checkStatus.data;
+        var list = new Array();
+        $.each(selectData,function (index,item) {
+            var obj = new Object();
+            obj.orderId=item.ID_;
+            obj.paymentTime=item.payment_time;
+            obj.orderMoney=item.order_money;
+            list.push(obj);
+        });
+        if (parentId=='0'){
+            parentId=channelTree.getSelected().data.id
+        }
+        layer.load();
+        $.post('/channel/rule/saveClearing',{listMap:JSON.stringify(list),channelId:parentId},function (restlt) {
+                doSearch();
+        });
+
     }
 
 </script>
