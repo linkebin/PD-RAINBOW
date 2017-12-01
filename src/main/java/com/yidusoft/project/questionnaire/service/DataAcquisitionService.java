@@ -1,5 +1,6 @@
 package com.yidusoft.project.questionnaire.service;
 
+import com.yidusoft.core.Result;
 import com.yidusoft.core.Service;
 import com.yidusoft.project.questionnaire.domain.DataAcquisition;
 
@@ -19,4 +20,12 @@ public interface DataAcquisitionService extends Service<DataAcquisition> {
     //查询活动的填报人数
     Integer findCountByActivityId(String activityId);
     List<DataAcquisition> findMyQuestionnaireListByPage(Map<String,Object> map);
+    //查询来访者填写问卷的总数
+    int  getDataAcquisitionTotal(String userId);
+    //填写问卷类别总数
+    List<DataAcquisition> getQuestionnaireTypeTotal(String userId);
+    //查询来访者的填写结果
+    List<DataAcquisition> findDataAcquistionForVisitor(DataAcquisition dataAcquisition);
+    //来访者的问卷统计分析
+    public Result getDataAcquisitionForVisitingCount(String userId);
 }

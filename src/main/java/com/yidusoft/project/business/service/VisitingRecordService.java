@@ -32,5 +32,10 @@ public interface VisitingRecordService extends Service<VisitingRecord> {
      * @return
      */
     List<Map<String,Object>> findVisitorAndScheduleByParameter(Map<String,Object> map);
-
+    /**
+     * 查询来访者的来访的总次数
+     * @param userId
+     * @return
+     */
+    int  getVisitingTotal(String userId);
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class QuestionnaireMethod {
 
-        // 症状自评量表-SCL90  的规则结论
+    // 症状自评量表-SCL90  的规则结论
     public Result gauge_4(ArrayList<QuestionnaireAnswer> questionnaireAnswerList) throws  Exception{
         //1.躯体化
        Map<String,Object> factor1=getFactorScore("躯体化分","1,4,12,27,40,42,48,49,52,53,56,58",questionnaireAnswerList);
@@ -588,8 +588,6 @@ public class QuestionnaireMethod {
 
        return  map;
    }
-   //针对 生活事件量表(LES) 设计计算个维度的分数
-
 
     //保留两位小数 不四舍五入
     public     double decimal(double f){

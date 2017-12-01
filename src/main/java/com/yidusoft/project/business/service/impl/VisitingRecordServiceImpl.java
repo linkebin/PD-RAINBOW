@@ -35,4 +35,13 @@ public class VisitingRecordServiceImpl extends AbstractService<VisitingRecord> i
     public List<Map<String, Object>> findVisitorAndScheduleByParameter(Map<String, Object> map) {
         return visitingRecordMapper.findVisitorAndScheduleByParameter(map);
     }
+    /**
+     * 查询来访者的来访的总次数
+     * @param userId
+     * @return
+     */
+    @Override
+    public int getVisitingTotal(String userId) {
+        return visitingRecordMapper.getVisitingTotal(userId);
+    }
 }

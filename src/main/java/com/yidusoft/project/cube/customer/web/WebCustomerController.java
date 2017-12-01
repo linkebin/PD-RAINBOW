@@ -208,4 +208,13 @@ public class WebCustomerController {
     public String customerCount(){
         return "project/cube/customer/customer-count";
     }
+    /**
+     * 跳转到客户问卷分析页面
+     * @return
+     */
+    @RequestMapping("/getCustomerAnalysis")
+    public String getCustomerAnalysis(String userId,Model model){
+        model.addAttribute("userId",userId);
+        return "project/cube/customer/customer-analysis";
+    }
 }

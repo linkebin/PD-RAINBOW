@@ -98,4 +98,10 @@
     </if>
 
   </select>
+
+  <select id="getVisitingTotal" resultType="int" parameterType="String">
+     select count(*)  from
+       visiting_record
+         where visitor_id =#{userId}
+  </select>
 </mapper>

@@ -15,4 +15,10 @@ public interface DataAcquisitionMapper extends Mapper<DataAcquisition> {
     List<DataAcquisition> findMyQuestionnaireListByPage(Map<String,Object> map);
     //查询活动的填报人数
     Integer findCountByActivityId(String activityId);
+    //查询来访者填写问卷的总数
+    int  getDataAcquisitionTotal(String userId);
+    //填写问卷类别总数
+    List<DataAcquisition> getQuestionnaireTypeTotal(String userId);
+    //查询来访者的填写结果
+    List<DataAcquisition>findDataAcquistionForVisitor(DataAcquisition dataAcquisition);
 }
