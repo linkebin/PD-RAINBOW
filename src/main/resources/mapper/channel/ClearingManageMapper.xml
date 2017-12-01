@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.channel.dao.ClearingManageMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.channel.domain.ClearingManage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="clear_id" jdbcType="VARCHAR" property="clearId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+    <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="brokerage" jdbcType="DECIMAL" property="brokerage" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+</mapper>

@@ -130,7 +130,18 @@
                 var layEvent = obj.event; //获得 lay-event 对应的值
                 var tr = obj.tr; //获得当前行 tr 的DOM对象
                 if(layEvent === 'edit'){ //编辑
+                    var parentId = channelTree.getSelected().data.parentId;
+                    var list = new Array();
 
+                        var obj = new Object();
+                        obj.orderId=data.ID_;
+                        obj.paymentTime=data.payment_time;
+                        obj.orderMoney=data.order_money;
+                        list.push(obj);
+                    if (parentId=='0'){
+                        parentId=channelTree.getSelected().data.id
+                    }
+                    sendSave(list,parentId);
                 }
             });
         });
@@ -242,10 +253,29 @@
         if (parentId=='0'){
             parentId=channelTree.getSelected().data.id
         }
-        layer.load();
-        $.post('/channel/rule/saveClearing',{listMap:JSON.stringify(list),channelId:parentId},function (restlt) {
-                doSearch();
-        });
+        sendSave(list,parentId);
+    }
+
+
+    function sendSave(list,parentId) {
+        if (list.length>0){
+            layer.load();
+            $.post('/channel/rule/saveClearing',{listMap:JSON.stringify(list),channelId:parentId},function (restlt) {
+                if (restlt.code==200){
+                    layer.msg("结算成功",{
+                        icon: 1,
+                        time: 2000,
+                    },function () {
+                        doSearch();
+                    });
+
+                }else {
+                    layer.msg(restlt.message);
+                }
+            });
+        }else{
+            layer.msg("请选择数据！")
+        }
 
     }
 
