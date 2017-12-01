@@ -52,8 +52,9 @@
             </form>
         </div>
         <div class="eui-textAlignC eui-bg-white eui-padding20" id="submitBnt">
-            <span onclick="submitQuestionnaire()" class="eui-btn eui-btn-normal eui-btn-big"><img
-                    src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷</span>
+            <button onclick="submitQuestionnaire()" class="eui-btn eui-btn-normal eui-btn-big" id="confirm"><img
+                    src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷
+            </button>
         </div>
     </div>
 </div>
@@ -307,7 +308,8 @@
             var userName = $('#userName').val();
             //加载层
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-
+            $('#confirm').attr("disabled", true);
+            $('#confirm').text("正在提交中...");
             $.post("/launch/activities/getActivityById", {id: activityId}, function (result) {
                 console.log(result);
                 if (result.code == 200) {
@@ -320,6 +322,8 @@
                                     layer.confirm('活动已结束', {
                                         btn: ['确定']
                                     })
+                                    layer.close(index);
+                                    remove();
                                 } else {
                                     $.post("/cube/questionnaire/subQuestionnaire",
                                             {
@@ -333,30 +337,45 @@
                                             }, function (result) {
                                                 layer.closeAll();
                                                 console.log(result);
-                                                if (result.code = 200) {
-                                                    /*window.location.href = "/web/cube/getSuccess";*/
+                                                if (result.code == 200) {
+                                                    window.location.href = "/web/cube/getSuccess";
                                                 } else {
-                                                    layer.msg('填写失败！', {
-                                                        icon: 1,
-                                                        time: 5000
+                                                    layer.msg(result.message, {
+                                                        icon: 2,
+                                                        time: 3000
                                                     });
+                                                    remove();
                                                 }
                                             });
                                 }
                             } else {
-                                layer.msg(res.message);
+                                layer.msg(result.message, {
+                                    icon: 2,
+                                    time: 3000
+                                });
+                                layer.close(index);
+                                remove();
                             }
                         })
                     } else {
                         layer.confirm('活动已结束', {
                             btn: ['确定']
                         })
+                        layer.close(index);
+                        remove();
                     }
                 } else {
                     layer.msg(result.message);
+                    layer.close(index);
+                    remove();
                 }
             })
         }
+    }
+
+    function remove() {
+        $('#confirm').removeAttr("disabled");
+        $('#confirm').text("提交问卷");
     }
 
     //form表单  select,checkbox,radio 动态添加  需要更新
