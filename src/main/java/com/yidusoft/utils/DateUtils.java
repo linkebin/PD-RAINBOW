@@ -32,6 +32,8 @@ public class DateUtils {
      */
     public static String FORMAT_FULL_CN = "yyyy年MM月dd日  HH时mm分ss秒SSS毫秒";
 
+    public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     /**
      * 获得默认的 date pattern
      */
@@ -86,6 +88,56 @@ public class DateUtils {
         return (returnValue);
     }
 
+    public static boolean isOverlap(String startdate1, String enddate1, String startdate2, String enddate2) {
+        Date leftStartDate = null;
+        Date leftEndDate = null;
+        Date rightStartDate = null;
+        Date rightEndDate = null;
+        try {
+            leftStartDate = format.parse(startdate1);
+            leftEndDate = format.parse(enddate1);
+            rightStartDate = format.parse(startdate2);
+            rightEndDate = format.parse(enddate2);
+        } catch (ParseException e) {
+            return false;
+        }
+        return
+                ((leftStartDate.getTime() >= rightStartDate.getTime())
+                        && leftStartDate.getTime() < rightEndDate.getTime())
+                        ||
+                        ((leftStartDate.getTime() > rightStartDate.getTime())
+                                && leftStartDate.getTime() <= rightEndDate.getTime())
+                        ||
+                        ((rightStartDate.getTime() >= leftStartDate.getTime())
+                                && rightStartDate.getTime() < leftEndDate.getTime())
+                        ||
+                        ((rightStartDate.getTime() > leftStartDate.getTime())
+                                && rightStartDate.getTime() <= leftEndDate.getTime());
+
+    }
+
+    public static boolean isOverlap(Long leftStartDate, Long leftEndDate, Long rightStartDate, Long rightEndDate) {
+        return
+                ((leftStartDate >= rightStartDate)
+                        && leftStartDate < rightEndDate)
+                        ||
+                        ((leftStartDate > rightStartDate)
+                                && leftStartDate <= rightEndDate)
+                        ||
+                        ((rightStartDate >= leftStartDate)
+                                && rightStartDate < leftEndDate)
+                        ||
+                        ((rightStartDate > leftStartDate)
+                                && rightStartDate <= leftEndDate);
+    }
+
+    public static String stampToDate(String s){
+        String res;
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = format.format(date);
+        return res;
+    }
     /**
      * 使用预设格式提取字符串日期
      *

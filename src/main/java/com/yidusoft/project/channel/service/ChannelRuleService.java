@@ -22,4 +22,5 @@ public interface ChannelRuleService extends Service<ChannelRule> {
 
     //根据渠道获取结算规则
     List<Map<String,Object>> findRuleByChannel(Map<String,Object> map);
+
 }

@@ -12,6 +12,7 @@ import com.yidusoft.project.channel.service.ChannelRuleService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.DateUtils;
 import com.yidusoft.utils.PasswordHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,7 +134,7 @@ public class ChannelManageController {
         List<String>  ids = new ArrayList<String>();
         List<Map<String,Object>> maps = channelRuleService.findChannelRuleTimeClashList(map);
         for (Map<String,Object> m : maps){
-           boolean flag = isOverlap(map.get("start").toString(),map.get("end").toString(),
+           boolean flag = DateUtils.isOverlap(map.get("start").toString(),map.get("end").toString(),
                     m.get("start_time").toString(), m.get("end_time").toString());
             System.out.println(flag +":"+m.get("start_time").toString()+"---"+m.get("end_time").toString());
            if (flag){
@@ -145,34 +146,6 @@ public class ChannelManageController {
 
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
-    }
-    public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private  boolean isOverlap(String startdate1, String enddate1,String startdate2, String enddate2) {
-        Date leftStartDate = null;
-        Date leftEndDate = null;
-        Date rightStartDate = null;
-        Date rightEndDate = null;
-        try {
-            leftStartDate = format.parse(startdate1);
-            leftEndDate = format.parse(enddate1);
-            rightStartDate = format.parse(startdate2);
-            rightEndDate = format.parse(enddate2);
-        } catch (ParseException e) {
-            return false;
-        }
-        return
-                ((leftStartDate.getTime() >= rightStartDate.getTime())
-                        && leftStartDate.getTime() < rightEndDate.getTime())
-                        ||
-                        ((leftStartDate.getTime() > rightStartDate.getTime())
-                                && leftStartDate.getTime() <= rightEndDate.getTime())
-                        ||
-                        ((rightStartDate.getTime() >= leftStartDate.getTime())
-                                && rightStartDate.getTime() < leftEndDate.getTime())
-                        ||
-                        ((rightStartDate.getTime() > leftStartDate.getTime())
-                                && rightStartDate.getTime() <= leftEndDate.getTime());
-
     }
 
     @PostMapping("/listByaccounts")

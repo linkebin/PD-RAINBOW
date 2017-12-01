@@ -49,7 +49,7 @@ public class OrderOnline {
     private String creator;
 
     @Column(name = "clearing_status")
-    private String clearingStatus;
+    private Integer clearingStatus;
 
     /**
      * 是否删除
@@ -98,11 +98,11 @@ public class OrderOnline {
     @Transient
     private String productName;
 
-    public String getClearingStatus() {
+    public Integer getClearingStatus() {
         return clearingStatus;
     }
 
-    public void setClearingStatus(String clearingStatus) {
+    public void setClearingStatus(Integer clearingStatus) {
         this.clearingStatus = clearingStatus;
     }
 
