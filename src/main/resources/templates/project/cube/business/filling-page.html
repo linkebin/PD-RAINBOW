@@ -137,8 +137,8 @@
                     required: true,
                 },
                 /*msgCode: {
-                    required: true,
-                }*/
+                 required: true,
+                 }*/
             },
             messages: {
                 fullName: {
@@ -160,40 +160,40 @@
                     required: '请输入活动邀请码',
                 },
                 /*msgCode: {
-                    required: '请输入手机验证码',
-                }*/
+                 required: '请输入手机验证码',
+                 }*/
             },
 
             submitHandler: function () {
                 var obj = $("#activitiesForm").serializeObject();
-                obj.phone=parseInt(obj.phone);
+                obj.phone = parseInt(obj.phone);
                 var params = {};
                 params.activityPorn = obj.activityPorn;
                 params.id = $('#activityId').val();
                 delete obj.activityPorn;
-                add(params,obj);
+                add(params, obj);
                 /*$.post("/user/check/msgCode", {msgCode: obj.msgCode}, function (result) {
-                    if(result.code==200){
-                        delete obj.msgCode;
-                        add(params,obj);
-                    }else{
-                        layer.msg(result.message,{
-                            icon: 2,
-                            time: 1500
-                        });
-                    }
-                })*/
+                 if(result.code==200){
+                 delete obj.msgCode;
+                 add(params,obj);
+                 }else{
+                 layer.msg(result.message,{
+                 icon: 2,
+                 time: 1500
+                 });
+                 }
+                 })*/
             }
         });
     });
 
-    function add(params,obj) {
+    function add(params, obj) {
         $.post("/launch/activities/getIdByPorn", {json: JSON.stringify(params)}, function (result) {
             console.log(result);
             if (result.code = 200) {
                 var activity = result.data;
                 if (result.data == null) {
-                    return layer.msg('活动邀请码错误',{
+                    return layer.msg('活动邀请码错误', {
                         icon: 2,
                         time: 1500
                     })
@@ -209,11 +209,31 @@
                                     btn: ['确定']
                                 })
                             } else {
-                                $.post("/active/participant/add",{json:JSON.stringify(obj)},function (res) {
-                                    console.log(res);
-                                    if(res.code==200){
-                                        var time = new Date().Format("yyyy-MM-dd");
-                                        window.location.href="/web/cube/getQuestionnaireFill?questionnaireId="+activity.uestionnaireId+"&userId="+res.data.id+"&visitorTimes="+time+"&activityId="+activity.id+"&userName="+res.data.fullName;
+                                $.post("/user/questionnaires/detail", {userId: result.data.userId}, function (result) {
+                                    if (result.code == 200) {
+                                        if (result.data.questionnairesTotal == 0) {
+                                            return layer.msg("使用卷不足，请联系咨询师！", {
+                                                icon: 2,
+                                                time: 2000
+                                            });
+                                        }
+                                        $.post("/active/participant/add", {json: JSON.stringify(obj)}, function (res) {
+                                            console.log(res);
+                                            if (res.code == 200) {
+                                                var time = new Date().Format("yyyy-MM-dd");
+                                                window.location.href = "/web/cube/getQuestionnaireFill?questionnaireId=" + activity.uestionnaireId + "&userId=" + res.data.id + "&visitorTimes=" + time + "&activityId=" + activity.id + "&userName=" + res.data.fullName;
+                                            } else {
+                                                layer.msg(res.message, {
+                                                    icon: 2,
+                                                    time: 1500
+                                                })
+                                            }
+                                        })
+                                    } else {
+                                        layer.msg(res.message, {
+                                            icon: 2,
+                                            time: 1500
+                                        })
                                     }
                                 })
                             }
@@ -237,24 +257,24 @@
         $("#btnSendCode").html("正在发送");
         var m = $("#phone").val();
         curCount = count;
-        $(o).attr('disabled','true');
+        $(o).attr('disabled', 'true');
         $.ajax({
-            url:'/user/modifyPsd/code',
-            type:"post",
-            data:{
-                mobile:m
+            url: '/user/modifyPsd/code',
+            type: "post",
+            data: {
+                mobile: m
             },
-            dataType:"json",
-            success:function(data){
-                if(data.code ==200) {
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 200) {
                     layer.msg(data.message);
                     InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
-                }else {
+                } else {
                     layer.msg(data.message);
                     //$(o).removeAttr('disabled');
                     $("#btnSendCode").html("点击获取");
                     $("#btnSendCode").removeAttr('disabled')
-                            .css("background","#7dbbfa").css("color","#fff").removeClass('eui-btn-disabled');
+                            .css("background", "#7dbbfa").css("color", "#fff").removeClass('eui-btn-disabled');
                 }
             }
         });
@@ -268,7 +288,7 @@
         }
         else {
             curCount--;
-            $("#btnSendCode").html('倒计'+curCount+'秒');
+            $("#btnSendCode").html('倒计' + curCount + '秒');
         }
     }
 </script>

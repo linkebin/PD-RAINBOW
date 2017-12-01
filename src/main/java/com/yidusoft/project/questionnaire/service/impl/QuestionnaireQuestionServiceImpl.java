@@ -263,6 +263,10 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     //活动提交问卷
     @Override
     public Result subQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
+        Result judg = judgeBalance(activityId);
+        if(judg.getCode()!=200){
+            return judgeBalance(activityId);
+        }
         try {
             List<Map<String, Object>> mapList = (List<Map<String, Object>>) JSON.parse(param);
             //问卷使用的id
@@ -308,25 +312,39 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 activeParticipant.setFillingTime(new Date());
                 activeParticipantService.update(activeParticipant);
             }
-            //活动扣除余额
-            deleteDuction(activityId);
             //记录到账户信息
         } catch (Exception e) {
             return ResultGenerator.genFailResult(e.getMessage());
         }
-        return ResultGenerator.genSuccessResult();
+        return deleteDuction(activityId);
+    }
+
+    /**
+     * 判断余额是否足够
+     * @param activityId
+     * @return
+     */
+    public Result judgeBalance(String activityId){
+        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
+        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(launchActivities.getUserId());
+        if(userQuestionnaires.getQuestionnairesTotal()<=0){
+            return ResultGenerator.genFailResult("使用券不足");
+        }
+        return  ResultGenerator.genSuccessResult();
     }
 
     /**
      * 判断是调研活动还是企业活动
      * @param activityId
      */
-    public void deleteDuction(String activityId) {
+    public Result deleteDuction(String activityId) {
         LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        if(launchActivities.getInitiatorType()!=1){//如果是企业活动
-            updateUserQuestionnaires(launchActivities.getUserId());
+        if(launchActivities.getInitiatorType()==1){//如果是企业活动
+            return updateUserQuestionnaires(launchActivities.getUserId());
         }
+        return  ResultGenerator.genSuccessResult();
     }
+
 
     /**
      * 判断用户余额和是否是会员
@@ -335,15 +353,9 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
      */
     public Result updateUserQuestionnaires(String userId){
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
-        if(userQuestionnaires.getMember()!=1){
-            //如果不是会员
-            if(userQuestionnaires.getQuestionnairesTotal()>0){
-                //如果使用券大于0
-                userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
-                userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
-            }else{//如果使用卷小于0
-                return ResultGenerator.genFailResult("使用券不足");
-            }
+        if(userQuestionnaires.getMember()!=1){//如果不是会员
+            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+            userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
         }else{//如果是会员
             if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){//如果会员到期
                 userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);

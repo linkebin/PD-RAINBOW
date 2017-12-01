@@ -28,6 +28,17 @@ public class UserQuestionnairesController {
         return ResultGenerator.genSuccessResult(userQuestionnaires);
     }
 
+    /**
+     * 获取用户问卷账号信息
+     * @param userId
+     * @return
+     */
+    @PostMapping("/detail")
+    public Result detail(String userId) {
+        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId",userId);
+        return ResultGenerator.genSuccessResult(userQuestionnaires);
+    }
+
     @PostMapping
     public Result add(UserQuestionnaires userQuestionnaires) {
         userQuestionnairesService.save(userQuestionnaires);
@@ -45,11 +56,4 @@ public class UserQuestionnairesController {
         userQuestionnairesService.update(userQuestionnaires);
         return ResultGenerator.genSuccessResult();
     }
-
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findById(id);
-        return ResultGenerator.genSuccessResult(userQuestionnaires);
-    }
-
 }

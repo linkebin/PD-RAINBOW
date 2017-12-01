@@ -220,7 +220,7 @@
     //获取填报人的信息
     function getActivityInfo() {
         var index = layer.load(2); //加载
-        $.post("/active/participant/list", { page: 1, size: 5 ,activityId: $('#id').val()}, function (result) {
+        $.post("/active/participant/list", { page: 1, size: 10 ,activityId: $('#id').val()}, function (result) {
             console.log(result);
             laypage.render({
                 elem: 'pages'
