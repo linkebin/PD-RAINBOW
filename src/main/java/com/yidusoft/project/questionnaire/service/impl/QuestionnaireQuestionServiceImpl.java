@@ -106,10 +106,6 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     @Override
     public Result submitQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
         try {
-            Result judg = judgeBalance(Security.getUserId());//判断余额
-            if(judg.getCode()!=200){
-                return judgeBalance(Security.getUserId());
-            }
             List<Map<String, Object>> mapList = (List<Map<String, Object>>) JSON.parse(param);
             //问卷使用的id
             String dataAcquisitionId = UUID.randomUUID().toString();
