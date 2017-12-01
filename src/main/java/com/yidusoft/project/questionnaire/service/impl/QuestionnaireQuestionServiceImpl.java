@@ -263,7 +263,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     //活动提交问卷
     @Override
     public Result subQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
-        Result judg = judgeBalance(activityId);
+        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
+        Result judg = judgeBalance(launchActivities.getUserId());//判断余额
         if(judg.getCode()!=200){
             return judgeBalance(activityId);
         }
@@ -321,12 +322,11 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
     /**
      * 判断余额是否足够
-     * @param activityId
+     * @param userId
      * @return
      */
-    public Result judgeBalance(String activityId){
-        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(launchActivities.getUserId());
+    public Result judgeBalance(String userId){
+        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
         if(userQuestionnaires.getQuestionnairesTotal()<=0){
             return ResultGenerator.genFailResult("使用券不足");
         }
@@ -347,7 +347,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
 
     /**
-     * 判断用户余额和是否是会员
+     * 判断是否是会员
      * 来决定是否扣除问卷
      * @param userId
      */
@@ -363,7 +363,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             }
         }
         userQuestionnairesService.update(userQuestionnaires);
-        return addAccount(userId);
+        return addAccount(userId);//添加账户信息
     }
 
     /**
