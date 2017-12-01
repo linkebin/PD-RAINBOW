@@ -111,7 +111,11 @@
                     <div class="DivInfo">
                         <p><i class="eui-icon eui-color-blue eui-font18">&#xe60e;</i>
                             <span class="eui-font16">记录时间</span>
-                            <span  class="eui-marginL15 createTime"></span></p>
+                            <span  class="eui-marginL15 createTime"></span>
+                            <span  onclick="getCustomerAnalysis()" class="eui-btn eui-btn-small eui-btn-normal">
+                                <i class="eui-icon">&#xe654;</i> 客户分析
+                            </span>
+                        </p>
 
                         <p class="eui-marginT15"><i class="eui-icon eui-color-blue eui-font18">&#xe60e;</i>
                             <span class="eui-font16">来访时间</span>
@@ -978,6 +982,13 @@ var processLogA=null;
                 layer.closeAll();
              });
     }
+    //跳转到客户分析页面
+    //问卷选择页面调用父页面的方法
+    function  getCustomerAnalysis() {
+        var userId=$("[name='visitorId']").val();
+     window.open("/web/customer/getCustomerAnalysis?userId="+userId);
+    }
+
     </script>
 
 </body>

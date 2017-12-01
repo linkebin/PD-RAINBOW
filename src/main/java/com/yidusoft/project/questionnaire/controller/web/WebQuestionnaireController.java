@@ -131,7 +131,7 @@ public class WebQuestionnaireController {
         }else  if(("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())){
             return "project/questionnaire/questionnairePreview/fillIn_gauge_10_preview";
         }else {
-            return "project/cube/questionnaire/vertical-questionnaire";
+            return "project/questionnaire/questionnairePreview/questionnaire_vertical_preview";
         }
 
     }

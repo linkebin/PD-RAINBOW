@@ -80,4 +80,25 @@
         SELECT count(*) FROM data_acquisition
         WHERE activity_id=#{activityId} AND deleted=0
     </select>
+
+    <select id="getDataAcquisitionTotal" parameterType="String" resultType="int">
+        SELECT COUNT (*)  FROM  data_acquisition   WHERE  user_id   =#{userId} AND deleted=0
+    </select>
+
+    <select id="getQuestionnaireTypeTotal" parameterType="String" resultMap="QuestionnaireUseInfoResultMap">
+        SELECT * FROM (
+        SELECT id_ as data_question ,questionnaire_name FROM questionnaire
+        WHERE id_ IN   (
+        SELECT
+        data_question
+        FROM  data_acquisition
+        WHERE  user_id   =#{userId})
+        GROUP BY   questionnaire_type )  tt
+    </select>
+    <select id="findDataAcquistionForVisitor" parameterType="com.yidusoft.project.questionnaire.domain.DataAcquisition" resultMap="BaseResultMap">
+          SELECT *
+            FROM  data_acquisition
+            WHERE  data_question=#{dataQuestion}  and   user_id =#{userId}
+    </select>
+
 </mapper>

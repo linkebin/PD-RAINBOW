@@ -1,6 +1,9 @@
 package com.yidusoft.project.questionnaire.service.impl;
 
 import com.yidusoft.core.AbstractService;
+import com.yidusoft.core.Result;
+import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.business.service.VisitingRecordService;
 import com.yidusoft.project.questionnaire.dao.DataAcquisitionMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireAnswerMapper;
 import com.yidusoft.project.questionnaire.domain.DataAcquisition;
@@ -27,7 +30,8 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
     private DataAcquisitionMapper dataAcquisitionMapper;
     @Resource
     private QuestionnaireAnswerMapper questionnaireAnswerMapper;
-
+    @Resource
+    private VisitingRecordService visitingRecordService;
 
     //根据日期查询来访者使用的问卷
     @Override
@@ -39,7 +43,55 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
     public List<DataAcquisition> findMyQuestionnaireListByPage(Map<String,Object> map) {
         return dataAcquisitionMapper.findMyQuestionnaireListByPage(map);
     }
+    /**
+     *  查询来访者填写问卷的总数
+     * @param userId
+     * @return
+     */
+    @Override
+    public int getDataAcquisitionTotal(String userId) {
+        return dataAcquisitionMapper.getDataAcquisitionTotal(userId);
+    }
 
+    /**
+     * 填写问卷类别总数
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<DataAcquisition> getQuestionnaireTypeTotal(String userId) {
+        return dataAcquisitionMapper.getQuestionnaireTypeTotal(userId);
+    }
+    /**
+     * 查询来访者的填写结果
+     * @param dataAcquisition
+     * @return
+     */
+    @Override
+    public  List<DataAcquisition> findDataAcquistionForVisitor(DataAcquisition dataAcquisition) {
+        //来访者问卷使用记录
+        List<DataAcquisition> dataAcquisitionList= dataAcquisitionMapper.findDataAcquistionForVisitor(dataAcquisition);
+        return dataAcquisitionList;
+    }
+
+    /**
+     * 来访者的问卷统计分析
+     *  @return
+     */
+    @Override
+    public Result getDataAcquisitionForVisitingCount(String userId) {
+        //填写问卷类别总数
+        List<DataAcquisition> dataAcquisitions= dataAcquisitionMapper.getQuestionnaireTypeTotal(userId);
+        //填写问卷总数
+        int dataAcquisitionTotal =dataAcquisitionMapper.getDataAcquisitionTotal(userId);
+        //来访总次数
+        int visitingTotal= visitingRecordService.getVisitingTotal(userId);
+        Map<String,Object> map=new HashMap<>();
+        map.put("dataAcquisitions",dataAcquisitions);
+        map.put("dataAcquisitionTotal",dataAcquisitionTotal);
+        map.put("visitingTotal",visitingTotal);
+        return ResultGenerator.genSuccessResult(map);
+    }
     //保留两位小数 不四舍五入
     public  double decimal(double f){
         BigDecimal b=new BigDecimal(f);

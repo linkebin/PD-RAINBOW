@@ -20,13 +20,35 @@ public class DataAcquisitionController {
     @Resource
     private DataAcquisitionService dataAcquisitionService;
 
-
-
-    //根据日期查询来访者使用的问卷
+    /**
+     * 根据日期查询来访者使用的问卷
+     * @param dataAcquisition
+     * @return
+     */
     @PostMapping("/findQuestionnaireForVisitor")
     public Result  findQuestionnaireForVisitor(DataAcquisition dataAcquisition) {
         List<DataAcquisition> list=dataAcquisitionService.findQuestionnaireForVisitor(dataAcquisition);
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    /**
+     * 来访者的问卷统计分析
+     * @param userId
+     * @return
+     */
+    @PostMapping("/getDataAcquisitionForVisitingCount")
+    public Result  findQuestionnaireForVisitor(String userId) {
+        return dataAcquisitionService.getDataAcquisitionForVisitingCount(userId);
+    }
+    /**
+     * 查询来访者的填写结果
+     * @param dataAcquisition
+     * @return
+     */
+    public  Result  findDataAcquistionForVisitor(DataAcquisition dataAcquisition) {
+        //来访者问卷使用记录
+        List<DataAcquisition> dataAcquisitionList= dataAcquisitionService.findDataAcquistionForVisitor(dataAcquisition);
+        return ResultGenerator.genSuccessResult(dataAcquisitionList);
     }
 
 

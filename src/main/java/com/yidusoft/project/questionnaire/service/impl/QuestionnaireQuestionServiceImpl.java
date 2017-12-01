@@ -90,7 +90,17 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
         return questionnaireQuestionMapper.findQuestionForQuestionnaire(id);
     }
 
-    //提交问卷
+    /**
+     * //提交问卷
+     * @param param
+     * @param questionnaireId
+     * @param userId
+     * @param visitorTimes
+     * @param timeConsuming
+     * @param activityId
+     * @param userName
+     * @return
+     */
     @Override
     public Result submitQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
         try {
@@ -129,7 +139,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             } else {
                 dataAcquisition.setDataUser(Security.getUser().getUserName());
             }
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+            //小写的mm表示的是分钟  
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date=sdf.parse(visitorTimes);
             dataAcquisition.setCreateTime(date);
             dataAcquisitionMapper.insert(dataAcquisition);
@@ -172,7 +183,6 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             String[] correctAnswerArray;
             String[] answerArray;
             String[] scoreArray;
-           //
             if (answer.contains("||")) {
                 answerArray = answer.split("\\|\\|");
             } else {
@@ -286,7 +296,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setUserId(userId);
             dataAcquisition.setDeleted(0);
             dataAcquisition.setDataUser(userName);
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+            //小写的mm表示的是分钟  
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date=sdf.parse(visitorTimes);
             dataAcquisition.setCreateTime(date);
             dataAcquisitionMapper.insert(dataAcquisition);
@@ -324,8 +335,10 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
      */
     public Result updateUserQuestionnaires(String userId){
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
-        if(userQuestionnaires.getMember()!=1){//如果不是会员
-            if(userQuestionnaires.getQuestionnairesTotal()>0){//如果使用券大于0
+        if(userQuestionnaires.getMember()!=1){
+            //如果不是会员
+            if(userQuestionnaires.getQuestionnairesTotal()>0){
+                //如果使用券大于0
                 userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
                 userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
             }else{//如果使用卷小于0
