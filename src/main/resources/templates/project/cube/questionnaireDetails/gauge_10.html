@@ -208,6 +208,7 @@
             var json=eval("("+dataResult+")");
             totalScore=json.totalScore;
             console.log(totalScore + "====");
+            $("#totalScore").text(totalScore);
             context+="<p class='eui-margin10'>匹兹堡睡眠质量指数（PSQI）的总分区间为0~21分，我国以“PSQI>7分”作为成人睡眠质量问题的参考值，且得分越高表示睡眠质量越差。：</p>";
 
             context+="<p class='eui-margin10'>您的得分：</p>";

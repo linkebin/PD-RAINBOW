@@ -483,8 +483,8 @@ public class QuestionnaireMethod {
             daytimeDysfunction = 3;
         }
 
-        double totalScore = sleepQuan + fallSleepTime + sleepTime + fallSleepTime + sleepTime
-                + dyssomnia + sodiumAmytal + daytimeDysfunction;
+        double totalScore = sleepQuan + fallSleepTime + sleepTime
+                + dyssomnia + sodiumAmytal + daytimeDysfunction + sleepEfficiency;
         Map<String,Object> map = new HashMap<>();
         System.out.println(sodiumAmytal + "======"
         + sleepQuan + "==" + fallSleepTime + "=====" + sleepTime + "==="
