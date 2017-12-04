@@ -86,8 +86,10 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
         int dataAcquisitionTotal =dataAcquisitionMapper.getDataAcquisitionTotal(userId);
         //来访总次数
         int visitingTotal= visitingRecordService.getVisitingTotal(userId);
+        List<DataAcquisition>  questionnaireList= dataAcquisitionMapper.findQuestionnaireForVisitorAll(userId);
         Map<String,Object> map=new HashMap<>();
         map.put("dataAcquisitions",dataAcquisitions);
+        map.put("questionnaireList",questionnaireList);
         map.put("dataAcquisitionTotal",dataAcquisitionTotal);
         map.put("visitingTotal",visitingTotal);
         return ResultGenerator.genSuccessResult(map);

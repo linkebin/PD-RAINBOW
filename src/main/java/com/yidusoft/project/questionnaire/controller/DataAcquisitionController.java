@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.security.Security;
 import java.util.List;
 
 /**
@@ -45,7 +46,8 @@ public class DataAcquisitionController {
      * @param dataAcquisition
      * @return
      */
-    public  Result  findDataAcquistionForVisitor(DataAcquisition dataAcquisition) {
+    @PostMapping("/findDataAcquistionForVisitor")
+    public  Result  findDataAcquistionForVisitor(DataAcquisition dataAcquisition){
         //来访者问卷使用记录
         List<DataAcquisition> dataAcquisitionList= dataAcquisitionService.findDataAcquistionForVisitor(dataAcquisition);
         return ResultGenerator.genSuccessResult(dataAcquisitionList);

@@ -39,10 +39,8 @@
                <input type="hidden" th:value="${userId}"  id="userId"/>
                <input type="hidden" th:value="${visitorTimes}"  id="visitorTimes"/>
                <div class="eui-form-item eui-padding20">
-                  <span id="remarks">
-                      下面列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。
-                 </span>
-                 <hr/>
+
+
                </div>
              <div class="eui-bg-white eui-form" id="divTable" >
                   <!--  问题内容-->
@@ -119,16 +117,21 @@ eui.use(['form', 'layedit', 'laydate'], function(){
         console.log(data.elem + "======="); //得到radio原始DOM对象
         console.log(data.value + "----=====---"); //被点击的radio的value
         if(data.elem.value == "否"){
-            $(":radio:gt(78)").attr("disabled","disabled");
-            $(":radio:gt(78)").removeAttr("checked");
+//            $(":radio:gt(78)").attr("disabled","disabled");
+//            $(":radio:gt(78)").removeAttr("checked");
+            for(var i  = 27; i < 33; i++ ){
+                $('#SDQ_'+i + " input").attr("disabled","disabled");
+                $('#SDQ_'+i + " input").removeAttr("checked");
+            }
             flag = true;
             form.render();
         }else if(data.elem.value == "是(有少许困难)" || data.elem.value == "是（有困难）" || data.elem.value == "是（有很大的困难）"){
-            $(":radio:gt(78)").removeAttr("disabled");
+            for(var i  = 27; i < 33; i++ ){
+                $('#SDQ_'+i + " input").removeAttr("disabled");
+            }
             flag = false;
             form.render();
         }
-
 //            if(data.elem.attributes.states.value=='0'){
 //                data.elem.checked=true;
 //
@@ -203,6 +206,7 @@ function  getTable(questionList) {
                        'radioNmae="answer'+questionList[i].id+'" ' +
                        'correctAnswer="'+questionList[i].answer+'" ' +
                        'questionId="'+questionList[i].id+'"  ' +
+                      'id="'+questionList[i].id+'"  ' +
                        'class="eui-form-item eui-padding20" name="divQuestion">';
         context+='<div class="eui-font18">';
         if(questionList[i].questionType==2){
@@ -234,7 +238,7 @@ function  getTable(questionList) {
 //
                 else if(i > 25 && questionList[i].questionType!=2 && questionList[i].questionType!=5){
                 radioName='answer'+questionList[i].id;
-                context+='  <input e-filter="filter" type="radio"  disabled="disabled" states="0"  optionScore="'+optionScore[sequence]+'" ' ;
+                context+='  <input e-filter="filter" type="radio"   states="0"  optionScore="'+optionScore[sequence]+'" ' ;
             }
             else {
                 radioName='answer'+questionList[i].id;
@@ -282,19 +286,48 @@ function  getTable(questionList) {
                }
            }else if(flag && i < 26){
                for(var j=0;j<size;j++){
-
                    if (question.children("input").eq(j).prop("checked")) {
                        state=1;
                    }
+
                }
                if (state == 0) {
                    //state=0 说明没有做这道题
                    result += num + ","
                }
+
            }
 
 
        }
+//      if(flag){
+//          for(var i = 1; i < 27; i++){
+//              var num = parseInt(i);
+//              var state=0;
+//              alert($('#SDQ_'+i ) + ":" +$('#SDQ_'+i + " input").prop("checked"));
+//              if($('#SDQ_'+i + " input").prop("checked")){
+//                  alert("select)");
+//                  state = 1;
+//              }
+//              if (state == 0) {
+//                  //state=0 说明没有做这道题
+//                  result += num + ","
+//               }
+//          }
+//      }else{
+//          for(var i = 1; i < 33; i++){
+//              var num = parseInt(i);
+//              var state=0;
+//              if($('#SDQ_'+i + " input").prop("checked")){
+//                  state = 1;
+//              }
+//              if (state == 0) {
+//                  //state=0 说明没有做这道题
+//                  result += num + ","
+//              }
+//          }
+//          }
+//
        if(result!=""){
            result+="题没有做，请答完！";
            layer.msg(result, {
@@ -302,6 +335,7 @@ function  getTable(questionList) {
                time: 5000
        });
        }
+
        return result;
   }
   //提交问卷
@@ -337,7 +371,36 @@ function  getTable(questionList) {
                   //答案类型
                   obj.questionType = divQuestions.eq(i).attr("questionType");
                   array.push(obj);
-              }else{
+              }else if(!flag){
+
+                      //获取所有被选中的radio元素
+                      var radios = divQuestions.eq(i).children("input:radio:checked");
+                      var answer = "";
+                      var score = "";
+                      for (var r = 0; r < radios.length; r++) {
+                          answer = answer + "||" + radios.eq(r).val();
+                          score = score + "||" + radios.eq(r).attr("optionScore");
+                      }
+                      answer = answer.substring(2, answer.length);
+                      score = score.substring(2, score.length);
+                      var obj = new Object();
+                      //分数
+                      obj.score = score;
+                      //问题
+                      obj.questionId = divQuestions.eq(i).attr("questionId");
+                      //选择的答案（列子：A:1  B:2  答案： A:1  或者多选  ）
+                      obj.answer = answer;
+                      if(i ==26 || i == 27){
+                          obj.score = 0;
+                          obj.answer = answer;
+                      }
+                      //正确答案
+                      obj.correctAnswer = divQuestions.eq(i).attr("correctAnswer");
+                      //答案类型
+                      obj.questionType = divQuestions.eq(i).attr("questionType");
+                      array.push(obj);
+                  }
+              else{
                       var obj = new Object();
                       //分数
                       obj.score = 0;

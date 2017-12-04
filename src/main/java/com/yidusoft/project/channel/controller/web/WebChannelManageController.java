@@ -40,6 +40,7 @@ public class WebChannelManageController {
         return "project/channel/onaylanmam-channel-list";
     }
 
+
     @RequestMapping("/openaccounts")
     public String openaccounts(String id, Model model) {
         model.addAttribute("channelId",id);

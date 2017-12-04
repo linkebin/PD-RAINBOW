@@ -43,10 +43,11 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
     }
     //为来访者使用问卷
     @Override
-    public Result getCheckQuestionnaireForVisitor() {
+    public Result getCheckQuestionnaireForVisitor(){
         try{
         //判断账号余额是否够
         if(!userQuestionnairesService.flgBalance()){
+
             throw  new MyException("账号余额不足！");
         }
 

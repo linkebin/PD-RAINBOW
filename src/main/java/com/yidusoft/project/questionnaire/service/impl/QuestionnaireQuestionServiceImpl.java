@@ -26,7 +26,9 @@ import com.yidusoft.project.transaction.service.AccountInfoService;
 import com.yidusoft.project.transaction.service.UserQuestionnairesService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.EntityReflex;
+import com.yidusoft.utils.MyException;
 import com.yidusoft.utils.Security;
+import org.activiti.engine.runtime.Execution;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -145,14 +147,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setCreateTime(date);
             dataAcquisitionMapper.insert(dataAcquisition);
 
-           /*    //添加填报时间
-            ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
-            if(activeParticipant!=null){
-                activeParticipant.setFillingTime(new Date());
-                activeParticipantService.update(activeParticipant);
-            }*/
-            //活动扣除余额
-            //deleteDuction(activityId);
+            //扣除余额
+            updateUserQuestionnaires(Security.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
@@ -263,11 +259,6 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     //活动提交问卷
     @Override
     public Result subQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
-        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        Result judg = judgeBalance(launchActivities.getUserId());//判断余额
-        if(judg.getCode()!=200){
-            return judgeBalance(activityId);
-        }
         try {
             List<Map<String, Object>> mapList = (List<Map<String, Object>>) JSON.parse(param);
             //问卷使用的id
@@ -313,57 +304,57 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 activeParticipant.setFillingTime(new Date());
                 activeParticipantService.update(activeParticipant);
             }
+            deleteDuction(activityId);
             //记录到账户信息
         } catch (Exception e) {
             return ResultGenerator.genFailResult(e.getMessage());
         }
-        return deleteDuction(activityId);
-    }
-
-    /**
-     * 判断余额是否足够
-     * @param userId
-     * @return
-     */
-    public Result judgeBalance(String userId){
-        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
-        if(userQuestionnaires.getQuestionnairesTotal()<=0){
-            return ResultGenerator.genFailResult("使用券不足");
-        }
-        return  ResultGenerator.genSuccessResult();
+        return ResultGenerator.genSuccessResult();
     }
 
     /**
      * 判断是调研活动还是企业活动
      * @param activityId
      */
-    public Result deleteDuction(String activityId) {
+    public void deleteDuction(String activityId)throws Exception {
         LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
         if(launchActivities.getInitiatorType()==1){//如果是企业活动
-            return updateUserQuestionnaires(launchActivities.getUserId());
+                updateUserQuestionnaires(launchActivities.getUserId());
         }
-        return  ResultGenerator.genSuccessResult();
     }
 
 
     /**
-     * 判断是否是会员
+     * 判断用户余额和是否是会员
      * 来决定是否扣除问卷
      * @param userId
      */
-    public Result updateUserQuestionnaires(String userId){
+    public Result updateUserQuestionnaires(String userId) throws Exception{
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(userId);
-        if(userQuestionnaires.getMember()!=1){//如果不是会员
-            userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
-            userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
-        }else{//如果是会员
-            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){//如果会员到期
+        if(userQuestionnaires.getMember()!=1){
+            //如果不是会员
+            if(userQuestionnaires.getQuestionnairesTotal()>0){
+                //如果使用券大于0
                 userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
                 userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+            }else{
+                //如果使用卷小于0
+                throw new MyException("使用券不足");
             }
-        }
+        }else{//如果是会员
+            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){
+                //如果会员到期
+                if(userQuestionnaires.getQuestionnairesTotal()>0){
+                    userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal()-1);
+                    userQuestionnaires.setQuestionnairesCumulativeTotal(userQuestionnaires.getQuestionnairesCumulativeTotal()+1);
+                }else{
+                    //如果使用卷小于0
+                    throw new MyException("使用券不足");
+                    }
+                }
+            }
         userQuestionnairesService.update(userQuestionnaires);
-        return addAccount(userId);//添加账户信息
+        return addAccount(userId);
     }
 
     /**

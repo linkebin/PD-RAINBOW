@@ -30,7 +30,7 @@ public class CubeQuestionnaireController {
     @PostMapping("/submitQuestionnaire")
     @ResponseBody
     public  Result submitQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming,String activityId,String userName){
-        return ResultGenerator.genSuccessResult(questionnaireQuestionService.submitQuestionnaire(param,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName));
+        return questionnaireQuestionService.submitQuestionnaire(param,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName);
     }
 
     /**
@@ -43,7 +43,7 @@ public class CubeQuestionnaireController {
     @PostMapping("/subQuestionnaire")
     @ResponseBody
     public  Result subQuestionnaire(String param, String questionnaireId,String userId,String visitorTimes,String timeConsuming,String activityId,String userName){
-        return ResultGenerator.genSuccessResult(questionnaireQuestionService.subQuestionnaire(param,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName));
+        return questionnaireQuestionService.subQuestionnaire(param,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName);
     }
 
 }

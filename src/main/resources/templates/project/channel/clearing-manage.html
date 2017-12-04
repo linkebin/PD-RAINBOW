@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>渠道结算</title>
+    <title>结算管理</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
 </head>
 <body>
@@ -41,11 +41,11 @@
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
-                    <i class='eui-icon eui-font24'>&#xe61d;</i> 待结算订单
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 已结算订单
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>
-                    <a onclick="clearingAll()" class="eui-btn eui-btn-small" href="###">结算全部</a>
+                    <!--<a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>-->
+                    <!--<a onclick="clearingAll()" class="eui-btn eui-btn-small" href="###">结算全部</a>-->
                 </div>
             </div>
             <table id="test2"></table>
@@ -89,22 +89,25 @@
             tableIns = table.render({
                 id: 'idTest'
                 ,elem: '#test2'
-                ,url:'/channel/rule/listNoClearing'
+                ,url:'/clearing/manage/listHasClearing'
                 ,method:'post'
                 ,where: {json: JSON.stringify(obj)}
                 ,height: 420
                 ,cols: [[ //标题栏
                 {checkbox: true},
-                    {field: 'order_code', title: '订单编号', width: 150}
-                    ,{field: 'serial_number', title: '订单流水号', width: 150}
-                    ,{field: 'questionnaire_total', title: '问卷购买数量', width: 100}
-                    ,{field: 'order_money', title: '付款金额', width: 100}
-                    ,{field: 'creator', title: '支付人', width: 100,templet:'<div>{{# if(d.creator==undefined){ }} 无邀请人  {{#  }else{   }} {{d.creator}} {{# } }}</div>'}
-                    ,{field: 'payment_time', title: '支付时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
-                    ,{field: '', title: '操作', width: 150,templet:'<div class="eui-btn-group">' +
-                    ' <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
-                        'title="结算" e-event="edit" ><i class="eui-icon">&#xe65e;</i>' +
-                    '</button></div>'}
+                    {field: 'order_code', title: '订单编号', width: 110}
+                    ,{field: 'order_money', title: '结算金额(￥)', width: 110}
+                    ,{field: 'brokerage', title: '结算佣金(￥)', width: 110}
+//                    ,{field: 'creator', title: '支付人', width: 100,templet:'<div>{{# if(d.creator==undefined){ }} 无邀请人  {{#  }else{   }} {{d.creator}} {{# } }}</div>'}
+                    ,{field: 'creator', title: '结算人', width: 100}
+                    ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'channel_name', title: '渠道名', width: 100}
+                    ,{field: 'rule_name', title: '渠道规则名', width: 110}
+                    ,{field: 'rule', title: '渠道规则比例', width: 120}
+//                    ,{field: '', title: '操作', width: 150,templet:'<div class="eui-btn-group">' +
+//                    ' <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
+//                        'title="结算" e-event="edit" ><i class="eui-icon">&#xe65e;</i>' +
+//                    '</button></div>'}
                 ]]
                 ,response: {
                     statusName: 'code' //数据状态的字段名称，默认：code

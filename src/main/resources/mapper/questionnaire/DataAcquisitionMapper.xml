@@ -82,7 +82,7 @@
     </select>
 
     <select id="getDataAcquisitionTotal" parameterType="String" resultType="int">
-        SELECT COUNT (*)  FROM  data_acquisition   WHERE  user_id   =#{userId} AND deleted=0
+        SELECT COUNT(*)  FROM  data_acquisition   WHERE  user_id   =#{userId} AND deleted=0
     </select>
 
     <select id="getQuestionnaireTypeTotal" parameterType="String" resultMap="QuestionnaireUseInfoResultMap">
@@ -101,4 +101,14 @@
             WHERE  data_question=#{dataQuestion}  and   user_id =#{userId}
     </select>
 
+    <select id="findQuestionnaireForVisitorAll" parameterType="String" resultMap="QuestionnaireUseInfoResultMap">
+         SELECT * FROM (
+        SELECT id_ as data_question ,questionnaire_name FROM questionnaire
+        WHERE id_ IN   (
+        SELECT
+        data_question
+        FROM  data_acquisition
+        WHERE  user_id=#{userId})
+        GROUP BY   data_question,questionnaire_name )  tt
+    </select>
 </mapper>

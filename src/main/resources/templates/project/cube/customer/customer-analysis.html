@@ -13,22 +13,31 @@
         <div class="eui-row">
             <div class="eui-col-md4">
                 <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-green">10</span> 次</p>
-                    <p class="name">来访总次数</p>
+                    <p class="eui-textNum"><span class="eui-color-green" id="visitingTotal"></span> 次</p>
+                    <p class="name" >来访总次数</p>
                 </a>
             </div>
             <div class="eui-col-md4">
                 <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-yellow">2</span> 个</p>
+                    <p class="eui-textNum"><span class="eui-color-yellow" id="dataAcquisitionTotal"></span> 个</p>
                     <p class="name">填写问卷总数</p>
                 </a>
             </div>
             <div class="eui-col-md4">
                 <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-orange">3</span> 个</p>
+                    <p class="eui-textNum"><span class="eui-color-orange" id="dataAcquisitionType"></span> 个</p>
                     <p class="name">填写问卷类别总数</p>
                 </a>
             </div>
+        </div>
+        <div class="eui-form  eui-form-pane  eui-form eui-marginL10 eui-paddingL10"   style="width: 700px">
+            <label class="eui-form-label">问卷名称</label>
+            <div class="eui-input-block">
+                <select name="questionType" id="questionType">
+                    <option value="" >请选择问卷</option>
+                </select>
+            </div>
+
         </div>
         <div id="analysis"  style="width: 100%;height:400px;">
         </div>
@@ -41,48 +50,53 @@
 <script src="/Scripts/plugins/echarts/echarts.min.js"></script>
 <!-- 引入 macarons 主题 -->
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script>
-    var form, layer;
+
     eui.use(['form', 'layer', 'element'], function () {
-        form = eui.form;
-        layer = eui.layer;
+        var form = eui.form;
+        var layer = eui.layer;
         var element = eui.element;
+
+        form.on('select', function(data){
+           var userId= $("#userId").val();
+            //问卷id
+           var dataQuestion= data.elem.value;
+            var questionnaireNmae= $("#questionType").find("option:selected").text();
+            if(dataQuestion!="") {
+                $.post("/data/acquisition/findDataAcquistionForVisitor"
+                    , {"userId":userId,"dataQuestion":dataQuestion}, function (result) {
+                    //返回一个问卷结果的集合
+                     console.info(result.data);
+                     var score=new Array;
+                     var timeData=new Array;
+                     if(result.data.length>1){
+                         for(var i=0;i<result.data.length;i++){
+                             var dataAcquistion=eval('('+result.data[i].dataResult+')');
+                             timeData[i]= new Date(result.data[i].createTime).Format('yyyy-MM-dd')+"";
+                             score[i]=dataAcquistion.totalScore;
+                         }
+                         analysis(questionnaireNmae,timeData,score);
+                     }
+
+                });
+            }
+        });
     });
 
+
+
+
     $(function () {
-        analysis();
+       // analysis();
+        getDataAcquisitionForVisitingCount();
     });
     //问卷填报统计
-    function  analysis() {
+    function  analysis(name,timeData,score) {
         var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
-        var timeData = ['0:00', '0:30',
-            '1:00', '1:30',
-            '2:00', '2:30',
-            '3:00', '3:30',
-            '4:00', '4:30',
-            '5:00', '5:30',
-            '6:00', '6:30',
-            '7:00', '7:30',
-            '8:00', '8:30',
-            '9:00', '9:30',
-            '10:00', '10:30',
-            '11:00', '11:30',
-            '12:00', '12:30',
-            '13:00', '13:30',
-            '14:00', '14:30',
-            '15:00', '15:30',
-            '16:00', '16:30',
-            '17:00', '17:30',
-            '18:00', '18:30',
-            '19:00', '19:30',
-            '20:00', '20:30',
-            '21:00', '21:30',
-            '22:00', '22:30',
-            '23:00', '23:30'
-        ];
         option = {
             title: {
-                text: '问卷名称',
+                text: name,
                 x: 'left',
             },
             tooltip: {
@@ -220,7 +234,7 @@
                         }]
                     ]
                 },
-                data: [113, 132, 123, 122, 132, 132, 123, 225, 223, 232, 223, 222, 223, 312, 223, 222, 223, 222, 232, 262, 232, 232, 223, 222, 223, 332, 223, 232, 223, 322, 123, 222, 231, 322, 233, 122, 223, 232, 232, 222, 223, 232, 232, 222, 232, 132, 123, 212]
+                data: score
 
             }]
         };
@@ -229,13 +243,34 @@
 
      //来访者的问卷统计分析
     function getDataAcquisitionForVisitingCount(){
+      eui.use(['layer','form'], function(){ //独立版的layer无需执行这一句
+          var $ = eui.jquery
+              ,layer = eui.layer
+              ,form=eui.form;
           var userId= $("#userId").val();
+          //加载层
+          var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
           $.post("/data/acquisition/getDataAcquisitionForVisitingCount",{"userId":userId},function (result) {
-              /*visitingTotal
-              dataAcquisitionTotal
-              dataAcquisitions
-*/
+              layer.closeAll();
+            //来访总次数
+            var  visitingTotal= result.data.visitingTotal;
+            //填写问卷类别总数
+            var   dataAcquisitionType= result.data.dataAcquisitions.length;
+            //填写问卷总数
+            var  dataAcquisitionTotal= result.data.dataAcquisitionTotal;
+
+            $("#visitingTotal").text(visitingTotal);
+            $("#dataAcquisitionType").text(dataAcquisitionType);
+            $("#dataAcquisitionTotal").text(dataAcquisitionTotal);
+            var selectContext="";
+            var questionnaire= result.data.questionnaireList;
+            for(var i=0; i< questionnaire.length;i++){
+                selectContext+="<option value='"+questionnaire[i].dataQuestion+"'>"+questionnaire[i].questionnaireName+"</option>";
+            }
+              $("#questionType").append(selectContext);
+              form.render();
           });
+        });
     }
 
 

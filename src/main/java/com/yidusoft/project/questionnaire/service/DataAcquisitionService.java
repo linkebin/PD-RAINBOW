@@ -27,5 +27,6 @@ public interface DataAcquisitionService extends Service<DataAcquisition> {
     //查询来访者的填写结果
     List<DataAcquisition> findDataAcquistionForVisitor(DataAcquisition dataAcquisition);
     //来访者的问卷统计分析
-    public Result getDataAcquisitionForVisitingCount(String userId);
+   Result getDataAcquisitionForVisitingCount(String userId);
+
 }

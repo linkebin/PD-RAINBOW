@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.channel.dao.ClearingManageMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.channel.domain.ClearingManage">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="clear_id" jdbcType="VARCHAR" property="clearId" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="channel_id" jdbcType="VARCHAR" property="channelId" />
+    <result column="rule_id" jdbcType="VARCHAR" property="ruleId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="brokerage" jdbcType="DECIMAL" property="brokerage" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+
+  <select id="findHasClearingByChannelCounselorId"  resultType="Map">
+        SELECT cm.*,oo.order_money,oo.order_code,
+        (SELECT channel_name FROM channel_manage WHERE id_=cm.channel_id) channel_name,
+        ar.rule,ar.rule_name
+
+         FROM clearing_manage cm LEFT JOIN order_online oo ON oo.ID_=cm.order_id LEFT JOIN account_rule ar ON ar.rule_id=cm.rule_id
+
+        WHERE 1=1
+        <if test="null != ids">
+          AND oo.user_id in
+          <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+
+        <if test="map.startTime != '' and map.endTime!=null">
+          AND cm.create_time  &gt;  #{map.startTime} AND cm.create_time  &lt;  #{map.endTime}
+        </if>
+
+        <if test="map.creator != null and map.creator!=''">
+          AND cm.creator LIKE '%${map.creator}%'
+        </if>
+
+  </select>
+</mapper>
