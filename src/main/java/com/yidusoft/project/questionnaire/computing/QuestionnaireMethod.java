@@ -166,7 +166,7 @@ public class QuestionnaireMethod {
         //意志行为 意志行为=行为+活动+兴趣+人际交往+健康关注
         Map<String,Object> volitionalBehaviorMap  =getFactorScore("意志行为","14,15,16,17,18",questionnaireAnswerList);
         //个性特征 个性特征=自信与自尊+安全与信任+责任感+活泼性+仁慈心+需要满足
-        Map<String,Object> personalityCharacteristicsMap  =getFactorScore("个性特征","14,15,16,17,18",questionnaireAnswerList);
+        Map<String,Object> personalityCharacteristicsMap  =getFactorScore("个性特征","10,11,12,13,14,15",questionnaireAnswerList);
         Map<String,Object> map=new HashMap<>();
         map.put("cognitiveDimension",cognitiveDimensionMap.get("认知维度"));
         map.put("thinkingDimension",thinkingDimensionMap.get("思维维度"));
