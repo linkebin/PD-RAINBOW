@@ -32,7 +32,7 @@
             </div>
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
-                    <a href="#"  class="eui-btn eui-btn-disabled"  onclick="" disabled="disabled"><i class="eui-icon">&#xe60a;</i> 保存</a>
+                  <!--  <a href="#"  class="eui-btn eui-btn-disabled"  onclick="" disabled="disabled"><i class="eui-icon">&#xe60a;</i> 保存</a>-->
                 </div>
             </div>
         </div>
@@ -81,6 +81,7 @@
                                  <option value="">请选择</option>
                                  <option value="1">横版</option>
                                  <option value="2">竖版</option>
+                                 <option value="3">固定模板</option>
                             </select>
                          </div>
                        <label class="eui-form-label">可见权限</label>
@@ -149,8 +150,8 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;" >
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"   class="eui-btn eui-btn-small eui-btn-disabled " onclick="" disabled="disabled">
-                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加标签</p>
+                     <!--   <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"   class="eui-btn eui-btn-small eui-btn-disabled " onclick="" disabled="disabled">
+                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加标签</p>-->
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
                 </div>
@@ -169,8 +170,8 @@
             <div class="eui-col-md6">
                 <div class="eui-btn-group eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
-                        <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small eui-btn-disabled " onclick="" disabled="disabled">
-                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加场景</p>
+                      <!--  <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small eui-btn-disabled " onclick="" disabled="disabled">
+                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加场景</p>-->
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
                     </div>
                 </div>
@@ -181,73 +182,6 @@
                 <!--场景-->
             </div>
         </div>
-
-
-
-
-        <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20" name="transverse">
-            <div class="eui-col-md6" >
-                <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>可选的问题</span>
-            </div>
-            <div class="eui-col-md6">
-                <div class="eui-btn-group eui-panelsIn">
-                    <button class="eui-btn eui-btn-disabled " onclick="chageQuestion()" disabled="disabled"><i class="eui-icon">&#xe610;</i> 选择</button>
-                </div>
-            </div>
-        </div>
-        <div class="eui-row"   name="transverse">
-            <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
-                <form class="eui-form " id="searchFrom" action=""   >
-                    <blockquote class="eui-elem-quote eui-quote-search">
-                        <input type="hidden" id="id" name="id"/>
-                        <input type="hidden"  name="ascriptionType" value="1"/>
-                        <div class="eui-input-inline eui-padding10">
-                            <input type="text" name="questionCode" e-verify="title" value="" autocomplete="off" placeholder="编号" class="eui-input">
-                        </div>
-                        <div class="eui-input-inline eui-padding10">
-                            <input type="text" name="questionContent" e-verify="title" value="" autocomplete="off" placeholder="问题内容" class="eui-input">
-                        </div>
-                        <div class="eui-input-inline eui-padding10">
-                            <select name="questionType">
-                                <option value="" >答案类型</option>
-                                <option value="1" >单选</option>
-                                <option value="2" >多选</option>
-                                <option value="3" >评分单选</option>
-                            </select>
-                        </div>
-                        <div class="eui-input-inline">
-                            <span class="eui-btn" onclick="doSearch()">查询</span>
-                            <span class="eui-btn eui-btn-primary" onclick="resetForm()" >重置</span>
-                        </div>
-                    </blockquote>
-                    <div class="eui-form-item">
-                        <table class="eui-table eui-form" id="questionTable">
-                            <colgroup>
-                                <col width="60">
-                                <col>
-                            </colgroup>
-                            <thead>
-                            <tr>
-                                <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
-                                <th>问题编号</th>
-                                <th>问题内容</th>
-                                <th>选项</th>
-                                <th>答案对应分数</th>
-                                <th>答案</th>
-                                <th>答案类型</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                        <div id="pages"></div>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
                 <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>已选的问题</span>
@@ -424,7 +358,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     //模板类型
     form.on('select(answerModelType)', function(data){
-        if(data.elem.value=='1'){
+        if(data.elem.value=='1' || data.elem.value=='3'){
             $("[name='transverse']").hide();
             var questionList= $("#addQuestionCollapse").children();
             for(var i=0;i< questionList.length;i++ ){

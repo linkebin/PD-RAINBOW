@@ -99,6 +99,7 @@
           SELECT *
             FROM  data_acquisition
             WHERE  data_question=#{dataQuestion}  and   user_id =#{userId}
+            ORDER BY create_time
     </select>
 
     <select id="findQuestionnaireForVisitorAll" parameterType="String" resultMap="QuestionnaireUseInfoResultMap">
