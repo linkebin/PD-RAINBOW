@@ -91,4 +91,19 @@ public interface SecUserMapper extends Mapper<SecUser> {
      */
     SecUser findChannelDefaultAccount(String channelId);
 
+    /**
+     * 查询每月客户增长数量
+     * @return
+     */
+    List<Map<String,Object>> findPerMonthCustomerCount();
+
+    /**
+     * 查询每个渠道商邀请的用户的数量
+     * @return
+     */
+    List<Map<String,Object>> findPerChannelCount();
+
+    List<Map<String,Object>> findAllVisitorCount(String userId);
+
+    List<Map<String,Object>> findAreaVisitor(String userId);
 }

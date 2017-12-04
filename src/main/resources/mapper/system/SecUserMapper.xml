@@ -190,5 +190,46 @@
       </if>
 
     </select>
+    <!--查询每月用户增长数量-->
+    <select id="findPerMonthCustomerCount"  resultType="java.util.Map">
 
+        SELECT su.*,COUNT(*) AS user_count,DATE_FORMAT( su.create_time,'%m')
+        as month   FROM sec_user su
+        WHERE DATE_FORMAT(su.CREATE_TIME,"%Y")= DATE_FORMAT(NOW(),"%Y")
+        AND su.ACCOUNT_TYPE = 1
+        GROUP BY month
+    </select>
+
+    <!--查询每个渠道商-邀请-->
+    <select id="findPerChannelCount" resultType="java.util.Map">
+        	SELECT su1.* ,COUNT(*) as userCount,su2.user_name AS inviterName
+			FROM sec_user su1 ,sec_user su2 WHERE su1.inviter_user = su2.id_
+					AND su1.ACCOUNT_TYPE =1
+							GROUP BY su1.inviter_user
+    </select>
+
+    <select id="findAllVisitorCount" parameterType="String" resultType="java.util.Map">
+
+           SELECT
+            COUNT(*) AS visitorCount ,DATE_FORMAT(vr.create_time, "%m") AS month,
+            visitor_name
+        FROM
+            visitor_register vr
+        WHERE
+            vr.creator = #{userId}
+        AND DATE_FORMAT(vr.create_time, "%Y") = DATE_FORMAT(NOW(),"%Y")
+        GROUP BY month
+    </select>
+
+    <select id="findAreaVisitor" parameterType="String" resultType="java.util.Map">
+        SELECT
+            vr.*,
+            COUNT(*) AS visitorCount
+        FROM
+            visitor_register vr
+        WHERE
+            vr.creator = #{userId}
+        GROUP BY
+            vr.visitor_name
+    </select>
 </mapper>

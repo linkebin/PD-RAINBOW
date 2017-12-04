@@ -79,6 +79,7 @@
                             </div>
                             <div class="eui-col-md6 eui-textAlignR">
                                 <a onclick="addAccount()" class="eui-btn eui-btn-small eui-btn-normal">添加用户</a>
+                                <a onclick="goTocustomerStatistics()" class="eui-btn eui-btn-small eui-btn-normal">邀请统计</a>
                             </div>
                         </div>
 
@@ -369,6 +370,10 @@
             $("#channelAccountAdd").setForm(result.data)
         });
 
+    }
+
+    function goTocustomerStatistics(){
+        window.open("/web/customerStatistics/CustomerStatistics");
     }
 </script>
 
