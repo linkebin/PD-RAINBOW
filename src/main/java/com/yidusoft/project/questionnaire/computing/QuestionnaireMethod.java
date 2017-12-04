@@ -99,9 +99,21 @@ public class QuestionnaireMethod {
         average.put("恐怖症状",decimal(Double.valueOf(factor7.get("恐怖症状").toString())/7));
         average.put("偏执症状",decimal(Double.valueOf(factor8.get("偏执症状").toString())/6));
         average.put("精神症状",decimal(Double.valueOf(factor9.get("精神症状").toString())/10));
+        //记录因子额key值 用于统计
+        Map<String,Object>  key=new HashMap<>();
+        key.put("1","躯体化分");
+        key.put("2","强迫症状");
+        key.put("3","人际敏感");
+        key.put("4","抑郁症状");
+        key.put("5","焦虑症状");
+        key.put("6","敌对症状");
+        key.put("7","恐怖症状");
+        key.put("8","偏执症状");
+        key.put("9","精神症状");
         Map<String,Object>  maps=new HashMap<>();
         maps.put("score",score);
         maps.put("average",average);
+
         return ResultGenerator.genSuccessResult(JSON.toJSONString(maps));
     }
 

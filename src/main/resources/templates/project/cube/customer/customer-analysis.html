@@ -71,12 +71,18 @@
                      var score=new Array;
                      var timeData=new Array;
                      if(result.data.length>1){
+                         $("#analysis").show();
                          for(var i=0;i<result.data.length;i++){
                              var dataAcquistion=eval('('+result.data[i].dataResult+')');
                              timeData[i]= new Date(result.data[i].createTime).Format('yyyy-MM-dd')+"";
                              score[i]=dataAcquistion.totalScore;
                          }
                          analysis(questionnaireNmae,timeData,score);
+                     }else {
+                         $("#analysis").hide();
+                         layer.msg('当前问卷只填写了一张，不做统计', {
+                             time: 3000
+                         });
                      }
 
                 });
@@ -93,6 +99,13 @@
     });
     //问卷填报统计
     function  analysis(name,timeData,score) {
+        var  max=0;
+        for(var i=0;i<score.length;i++){
+            if(max<parseInt(score[i])){
+                max=parseInt(score[i]);
+            }
+        }
+        max+=10;
         var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
         option = {
             title: {
@@ -161,7 +174,7 @@
             yAxis: [{
 
                 type: 'value',
-                max: 500,
+                max: max,
                 name: '单位:',
                 min: 0,
                 interval: 25,
@@ -199,7 +212,7 @@
                         }
                     },
                     data: [
-                        [{
+                   /*     [{
                             name: '优',
                             yAxis: 100,
                             itemStyle: {
@@ -231,7 +244,7 @@
                             }
                         }, {
                             yAxis: 400,
-                        }]
+                        }]*/
                     ]
                 },
                 data: score
