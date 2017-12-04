@@ -802,8 +802,16 @@ body .eui-layer-title{
     border-radius: 0;
 
 }
-
-
+.chartsLeft{
+    width: 280px;
+    position: fixed;
+    left: 50%;
+    top: 80px;
+    margin-left: -600px!important;
+}
+.chartsLeft .eui-form-item{
+    margin-bottom: 10px;
+}
 .collect{
     font-size: 16px;
     cursor: pointer;
@@ -817,21 +825,174 @@ body .eui-layer-title{
 .filter>li .chartsContent{
     padding-left: 15px;
 }
+.areal{
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 0 10px #cccccc;
+
+}
+.areal{
+    position: relative;
+    padding-bottom: 10px;
+}
+.areal .arealIn{
+    position: absolute;
+    display: block;
+    width: 98%;
+    height: 100%;
+    background: #e6e6e6;
+    left: 8px;
+    top: 6px;
+    z-index: -1;
+}
+.areal .eui-tab-title{
+    border-bottom: 0;
+}
+.areal .eui-tab-brief>.eui-tab-title .eui-this{
+    color: #279eff;
+}
+.areal .eui-tab-brief>.eui-tab-title .eui-this:after{
+    height: 50px;
+    border-bottom: 0;
+    background: url(../../images/xymfImages/xymf/province.png) no-repeat center 34px;
+}
 
 
 
+.statistics li{
+    overflow: hidden;
+}
+.statistics .eui-progress{
+    border-radius: 0;
+    background: #ffffff;
+    height: 8px;
+}
+.statistics .eui-progress-bar{
+    border-radius: 0;
+    background: #279eff;
+    height: 8px;
+}
 
+.types .eui-table thead tr{
+    background: #FFFFFF;
+}
+.types .eui-table td, .eui-table th, .eui-table[e-skin=row], .eui-table[e-skin=line]{
+    border: 0;
+    border-bottom: 1px solid #e2e2e2;
+}
+.types .eui-progress{
+    border-radius:0;
+}
+.types .eui-progress-bar{
+    border-radius:0;
+    background: linear-gradient(to right,#1786e5,#8cc5f9);
+}
+.chartsColor1{
+    color: #6a91ea;
+}
+.chartsColor2{
+    color: #ce4e43;
+}
+.sexSpread{
+    height: auto;
+    margin-bottom: 10px;
+}
+.sexSpread li{
+    float: left;
+    margin-right: 4px;
+    margin-bottom: 4px;
+    width: 16px;
+    height: 16px;
+    background: url(../../images/xymfImages/xymf/man.png) no-repeat center center;
+    -webkit-background-size: 15px;
+    background-size: 15px;
+}
+.sexSpread .sexWoman{
+    background: url(../../images/xymfImages/xymf/woman.png) no-repeat center center;
+    -webkit-background-size: 12px;
+    background-size: 12px;
+}
+.charts0{
+    width: 100%;
+    height: 250px;
+}
 
+.marriage{
+    position: relative;
+}
+.marriageIn{
+    position: absolute;
+    text-align: center;
+    color: #ffffff;
+    border-radius: 50%;
+}
+.marriage1{
+    width: 80px;
+    height: 80px;
+    padding-top: 20px;
+    box-sizing: border-box;
+    background: #ce4e43;
+    left: 50px;
+    top: 130px;
+}
+.marriage2{
+    width: 120px;
+    height: 120px;
+    padding-top: 40px;
+    box-sizing: border-box;
+    background: #8884d8;
+    left: 140px;
+    top: 40px;
+}
+.marriage3{
+    width: 100px;
+    height: 100px;
+    padding-top: 32px;
+    box-sizing: border-box;
+    background: #c1e5ce;
+    left: 260px;
+    top: 10px;
+    color: #333333;
+}
+.marriage4{
+    width: 90px;
+    height: 90px;
+    padding-top: 26px;
+    box-sizing: border-box;
+    background: #82ca9d;
+    left: 0;
+    top: 20px;
+}
+.marriage5{
+    width: 94px;
+    height: 94px;
+    padding-top: 28px;
+    box-sizing: border-box;
+    background: #6a91ea;
+    left: 150px;
+    top: 180px;
+}
+.marriage6{
+    width: 86px;
+    height: 86px;
+    padding-top: 26px;
+    box-sizing: border-box;
+    background: #ffc658;
+    left: 240px;
+    top: 140px;
+}
 
+.chartsLeft .eui-form-select dl dd, .eui-form-select dl dt{
+    color: #333;
+}
+.chartsLeft .eui-form-select dl dd.eui-this{
+    color: #ffffff;
+}
+.areal .eui-form-selected dl{
+    text-align: center;
+}
 
-
-
-
-
-
-
-
-
-
-
+.collectIn{
+    color: #f9f864;
+}
 
