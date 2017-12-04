@@ -8,6 +8,7 @@ import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.channel.service.ClearingManageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -45,10 +46,25 @@ public class ClearingManageController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
-        ClearingManage clearingManage = clearingManageService.findById(id);
-        return ResultGenerator.genSuccessResult(clearingManage);
+    @PostMapping("/clearingLineChart")
+    public Result clearingLineChart(String json) {
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+
+        List<Map<String,Object>> maps = clearingManageService.findChannelAccountLineChart(null,map);
+
+        return ResultGenerator.genSuccessResult(maps);
+    }
+
+    @PostMapping("/channelUserLineChart")
+    public Result channelUserLineChart(String json) {
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+        List<String> ids = getChannelConsultIds(map);
+        map.put("channel_id", Security.getUser().getChannelId());
+        List<Map<String,Object>> maps = null;
+        if (ids.size()>0){
+            maps = clearingManageService.findChannelAccountLineChart(ids,map);
+        }
+        return ResultGenerator.genSuccessResult(maps);
     }
 
     @PostMapping("/listHasClearing")

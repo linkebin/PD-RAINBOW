@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>结算规则时间线</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body>
+<div class="eui-bg-white eui-padding15">
+    <ul class="eui-timeline">
+        <th:block th:each="mapS:${channelRuleMaps}">
+            <li class="eui-timeline-item">
+                <i class="eui-icon eui-timeline-axis">&#xe63f;</i>
+                <div class="eui-timeline-content eui-text">
+                    <h3 class="eui-timeline-title">
+                        <span th:text="${#dates.format(mapS.start_time,'yyyy-MM-dd')}"></span> -
+                        <span  th:text="${#dates.format(mapS.end_time,'yyyy-MM-dd')}"></span>
+                    </h3>
+                    <p>
+                    <ul>
+                        <li th:text="${mapS.rule_name}">礼包2</li>
+                        <ul>
+                            <li style="list-style-type: none;"><span th:text="${mapS.rule}">0.4</span>
+                                <!--<span style="float: right;">超级管理员</span>-->
+                            </li>
+                        </ul>
+                    </ul>
+                    </p>
+                </div>
+            </li>
+        </th:block>
+
+    </ul>
+</div>
+</body>
+</html>

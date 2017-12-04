@@ -11,4 +11,7 @@ public interface ClearingManageMapper extends Mapper<ClearingManage> {
 
     List<Map<String,Object>> findHasClearingByChannelCounselorId(@Param("ids")List<String> ids,
                                                                  @Param("map")Map<String,Object> map);
+
+    List<Map<String,Object>> findChannelAccountLineChart(@Param("ids")List<String> ids,
+                                                         @Param("map")Map<String,Object> map);
 }

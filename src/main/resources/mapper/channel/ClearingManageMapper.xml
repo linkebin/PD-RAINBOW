@@ -16,7 +16,7 @@
   </resultMap>
 
   <select id="findHasClearingByChannelCounselorId"  resultType="Map">
-        SELECT cm.*,oo.order_money,oo.order_code,
+        SELECT cm.*,oo.order_money,oo.order_code,oo.creator consultant_name ,
         (SELECT channel_name FROM channel_manage WHERE id_=cm.channel_id) channel_name,
         ar.rule,ar.rule_name
 
@@ -34,9 +34,36 @@
           AND cm.create_time  &gt;  #{map.startTime} AND cm.create_time  &lt;  #{map.endTime}
         </if>
 
+          <if test="map.status != '' and map.status!=null">
+              AND cm.status =#{map.status}
+          </if>
+
         <if test="map.creator != null and map.creator!=''">
           AND cm.creator LIKE '%${map.creator}%'
         </if>
-
+      ORDER BY cm.create_time DESC
   </select>
+
+    <select id="findChannelAccountLineChart"  resultType="Map">
+     SELECT date_format(cm.create_time, '%Y-%m') AS create_time,  sum(cm.brokerage) AS brokerage,
+            (
+                SELECT max(maxY) maxY FROM(
+                SELECT  sum(cm.brokerage) maxY  FROM clearing_manage cm
+                WHERE cm.channel_id=#{map.channel_id} AND cm.`status`=2
+                GROUP BY  date_format(cm.create_time, '%Y-%m')
+            ) v
+        ) maxY
+
+     FROM clearing_manage cm LEFT JOIN order_online oo ON cm.order_id=oo.ID_
+	 WHERE cm.channel_id=#{map.channel_id} AND cm.`status`=2
+
+    <if test="null != ids">
+        AND oo.user_id in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </if>
+
+        GROUP BY  date_format(cm.create_time, '%Y-%m')
+    </select>
 </mapper>
