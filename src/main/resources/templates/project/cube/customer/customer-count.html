@@ -219,7 +219,7 @@
                         <div class="arealIn"></div>
                         <div class="eui-row eui-padding5">
                             <div class="eui-col-md7">
-                                地图
+                                <div id="map" class="charts0" style="height: 360px;"></div>
                             </div>
                             <div class="eui-col-md5">
                                 <div class="eui-tab eui-tab-brief" e-filter="docDemoTabBrief">
@@ -661,7 +661,7 @@
                             </div>
                             <div class="eui-col-md6">
                                 <div class="eui-font16 eui-marginB20 eui-marginT10">婚姻状况</div>
-                                <div class="marriage">
+                                <!--<div class="marriage">
                                     <div class="marriageIn marriage1">
                                         <p><span>1210</span>,<span>30%</span></p>
                                         <p>丧偶独居</p>
@@ -686,7 +686,8 @@
                                         <p><span>1210</span>,<span>30%</span></p>
                                         <p>离婚独居</p>
                                     </div>
-                                </div>
+                                </div>-->
+                                <div id="marriages" class="charts0"></div>
                             </div>
                             <div class="eui-col-md12">
                                 <div class="eui-font16 eui-marginB20 eui-marginT10">宗教信仰</div>
@@ -701,67 +702,6 @@
         </div>
     </div>
 
-    <div class="eui-area">
-        <div class="eui-row eui-padding10 eui-font16">
-            <div class="eui-col-md2">
-                <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-blue" id="customerSum">0</span>个</p>
-                    <p class="name">客户总数</p>
-                </a>
-            </div>
-        </div>
-        <div class="eui-row eui-padding10 eui-font16">
-            <div class="eui-row dataCharts">
-                <div class="eui-col-md12">
-                    <div id="sum" style="width: 100%;height:100%;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="eui-row eui-padding10 eui-font26">
-            <div class="eui-col-md12">
-                <div class="eui-tab">
-                    <ul class="eui-tab-title">
-                        <li class="eui-this">占比</li>
-                        <li>折线</li>
-                        <li>分析</li>
-                    </ul>
-                    <div class="eui-tab-content">
-                        <div class="eui-tab-item eui-show">
-                            <div class="eui-row dataCharts">
-                                <div class="eui-col-md6">
-                                    <div id="sex" style="width: 100%;height:320px;"></div>
-                                </div>
-                                <div class="eui-col-md6">
-                                    <div id="occupation" style="width: 100%;height:320px;"></div>
-                                </div>
-                            </div>
-                            <div class="eui-row dataCharts">
-                                <div class="eui-col-md6">
-                                    <div id="income" style="width: 100%;height:320px;"></div>
-                                </div>
-                                <div class="eui-col-md6">
-                                    <div id="level" style="width: 100%;height:320px;"></div>
-                                </div>
-                            </div>
-                            <div class="eui-col-md6">
-                                <div id="status" style="width: 100%;height:320px;"></div>
-                            </div>
-                        </div>
-                        <div class="eui-tab-item">
-                            <div class="eui-area eui-textAlignC eui-marginT20">
-                                <img src="/Styles/images/todo.png" width="380">
-                            </div>
-                        </div>
-                        <div class="eui-tab-item">
-                            <div class="eui-area eui-textAlignC eui-marginT20">
-                                <img src="/Styles/images/todo.png" width="380">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div th:replace="project/cube/common/footer :: footer">footer</div>
 </div>
 </body>
@@ -771,7 +711,19 @@
 <script src="/Scripts/plugins/echarts/echarts.min.js"></script>
 <!-- 引入 macarons 主题 -->
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
+<!--婚姻状况脚本-->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<!--地图脚本-->
+<script src="http://gallery.echartsjs.com/dep/echarts/map/js/china.js"></script>
+<script src="http://gallery.echartsjs.com/dep/echarts/map/js/world.js"></script>
 <script>
+    var form, layer;
+    eui.use(['form', 'layer', 'element'], function () {
+        form = eui.form;
+        layer = eui.layer;
+        var element = eui.element;
+    })
+
     // charts用户统计页面左侧筛选栏
     $(".filter>li .chartsContent").hide();
     $(".filter>li").click(function(){
@@ -784,6 +736,11 @@
     $(".collect").click(function(){
         $(this).toggleClass("collectIn");
     })
+    // 左侧宽度
+    var carouselHeight = $(window).height() - 280;
+    $(".filter").css("min-height", carouselHeight+'px');
+
+
 
     // 年龄分布
     var myChart = echarts.init(document.getElementById('chart1'),'macarons');
@@ -1026,7 +983,7 @@
                 areaStyle:{
                     color: 'transparent'
                 }
-            },
+            }
         },
         series: [{
 //            name: '销量',
@@ -1039,450 +996,608 @@
     myChart.setOption(option);
     //年龄分布
 
+    // 婚姻状况
+    var myChart = echarts.init(document.getElementById('marriages'),'macarons');
+    //数据
+    var data = {
+        name: "基础数据资源",
+        "children": [{
+            "name": "基础信息数据量",
+            "children": [{
+                "name": "建档人数", //类型名称
+                "size": 133, //总数
+                "add": "11", //本月新增数
+                "rate": "13%" //月增长率
+            }, {
+                "name": "妊娠期妇女管理数",
+                "size": 44,
+                "add": "11",
+                "rate": "13%"
+            }, {
+                "name": "儿童管理数",
+                "size": 24,
+                "add": "11",
+                "rate": "13%"
+            }, {
+                "name": "新生儿管理数",
+                "size": 4,
+                "add": "13",
+                "rate": "13%"
+            }, {
+                "name": "老年人管理数",
+                "size": 34,
+                "add": "14",
+                "rate": "13%"
+            }],
+            "size": 199,
+            "add": "11",
+            "rate": "13%"
+        }
+        ]
+    };
 
-
-
-
-
-
-
-    var form, layer;
-    eui.use(['form', 'layer', 'element'], function () {
-        form = eui.form;
-        layer = eui.layer;
-        var element = eui.element;
-    })
-
-    var sexData = [
-        {value: 0, name: '男'},
-        {value: 0, name: '女'}
-    ]
-    var occupation = [
-        {value: 0, name: '计算机/互联网/通信/电子'},
-        {value: 0, name: '会计/金融/银行/保险'},
-        {value: 0, name: '贸易/消费/制造/运营'},
-        {value: 0, name: '制药/医疗'},
-        {value: 0, name: '广告/媒体'},
-        {value: 0, name: '房地产/建筑'},
-        {value: 0, name: '专业服务/教育/培训'},
-        {value: 0, name: '服务业'},
-        {value: 0, name: '物流/运输'},
-        {value: 0, name: '能源/新材料'},
-        {value: 0, name: '政府/非盈利机构'},
-        {value: 0, name: '自由职业/其他'},
-        {value: 0, name: '暂无任职'},
-    ]
-    $(function () {
-        $.get("/visitor/register/customerCount", function (result) {
-            console.log(result);
-            if (result.code == 200) {
-                var visitorList = result.data;
-                $('#customerSum').html(visitorList.length);
-                for (var i in visitorList) {
-                    var visitor = visitorList[i];
-                    //判断性别
-                    if (visitor.sex == 1) {
-                        sexData[0].value++;
-                    } else {
-                        sexData[1].value++;
-                    }
-                    //判断职业
-                    if (visitor.occupation == '计算机/互联网/通信/电子') {
-                        occupation[0].value++;
-                    } else if (visitor.occupation == '会计/金融/银行/保险') {
-                        occupation[1].value++;
-                    } else if (visitor.occupation == '贸易/消费/制造/运营') {
-                        occupation[2].value++;
-                    } else if (visitor.occupation == '制药/医疗') {
-                        occupation[3].value++;
-                    } else if (visitor.occupation == '广告/媒体') {
-                        occupation[4].value++;
-                    } else if (visitor.occupation == '房地产/建筑') {
-                        occupation[5].value++;
-                    } else if (visitor.occupation == '专业服务/教育/培训') {
-                        occupation[6].value++;
-                    } else if (visitor.occupation == '服务业') {
-                        occupation[7].value++;
-                    } else if (visitor.occupation == '物流/运输') {
-                        occupation[8].value++;
-                    } else if (visitor.occupation == '能源/新材料') {
-                        occupation[9].value++;
-                    } else if (visitor.occupation == '政府/非盈利机构') {
-                        occupation[10].value++;
-                    } else if (visitor.occupation == '自由职业/其他') {
-                        occupation[11].value++;
-                    } else if (visitor.occupation == '暂无任职') {
-                        occupation[12].value++;
-                    }
-                }
-                calculation(visitorList);
-                customerSum(visitorList);//客户总数折线图
-                pieChart('sex', '性别', '男女比例',['男','女'], sexData);
-                var data = [
-                    '计算机/互联网/通信/电子',
-                    '会计/金融/银行/保险',
-                    '贸易/消费/制造/运营',
-                    '制药/医疗',
-                    '广告/媒体',
-                    '房地产/建筑',
-                    '专业服务/教育/培训',
-                    '服务业',
-                    '物流/运输',
-                    '能源/新材料',
-                    '政府/非盈利机构',
-                    '自由职业/其他',
-                    '暂无任职'
-                ]
-                initRingGraph('occupation', '职业','职业比例',data , occupation);
+    //配色
+    var getFillColor = function(nodeName, isLeaf) {
+        var fill = {};
+        var baseArray = ["基础信息数据量", "建档人数", "妊娠期妇女管理数", "儿童管理数", "新生儿管理数", "老年人管理数"];
+        var signArray = ["家庭医生签约人数", "慢性病人管理数", "家庭医生签约", "精神病患者管理数", "糖尿病患者管理数", "高血压患者管理数", "脑卒中患者管理数", "残疾患者管理数",
+            "糖尿病患者签约数", "精神病患者签约数", "高血压患者签约数", "脑卒中患者签约数"
+        ];
+        var recordArray = ["健康档案数量", "健康档案管理数", "门诊管理数", "住院管理数", "检验报告管理数", "检查报告管理数"];
+        if ($.inArray(nodeName, baseArray) != -1) {
+            if (isLeaf) {
+                fill.fillColor = {
+                    type: "radial",
+                    x: 0.5,
+                    y: 0.5,
+                    r: 0.5,
+                    colorStops: [{
+                        offset: 0,
+                        color: "#8884d8" // 0% 处的颜色
+                    }, {
+                        offset: 1,
+                        color: "#6a91ea" // 100% 处的颜色
+                    }],
+                    globalCoord: false // 缺省为 false
+                };
+//                fill.borderColor = "#03a1b3";
+                fill.borderWidth = 1;
+                fill.emphasisFillColor = {
+                    type: "radial",
+                    x: 0.5,
+                    y: 0.5,
+                    r: 0.5,
+                    colorStops: [{
+                        offset: 0,
+                        color: "#0a7998" // 0% 处的颜色
+                    }, {
+                        offset: 0.7,
+                        color: "#0b9ec8" //70% 处的颜色
+                    }, {
+                        offset: 1,
+                        color: "#09c2f6" // 100% 处的颜色
+                    }],
+                    globalCoord: false // 缺省为 false
+                };
+                fill.emphasisBorderColor = "#09c2f6";
+                fill.emphasisborderWidth = 1;
             } else {
-                layer.msg(result.message, {
-                    icon: 2,
-                    time: 1500
-                });
-            }
-        })
-    })
-
-    var income = [
-        {value: 0, name: '3000元以下'},
-        {value: 0, name: '3000 - 6000元'},
-        {value: 0, name: '6000 - 10000元'},
-        {value: 0, name: '10000元以上'},
-    ]
-    var level = [
-        {value: 0, name: '小学'},
-        {value: 0, name: '初中'},
-        {value: 0, name: '高中'},
-        {value: 0, name: '专科'},
-        {value: 0, name: '本科'},
-        {value: 0, name: '研究生'},
-        {value: 0, name: '博士'},
-    ]
-    /*var maritalStatus = [
-        {value: 0, name: '未婚'},
-        {value: 0, name: '已婚'},
-        {value: 0, name: '分居'},
-        {value: 0, name: '再婚'},
-        {value: 0, name: '离婚独居'},
-        {value: 0, name: '丧偶独居'},
-    ]*/
-    var maritalStatus = [0,0,0,0,0,0]
-    function calculation(visitorList) {
-        for (var i in visitorList) {
-            var visitor = visitorList[i];
-            //判断收入
-            if (visitor.income == '3000元以下') {
-                income[0].value++;
-            } else if (visitor.income == '3000 - 6000元') {
-                income[1].value++;
-            } else if (visitor.income == '6000 - 10000元') {
-                income[2].value++;
-            } else {
-                income[3].value++;
-            }
-
-            //判断教育程度
-            if (visitor.educationLevel == 1) {
-                level[0].value++;
-            } else if (visitor.educationLevel == 2) {
-                level[1].value++;
-            } else if (visitor.educationLevel == 3) {
-                level[2].value++;
-            } else if (visitor.educationLevel == 4) {
-                level[3].value++;
-            } else if (visitor.educationLevel == 5) {
-                level[4].value++;
-            } else if (visitor.educationLevel == 6) {
-                level[5].value++;
-            } else if (visitor.educationLevel == 7) {
-                level[6].value++;
-            } else if (visitor.educationLevel == 8) {
-                level[7].value++;
-            }
-            
-            if (visitor.maritalStatus == 1) {
-                maritalStatus[0]++;
-            } else if (visitor.maritalStatus == 2) {
-                maritalStatus[1]++;
-            } else if (visitor.maritalStatus == 3) {
-                maritalStatus[2]++;
-            } else if (visitor.maritalStatus == 4) {
-                maritalStatus[3]++;
-            } else if (visitor.maritalStatus == 5) {
-                maritalStatus[4]++;
-            } else {
-                maritalStatus[5]++;
+//                fill.fillColor = "rgba(0, 252, 255, 0.1)";
+//                fill.borderColor = "rgba(11, 72, 115, 1)";
+//                fill.borderWidth = 0;
+//                fill.emphasisFillColor = "rgba(0, 252, 255, 0.1)";
+//                fill.emphasisBorderColor = "rgba(11, 72, 115, 1)";
+//                fill.emphasisborderWidth = 0;
             }
         }
-        initRingGraph('income', '收入','收入比例', ['3000元以下','3000 - 6000元','6000 - 10000元','10000元以上'], income);
-        init('level', '教育程度','教育程度比例', ['小学','初中','高中','专科','本科','研究生','博士'], level);
-        /*initRingGraph('status', '婚姻状况','婚姻状况比例',['未婚','已婚','分居','再婚','离婚独居','丧偶独居'] , maritalStatus);*/
-        test('status', '婚姻状况','婚姻状况比例',['未婚','已婚','分居','再婚','离婚独居','丧偶独居'],maritalStatus);
-    }
+        return fill;
+    };
 
-    //初始化饼图
-    function pieChart(id,text,name,data,data1) {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById(id), 'macarons');
-        option = {
-            title : {
-                text: text,
-                x:'center'
-            },
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left',
-                data: data
-            },
-            series : [
-                {
-                    name: name,
-                    type: 'pie',
-                    radius : '70%',
-                    center: ['50%', '50%'],
-                    data: data1,
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
+    //渲染函数
+    var renderItem = function(params, api) {
+        var fillObj = getFillColor(api.value(2), api.value(9));
+        var textPosition = "inside";
+        if (!api.value(9)) {
+            if (api.value(1) == 1) {
+                if (api.value(6) > api.getWidth() / 2) {
+                    textPosition = "right";
+                } else {
+                    textPosition = "left";
                 }
-            ]
+            } else {
+                textPosition = "top";
+            }
+        }
+        return {
+            type: "circle",
+            shape: {
+                cx: api.value(6),
+                cy: api.value(7),
+                r: api.value(8)
+            },
+            z2: api.value(1) * 2,
+            style: api.style({
+                stroke: fillObj.borderColor,
+                fill: fillObj.fillColor,
+                textPosition: textPosition,
+                lineWidth: fillObj.borderWidth
+                //text: nodeName,
+                // textFont: textFont,
+                // textDistance : itemLayout.r,
+            }),
+            styleEmphasis: api.style({
+                textPosition: textPosition,
+                stroke: fillObj.emphasisBorderColor,
+                fill: fillObj.emphasisFillColor,
+                lineWidth: fillObj.emphasisborderWidth
+            })
         };
-        myChart.setOption(option);
-    }
+    };
 
-    //初始化环形图
-    function initRingGraph(id, text ,name, data, data1) {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById(id), 'macarons');
-        option = {
-            title: {
-                text: text,
-                x: 'center'
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b}: {c} ({d}%)"
-            },
-            legend: {
-                orient: 'vertical',
-                x: 'left',
-                data:data
-            },
-            series: [
-                {
-                    name:name,
-                    type:'pie',
-                    radius: ['50%', '70%'],
-                    avoidLabelOverlap: false,
-                    label: {
-                        normal: {
-                            show: false,
-                            position: 'center'
+    var root = d3.hierarchy(data)
+            .sum(function(d) {
+                return d.size;
+            })
+            .sort(function(a, b) {
+                return b.value - a.value;
+            });
+    d3.pack()
+            .size([240,260])
+            .padding(0.5)(root);
+    var maxDepth = 0;
+    var nodeAll = root.descendants();
+    var nodes = nodeAll.filter(function(it) {
+        return it.parent;
+    });
+
+    //获取各圆相关数据
+    var seriesData = nodes.map(function(node) {
+        maxDepth = Math.max(maxDepth, node.depth);
+        var color = "#ffffff";
+        node.isLeaf = !node.children || !node.children.length;
+        if (node.depth == 1) {
+            switch (node.data.name) {
+                case "健康档案数量":
+                    color = "rgba(14, 149, 156, 1)";
+                    break;
+            }
+            return {
+                value: [
+                    node.value,
+                    node.depth,
+                    node.data.name,
+                    node.data.size,
+                    node.data.add,
+                    node.data.rate,
+                    node.x,
+                    node.y,
+                    node.r,
+                    node.isLeaf
+                ],
+                label: {
+                    normal: {
+                        show: true,
+                        color: color,
+                        formatter: function(params) {
+                            return "{type|" + params.value[2] + "}\n{numAll|" + params.value[3] + "}\n{add|本月新增：" + params.value[4] + "}";
                         },
-                        emphasis: {
-                            show: true,
-                            textStyle: {
-                                fontSize: '30',
-                                fontWeight: 'bold'
+                        rich: {
+                            type: {
+                                fontSize: 14,
+                                color: color
+                            },
+                            numAll: {
+                                fontSize: 28,
+                                padding: [5, 0, 5, 0],
+                                color: color
+                            },
+                            add: {
+                                fontSize: 14,
+                                color: color
                             }
                         }
-                    },
-                    labelLine: {
-                        normal: {
-                            show: false
-                        }
-                    },
-                    data:data1
-                }
-            ]
-        };
-        myChart.setOption(option);
-    }
-    //初始化南丁格尔玫瑰图
-    function init(id,text,name,data,data1) {
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById(id), 'macarons');
-        option = {
-            title : {
-                text: text,
-                x:'center'
-            },
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-                orient: 'vertical',
-                x : 'left',
-                data:data
-            },
-            toolbox: {
-                show : true,
-                feature : {
-                    mark : {show: true},
-                    magicType : {
-                        show: true,
-                        type: ['pie', 'funnel']
-                    },
-                }
-            },
-            calculable : true,
-            series : [
-                {
-                    name:name,
-                    type:'pie',
-                    radius : [20, 110],
-                    roseType : 'radius',
-                    label: {
-                        normal: {
-                            show: false
-                        },
-                        emphasis: {
-                            show: true
-                        }
-                    },
-                    lableLine: {
-                        normal: {
-                            show: false
-                        },
-                        emphasis: {
-                            show: true
-                        }
-                    },
-                    data:data1
-                }
-            ]
-        };
-        myChart.setOption(option);
-    }
-
-
-    var sum = [0,0,0,0,0,0,0,0,0,0,0,0];
-    //客户总数曲线图
-    function customerSum(visitorList) {
-        for (var i in visitorList) {
-            var visitor = visitorList[i];
-            var date = new Date(visitor.createTime).getMonth()+1;
-            if(date==1){
-                sum[0]++;
-            }else if(date==2){
-                sum[1]++;
-            }else if(date==3){
-                sum[2]++;
-            }else if(date==4){
-                sum[3]++;
-            }else if(date==5){
-                sum[4]++;
-            }else if(date==6){
-                sum[5]++;
-            }else if(date==7){
-                sum[6]++;
-            }else if(date==8){
-                sum[7]++;
-            }else if(date==9){
-                sum[8]++;
-            }else if(date==10){
-                sum[9]++;
-            }else if(date==11){
-                sum[10]++;
-            }else if(date==12){
-                sum[11]++;
-            }
-        }
-        brokenLineGraph('sum','客户增长曲线图',['客户增长'],'客户增长',sum);
-    }
-
-    //初始化折线图
-    function brokenLineGraph(id,text,data,name,data1) {
-        var myChart = echarts.init(document.getElementById(id), 'macarons');
-        option = {
-            title: {
-                text: text
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:data
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name:name,
-                    type:'line',
-                    stack: '总量',
-                    data:data1
-                }
-            ]
-        };
-        myChart.setOption(option);
-    }
-
-    function test(id,text,name,data,data1) {
-        var myChart = echarts.init(document.getElementById(id), 'macarons');
-        option = {
-            title : {
-                text: text,
-                x:'center'
-            },
-            color: ['#3398DB'],
-            tooltip : {
-                trigger: 'axis',
-                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis : [
-                {
-                    type : 'category',
-                    data : data,
-                    axisTick: {
-                        alignWithLabel: true
                     }
                 }
-            ],
-            yAxis : [
-                {
-                    type : 'value'
+            }
+        } else {
+            if (node.data.name == "家庭医生签约" || node.data.name == "慢性病人管理数") {
+                color = "rgba(222, 0, 155,1)";
+            }
+            return {
+                value: [
+                    node.value,
+                    node.depth,
+                    node.data.name,
+                    node.data.size,
+                    node.data.add,
+                    node.data.rate,
+                    node.x,
+                    node.y,
+                    node.r,
+                    node.isLeaf
+                ],
+                label: {
+                    normal: {
+                        show: true,
+                        color: color,
+                        position: "inside",
+                        formatter: function(params) {
+                            var result = "";
+                            var nodeName = params.value[2];
+                            if (params.value[9]) {
+                                if (params.value[8] > 10) {
+                                    var trunText = echarts.format.truncateText(nodeName, 2 * params.value[8], {
+                                        fontSize: 14,
+                                        fontFamily: "微软雅黑"
+                                    }, '.');
+                                    if (trunText.indexOf(".") > 0) {
+                                        var strindex1 = nodeName.indexOf("患者");
+                                        var strindex2 = nodeName.indexOf("管理数");
+                                        if (strindex1 > 0) {
+                                            result += "{type|" + nodeName.substring(0, strindex1) + "}";
+                                        } else {
+                                            result += "{type|" + nodeName.substring(0, strindex2) + "}";
+                                        }
+                                    } else {
+                                        result += "{type|" + nodeName + "}";
+                                    }
+                                    if (params.value[8] > 45) {
+                                        result += "\n{num|" + params.value[3] + "}";
+                                    }
+                                }
+                            } else {
+                                result += "{type|" + params.value[2] + "}";
+                            }
+                            return result;
+                        },
+                        rich: {
+                            type: {
+                                fontSize: 12,
+                                padding: [5, 0, 5, 0],
+                                color: color
+                            },
+                            num: {
+                                fontSize: 16,
+                                color: color
+                            }
+                        }
+                    }
                 }
-            ],
-            series : [
-                {
-                    name: name,
-                    type:'bar',
-                    barWidth: '60%',
-                    data:data1
+            }
+        }
+    });
+
+    //echarts 配置
+    option = {
+        backgroundColor: "transparent",
+        title: {
+//            text: "2017-10",
+            textStyle: {
+//                color: "rgba(164, 159, 159, 0.21)",
+                fontSize: 16,
+                fontFamily: "微软雅黑",
+                fontWeight: "normal"
+            },
+            right: 0,
+            bottom: 0
+        },
+        xAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            }
+        },
+        yAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            }
+        },
+        tooltip: {
+            backgroundColor: "rgba(50,50,50,0.8)",
+            formatter: function(params) {
+                var size = ("" + params.value[3]).replace(/\d{1,3}(?=(\d{3})+$)/g, "$&,");
+                var add = ("" + params.value[4]).replace(/\d{1,3}(?=(\d{3})+$)/g, "$&,");
+                var result = "<span>" + params.value[2] + "</span><br>" +
+                        "<span style = 'line-height:30px;font-size : 25px; font-weight:bold;'>" + size + "</span></br>" +
+                        "<div>" +
+                        "<div style = 'float : left; padding-right:20px; border-right: solid 1px #4c4a4a;'>" +
+                        "<span >本月新增</span></br>" +
+                        "<span style = 'color : #6a91ea; '>" + add + "</span>" +
+                        "</div>" +
+                        "<div style = 'float : right; margin-left:20px;'>" +
+                        "<span style = 'width : 100px;'>月增长率</span></br>";
+                if (params.value[5] > 0) {
+                    result += "<span style = 'color : #6a91ea;  width : 100px;'>+" + params.value[5] + "</span>"
+                } else {
+                    result += "<span style = 'color : #6a91ea;  width : 100px;'>" + params.value[5] + "</span>"
                 }
-            ]
-        };
-        myChart.setOption(option);
-    }
+                result += "</div>" +
+                "</div>";
+                return result;
+            }
+        },
+        series: {
+            type: "custom",
+            renderItem: renderItem,
+            data: seriesData
+        }
+    };
+    myChart.setOption(option);
+
+
+
+    //地图
+    var myChart = echarts.init(document.getElementById('map'),'macarons');
+    var option = {
+        backgroundColor: 'transparent',
+        title: {
+//            text: '阴阳师与王者荣耀贴吧用户区域分布',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['王者荣耀', '阴阳师']
+        },
+        visualMap: {
+            min: 0,
+            max: 100,
+            left: 'left',
+            top: 'bottom',
+            text: ['高', '低'],
+            calculable: true,
+            inRange: {
+                color: ['#50a3ba','#f1c40f', '#e67e22', '#d94e5d']
+            },
+            textStyle: {
+                color: '#fff'
+            }
+        },
+
+        series: [{
+            name: '王者荣耀',
+            type: 'map',
+            mapType: 'china',
+            roam: true,
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            data: [{
+                name: '北京',
+                value: 6.8
+            }, {
+                name: '天津',
+                value: 1.6
+            }, {
+                name: '上海',
+                value: 4.7
+            }, {
+                name: '重庆',
+                value: 2.5
+            }, {
+                name: '河北',
+                value: 3.6
+            }, {
+                name: '河南',
+                value: 4.5
+            }, {
+                name: '云南',
+                value: 1.1
+            }, {
+                name: '辽宁',
+                value: 3.1
+            }, {
+                name: '黑龙江',
+                value: 2.1
+            }, {
+                name: '湖南',
+                value: 2.9
+            }, {
+                name: '安徽',
+                value: 2.9
+            }, {
+                name: '山东',
+                value: 6.6
+            }, {
+                name: '新疆',
+                value: 0.5
+            }, {
+                name: '江苏',
+                value: 8.3
+            }, {
+                name: '浙江',
+                value: 7.6
+            }, {
+                name: '江西',
+                value: 2.3
+            }, {
+                name: '湖北',
+                value: 3.6
+            }, {
+                name: '广西',
+                value: 2.0
+            }, {
+                name: '甘肃',
+                value: 0.6
+            }, {
+                name: '山西',
+                value: 1.7
+            }, {
+                name: '内蒙古',
+                value: 0.9
+            }, {
+                name: '陕西',
+                value: 2.1
+            }, {
+                name: '吉林',
+                value: 1.1
+            }, {
+                name: '福建',
+                value: 4.4
+            }, {
+                name: '贵州',
+                value: 1.0
+            }, {
+                name: '广东',
+                value: 12.6
+            }, {
+                name: '青海',
+                value: 0.1
+            }, {
+                name: '西藏',
+                value: 0.2
+            }, {
+                name: '四川',
+                value: 4.7
+            }, {
+                name: '宁夏',
+                value: 0.3
+            }, {
+                name: '海南',
+                value: 0.6
+            }, {
+                name: '台湾',
+                value: 0.3
+            }]
+        }, {
+            name: '阴阳师',
+            type: 'map',
+            mapType: 'china',
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            data: [{
+                name: '北京',
+                value: 6.9
+            }, {
+                name: '天津',
+                value: 1.8
+            }, {
+                name: '上海',
+                value: 6.4
+            }, {
+                name: '重庆',
+                value: 3.0
+            }, {
+                name: '河北',
+                value: 2.4
+            }, {
+                name: '河南',
+                value: 3.3
+            }, {
+                name: '云南',
+                value: 1.5
+            }, {
+                name: '辽宁',
+                value: 2.9
+            }, {
+                name: '黑龙江',
+                value: 1.7
+            }, {
+                name: '湖南',
+                value: 2.9
+            }, {
+                name: '安徽',
+                value: 2.8
+            }, {
+                name: '山东',
+                value: 5.2
+            }, {
+                name: '新疆',
+                value: 0.5
+            }, {
+                name: '江苏',
+                value: 9.1
+            }, {
+                name: '浙江',
+                value: 8.4
+            }, {
+                name: '江西',
+                value: 1.9
+            }, {
+                name: '湖北',
+                value: 4.2
+            }, {
+                name: '广西',
+                value: 2.7
+            }, {
+                name: '甘肃',
+                value: 0.5
+            }, {
+                name: '山西',
+                value: 1.1
+            }, {
+                name: '内蒙古',
+                value: 0.8
+            }, {
+                name: '陕西',
+                value: 2.0
+            }, {
+                name: '吉林',
+                value: 1.1
+            }, {
+                name: '福建',
+                value: 4.0
+            }, {
+                name: '贵州',
+                value: 1.1
+            }, {
+                name: '广东',
+                value: 11.4
+            }, {
+                name: '青海',
+                value: 0.1
+            }, {
+                name: '西藏',
+                value: 0.1
+            }, {
+                name: '四川',
+                value: 5.8
+            }, {
+                name: '宁夏',
+                value: 0.2
+            }, {
+                name: '海南',
+                value: 0.6
+            }, {
+                name: '台湾',
+                value: 0.2
+            }]
+        },
+
+        ]
+    };
+    myChart.setOption(option);
+
 </script>
 </html>
