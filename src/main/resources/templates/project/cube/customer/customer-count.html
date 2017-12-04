@@ -8,6 +8,213 @@
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome">
     <div th:replace="project/cube/common/header :: header(${3})">Header</div>
+    <div class="eui-bd eui-area eui-marginT10 chartsPage">
+        <div class="eui-sd1 eui-sd1-type3">
+            <div class="chartsLeft eui-bg-white chartsShadow eui-margin10 eui-marginT0">
+                <div class="eui-bg-blue eui-padding10">
+                    <div class="eui-row">
+                        <div class="eui-col-md6 eui-font18">按指标查询</div>
+                        <div class="eui-col-md6 eui-paddingT5 eui-textAlignR">
+                            <p class="collect"><span class="eui-icon">&#xe600;</span> 收藏模版</p>
+                        </div>
+                    </div>
+                    <div class="eui-marginT20 eui-form">
+                        <select name="city" e-verify="required">
+                            <option value="010" selected="">请选择模版</option>
+                            <option value="012">模版一</option>
+                            <option value="0571">模版二</option>
+                        </select>
+                    </div>
+                </div>
+                <ul class="eui-form eui-marginT20 eui-paddingB10 eui-paddingLR10 filter">
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">区域</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域1</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域2</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域3</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">问卷类型</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域1</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域2</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域3</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">性别</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域1</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域2</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域3</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">年龄</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域1</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域2</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域3</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">宗教</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域1</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域2</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域3</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">婚姻</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域1</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域2</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">区域3</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="eui-mn1">
+            <div class="eui-mn1-type3">
+                <div class="eui-row eui-form">
+                    <label class="eui-col-md1 eui-form-label">时间：</label>
+                    <div class="eui-col-md3">
+                        <select name="city" e-verify="required">
+                            <option value="010" selected="">近7天</option>
+                            <option value="011">近30天</option>
+                            <option value="0571">选择时间</option>
+                        </select>
+                    </div>
+                    <div class="eui-col-md3 eui-marginL10"><span class="eui-btn eui-btn-normal">当前数据导出</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="eui-area">
         <div class="eui-row eui-padding10 eui-font16">
             <div class="eui-col-md2">
@@ -79,6 +286,14 @@
 <!-- 引入 macarons 主题 -->
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
 <script>
+    // charts用户统计页面左侧筛选栏
+    $(".filter>li .chartsContent").hide();
+    $(".filter>li").click(function(){
+        $(this).children(".chartsContent").stop().slideToggle();
+        // event.stopPropagation(".filter>li .eui-form-checkbox");
+    });
+
+
     var form, layer;
     eui.use(['form', 'layer', 'element'], function () {
         form = eui.form;
