@@ -34,6 +34,14 @@
                     <input type="text" name="endTime" id="endTime"  value=""
                             placeholder="结束时间" class="eui-input">
                 </div>
+                <div class="eui-input-inline eui-padding10">
+                    <select name="status">
+                        <option value="">请选择支付类型</option>
+                        <option selected="selected" value="1">未支付</option>
+                        <option value="2">已支付</option>
+                    </select>
+                </div>
+
                 <div class="eui-input-inline">
                     <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
                     <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
@@ -66,9 +74,6 @@
 
     var tableIns;
     var table;
-
-
-
     function dynamicTable(obj) {
 
         eui.use(['table', 'laydate'], function(){
@@ -94,20 +99,17 @@
                 ,where: {json: JSON.stringify(obj)}
                 ,height: 420
                 ,cols: [[ //标题栏
-                {checkbox: true},
+                {checkbox: true}
+                    ,{field: '', title: '操作', width: 80,templet:'#barDemo'},
                     {field: 'order_code', title: '订单编号', width: 110}
                     ,{field: 'order_money', title: '结算金额(￥)', width: 110}
                     ,{field: 'brokerage', title: '结算佣金(￥)', width: 110}
 //                    ,{field: 'creator', title: '支付人', width: 100,templet:'<div>{{# if(d.creator==undefined){ }} 无邀请人  {{#  }else{   }} {{d.creator}} {{# } }}</div>'}
                     ,{field: 'creator', title: '结算人', width: 100}
                     ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'rule', title: '渠道规则比例', width: 120}
                     ,{field: 'channel_name', title: '渠道名', width: 100}
                     ,{field: 'rule_name', title: '渠道规则名', width: 110}
-                    ,{field: 'rule', title: '渠道规则比例', width: 120}
-//                    ,{field: '', title: '操作', width: 150,templet:'<div class="eui-btn-group">' +
-//                    ' <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
-//                        'title="结算" e-event="edit" ><i class="eui-icon">&#xe65e;</i>' +
-//                    '</button></div>'}
                 ]]
                 ,response: {
                     statusName: 'code' //数据状态的字段名称，默认：code
@@ -226,6 +228,7 @@
                         var oj = new Object();
                         oj.type=2;
                         oj.channel_id=newdata[0].id;
+                        oj.status=1;
                         dynamicTable(oj);
                     }
                 });
@@ -303,6 +306,17 @@
 
     }
 
+</script>
+<script type="text/html" id="barDemo">
+    <div class="eui-btn-group">
+
+
+        <div>{{# if(d.status=="1"){ }}
+            <button  class="eui-btn eui-btn-primary eui-btn-mini"
+                                                title="支付佣金" e-event="edit3" >
+            <i class="eui-icon">&#xe618;</i></button>  {{#  }else{   }}
+            {{# } }}</div>
+    </div>
 </script>
 </body>
 </html>

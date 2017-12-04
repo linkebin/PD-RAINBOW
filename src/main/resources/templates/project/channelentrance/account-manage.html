@@ -95,7 +95,7 @@
                                 </colgroup>
                                 <thead>
                                 <tr>
-                                    <th><input type="checkbox" e-skin="primary" title=""></th>
+                                    <!--<th><input type="checkbox" e-skin="primary" title=""></th>-->
                                     <th>姓名</th>
                                     <th>性别</th>
                                     <th>手机</th>
@@ -283,7 +283,7 @@
                 str='<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑" onclick="updateAccount('+id+')" ><i class="eui-icon"></i></button>';
             }
             tableHtml +=  '<tr>' +
-                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
+//                '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" type="hidden" value="' + secUser.id + '"></td>' +
                 '<td><a>'+ secUser.USER_NAME +'</a></td>' +
                 '<td>'+ sex +'</td>' +
                 '<td>'+secUser.MOBILE+'</td>' +
@@ -305,11 +305,11 @@
             });
         }
         if (ids==''){
-            layer.msg('请选择要删除的账号', {
+            layer.msg('请选择要删除的用户', {
                 time: 2000
             });
         }else {
-            layer.confirm('您确定删除该账号吗？', {
+            layer.confirm('您确定删除该用户吗？', {
                 btn: ['确认', '取消'],
                 shade: 0,
                 title:'提示'
