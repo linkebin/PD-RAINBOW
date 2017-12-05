@@ -26,7 +26,7 @@ public interface ChannelManageMapper extends Mapper<ChannelManage> {
     List<Map<String,Object>> findChannelAccountListByChannelId(Map<String,Object> map);
 
     /**
-     * 查询渠道下的账号树
+     * 查询渠道下的用户树
      * @return
      */
     List<Map<String,Object>> findChannelAccountTree(Map<String,Object> map);

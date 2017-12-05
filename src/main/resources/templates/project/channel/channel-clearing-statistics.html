@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>结算统计</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body>
+<input type="hidden" id="channelId">
+<div class="eui-bd eui-padding15">
+    <div class="eui-sd1 eui-sd1-type3">
+        <div class="eui-col-md3 etree">
+            <p>渠道树</p>
+            <ul style="padding: 10px;" id="channelTree"></ul>
+        </div>
+    </div>
+    <div class="eui-mn1 eui-bg-white">
+
+        <div class="eui-mn1-type3">
+            <form class="eui-form" id="searchFrom">
+                <input type="hidden" id="id"  name="parentId"/>
+                <input type="hidden"   name="type" value="3"/>
+                <!--<div class="eui-input-inline eui-padding10">-->
+
+                    <!--<input type="text" name="creator"  value=""-->
+                            <!--placeholder="支付人/关键字" class="eui-input">-->
+                <!--</div>-->
+                <!--<div class="eui-input-inline eui-padding10">-->
+                    <!--<input type="text" name="startTime" id="startTime"  value=""-->
+                            <!--placeholder="起始时间" class="eui-input">-->
+                <!--</div>-->
+
+                <!--<div class="eui-input-inline eui-padding10">-->
+                    <!--<input type="text" name="endTime" id="endTime"  value=""-->
+                            <!--placeholder="结束时间" class="eui-input">-->
+                <!--</div>-->
+                <!--<div class="eui-input-inline eui-padding10">-->
+                    <!--<select name="status">-->
+                        <!--<option value="">请选择支付类型</option>-->
+                        <!--<option selected="selected" value="1">未支付</option>-->
+                        <!--<option value="2">已支付</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+
+                <!--<div class="eui-input-inline">-->
+                    <!--<span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>-->
+                    <!--<span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>-->
+                <!--</div>-->
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <!--<i class='eui-icon eui-font24'>&#xe61d;</i> 全部-->
+                    <span>结算统计</span>
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                    <!--<a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>-->
+                    <a onclick="lookAll()" class="eui-btn eui-btn-small" href="###">查看全部</a>
+                </div>
+            </div>
+            <div id="analysis"  style="width: 100%;height:400px;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/Scripts/plugins/echarts/echarts.min.js"></script>
+<!-- 引入 macarons 主题 -->
+<script src="/Scripts/plugins/echarts/macarons.js"></script>
+<script>
+    function resetForm() {
+        $('#searchFrom')[0].reset();
+    }
+    function doSearch() {
+        var obj =$("#searchFrom").serializeObject();
+
+        if(obj.parentId!=''){
+            if (obj.parentId =='0'){
+                obj.type=2;
+                obj.channel_id=$("#id").attr('searchId');
+            }else {
+                obj.type=1;
+                obj.inviter_user=$("#id").attr('searchId');
+            }
+            dataList(obj);
+        }
+    }
+
+    function dataList(obj) {
+        eui.use(['form','layer'], function(){
+            var form = eui.form,
+                layer = eui.layer;
+            layer.load();
+            if (tableIns!=undefined){
+                tableIns.reload({
+                    where: {json: JSON.stringify(obj)}
+                });
+            }
+            layer.closeAll();
+        });
+    }
+
+    var channelTree;
+    var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
+
+    $(function () {
+       loadTree();
+        lineChartRight('');
+        myChart.on('click', function (param) {
+            console.log(param)
+        });
+    });
+
+    function lookAll() {
+        loadTree();
+        lineChartRight('');
+    }
+    function loadTree() {
+        $.ajax({
+            url:"/channel/manage/channelTree",
+            type:"post",
+            success:function(result){
+                //菜单树
+                channelTree =   $("#channelTree").ligerTree({
+                    data:result.data,
+                    checkbox: false,
+                    parentIcon: 'folder',
+                    childIcon: 'leaf' ,
+                    slide: false, //是否显示动画
+                    nodeWidth: 200,
+                    isExpand:2,
+                    idFieldName: 'id',
+                    textFieldName:'channelName',
+                    parentIDFieldName: 'deleted',
+                    onSelect: function (node)
+                    {
+//                        var obj =$("#searchFrom").serializeObject();
+                        lineChartRight(node.data.id);
+                    },
+                    onAfterAppend:function (parentNode, newdata) {
+
+                    }
+                });
+//                channelTree.selectNode(channelTree.getNodeDom(0));
+                $("#channelTree .l-body").mouseover(function(){
+                    var text =$(this).find('span').html();
+                    $(this).attr("title",text);
+                });
+
+            }
+        });
+    }
+
+    function lineChartRight(channel_id) {
+        var timeDataX=new Array;
+        var timeDataY=new Array;
+        var obj = new Object();
+        if (channel_id!=''){
+            obj.channel_id=channel_id;
+        }
+        $.post('/clearing/manage/clearingLineChart',{json:JSON.stringify(obj)},function (result) {
+            var setingObj = new Object();
+            setingObj.maxY=100;
+            setingObj.interval=25;
+            if(result.data !=null &&result.data.length>0){
+                for(var i=0;i<result.data.length;i++){
+                    timeDataX[i]= result.data[i].create_time;
+                    timeDataY[i]=result.data[i].brokerage;
+                }
+                setingObj.maxY=Math.ceil((result.data[0].maxY)/50)*50;
+                setingObj.interval=Math.ceil((setingObj.maxY)/4);
+            }
+            myChart.setOption(getOption(timeDataX,timeDataY,setingObj));
+        }) ;
+    }
+
+    function getOption(timeData,data,setingObj) {
+        option = {
+            title: {
+                text: '',
+                x: 'left',
+            },
+            tooltip: {
+                trigger: 'axis',
+
+                axisPointer: {
+                    animation: false
+                }
+            },
+            legend: {
+                data: ['流量'],
+                x: 'left'
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            axisPointer: {
+                link: {
+                    xAxisIndex: 'all'
+                }
+            },
+            dataZoom: [{
+                show: true,
+                realtime: true,
+                start: 30,
+                end: 70,
+
+                xAxisIndex: [0, 1]
+            }, {
+                type: 'inside',
+                realtime: true,
+                start: 30,
+                end: 70,
+                xAxisIndex: [0, 1]
+            }],
+            grid: [{
+                left: 40,
+                right: 40,
+            }, {
+                left: 40,
+                right: 40,
+            }],
+            xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                axisLine: {
+                    onZero: true
+                },
+                data: timeData
+            }, {
+                gridIndex: 1
+            }],
+
+            yAxis: [{
+                type: 'value',
+                max: setingObj.maxY,
+                name: '单位:￥',
+                min: 0,
+                interval: setingObj.interval,
+
+
+            }, {
+                gridIndex: 1
+            }],
+            series: [{
+                name: '佣金',
+                type: 'line',
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 9,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: '最大值'
+                    }, {
+                        type: 'min',
+                        name: '最小值'
+                    }]
+                },
+                markArea: {
+                    silent: true,
+                    label: {
+                        normal: {
+                            position: ['10%', '100%']
+                        }
+                    }
+                },
+                data: data
+
+            }]
+        };
+
+        return option;
+    }
+
+</script>
+</body>
+</html>

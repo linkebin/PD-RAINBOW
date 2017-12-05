@@ -29,26 +29,23 @@
                     <div class="eui-col-md6 eui-textAlignR">
                     </div>
                 </div>
-                <div style="height: 600px;">
+                <div style="">
                     <form id="searchFrom" onsubmit="return false;">
                         <div class="eui-form eui-margin10">
                             <div class="eui-form-item">
                                 <label class="eui-form-label">用户姓名</label>
                                 <div class="eui-input-inline">
-                                    <select  name="inviter_user">
+                                    <select onchange="userLineChart()" e-filter="inviter_user"  name="inviter_user">
                                         <th:block th:each="maps : ${channelAccountMap}">
                                             <option th:text="${maps.USER_NAME}" th:value="${maps.ID_}"></option>
                                         </th:block>
                                     </select>
                                 </div>
-                                <div class="eui-input-inline">
-                                    <span class="eui-btn eui-btn-small eui-btn-normal" onclick="userLineChart()">查询</span>
-                                </div>
                             </div>
 
                         </div>
                     </form>
-
+                    <div id="analysis2"  style="width: 100%;height:300px;"></div>
                 </div>
              </div>
     </div>
@@ -69,26 +66,41 @@
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
 <script>
     var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
+    var myChart2 = echarts.init(document.getElementById('analysis2'), 'macarons');
     var tableIns;
     var table;
 
-    myChart.on('click', function (param) {
-        console.log(param)
+
+    var form,laypage,layer;
+    eui.use(['form','laypage','layer'], function() {
+         form = eui.form
+            , laypage = eui.laypage
+            , layer = eui.layer;
+
+        form.on('select(inviter_user)', function(data){
+            userLineChart();
+        });
+
     });
+
+
     $(function () {
         var timeDataX=new Array;
         var timeDataY=new Array;
         var obj = new Object();
         obj.channel_id=$("#channelId").val();
        $.post('/clearing/manage/clearingLineChart',{json:JSON.stringify(obj)},function (result) {
-           for(var i=0;i<result.data.length;i++){
-               timeDataX[i]= result.data[i].create_time;
-               timeDataY[i]=result.data[i].brokerage;
-           }
            var setingObj = new Object();
-           setingObj.maxY=Math.ceil((result.data[0].maxY)/50)*50;
-           setingObj.interval=Math.ceil((setingObj.maxY)/4);
-
+           setingObj.maxY=100;
+           setingObj.interval=25;
+           if(result.data !=null &&result.data.length>0){
+               for(var i=0;i<result.data.length;i++){
+                   timeDataX[i]= result.data[i].create_time;
+                   timeDataY[i]=result.data[i].brokerage;
+               }
+               setingObj.maxY=Math.ceil((result.data[0].maxY)/50)*50;
+               setingObj.interval=Math.ceil((setingObj.maxY)/4);
+           }
            myChart.setOption(getOption(timeDataX,timeDataY,setingObj));
        }) ;
 
@@ -97,10 +109,17 @@
         oj.channel_id=$("#channelId").val();
         oj.status=2;
         dynamicTable(oj);
-
         userLineChart();
 
-
+        myChart.on('click', function (param) {
+            console.log(param)
+            var oj = new Object();
+            oj.type=2;
+            oj.channel_id=$("#channelId").val();
+            oj.status=2;
+            oj.create_time=param.name;
+            dynamicTable(oj);
+        });
     });
     function getOption(timeData,data,setingObj) {
         option = {
@@ -216,8 +235,21 @@
     function userLineChart() {
         var userObj =  $("#searchFrom").serializeObject();
         userObj.type=1;
+        var timeDataX=new Array;
+        var timeDataY=new Array;
         $.post('/clearing/manage/channelUserLineChart',{json:JSON.stringify(userObj)},function (result) {
-
+            var setingObj = new Object();
+            setingObj.maxY=100;
+            setingObj.interval=25;
+            if(result.data !=null &&result.data.length>0){
+                for(var i=0;i<result.data.length;i++){
+                    timeDataX[i]= result.data[i].create_time;
+                    timeDataY[i]=result.data[i].brokerage;
+                }
+                setingObj.maxY=Math.ceil((result.data[0].maxY)/50)*50;
+                setingObj.interval=Math.ceil((setingObj.maxY)/4);
+            }
+            myChart2.setOption(getOption(timeDataX,timeDataY,setingObj));
         });
     }
 
@@ -247,11 +279,12 @@
                 ,height: 320
                 ,cols: [[ //标题栏
                     {checkbox: true},
-                    {field: 'order_code', title: '订单编号', width: 210}
+                    {field: 'order_code', title: '订单编号', width: 220}
                     ,{field: 'order_money', title: '结算金额(￥)', width: 110}
                     ,{field: 'brokerage', title: '结算佣金(￥)', width: 110}
-                    ,{field: 'consultant_name', title: '咨询师', width: 100}
-                    ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'consultant_name', title: '咨询师', width: 120}
+                    ,{field: 'referrer', title: '推荐人', width: 120}
+                    ,{field: 'create_time', title: '结算时间', width: 225,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
                 ]]
                 ,response: {
                     statusName: 'code' //数据状态的字段名称，默认：code

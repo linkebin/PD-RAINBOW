@@ -16,46 +16,61 @@
   </resultMap>
 
   <select id="findHasClearingByChannelCounselorId"  resultType="Map">
-        SELECT cm.*,oo.order_money,oo.order_code,oo.creator consultant_name ,
+      SELECT b.* FROM (
+      SELECT cm.*,oo.order_money,oo.order_code,oo.creator consultant_name ,
         (SELECT channel_name FROM channel_manage WHERE id_=cm.channel_id) channel_name,
-        ar.rule,ar.rule_name
-
+        ar.rule,ar.rule_name,oo.user_id,oo.order_state,
+      (SELECT su.USER_NAME FROM sec_user su WHERE su.ID_=(SELECT su.inviter_user FROM sec_user su WHERE su.ID_=oo.user_id))  referrer
          FROM clearing_manage cm LEFT JOIN order_online oo ON oo.ID_=cm.order_id LEFT JOIN account_rule ar ON ar.rule_id=cm.rule_id
 
-        WHERE 1=1
+      ) b WHERE b.order_state=1
+
+
+          <if test="map.create_time != '' and map.create_time!=null">
+              AND b.status =#{map.status}
+          </if>
+
         <if test="null != ids">
-          AND oo.user_id in
+          AND b.user_id in
           <foreach collection="ids" item="item" open="(" separator="," close=")">
             #{item}
           </foreach>
         </if>
 
         <if test="map.startTime != '' and map.endTime!=null">
-          AND cm.create_time  &gt;  #{map.startTime} AND cm.create_time  &lt;  #{map.endTime}
+          AND b.create_time  &gt;  #{map.startTime} AND b.create_time  &lt;  #{map.endTime}
         </if>
 
           <if test="map.status != '' and map.status!=null">
-              AND cm.status =#{map.status}
+              AND b.status =#{map.status}
           </if>
 
         <if test="map.creator != null and map.creator!=''">
-          AND cm.creator LIKE '%${map.creator}%'
+          AND b.creator LIKE '%${map.creator}%'
         </if>
-      ORDER BY cm.create_time DESC
+      ORDER BY b.create_time DESC
   </select>
+    <select id="findAllChannelLineChart" parameterType="java.util.Map" resultType="Map">
+
+    </select>
 
     <select id="findChannelAccountLineChart"  resultType="Map">
      SELECT date_format(cm.create_time, '%Y-%m') AS create_time,  sum(cm.brokerage) AS brokerage,
             (
                 SELECT max(maxY) maxY FROM(
-                SELECT  sum(cm.brokerage) maxY  FROM clearing_manage cm
-                WHERE cm.channel_id=#{map.channel_id} AND cm.`status`=2
+                SELECT  sum(cm.brokerage) maxY  FROM clearing_manage cm WHERE 1=1
+                <if test="map.channel_id != null and map.channel_id!=''">
+                    AND  cm.channel_id=#{map.channel_id} AND cm.`status`=2
+                </if>
                 GROUP BY  date_format(cm.create_time, '%Y-%m')
             ) v
         ) maxY
 
-     FROM clearing_manage cm LEFT JOIN order_online oo ON cm.order_id=oo.ID_
-	 WHERE cm.channel_id=#{map.channel_id} AND cm.`status`=2
+     FROM clearing_manage cm LEFT JOIN order_online oo ON cm.order_id=oo.ID_ WHERE 1=1
+    <if test="map.channel_id != null and map.channel_id!=''">
+        AND  cm.channel_id=#{map.channel_id} AND cm.`status`=2
+    </if>
+
 
     <if test="null != ids">
         AND oo.user_id in
