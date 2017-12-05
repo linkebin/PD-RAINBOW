@@ -13,14 +13,12 @@ import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
-* Created by CodeGenerator on 2017/10/11.
-*/
+ * Created by CodeGenerator on 2017/10/11.
+ */
 @RestController
 @RequestMapping("/visitor/register")
 public class VisitorRegisterController {
@@ -30,14 +28,14 @@ public class VisitorRegisterController {
     @PostMapping("/add")
     public Result add(String json) {
 
-        VisitorRegister visitorRegister = JSON.parseObject(json,VisitorRegister.class);
+        VisitorRegister visitorRegister = JSON.parseObject(json, VisitorRegister.class);
         visitorRegister.setId(UUID.randomUUID().toString());
         visitorRegister.setVisitorCode(CodeHelper.getCode("DJ"));
         visitorRegister.setCreateTime(new Date());
         visitorRegister.setDeleted(0);
         try {
             visitorRegisterService.save(visitorRegister);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult("登记失败");
         }
@@ -46,14 +44,14 @@ public class VisitorRegisterController {
 
     @PostMapping("/update")
     public Result update(String json) {
-        VisitorRegister visitorRegister = JSON.parseObject(json,VisitorRegister.class);
+        VisitorRegister visitorRegister = JSON.parseObject(json, VisitorRegister.class);
 
         try {
             visitorRegisterService.deleteById(visitorRegister.getId());
             visitorRegister.setDeleted(0);
             visitorRegister.setCreator(Security.getUserId());
             visitorRegisterService.save(visitorRegister);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult("保存失败");
         }
@@ -61,18 +59,17 @@ public class VisitorRegisterController {
     }
 
     @PostMapping("/delete")
-    public Result delete(String  id) {
-       VisitorRegister visitorRegister = visitorRegisterService.findById(id);
+    public Result delete(String id) {
+        VisitorRegister visitorRegister = visitorRegisterService.findById(id);
         visitorRegister.setDeleted(1);
         try {
             visitorRegisterService.update(visitorRegister);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult("文件删除失败");
         }
         return ResultGenerator.genSuccessResult();
     }
-
 
 
     @PostMapping("/detail")
@@ -82,8 +79,8 @@ public class VisitorRegisterController {
     }
 
     @PostMapping("/listByparameter")
-    public Result listByparameter( int page, int pagesize,String json) {
-        VisitorRegister visitorRegister = JSON.parseObject(json,VisitorRegister.class);
+    public Result listByparameter(int page, int pagesize, String json) {
+        VisitorRegister visitorRegister = JSON.parseObject(json, VisitorRegister.class);
 
         PageHelper.startPage(page, pagesize);
         List<VisitorRegister> list = visitorRegisterService.findViitorByCounselorId(visitorRegister);
@@ -94,11 +91,11 @@ public class VisitorRegisterController {
 
 
     @PostMapping("/listByparameterTime")
-    public Result listByparameterTime( int page, int pagesize,String json) {
-        VisitorRegister visitorRegister = JSON.parseObject(json,VisitorRegister.class);
+    public Result listByparameterTime(int page, int pagesize, String json) {
+        VisitorRegister visitorRegister = JSON.parseObject(json, VisitorRegister.class);
 
         PageHelper.startPage(page, pagesize);
-        List<Map<String,Object>> list = visitorRegisterService.findViitorByCounselorIdSortTime(visitorRegister);
+        List<Map<String, Object>> list = visitorRegisterService.findViitorByCounselorIdSortTime(visitorRegister);
 
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
@@ -106,11 +103,17 @@ public class VisitorRegisterController {
 
     /**
      * 获取客户信息
+     *
      * @return
      */
     @GetMapping("/customerCount")
-    public Result count(){
+    public Result count() {
         List<VisitorRegister> list = visitorRegisterService.findVitorByCreator(Security.getUserId());
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    @PostMapping("/test")
+    public Result test(Date startTime, Date endTime, String sex, String maritalStatus)  {
+        return visitorRegisterService.acquisitionOfStatisticalAnalysis(startTime, endTime, sex, maritalStatus);
     }
 }

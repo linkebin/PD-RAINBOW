@@ -1,5 +1,7 @@
 package com.yidusoft.project.business.domain;
 
+import com.yidusoft.project.questionnaire.domain.Questionnaire;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -276,6 +278,10 @@ public class VisitorRegister {
 
     @Column(name = "native_place")
     private String nativePlace;
+
+    @Transient
+    private Questionnaire questionnaire;
+
 
     public String getIncome() {
         return income;
@@ -1135,5 +1141,13 @@ public class VisitorRegister {
      */
     public void setTreatmentCondition(String treatmentCondition) {
         this.treatmentCondition = treatmentCondition;
+    }
+
+    public Questionnaire getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(Questionnaire questionnaire) {
+        this.questionnaire = questionnaire;
     }
 }

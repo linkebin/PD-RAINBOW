@@ -104,4 +104,9 @@
        visiting_record
          where visitor_id =#{userId}
   </select>
+<!--
+  <select id="getVisitingTotal" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT * FROM visiting_record WHERE DATE(create_time) BETWEEN #{startTime} AND #{endTime}
+  </select>-->
+
 </mapper>
