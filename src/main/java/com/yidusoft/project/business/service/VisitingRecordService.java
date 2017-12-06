@@ -38,4 +38,6 @@ public interface VisitingRecordService extends Service<VisitingRecord> {
      * @return
      */
     int  getVisitingTotal(String userId);
+
+    List<Map<String,Object>> findGoalBarChart();
 }

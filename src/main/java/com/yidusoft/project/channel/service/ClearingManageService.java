@@ -19,4 +19,9 @@ public interface ClearingManageService extends Service<ClearingManage> {
 
     List<Map<String,Object>> findChannelAccountLineChart(List<String> ids,Map<String,Object> map);
 
+    List<Map<String,Object>> findChannelAccountLineChartNew(List<String> ids,Map<String,Object> map);
+
+    List<Map<String,Object>> findOrderClearingByChannelCounselorId(List<String> ids,
+                                                                   Map<String,Object> map);
+
 }

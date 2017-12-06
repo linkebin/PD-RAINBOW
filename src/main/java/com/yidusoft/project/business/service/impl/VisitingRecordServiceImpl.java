@@ -44,4 +44,9 @@ public class VisitingRecordServiceImpl extends AbstractService<VisitingRecord> i
     public int getVisitingTotal(String userId) {
         return visitingRecordMapper.getVisitingTotal(userId);
     }
+
+    @Override
+    public List<Map<String, Object>> findGoalBarChart() {
+        return visitingRecordMapper.findGoalBarChart();
+    }
 }

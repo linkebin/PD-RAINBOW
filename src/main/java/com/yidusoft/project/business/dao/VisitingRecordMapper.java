@@ -37,4 +37,7 @@ public interface VisitingRecordMapper extends Mapper<VisitingRecord> {
     int  getVisitingTotal(String userId);
 
 
+    //获取来访目的条形图数据
+    List<Map<String,Object>> findGoalBarChart();
+
 }

@@ -232,25 +232,29 @@
 
 
     function clearingAll() {
-        var parentId = channelTree.getSelected().data.parentId;
-        if (parentId=='0'){
-            parentId=channelTree.getSelected().data.id
-        }
-        layer.load();
-        $.post('/channel/rule/clearingAll',{channelId:parentId},function (result) {
-            layer.closeAll();
-            if (result.code==200){
-                layer.msg("结算成功",{
-                    icon: 1,
-                    time: 2000,
-                },function () {
-                    doSearch();
-                });
-
-            }else {
-                layer.msg(result.message);
+        layer.confirm('是否结算全部订单?', function(index){
+            var parentId = channelTree.getSelected().data.parentId;
+            if (parentId=='0'){
+                parentId=channelTree.getSelected().data.id
             }
+            layer.load();
+            $.post('/channel/rule/clearingAll',{channelId:parentId},function (result) {
+                layer.closeAll();
+                if (result.code==200){
+                    layer.msg("结算成功",{
+                        icon: 1,
+                        time: 2000,
+                    },function () {
+                        doSearch();
+                    });
+
+                }else {
+                    layer.msg(result.message);
+                }
+            });
+            layer.closeAll();
         });
+
     }
     function selectClearing() {
         var checkStatus = table.checkStatus('idTest');
@@ -274,20 +278,23 @@
 
     function sendSave(list,parentId) {
         if (list.length>0){
-            layer.load();
-            $.post('/channel/rule/saveClearing',{listMap:JSON.stringify(list),channelId:parentId},function (restlt) {
-                if (restlt.code==200){
-                    layer.msg("结算成功",{
-                        icon: 1,
-                        time: 2000,
-                    },function () {
-                        doSearch();
-                    });
+            layer.confirm('是否结算订单?', function(index){
+                layer.load();
+                $.post('/channel/rule/saveClearing',{listMap:JSON.stringify(list),channelId:parentId},function (restlt) {
+                    if (restlt.code==200){
+                        layer.msg("结算成功",{
+                            icon: 1,
+                            time: 2000,
+                        },function () {
+                            doSearch();
+                        });
 
-                }else {
-                    layer.msg(restlt.message);
-                }
+                    }else {
+                        layer.msg(restlt.message);
+                    }
+                });
             });
+
         }else{
             layer.msg("请选择数据！")
         }

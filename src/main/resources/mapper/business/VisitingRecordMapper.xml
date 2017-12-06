@@ -25,6 +25,15 @@
 
 
   </resultMap>
+
+  <select id="findGoalBarChart" resultType="Map">
+      SELECT vr.visitor_goal, soo.option_name, count(vr.visitor_goal) total FROM visiting_record vr LEFT JOIN select_option soo ON vr.visitor_goal=soo.option_id
+        WHERE vr.deleted=0 AND vr.visitor_goal
+      in(SELECT so.option_id FROM select_option so WHERE so.option_category='goal')
+
+      GROUP BY vr.visitor_goal
+  </select>
+
   <!--AND visitor_time &gt;=#{startTime} AND visitor_time &lt;=#{endTime}-->
   <select id="findVisitingRecordShaftTimeByCustomerId" parameterType="com.yidusoft.project.business.domain.VisitingRecord"
           resultMap="BaseResultMap">

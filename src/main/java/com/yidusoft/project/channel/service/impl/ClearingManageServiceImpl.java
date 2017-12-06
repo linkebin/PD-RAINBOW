@@ -47,4 +47,14 @@ public class ClearingManageServiceImpl extends AbstractService<ClearingManage> i
     public List<Map<String, Object>> findChannelAccountLineChart(List<String> ids,Map<String, Object> map) {
         return clearingManageMapper.findChannelAccountLineChart(ids,map);
     }
+
+    @Override
+    public List<Map<String, Object>> findChannelAccountLineChartNew(List<String> ids, Map<String, Object> map) {
+        return clearingManageMapper.findChannelAccountLineChartNew(ids,map);
+    }
+
+    @Override
+    public List<Map<String, Object>> findOrderClearingByChannelCounselorId(List<String> ids, Map<String, Object> map) {
+        return clearingManageMapper.findOrderClearingByChannelCounselorId(ids,map);
+    }
 }

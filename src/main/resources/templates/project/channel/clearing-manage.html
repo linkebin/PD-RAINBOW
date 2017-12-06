@@ -36,7 +36,7 @@
                 </div>
                 <div class="eui-input-inline eui-padding10">
                     <select name="status">
-                        <option value="">请选择支付类型</option>
+                        <option value="">全部类型</option>
                         <option selected="selected" value="1">未支付</option>
                         <option value="2">已支付</option>
                     </select>
@@ -49,11 +49,11 @@
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
-                    <i class='eui-icon eui-font24'>&#xe61d;</i> 已结算订单
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 已结算列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
                     <!--<a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>-->
-                    <!--<a onclick="clearingAll()" class="eui-btn eui-btn-small" href="###">结算全部</a>-->
+                    <a onclick="clearingAll()" class="eui-btn eui-btn-small" href="###">支付佣金</a>
                 </div>
             </div>
             <table id="test2"></table>
@@ -74,7 +74,8 @@
 
     var tableIns;
     var table;
-    function dynamicTable(obj) {
+
+    function dynamicTable2(obj) {
 
         eui.use(['table', 'laydate'], function(){
             table = eui.table;
@@ -90,7 +91,6 @@
                 ,done: function(value, date, endDate){
                 }
             });
-
             tableIns = table.render({
                 id: 'idTest'
                 ,elem: '#test2'
@@ -99,17 +99,15 @@
                 ,where: {json: JSON.stringify(obj)}
                 ,height: 420
                 ,cols: [[ //标题栏
-                {checkbox: true}
-                    ,{field: '', title: '操作', width: 80,templet:'#barDemo'},
                     {field: 'order_code', title: '订单编号', width: 110}
-                    ,{field: 'order_money', title: '结算金额(￥)', width: 110}
-                    ,{field: 'brokerage', title: '结算佣金(￥)', width: 110}
-//                    ,{field: 'creator', title: '支付人', width: 100,templet:'<div>{{# if(d.creator==undefined){ }} 无邀请人  {{#  }else{   }} {{d.creator}} {{# } }}</div>'}
+                    ,{field: 'order_money', title: '金额(￥)', width: 100}
+                    ,{field: 'brokerage', title: '佣金(￥)', width: 100}
                     ,{field: 'creator', title: '结算人', width: 100}
                     ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
-                    ,{field: 'rule', title: '渠道规则比例', width: 120}
-                    ,{field: 'channel_name', title: '渠道名', width: 100}
-                    ,{field: 'rule_name', title: '渠道规则名', width: 110}
+                    ,{field: 'status', title: '支付状态', width: 100,templet:'<div>{{# if(d.status==2){ }} 已支付  {{#  }else{   }} 未支付 {{# } }}</div>'}
+                    ,{field: 'channel_name', title: '渠道商', width: 100}
+                    ,{field: 'rule', title: '结算比例', width: 100}
+                    ,{field: 'rule_name', title: '结算规则', width: 110}
                 ]]
                 ,response: {
                     statusName: 'code' //数据状态的字段名称，默认：code
@@ -128,32 +126,8 @@
 
                 }
             });
-
-            //监听工具条
-            table.on('tool(idTest)', function(obj){
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-                if(layEvent === 'edit'){ //编辑
-                    var parentId = channelTree.getSelected().data.parentId;
-                    var list = new Array();
-
-                        var obj = new Object();
-                        obj.ID_=data.ID_;
-                        obj.payment_time=data.payment_time;
-                        obj.order_money=data.order_money;
-                        list.push(obj);
-                    if (parentId=='0'){
-                        parentId=channelTree.getSelected().data.id
-                    }
-                    sendSave(list,parentId);
-                }
-            });
         });
     }
-
-
-
 
 
     function resetForm() {
@@ -161,7 +135,6 @@
     }
     function doSearch() {
         var obj =$("#searchFrom").serializeObject();
-
         if(obj.parentId!=''){
             if (obj.parentId =='0'){
                 obj.type=2;
@@ -170,22 +143,8 @@
                 obj.type=1;
                 obj.inviter_user=$("#id").attr('searchId');
             }
-            dataList(obj);
+                dynamicTable2(obj);
         }
-    }
-
-    function dataList(obj) {
-        eui.use(['form','layer'], function(){
-            var form = eui.form,
-                layer = eui.layer;
-            layer.load();
-            if (tableIns!=undefined){
-                tableIns.reload({
-                    where: {json: JSON.stringify(obj)}
-                });
-            }
-            layer.closeAll();
-        });
     }
 
     var channelTree;
@@ -229,7 +188,7 @@
                         oj.type=2;
                         oj.channel_id=newdata[0].id;
                         oj.status=1;
-                        dynamicTable(oj);
+                        dynamicTable2(oj);
                     }
                 });
                 channelTree.selectNode(channelTree.getNodeDom(0));
@@ -240,70 +199,6 @@
 
             }
         });
-    }
-
-
-    function clearingAll() {
-        var parentId = channelTree.getSelected().data.parentId;
-        if (parentId=='0'){
-            parentId=channelTree.getSelected().data.id
-        }
-        layer.load();
-        $.post('/channel/rule/clearingAll',{channelId:parentId},function (result) {
-            layer.closeAll();
-            if (result.code==200){
-                layer.msg("结算成功",{
-                    icon: 1,
-                    time: 2000,
-                },function () {
-                    doSearch();
-                });
-
-            }else {
-                layer.msg(result.message);
-            }
-        });
-    }
-    function selectClearing() {
-        var checkStatus = table.checkStatus('idTest');
-        var parentId = channelTree.getSelected().data.parentId;
-
-        var selectData = checkStatus.data;
-        var list = new Array();
-        $.each(selectData,function (index,item) {
-            var obj = new Object();
-            obj.ID_=item.ID_;
-            obj.payment_time=item.payment_time;
-            obj.order_money=item.order_money;
-            list.push(obj);
-        });
-        if (parentId=='0'){
-            parentId=channelTree.getSelected().data.id
-        }
-        sendSave(list,parentId);
-    }
-
-
-    function sendSave(list,parentId) {
-        if (list.length>0){
-            layer.load();
-            $.post('/channel/rule/saveClearing',{listMap:JSON.stringify(list),channelId:parentId},function (restlt) {
-                if (restlt.code==200){
-                    layer.msg("结算成功",{
-                        icon: 1,
-                        time: 2000,
-                    },function () {
-                        doSearch();
-                    });
-
-                }else {
-                    layer.msg(restlt.message);
-                }
-            });
-        }else{
-            layer.msg("请选择数据！")
-        }
-
     }
 
 </script>

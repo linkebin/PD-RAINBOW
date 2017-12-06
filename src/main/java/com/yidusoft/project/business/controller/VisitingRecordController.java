@@ -46,6 +46,32 @@ public class VisitingRecordController {
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
     }
 
+    @PostMapping("/goalBarChart")
+    public Result clearingLineChart() {
+
+        List<Map<String,Object>> maps = visitingRecordService.findGoalBarChart();
+        int startSize = maps.size();
+        List<SelectOption> list =selectOptionService.findSelectOptionByType("goal");
+        for (SelectOption selectOption : list){
+            boolean f = true;
+            if (startSize>0) {
+                for (Map<String, Object> m : maps) {
+                    if (m.get("visitor_goal").toString().equals(selectOption.getOptionId())) {
+                        f = false;
+                        break;
+                    }
+                }
+            }
+            if (f){
+                Map<String,Object> map = new HashMap<String,Object>();
+                map.put("option_name",selectOption.getOptionValue());
+                map.put("total",0);
+                maps.add(map);
+            }
+        }
+        return ResultGenerator.genSuccessResult(maps);
+    }
+
 
     @PostMapping("/add")
     public Result add(String json) {

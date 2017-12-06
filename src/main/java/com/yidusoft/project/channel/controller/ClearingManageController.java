@@ -55,16 +55,32 @@ public class ClearingManageController {
         return ResultGenerator.genSuccessResult(maps);
     }
 
-    @PostMapping("/channelUserLineChart")
-    public Result channelUserLineChart(String json) {
+    @PostMapping("/clearingLineChartNew")
+    public Result clearingLineChartNew(String json) {
         Map<String,Object> map = JSON.parseObject(json,Map.class);
         List<String> ids = getChannelConsultIds(map);
         map.put("channel_id", Security.getUser().getChannelId());
-        List<Map<String,Object>> maps = null;
-        if (ids.size()>0){
-            maps = clearingManageService.findChannelAccountLineChart(ids,map);
+
+        List<Map<String,Object>> maps = clearingManageService.findChannelAccountLineChartNew(ids,map);
+        if (maps.get(0).get("maxY")==null){
+            maps.get(0).put("maxY",0);
+        }
+        for (Map<String,Object> m : maps){
+            if (m.get("brokerage")==null){
+                m.put("brokerage",0);
+            }
         }
         return ResultGenerator.genSuccessResult(maps);
+    }
+
+    @PostMapping("/listClearingAllTable")
+    public Result listClearingAllTable(Integer page,  Integer limit,String json) {
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+        PageHelper.startPage(page, limit);
+        List<Map<String,Object>> list = clearingManageService.findOrderClearingByChannelCounselorId(null,map);
+        PageInfo pageInfo = new PageInfo(list);
+
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
     }
 
     @PostMapping("/listHasClearing")
@@ -76,6 +92,24 @@ public class ClearingManageController {
         if (ids.size()>0){
             PageHelper.startPage(page, limit);
             list = clearingManageService.findHasClearingByChannelCounselorId(ids,map);
+        }
+
+        PageInfo pageInfo = new PageInfo(list);
+
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
+    }
+
+
+
+    @PostMapping("/listOrderOnlineClearing")
+    public Result listOrderOnlineClearing(Integer page,  Integer limit,String json) {
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+
+        List<String> ids = getChannelConsultIds(map);
+        List<Map<String,Object>> list = null;
+        if (ids.size()>0){
+            PageHelper.startPage(page, limit);
+            list = clearingManageService.findOrderClearingByChannelCounselorId(ids,map);
         }
 
         PageInfo pageInfo = new PageInfo(list);

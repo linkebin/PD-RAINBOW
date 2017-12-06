@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <title>结算统计</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <style>
+        .main {
+            height: 400px;
+            /* width: 778px !important; */
+            overflow: hidden;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #e3e3e3;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
 <body>
 <input type="hidden" id="channelId">
@@ -57,7 +73,9 @@
                     <a onclick="lookAll()" class="eui-btn eui-btn-small" href="###">查看全部</a>
                 </div>
             </div>
-            <div id="analysis"  style="width: 100%;height:400px;"></div>
+            <div id="analysis"  class="main"></div>
+
+            <table id="test2"></table>
         </div>
     </div>
 </div>
@@ -112,6 +130,8 @@
     $(function () {
        loadTree();
         lineChartRight('');
+        var o = new Object();
+        dynamicTable2(o);
         myChart.on('click', function (param) {
             console.log(param)
         });
@@ -120,6 +140,8 @@
     function lookAll() {
         loadTree();
         lineChartRight('');
+        var o = new Object();
+        dynamicTable2(o);
     }
     function loadTree() {
         $.ajax({
@@ -142,6 +164,10 @@
                     {
 //                        var obj =$("#searchFrom").serializeObject();
                         lineChartRight(node.data.id);
+                        var oj = new Object();
+                        oj.type=2;
+                        oj.channel_id=node.data.id;
+                        dynamicTable(oj);
                     },
                     onAfterAppend:function (parentNode, newdata) {
 
@@ -289,6 +315,127 @@
         };
 
         return option;
+    }
+
+    function dynamicTable(obj) {
+
+        eui.use(['table', 'laydate'], function(){
+            table = eui.table;
+            var laydate = eui.laydate;
+
+            laydate.render({
+                elem: '#startTime'
+                ,done: function(value, date, endDate){
+                }
+            });
+            laydate.render({
+                elem: '#endTime'
+                ,done: function(value, date, endDate){
+                }
+            });
+
+            tableIns = table.render({//<div>{{# if(d.SEX=="1"){ }} 男  {{#  }else{   }} 女 {{# } }}</div>  <div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>
+                id: 'idTest'
+                ,elem: '#test2'
+                ,url:'/clearing/manage/listOrderOnlineClearing'
+                ,method:'post'
+                ,where: {json: JSON.stringify(obj)}
+                ,height: 420
+                ,cols: [[ //标题栏
+//                    {checkbox: true},
+                    {field: 'order_code', title: '订单编号', width: 120}
+                    ,{field: 'order_money', title: '金额(￥)', width: 100}
+                    ,{field: 'brokerage', title: '佣金(￥)', width: 100,templet:'<div>{{# if(d.brokerage==undefined ){ }} 未结算  {{#  }else{   }} {{ d.brokerage}} {{# } }}</div>'}
+                    ,{field: 'status', title: '支付状态', width: 100,templet:'<div>{{# if(d.status=="1"){ }} 未支付  {{#  } }}  {{# if(d.status=="2"){ }} 已支付  {{#  } }}   {{# if(d.status==undefined){ }} 未结算  {{#  } }}</div>'}
+                    ,{field: 'consultant_name', title: '咨询师', width: 100}
+                    ,{field: 'referrer', title: '推荐人', width: 100}
+                    ,{field: 'payment_time', title: '订单时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{# if(d.create_time==undefined ){ }} 未结算  {{#  }else{   }} {{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}} {{# } }}</div>'}
+
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+
+                }
+            });
+
+            //监听工具条
+            table.on('tool(idTest)', function(obj){
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                if(layEvent === 'edit'){ //编辑
+                    var parentId = channelTree.getSelected().data.parentId;
+                    var list = new Array();
+
+                    var obj = new Object();
+                    obj.ID_=data.ID_;
+                    obj.payment_time=data.payment_time;
+                    obj.order_money=data.order_money;
+                    list.push(obj);
+                    if (parentId=='0'){
+                        parentId=channelTree.getSelected().data.id
+                    }
+                    sendSave(list,parentId);
+                }
+            });
+        });
+    }
+
+
+    function dynamicTable2(obj) {
+        eui.use(['table', 'laydate'], function(){
+            table = eui.table;
+            var laydate = eui.laydate;
+
+            tableIns = table.render({
+                id: 'idTest'
+                ,elem: '#test2'
+                ,url:'/clearing/manage/listClearingAllTable'
+                ,method:'post'
+                ,where: {json: JSON.stringify(obj)}
+                ,height: 420
+                ,cols: [[ //标题栏
+                    {field: 'order_code', title: '订单编号', width: 120}
+                    ,{field: 'order_money', title: '金额(￥)', width: 100}
+                    ,{field: 'brokerage', title: '佣金(￥)', width: 100,templet:'<div>{{# if(d.brokerage==undefined ){ }} 未结算  {{#  }else{   }} {{ d.brokerage}} {{# } }}</div>'}
+                    ,{field: 'status', title: '支付状态', width: 100,templet:'<div>{{# if(d.status=="1"){ }} 未支付  {{#  } }}  {{# if(d.status=="2"){ }} 已支付  {{#  } }}   {{# if(d.status==undefined){ }} 未结算  {{#  } }}</div>'}
+                    ,{field: 'consultant_name', title: '咨询师', width: 100}
+                    ,{field: 'referrer', title: '推荐人', width: 100}
+                    ,{field: 'payment_time', title: '订单时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{# if(d.create_time==undefined ){ }} 未结算  {{#  }else{   }} {{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}} {{# } }}</div>'}
+
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+
+                }
+            });
+        });
     }
 
 </script>
