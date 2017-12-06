@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>来访目的</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css"  media="all">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/demo.css" media="all">
+    <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
+</head>
+<body>
+<div class="eui-bg-white eui-row eui-padding15">
+    <div class="eui-col-md12 eui-paddingR10">
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class="eui-icon eui-font24"></i> 来访目的
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <a onclick="addGoal()" class="eui-btn eui-btn-small" href="###">新建</a>
+                <a class="eui-btn eui-btn-small" href="###">来访目的统计</a>
+            </div>
+        </div>
+        <table id="test2"></table>
+    </div>
+</div>
+
+
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+
+
+<script>
+
+// 表单
+eui.use(['element','form', 'layedit', 'laydate','laypage', 'layer'], function(){
+    var form = eui.form
+    ,layer = eui.layer
+    ,layedit = eui.layedit
+    ,laydate = eui.laydate
+    ,laypage = eui.laypage
+    ,$ = eui.jquery;
+
+
+});
+
+function dynamicTable(obj) {
+
+    eui.use(['table', 'laydate'], function(){
+        table = eui.table;
+        var laydate = eui.laydate;
+
+        tableIns = table.render({
+            id: 'idTest'
+            ,elem: '#test2'
+            ,url:'/visiting/record/goalManage'
+            ,method:'post'
+            ,where: {json: JSON.stringify(obj)}
+            ,height: 420
+            ,cols: [[ //标题栏
+                {checkbox: true},
+                {field: 'optionId', title: '编号', width: 150}
+                ,{field: 'optionValue', title: '来访目的', width: 350}
+                ,{field: 'creator', title: '创建人', width: 120}
+                ,{field: 'createTime', title: '创建时间', width: 180,templet:'<div>{{new Date(d.createTime).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                ,{field: '', title: '操作', width: 150,templet:'#barDemo'}
+            ]]
+            ,response: {
+                statusName: 'code' //数据状态的字段名称，默认：code
+                ,statusCode: 200 //成功的状态码，默认：0
+                ,msgName: 'message' //状态信息的字段名称，默认：msg
+                ,countName: 'count' //数据总数的字段名称，默认：count
+                ,dataName: 'data' //数据列表的字段名称，默认：data
+            }
+            ,skin: 'row' //表格风格
+            ,even: true
+            ,loading: true
+            ,page: true //是否显示分页
+            ,limits: [10,30,50,100]
+            ,limit: 10 //每页默认显示的数量
+            ,done: function(res, curr, count){
+
+            }
+        });
+
+        //监听工具条
+        table.on('tool(idTest)', function(obj){
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if(layEvent === 'edit'){ //编辑
+                var obj = new Object();
+                $("#optionValue").val(data.optionValue);
+                var index = layer.open({
+                    title: '编辑来访目的'
+                    , type: 1
+                    , area: ['400px', '200px']
+                    , content: $("#inDiv")
+                    ,btn: ['保存', '取消']
+                    ,yes: function(index, layero){
+                        var value = $("#optionValue").val();
+                        var obj = new Object();
+                        obj.optionId=data.optionId;
+                        obj.optionValue=value;
+                        obj.optionName=value;
+                        addData('update',obj);
+                    }
+                    ,btn2: function(index, layero){
+
+                    }
+                });
+            }
+            if(layEvent === 'del'){
+                $.post('/select/option/delete',{id:data.optionId},function (result) {
+                    dynamicTable(new Object());
+                    layer.closeAll();
+                });
+            }
+        });
+    });
+}
+function addGoal() {
+    $("#optionValue").val('');
+    var index = layer.open({
+        title: '新建来访目的'
+        , type: 1
+        , area: ['400px', '200px']
+        , content: $("#inDiv")
+        ,btn: ['保存', '取消']
+        ,yes: function(index, layero){
+            var value = $("#optionValue").val();
+            var obj = new Object();
+            obj.optionValue=value;
+            obj.optionName=value;
+            addData('add',obj);
+        }
+        ,btn2: function(index, layero){
+
+        }
+    });
+}
+$(function () {
+    dynamicTable(new Object());
+});
+
+function addData(type,obj) {
+
+    if (type=='add'){
+        $.post('/select/option/add',{json:JSON.stringify(obj)},function (result) {
+            dynamicTable(new Object());
+            layer.closeAll();
+        });
+    }else {
+        $.post('/select/option/update',{json:JSON.stringify(obj)},function (result) {
+            dynamicTable(new Object());
+            layer.closeAll();
+        });
+    }
+}
+</script>
+</body>
+<script type="text/html" id="barDemo">
+    <div class="eui-btn-group">
+            <button  class="eui-btn eui-btn-primary eui-btn-mini"
+                     title="编辑" e-event="edit" >
+                <i class="eui-icon">&#xe642;</i></button>
+
+        <button  class="eui-btn eui-btn-primary eui-btn-mini"
+                 title="删除" e-event="del" >
+            <i class="eui-icon">&#xe640;</i></button>
+    </div>
+</script>
+<div id="inDiv" style="display: none">
+        <div class="eui-form eui-padding20">
+            <div class="eui-form-item">
+                <label class="eui-form-label">来访目的</label>
+                <div class="eui-input-block">
+                    <input class="eui-input" id="optionValue" name="optionValue" placeholder="" type="text">
+                </div>
+            </div>
+        </div>
+</div>
+</html>

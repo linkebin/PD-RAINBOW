@@ -4,6 +4,7 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.Service;
 import com.yidusoft.project.business.domain.VisitorRegister;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,4 +31,12 @@ public interface VisitorRegisterService extends Service<VisitorRegister> {
      * @return
      */
     List<VisitorRegister> findVitorByCreator(String creator);
+
+    /**
+     * 客户统计分析
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus);
 }

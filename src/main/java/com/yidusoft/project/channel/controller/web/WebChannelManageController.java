@@ -35,6 +35,12 @@ public class WebChannelManageController {
         return "project/channel/channel-list";
     }
 
+    @RequestMapping("/channelClearingStatistics")
+    public String channelClearingStatistics() {
+
+        return "project/channel/channel-clearing-statistics";
+    }
+
     @RequestMapping("/onaylanmam")
     public String onaylanmamopenlist() {
         return "project/channel/onaylanmam-channel-list";

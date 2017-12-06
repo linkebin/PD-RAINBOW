@@ -23,9 +23,9 @@ public class PasswordHelper {
 	public static void main(String[] args) {
 		PasswordHelper passwordHelper = new PasswordHelper();
 		SecUser secUser = new SecUser();
-		secUser.setAccount("admin");
-		secUser.setUserPass("21232f297a57a5a743894a0e4a801fc3");
+		secUser.setUserPass("c4ca4238a0b923820dcc509a6f75849b");
 		passwordHelper.encryptPassword(secUser);
+		System.out.println(secUser.getUserPass());
 	}
 
 	public static String strToMd5(String str){

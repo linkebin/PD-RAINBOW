@@ -28,4 +28,11 @@ public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
      * @return
      */
     List<VisitorRegister> findVitorByCreator(String creator);
+
+    /**
+     * 客户统计分析
+     * @param map
+     * @return
+     */
+    List<VisitorRegister> acquisitionOfStatisticalAnalysis(Map map);
 }

@@ -217,4 +217,13 @@ public class WebCustomerController {
         model.addAttribute("userId",userId);
         return "project/cube/customer/customer-analysis";
     }
+
+    /**
+     * 跳转到客户统计页面
+     * @return
+     */
+    @RequestMapping("/visitorCount")
+    public String visitorCount(){
+        return "project/cube/customer/visitor-count";
+    }
 }

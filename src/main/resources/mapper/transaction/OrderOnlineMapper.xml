@@ -25,7 +25,7 @@
     </resultMap>
 
     <select id="findOrderByUserId" resultType="Map">
-        SELECT oo.* FROM order_online oo WHERE oo.deleted=0 AND oo.clearing_status=1
+        SELECT oo.* FROM order_online oo WHERE oo.deleted=0 AND  oo.order_state=1 AND oo.clearing_status=1
         <if test="null != ids">
             AND oo.user_id in
             <foreach collection="ids" item="item" open="(" separator="," close=")">

@@ -11,6 +11,8 @@ import com.yidusoft.project.business.domain.VisitingRecordFile;
 import com.yidusoft.project.business.service.ScheduleService;
 import com.yidusoft.project.business.service.VisitingRecordFileService;
 import com.yidusoft.project.business.service.VisitingRecordService;
+import com.yidusoft.project.system.domain.SelectOption;
+import com.yidusoft.project.system.service.SelectOptionService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.Security;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,20 @@ public class VisitingRecordController {
 
     @Autowired
     private VisitingRecordFileService visitingRecordFileService;
+
+    @Autowired
+    private SelectOptionService selectOptionService;
+
+    @PostMapping("/goalManage")
+    public Result goalManage(Integer page,  Integer limit) {
+
+        PageHelper.startPage(page, limit);
+        List<SelectOption> list =selectOptionService.findSelectOptionByType("goal");
+        PageInfo pageInfo = new PageInfo(list);
+
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
+    }
+
 
     @PostMapping("/add")
     public Result add(String json) {

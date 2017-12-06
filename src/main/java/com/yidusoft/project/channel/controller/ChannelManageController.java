@@ -127,6 +127,16 @@ public class ChannelManageController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
+    @PostMapping("/channelTree")
+    public Result channelTree() {
+        ChannelManage channelManage = new ChannelManage();
+        channelManage.setStatus(2);
+        channelManage.setJoinStartTime("");
+        channelManage.setJoinEndTime("");
+        List<ChannelManage> list = channelManageService.finndChannelByParameterList(channelManage);
+        return ResultGenerator.genSuccessResult(list);
+    }
+
     @PostMapping("/listByparameterSelect")
     public Result listByparameterSelect(int page,  int pagesize,String json) {
         Map map = JSON.parseObject(json,Map.class);

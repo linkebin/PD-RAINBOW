@@ -49,16 +49,17 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
-
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
     <result column="district" jdbcType="VARCHAR" property="district" />
-
     <result column="income" jdbcType="VARCHAR" property="income" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="nativePlace" jdbcType="VARCHAR" property="nativePlace" />
-
     <result column="treatment_condition" jdbcType="LONGVARCHAR" property="treatmentCondition" />
+    <association property="questionnaire" javaType="com.yidusoft.project.questionnaire.domain.Questionnaire">
+      <id column="ID_" jdbcType="VARCHAR" property="id" />
+      <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName"></result>
+    </association>
   </resultMap>
 
   <select id="findViitorByCounselorId" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultMap="BaseResultMap">
@@ -96,5 +97,21 @@
 
   <select id="findVitorByCreator" resultMap="BaseResultMap" parameterType="String">
     SELECT * FROM visitor_register WHERE deleted=0 AND creator=#{creator}
+  </select>
+
+  <select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT da.*,register.*,que.questionnaire_name FROM visitor_register register,data_acquisition da,questionnaire que,
+    (SELECT visitor_id FROM visiting_record
+    WHERE DATE(create_time) BETWEEN #{startTime} AND #{endTime}
+    AND deleted=0 GROUP BY visitor_id ) as record
+    WHERE record.visitor_id=register.ID_
+    AND register.deleted=0
+    AND da.deleted=0
+    AND que.deleted=0
+    <if test="sex!=null and sex!=''">
+      AND register.sex=#{sex}
+    </if>
+    AND da.user_id=record.visitor_id
+    AND que.ID_=da.data_question
   </select>
 </mapper>
