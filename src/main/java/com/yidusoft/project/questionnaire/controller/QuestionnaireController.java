@@ -3,6 +3,7 @@ package com.yidusoft.project.questionnaire.controller;
 import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.questionnaire.dao.QuestionnaireMapper;
 import com.yidusoft.project.questionnaire.domain.Questionnaire;
 import com.yidusoft.project.questionnaire.service.QuestionnaireService;
 import com.github.pagehelper.PageHelper;
@@ -24,7 +25,8 @@ import java.util.Map;
 public class QuestionnaireController {
     @Resource
     private QuestionnaireService questionnaireService;
-
+    @Resource
+    private QuestionnaireMapper questionnaireMapper;
 
     /***
      * 分页条件查询问卷
@@ -181,5 +183,48 @@ public class QuestionnaireController {
     public Result getQuestionnaireByState(){
         List<Questionnaire> list=questionnaireService.getQuestionnaireByState();
         return ResultGenerator.genSuccessResult(list);
+    }
+
+    /**
+     * 查找每周、月、年问卷使用数量
+     * @return
+     */
+    @PostMapping("/findQuestionnaireUsedCountByWeekMAndY")
+    public Result findQuestionnaireUsedCountByWeekMAndY(){
+        try {
+            List<Map<String,Object>> list = questionnaireMapper.findQuestionnaireUsedCountByWeekMAndY();
+            return ResultGenerator.genSuccessResult(list);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("加载出错了！");
+        }
+
+    }
+
+    /**
+     * 查找本月各问卷使用情况
+     * @return
+     */
+    @PostMapping("/findQuestionnaireUsedCountByMonth")
+    public Result findQuestionnaireUsedCountByMonth(){
+        try {
+            List<Map<String,Object>> list = questionnaireMapper.findQuestionnaireUsedCountByMonth();
+            return ResultGenerator.genSuccessResult(list);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("加载出错了！");
+        }
+    }
+
+    /**
+     * 查找所有问卷的使用情况
+     * @return
+     */
+    @PostMapping("/findAllQuestionnaireUsedCount")
+    public Result findAllQuestionnaireUsedCount(){
+        try {
+            List<Map<String,Object>> list = questionnaireMapper.findAllQuestionnaireUsedCount();
+            return ResultGenerator.genSuccessResult(list);
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("加载出错了！");
+        }
     }
 }

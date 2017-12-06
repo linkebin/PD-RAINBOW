@@ -183,4 +183,77 @@
         AND (q.questionnaire_permission = 1 OR  q.id_ IN (
         SELECT questionnaire_id FROM questionnaire_permission_middle  where user_id = #{userId}  )   )
     </select>
+
+    <select id="findQuestionnaireUsedCountByWeekMAndY" resultType="java.util.Map">
+        SELECT
+		COUNT(*) AS count
+	FROM
+		questionnaire q
+	RIGHT JOIN data_acquisition d ON q.ID_ = d.data_question
+	WHERE
+		q.deleted = 0
+	UNION ALL
+		(
+			SELECT
+				COUNT(*)
+			FROM
+				questionnaire q
+			RIGHT JOIN data_acquisition d ON q.ID_ = d.data_question
+			WHERE
+				q.deleted = 0
+			AND YEARWEEK(
+				date_format(d.create_time, '%Y-%m-%d')
+			) = YEARWEEK(NOW())
+		)
+	UNION ALL
+		(
+			SELECT
+				COUNT(*)
+			FROM
+				questionnaire q
+			RIGHT JOIN data_acquisition d ON q.ID_ = d.data_question
+			WHERE
+				q.deleted = 0
+			AND date_format(d.create_time, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+		)
+	UNION ALL
+		(
+			SELECT
+				COUNT(*)
+			FROM
+				questionnaire q
+			RIGHT JOIN data_acquisition d ON q.ID_ = d.data_question
+			WHERE
+				q.deleted = 0
+			AND date_format(d.create_time, '%Y') = DATE_FORMAT(NOW(), '%Y')
+		)
+    </select>
+
+    <select id="findQuestionnaireUsedCountByMonth" resultType="java.util.Map">
+                SELECT
+            q.*,
+            COUNT(*) questionnaireCount
+        FROM
+            questionnaire q
+        RIGHT JOIN data_acquisition d ON q.ID_ = d.data_question
+        WHERE
+            q.deleted = 0
+        AND DATE_FORMAT(d.create_time, "%Y-%m") = DATE_FORMAT(NOW(), "%Y-%m")
+        GROUP BY
+            q.questionnaire_name
+    </select>
+
+    <select id="findAllQuestionnaireUsedCount" resultType="java.util.Map">
+                SELECT
+            q.questionnaire_name,
+            COUNT(*) AS questionnaireCount
+        FROM
+            questionnaire q
+        RIGHT JOIN data_acquisition d ON q.ID_ = d.data_question
+        WHERE
+            q.deleted = 0
+        GROUP BY
+            q.questionnaire_name
+    </select>
+
 </mapper>

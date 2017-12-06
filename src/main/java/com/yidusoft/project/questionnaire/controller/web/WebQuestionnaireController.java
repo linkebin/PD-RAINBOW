@@ -196,4 +196,10 @@ public class WebQuestionnaireController {
         model.addAttribute("sceneList",sceneList);
         return "project/questionnaire/questionnaire/detail-questionnaire";
     }
+
+    //跳转到问卷统计页面
+    @RequestMapping("/questionnaireAnalysis")
+    public String questionnaireAnalysis(){
+        return "project/questionnaire/statisticalAnalysis/questionnaireAnalysis";
+    }
 }
