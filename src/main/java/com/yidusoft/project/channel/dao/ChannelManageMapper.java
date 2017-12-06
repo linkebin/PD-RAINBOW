@@ -45,4 +45,32 @@ public interface ChannelManageMapper extends Mapper<ChannelManage> {
      * @return
      */
     List<Map<String,Object>> findNotCertificationUser(Map<String, Object> map);
+
+
+    /**
+     * 查询渠道商下面所有的咨询师
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> findConsultantForChannel(Map<String,Object> map);
+
+    /**
+     * 查询所有的渠道商
+     * @return
+     */
+    List<ChannelManage> findChannelManageAll();
+
+    /**
+     * 查询市区的人数
+     * @param  map
+     * @return
+     */
+    List<Map<String,Object>> findChannelForCity(Map<String,Object> map);
+
+    /***
+     * 查询某时间段增加的人数
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>>  findChannelForTime(Map<String,Object> map);
 }

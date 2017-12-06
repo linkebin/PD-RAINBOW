@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>来访统计</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+
+    <div class="eui-bd eui-area eui-marginT10 chartsPage">
+        <div class="eui-mn1">
+            <div class="eui-mn1-type1">
+                <div class="eui-row eui-form">
+                    <label class="eui-col-md1 eui-form-label" style="width: 100px">渠道商：</label>
+                    <div class="eui-col-md3">
+                        <select name="city" id="channels" e-verify="required"  e-filter="selected">
+                            <option value="" >请选择渠道商</option>
+                            <option th:each="channel:${channelManageAll}"  th:value="${channel.id}" th:text="${channel.channelName}"></option>
+                        </select>
+                    </div>
+                    <label class="eui-form-label">请选择范围</label>
+                    <div class="eui-input-inline">
+                        <input type="text" class="eui-input" id="times" placeholder=" 选择时间段 ">
+                    </div>
+                    <span class="eui-btn" onclick="findConsultant ()">查询</span>
+                </div>
+
+                <div class="eui-row eui-marginT20">
+                    <div class="eui-col-md1 eui-font18">区域分布</div>
+                    <div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png" alt=""/> 导出</div>
+                    <div class="areal eui-col-md12 eui-padding5 eui-marginT10">
+                        <div class="arealIn"></div>
+                        <div class="eui-row eui-padding5">
+                            <div class="eui-col-md7">
+                                <div id="map" class="charts0" style="height: 360px;"></div>
+                            </div>
+                            <div class="eui-col-md5">
+                                <div class="eui-tab eui-tab-brief" e-filter="docDemoTabBrief">
+                                    <ul class="eui-tab-title">
+                                        <li class="eui-this" onclick="channelNums('province')">省份</li>
+                                        <li onclick="channelNums('city')">城市</li>
+                                    </ul>
+                                    <div class="eui-tab-content">
+
+                                        <div class="eui-tab-item eui-show">
+                                            <ul class="statistics" id="channel">
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">1、北京</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="89%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">2、江苏</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="78%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">3、浙江</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="72%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">4、上海</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="68%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">5、广东</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="62%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">6、河南</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="56%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">7、河北</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="50%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">8、山东</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="44%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">9、湖南</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="40%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="eui-marginB10">
+                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">10、湖北</div>
+                                                    <div class="eui-col-md9 eui-paddingT5">
+                                                        <div class="eui-progress">
+                                                            <div class="eui-progress-bar" e-percent="36%"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="eui-row eui-marginT20">
+                    <div class="eui-col-md1 eui-font18">人数增长</div>
+                    <div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png" alt=""/> 导出</div>
+                    <div class="areal eui-col-md12 eui-padding5 eui-marginT10">
+                        <div class="" style="height: 400px" id="channelNums" ></div>
+                        <div class="eui-row eui-padding5"  >
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+</div>
+</body>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/Scripts/plugins/echarts/echarts.min.js"></script>
+<!-- 引入 macarons 主题 -->
+<script src="/Scripts/plugins/echarts/macarons.js"></script>
+<!--婚姻状况脚本-->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<!--地图脚本-->
+<script src="http://gallery.echartsjs.com/dep/echarts/map/js/china.js"></script>
+
+<script>
+    $(function () {
+        findConsultant ();
+    });
+
+    var channle=new Array;
+    //最大值
+    var max=0;
+    //地图
+    var myChart = echarts.init(document.getElementById('map'),'macarons');
+    //省
+    var provinces="";
+    //市
+    var citys="" ;
+    var data = [
+
+        {
+            name: '齐齐哈尔'
+        }, {
+            name: '盐城'
+        }, {
+            name: '青岛'
+        }, {
+            name: '金昌'
+        }, {
+            name: '泉州'
+        }, {
+            name: '拉萨'
+        }, {
+            name: '上海浦东'
+        }, {
+            name: '攀枝花'
+        }, {
+            name: '威海'
+        }, {
+            name: '承德'
+        }, {
+            name: '汕尾'
+        }, {
+            name: '克拉玛依'
+        }, {
+            name: '重庆市'
+        }
+
+    ];
+
+    var geoCoordMap = {
+
+        '齐齐哈尔': [123.97, 47.33],
+        '盐城': [120.13, 33.38],
+        '青岛': [120.33, 36.07],
+        '金昌': [102.188043, 38.520089],
+        '泉州': [118.58, 24.93],
+        '拉萨': [91.11, 29.97],
+        '上海浦东': [121.48, 31.22],
+        '攀枝花': [101.718637, 26.582347],
+        '威海': [122.1, 37.5],
+        '承德': [117.93, 40.97],
+        '汕尾': [115.375279, 22.786211],
+        '克拉玛依': [84.77, 45.59],
+        '重庆市': [108.384366, 30.439702],
+
+    };
+
+    myChart.setOption({
+        series: [{
+            type: 'map',
+            map: 'china'
+        }]
+    });
+    var convertData = function(data) {
+        var res = [];
+
+        for (var i = 0; i < data.length; i++) {
+            var geoCoord = geoCoordMap[data[i].name];
+
+            if (geoCoord) {
+                res.push({
+                    name: data[i].name,
+                    value: geoCoord.concat(data[i].value)
+                });
+            }
+        }
+
+        return res;
+    };
+    var option;
+    function  startOption() {
+       option = {
+
+
+        title: {
+//            text: '中国大区分布图',
+//            subtext: '中国的八大区分布',
+            sublink: '#',
+
+            itemGap: 30,
+
+            left: 'center',
+            textStyle: {
+
+                color: '#1a1b4e',
+
+                fontStyle: 'normal',
+
+                fontWeight: 'bold',
+
+                fontSize: 30
+
+            },
+
+            subtextStyle: {
+
+
+                color: '#58d9df',
+
+                fontStyle: 'normal',
+
+                fontWeight: 'bold',
+
+                fontSize: 16
+
+
+            }
+        },
+
+        tooltip: {
+            trigger: 'item'
+
+        },
+
+        visualMap: {
+            min: 0,
+            max: max,
+            left: 'left',
+            top: 'bottom',
+            text: ['高', '低'],
+            calculable: true,
+            inRange: {
+                color: ['#ffffff', '#E0DAFF', '#ADBFFF', '#9CB4FF', '#6A9DFF', '#3889FF']
+            }
+        },
+
+
+        geo: {
+            map: 'china',
+            zoom: 1.2,
+            label: {
+                normal: {
+
+                    show: true,
+                    color: '#c1c4c8'
+                },
+                emphasis: {
+                    show: false,
+                    color: '#292929'
+                }
+            },
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#fbfbfb',
+                    borderColor: '#b9b4b7'
+
+                },
+                emphasis: {
+                    areaColor: '#1e9fff'
+                }
+            }
+        },
+        series: [{
+            name: '供需占比',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: convertData(data),
+            symbolSize: 10,
+            showEffectOn: 'render',
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+                normal: {
+                    formatter: '{b}',
+                    position: 'right',
+                    show: false
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#c60fff',
+                    shadowBlur: 10,
+                    shadowColor: '#333'
+                }
+            }
+        }, {
+            type: 'map',
+            mapType: 'china',
+            geoIndex: 0,
+            label: {
+                normal: {
+                    show: true
+                },
+                emphasis: {
+                    show: true
+                }
+            },
+            data: [{
+                name: '北京',
+                value: randomData("北京")
+            }, {
+                name: '天津',
+                value: randomData("天津")
+            }, {
+                name: '上海',
+                value: randomData("上海")
+            }, {
+                name: '重庆',
+                value: randomData("重庆")
+            }, {
+                name: '河北',
+                value: randomData("河北")
+            }, {
+                name: '河南',
+                value: randomData("河南")
+            }, {
+                name: '云南',
+                value: randomData("云南")
+            }, {
+                name: '辽宁',
+                value: randomData("辽宁")
+            }, {
+                name: '黑龙江',
+                value: randomData("黑龙江")
+            }, {
+                name: '湖南',
+                value: randomData("湖南")
+            }, {
+                name: '安徽',
+                value: randomData("安徽")
+            }, {
+                name: '山东',
+                value: randomData("山东")
+            }, {
+                name: '新疆',
+                value: randomData("新疆")
+            }, {
+                name: '江苏',
+                value: randomData("江苏")
+            }, {
+                name: '浙江',
+                value: randomData("浙江")
+            }, {
+                name: '江西',
+                value: randomData("江西")
+            }, {
+                name: '湖北',
+                value: randomData("湖北")
+            }, {
+                name: '广西',
+                value: randomData("广西")
+            }, {
+                name: '甘肃',
+                value: randomData("甘肃")
+            }, {
+                name: '山西',
+                value: randomData("山西")
+            }, {
+                name: '内蒙古',
+                value: randomData("内蒙古")
+            }, {
+                name: '陕西',
+                value: randomData("陕西")
+            }, {
+                name: '吉林',
+                value: randomData("吉林")
+            }, {
+                name: '福建',
+                value: randomData("福建")
+            }, {
+                name: '贵州',
+                value: randomData("贵州")
+            }, {
+                name: '广东',
+                value: randomData("广东")
+            }, {
+                name: '青海',
+                value: randomData("青海")
+            }, {
+                name: '西藏',
+                value: randomData("西藏")
+            }, {
+                name: '四川',
+                value: randomData("四川")
+            }, {
+                name: '宁夏',
+                value: randomData("宁夏")
+            }, {
+                name: '海南',
+                value: randomData("海南")
+            }, {
+                name: '台湾',
+                value: randomData("台湾")
+            }, {
+                name: '香港',
+                value: randomData("香港")
+            }, {
+                name: '澳门',
+                value: randomData("澳门")
+            }, {
+                name: '南海诸岛',
+                value: randomData("南海诸岛")
+            }]
+        }]
+    };
+    }
+    myChart.on('mouseover', function(params) {
+        var city = params.name;
+
+
+        if (city == '广东' || city == '广西' || city == '海南') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "广东"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "广西"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "海南"
+            });
+
+        }
+
+        if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "山东"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "江苏"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "浙江"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "安徽"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "福建"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "上海"
+            });
+
+        }
+
+        if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "湖北"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "湖南"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "河南"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "江西"
+            });
+
+
+        }
+
+        if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "北京"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "天津"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "河北"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "山西"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "内蒙古"
+            });
+
+
+        }
+        if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "宁夏"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "新疆"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "青海"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "陕西"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "甘肃"
+            });
+
+
+        }
+        if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "四川"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "云南"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "贵州"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "西藏"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "重庆"
+            });
+
+
+        }
+        if (city == '辽宁' || city == '吉林' || city == '黑龙江') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "辽宁"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "吉林"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "黑龙江"
+            });
+
+
+        }
+        if (city == '台湾' || city == '香港' || city == '澳门') {
+
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "台湾"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "香港"
+            });
+            myChart.dispatchAction({
+                type: 'highlight',
+                name: "澳门"
+            });
+
+
+        }
+
+
+
+    });
+    myChart.on('mouseout', function(params) {
+        var city = params.name;
+
+
+        if (city == '广东' || city == '广西' || city == '海南') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "广东"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "广西"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "海南"
+            });
+
+        }
+        if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "山东"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "江苏"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "浙江"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "安徽"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "福建"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "上海"
+            });
+
+        }
+        if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "湖北"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "湖南"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "河南"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "江西"
+            });
+
+        }
+        if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "北京"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "天津"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "河北"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "山西"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "内蒙古"
+            });
+
+        }
+        if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "宁夏"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "新疆"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "青海"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "陕西"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "甘肃"
+            });
+
+        }
+        if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "四川"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "云南"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "贵州"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "西藏"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "重庆"
+            });
+
+        }
+        if (city == '辽宁' || city == '黑龙江' || city == '吉林') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "辽宁"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "黑龙江"
+            });
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "吉林"
+            });
+
+        }
+        if (city == '台湾' || city == '香港' || city == '澳门') {
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "台湾"
+            });
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "香港"
+            });
+
+
+            myChart.dispatchAction({
+                type: 'downplay',
+                name: "澳门"
+            });
+
+        }
+
+    });
+
+    //折线图
+    var myChart1 = echarts.init(document.getElementById('channelNums'),'macarons');
+    var timeData = new Array;
+    var dataNums = new Array;
+    var max1=0;
+    var option1;
+    function optionStrat1() {
+        option1 = {
+            title: {
+                text: '',
+                x: 'left',
+            },
+            tooltip: {
+                trigger: 'axis',
+
+                axisPointer: {
+                    animation: false
+                }
+            },
+            legend: {
+                data: ['流量'],
+                x: 'left'
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            axisPointer: {
+                link: {
+                    xAxisIndex: 'all'
+                }
+            },
+            dataZoom: [{
+                show: true,
+                realtime: true,
+                start: 30,
+                end: 70,
+
+                xAxisIndex: [0, 1]
+            }, {
+                type: 'inside',
+                realtime: true,
+                start: 30,
+                end: 70,
+                xAxisIndex: [0, 1]
+            }],
+            grid: [{
+                left: 40,
+                right: 40,
+            }, {
+                left: 40,
+                right: 40,
+            }],
+            xAxis: [{
+
+
+                type: 'category',
+                boundaryGap: false,
+                axisLine: {
+                    onZero: true
+                },
+                data: timeData
+            }, {
+                gridIndex: 1
+            }],
+
+            yAxis: [{
+
+                type: 'value',
+                max: max1,
+                name: '单位:',
+                min: 0,
+                interval: 25,
+
+
+            }, {
+                gridIndex: 1
+            }],
+            series: [{
+                name: '数值',
+                type: 'line',
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 9,
+                showSymbol: false,
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
+                },
+                markPoint: {
+                    data: [{
+                        type: 'max',
+                        name: '最大值'
+                    }, {
+                        type: 'min',
+                        name: '最小值'
+                    }]
+                },
+                markArea: {
+                    silent: true,
+                    label: {
+                        normal: {
+                            position: ['10%', '50%']
+                        }
+                    },
+                    data: [
+                    ]
+                },
+                data: dataNums
+
+            }]
+        };
+    }
+    //myChart1.setOption(option1);
+
+
+
+    var form,layer;
+    eui.use(['form', 'layer', 'element','laydate'], function () {
+        form = eui.form;
+        layer = eui.layer;
+        var element = eui.element;
+        var laydate = eui.laydate;
+        form.on('select',function (data) {
+
+
+        });
+
+        laydate.render({
+            elem: '#times'
+            ,type: 'month'
+            ,range: '~'
+            ,format: 'yyyy-MM'
+        });
+
+
+    });
+   //查询渠道咨询师人数 城市占比
+    function findConsultant () {
+        citys="";
+        provinces="";
+        var  channelId=$("#channels").val();
+        if(channelId==""){
+            channelId="";
+        }
+        var times=$("#times").val().trim().split("~");
+        var startTime="";
+        var endTime="";
+        if(times[0]!="" && times[1]!=""){
+         startTime=times[0].trim()+"-01";
+         endTime=times[1].trim()+"-01";
+        }
+        $.ajax({
+            url: "/channel/manage/findConsultantForChannel",
+            data: {
+                channelId:channelId,
+                startTime:startTime,
+                endTime:endTime
+            },
+            async: false,
+            type: "post",
+            success: function (result) {
+                //layer.closeAll();
+                //所有的咨询师
+                channle=result.data.consultantAll;
+                //cityNums 市的人数
+                var  cityNums=result.data.cityNums;
+                //某时间段增加的人数
+                var  channelForTime=result.data.channelForTimeAll;
+
+                //算出总数
+                var nums=0;
+                for(var i=0;i<cityNums.length;i++){
+                    nums+=parseInt(cityNums[i].num);
+                }
+                for(var i=0;i<cityNums.length;i++){
+                    citys+='<li class="eui-marginB10">';
+                    citys+='<div class="eui-col-md3 eui-textAlignR eui-paddingR10">'+(i+1)+'、'+cityNums[i].city+'</div>';
+                    citys+='<div class="eui-col-md9 eui-paddingT5">';
+                    citys+='<div class="eui-progress">';
+                    citys+='<div class="eui-progress-bar" e-percent="'+(parseInt(cityNums[i].num)/nums)*100+'%"></div>';
+                    citys+='</div>';
+                    citys+='</div>';
+                    citys+='</li>';
+                }
+
+                max=channle.length;
+                startOption();
+                myChart.setOption(option);
+
+                //折线图设置值
+                timeData=new Array;
+                dataNums=new Array;
+                for(var i=0;i<channelForTime.length;i++){
+                    if(parseInt(channelForTime[i].num)>max1){
+                        max1=channelForTime[i].num;
+                    }
+
+                    timeData[i]=channelForTime[i].times;
+                    dataNums[i]=channelForTime[i].num;
+                }
+                max1+=5;
+                optionStrat1();
+                myChart1.setOption(option1);
+            }
+        });
+
+    }
+
+    function randomData(province) {
+        var num=0;
+        for(var i=0;i<channle.length;i++){
+            console.info("城市"+channle[i].province);
+            if(channle[i].province!="" && channle[i].province!=null){
+            if((channle[i].province).indexOf(province)!=-1){
+                num++;
+            }
+            }
+        }
+        //省的比例
+        if(num>0){
+            provinces+='<li class="eui-marginB10">';
+            provinces+='<div class="eui-col-md3 eui-textAlignR eui-paddingR10">'+province+'</div>';
+            provinces+='<div class="eui-col-md9 eui-paddingT5">';
+            provinces+='<div class="eui-progress">';
+            provinces+='<div class="eui-progress-bar" e-percent="'+(num/channle.length)*100+'%"></div>';
+            provinces+='</div>';
+            provinces+='</div>';
+            provinces+='</li>';
+        }
+        console.info(num);
+
+        return num;
+    }
+    function channelNums(name) {
+        if(name=='city'){
+            $("#channel").html(citys);
+        }else {
+            $("#channel").html(provinces);
+        }
+        eui.use(['form', 'layer', 'element'], function () {
+          var   form = eui.form;
+            var element = eui.element;
+            form.render();
+        });
+    }
+
+</script>
+</html>

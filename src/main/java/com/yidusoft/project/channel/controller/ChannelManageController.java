@@ -246,4 +246,24 @@ public class ChannelManageController {
             return ResultGenerator.genFailResult("出错了");
         }
     }
+
+    /**
+     * 查询所有的渠道商
+     * @return
+     */
+    @PostMapping("/findChannelManageAll")
+    public Result findChannelManageAll(){
+      List<ChannelManage> channelManageAll = channelManageService.findChannelManageAll();
+      return ResultGenerator.genSuccessResult(channelManageAll);
+    }
+    /**
+     * 查询渠道商下面所有的咨询师
+     * @return
+     */
+    @PostMapping("/findConsultantForChannel")
+    public Result findConsultantForChannel(String channelId,String endTime,String startTime){
+
+        return channelManageService.findConsultantForChannel(channelId,startTime,endTime);
+    }
+
 }

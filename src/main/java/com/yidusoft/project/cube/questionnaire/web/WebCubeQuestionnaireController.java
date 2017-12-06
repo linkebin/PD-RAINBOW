@@ -27,6 +27,8 @@ public class WebCubeQuestionnaireController {
 
 
 
+
+
     @RequestMapping(value ={"/getQuestionnaireGuide"})
     public String getQuestionnaireGuide(String questionnaireId,String userId,String visitorTimes,String activityId,String userName,Model model){
         model.addAttribute("questionnaireId",questionnaireId);

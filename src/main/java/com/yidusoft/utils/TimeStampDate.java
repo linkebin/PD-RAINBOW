@@ -165,7 +165,7 @@ public class TimeStampDate {
     //  date=2014-12-05 23:17:07  
     //  1417792627  
     public static void main(String[] args) {
-        String timeStamp = "1503319104";
+     /*   String timeStamp = "1503319104";
         System.out.println("timeStamp="+timeStamp);
 
         String date = timeStamp2Date(timeStamp, "yyyy-MM-dd HH:mm:ss");
@@ -189,8 +189,8 @@ public class TimeStampDate {
         System.out.println("加一天"+calendarToDate(cc,"yyyy-MM-dd HH:mm:ss"));
 
          int i= timeBeApart(date1,date1);
-         System.out.println(i);
-
-
+         System.out.println(i);*/
+        getDate("2017-12-11 00:00:00","yyyy-MM-dd HH:mm:ss");
+        System.out.println(getDate("2017-12-11 00:00:00","yyyy-MM-dd HH:mm:ss"));
     }
 }

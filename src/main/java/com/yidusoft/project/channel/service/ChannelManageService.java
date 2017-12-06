@@ -62,4 +62,16 @@ public interface ChannelManageService extends Service<ChannelManage> {
      * @return
      */
     List<Map<String,Object>> findNotCertificationUser(Map<String, Object> map);
+    /**
+     * 查询渠道商下面所有的咨询师
+     * @param channelId
+     * @return
+     */
+    Result findConsultantForChannel(String  channelId,String startTime,String endTime);
+    /**
+     * 查询所有的渠道商
+     * @return
+     */
+    List<ChannelManage> findChannelManageAll();
+
 }

@@ -100,4 +100,13 @@ public class WebChannelManageController {
     public String selectchannel() {
         return "project/channel/select-channel";
     }
+
+    @RequestMapping("/getChannelCount")
+    public String getChannelCount(Model model) {
+       // 询所有的渠道商
+        List<ChannelManage> channelManageAll = channelManageService.findChannelManageAll();
+        model.addAttribute("channelManageAll",channelManageAll);
+        return "project/channel/channel-customer-count";
+    }
+
 }
