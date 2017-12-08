@@ -556,7 +556,7 @@
 <!-- 引入 ECharts 文件 -->
 <script src="/Scripts/plugins/echarts/echarts.min.js"></script>
 <!-- 引入 macarons 主题 -->
-<script src="/Scripts/plugins/echarts/macarons.js"></script>
+<!--<script src="/Scripts/plugins/echarts/macarons.js"></script>-->
 <!--婚姻状况脚本-->
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <!--地图脚本-->
@@ -1111,7 +1111,7 @@
                     color: '#333333' // 标签文字颜色
                 },
                 // boundaryGap: false,
-                data: ["18岁", "19", "25", "31", "37", "43", "49", "54"]
+                data: ["18", "≥19", "≥25", "≥31", "≥37", "≥43", "≥49", "≥54"]
             },
 
             yAxis: {
@@ -1146,7 +1146,7 @@
             series: [{
                 //name: '销量',
                 type: 'bar',
-                barWidth: 60,//柱图宽度
+                barWidth: 24,//柱图宽度
                 data: [10, 20, 30, 40, 50, 60, 70, 80]
             }]
         };
@@ -1211,7 +1211,7 @@
                 },
                 itemStyle: {
                     normal: {
-                        // color : "rgba(0,0,0,0)", // 图表中各个图区域的边框线拐点颜色
+                        color : "#61a0a8", // 图表中各个图区域的边框线拐点颜色
                         lineStyle: {
                             color: "rgba(255,255,255,0.4)" // 图表中各个图区域的边框线颜色
                         },
@@ -1348,10 +1348,10 @@
                         r: 0.7,
                         colorStops: [{
                             offset: 0,
-                            color: "#8884d8" // 0% 处的颜色
+                            color: "#9f9ce0" // 0% 处的颜色
                         }, {
                             offset: 1,
-                            color: "#6a91ea" // 100% 处的颜色
+                            color: "#86a5ee" // 100% 处的颜色
                         }],
                         globalCoord: false // 缺省为 false
                     };
@@ -1359,19 +1359,19 @@
                     fill.borderWidth = 1;
                     fill.emphasisFillColor = {
                         type: "radial",
-                        x: 0.5,
-                        y: 0.5,
-                        r: 0.5,
+                        x: 0.7,
+                        y: 0.7,
+                        r: 0.7,
                         colorStops: [{
                             offset: 0,
-                            color: "#7772d1" // 0% 处的颜色
+                            color: "#938edb" // 0% 处的颜色
                         }, {
                             offset: 1,
-                            color: "#5c87e9" // 100% 处的颜色
+                            color: "#89a8ef" // 100% 处的颜色
                         }],
                         globalCoord: false // 缺省为 false
                     };
-                    fill.emphasisBorderColor = "#09c2f6";
+                    fill.emphasisBorderColor = "#89a8ef";
                     fill.emphasisborderWidth = 1;
                 } else {
 //                fill.fillColor = "rgba(0, 252, 255, 0.1)";
@@ -1602,12 +1602,12 @@
                 }
             },
             tooltip: {
-                backgroundColor: "rgba(50,50,50,0.8)",
+                backgroundColor: "rgba(50,50,50,0.6)",
                 formatter: function (params) {
                     var size = ("" + params.value[3]).replace(/\d{1,3}(?=(\d{3})+$)/g, "$&,");
                     var add = ("" + params.value[4]).replace(/\d{1,3}(?=(\d{3})+$)/g, "$&,");
                     var result = "<span>" + params.value[2] + "</span><br>" +
-                            "<span style = 'line-height:30px;font-size : 25px; font-weight:bold;'>" + size + "</span></br>" +
+                            "<span style = 'line-height:30px;font-size : 24px;'>" + size + "</span></br>" +
                             "<div>" +
                             "<div style = 'float : left; padding-right:20px; border-right: solid 1px #4c4a4a;'>" +
                             "</div>" +
