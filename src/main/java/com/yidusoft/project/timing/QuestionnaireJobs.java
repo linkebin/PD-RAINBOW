@@ -18,8 +18,11 @@ public class QuestionnaireJobs {
 
     @Resource
     private QuestionnaireService questionnaireService;
+
+
     @Scheduled(cron="0 0 5 * * ? ")
     public void cronJob(){
+     //@Scheduled(cron="0 * 14 * * ?")
       //查询问卷即将要上架的 修改状态
         questionnaireService.setQuestionnaireState();
 

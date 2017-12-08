@@ -193,10 +193,11 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
                 String nowTime= TimeStampDate.dateToStr(new Date(),"yyyy-MM-dd");
                 if(nowTime.equals(shelfTime)){
                     questionnaire.setQuestionnaireState(2);
-                    this.update(questionnaire);
+                    questionnaireMapper.updateByPrimaryKey(questionnaire);
                 }
             }
         }catch (Exception e){
+            e.printStackTrace();
             return   ResultGenerator.genFailResult(e.getMessage());
         }
 
