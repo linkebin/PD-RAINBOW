@@ -57,4 +57,13 @@ public class ClearingManageServiceImpl extends AbstractService<ClearingManage> i
     public List<Map<String, Object>> findOrderClearingByChannelCounselorId(List<String> ids, Map<String, Object> map) {
         return clearingManageMapper.findOrderClearingByChannelCounselorId(ids,map);
     }
+
+    @Override
+    public void updateClearingManageStatus(List<String> ids) {
+        for (String s :ids){
+            ClearingManage clearingManage = this.findBy("orderId",s);
+            clearingManage.setStatus(2);
+            this.update(clearingManage);
+        }
+    }
 }

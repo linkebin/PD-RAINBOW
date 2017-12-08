@@ -200,6 +200,13 @@
                 }
                 var start = new Date(activity.activityStart).Format('yyyy-MM-dd hh:mm:ss');
                 var end = new Date(activity.activityEnd).Format('yyyy-MM-dd hh:mm:ss');
+
+                if(new Date() < new Date(start)){
+                    return;
+                }
+
+
+
                 if (new Date() > new Date(start) && new Date() < new Date(end)) {
                     $.post('/data/acquisition/findCount', {activityId: activity.id}, function (res) {
                         console.log(res)
