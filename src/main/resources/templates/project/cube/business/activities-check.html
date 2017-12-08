@@ -389,7 +389,7 @@
                 console.log(result.data/$('input[name="activityTotal"]').val()*100);
                 var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
                 progressBar = parseInt(progressBar);
-                if(progressBar<1){
+                if(progressBar<1 && progressBar>0){
                     progressBar="1%";
                 }else{
                     progressBar+="%";

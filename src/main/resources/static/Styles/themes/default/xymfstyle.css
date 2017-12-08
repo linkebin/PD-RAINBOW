@@ -882,10 +882,16 @@ body .eui-layer-title{
 }
 .types .eui-progress{
     border-radius:0;
+    height: 12px;
+    margin-top: 10px;
 }
 .types .eui-progress-bar{
     border-radius:0;
     background: linear-gradient(to right,#1786e5,#8cc5f9);
+    height: 12px;
+}
+.types .eui-progress-text{
+    display: inline-block;
 }
 .chartsColor1{
     color: #6a91ea;

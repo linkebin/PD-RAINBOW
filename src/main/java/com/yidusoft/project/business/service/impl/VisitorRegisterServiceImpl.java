@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -76,28 +77,38 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @return
      */
     @Override
-    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus) {
+    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city) {
         String arr[] = maritalStatus.split(",");
-        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex));
-        List<VisitorRegister> thisYearList = new ArrayList<>();
-        for (VisitorRegister visitorRegister : reslutList) {
-            if(arr.length>1){
-                for (String i : arr) {
-                    if (Integer.parseInt(i) == visitorRegister.getMaritalStatus()) {
-                        thisYearList.add(visitorRegister);
-                    }
-                }
-            }
-        }
-        Map map = getMap(operationDate(startTime), operationDate(endTime), sex);//设置时间map
-        List<VisitorRegister> lastYearList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(map);
-        Map<String, List> resultMap = new HashMap<>();
-        resultMap.put("thisYearList", thisYearList);
-        if(thisYearList.size()==0){
-            resultMap.put("thisYearList", reslutList);
-        }
-        resultMap.put("lastYearList", lastYearList);
-        return ResultGenerator.genSuccessResult(resultMap);
+        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex, name, province,city));
+        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
+        return ResultGenerator.genSuccessResult(thisYearList);
+    }
+
+    /**
+     * 获取问卷类型
+     * @param startTime
+     * @param endTime
+     * @param sex
+     * @param maritalStatus
+     * @return
+     */
+    @Override
+    public Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city) {
+        List<VisitorRegister> reslutList = visitorRegisterMapper.getQuestion(getMap(startTime, endTime, sex, name, province,city));
+        List<VisitorRegister> list = visitorRegisterMapper.getQuestion(getMap(operationDate(startTime), operationDate(endTime), sex, name, province,city));
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.setTime(startTime);
+        rightNow.add(Calendar.DATE, -1);
+        Date date = rightNow.getTime();
+        List<VisitorRegister> lastPhase = visitorRegisterMapper.getQuestion(getMap(lastPhaseDate(startTime,endTime), date, sex, name, province,city));
+        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
+        List<VisitorRegister> LastYearList = getList(maritalStatus,belief,questionName,list);
+        List<VisitorRegister> lastPhaseList = getList(maritalStatus,belief,questionName,lastPhase);
+        Map map = new HashMap();
+        map.put("thisYearList",thisYearList);
+        map.put("LastYearList",LastYearList);
+        map.put("lastPhaseList",lastPhaseList);
+        return ResultGenerator.genSuccessResult(map);
     }
 
     /**
@@ -107,11 +118,14 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @param endTime
      * @return
      */
-    public Map getMap(Date startTime, Date endTime, String sex) {
+    public Map getMap(Date startTime, Date endTime, String sex, String name, String province,String city) {
         Map map = new HashMap<>();
         map.put("startTime", startTime);
         map.put("endTime", endTime);
         map.put("sex", sex);
+        map.put("name", name);
+        map.put("province", province);
+        map.put("city", city);
         return map;
     }
 
@@ -128,5 +142,82 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
         rightNow.add(Calendar.YEAR, -1);
         Date dt = rightNow.getTime();
         return dt;
+    }
+
+    /**
+     * 获取上一期的时间段
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public Date lastPhaseDate(Date startTime, Date endTime){
+        long t1 = startTime.getTime();
+        long t2 = endTime.getTime();
+        long millis = t2 - t1;
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        Calendar rightNow = Calendar.getInstance();
+        rightNow.setTime(startTime);
+        rightNow.add(Calendar.DATE, -(int)days);
+        Date date = rightNow.getTime();
+        return date;
+    }
+
+    /**
+     * 返回今年的数据集合
+     * @param maritalStatus
+     * @param list
+     * @return
+     */
+    public List getList(String maritalStatus,String belief,String questionName,List<VisitorRegister> list){
+        List thisYearList = new ArrayList<>();
+        String status[] = maritalStatus.split(",");
+        String bel[] = belief.split(",");
+        String typeName[] = questionName.split(",");
+        for (VisitorRegister visitorRegister : list) {
+            if(status.length>1){
+                for (String i : status) {
+                    if (Integer.parseInt(i) == visitorRegister.getMaritalStatus()) {
+                        if(bel.length>1){
+                            for (String j : bel) {
+                                if (Integer.parseInt(j) == visitorRegister.getReligiousBelief()) {
+                                    if(typeName.length>1){
+                                        for (String name : typeName) {
+                                            if (name.equals(visitorRegister.getQuestionnaire().getQuestionnaireName())) {
+                                                thisYearList.add(visitorRegister);
+                                            }
+                                        }
+                                    }else{
+                                        thisYearList.add(visitorRegister);
+                                    }
+                                }
+                            }
+                        }else{
+                            thisYearList.add(visitorRegister);
+                        }
+                    }
+                }
+            }else if(bel.length>1){
+                for (String i : bel) {
+                    if (Integer.parseInt(i) == visitorRegister.getReligiousBelief()) {
+                        if(typeName.length>1){
+                            for (String name : typeName) {
+                                if (name.equals(visitorRegister.getQuestionnaire().getQuestionnaireName())) {
+                                    thisYearList.add(visitorRegister);
+                                }
+                            }
+                        }else{
+                            thisYearList.add(visitorRegister);
+                        }
+                    }
+                }
+            } else if(typeName.length>1){
+                for (String name : typeName) {
+                    if (name.equals(visitorRegister.getQuestionnaire().getQuestionnaireName())) {
+                        thisYearList.add(visitorRegister);
+                    }
+                }
+            }
+        }
+        return thisYearList;
     }
 }

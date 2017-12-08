@@ -95,6 +95,9 @@ public class Questionnaire {
     @Column(name = "gauge_id")
     private String gaugeId;
 
+    @Transient
+    private Integer count;
+
     /**
      * 获取问卷权限
      * @return
@@ -394,20 +397,28 @@ public class Questionnaire {
         return remarks;
     }
 
-    public Integer getAnswerModelType() {
-        return answerModelType;
-    }
+    public Integer getAnswerModelType() { return answerModelType; }
 
     public void setAnswerModelType(Integer answerModelType) {
         this.answerModelType = answerModelType;
     }
 
     /**
-     * 设置注意事项
+     * 设置计数数量
      *
-     * @param remarks 注意事项
+     * @param count 计数
      */
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
+    public void setCount(Integer count) {
+        this.count = count;
     }
+
+    /**
+     * 获取计数数量
+     * @return
+     */
+    public  Integer getCount() {
+        return count;
+    }
+
+
 }
