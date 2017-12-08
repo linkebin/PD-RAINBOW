@@ -444,6 +444,7 @@ public class UploadController {
                 fileResponseData.setData(data);
 
                 SecUser secUser = secUserService.findById(Security.getUserId());
+                secUser.setCertificationStatus(2);
                 secUser.setCertification(childPath + "/" + userId + type);
                 Session session = SecurityUtils.getSubject().getSession();
                 session.setAttribute("userSessionId", secUser.getId());

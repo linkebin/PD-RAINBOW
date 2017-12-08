@@ -978,7 +978,42 @@
                         }
                     });
                     return true;
-                }else{
+                }else if(result.data.certificationStatus == 2){
+                    layer.closeAll();
+                    //询问框
+//                    layer.confirm('', {
+//                        btn: ['确定','取消'] //按钮
+//                    }, function(){
+//                        layer.closeAll();
+//                        window.location.href="/web/user/userInfo";
+//                    }, function(){
+//                        layer.closeAll();
+//                        parent.window.close();
+//                    }, function(index, layero){
+//                        layer.closeAll();
+//                        parent.window.close();
+//                    });
+                    layer.open({
+                        title:'提示'
+                        ,content: '资质证明正在审核中，请耐心等候！'
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            layer.closeAll();
+                            parent.window.close();
+                        }
+                        ,btn2: function(index, layero){
+                            layer.closeAll();
+                            parent.window.close();
+                        }
+                        ,cancel: function(){
+                            layer.closeAll();
+                            parent.window.close();
+                        }
+                    });
+                    return true;
+
+                }
+                else{
                     return false;
                 }
 

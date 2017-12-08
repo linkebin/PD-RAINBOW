@@ -193,7 +193,7 @@
         su.STATUS = 1
           AND su.DELETED = 0
           AND su.ACCOUNT_TYPE = 1
-          AND su.certification_status = 0
+          AND su.certification_status = 2
             <if test="account != null and account != ''">
                 AND su.account LIKE "%${account}%"
              </if>
