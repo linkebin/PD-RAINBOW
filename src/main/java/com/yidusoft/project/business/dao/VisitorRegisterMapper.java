@@ -35,4 +35,11 @@ public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
      * @return
      */
     List<VisitorRegister> acquisitionOfStatisticalAnalysis(Map map);
+
+    /**
+     * 获取问卷类型的统计
+     * @param map
+     * @return
+     */
+    List<VisitorRegister> getQuestion(Map map);
 }

@@ -59,9 +59,9 @@
     <association property="questionnaire" javaType="com.yidusoft.project.questionnaire.domain.Questionnaire">
       <id column="ID_" jdbcType="VARCHAR" property="id" />
       <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName"></result>
+        <result column="count" jdbcType="INTEGER" property="count"></result>
     </association>
   </resultMap>
-
   <select id="findViitorByCounselorId" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultMap="BaseResultMap">
 
     SELECT ID_,visitor_name,visitor_code,sex,phone,province,city,district,address FROM visitor_register
@@ -100,18 +100,42 @@
   </select>
 
   <select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
-    SELECT da.*,register.*,que.questionnaire_name FROM visitor_register register,data_acquisition da,questionnaire que,
-    (SELECT visitor_id FROM visiting_record
-    WHERE DATE(create_time) BETWEEN #{startTime} AND #{endTime}
-    AND deleted=0 GROUP BY visitor_id ) as record
-    WHERE record.visitor_id=register.ID_
-    AND register.deleted=0
-    AND da.deleted=0
-    AND que.deleted=0
-    <if test="sex!=null and sex!=''">
-      AND register.sex=#{sex}
-    </if>
-    AND da.user_id=record.visitor_id
-    AND que.ID_=da.data_question
+        SELECT da.*,register.* FROM visitor_register register,data_acquisition da,questionnaire que,
+        (SELECT visitor_id FROM visiting_record
+        WHERE DATE(create_time) BETWEEN  DATE(#{startTime}) AND DATE(#{endTime})
+        AND deleted=0 GROUP BY visitor_id ) as record
+        WHERE record.visitor_id=register.ID_
+        AND register.deleted=0
+        AND da.deleted=0
+        AND que.deleted=0
+        <if test="sex!=null and sex!=''">
+          AND register.sex=#{sex}
+        </if>
+        AND da.user_id=record.visitor_id
+        AND que.ID_=da.data_question
   </select>
+    <select id="getQuestion" resultMap="BaseResultMap" parameterType="java.util.Map">
+        SELECT da.*,register.*,que.questionnaire_name,count(*) count FROM visitor_register register,data_acquisition da,questionnaire que,
+        (SELECT visitor_id FROM visiting_record
+        WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
+        AND deleted=0 GROUP BY visitor_id ) as record
+        WHERE record.visitor_id=register.ID_
+        AND register.deleted=0
+        AND da.deleted=0
+        AND que.deleted=0
+        <if test="sex!=null and sex!=''">
+            AND register.sex=#{sex}
+        </if>
+        AND da.user_id=record.visitor_id
+        AND que.ID_=da.data_question
+        <if test="name!=null and name!=''">
+            GROUP BY que.questionnaire_name
+        </if>
+        <if test="province!=null and province!=''">
+            GROUP BY register.province ORDER BY count desc
+        </if>
+        <if test="city!=null and city!=''">
+            GROUP BY register.city ORDER BY count desc
+        </if>
+    </select>
 </mapper>

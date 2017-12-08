@@ -112,8 +112,13 @@ public class VisitorRegisterController {
         return ResultGenerator.genSuccessResult(list);
     }
 
-    @PostMapping("/test")
-    public Result test(Date startTime, Date endTime, String sex, String maritalStatus)  {
-        return visitorRegisterService.acquisitionOfStatisticalAnalysis(startTime, endTime, sex, maritalStatus);
+    @PostMapping("/getCount")
+    public Result getCount(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city)  {
+        return visitorRegisterService.acquisitionOfStatisticalAnalysis(startTime, endTime, sex, maritalStatus, belief,questionName, name, province,city);
+    }
+
+    @PostMapping("/getQuestionCount")
+    public Result getQuestionCount(Date startTime, Date endTime, String sex, String maritalStatus,String belief,String questionName,String name,String province,String city)  {
+        return visitorRegisterService.getQuestion(startTime, endTime, sex, maritalStatus, belief,questionName, name ,province,city);
     }
 }
