@@ -355,17 +355,22 @@
             , content: $("#pizu")
             , btn: ['保存', '取消']
             , yes: function (index, layero) {
-                if (processDefinitionKey == 'channelL'){
-                    $.post('/channelComplete/true/' + taskId + '/' + $("#ppzz").val(), function (result) {
-                        location.reload();
-                    });
+                if ($("#ppzz").val()!=''){
+                    if (processDefinitionKey == 'channelL'){
+                        $.post('/channelComplete/true/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                            location.reload();
+                        });
+                    }
+
+                    if (processDefinitionKey == 'launchL'){
+                        $.post('/complete/true/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                            location.reload();
+                        });
+                    }
+                    layer.closeAll();
+                }else {
+                    layer.msg('请填写批注信息！');
                 }
-                if (processDefinitionKey == 'launchL'){
-                    $.post('/complete/true/' + taskId + '/' + $("#ppzz").val(), function (result) {
-                        location.reload();
-                    });
-                }
-                layer.closeAll();
             }
             , btn2: function (index, layero) {
             }
@@ -381,18 +386,22 @@
                 , content: $("#pizu")
                 , btn: ['保存', '取消']
                 , yes: function (index, layero) {
-                    if (processDefinitionKey == 'channelL'){
-                        $.post('/channelComplete/false/' + taskId + '/' + $("#ppzz").val(), function (result) {
-                            location.reload();
-                        });
-                    }
-                    if (processDefinitionKey == 'launchL'){
-                        $.post('/complete/false/' + taskId + '/' + $("#ppzz").val(), function (result) {
-                            location.reload();
-                        });
+                    if($("#ppzz").val()!=''){
+                        if (processDefinitionKey == 'channelL'){
+                            $.post('/channelComplete/false/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                                location.reload();
+                            });
+                        }
+                        if (processDefinitionKey == 'launchL'){
+                            $.post('/complete/false/' + taskId + '/' + $("#ppzz").val(), function (result) {
+                                location.reload();
+                            });
+                        }
+                        layer.closeAll();
+                    }else {
+                        layer.msg('请填写批注信息！');
                     }
 
-                    layer.closeAll();
                 }
                 , btn2: function (index, layero) {
                 }

@@ -106,10 +106,15 @@ public class VisitingRecordController {
     @PostMapping("/detail")
     public Result detail(String id) {
         VisitingRecord visitingRecord = visitingRecordService.findById(id);
+
+        SelectOption selectOption = selectOptionService.findById(visitingRecord.getVisitorGoal());
+        visitingRecord.setVisitorGoal(selectOption.getOptionValue());
+
         VisitingRecordFile visitingRecordFile = new VisitingRecordFile();
         visitingRecordFile.setCreator(Security.getUserId());
 
         visitingRecordFile.setRecordId(visitingRecord.getId());
+
         List<VisitingRecordFile> visitingRecordFiles = visitingRecordFileService.findVisitingRecordFileByVisitorId(visitingRecordFile);
         visitingRecord.setVisitingRecordFileList(visitingRecordFiles);
         return ResultGenerator.genSuccessResult(visitingRecord);

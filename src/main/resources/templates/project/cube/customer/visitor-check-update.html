@@ -558,7 +558,7 @@
         form.on('radio(maritalStatus)', function(data){
             if (data.value !='1'){
                 $('.marital').show();
-                $('.marital input').removeAttr('disabled');
+                $('.marital input').removeAttr('disabled').val('');
 
             }else {
                 $('.marital').hide();
@@ -570,7 +570,7 @@
         form.on('radio(Have_children)', function(data){
             if (data.value =='1'){
                 $('.children_info').show();
-                $('.children_info input').removeAttr('disabled');
+                $('.children_info input').removeAttr('disabled').val('');
             }else {
                 $('.children_info').hide();
                 $('.children_info input').attr('disabled','disabled');
@@ -582,14 +582,14 @@
                 $('.father_info').show();
                 $('.father_leave').hide();
 
-                $('.father_info input').removeAttr('disabled');
+                $('.father_info input').removeAttr('disabled').val('');
                 $('.father_leave input').attr('disabled','disabled');
-                $(".father_info select").removeAttr("disabled");
+                $(".father_info select").removeAttr("disabled").val('');
             }else {
                 $('.father_info').hide();
                 $('.father_leave').show();
                 $('.father_info input').attr('disabled','disabled');
-                $('.father_leave input').removeAttr('disabled');
+                $('.father_leave input').removeAttr('disabled').val('');
                 $(".father_info select").attr("disabled", true);
             }
         });
@@ -599,14 +599,14 @@
                 $('.mother_info').show();
                 $('.mother_leave').hide();
 
-                $('.mother_info input').removeAttr('disabled');
+                $('.mother_info input').removeAttr('disabled').val('');
                 $('.mother_leave input').attr('disabled','disabled');
-                $(".mother_info select").removeAttr("disabled");
+                $(".mother_info select").removeAttr("disabled").val('');
             }else {
                 $('.mother_info').hide();
                 $('.mother_leave').show();
                 $('.mother_info input').attr('disabled','disabled');
-                $('.mother_leave input').removeAttr('disabled');
+                $('.mother_leave input').removeAttr('disabled').val('');
                 $(".mother_info select").attr("disabled", true);
             }
         });
@@ -614,7 +614,7 @@
         form.on('radio(parental_separation)', function(data){
             if (data.value =='1'){
                 $('.parentalSeparationYourAge').show();
-                $('.parentalSeparationYourAge input').removeAttr('disabled');
+                $('.parentalSeparationYourAge input').removeAttr('disabled').val('');
             }else {
                 $('.parentalSeparationYourAge').hide();
                 $('.parentalSeparationYourAge input').attr('disabled','disabled');
@@ -624,7 +624,7 @@
         form.on('radio(divorce)', function(data){
             if (data.value =='1'){
                 $('.divorce').show();
-                $('.divorce input').removeAttr('disabled');
+                $('.divorce input').removeAttr('disabled').val('');
             }else {
                 $('.divorce').hide();
                 $('.divorce input').attr('disabled','disabled');
@@ -635,7 +635,7 @@
         form.on('radio(psychologicalCounseling)', function(data){
             if (data.value =='1'){
                 $('.consult_info').show();
-                $('.consult_info input').removeAttr('disabled');
+                $('.consult_info input').removeAttr('disabled').val('');
                 form.render();
             }else {
                 $('.consult_info').hide();
@@ -645,7 +645,7 @@
         form.on('radio(medicalHistory)', function(data){
             if (data.value =='1'){
                 $('.medicalHistory').show();
-                $('.medicalHistory input').removeAttr('disabled');
+                $('.medicalHistory input').removeAttr('disabled').val('');
             }else {
                 $('.medicalHistory').hide();
                 $('.medicalHistory input').attr('disabled','disabled');
@@ -655,7 +655,7 @@
         form.on('radio(longMedication)', function(data){
             if (data.value =='1'){
                 $('.LongMedication').show();
-                $('.LongMedication input').removeAttr('disabled');
+                $('.LongMedication input').removeAttr('disabled').val();
             }else {
                 $('.LongMedication').hide();
                 $('.LongMedication input').attr('disabled','disabled');

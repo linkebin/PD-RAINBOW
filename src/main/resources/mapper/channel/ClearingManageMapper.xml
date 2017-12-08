@@ -15,9 +15,6 @@
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
 
-    <!--<if test="map.referrer !=null and map.referrer!=''">-->
-        <!--AND b.referrer LIKE  '%${map.referrer}%'-->
-    <!--</if>-->
     <select id="findOrderClearingByChannelCounselorId"  resultType="Map">
     SELECT b.* FROM (
         SELECT oo.order_code,oo.order_money,oo.clearing_status,oo.creator consultant_name,oo.user_id,oo.payment_time,

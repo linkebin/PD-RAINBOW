@@ -5,6 +5,22 @@
     <title>结算记录</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
     <link rel="stylesheet" th:href="@{/Styles/themes/default/shutter.css}" media="all">
+    <style>
+        .main {
+            height: 400px;
+            /* width: 778px !important; */
+            overflow: hidden;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #e3e3e3;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
 <body class="eui-layout-body">
 <div class="eui-layout eui-layout-admin xymfHome">
@@ -33,7 +49,6 @@
                                         <option value="3">未结算</option>
                                 </select>
                             </div>
-
                             <label class="eui-form-label">用户姓名</label>
                             <div class="eui-input-inline">
                                 <select    name="referrer">
@@ -43,17 +58,35 @@
                                     </th:block>
                                 </select>
                             </div>
-
                             <div class="eui-input-inline">
                                 <span class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()">查询</span>
                                 <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
                             </div>
                         </div>
 
+                        <!--<div class="eui-form-item">-->
+                            <!--<label class="eui-form-label">起始时间</label>-->
+                            <!--<div class="eui-input-inline">-->
+                                <!--&lt;!&ndash;<input name="USER_NAME" class="eui-input" type="text" placeholder="">&ndash;&gt;-->
+                            <!--</div>-->
 
+                            <!--<label class="eui-form-label">截至时间</label>-->
+                            <!--<div class="eui-input-inline">-->
+                                <!--&lt;!&ndash;<input name="USER_NAME" class="eui-input" type="text" placeholder="">&ndash;&gt;-->
+                            <!--</div>-->
+                        <!--</div>-->
                     </div>
                 </form>
-                <div id="analysis"  style="width: 100%;height:300px;"></div>
+                <div class="eui-row eui-padding10 eui-borderB">
+                    <div class="eui-col-md6 eui-font18">
+                        <span style="margin-left: 40px;" class="eui-color-blue">金额: <span id="z">0</span></span>
+                        <span class="eui-color-blue" style="margin-left: 40px;">佣金: <span id="y">0</span> </span>
+                    </div>
+                    <div class="eui-col-md6 eui-textAlignR">
+
+                    </div>
+                </div>
+                <div id="analysis"  style="width: 100%;height:250px;"></div>
                 <table id="test2"></table>
 
              </div>
@@ -279,8 +312,7 @@
                 ,done: function(value, date, endDate){
                 }
             });
-
-            tableIns = table.render({//<div>{{# if(d.SEX=="1"){ }} 男  {{#  }else{   }} 女 {{# } }}</div>  <div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>
+            tableIns = table.render({
                 id: 'idTest'
                 ,elem: '#test2'
                 ,url:'/clearing/manage/listOrderOnlineClearing'
@@ -288,7 +320,6 @@
                 ,where: {json: JSON.stringify(obj)}
                 ,height: 420
                 ,cols: [[ //标题栏
-//                    {checkbox: true},
                     {field: 'order_code', title: '订单编号', width: 120}
                     ,{field: 'order_money', title: '金额(￥)', width: 100}
                     ,{field: 'brokerage', title: '佣金(￥)', width: 100,templet:'<div>{{# if(d.brokerage==undefined ){ }} 未结算  {{#  }else{   }} {{ d.brokerage}} {{# } }}</div>'}
@@ -313,7 +344,8 @@
                 ,limits: [10,30,50,100]
                 ,limit: 10 //每页默认显示的数量
                 ,done: function(res, curr, count){
-
+                    $("#z").html(res.data[0].gross);
+                    $("#y").html(res.data[0].bk);
                 }
             });
 

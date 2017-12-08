@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,9 +63,12 @@ public class ClearingManageController {
         map.put("channel_id", Security.getUser().getChannelId());
 
         List<Map<String,Object>> maps = clearingManageService.findChannelAccountLineChartNew(ids,map);
-        if (maps.get(0).get("maxY")==null){
-            maps.get(0).put("maxY",0);
+        if (maps.size()>0) {
+            if (maps.get(0).get("maxY")==null){
+                maps.get(0).put("maxY",0);
+            }
         }
+
         for (Map<String,Object> m : maps){
             if (m.get("brokerage")==null){
                 m.put("brokerage",0);
@@ -108,8 +112,21 @@ public class ClearingManageController {
         List<String> ids = getChannelConsultIds(map);
         List<Map<String,Object>> list = null;
         if (ids.size()>0){
-            PageHelper.startPage(page, limit);
-            list = clearingManageService.findOrderClearingByChannelCounselorId(ids,map);
+            List<Map<String,Object>> listAll = clearingManageService.findOrderClearingByChannelCounselorId(ids,map);
+            if(listAll.size()>0){
+                double gross =0.0;
+                double bk = 0.0;
+                for(Map<String,Object> m2 : listAll){
+                    gross+=Double.valueOf( m2.get("order_money").toString());
+                    if (m2.get("brokerage")!=null){
+                        bk+=Double.valueOf( m2.get("brokerage").toString());
+                    }
+                }
+                PageHelper.startPage(page, limit);
+                list = clearingManageService.findOrderClearingByChannelCounselorId(ids,map);
+                list.get(0).put("gross",gross);
+                list.get(0).put("bk",bk);
+            }
         }
 
         PageInfo pageInfo = new PageInfo(list);

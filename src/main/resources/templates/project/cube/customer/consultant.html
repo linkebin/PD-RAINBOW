@@ -770,8 +770,6 @@ var processLogA=null;
 
             $(".DivInfo .visitorGoal").html(obj.visitorGoal);
 
-//            $('#city').val(obj.visitorGoal);
-//            $('#city').trigger("change");
 
             var visitingRecordFileList = obj.visitingRecordFileList;
             $("#demoList").html('');
@@ -814,7 +812,6 @@ var processLogA=null;
                         recordId:$("#recordId").val()}
                     ,done: function(res){
                         var obj = JSON.parse(res);
-
                         $("#demoList").append(' <tr> <th>'+obj.fileName+'</th> <th>'
                             +new Date().Format('yyyy-MM-dd hh:mm:ss')+'</th>' +
                             '<th class="icons">' +foeBtnfileType(obj)+
@@ -848,7 +845,7 @@ var processLogA=null;
         if (pic.indexOf(obj.fileType)!=-1){
             return '<i path="'+obj.data.src+'" title="查看图片" class="eui-icon tb">&#xe64a;</i>';
         }
-        if (video.indexOf(item.fileType)!=-1){
+        if (video.indexOf(obj.fileType)!=-1){
             return '<i path="'+obj.data.src+'" title="播放" class="eui-icon tb">&#xe652;</i>'
         }
 
