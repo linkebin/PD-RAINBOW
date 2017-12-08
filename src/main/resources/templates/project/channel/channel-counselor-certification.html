@@ -232,11 +232,15 @@
             success: function (result) {
                if (result.code == 200){
                    layer.closeAll();
-                   layer.msg("审核成功");
+                   layer.msg("审核成功",{
+                       time: 5000
+               });
                    doSearch();
                }else{
                    layer.closeAll();
-                   layer.msg("审核失败");
+                   layer.msg("审核失败",{
+                       time:5000
+                   });
                }
             }
         });
