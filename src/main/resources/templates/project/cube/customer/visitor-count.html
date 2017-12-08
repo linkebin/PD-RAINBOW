@@ -59,7 +59,7 @@
                         <div class="eui-form-item chartsTitle">
                             <label class="eui-form-label eui-textAlignL">问卷类型</label>
                             <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                <input type="checkbox"  e-skin="primary" title="" checked="">
                             </div>
                         </div>
                         <ul class="chartsContent" id="type">
@@ -264,19 +264,11 @@
                                     </ul>
                                     <div class="eui-tab-content">
                                         <div class="eui-tab-item eui-show">
-                                            <ul class="province">
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">1、北京</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="89%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                            <ul class="statistics province">
                                             </ul>
                                         </div>
                                         <div class="eui-tab-item">
-                                            <ul class="city">
+                                            <ul class="statistics city">
 
                                             </ul>
                                         </div>
@@ -988,9 +980,9 @@
                         progressBar = parseInt(progressBar) + "%";
                         tableHtml += '<li class="eui-marginB10">' +
                                 '<div class="eui-col-md3 eui-textAlignR eui-paddingR10">' + (parseInt(i) + 1) + '、' + list.province + '</div>' +
-                                '<div class="eui-col-md10 eui-paddingT5">' +
+                                '<div class="eui-col-md9 eui-paddingT5">' +
                                 '<div class="eui-progress" e-filter="que' + i + '">' +
-                                '<div class="eui-progress-bar" e-percent="'+progressBar+'"></div>' +
+                                '<div class="eui-progress-bar" ></div>' +
                                 '</div>' +
                                 '</div>' +
                                 '</li>';
@@ -998,7 +990,7 @@
                     $('.province').html(tableHtml);
                     var count = getCountSum(thisYearList);
                     form.render();
-                    /*for (var j in thisYearList) {
+                    for (var j in thisYearList) {
                     eui.use(['element'], function () {
                         var element = eui.element;
                         var thisYear = thisYearList[j].questionnaire;
@@ -1008,7 +1000,7 @@
                         var name = 'que' + '' + j;
                         element.progress(name, progressBar);
                     })
-                }*/
+                }
             }
         })
             })
@@ -1035,10 +1027,10 @@
                     for (var i in thisYearList) {
                         var list = thisYearList[i];
                         tableHtml += '<li class="eui-marginB10">' +
-                                '<div class="eui-col-md3 eui-textAlignR eui-paddingR10">' + (parseInt(i) + 1) + '、' + list.city + '</div>' +
-                                '<div class="eui-col-md9 eui-paddingT5">' +
+                                '<div class="eui-col-md5 eui-textAlignL eui-paddingR10">' + (parseInt(i) + 1) + '、' + list.city + '</div>' +
+                                '<div class="eui-col-md7 eui-paddingT5">' +
                                 '<div class="eui-progress" e-filter="ques' + i + '">' +
-                                '<div class="eui-progress-bar" e-percent="0%"></div>' +
+                                '<div class="eui-progress-bar"></div>' +
                                 '</div>' +
                                 '</div>' +
                                 '</li>';
@@ -1086,9 +1078,6 @@
             legend: {
                 data: ['年龄']
             },
-            xAxis: {
-                data: ageNameDate
-            },
             //修改柱状条的颜色color
             itemStyle: {
                 normal: {
@@ -1122,7 +1111,7 @@
                     color: '#333333' // 标签文字颜色
                 },
                 // boundaryGap: false,
-                data: ageNameDate
+                data: ["18岁", "19", "25", "31", "37", "43", "49", "54"]
             },
 
             yAxis: {
@@ -1158,7 +1147,7 @@
                 //name: '销量',
                 type: 'bar',
                 barWidth: 60,//柱图宽度
-                data: ageData
+                data: [10, 20, 30, 40, 50, 60, 70, 80]
             }]
         };
         // 使用刚指定的配置项和数据显示图表。
