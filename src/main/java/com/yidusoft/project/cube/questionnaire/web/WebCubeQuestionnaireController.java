@@ -154,14 +154,21 @@ public class WebCubeQuestionnaireController {
     }
 
     @RequestMapping(value ={"/getQuestionnaireFill"})
-    public String getQuestionnaireFill(String questionnaireId,String userId,String visitorTimes,String activityId,String userName,Model model){
-        model.addAttribute("questionnaireId",questionnaireId);
-        model.addAttribute("activityId",activityId);
-        model.addAttribute("userId",userId);
-        model.addAttribute("visitorTimes",visitorTimes);
-        model.addAttribute("userName",userName);
-        Questionnaire questionnaire= questionnaireService.findById(questionnaireId);
-        model.addAttribute("questionnaire",questionnaire);
+    public String getQuestionnaireFill(String questionnaireId,String userId,String visitorTimes,String activityId,String userName,Model model) {
+        model.addAttribute("questionnaireId", questionnaireId);
+        model.addAttribute("activityId", activityId);
+        model.addAttribute("userId", userId);
+        model.addAttribute("visitorTimes", visitorTimes);
+        model.addAttribute("userName", userName);
+        Questionnaire questionnaire = questionnaireService.findById(questionnaireId);
+        model.addAttribute("questionnaire", questionnaire);
+        if (("生活事件量表(LES)").equals(questionnaire.getQuestionnaireName())) {
+            return "project/cube/questionnaireFilling/fillIn_gauge_15";
+        } else if (("长处和困难问卷(SDQ)").equals(questionnaire.getQuestionnaireName())) {
+            return "project/cube/questionnaireFilling/fillIn_gauge_13";
+        } else if (("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getQuestionnaireName())) {
+            return "project/cube/questionnaireFilling/fillIn_gauge_14";
+        }
         return "project/cube/questionnaire/other-questionnaire";
     }
 }

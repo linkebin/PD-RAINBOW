@@ -96,7 +96,7 @@
                             </colgroup>
                             <thead>
                             <tr>
-                                <th><input type="checkbox" e-skin="primary" title=""></th>
+                                <th><input type="checkbox" e-filter="allChoose" e-skin="primary"></th>
                                 <th>活动编号</th>
                                 <th>活动名称</th>
                                 <th>活动目的</th>
@@ -213,7 +213,7 @@
             var id = "'" + activity.id + "'";
             var url = activity.uestionnaireUri + '?id=' + activity.id;
             tableHtml += '<tr>' +
-                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox" e-filter="allChoose"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
                     '<td>' + activity.activityCode + '</td>' +
                     '<td>' + activity.activityName + '</td>' +
                     '<td>' + activity.activityAim + '</td>' +

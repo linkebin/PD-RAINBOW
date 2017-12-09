@@ -100,7 +100,7 @@
   </select>
 
   <select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
-        SELECT da.*,register.* FROM visitor_register register,data_acquisition da,questionnaire que,
+        SELECT da.*,register.*,que.questionnaire_name FROM visitor_register register,data_acquisition da,questionnaire que,
         (SELECT visitor_id FROM visiting_record
         WHERE DATE(create_time) BETWEEN  DATE(#{startTime}) AND DATE(#{endTime})
         AND deleted=0 GROUP BY visitor_id ) as record

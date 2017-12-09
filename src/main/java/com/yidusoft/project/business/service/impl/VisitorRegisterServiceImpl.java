@@ -78,7 +78,6 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      */
     @Override
     public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city) {
-        String arr[] = maritalStatus.split(",");
         List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex, name, province,city));
         List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
         return ResultGenerator.genSuccessResult(thisYearList);

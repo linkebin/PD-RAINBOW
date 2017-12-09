@@ -27,39 +27,27 @@
                     </div>
                 </div>
                 <ul class="eui-form eui-marginT20 eui-paddingB10 eui-paddingLR10 filter">
-                    <li>
+                    <!--<li>
                         <div class="eui-form-item chartsTitle">
                             <label class="eui-form-label eui-textAlignL">区域</label>
                             <div class="eui-input-block eui-textAlignR eui-paddingR10">
                                 <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
                             </div>
                         </div>
-                        <ul class="chartsContent">
+                        <ul class="chartsContent region">
                             <li class="eui-form-item">
                                 <label class="eui-form-label eui-textAlignL">区域1</label>
                                 <div class="eui-input-block eui-textAlignR eui-paddingR10">
                                     <input type="checkbox" name="like[write]" e-skin="primary" title="">
                                 </div>
                             </li>
-                            <li class="eui-form-item">
-                                <label class="eui-form-label eui-textAlignL">区域2</label>
-                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
-                                </div>
-                            </li>
-                            <li class="eui-form-item">
-                                <label class="eui-form-label eui-textAlignL">区域3</label>
-                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
-                                </div>
-                            </li>
                         </ul>
-                    </li>
+                    </li>-->
                     <li>
                         <div class="eui-form-item chartsTitle">
                             <label class="eui-form-label eui-textAlignL">问卷类型</label>
                             <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                <input type="checkbox"  e-skin="primary" title="" checked="">
+                                <input type="checkbox" e-skin="primary" title="" checked="">
                             </div>
                         </div>
                         <ul class="chartsContent" id="type">
@@ -93,26 +81,50 @@
                         <div class="eui-form-item chartsTitle">
                             <label class="eui-form-label eui-textAlignL">年龄</label>
                             <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                <input type="checkbox" e-skin="primary" title="" checked="">
                             </div>
                         </div>
                         <ul class="chartsContent">
                             <li class="eui-form-item">
-                                <label class="eui-form-label eui-textAlignL">区域1</label>
+                                <label class="eui-form-label eui-textAlignL">18岁以下</label>
                                 <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                    <input type="checkbox" name="age" value="0" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
                                 </div>
                             </li>
                             <li class="eui-form-item">
-                                <label class="eui-form-label eui-textAlignL">区域2</label>
+                                <label class="eui-form-label eui-textAlignL">19-44岁</label>
                                 <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                    <input type="checkbox" name="age" value="1" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
                                 </div>
                             </li>
                             <li class="eui-form-item">
-                                <label class="eui-form-label eui-textAlignL">区域3</label>
+                                <label class="eui-form-label eui-textAlignL">45-59岁</label>
                                 <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                    <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                                    <input type="checkbox" name="age" value="2" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">60-74</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="3" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">75-89岁</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="4" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-form-label eui-textAlignL">90岁以上</label>
+                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="5" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
                                 </div>
                             </li>
                         </ul>
@@ -346,153 +358,12 @@
                                     <div class="eui-col-md2 eui-textAlignR eui-paddingR10"><img
                                             src="/Styles/images/xymfImages/xymf/woman.png" alt=""/></div>
                                 </div>
-                                <div>
-                                    <ul class="sexSpread">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                    </ul>
-                                    <ul class="sexSpread">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                    </ul>
-                                    <ul class="sexSpread">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                    </ul>
-                                    <ul class="sexSpread">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                    </ul>
-                                    <ul class="sexSpread">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                    </ul>
-                                    <ul class="sexSpread">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                        <li class="sexWoman"></li>
-                                    </ul>
+                                <div id="sex">
+
                                 </div>
                             </div>
                             <div class="eui-col-md6">
                                 <div class="eui-col-md6 eui-font16 eui-marginB20 eui-marginT10">年龄分布</div>
-                                <div class="eui-col-md6 eui-textAlignR">
-                                    <div class="eui-form eui-input-inline eui-width100 eui-color-gray3">
-                                        <select name="age" e-verify="required" e-filter="allSeleted">
-                                            <option value="0" selected>间隔5岁</option>
-                                            <option value="1">间隔10岁</option>
-                                            <option value="2">间隔15岁</option>
-                                            <option value="3">间隔20岁</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="eui-col-md12">
                                     <div id="chart1" class="charts0"></div>
                                 </div>
@@ -565,13 +436,14 @@
 <script src="/card.js"></script>
 
 <script>
-    var typeSum=0;//计算初始化的次数
+    var typeSum = 0;//计算初始化的次数
     var nowDate = new Date();
     nowDate.setDate(nowDate.getDate() - 7);
+    var form, layer, element;
     eui.use(['form', 'layer', 'element'], function () {
-        var form = eui.form,
-                layer = eui.layer,
-                element = eui.element;
+        form = eui.form;
+        layer = eui.layer;
+        element = eui.element;
         form.on('select(selected)', function (data) {
             if (data.value == 0) {
                 nowDate = new Date()
@@ -589,243 +461,310 @@
 
     $(function () {
         doSearch();
-        getProvince();
-        getCity();
     })
     var statusIds = '';
     var beliefIds = '';
     var sex = 0;
     var typeIds = '';
     function doSearch() {
-        $('tbody').html("");
-        $('.man').text(0);
-        $('.manPercent').text('0%');
-        $('.women').text(0);
-        $('.womenPercent').text('0%');
-        /*eui.use(['element'], function () {
-         var element = eui.element;*/
-        var sexArray = new Array();
-        var s = 0;
-        $(".sex:checked").each(function (i) {
-            var id = $(this).parent().find("input[name='sex']").val();
-            sexArray[s] = id;
-            sex = id;
-            s++;
-        });
+        eui.use(['element'], function () {
+            var element = eui.element;
+            $('tbody').html("");
+            $('.man').text(0);
+            $('.manPercent').text('0%');
+            $('.women').text(0);
+            $('.womenPercent').text('0%');
+            /*eui.use(['element'], function () {
+             var element = eui.element;*/
+            var sexArray = new Array();
+            var s = 0;
+            $(".sex:checked").each(function (i) {
+                var id = $(this).parent().find("input[name='sex']").val();
+                sexArray[s] = id;
+                sex = id;
+                s++;
+            });
 
-        var beliefArray = new Array();
-        $('input[name="belief"]:checked').each(function (i) {
-            var belief = $(this).parent().find("input[name='belief']").val();
-            beliefArray[i] = belief;
-        })
-        beliefIds = beliefArray.join(",");
+            var beliefArray = new Array();
+            $('input[name="belief"]:checked').each(function (i) {
+                var belief = $(this).parent().find("input[name='belief']").val();
+                beliefArray[i] = belief;
+            })
+            beliefIds = beliefArray.join(",");
 
-        var statusArray = new Array();
-        $('input[name="maritalStatus"]:checked').each(function (i) {
-            var maritalStatus = $(this).parent().find("input[name='maritalStatus']").val();
-            statusArray[i] = maritalStatus;
-        })
-        statusIds = statusArray.join(",");
+            var statusArray = new Array();
+            $('input[name="maritalStatus"]:checked').each(function (i) {
+                var maritalStatus = $(this).parent().find("input[name='maritalStatus']").val();
+                statusArray[i] = maritalStatus;
+            })
+            statusIds = statusArray.join(",");
 
-        var typeArray = new Array();
-        $('input[name="type"]:checked').each(function (i) {
-            var maritalStatus = $(this).parent().find("input[name='type']").val();
-            typeArray[i] = maritalStatus;
-        })
-        typeIds = typeArray.join(",");
+            var typeArray = new Array();
+            $('input[name="type"]:checked').each(function (i) {
+                var maritalStatus = $(this).parent().find("input[name='type']").val();
+                typeArray[i] = maritalStatus;
+            })
 
-        if (sexArray.length == 2) {
-            sex = '';
-        }
-        if (sexArray.length == 0) {
-            return;
-        } else if (statusArray.length == 0) {
-            return;
-        } else if (beliefArray.length == 0) {
-            return;
-        }
-        $.post("/visitor/register/getCount", {
-            startTime: nowDate,
-            endTime: new Date(),
-            sex: sex,
-            maritalStatus: statusIds,
-            belief: beliefIds,
-            questionName: typeIds,
-            name: '',
-            province: '',
-            city: ''
-        }, function (result) {
-            console.log(result);
-            if (result.code = 200) {
-                var manSum = 0;
-                var womenSum = 0;
-                var registerList = result.data;
-                var value = [0, 0, 0, 0, 0, 0, 0];
-                var data = [0, 0, 0, 0, 0, 0, 0];
-                var statusData = [
-                    {"name": "未婚", "size": 0, "add": "11", "rate": "13%"},
-                    {"name": "已婚", "size": 0, "add": "11", "rate": "13%"},
-                    {"name": "已婚分居", "size": 0, "add": "11", "rate": "13%"},
-                    {"name": "再婚", "size": 0, "add": "11", "rate": "13%"},
-                    {"name": "离婚独居", "size": 0, "add": "11", "rate": "13%"},
-                    {"name": "丧偶独居", "size": 0, "add": "11", "rate": "13%"},
-                ]
-                for (var i in registerList) {
-                    var register = registerList[i];
-                    if (register.sex == 1) {
-                        manSum++;
-                    } else {
-                        womenSum++;
-                    }
-                    //学历分布
-                    var level = register.educationLevel;
-                    if (level == 1) {
-                        value[0]++;
-                    } else if (level == 2) {
-                        value[1]++;
-                    } else if (level == 3) {
-                        value[2]++;
-                    } else if (level == 4) {
-                        value[3]++;
-                    } else if (level == 5) {
-                        value[4]++;
-                    } else if (level == 6) {
-                        value[5]++;
-                    } else {
-                        value[6]++;
-                    }
-                    //宗教信仰分布
-                    var belief = register.ReligiousBelief;
-                    if (belief == 0) {
-                        data[0]++;
-                    } else if (belief == 1) {
-                        data[1]++;
-                    } else if (belief == 2) {
-                        data[2]++;
-                    } else if (belief == 3) {
-                        data[3]++;
-                    } else if (belief == 4) {
-                        data[4]++;
-                    } else if (belief == 5) {
-                        data[5]++;
-                    } else {
-                        data[6]++;
-                    }
+            typeIds = typeArray.join(",");
 
-                    //婚姻状况分布
-                    var status = register.maritalStatus;
-                    if (status == 1) {
-                        statusData[0].size++;
-                    } else if (status == 2) {
-                        statusData[1].size++;
-                    } else if (status == 3) {
-                        statusData[2].size++;
-                    } else if (status == 4) {
-                        statusData[3].size++;
-                    } else if (status == 5) {
-                        statusData[4].size++;
-                    } else if (status == 6) {
-                        statusData[5].size++;
-                    }
-                }
-                var manPercent = ((manSum / registerList.length) * 100).toFixed(1) + "%";
-                var womenPercent = ((womenSum / registerList.length) * 100).toFixed(1) + "%";
-                init(value);//学历分布
-                religiousBelief(data);//宗教信仰分布
-                var marryData = [];
-                for (var i in statusData) {
-                    if (statusData[i].size != 0) {
-                        marryData.push(statusData[i]);
-                    }
-                }
-                ageList(registerList);//计算年龄分布
-                marry(marryData);//初始化婚姻状况
-                $('.man').text(manSum);
-                $('.manPercent').text(manPercent);
-                $('.women').text(womenSum);
-                $('.womenPercent').text(womenPercent);
+            if (sexArray.length == 2) {
+                sex = '';
             }
-        })
-        $.post("/visitor/register/getQuestionCount", {
-            startTime: nowDate,
-            endTime: new Date(),
-            sex: sex,
-            maritalStatus: statusIds,
-            belief: beliefIds,
-            questionName: typeIds,
-            name: 'name',
-            province: '',
-            city: ''
-        }, function (result) {
-            if (result.code == 200) {
-                var thisYearList = result.data.thisYearList;
-                var lastYearList = result.data.lastYearList;
-                var lastPhaseList = result.data.lastPhaseList;
-                var countSum = getCountSum(thisYearList);//问卷总数
-                var lastCountSum = getCountSum(lastYearList);//去年的问卷总数
-                var lastPhaseSum = getCountSum(lastPhaseList);//上个时期的使用问卷总数
-                //同比增长率
-                var tongbi = (countSum - lastCountSum) / lastCountSum * 100 + '%';
-                var mom = (countSum - lastPhaseSum) / lastPhaseSum * 100 + '%';
-                if (lastPhaseSum == 0) {//如果上期的基数为0
-                    mom = "--"
-                }
-                if (lastCountSum == 0) {//如果去年同期的基数为0
-                    tongbi = "--"
-                }
-                var up = 'up';
-                var down = 'up';
-                if (!judgeSign(countSum - lastCountSum)) {//如果为负数，则为下降率
-                    up = 'down';
-                }
-                if (!judgeSign(countSum - lastPhaseSum)) {//如果为负数，则为下降率
-                    down = 'down';
-                }
-                var tableHtml = '';
-                typeSum++;//表示刷新数据次数+1
-                initType(thisYearList);//设置问卷类型名称复选框
-                for (var j in thisYearList) {
-                    var thisYear = thisYearList[j].questionnaire;
-                    var progressBar = (thisYear.count / countSum) * 100;
-                    progressBar = parseInt(progressBar)+'%';
-                    tableHtml += '<tr>' +
-                            '<td>' + (parseInt(j) + 1) + '</td>' +
-                            '<td>' + thisYear.questionnaireName + '</td>' +
-                            '<td class="eui-row">' +
-                            '<span class="eui-col-md2">' + thisYear.count + '</span>' +
-                            '<div class="eui-progress eui-col-md10 eui-marginT10" e-showpercent="yes" e-filter="question' + j + '">' +
-                            '<div class="eui-progress-bar" e-percent="'+progressBar+'"></div>' +
-                            '</div>' +
-                            '</td>' +
-                            '<td>' + tongbi + '<img src="/Styles/images/xymfImages/xymf/' + up + '.png" alt=""/></td>' +
-                            '<td>' + mom + '<img src="/Styles/images/xymfImages/xymf/' + down + '.png" alt=""/></td>' +
-                            '</tr>';
+            if (sexArray.length == 0) {
+                sex = 3;
+            } else if (statusArray.length == 0) {
+                return;
+            } else if (beliefArray.length == 0) {
+                return;
+            }
+            $.post("/visitor/register/getCount", {
+                startTime: nowDate,
+                endTime: new Date(),
+                sex: sex,
+                maritalStatus: statusIds,
+                belief: beliefIds,
+                questionName: typeIds,
+                name: '',
+                province: '',
+                city: ''
+            }, function (result) {
+                /*console.log(result);*/
+                if (result.code = 200) {
+                    var manSum = 0;
+                    var womenSum = 0;
+                    var resuliList = result.data
+                    var registerList = countAge(resuliList);
+                    var value = [0, 0, 0, 0, 0, 0, 0];
+                    var data = [0, 0, 0, 0, 0, 0, 0];
+                    var statusData = [
+                        {"name": "未婚", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "已婚", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "已婚分居", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "再婚", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "离婚独居", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "丧偶独居", "size": 0, "add": "11", "rate": "13%"},
+                    ]
+                    for (var i in registerList) {
+                        var register = registerList[i];
+                        if (register.sex == 1) {
+                            manSum++;
+                        } else {
+                            womenSum++;
+                        }
 
+                        //学历分布
+                        var level = register.educationLevel;
+                        if (level == 1) {
+                            value[0]++;
+                        } else if (level == 2) {
+                            value[1]++;
+                        } else if (level == 3) {
+                            value[2]++;
+                        } else if (level == 4) {
+                            value[3]++;
+                        } else if (level == 5) {
+                            value[4]++;
+                        } else if (level == 6) {
+                            value[5]++;
+                        } else {
+                            value[6]++;
+                        }
+                        //宗教信仰分布
+                        var belief = register.religiousBelief;
+                        if (belief == 0) {
+                            data[0]++;
+                        } else if (belief == 1) {
+                            data[1]++;
+                        } else if (belief == 2) {
+                            data[2]++;
+                        } else if (belief == 3) {
+                            data[3]++;
+                        } else if (belief == 4) {
+                            data[4]++;
+                        } else if (belief == 5) {
+                            data[5]++;
+                        } else {
+                            data[6]++;
+                        }
+
+                        //婚姻状况分布
+                        var status = register.maritalStatus;
+                        if (status == 1) {
+                            statusData[0].size++;
+                        } else if (status == 2) {
+                            statusData[1].size++;
+                        } else if (status == 3) {
+                            statusData[2].size++;
+                        } else if (status == 4) {
+                            statusData[3].size++;
+                        } else if (status == 5) {
+                            statusData[4].size++;
+                        } else if (status == 6) {
+                            statusData[5].size++;
+                        }
+                    }
+                    var manPercent = '';
+                    var womenPercent = '';
+                    if (registerList.length != 0) {
+                        manPercent = ((manSum / registerList.length) * 100).toFixed(1) + "%";
+                        womenPercent = ((womenSum / registerList.length) * 100).toFixed(1) + "%";
+                    } else {
+                        manPercent = '0%'
+                        womenPercent = '0%'
+                    }
+
+                    init(value);//学历分布
+                    religiousBelief(data);//宗教信仰分布
+                    var marryData = [];
+                    for (var i in statusData) {
+                        if (statusData[i].size != 0) {
+                            marryData.push(statusData[i]);
+                        }
+                    }
+                    ageList(registerList);//计算年龄分布
+                    marry(marryData);//初始化婚姻状况
+                    $('.man').text(manSum);
+                    $('.manPercent').text(manPercent);
+                    $('.women').text(womenSum);
+                    $('.womenPercent').text(womenPercent);
+                    var i = 0
+                    $('#sex').html("");
+                    for (i; i <= 6; i++) {
+                        var html = '';
+                        html = '<ul class="sexSpread">';
+                        var percent = ((manSum / registerList.length) * 100).toFixed(1)
+                        var length = parseInt(percent / 5);
+//                        console.log(length+","+percent);
+                        if (percent > 0 && percent <= 5) {
+                            length = 1;
+                        }
+                        for (var j = 0; j < length; j++) {
+                            html += '<li></li>';
+                        }
+                        for (var k = 0; k < (20 - parseInt(length)); k++) {
+                            html += '<li class="sexWoman"></li>';
+                        }
+                        html += '</ul>';
+                        $('#sex').append(html);
+                    }
+                }else{
+                    layer.msg("请重新加载",{
+                        icon: 1,
+                        time: 1500
+                    })
                 }
-                $('tbody').html(tableHtml);
-                /*for (var j in thisYearList) {
-                    eui.use(['element'], function () {
-                        var element = eui.element;
+            })
+            $.post("/visitor/register/getQuestionCount", {
+                startTime: nowDate,
+                endTime: new Date(),
+                sex: sex,
+                maritalStatus: statusIds,
+                belief: beliefIds,
+                questionName: typeIds,
+                name: 'name',
+                province: '',
+                city: ''
+            }, function (result) {
+                if (result.code == 200) {
+                    var thisYearList = countAge(result.data.thisYearList);
+                    var lastYearList = countAge(result.data.lastYearList);
+                    var lastPhaseList = countAge(result.data.lastPhaseList);
+                    var countSum = getCountSum(thisYearList);//问卷总数
+                    var lastCountSum = getCountSum(lastYearList);//去年的问卷总数
+                    var lastPhaseSum = getCountSum(lastPhaseList);//上个时期的使用问卷总数
+                    //同比增长率
+                    var tongbi = (countSum - lastCountSum) / lastCountSum * 100 + '%';
+                    var mom = (countSum - lastPhaseSum) / lastPhaseSum * 100 + '%';
+                    if (lastPhaseSum == 0) {//如果上期的基数为0
+                        mom = "--"
+                    }
+                    if (lastCountSum == 0) {//如果去年同期的基数为0
+                        tongbi = "--"
+                    }
+                    var up = 'up';
+                    var down = 'up';
+                    if (!judgeSign(countSum - lastCountSum)) {//如果为负数，则为下降率
+                        up = 'down';
+                    }
+                    if (!judgeSign(countSum - lastPhaseSum)) {//如果为负数，则为下降率
+                        down = 'down';
+                    }
+                    typeSum++;//表示刷新数据次数+1
+                    initType(thisYearList);//设置问卷类型名称复选框
+                    for (var j in thisYearList) {
                         var thisYear = thisYearList[j].questionnaire;
                         var progressBar = (thisYear.count / countSum) * 100;
-                        progressBar = parseInt(progressBar) + "%";
-                        var name = 'question'+ j.toString();
-                        setTimeout(function () {
-                            element.progress(name, progressBar);
-                        }, 1000)
-                    })
-                }*/
+                        progressBar = parseInt(progressBar) + '%';
+                        var tableHtml = '';
+                        tableHtml = '<tr>' +
+                                '<td>' + (parseInt(j) + 1) + '</td>' +
+                                '<td>' + thisYear.questionnaireName + '</td>' +
+                                '<td class="eui-row">' +
+                                '<span class="eui-col-md2">' + thisYear.count + '</span>' +
+                                '<div class="eui-progress eui-col-md10 eui-marginT10" e-showpercent="yes" e-filter="question' + j + '">' +
+                                '<div class="eui-progress-bar"></div>' +
+                                '</div>' +
+                                '</td>' +
+                                '<td>' + tongbi + '<img src="/Styles/images/xymfImages/xymf/' + up + '.png" alt=""/></td>' +
+                                '<td>' + mom + '<img src="/Styles/images/xymfImages/xymf/' + down + '.png" alt=""/></td>' +
+                                '</tr>';
+                        $('tbody').append(tableHtml);
+                        var name = 'question' + j.toString();
+                        element.progress(name, progressBar);
+                        element.init('progress', name);
+                    }
+                }
+            })
+        })
+        getProvince();
+        getCity();
+    }
+
+    //计算年龄段后得出的数据
+    function countAge(resuliList) {
+        var registerList =[];
+        $('input[name="age"]:checked').each(function (i) {
+            var ageValue = $(this).parent().find("input[name='age']").val();
+            for (var i in resuliList) {
+                var res = resuliList[i];
+                var age = new Date().getYear() - new Date(res.birthday).getYear();
+                if (ageValue == 0) {
+                    if (age <= 18) {
+                        registerList.push(res);
+                    }
+                }else if(ageValue == 1){
+                    if (age >= 19 && age <=44) {
+                        registerList.push(res);
+                    }
+                }else if(ageValue == 2){
+                    if (age >= 45 && age <=59) {
+                        registerList.push(res);
+                    }
+                }else if(ageValue == 3){
+                    if (age >= 60 && age <=74) {
+                        registerList.push(res);
+                    }
+                }else if(ageValue == 4){
+                    if (age >= 75 && age <=89) {
+                        registerList.push(res);
+                    }
+                }else if(ageValue == 5){
+                    if (age >= 90) {
+                        registerList.push(res);
+                    }
+                }
             }
         })
-        /*})*/
+        return registerList;
     }
+
 
     //设置问卷类型名称复选框
     var list;
     function initType(thisYearList) {
-        if(typeSum==1){
+        if (typeSum == 1) {
             list = thisYearList
-        }else{
+        } else {
             return;
         }
         var html = '';
@@ -834,7 +773,7 @@
             html += '<li class="eui-form-item">' +
                     '<label class="eui-form-label eui-textAlignL">' + thisYear.questionnaireName + '</label>' +
                     '<div class="eui-input-block eui-textAlignR eui-paddingR10">' +
-                    '<input type="checkbox" name="type" e-skin="primary" value="'+thisYear.questionnaireName+'" title="" e-filter="allChoose" checked>' +
+                    '<input type="checkbox" name="type" e-skin="primary" value="' + thisYear.questionnaireName + '" title="" e-filter="allChoose" checked>' +
                     '</div>' +
                     '</li>';
         }
@@ -857,105 +796,34 @@
         }
         return result;
     }
-    var ageNameData = ["18岁以下", "19-24岁", "25-30岁", "31-36岁", "37-42岁", "43-48岁", "49-54岁", "54岁以上"];
-    var form
+    var ageNameData = ["<18", "≥19", "≥45", "≥60", "≥75", "≥90"]
     function ageList(registerList) {
-        var ageData = [0, 0, 0, 0, 0, 0, 0, 0];
-        eui.use(['form'], function () {
-            form = eui.form;
-            for (var i in registerList) {
-                var register = registerList[i];
-                var age = new Date().getYear() - new Date(register.birthday).getYear();
-                if (age < 18) {
-                    ageData[0]++;
-                } else if (age >= 19 && age <= 24) {
-                    ageData[1]++;
-                } else if (age >= 25 && age <= 30) {
-                    ageData[2]++;
-                } else if (age >= 31 && age <= 36) {
-                    ageData[3]++;
-                } else if (age >= 37 && age <= 42) {
-                    ageData[4]++;
-                } else if (age >= 43 && age <= 48) {
-                    ageData[5]++;
-                } else if (age >= 49 && age <= 54) {
-                    ageData[6]++;
-                } else {
-                    ageData[7]++;
-                }
+        var ageData = [0, 0, 0, 0, 0, 0];
+        for (var i in registerList) {
+            var register = registerList[i];
+            var age = new Date().getYear() - new Date(register.birthday).getYear();
+            /*console.log("年龄是:"+age);*/
+            if (age < 18) {
+                ageData[0]++;
+            } else if (age >= 19 && age <= 44) {
+                ageData[1]++;
+            } else if (age >= 45 && age <= 59) {
+                ageData[2]++;
+            } else if (age >= 60 && age <= 74) {
+                ageData[3]++;
+            } else if (age >= 75 && age <= 89) {
+                ageData[4]++;
+            } else {
+                ageData[5]++;
             }
-            form.on('select(allSeleted)', function (data) {
-                ageData = [0, 0, 0, 0, 0, 0, 0, 0];
-                for (var i in registerList) {
-                    var register = registerList[i];
-                    var age = new Date().getYear() - new Date(register.birthday).getYear();
-                    if (data.value == 0) {
-                        ageNameData = ["18岁以下", "19-24岁", "25-30岁", "31-36岁", "37-42岁", "43-48岁", "49-54岁", "54岁以上"];
-                        if (age < 18) {
-                            ageData[0]++;
-                        } else if (age >= 19 && age <= 24) {
-                            ageData[1]++;
-                        } else if (age >= 25 && age <= 30) {
-                            ageData[2]++;
-                        } else if (age >= 31 && age <= 36) {
-                            ageData[3]++;
-                        } else if (age >= 37 && age <= 42) {
-                            ageData[4]++;
-                        } else if (age >= 43 && age <= 48) {
-                            ageData[5]++;
-                        } else if (age >= 49 && age <= 54) {
-                            ageData[6]++;
-                        } else {
-                            ageData[7]++;
-                        }
-                    } else if (data.value == 1) {
-                        ageNameData = ["18岁以下", "19-29岁", "30-40岁", "41-51岁", "51岁以上"];
-                        if (age < 18) {
-                            ageData[0]++;
-                        } else if (age >= 19 && age <= 29) {
-                            ageData[1]++;
-                        } else if (age >= 30 && age <= 40) {
-                            ageData[2]++;
-                        } else if (age >= 41 && age <= 51) {
-                            ageData[3]++;
-                        } else {
-                            ageData[4]++;
-                        }
-                    } else if (data.value == 2) {
-                        ageNameData = ["18岁以下", "19-34岁", "35-50岁", "51岁以上"];
-                        if (age < 18) {
-                            ageData[0]++;
-                        } else if (age >= 19 && age <= 34) {
-                            ageData[1]++;
-                        } else if (age >= 35 && age <= 50) {
-                            ageData[2]++;
-                        } else {
-                            ageData[3]++;
-                        }
-                    } else if (data.value == 3) {
-                        ageNameData = ["18岁以下", "19-39岁", "40-60", "60岁以上"];
-                        if (age < 18) {
-                            ageData[0]++;
-                        } else if (age >= 19 && age <= 39) {
-                            ageData[1]++;
-                        } else if (age >= 40 && age <= 60) {
-                            ageData[2]++;
-                        } else {
-                            ageData[3]++;
-                        }
-                    }
-                }
-                return ageInit(ageNameData, ageData);
-            })
-            ageInit(ageNameData, ageData);
-        })
+        }
+        ageInit(ageNameData, ageData);
     }
-
     /**
      * 获取省份排名
      */
     function getProvince() {
-        eui.use('form',function () {
+        eui.use('form', function () {
             var form = eui.form;
             $.post("/visitor/register/getQuestionCount", {
                 startTime: nowDate,
@@ -968,9 +836,114 @@
                 province: 'province',
                 city: ''
             }, function (result) {
-                console.log(result);
+                var provinceData = [{
+                    name: '北京',
+                    value: 0
+                }, {
+                    name: '天津',
+                    value: 0
+                }, {
+                    name: '上海',
+                    value: 0
+                }, {
+                    name: '重庆',
+                    value: 0
+                }, {
+                    name: '河北',
+                    value: 0
+                }, {
+                    name: '河南',
+                    value: 0
+                }, {
+                    name: '云南',
+                    value: 0
+                }, {
+                    name: '辽宁',
+                    value: 0
+                }, {
+                    name: '黑龙江',
+                    value: 0
+                }, {
+                    name: '湖南',
+                    value: 0
+                }, {
+                    name: '安徽',
+                    value: 0
+                }, {
+                    name: '山东',
+                    value: 0
+                }, {
+                    name: '新疆',
+                    value: 0
+                }, {
+                    name: '江苏',
+                    value: 0
+                }, {
+                    name: '浙江',
+                    value: 0
+                }, {
+                    name: '江西',
+                    value: 0
+                }, {
+                    name: '湖北',
+                    value: 0
+                }, {
+                    name: '广西',
+                    value: 0
+                }, {
+                    name: '甘肃',
+                    value: 0
+                }, {
+                    name: '山西',
+                    value: 0
+                }, {
+                    name: '内蒙古',
+                    value: 0
+                }, {
+                    name: '陕西',
+                    value: 0
+                }, {
+                    name: '吉林',
+                    value: 0
+                }, {
+                    name: '福建',
+                    value: 0
+                }, {
+                    name: '贵州',
+                    value: 0
+                }, {
+                    name: '广东',
+                    value: 0
+                }, {
+                    name: '青海',
+                    value: 0
+                }, {
+                    name: '西藏',
+                    value: 0
+                }, {
+                    name: '四川',
+                    value: 0
+                }, {
+                    name: '宁夏',
+                    value: 0
+                }, {
+                    name: '海南',
+                    value: 0
+                }, {
+                    name: '台湾',
+                    value: 0
+                }, {
+                    name: '香港',
+                    value: 0
+                }, {
+                    name: '澳门',
+                    value: 0
+                }, {
+                    name: '南海诸岛',
+                    value: 0
+                }]
                 if (result.code == 200) {
-                    var thisYearList = result.data.thisYearList;
+                    var thisYearList = countAge(result.data.thisYearList);
                     var tableHtml = '';
                     for (var i in thisYearList) {
                         var list = thisYearList[i];
@@ -986,28 +959,37 @@
                                 '</div>' +
                                 '</div>' +
                                 '</li>';
+
+                        for (var j in provinceData) {
+                            var province = provinceData[j];
+                            if (list.province.indexOf(province.name) != -1) {
+                                province.value = thisYear.count;
+                            }
+                        }
                     }
                     $('.province').html(tableHtml);
                     var count = getCountSum(thisYearList);
                     form.render();
                     for (var j in thisYearList) {
-                    eui.use(['element'], function () {
-                        var element = eui.element;
-                        var thisYear = thisYearList[j].questionnaire;
-                        var progressBar = (thisYear.count / count) * 100;
-                        progressBar = parseInt(progressBar) + "%";
-                        console.log(progressBar)
-                        var name = 'que' + '' + j;
-                        element.progress(name, progressBar);
-                    })
+                        eui.use(['element'], function () {
+                            var element = eui.element;
+                            var thisYear = thisYearList[j].questionnaire;
+                            var progressBar = (thisYear.count / count) * 100;
+                            progressBar = parseInt(progressBar) + "%";
+                            /*console.log(progressBar)*/
+                            var name = 'que' + '' + j;
+                            element.progress(name, progressBar);
+                        })
+                    }
                 }
-            }
-        })
+                initProvince(provinceData);
             })
+        })
     }
 
+
     function getCity() {
-        eui.use('form',function () {
+        eui.use('form', function () {
             var form = eui.form;
             $.post("/visitor/register/getQuestionCount", {
                 startTime: nowDate,
@@ -1020,10 +1002,10 @@
                 province: '',
                 city: 'city'
             }, function (result) {
-                console.log(result);
+                /*console.log(result);*/
                 if (result.code == 200) {
-                    var thisYearList = result.data.thisYearList;
-                    var tableHtml = '';
+                    var thisYearList =countAge(result.data.thisYearList);
+                    var tableHtml='';
                     for (var i in thisYearList) {
                         var list = thisYearList[i];
                         tableHtml += '<li class="eui-marginB10">' +
@@ -1043,7 +1025,7 @@
                             var thisYear = thisYearList[j].questionnaire;
                             var progressBar = (thisYear.count / count) * 100;
                             progressBar = parseInt(progressBar) + "%";
-                            console.log(progressBar)
+                            /*console.log(progressBar)*/
                             var name = 'ques' + '' + j;
                             element.progress(name, progressBar);
                         })
@@ -1111,7 +1093,7 @@
                     color: '#333333' // 标签文字颜色
                 },
                 // boundaryGap: false,
-                data: ["18", "≥19", "≥25", "≥31", "≥37", "≥43", "≥49", "≥54"]
+                data: ageNameDate
             },
 
             yAxis: {
@@ -1147,7 +1129,7 @@
                 //name: '销量',
                 type: 'bar',
                 barWidth: 24,//柱图宽度
-                data: [10, 20, 30, 40, 50, 60, 70, 80]
+                data: ageData
             }]
         };
         // 使用刚指定的配置项和数据显示图表。
@@ -1175,13 +1157,13 @@
                     }
                 },
                 indicator: [
-                    {name: '小学'},
-                    {name: '初中'},
-                    {name: '高中'},
-                    {name: '专科'},
-                    {name: '本科'},
-                    {name: '研究生'},
-                    {name: '博士'}
+                    {name: '小学', max: Math.max.apply(null, value)},
+                    {name: '初中', max: Math.max.apply(null, value)},
+                    {name: '高中', max: Math.max.apply(null, value)},
+                    {name: '专科', max: Math.max.apply(null, value)},
+                    {name: '本科', max: Math.max.apply(null, value)},
+                    {name: '研究生', max: Math.max.apply(null, value)},
+                    {name: '博士', max: Math.max.apply(null, value)}
                 ],
                 splitArea: {
                     areaStyle: {
@@ -1211,7 +1193,7 @@
                 },
                 itemStyle: {
                     normal: {
-                        color : "#61a0a8", // 图表中各个图区域的边框线拐点颜色
+                        color: "#61a0a8", // 图表中各个图区域的边框线拐点颜色
                         lineStyle: {
                             color: "rgba(255,255,255,0.4)" // 图表中各个图区域的边框线颜色
                         },
@@ -1328,7 +1310,6 @@
     }
     // 婚姻状况
     function marry(data) {
-        console.log(data);
         var myChart = echarts.init(document.getElementById('marriages'), 'macarons');
         //数据
         var data = {
@@ -1626,686 +1607,580 @@
         myChart.setOption(option);
     }
 
-    //地图
-    var myChart = echarts.init(document.getElementById('map'), 'macarons');
+    function initProvince(provinceData) {
+        console.log(provinceData);
+        //地图
+        var myChart = echarts.init(document.getElementById('map'), 'macarons');
 
-    function randomData() {
-        return Math.round(Math.random() * 100);
-    }
-    var data = [
+        var data = [
 
-        {
-            name: '齐齐哈尔'
-        }, {
-            name: '盐城'
-        }, {
-            name: '青岛'
-        }, {
-            name: '金昌'
-        }, {
-            name: '泉州'
-        }, {
-            name: '拉萨'
-        }, {
-            name: '上海浦东'
-        }, {
-            name: '攀枝花'
-        }, {
-            name: '威海'
-        }, {
-            name: '承德'
-        }, {
-            name: '汕尾'
-        }, {
-            name: '克拉玛依'
-        }, {
-            name: '重庆市'
-        }
-
-    ];
-
-    var geoCoordMap = {
-
-        '齐齐哈尔': [123.97, 47.33],
-        '盐城': [120.13, 33.38],
-        '青岛': [120.33, 36.07],
-        '金昌': [102.188043, 38.520089],
-        '泉州': [118.58, 24.93],
-        '拉萨': [91.11, 29.97],
-        '上海浦东': [121.48, 31.22],
-        '攀枝花': [101.718637, 26.582347],
-        '威海': [122.1, 37.5],
-        '承德': [117.93, 40.97],
-        '汕尾': [115.375279, 22.786211],
-        '克拉玛依': [84.77, 45.59],
-        '重庆市': [108.384366, 30.439702],
-
-    };
-
-
-    myChart.setOption({
-        series: [{
-            type: 'map',
-            map: 'china'
-        }]
-    });
-
-
-    var convertData = function (data) {
-        var res = [];
-
-        for (var i = 0; i < data.length; i++) {
-            var geoCoord = geoCoordMap[data[i].name];
-
-            if (geoCoord) {
-                res.push({
-                    name: data[i].name,
-                    value: geoCoord.concat(data[i].value)
-                });
+            {
+                name: '齐齐哈尔'
+            }, {
+                name: '盐城'
+            }, {
+                name: '青岛'
+            }, {
+                name: '金昌'
+            }, {
+                name: '泉州'
+            }, {
+                name: '拉萨'
+            }, {
+                name: '上海浦东'
+            }, {
+                name: '攀枝花'
+            }, {
+                name: '威海'
+            }, {
+                name: '承德'
+            }, {
+                name: '汕尾'
+            }, {
+                name: '克拉玛依'
+            }, {
+                name: '重庆市'
             }
-        }
 
-        return res;
-    };
+        ];
 
-    option = {
+        var geoCoordMap = {
+
+            '齐齐哈尔': [123.97, 47.33],
+            '盐城': [120.13, 33.38],
+            '青岛': [120.33, 36.07],
+            '金昌': [102.188043, 38.520089],
+            '泉州': [118.58, 24.93],
+            '拉萨': [91.11, 29.97],
+            '上海浦东': [121.48, 31.22],
+            '攀枝花': [101.718637, 26.582347],
+            '威海': [122.1, 37.5],
+            '承德': [117.93, 40.97],
+            '汕尾': [115.375279, 22.786211],
+            '克拉玛依': [84.77, 45.59],
+            '重庆市': [108.384366, 30.439702],
+
+        };
 
 
-        title: {
+        myChart.setOption({
+            series: [{
+                type: 'map',
+                map: 'china'
+            }]
+        });
+
+
+        var convertData = function (data) {
+            var res = [];
+
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+            }
+
+            return res;
+        };
+
+        option = {
+
+
+            title: {
 //            text: '中国大区分布图',
 //            subtext: '中国的八大区分布',
-            sublink: '#',
+                sublink: '#',
 
-            itemGap: 30,
+                itemGap: 30,
 
-            left: 'center',
-            textStyle: {
+                left: 'center',
+                textStyle: {
 
-                color: '#1a1b4e',
+                    color: '#1a1b4e',
 
-                fontStyle: 'normal',
+                    fontStyle: 'normal',
 
-                fontWeight: 'bold',
+                    fontWeight: 'bold',
 
-                fontSize: 30
-
-            },
-
-            subtextStyle: {
-
-
-                color: '#58d9df',
-
-                fontStyle: 'normal',
-
-                fontWeight: 'bold',
-
-                fontSize: 16
-
-
-            }
-        },
-
-        tooltip: {
-            trigger: 'item'
-
-        },
-
-        visualMap: {
-            min: 0,
-            max: 100,
-            left: 'left',
-            top: 'bottom',
-            text: ['高', '低'],
-            calculable: true,
-            inRange: {
-                color: ['#ffffff', '#E0DAFF', '#ADBFFF', '#9CB4FF', '#6A9DFF', '#3889FF']
-            }
-        },
-
-
-        geo: {
-            map: 'china',
-            zoom: 1.2,
-            label: {
-                normal: {
-
-                    show: true,
-                    color: '#c1c4c8'
-                },
-                emphasis: {
-                    show: false,
-                    color: '#292929'
-                }
-            },
-            roam: true,
-            itemStyle: {
-                normal: {
-                    areaColor: '#fbfbfb',
-                    borderColor: '#b9b4b7'
+                    fontSize: 30
 
                 },
-                emphasis: {
-                    areaColor: '#1e9fff'
+
+                subtextStyle: {
+
+
+                    color: '#58d9df',
+
+                    fontStyle: 'normal',
+
+                    fontWeight: 'bold',
+
+                    fontSize: 16
+
+
                 }
-            }
-        },
-        series: [{
-            name: '供需占比',
-            type: 'effectScatter',
-            coordinateSystem: 'geo',
-            data: convertData(data),
-            symbolSize: 10,
-            showEffectOn: 'render',
-            rippleEffect: {
-                brushType: 'stroke'
             },
-            hoverAnimation: true,
-            label: {
-                normal: {
-                    formatter: '{b}',
-                    position: 'right',
-                    show: false
+
+            tooltip: {
+                trigger: 'item'
+
+            },
+
+            visualMap: {
+                min: 0,
+                max: 100,
+                left: 'left',
+                top: 'bottom',
+                text: ['高', '低'],
+                calculable: true,
+                inRange: {
+                    color: ['#ffffff', '#E0DAFF', '#ADBFFF', '#9CB4FF', '#6A9DFF', '#3889FF']
+                }
+            },
+
+
+            geo: {
+                map: 'china',
+                zoom: 1.2,
+                label: {
+                    normal: {
+
+                        show: true,
+                        color: '#c1c4c8'
+                    },
+                    emphasis: {
+                        show: false,
+                        color: '#292929'
+                    }
                 },
-                emphasis: {
-                    show: true
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#fbfbfb',
+                        borderColor: '#b9b4b7'
+
+                    },
+                    emphasis: {
+                        areaColor: '#1e9fff'
+                    }
                 }
             },
-            itemStyle: {
-                normal: {
-                    color: '#c60fff',
-                    shadowBlur: 10,
-                    shadowColor: '#333'
-                }
-            }
-        }, {
-            type: 'map',
-            mapType: 'china',
-            geoIndex: 0,
-            label: {
-                normal: {
-                    show: true
+            series: [{
+                name: '供需占比',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: convertData(data),
+                symbolSize: 10,
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
                 },
-                emphasis: {
-                    show: true
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#c60fff',
+                        shadowBlur: 10,
+                        shadowColor: '#333'
+                    }
                 }
-            },
-            data: [{
-                name: '北京',
-                value: randomData()
             }, {
-                name: '天津',
-                value: randomData()
-            }, {
-                name: '上海',
-                value: randomData()
-            }, {
-                name: '重庆',
-                value: randomData()
-            }, {
-                name: '河北',
-                value: randomData()
-            }, {
-                name: '河南',
-                value: randomData()
-            }, {
-                name: '云南',
-                value: randomData()
-            }, {
-                name: '辽宁',
-                value: randomData()
-            }, {
-                name: '黑龙江',
-                value: randomData()
-            }, {
-                name: '湖南',
-                value: randomData()
-            }, {
-                name: '安徽',
-                value: randomData()
-            }, {
-                name: '山东',
-                value: randomData()
-            }, {
-                name: '新疆',
-                value: randomData()
-            }, {
-                name: '江苏',
-                value: randomData()
-            }, {
-                name: '浙江',
-                value: randomData()
-            }, {
-                name: '江西',
-                value: randomData()
-            }, {
-                name: '湖北',
-                value: randomData()
-            }, {
-                name: '广西',
-                value: randomData()
-            }, {
-                name: '甘肃',
-                value: randomData()
-            }, {
-                name: '山西',
-                value: randomData()
-            }, {
-                name: '内蒙古',
-                value: randomData()
-            }, {
-                name: '陕西',
-                value: randomData()
-            }, {
-                name: '吉林',
-                value: randomData()
-            }, {
-                name: '福建',
-                value: randomData()
-            }, {
-                name: '贵州',
-                value: randomData()
-            }, {
-                name: '广东',
-                value: randomData()
-            }, {
-                name: '青海',
-                value: randomData()
-            }, {
-                name: '西藏',
-                value: randomData()
-            }, {
-                name: '四川',
-                value: randomData()
-            }, {
-                name: '宁夏',
-                value: randomData()
-            }, {
-                name: '海南',
-                value: randomData()
-            }, {
-                name: '台湾',
-                value: randomData()
-            }, {
-                name: '香港',
-                value: randomData()
-            }, {
-                name: '澳门',
-                value: randomData()
-            }, {
-                name: '南海诸岛',
-                value: randomData()
+                type: 'map',
+                mapType: 'china',
+                geoIndex: 0,
+                label: {
+                    normal: {
+                        show: true
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: provinceData
             }]
-        }]
-    };
+        };
 
 
-    myChart.setOption(option);
+        myChart.setOption(option);
 
 
-    myChart.on('mouseover', function (params) {
-        var city = params.name;
+        myChart.on('mouseover', function (params) {
+            var city = params.name;
 
 
-        if (city == '广东' || city == '广西' || city == '海南') {
+            if (city == '广东' || city == '广西' || city == '海南') {
 
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "广东"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "广西"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "海南"
-            });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "广东"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "广西"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "海南"
+                });
 
-        }
+            }
 
-        if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
+            if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
 
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "山东"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "江苏"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "浙江"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "安徽"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "福建"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "上海"
-            });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "山东"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "江苏"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "浙江"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "安徽"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "福建"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "上海"
+                });
 
-        }
+            }
 
-        if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
+            if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
 
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "湖北"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "湖南"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "河南"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "江西"
-            });
-
-
-        }
-
-        if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
-
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "北京"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "天津"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "河北"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "山西"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "内蒙古"
-            });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "湖北"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "湖南"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "河南"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "江西"
+                });
 
 
-        }
-        if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
+            }
 
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "宁夏"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "新疆"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "青海"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "陕西"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "甘肃"
-            });
+            if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
 
-
-        }
-        if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
-
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "四川"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "云南"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "贵州"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "西藏"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "重庆"
-            });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "北京"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "天津"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "河北"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "山西"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "内蒙古"
+                });
 
 
-        }
-        if (city == '辽宁' || city == '吉林' || city == '黑龙江') {
+            }
+            if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
 
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "辽宁"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "吉林"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "黑龙江"
-            });
-
-
-        }
-        if (city == '台湾' || city == '香港' || city == '澳门') {
-
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "台湾"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "香港"
-            });
-            myChart.dispatchAction({
-                type: 'highlight',
-                name: "澳门"
-            });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "宁夏"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "新疆"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "青海"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "陕西"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "甘肃"
+                });
 
 
-        }
+            }
+            if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
+
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "四川"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "云南"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "贵州"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "西藏"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "重庆"
+                });
 
 
-    });
+            }
+            if (city == '辽宁' || city == '吉林' || city == '黑龙江') {
 
-    myChart.on('mouseout', function (params) {
-        var city = params.name;
-
-
-        if (city == '广东' || city == '广西' || city == '海南') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "广东"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "广西"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "海南"
-            });
-
-        }
-        if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "山东"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "江苏"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "浙江"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "安徽"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "福建"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "上海"
-            });
-
-        }
-        if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "湖北"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "湖南"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "河南"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "江西"
-            });
-
-        }
-        if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "北京"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "天津"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "河北"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "山西"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "内蒙古"
-            });
-
-        }
-        if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "宁夏"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "新疆"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "青海"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "陕西"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "甘肃"
-            });
-
-        }
-        if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "四川"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "云南"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "贵州"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "西藏"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "重庆"
-            });
-
-        }
-        if (city == '辽宁' || city == '黑龙江' || city == '吉林') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "辽宁"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "黑龙江"
-            });
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "吉林"
-            });
-
-        }
-        if (city == '台湾' || city == '香港' || city == '澳门') {
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "台湾"
-            });
-
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "香港"
-            });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "辽宁"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "吉林"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "黑龙江"
+                });
 
 
-            myChart.dispatchAction({
-                type: 'downplay',
-                name: "澳门"
-            });
+            }
+            if (city == '台湾' || city == '香港' || city == '澳门') {
 
-        }
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "台湾"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "香港"
+                });
+                myChart.dispatchAction({
+                    type: 'highlight',
+                    name: "澳门"
+                });
 
-    });
-    myChart.setOption(option);
 
+            }
+
+
+        });
+
+        myChart.on('mouseout', function (params) {
+            var city = params.name;
+
+
+            if (city == '广东' || city == '广西' || city == '海南') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "广东"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "广西"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "海南"
+                });
+
+            }
+            if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "山东"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "江苏"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "浙江"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "安徽"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "福建"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "上海"
+                });
+
+            }
+            if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "湖北"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "湖南"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "河南"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "江西"
+                });
+
+            }
+            if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "北京"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "天津"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "河北"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "山西"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "内蒙古"
+                });
+
+            }
+            if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "宁夏"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "新疆"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "青海"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "陕西"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "甘肃"
+                });
+
+            }
+            if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "四川"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "云南"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "贵州"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "西藏"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "重庆"
+                });
+
+            }
+            if (city == '辽宁' || city == '黑龙江' || city == '吉林') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "辽宁"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "黑龙江"
+                });
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "吉林"
+                });
+
+            }
+            if (city == '台湾' || city == '香港' || city == '澳门') {
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "台湾"
+                });
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "香港"
+                });
+
+
+                myChart.dispatchAction({
+                    type: 'downplay',
+                    name: "澳门"
+                });
+
+            }
+
+        });
+        myChart.setOption(option);
+    }
 </script>
 </html>
