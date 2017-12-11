@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>结算统计</title>
+    <title>佣金统计</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
     <style>
         .main {
@@ -41,15 +41,15 @@
                     <!--<input type="text" name="creator"  value=""-->
                             <!--placeholder="支付人/关键字" class="eui-input">-->
                 <!--</div>-->
-                <!--<div class="eui-input-inline eui-padding10">-->
-                    <!--<input type="text" name="startTime" id="startTime"  value=""-->
-                            <!--placeholder="起始时间" class="eui-input">-->
-                <!--</div>-->
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="startTime" id="startTime"  value=""
+                            placeholder="订单起始时间" class="eui-input">
+                </div>
 
-                <!--<div class="eui-input-inline eui-padding10">-->
-                    <!--<input type="text" name="endTime" id="endTime"  value=""-->
-                            <!--placeholder="结束时间" class="eui-input">-->
-                <!--</div>-->
+                <div class="eui-input-inline eui-padding10">
+                    <input type="text" name="endTime" id="endTime"  value=""
+                            placeholder="订单结束时间" class="eui-input">
+                </div>
                 <!--<div class="eui-input-inline eui-padding10">-->
                     <!--<select name="status">-->
                         <!--<option value="">请选择支付类型</option>-->
@@ -58,15 +58,15 @@
                     <!--</select>-->
                 <!--</div>-->
 
-                <!--<div class="eui-input-inline">-->
-                    <!--<span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>-->
-                    <!--<span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>-->
-                <!--</div>-->
+                <div class="eui-input-inline">
+                    <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
                     <!--<i class='eui-icon eui-font24'>&#xe61d;</i> 全部-->
-                    <span>结算统计</span>
+                    <span>佣金统计</span>
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
                     <!--<a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>-->
@@ -92,12 +92,31 @@
 <!-- 引入 macarons 主题 -->
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
 <script>
+
+    eui.use(['form', 'laydate', 'element'], function () {
+        var form = eui.form
+            , element = eui.element
+            , laydate = eui.laydate;
+
+        laydate.render({
+            elem: '#startTime'
+        });
+        laydate.render({
+            elem: '#endTime'
+        });
+
+    });
+
     function resetForm() {
         $('#searchFrom')[0].reset();
     }
     function doSearch() {
         var obj =$("#searchFrom").serializeObject();
 
+        if (obj.startTime!='' &&  obj.endTime!=''){
+            obj.startTime=obj.startTime+' 00:00:00';
+            obj.endTime=obj.endTime+' 24:00:00';
+        }
         if(obj.parentId!=''){
             if (obj.parentId =='0'){
                 obj.type=2;
@@ -106,8 +125,10 @@
                 obj.type=1;
                 obj.inviter_user=$("#id").attr('searchId');
             }
-            dataList(obj);
+
         }
+        dataList(obj);
+        lineChartRight(obj.parentId)
     }
 
     function dataList(obj) {
@@ -130,17 +151,15 @@
     $(function () {
        loadTree();
         lineChartRight('');
-        var o = new Object();
+        var o =$("#searchFrom").serializeObject();
         dynamicTable2(o);
-        myChart.on('click', function (param) {
-            console.log(param)
-        });
+
     });
 
     function lookAll() {
         loadTree();
         lineChartRight('');
-        var o = new Object();
+        var o =$("#searchFrom").serializeObject();
         dynamicTable2(o);
     }
     function loadTree() {
@@ -162,18 +181,21 @@
                     parentIDFieldName: 'deleted',
                     onSelect: function (node)
                     {
-//                        var obj =$("#searchFrom").serializeObject();
                         lineChartRight(node.data.id);
-                        var oj = new Object();
+                        var oj = $("#searchFrom").serializeObject();
+                        if (oj.startTime!='' &&  oj.endTime!=''){
+                            oj.startTime=oj.startTime+' 00:00:00';
+                            oj.endTime=oj.endTime+' 24:00:00';
+                        }
                         oj.type=2;
                         oj.channel_id=node.data.id;
                         dynamicTable(oj);
+                        lineChartRight(oj.channel_id)
                     },
                     onAfterAppend:function (parentNode, newdata) {
 
                     }
                 });
-//                channelTree.selectNode(channelTree.getNodeDom(0));
                 $("#channelTree .l-body").mouseover(function(){
                     var text =$(this).find('span').html();
                     $(this).attr("title",text);
@@ -186,7 +208,11 @@
     function lineChartRight(channel_id) {
         var timeDataX=new Array;
         var timeDataY=new Array;
-        var obj = new Object();
+        var obj = $("#searchFrom").serializeObject();
+        if (obj.startTime!='' &&  obj.endTime!=''){
+            obj.startTime=obj.startTime+' 00:00:00';
+            obj.endTime=obj.endTime+' 24:00:00';
+        }
         if (channel_id!=''){
             obj.channel_id=channel_id;
         }
@@ -225,9 +251,9 @@
             },
             toolbox: {
                 feature: {
-                    dataZoom: {
-                        yAxisIndex: 'none'
-                    },
+//                    dataZoom: {
+//                        yAxisIndex: 'none'
+//                    },
                     restore: {},
                     saveAsImage: {}
                 }

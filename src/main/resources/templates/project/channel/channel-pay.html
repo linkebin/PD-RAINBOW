@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>渠道佣金支付</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+    <style>
+        tr td:nth-child(1){
+            font-weight:bold;
+            text-align: right;
+        }
+        tr td:nth-child(3){
+            font-weight:bold;
+            text-align: right;
+        }
+    </style>
+</head>
+<body class="eui-bg-white">
+    <div class="eui-padding10">
+        <table class="eui-table" e-skin="nob">
+            <tbody>
+            <tr>
+                <td>收款渠道商:</td>
+                <td th:text="${channel_id.channelName}"></td>
+                <td>收款人账号:</td>
+                <td>xxxxxx</td>
+            </tr>
+            <tr>
+                <td>收款人姓名:</td>
+                <td th:text="${channel_id.linkman}"></td>
+                <td>收款人手机号:</td>
+                <td th:text="${channel_id.linkmanTell}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <form style="margin-left: 80px;" class="eui-form" id="searchFrom">
+            <input type="hidden" name="status" value="1">
+            <input type="hidden" name="type" value="2">
+            <input type="hidden" name="channel_id" th:value="${channel_id.id}">
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="startTime" id="startTime"  value="" readonly="readonly"
+                       placeholder="结算时间-起始时间" class="eui-input">
+            </div>
+
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="endTime" id="endTime" readonly="readonly"  value=""
+                       placeholder="结算时间-结束时间" class="eui-input">
+            </div>
+
+            <div class="eui-input-inline">
+                <span class="eui-btn" onclick="doSearch()">查询</span>
+                <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+            </div>
+        </form>
+
+        <p style="margin-left: 86px;" class="eui-font26 eui-marginT20">佣金(￥): <span id="y">0</span> 元  <span class="eui-marginL20"><a onclick="payMoney()" href="###" class="eui-btn">支付</a></span></p>
+    </div>
+    <script src="/Scripts/module/eui.js" charset="utf-8"></script>
+    <script src="/Scripts/main.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+    <script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+    <script src="/pack.ajax.js" type="text/javascript"></script>
+    <script src="/Scripts/date2format.js" type="text/javascript"></script>
+    <script src="/Scripts/plugins/jquery.validate.js"></script>
+
+    <script>
+        var m =0;
+        eui.use(['form', 'laydate', 'element'], function () {
+            var form = eui.form
+                , element = eui.element
+                , laydate = eui.laydate;
+
+            laydate.render({
+                elem: '#startTime'
+            });
+            laydate.render({
+                elem: '#endTime'
+            });
+
+        });
+
+        $(function () {
+            doSearch();
+        });
+
+        function resetForm() {
+            $('#searchFrom')[0].reset();
+        }
+
+        function doSearch() {
+                var obj =$("#searchFrom").serializeObject();
+                if (obj.startTime!='' &&  obj.endTime!=''){
+                    obj.startTime=obj.startTime+' 00:00:00';
+                    obj.endTime=obj.endTime+' 24:00:00';
+                }
+                eui.use(['layer'], function () {
+                    var  layer = eui.layer;
+                    layer.load();
+                });
+                $.post('/clearing/manage/listHasClearing',{json: JSON.stringify(obj),limit:100000,page:1},function (result) {
+                    $("#y").html(0);
+                    if (result.data.length>0){
+                        $("#y").html(result.data[0].bk);
+                        m=result.data[0].bk;
+                    }
+                    layer.closeAll();
+                });
+
+        }
+
+        function payMoney() {
+            var obj =$("#searchFrom").serializeObject();
+            if (obj.startTime!='' &&  obj.endTime!=''){
+                obj.startTime=obj.startTime+' 00:00:00';
+                obj.endTime=obj.endTime+' 24:00:00';
+            }
+            if (m==0){
+                layer.msg("可支付的佣金为 0 元");
+                return;
+            }
+            layer.load();
+            $.post('/clearing/manage/payMoney',{json: JSON.stringify(obj),limit:100000,page:1},function (result) {
+                if(result.code==200){
+                    layer.msg(result.message, {
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        parent.closoBig();
+                    });
+                }else {
+                    layer.msg(result.message, {
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function(){
+                        layer.closeAll();
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

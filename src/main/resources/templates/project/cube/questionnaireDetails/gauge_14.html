@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div id="dataResult" class="eui-marginTB20">
-                <table class="eui-table" e-even e-skin="nob">
+                <table class="eui-table" e-even e-skin="nob" id="tableId">
                     <colgroup>
                         <col width="60">
                         <col>
@@ -122,18 +122,7 @@
                     <tr>
                         <td>女性</td><td>944</td><td>7.76±3.54</td><td>5.86±5.51</td><td>2.75±3.58</td><td>2.67±2.61</td><td>5.61±4.72</td><td>3.13±3.30</td><td>5.27±3.07</td><td>33.06±21.10</td>
                     </tr>
-                    <tr>
-                        <td>我的结果</td>
-                        <td>77</td>
-                        <td>1.8</td>
-                        <td>2.29</td>
-                        <td>1.8</td>
-                        <td>1.5</td>
-                        <td>2.29</td>
-                        <td>1.67</td>
-                        <td>2.2</td>
-                        <td>1.97</td>
-                    </tr>
+
                 </table>
             </div>
            <form class="eui-paddingT20">
@@ -274,9 +263,19 @@ function  getTable(list) {
             factorScore.push(json.classmateStress);
             factorScore.push(json.societyStress);
             factorScore.push(json.selfStress);
-            context+='<div class="eui-font14 eui-form-item eui-lineHeight24 eui-paddingT10">';
-            context+="<p>总均分为"+json.totalScoreAverage+"分</p>";
-
+            context+='<tr>';
+            context+='<td>我的结果</td>';
+            context+='<td></td>';
+            context+='<td>'+json.learningStress+'</td>';
+            context+='<td>'+json.teacherStress+'</td>';
+            context+='<td>'+json.familyStress+'</td>';
+            context+='<td>'+json.parentStress+'</td>';
+            context+='<td>'+json.classmateStress+'</td>';
+            context+='<td>'+json.societyStress+'</td>';
+            context+='<td>'+json.selfStress+'</td>';
+            context+='<td>'+json.totalScoreAverage+'</td>';
+            context+='</tr>';
+           /* context+="<p>总均分为"+json.totalScoreAverage+"分</p>";
             context+="<p>学习压力因子均分:"+json.learningStress+"分</p>";
             context+="<p>教师压力因子均分:"+json.teacherStress+"分</p>";
             context+="<p>家庭环境压力因子均分:"+json.familyStress+"分</p>";
@@ -284,11 +283,11 @@ function  getTable(list) {
             context+="<p>同学朋友压力因子均分:"+json.classmateStress+"分</p>";
             context+="<p>社会文化压力因子均分:"+json.societyStress+"分</p>";
             context+="<p>自我身心压力因子均分:"+json.selfStress+"分</p>";
-            context+='</div>';
+            context+='</div>';*/
 
     }
 
-    $("#dataResult").append(context);
+    $("#tableId").append(context);
 
     //问题
     var questionList=list.questionList;

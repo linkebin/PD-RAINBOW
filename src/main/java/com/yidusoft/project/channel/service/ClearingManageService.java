@@ -24,4 +24,6 @@ public interface ClearingManageService extends Service<ClearingManage> {
     List<Map<String,Object>> findOrderClearingByChannelCounselorId(List<String> ids,
                                                                    Map<String,Object> map);
 
+    void updateClearingManageStatus(List<String> ids);
+
 }

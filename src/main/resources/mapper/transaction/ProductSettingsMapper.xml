@@ -48,9 +48,9 @@
     </select>
 
     <select id="getUpdateUnion" resultMap="BaseResultMap">
-        SELECT id_,product_code,product_total,product_price,creator,create_time,
-        deleted,promotions_id,product_name,promotions_name,product_state
-        FROM product_settings WHERE promotions_id=#{id} AND deleted=0
+          SELECT id_,product_code,product_total,product_Type,product_price,creator,create_time,
+        deleted,promotions_id,product_name,promotions_name,product_state,time_limit
+        FROM product_settings WHERE promotions_id=#{id}  AND deleted=0
         AND product_state=0 AND product_total!=1
     </select>
 

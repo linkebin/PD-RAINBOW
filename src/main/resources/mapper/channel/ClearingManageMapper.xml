@@ -17,7 +17,7 @@
 
     <select id="findOrderClearingByChannelCounselorId"  resultType="Map">
     SELECT b.* FROM (
-        SELECT oo.order_code,oo.order_money,oo.clearing_status,oo.creator consultant_name,oo.user_id,oo.payment_time,
+        SELECT oo.ID_,oo.order_code,oo.order_money,oo.clearing_status,oo.creator consultant_name,oo.user_id,oo.payment_time,
         cm.brokerage,cm.create_time,cm.`status`,
         (SELECT su.USER_NAME FROM sec_user su WHERE su.ID_=(SELECT su.inviter_user FROM sec_user su WHERE su.ID_=oo.user_id))  referrer
 
@@ -40,6 +40,10 @@
 
         <if test="map.create_time != '' and map.create_time!=null">
             AND b.payment_time LIKE '%${map.create_time}%'
+        </if>
+
+        <if test="map.startTime !='' and map.endTime!=''">
+            AND b.payment_time &gt;= #{map.startTime}  AND b.payment_time &lt;= #{map.endTime}
         </if>
 
         <if test="null != ids">
@@ -87,9 +91,7 @@
         </if>
       ORDER BY b.create_time DESC
   </select>
-    <select id="findAllChannelLineChart" parameterType="java.util.Map" resultType="Map">
 
-    </select>
 
     <select id="findChannelAccountLineChartNew"  resultType="Map">
           SELECT date_format(oo.payment_time, '%Y-%m')  create_time, sum(cm.brokerage) brokerage,
@@ -107,6 +109,10 @@
 
         <if test="map.status ==3">
             AND cm.`status` is null
+        </if>
+
+        <if test="map.startTime !='' and map.endTime!=''">
+            AND oo.payment_time &gt;= #{map.startTime}  AND oo.payment_time &lt;= #{map.endTime}
         </if>
 
         <if test="map.status ==1">
@@ -144,6 +150,10 @@
      FROM clearing_manage cm LEFT JOIN order_online oo ON cm.order_id=oo.ID_ WHERE 1=1
     <if test="map.channel_id != null and map.channel_id!=''">
         AND  cm.channel_id=#{map.channel_id}
+    </if>
+
+    <if test="map.startTime !='' and map.endTime!=''">
+        AND oo.payment_time &gt;= #{map.startTime}  AND oo.payment_time &lt;= #{map.endTime}
     </if>
 
 

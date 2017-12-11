@@ -10,38 +10,53 @@
     <input type="hidden" id="userId" th:value="${userId}">
     <div th:replace="project/cube/common/header :: header(${3})">Header</div>
         <!-- 配合栅格系统和图文混合按钮组合 -->
-        <div class="eui-row">
-            <div class="eui-col-md4">
-                <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-green" id="visitingTotal"></span> 次</p>
-                    <p class="name" >来访总次数</p>
-                </a>
-            </div>
-            <div class="eui-col-md4">
-                <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-yellow" id="dataAcquisitionTotal"></span> 个</p>
-                    <p class="name">填写问卷总数</p>
-                </a>
-            </div>
-            <div class="eui-col-md4">
-                <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-orange" id="dataAcquisitionType"></span> 个</p>
-                    <p class="name">填写问卷类别总数</p>
-                </a>
-            </div>
-        </div>
-        <div class="eui-form  eui-form-pane  eui-form eui-marginL10 eui-paddingL10"   style="width: 700px">
-            <label class="eui-form-label">问卷名称</label>
-            <div class="eui-input-block">
-                <select name="questionType" id="questionType">
-                    <option value="" >请选择问卷</option>
-                </select>
-            </div>
+    <div class="eui-bd eui-area eui-marginT10 chartsPage">
+        <div class="eui-mn1">
+            <div class="eui-mn1-type1">
+                <div class="eui-row">
+                    <div class="eui-col-md4">
+                        <a href="#" class="eui-textIn">
+                            <p class="eui-textNum"><span class="eui-color-green" id="visitingTotal"></span> 次</p>
+                            <p class="name" >来访总次数</p>
+                        </a>
+                    </div>
+                    <div class="eui-col-md4">
+                        <a href="#" class="eui-textIn">
+                            <p class="eui-textNum"><span class="eui-color-yellow" id="dataAcquisitionTotal"></span> 个</p>
+                            <p class="name">填写问卷总数</p>
+                        </a>
+                    </div>
+                    <div class="eui-col-md4">
+                        <a href="#" class="eui-textIn">
+                            <p class="eui-textNum"><span class="eui-color-orange" id="dataAcquisitionType"></span> 个</p>
+                            <p class="name">填写问卷类别总数</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="eui-marginT20   eui-marginL20 eui-paddingT20"   >
+                    <div class=" eui-form-pane eui-form">
+                        <label class="eui-form-label">问卷名称</label>
+                        <div class="eui-input-block">
+                            <select name="questionType" id="questionType">
+                                <option value="" >请选择问卷</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+               <!-- <div id="analysis"  class="eui-paddingT20" style="width: 100%;height:400px;">
+                </div>-->
 
+                <div class="eui-row eui-marginT20" >
+                    <div class="eui-col-md1 eui-font18">问卷统计</div>
+                    <div class="areal eui-col-md12 eui-padding5 eui-marginT10" style="width: 100%;height:400px;" >
+                        <div  id="analysis" style="height:400px;"  ></div>
+                   </div>
+                </div>
+            </div>
         </div>
-        <div id="analysis"  style="width: 100%;height:400px;">
-        </div>
+    </div>
     <div th:replace="project/cube/common/footer :: footer">footer</div>
+
 </div>
 </body>
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
@@ -64,8 +79,11 @@
            var dataQuestion= data.elem.value;
             var questionnaireNmae= $("#questionType").find("option:selected").text();
             if(dataQuestion!="") {
+                //加载层
+                var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
                 $.post("/data/acquisition/findDataAcquistionForVisitor"
                     , {"userId":userId,"dataQuestion":dataQuestion}, function (result) {
+                        layer.closeAll();
                     //返回一个问卷结果的集合
                      console.info(result.data);
                      var score=new Array;

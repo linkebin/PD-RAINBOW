@@ -201,6 +201,9 @@
                 },
                 submitHandler: function () {
                     var params = $("#promotionsForm").serializeObject();
+                    console.info("params");
+                    console.info(params);
+                    return ;
                     if (params.promotionsStart > params.promotionsEnd) {
                         return layer.msg('开始时间不能大于结束时间', {
                             icon: 2,

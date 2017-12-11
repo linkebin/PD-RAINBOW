@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>来访统计</title>
+    <title>客户统计</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
 </head>
 <body class="eui-layout-body">
@@ -1027,7 +1027,7 @@
                 }
                 for(var i=0;i<cityNums.length;i++){
                     citys+='<li class="eui-marginB10">';
-                    citys+='<div class="eui-col-md3 eui-textAlignR eui-paddingR10">'+(i+1)+'、'+cityNums[i].city+'</div>';
+                    citys+='<div class="eui-col-md3 eui-textAlignR eui-paddingR10">'+cityNums[i].city+'</div>';
                     citys+='<div class="eui-col-md9 eui-paddingT5">';
                     citys+='<div class="eui-progress">';
                     citys+='<div class="eui-progress-bar" e-percent="'+(parseInt(cityNums[i].num)/nums)*100+'%"></div>';
@@ -1056,7 +1056,8 @@
                 myChart1.setOption(option1);
             }
         });
-
+        //初始化省
+        $("#channel").html(provinces);
     }
 
     function randomData(province) {
@@ -1093,7 +1094,7 @@
         eui.use(['form', 'layer', 'element'], function () {
           var   form = eui.form;
             var element = eui.element;
-            form.render();
+            element.init();
         });
     }
 

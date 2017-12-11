@@ -27,12 +27,12 @@
                 </div>
                 <div class="eui-input-inline eui-padding10">
                     <input type="text" name="startTime" id="startTime"  value=""
-                            placeholder="起始时间" class="eui-input">
+                            placeholder="结算时间-起始时间" class="eui-input">
                 </div>
 
                 <div class="eui-input-inline eui-padding10">
                     <input type="text" name="endTime" id="endTime"  value=""
-                            placeholder="结束时间" class="eui-input">
+                            placeholder="结算时间-结束时间" class="eui-input">
                 </div>
                 <div class="eui-input-inline eui-padding10">
                     <select name="status">
@@ -49,11 +49,19 @@
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
+                    <span  class="eui-color-green">金额: <span id="z">0</span></span>
+                    <span class="eui-color-green" style="margin-left: 40px;">佣金: <span id="y">0</span> </span>
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+
+                </div>
+            </div>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
                     <i class='eui-icon eui-font24'>&#xe61d;</i> 已结算列表
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <!--<a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>-->
-                    <a onclick="clearingAll()" class="eui-btn eui-btn-small" href="###">支付佣金</a>
+                    <a onclick="PayBk()" class="eui-btn eui-btn-small" href="###">支付佣金</a>
                 </div>
             </div>
             <table id="test2"></table>
@@ -75,12 +83,43 @@
     var tableIns;
     var table;
 
+    function closoBig() {
+        doSearch();
+    }
+
+    function PayBk() {
+       var sele = channelTree.getSelected();
+       if (sele!=null){
+           var channel_id = sele.data.parentId
+           if (sele.data.parentId=='0'){
+               channel_id = sele.data.id;
+           }
+           layer.open({
+               type: 2
+               ,title: '佣金支付'
+               ,area: ['800px', '450px']
+               ,shade: 0
+               ,moveType: 0//拖拽模式，0或者1
+               ,content:"/web/channel/manage/channelPay?channel_id="+channel_id
+               ,btn: ['关闭']
+               ,btn2: function(){
+                   layer.closeAll();
+               }
+               ,success: function(layero, index){
+               }
+           });
+       }else {
+           layer.msg('请选择左侧渠道商');
+       }
+
+    }
+
     function dynamicTable2(obj) {
 
-        eui.use(['table', 'laydate'], function(){
+        eui.use(['table', 'laydate','layer'], function(){
             table = eui.table;
             var laydate = eui.laydate;
-
+            var layer = eui.layer;
             laydate.render({
                 elem: '#startTime'
                 ,done: function(value, date, endDate){
@@ -91,6 +130,8 @@
                 ,done: function(value, date, endDate){
                 }
             });
+            layer.load();
+
             tableIns = table.render({
                 id: 'idTest'
                 ,elem: '#test2'
@@ -123,7 +164,13 @@
                 ,limits: [10,30,50,100]
                 ,limit: 10 //每页默认显示的数量
                 ,done: function(res, curr, count){
-
+                    $("#z").html(0);
+                    $("#y").html(0);
+                    if (count>0){
+                        $("#z").html(res.data[0].gross);
+                        $("#y").html(res.data[0].bk);
+                    }
+                    layer.closeAll();
                 }
             });
         });
@@ -135,6 +182,10 @@
     }
     function doSearch() {
         var obj =$("#searchFrom").serializeObject();
+        if (obj.startTime!='' &&  obj.endTime!=''){
+            obj.startTime=obj.startTime+' 00:00:00';
+            obj.endTime=obj.endTime+' 24:00:00';
+        }
         if(obj.parentId!=''){
             if (obj.parentId =='0'){
                 obj.type=2;
@@ -165,13 +216,19 @@
                     childIcon: 'leaf' ,
                     slide: false, //是否显示动画
                     nodeWidth: 200,
-                    isExpand:2,
+                    isExpand:1,
                     idFieldName: 'id',
                     textFieldName:'name',
                     parentIDFieldName: 'parentId',
                     onSelect: function (node)
                     {
                         var obj =$("#searchFrom").serializeObject();
+
+                        if (obj.startTime!='' &&  obj.endTime!=''){
+                            obj.startTime=obj.startTime+' 00:00:00';
+                            obj.endTime=obj.endTime+' 24:00:00';
+                        }
+
                         $("#id").val(node.data.parentId)
                         $("#id").attr('searchId',node.data.id);
                         if (node.data.parentId =='0'){
@@ -184,7 +241,12 @@
                         doSearch();
                     },
                     onAfterAppend:function (parentNode, newdata) {
-                        var oj = new Object();
+                        var oj = $("#searchFrom").serializeObject();
+
+                        if (oj.startTime!='' &&  oj.endTime!=''){
+                            oj.startTime=oj.startTime+' 00:00:00';
+                            oj.endTime=oj.endTime+' 24:00:00';
+                        }
                         oj.type=2;
                         oj.channel_id=newdata[0].id;
                         oj.status=1;
