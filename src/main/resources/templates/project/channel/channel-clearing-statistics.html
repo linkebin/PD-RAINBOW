@@ -159,7 +159,7 @@
     function lookAll() {
         loadTree();
         lineChartRight('');
-        var o = new Object();
+        var o =$("#searchFrom").serializeObject();
         dynamicTable2(o);
     }
     function loadTree() {
