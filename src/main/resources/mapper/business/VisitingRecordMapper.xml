@@ -31,7 +31,7 @@
         WHERE vr.deleted=0 AND vr.visitor_goal
       in(SELECT so.option_id FROM select_option so WHERE so.option_category='goal')
 
-      GROUP BY vr.visitor_goal
+      GROUP BY vr.visitor_goal,soo.option_name
   </select>
 
   <!--AND visitor_time &gt;=#{startTime} AND visitor_time &lt;=#{endTime}-->
