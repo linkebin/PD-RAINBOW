@@ -242,14 +242,18 @@
             }
         }
 
-        for(var i = 0; i < 5; i++){
-            console.log("num = " + arr2[i].questionnaireCount);
-        }
+//        for(var i = 0; i < 5; i++){
+//            console.log("num = " + arr2[i].questionnaireCount);
+//        }
         return arr2;
     }
 
     function getCollapse(questionnaireList){
         var tableHtml = '';
+        if(questionnaireList.length < 5){
+            tableHtml = '<h2 class="eui-colla-title">暂无排名</h2>';
+            return tableHtml;
+        }
         for (var item = 0; item < 5; item++) {
             var questionnaire = questionnaireList[item];
             tableHtml += '<div class="eui-colla-item">' ;
