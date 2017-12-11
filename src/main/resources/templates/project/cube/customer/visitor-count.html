@@ -255,6 +255,13 @@
                         </select>
                     </div>
                     <div class="eui-col-md3 eui-marginL10"><span class="eui-btn eui-btn-normal">当前数据导出</span></div>
+
+                    <div id="time">
+                        <label class="eui-form-label">时间段：</label>
+                        <div class="eui-col-md3">
+                            <input class="eui-input" id="timer" placeholder="时间段选择">
+                        </div>
+                    </div>
                 </div>
                 <div class="eui-row eui-marginT20">
                     <div class="eui-col-md1 eui-font18">区域分布</div>
@@ -439,25 +446,53 @@
     var typeSum = 0;//计算初始化的次数
     var nowDate = new Date();
     nowDate.setDate(nowDate.getDate() - 7);
-    var form, layer, element;
-    eui.use(['form', 'layer', 'element'], function () {
+    var endDate = new Date();
+    var form, layer, element, laydate;
+    eui.use(['form', 'layer', 'element', 'laydate'], function () {
         form = eui.form;
         layer = eui.layer;
         element = eui.element;
+        laydate = eui.laydate;
+        laydate.render({
+            elem: '#timer'
+            ,range: true
+            ,done: function(value, date) {
+                var now = value.substring(0,find(value,'-',2));
+                nowDate = new Date(now);
+                var end = value.substring(find(value,'-',2)+1,value.length);
+                endDate = new Date(end);
+                doSearch();
+            }
+        });
+        $('#time').hide();
         form.on('select(selected)', function (data) {
             if (data.value == 0) {
+                $('#time').hide();
                 nowDate = new Date()
                 nowDate.setDate(nowDate.getDate() - 7);
-            } else if (data.value = 1) {
+                doSearch();
+            } else if (data.value == 1) {
+                $('#time').hide();
                 nowDate = new Date()
                 nowDate.setMonth(nowDate.getMonth() - 1);
+                doSearch();
+            }else if (data.value == 2){
+                $('#time').show();
             }
-            doSearch();
         })
         form.on('checkbox(allChoose)', function (data) {
             doSearch();
         })
     })
+
+    function find(str,cha,num){
+        var x=str.indexOf(cha);
+        for(var i=0;i<num;i++){
+            x=str.indexOf(cha,x+1);
+        }
+        return x;
+
+    }
 
     $(function () {
         doSearch();
@@ -519,7 +554,7 @@
             }
             $.post("/visitor/register/getCount", {
                 startTime: nowDate,
-                endTime: new Date(),
+                endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
                 belief: beliefIds,
@@ -647,8 +682,8 @@
                         html += '</ul>';
                         $('#sex').append(html);
                     }
-                }else{
-                    layer.msg("请重新加载",{
+                } else {
+                    layer.msg("请重新加载", {
                         icon: 1,
                         time: 1500
                     })
@@ -656,7 +691,7 @@
             })
             $.post("/visitor/register/getQuestionCount", {
                 startTime: nowDate,
-                endTime: new Date(),
+                endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
                 belief: beliefIds,
@@ -672,27 +707,40 @@
                     var countSum = getCountSum(thisYearList);//问卷总数
                     var lastCountSum = getCountSum(lastYearList);//去年的问卷总数
                     var lastPhaseSum = getCountSum(lastPhaseList);//上个时期的使用问卷总数
-                    //同比增长率
-                    var tongbi = (countSum - lastCountSum) / lastCountSum * 100 + '%';
-                    var mom = (countSum - lastPhaseSum) / lastPhaseSum * 100 + '%';
-                    if (lastPhaseSum == 0) {//如果上期的基数为0
-                        mom = "--"
-                    }
-                    if (lastCountSum == 0) {//如果去年同期的基数为0
-                        tongbi = "--"
-                    }
-                    var up = 'up';
-                    var down = 'up';
-                    if (!judgeSign(countSum - lastCountSum)) {//如果为负数，则为下降率
-                        up = 'down';
-                    }
-                    if (!judgeSign(countSum - lastPhaseSum)) {//如果为负数，则为下降率
-                        down = 'down';
-                    }
                     typeSum++;//表示刷新数据次数+1
                     initType(thisYearList);//设置问卷类型名称复选框
                     for (var j in thisYearList) {
                         var thisYear = thisYearList[j].questionnaire;
+                        var tongbi = '--';//同比
+                        var mom = '--';//环比
+                        var up = 'up';
+                        var down = 'up';
+                        for (var k in lastPhaseList) {
+                            var lastPhase = lastPhaseList[k].questionnaire;
+                            if(thisYear.id == lastPhase.id){
+                                if(lastPhase.count!=0){
+                                    mom = parseInt(((thisYear.count-lastPhase.count)/lastPhase.count)*100)+'%';
+                                    if (!judgeSign(thisYear.count-lastPhase.count)) {//如果为负数，则为下降率
+                                        down = 'down';
+                                    }
+                                }
+                                continue;
+                            }
+                        }
+                        for (var y in lastYearList) {
+                            var lastYear = lastYearList[y].questionnaire;
+                            if(thisYear.id == lastYear.id){
+                                if(lastYear.count>0){
+                                    tongbi = parseInt(((thisYear.count-lastYear.count)/lastYear.count)*100)+'%';
+                                    if (!judgeSign(thisYear.count-lastYear.count)) {//如果为负数，则为下降率
+                                        up = 'down';
+                                    }
+                                }else if(lastYear.count<0){
+                                    tongbi = thisYear.count-lastYear.count
+                                }
+                                continue;
+                            }
+                        }
                         var progressBar = (thisYear.count / countSum) * 100;
                         progressBar = parseInt(progressBar) + '%';
                         var tableHtml = '';
@@ -722,7 +770,7 @@
 
     //计算年龄段后得出的数据
     function countAge(resuliList) {
-        var registerList =[];
+        var registerList = [];
         $('input[name="age"]:checked').each(function (i) {
             var ageValue = $(this).parent().find("input[name='age']").val();
             for (var i in resuliList) {
@@ -732,23 +780,23 @@
                     if (age <= 18) {
                         registerList.push(res);
                     }
-                }else if(ageValue == 1){
-                    if (age >= 19 && age <=44) {
+                } else if (ageValue == 1) {
+                    if (age >= 19 && age <= 44) {
                         registerList.push(res);
                     }
-                }else if(ageValue == 2){
-                    if (age >= 45 && age <=59) {
+                } else if (ageValue == 2) {
+                    if (age >= 45 && age <= 59) {
                         registerList.push(res);
                     }
-                }else if(ageValue == 3){
-                    if (age >= 60 && age <=74) {
+                } else if (ageValue == 3) {
+                    if (age >= 60 && age <= 74) {
                         registerList.push(res);
                     }
-                }else if(ageValue == 4){
-                    if (age >= 75 && age <=89) {
+                } else if (ageValue == 4) {
+                    if (age >= 75 && age <= 89) {
                         registerList.push(res);
                     }
-                }else if(ageValue == 5){
+                } else if (ageValue == 5) {
                     if (age >= 90) {
                         registerList.push(res);
                     }
@@ -773,7 +821,7 @@
             html += '<li class="eui-form-item">' +
                     '<label class="eui-col-md10 eui-paddingT10 eui-textAlignL">' + thisYear.questionnaireName + '</label>' +
                     '<div class="eui-col-md2 eui-textAlignR eui-paddingR10">' +
-                    '<input type="checkbox" name="type" e-skin="primary" value="'+thisYear.questionnaireName+'" title="" e-filter="allChoose" checked>' +
+                    '<input type="checkbox" name="type" e-skin="primary" value="' + thisYear.questionnaireName + '" title="" e-filter="allChoose" checked>' +
                     '</div>' +
                     '</li>';
         }
@@ -827,7 +875,7 @@
             var form = eui.form;
             $.post("/visitor/register/getQuestionCount", {
                 startTime: nowDate,
-                endTime: new Date(),
+                endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
                 belief: beliefIds,
@@ -836,6 +884,7 @@
                 province: 'province',
                 city: ''
             }, function (result) {
+                console.log(result);
                 var provinceData = [{
                     name: '北京',
                     value: 0
@@ -993,7 +1042,7 @@
             var form = eui.form;
             $.post("/visitor/register/getQuestionCount", {
                 startTime: nowDate,
-                endTime: new Date(),
+                endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
                 belief: beliefIds,
@@ -1004,8 +1053,8 @@
             }, function (result) {
                 /*console.log(result);*/
                 if (result.code == 200) {
-                    var thisYearList =countAge(result.data.thisYearList);
-                    var tableHtml='';
+                    var thisYearList = countAge(result.data.thisYearList);
+                    var tableHtml = '';
                     for (var i in thisYearList) {
                         var list = thisYearList[i];
                         tableHtml += '<li class="eui-marginB10">' +
