@@ -285,6 +285,9 @@ public class VisitorRegister {
     @Transient
     private String questionnaireName;
 
+    @Transient
+    private String dataQuestion;
+
     public String getIncome() {
         return income;
     }
@@ -1159,5 +1162,13 @@ public class VisitorRegister {
 
     public void setQuestionnaireName(String questionnaireName) {
         this.questionnaireName = questionnaireName;
+    }
+
+    public String getDataQuestion() {
+        return dataQuestion;
+    }
+
+    public void setDataQuestion(String dataQuestion) {
+        this.dataQuestion = dataQuestion;
     }
 }

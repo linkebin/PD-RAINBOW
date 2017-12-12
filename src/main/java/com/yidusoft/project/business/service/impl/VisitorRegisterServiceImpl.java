@@ -83,7 +83,7 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
         return ResultGenerator.genSuccessResult(thisYearList);
     }*/
     public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName) {
-        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex));
+        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex,""));
         List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
         return ResultGenerator.genSuccessResult(thisYearList);
     }
@@ -97,14 +97,14 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @return
      */
     @Override
-    public Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName) {
-        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex));
-        List<VisitorRegister> list = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(operationDate(startTime), operationDate(endTime), sex));
+    public Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String type) {
+        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex,type));
+        List<VisitorRegister> list = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(operationDate(startTime), operationDate(endTime), sex,type));
         Calendar rightNow = Calendar.getInstance();
         rightNow.setTime(startTime);
         rightNow.add(Calendar.DATE, -1);
         Date date = rightNow.getTime();
-        List<VisitorRegister> lastPhase = visitorRegisterMapper.getQuestion(getMap(lastPhaseDate(startTime,endTime), date, sex));
+        List<VisitorRegister> lastPhase = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(lastPhaseDate(startTime,endTime), date, sex,type));
         List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
         List<VisitorRegister> LastYearList = getList(maritalStatus,belief,questionName,list);
         List<VisitorRegister> lastPhaseList = getList(maritalStatus,belief,questionName,lastPhase);
@@ -122,11 +122,12 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @param endTime
      * @return
      */
-    public Map getMap(Date startTime, Date endTime, String sex) {
+    public Map getMap(Date startTime, Date endTime, String sex,String type) {
         Map map = new HashMap<>();
         map.put("startTime", startTime);
         map.put("endTime", endTime);
         map.put("sex", sex);
+        map.put("type", type);
         return map;
     }
 

@@ -118,7 +118,7 @@ public class VisitorRegisterController {
     }
 
     @PostMapping("/getQuestionCount")
-    public Result getQuestionCount(Date startTime, Date endTime, String sex, String maritalStatus,String belief,String questionName)  {
-        return visitorRegisterService.getQuestion(startTime, endTime, sex, maritalStatus, belief,questionName);
+    public Result getQuestionCount(Date startTime, Date endTime, String sex, String maritalStatus,String belief,String questionName,String type)  {
+        return visitorRegisterService.getQuestion(startTime, endTime, sex, maritalStatus, belief,questionName,type);
     }
 }

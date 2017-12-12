@@ -58,6 +58,7 @@
     <result column="treatment_condition" jdbcType="LONGVARCHAR" property="treatmentCondition" />
       <result column="count" jdbcType="INTEGER" property="count"></result>
       <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName"></result>
+      <result column="data_question" jdbcType="VARCHAR" property="dataQuestion"></result>
   </resultMap>
   <select id="findViitorByCounselorId" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultMap="BaseResultMap">
 
@@ -111,26 +112,29 @@
 
   </select>-->
     <select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
-        SELECT register.*,count(*) as count,que.questionnaire_name FROM
-        visitor_register register,data_acquisition da,questionnaire que,
-        (SELECT visitor_id FROM visiting_record
+        select a.*,que.questionnaire_name
+        <if test="type!=null and type!=''">
+            ,count(*)
+        </if>
+        FROM questionnaire que,(SELECT register.*,count(*) as count,da.data_question FROM visitor_register register,data_acquisition da,
+        (SELECT visitor_id,create_time FROM visiting_record
         WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
         AND deleted=0) as record
         WHERE record.visitor_id=register.ID_
-        AND register.deleted=0
-        AND da.deleted=0
-        AND que.deleted=0
         AND da.user_id=record.visitor_id
-        AND da.data_question = que.ID_
+        GROUP BY record.create_time) as a
+        WHERE que.id_ = a.data_question
         <if test="sex!=null and sex!=''">
-            AND register.sex=#{sex}
+            AND a.sex=#{sex}
         </if>
-        GROUP BY que.questionnaire_name
+        <if test="type!=null and type!=''">
+            GROUP BY que.questionnaire_name
+        </if>
     </select>
     <select id="getQuestion" resultMap="BaseResultMap" parameterType="java.util.Map">
         SELECT register.*,da.data_question,count(da.data_question) as count,que.questionnaire_name FROM
         visitor_register register,data_acquisition da,questionnaire que,
-        (SELECT visitor_id FROM visiting_record
+        (SELECT visitor_id,create_time FROM visiting_record
         WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
         AND deleted=0) as record
         WHERE record.visitor_id=register.ID_

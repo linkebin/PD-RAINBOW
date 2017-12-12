@@ -40,5 +40,5 @@ public interface VisitorRegisterService extends Service<VisitorRegister> {
      */
     Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName);
 
-    Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName);
+    Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String type);
 }
