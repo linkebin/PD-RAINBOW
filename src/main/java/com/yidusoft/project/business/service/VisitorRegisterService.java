@@ -38,7 +38,7 @@ public interface VisitorRegisterService extends Service<VisitorRegister> {
      * @param endTime
      * @return
      */
-    Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city);
+    Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName);
 
-    Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city);
+    Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName);
 }

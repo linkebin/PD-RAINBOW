@@ -455,13 +455,14 @@
         laydate = eui.laydate;
         laydate.render({
             elem: '#timer'
-            ,range: true
-            ,done: function(value, date) {
-                var now = value.substring(0,find(value,'-',2));
+            , range: true
+            , done: function (value, date) {
+                var now = value.substring(0, find(value, '-', 2));
                 nowDate = new Date(now);
-                var end = value.substring(find(value,'-',2)+1,value.length);
+                var end = value.substring(find(value, '-', 2) + 1, value.length);
                 endDate = new Date(end);
                 doSearch();
+                //设置问卷类型名称复选框
             }
         });
         $('#time').hide();
@@ -476,7 +477,7 @@
                 nowDate = new Date()
                 nowDate.setMonth(nowDate.getMonth() - 1);
                 doSearch();
-            }else if (data.value == 2){
+            } else if (data.value == 2) {
                 $('#time').show();
             }
         })
@@ -485,17 +486,19 @@
         })
     })
 
-    function find(str,cha,num){
-        var x=str.indexOf(cha);
-        for(var i=0;i<num;i++){
-            x=str.indexOf(cha,x+1);
+    //获取字符串的位置
+    function find(str, cha, num) {
+        var x = str.indexOf(cha);
+        for (var i = 0; i < num; i++) {
+            x = str.indexOf(cha, x + 1);
         }
         return x;
 
     }
-
+    //初始化
     $(function () {
         doSearch();
+        initType();
     })
     var statusIds = '';
     var beliefIds = '';
@@ -536,8 +539,8 @@
 
             var typeArray = new Array();
             $('input[name="type"]:checked').each(function (i) {
-                var maritalStatus = $(this).parent().find("input[name='type']").val();
-                typeArray[i] = maritalStatus;
+                var type = $(this).parent().find("input[name='type']").val();
+                typeArray[i] = type;
             })
 
             typeIds = typeArray.join(",");
@@ -558,12 +561,10 @@
                 sex: sex,
                 maritalStatus: statusIds,
                 belief: beliefIds,
-                questionName: typeIds,
-                name: '',
-                province: '',
-                city: ''
+                questionName: typeIds
             }, function (result) {
-                /*console.log(result);*/
+                /*console.log("基本信息");
+                 console.log(result);*/
                 if (result.code = 200) {
                     var manSum = 0;
                     var womenSum = 0;
@@ -700,27 +701,25 @@
                 province: '',
                 city: ''
             }, function (result) {
+                console.log(result);
                 if (result.code == 200) {
                     var thisYearList = countAge(result.data.thisYearList);
                     var lastYearList = countAge(result.data.lastYearList);
                     var lastPhaseList = countAge(result.data.lastPhaseList);
                     var countSum = getCountSum(thisYearList);//问卷总数
-                    var lastCountSum = getCountSum(lastYearList);//去年的问卷总数
-                    var lastPhaseSum = getCountSum(lastPhaseList);//上个时期的使用问卷总数
                     typeSum++;//表示刷新数据次数+1
-                    initType(thisYearList);//设置问卷类型名称复选框
                     for (var j in thisYearList) {
-                        var thisYear = thisYearList[j].questionnaire;
+                        var thisYear = thisYearList[j];
                         var tongbi = '--';//同比
                         var mom = '--';//环比
                         var up = 'up';
                         var down = 'up';
                         for (var k in lastPhaseList) {
-                            var lastPhase = lastPhaseList[k].questionnaire;
-                            if(thisYear.id == lastPhase.id){
-                                if(lastPhase.count!=0){
-                                    mom = parseInt(((thisYear.count-lastPhase.count)/lastPhase.count)*100)+'%';
-                                    if (!judgeSign(thisYear.count-lastPhase.count)) {//如果为负数，则为下降率
+                            var lastPhase = lastPhaseList[k];
+                            if (thisYear.id == lastPhase.id) {
+                                if (lastPhase.count != 0) {
+                                    mom = parseInt(((thisYear.count - lastPhase.count) / lastPhase.count) * 100) + '%';
+                                    if (!judgeSign(thisYear.count - lastPhase.count)) {//如果为负数，则为下降率
                                         down = 'down';
                                     }
                                 }
@@ -728,15 +727,15 @@
                             }
                         }
                         for (var y in lastYearList) {
-                            var lastYear = lastYearList[y].questionnaire;
-                            if(thisYear.id == lastYear.id){
-                                if(lastYear.count>0){
-                                    tongbi = parseInt(((thisYear.count-lastYear.count)/lastYear.count)*100)+'%';
-                                    if (!judgeSign(thisYear.count-lastYear.count)) {//如果为负数，则为下降率
+                            var lastYear = lastYearList[y];
+                            if (thisYear.id == lastYear.id) {
+                                if (lastYear.count > 0) {
+                                    tongbi = parseInt(((thisYear.count - lastYear.count) / lastYear.count) * 100) + '%';
+                                    if (!judgeSign(thisYear.count - lastYear.count)) {//如果为负数，则为下降率
                                         up = 'down';
                                     }
-                                }else if(lastYear.count<0){
-                                    tongbi = thisYear.count-lastYear.count
+                                } else if (lastYear.count < 0) {
+                                    tongbi = thisYear.count - lastYear.count
                                 }
                                 continue;
                             }
@@ -808,24 +807,28 @@
 
 
     //设置问卷类型名称复选框
-    var list;
-    function initType(thisYearList) {
-        if (typeSum == 1) {
-            list = thisYearList
-        } else {
-            return;
-        }
-        var html = '';
-        for (var j in list) {
-            var thisYear = list[j].questionnaire;
-            html += '<li class="eui-form-item">' +
-                    '<label class="eui-col-md10 eui-paddingT10 eui-textAlignL">' + thisYear.questionnaireName + '</label>' +
-                    '<div class="eui-col-md2 eui-textAlignR eui-paddingR10">' +
-                    '<input type="checkbox" name="type" e-skin="primary" value="' + thisYear.questionnaireName + '" title="" e-filter="allChoose" checked>' +
-                    '</div>' +
-                    '</li>';
-        }
-        $('#type').html(html);
+    function initType() {
+        eui.use('form',function () {
+            var form = eui.form;
+            $.get('/questionnaire/detail',function (result) {
+                if(result.code == 200){
+                    var resultList = result.data;
+                    var html = '';
+                    console.log(resultList);
+                    for (var i in resultList) {
+                        var thisYear = resultList[i];
+                        html += '<li class="eui-form-item">' +
+                                '<label class="eui-col-md10 eui-paddingT10 eui-textAlignL">' + thisYear.questionnaireName + '</label>' +
+                                '<div class="eui-col-md2 eui-textAlignR eui-paddingR10">' +
+                                '<input type="checkbox" name="type" e-skin="primary" value="' + thisYear.questionnaireName + '" e-filter="allChoose" checked>' +
+                                '</div>' +
+                                '</li>';
+                    }
+                    $('#type').html(html);
+                    form.render('checkbox');
+                }
+            })
+        })
     }
     //校验数字是正数还是负数
     function judgeSign(num) {
@@ -834,12 +837,12 @@
     }
 
     /**
-     * 计算总数
+     * 计算问卷总数
      */
     function getCountSum(list) {
         var result = 0;
         for (var i in list) {
-            var obj = list[i].questionnaire;
+            var obj = list[i];
             result += obj.count;
         }
         return result;
@@ -871,20 +874,19 @@
      * 获取省份排名
      */
     function getProvince() {
-        eui.use('form', function () {
-            var form = eui.form;
-            $.post("/visitor/register/getQuestionCount", {
+        eui.use(['form', 'element'], function () {
+            var form = eui.form,
+                    element = eui.element;
+            $.post("/visitor/register/getCount", {
                 startTime: nowDate,
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
                 belief: beliefIds,
-                questionName: typeIds,
-                name: '',
-                province: 'province',
-                city: ''
+                questionName: typeIds
             }, function (result) {
-                console.log(result);
+                /*console.log("省份：");
+                 console.log(result);*/
                 var provinceData = [{
                     name: '北京',
                     value: 0
@@ -992,43 +994,51 @@
                     value: 0
                 }]
                 if (result.code == 200) {
-                    var thisYearList = countAge(result.data.thisYearList);
+                    var resultList = countAge(result.data);
                     var tableHtml = '';
-                    for (var i in thisYearList) {
-                        var list = thisYearList[i];
-                        var thisYear = thisYearList[i].questionnaire;
-                        var count = getCountSum(thisYearList);
-                        var progressBar = (thisYear.count / count) * 100;
-                        progressBar = parseInt(progressBar) + "%";
+                    var provinceArray = [];
+                    var provinceGroup = [];
+                    for (var i in resultList) {
+                        var list = resultList[i];
+                        provinceArray.push(list.province);
+                        if (provinceGroup.indexOf(list.province) == -1) {  //判断在s数组中是否存在，不存在则push到s数组中
+                            provinceGroup.push(list.province);
+                        }
+                    }
+                    var hist = {};
+                    provinceArray.map(function (a) {
+                        if (a in hist) hist[a]++; else hist[a] = 1;
+                    });
+                    var index = 0//排名
+                    var count = 0;
+                    for (var j in hist) {
+                        index++;
+                        count += hist[j]
                         tableHtml += '<li class="eui-marginB10">' +
-                                '<div class="eui-col-md3 eui-textAlignR eui-paddingR10">' + (parseInt(i) + 1) + '、' + list.province + '</div>' +
+                                '<div class="eui-col-md3 eui-textAlignR eui-paddingR10">' + index + '、' + j + '</div>' +
                                 '<div class="eui-col-md9 eui-paddingT5">' +
-                                '<div class="eui-progress" e-filter="que' + i + '">' +
+                                '<div class="eui-progress" e-filter="que' + index + '">' +
                                 '<div class="eui-progress-bar" ></div>' +
                                 '</div>' +
                                 '</div>' +
                                 '</li>';
-
-                        for (var j in provinceData) {
-                            var province = provinceData[j];
-                            if (list.province.indexOf(province.name) != -1) {
-                                province.value = thisYear.count;
+                        for (var k in provinceData) {
+                            var province = provinceData[k];
+                            if (j.indexOf(province.name) != -1) {
+                                province.value = hist[j];
                             }
                         }
                     }
                     $('.province').html(tableHtml);
-                    var count = getCountSum(thisYearList);
-                    form.render();
-                    for (var j in thisYearList) {
-                        eui.use(['element'], function () {
-                            var element = eui.element;
-                            var thisYear = thisYearList[j].questionnaire;
-                            var progressBar = (thisYear.count / count) * 100;
-                            progressBar = parseInt(progressBar) + "%";
-                            /*console.log(progressBar)*/
-                            var name = 'que' + '' + j;
-                            element.progress(name, progressBar);
-                        })
+                    var sum = 0;
+                    for (var y in hist) {
+                        sum++;
+                        var thisCount = hist[y]
+                        var progressBar = (thisCount / count) * 100;
+                        progressBar = parseInt(progressBar) + "%";
+                        var name = 'que' + sum;
+                        element.progress(name, progressBar);
+                        element.init('progress', name);
                     }
                 }
                 initProvince(provinceData);
@@ -1038,48 +1048,59 @@
 
 
     function getCity() {
-        eui.use('form', function () {
-            var form = eui.form;
-            $.post("/visitor/register/getQuestionCount", {
+        eui.use(['element'], function () {
+            var element = eui.element;
+            $.post("/visitor/register/getCount", {
                 startTime: nowDate,
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
                 belief: beliefIds,
-                questionName: typeIds,
-                name: '',
-                province: '',
-                city: 'city'
+                questionName: typeIds
             }, function (result) {
                 /*console.log(result);*/
                 if (result.code == 200) {
-                    var thisYearList = countAge(result.data.thisYearList);
+                    var resultList = countAge(result.data);
                     var tableHtml = '';
-                    for (var i in thisYearList) {
-                        var list = thisYearList[i];
+                    var cityArray = [];
+                    var cityGroup = [];
+                    for (var i in resultList) {
+                        var list = resultList[i];
+                        cityArray.push(list.city);
+                        if (cityGroup.indexOf(list.city) == -1) {  //判断在s数组中是否存在，不存在则push到s数组中
+                            cityGroup.push(list.city);
+                        }
+                    }
+                    var index = 0
+                    var cityObj = {};
+                    cityArray.map(function (a) {
+                        if (a in cityObj) cityObj[a]++; else cityObj[a] = 1;
+                    });
+                    var citySum = 0;//城市的总数
+                    for (var j in cityObj) {
+                        index++;
+                        citySum += cityObj[j];
                         tableHtml += '<li class="eui-marginB10">' +
-                                '<div class="eui-col-md5 eui-textAlignL eui-paddingR10">' + (parseInt(i) + 1) + '、' + list.city + '</div>' +
-                                '<div class="eui-col-md7 eui-paddingT5">' +
-                                '<div class="eui-progress" e-filter="ques' + i + '">' +
-                                '<div class="eui-progress-bar"></div>' +
+                                '<div class="eui-col-md3 eui-textAlignR eui-paddingR10">' + index + '、' + j + '</div>' +
+                                '<div class="eui-col-md9 eui-paddingT5">' +
+                                '<div class="eui-progress" e-filter="que' + index + '">' +
+                                '<div class="eui-progress-bar" ></div>' +
                                 '</div>' +
                                 '</div>' +
                                 '</li>';
                     }
                     $('.city').html(tableHtml);
-                    var count = getCountSum(thisYearList);
-                    for (var j in thisYearList) {
-                        eui.use(['element'], function () {
-                            var element = eui.element;
-                            var thisYear = thisYearList[j].questionnaire;
-                            var progressBar = (thisYear.count / count) * 100;
-                            progressBar = parseInt(progressBar) + "%";
-                            /*console.log(progressBar)*/
-                            var name = 'ques' + '' + j;
-                            element.progress(name, progressBar);
-                        })
+                    var cityIndex = 0;
+                    for (var j in cityObj) {
+                        cityIndex++;
+                        var thisCount = cityObj[j];
+                        var progressBar = (thisCount / citySum) * 100;
+                        progressBar = parseInt(progressBar) + "%";
+                        /*console.log(progressBar)*/
+                        var name = 'que' + '' + cityIndex;
+                        element.progress(name, progressBar);
+                        element.init('progress', progressBar);
                     }
-                    form.render();
                 }
             })
         })
@@ -1659,59 +1680,59 @@
     }
 
     function initProvince(provinceData) {
-        console.log(provinceData);
+        /*console.log(provinceData);*/
         //地图
         var myChart = echarts.init(document.getElementById('map'), 'macarons');
 
-        var data = [
+        /*var data = [
 
-            {
-                name: '齐齐哈尔'
-            }, {
-                name: '盐城'
-            }, {
-                name: '青岛'
-            }, {
-                name: '金昌'
-            }, {
-                name: '泉州'
-            }, {
-                name: '拉萨'
-            }, {
-                name: '上海浦东'
-            }, {
-                name: '攀枝花'
-            }, {
-                name: '威海'
-            }, {
-                name: '承德'
-            }, {
-                name: '汕尾'
-            }, {
-                name: '克拉玛依'
-            }, {
-                name: '重庆市'
-            }
+         {
+         name: '齐齐哈尔'
+         }, {
+         name: '盐城'
+         }, {
+         name: '青岛'
+         }, {
+         name: '金昌'
+         }, {
+         name: '泉州'
+         }, {
+         name: '拉萨'
+         }, {
+         name: '上海浦东'
+         }, {
+         name: '攀枝花'
+         }, {
+         name: '威海'
+         }, {
+         name: '承德'
+         }, {
+         name: '汕尾'
+         }, {
+         name: '克拉玛依'
+         }, {
+         name: '重庆市'
+         }
 
-        ];
+         ];
 
-        var geoCoordMap = {
+         var geoCoordMap = {
 
-            '齐齐哈尔': [123.97, 47.33],
-            '盐城': [120.13, 33.38],
-            '青岛': [120.33, 36.07],
-            '金昌': [102.188043, 38.520089],
-            '泉州': [118.58, 24.93],
-            '拉萨': [91.11, 29.97],
-            '上海浦东': [121.48, 31.22],
-            '攀枝花': [101.718637, 26.582347],
-            '威海': [122.1, 37.5],
-            '承德': [117.93, 40.97],
-            '汕尾': [115.375279, 22.786211],
-            '克拉玛依': [84.77, 45.59],
-            '重庆市': [108.384366, 30.439702],
+         '齐齐哈尔': [123.97, 47.33],
+         '盐城': [120.13, 33.38],
+         '青岛': [120.33, 36.07],
+         '金昌': [102.188043, 38.520089],
+         '泉州': [118.58, 24.93],
+         '拉萨': [91.11, 29.97],
+         '上海浦东': [121.48, 31.22],
+         '攀枝花': [101.718637, 26.582347],
+         '威海': [122.1, 37.5],
+         '承德': [117.93, 40.97],
+         '汕尾': [115.375279, 22.786211],
+         '克拉玛依': [84.77, 45.59],
+         '重庆市': [108.384366, 30.439702],
 
-        };
+         };*/
 
 
         myChart.setOption({
@@ -1722,22 +1743,22 @@
         });
 
 
-        var convertData = function (data) {
-            var res = [];
+        /*var convertData = function (data) {
+         var res = [];
 
-            for (var i = 0; i < data.length; i++) {
-                var geoCoord = geoCoordMap[data[i].name];
+         for (var i = 0; i < data.length; i++) {
+         var geoCoord = geoCoordMap[data[i].name];
 
-                if (geoCoord) {
-                    res.push({
-                        name: data[i].name,
-                        value: geoCoord.concat(data[i].value)
-                    });
-                }
-            }
+         if (geoCoord) {
+         res.push({
+         name: data[i].name,
+         value: geoCoord.concat(data[i].value)
+         });
+         }
+         }
 
-            return res;
-        };
+         return res;
+         };*/
 
         option = {
 
@@ -1825,7 +1846,6 @@
                 name: '供需占比',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
-                data: convertData(data),
                 symbolSize: 10,
                 showEffectOn: 'render',
                 rippleEffect: {

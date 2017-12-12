@@ -77,8 +77,13 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @return
      */
     @Override
-    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city) {
+    /*public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city) {
         List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex, name, province,city));
+        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
+        return ResultGenerator.genSuccessResult(thisYearList);
+    }*/
+    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName) {
+        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex));
         List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
         return ResultGenerator.genSuccessResult(thisYearList);
     }
@@ -92,14 +97,14 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @return
      */
     @Override
-    public Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city) {
-        List<VisitorRegister> reslutList = visitorRegisterMapper.getQuestion(getMap(startTime, endTime, sex, name, province,city));
-        List<VisitorRegister> list = visitorRegisterMapper.getQuestion(getMap(operationDate(startTime), operationDate(endTime), sex, name, province,city));
+    public Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName) {
+        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex));
+        List<VisitorRegister> list = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(operationDate(startTime), operationDate(endTime), sex));
         Calendar rightNow = Calendar.getInstance();
         rightNow.setTime(startTime);
         rightNow.add(Calendar.DATE, -1);
         Date date = rightNow.getTime();
-        List<VisitorRegister> lastPhase = visitorRegisterMapper.getQuestion(getMap(lastPhaseDate(startTime,endTime), date, sex, name, province,city));
+        List<VisitorRegister> lastPhase = visitorRegisterMapper.getQuestion(getMap(lastPhaseDate(startTime,endTime), date, sex));
         List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
         List<VisitorRegister> LastYearList = getList(maritalStatus,belief,questionName,list);
         List<VisitorRegister> lastPhaseList = getList(maritalStatus,belief,questionName,lastPhase);
@@ -117,14 +122,11 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @param endTime
      * @return
      */
-    public Map getMap(Date startTime, Date endTime, String sex, String name, String province,String city) {
+    public Map getMap(Date startTime, Date endTime, String sex) {
         Map map = new HashMap<>();
         map.put("startTime", startTime);
         map.put("endTime", endTime);
         map.put("sex", sex);
-        map.put("name", name);
-        map.put("province", province);
-        map.put("city", city);
         return map;
     }
 
@@ -181,7 +183,7 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
                                 if (Integer.parseInt(j) == visitorRegister.getReligiousBelief()) {
                                     if(typeName.length>1){
                                         for (String name : typeName) {
-                                            if (name.equals(visitorRegister.getQuestionnaire().getQuestionnaireName())) {
+                                            if (name.equals(visitorRegister.getQuestionnaireName())) {
                                                 thisYearList.add(visitorRegister);
                                             }
                                         }
@@ -200,7 +202,7 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
                     if (Integer.parseInt(i) == visitorRegister.getReligiousBelief()) {
                         if(typeName.length>1){
                             for (String name : typeName) {
-                                if (name.equals(visitorRegister.getQuestionnaire().getQuestionnaireName())) {
+                                if (name.equals(visitorRegister.getQuestionnaireName())) {
                                     thisYearList.add(visitorRegister);
                                 }
                             }
@@ -211,7 +213,7 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
                 }
             } else if(typeName.length>1){
                 for (String name : typeName) {
-                    if (name.equals(visitorRegister.getQuestionnaire().getQuestionnaireName())) {
+                    if (name.equals(visitorRegister.getQuestionnaireName())) {
                         thisYearList.add(visitorRegister);
                     }
                 }
@@ -219,4 +221,5 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
         }
         return thisYearList;
     }
+
 }
