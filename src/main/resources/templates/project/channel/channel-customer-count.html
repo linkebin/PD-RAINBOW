@@ -45,86 +45,7 @@
 
                                         <div class="eui-tab-item eui-show">
                                             <ul class="statistics" id="channel">
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">1、北京</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="89%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">2、江苏</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="78%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">3、浙江</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="72%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">4、上海</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="68%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">5、广东</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="62%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">6、河南</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="56%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">7、河北</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="50%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">8、山东</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="44%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">9、湖南</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="40%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="eui-marginB10">
-                                                    <div class="eui-col-md3 eui-textAlignR eui-paddingR10">10、湖北</div>
-                                                    <div class="eui-col-md9 eui-paddingT5">
-                                                        <div class="eui-progress">
-                                                            <div class="eui-progress-bar" e-percent="36%"></div>
-                                                        </div>
-                                                    </div>
-                                                </li>
+
                                             </ul>
                                         </div>
                                     </div>
@@ -164,7 +85,7 @@
 
 <script>
     $(function () {
-        findConsultant ();
+        findConsultant();
     });
 
     var channle=new Array;
@@ -336,7 +257,7 @@
             name: '供需占比',
             type: 'effectScatter',
             coordinateSystem: 'geo',
-            data: convertData(data),
+           // data: convertData(data),
             symbolSize: 10,
             showEffectOn: 'render',
             rippleEffect: {
@@ -989,6 +910,9 @@
     });
    //查询渠道咨询师人数 城市占比
     function findConsultant () {
+      eui.use(['element','layer'], function () {
+        var element = eui.element;
+        var layer = eui.layer;
         citys="";
         provinces="";
         var  channelId=$("#channels").val();
@@ -1002,6 +926,8 @@
          startTime=times[0].trim()+"-01";
          endTime=times[1].trim()+"-01";
         }
+        //加载层
+        var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
         $.ajax({
             url: "/channel/manage/findConsultantForChannel",
             data: {
@@ -1012,7 +938,7 @@
             async: false,
             type: "post",
             success: function (result) {
-                //layer.closeAll();
+                 layer.closeAll();
                 //所有的咨询师
                 channle=result.data.consultantAll;
                 //cityNums 市的人数
@@ -1051,6 +977,7 @@
                     timeData[i]=channelForTime[i].times;
                     dataNums[i]=channelForTime[i].num;
                 }
+                //给最大值加几5让纵坐标高一点
                 max1+=5;
                 optionStrat1();
                 myChart1.setOption(option1);
@@ -1058,6 +985,9 @@
         });
         //初始化省
         $("#channel").html(provinces);
+
+            element.init();
+        });
     }
 
     function randomData(province) {

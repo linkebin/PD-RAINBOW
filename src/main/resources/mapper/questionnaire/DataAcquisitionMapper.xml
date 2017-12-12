@@ -86,14 +86,15 @@
     </select>
 
     <select id="getQuestionnaireTypeTotal" parameterType="String" resultMap="QuestionnaireUseInfoResultMap">
-        SELECT * FROM (
-        SELECT id_ as data_question ,questionnaire_name FROM questionnaire
-        WHERE id_ IN   (
-        SELECT
-        data_question
-        FROM  data_acquisition
-        WHERE  user_id   =#{userId})
-        GROUP BY   questionnaire_type )  tt
+            SELECT
+              q.questionnaire_type as id_
+           FROM  questionnaire q
+           LEFT JOIN  data_acquisition  d
+           ON d.data_question=q.id_
+           WHERE  d.user_id   =#{userId}
+           GROUP BY   questionnaire_type
+
+
     </select>
     <select id="findDataAcquistionForVisitor" parameterType="com.yidusoft.project.questionnaire.domain.DataAcquisition" resultMap="BaseResultMap">
           SELECT *
