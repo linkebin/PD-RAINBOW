@@ -240,7 +240,7 @@
             q.deleted = 0
         AND DATE_FORMAT(d.create_time, "%Y-%m") = DATE_FORMAT(NOW(), "%Y-%m")
         GROUP BY
-            q.questionnaire_name
+            q.questionnaire_name,q.ID_
     </select>
 
     <select id="findAllQuestionnaireUsedCount" resultType="java.util.Map">
