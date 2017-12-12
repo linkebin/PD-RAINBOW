@@ -39,6 +39,11 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
     private UserQuestionnairesService userQuestionnairesService;
 
     @Override
+    public List<Map<String, Object>> findVisitorRegisterProvince() {
+        return visitorRegisterMapper.findVisitorRegisterProvince();
+    }
+
+    @Override
     public List<VisitorRegister> findViitorByCounselorId(VisitorRegister visitorRegister) {
         return visitorRegisterMapper.findViitorByCounselorId(visitorRegister);
     }

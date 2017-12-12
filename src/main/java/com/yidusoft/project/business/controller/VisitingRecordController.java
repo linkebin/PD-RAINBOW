@@ -11,6 +11,7 @@ import com.yidusoft.project.business.domain.VisitingRecordFile;
 import com.yidusoft.project.business.service.ScheduleService;
 import com.yidusoft.project.business.service.VisitingRecordFileService;
 import com.yidusoft.project.business.service.VisitingRecordService;
+import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.project.system.domain.SelectOption;
 import com.yidusoft.project.system.service.SelectOptionService;
 import com.yidusoft.utils.CodeHelper;
@@ -36,6 +37,9 @@ public class VisitingRecordController {
     @Autowired
     private SelectOptionService selectOptionService;
 
+    @Resource
+    private VisitorRegisterService visitorRegisterService;
+
     @PostMapping("/goalManage")
     public Result goalManage(Integer page,  Integer limit) {
 
@@ -46,10 +50,61 @@ public class VisitingRecordController {
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
     }
 
-    @PostMapping("/goalBarChart")
-    public Result clearingLineChart() {
+    @PostMapping("/provincePrcGoalRanking")
+    public Result provincePrcGoalRanking(String json) {
+        Map<String,Object> parameter = JSON.parseObject(json,Map.class);
+        List<SelectOption> list =selectOptionService.findSelectOptionByType("goal");
 
-        List<Map<String,Object>> maps = visitingRecordService.findGoalBarChart();
+        List<Map<String,Object>> data = new ArrayList<Map<String,Object>>();
+
+        for (SelectOption selectOption : list){
+            parameter.put("option_name",selectOption.getOptionName());
+            List<Map<String,Object>> types = visitingRecordService.findComeToCallGoalAreaCount(parameter);
+            if (types.size()>0){
+                data.add(types.get(0));
+            }
+        }
+        return ResultGenerator.genSuccessResult(data);
+    }
+
+
+    @PostMapping("/comeToCallGoalAreaCount")
+    public Result comeToCallGoalAreaCount(String json) {
+        Map<String,Object> parameter = JSON.parseObject(json,Map.class);
+        List<Map<String,Object>> provinces = visitorRegisterService.findVisitorRegisterProvince();
+        List<Map<String,Object>> data = new ArrayList<Map<String,Object>>();
+
+        for(Map<String,Object> map : provinces){
+
+            parameter.put("province",map.get("province").toString());
+            List<Map<String,Object>> types = visitingRecordService.findComeToCallGoalAreaCount(parameter);
+
+            if (types.size()>0){
+                Map<String,Object> d = new HashMap<String,Object>();
+                String s = map.get("province").toString();
+                d.put("name",s.substring(0,s.length() - 1));
+                int value = 0;
+                String value2 = "";
+                for(Map<String,Object> map2 : types){
+                    value+=Integer.parseInt(map2.get("total").toString());
+                    value2+=map2.get("option_name").toString()+"::"+map2.get("total").toString()+",";
+                }
+
+                d.put("value",value);
+                d.put("value2",value2);
+                data.add(d);
+            }
+
+        }
+        return ResultGenerator.genSuccessResult(data);
+    }
+
+
+    @PostMapping("/goalBarChart")
+    public Result clearingLineChart(String json) {
+        Map<String,Object> parameter = JSON.parseObject(json,Map.class);
+
+        List<Map<String,Object>> maps = visitingRecordService.findGoalBarChart(parameter);
         int startSize = maps.size();
         List<SelectOption> list =selectOptionService.findSelectOptionByType("goal");
         for (SelectOption selectOption : list){

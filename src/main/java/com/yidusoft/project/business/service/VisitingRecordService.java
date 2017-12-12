@@ -12,6 +12,8 @@ import java.util.Map;
  */
 public interface VisitingRecordService extends Service<VisitingRecord> {
 
+    List<Map<String,Object>> findComeToCallGoalAreaCount(Map<String,Object> map);
+
     /**
      * 根据客户id 查询客户来访时间轴
      * @param visitingRecord
@@ -39,5 +41,5 @@ public interface VisitingRecordService extends Service<VisitingRecord> {
      */
     int  getVisitingTotal(String userId);
 
-    List<Map<String,Object>> findGoalBarChart();
+    List<Map<String,Object>> findGoalBarChart(Map<String,Object> map);
 }

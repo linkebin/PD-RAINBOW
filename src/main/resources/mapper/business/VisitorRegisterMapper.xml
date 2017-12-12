@@ -60,6 +60,13 @@
       <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName"></result>
       <result column="data_question" jdbcType="VARCHAR" property="dataQuestion"></result>
   </resultMap>
+
+    <select id="findVisitorRegisterProvince" resultType="Map">
+        SELECT vr.province FROM visitor_register vr WHERE vr.deleted=0
+
+          GROUP BY vr.province
+    </select>
+
   <select id="findViitorByCounselorId" parameterType="com.yidusoft.project.business.domain.VisitorRegister" resultMap="BaseResultMap">
 
     SELECT ID_,visitor_name,visitor_code,sex,phone,province,city,district,address FROM visitor_register
@@ -89,6 +96,9 @@
                   WHERE deleted=0 AND ID_ IN (SELECT visitor_id FROM visiting_record WHERE deleted=0 AND creator=#{creator}
                   ORDER BY create_time DESC)   LIMIT 0,10
   ) b
+
+  WHERE 1=1 AND b.visitor_name LIKE '%${visitorName}%'
+
   ORDER BY b.now_time DESC
 
   </select>

@@ -26,10 +26,46 @@
 
   </resultMap>
 
-  <select id="findGoalBarChart" resultType="Map">
+    <select id="findComeToCallGoalAreaCount" parameterType="java.util.Map" resultType="Map">
+        SELECT b.* FROM (
+        SELECT  soo.option_name,
+        (SELECT vr1.province FROM visitor_register vr1 WHERE vr1.ID_= vr.visitor_id) province,sum(1) total
+
+         FROM visiting_record vr
+
+
+        LEFT JOIN select_option soo ON vr.visitor_goal=soo.option_id
+                WHERE vr.deleted=0 AND vr.visitor_goal
+              in(SELECT so.option_id FROM select_option so WHERE so.option_category='goal')
+
+        <if test="startTime!='' and endTime!=''">
+            AND vr.create_time  &gt;=#{startTime} AND vr.create_time &lt;= #{endTime}
+        </if>
+
+
+        GROUP BY soo.option_name,province
+
+        ) b WHERE 1=1
+
+        <if test="province!='' and province!=null">
+            AND b.province=#{province}
+        </if>
+
+        <if test="option_name!='' and option_name!=null">
+            AND b.option_name=#{option_name}
+            ORDER BY b.total DESC LIMIT 0,1
+        </if>
+
+    </select>
+
+  <select id="findGoalBarChart" resultType="Map" parameterType="java.util.Map">
       SELECT vr.visitor_goal, soo.option_name, count(vr.visitor_goal) total FROM visiting_record vr LEFT JOIN select_option soo ON vr.visitor_goal=soo.option_id
         WHERE vr.deleted=0 AND vr.visitor_goal
       in(SELECT so.option_id FROM select_option so WHERE so.option_category='goal')
+
+      <if test="startTime!='' and endTime!=''">
+          AND vr.create_time  &gt;=#{startTime} AND vr.create_time &lt;= #{endTime}
+      </if>
 
       GROUP BY vr.visitor_goal,soo.option_name
   </select>

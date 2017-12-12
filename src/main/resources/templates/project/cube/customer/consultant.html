@@ -582,10 +582,12 @@ var processLogA=null;
     $(function () {
         loadShaftTime();
         $('#visitorName').bind('input propertychange', function() {
+
             var textValue = $(this).val();
             var params = new Object();
             params.creator=$("#creator").val();
             params.visitorName=textValue;
+            console.log(params)
             loadCustomerList(params);
         });
 
@@ -672,7 +674,6 @@ var processLogA=null;
             pagesize:100000
         },function (result) {
             $(".customerList").html('');
-            console.log(result.data.list)
             var list = result.data.list;
             $.each(list,function (index,item) {
 

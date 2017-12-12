@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
     <style>
         .main {
-            height: 400px;
             /* width: 778px !important; */
             overflow: hidden;
             padding: 10px;
@@ -40,7 +39,27 @@
         </div>
         <table id="test2"></table>
 
-            <div class="main" id="analysis" ></div>
+        <form class="eui-form" id="searchFrom">
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="startTime" id="startTime"  value=""
+                       placeholder="来访起始时间" class="eui-input">
+            </div>
+
+            <div class="eui-input-inline eui-padding10">
+                <input type="text" name="endTime" id="endTime"  value=""
+                       placeholder="来访结束时间" class="eui-input">
+            </div>
+
+            <div class="eui-input-inline">
+                <span class="eui-btn  eui-btn" onclick="doSearchA()">查询</span>
+                <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
+            </div>
+        </form>
+
+        <div class="main" style="height: 400px; width: 48%; float: left;" id="analysis3" ></div>
+        <div class="main" style="height: 400px; width: 48%; float: right" id="analysis4" ></div>
+
+        <div class="main" style="height: 400px; width: 48%; float: left;" id="analysis" ></div>
     </div>
 </div>
 
@@ -56,18 +75,36 @@
 <!-- 引入 macarons 主题 -->
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
 
+<!--地图脚本-->
+<script src="http://gallery.echartsjs.com/dep/echarts/map/js/china.js"></script>
+
 <script>
     var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
+
+    var myChart3 = echarts.init(document.getElementById('analysis3'), 'macarons');
+    var myChart4 = echarts.init(document.getElementById('analysis4'), 'macarons');
+
 // 表单
-eui.use(['element','form', 'layedit', 'laydate','laypage', 'layer'], function(){
+eui.use(['form', 'laydate', 'layer'], function(){
     var form = eui.form
     ,layer = eui.layer
-    ,layedit = eui.layedit
-    ,laydate = eui.laydate
-    ,laypage = eui.laypage
-    ,$ = eui.jquery;
-});
+    ,laydate = eui.laydate;
 
+    laydate.render({
+        elem: '#startTime'
+    });
+    laydate.render({
+        elem: '#endTime'
+    });
+});
+    function resetForm() {
+        $('#searchFrom')[0].reset();
+    }
+
+    function doSearchA() {
+        var obj =$("#searchFrom").serializeObject();
+        doSearch(obj);
+    }
 function dynamicTable(obj) {
 
     eui.use(['table', 'laydate'], function(){
@@ -165,9 +202,23 @@ function addGoal() {
 }
 $(function () {
     dynamicTable(new Object());
-    var timeDataX=new Array;
-    var timeDataY=new Array;
-    $.post('/visiting/record/goalBarChart',function (result) {
+    var obj =$("#searchFrom").serializeObject();
+    doSearch(obj);
+});
+
+function doSearch(obj) {
+    eui.use(['form', 'laydate', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,laydate = eui.laydate;
+    layer.load();
+    if (obj.startTime!='' &&  obj.endTime!=''){
+        obj.startTime=obj.startTime+' 00:00:00';
+        obj.endTime=obj.endTime+' 24:00:00';
+    }
+    $.post('/visiting/record/goalBarChart',{json:JSON.stringify(obj)},function (result) {
+        var timeDataX=new Array;
+        var timeDataY=new Array;
         if(result.data !=null &&result.data.length>0){
             for(var i=0;i<result.data.length;i++){
                 timeDataX[i]= result.data[i].option_name;
@@ -176,7 +227,25 @@ $(function () {
         }
         myChart.setOption(getOption(timeDataX,timeDataY,''));
     }) ;
-});
+    $.post('/visiting/record/comeToCallGoalAreaCount',{json:JSON.stringify(obj)},function (result) {
+        myChart3.setOption(getChinaMapOption(result.data));
+    }) ;
+    $.post('/visiting/record/provincePrcGoalRanking',{json:JSON.stringify(obj)},function (result) {
+        var timeDataX=new Array;
+        var timeDataY=new Array;
+        for(var i=0;i<result.data.length;i++){
+            timeDataY[i]= result.data[i].option_name;
+            var d = {
+                name: result.data[i].province,
+                value: result.data[i].total
+            }
+            timeDataX[i]=d;
+        }
+        myChart4.setOption(getProvinceRankingOption(timeDataY,timeDataX));
+        layer.closeAll();
+    }) ;
+    });
+}
 
 function addData(type,obj) {
     if(obj.optionValue.trim()==''){
@@ -199,7 +268,8 @@ function addData(type,obj) {
 function getOption(timeData,data,setingObj) {
     option = {
         title: {
-            text: '来访目的统计'
+            text: '来访目的(总数)',
+            x: 'center'
         },
         tooltip : {
             trigger: 'axis',
@@ -258,6 +328,181 @@ function getOption(timeData,data,setingObj) {
     };
     return option;
 }
+
+
+function getChinaMapOption(data2) {
+    var option3 = {
+        title: {
+            text: '来访目的区域分布',
+            subtext: '',
+            x: 'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: function(params) {
+                if (params.data.value2==undefined){
+                    return params.data.name+':0';
+                }
+                    var types = params.data.value2.split(",");
+                    var rest =params.data.name+':'+params.data.value+"<br/>";
+                    $.each(types,function (index,item) {
+                        if (item!=''){
+                            rest+=item.split("::")[0]+":"+item.split("::")[1]+"<br/>"
+                        }
+                    });
+                    return rest;
+            }
+        },
+
+        dataRange: {
+            min: 0,
+            max: 9000,
+            x: 'left',
+            y: 'bottom',
+            text: ['高', '低'], // 文本，默认为数值文本
+            calculable: false,
+            splitNumber: 0,
+            color: ['#0000F8', '#33F4FA']
+        },
+        toolbox: {
+            show: true,
+            orient: 'vertical',
+            x: 'right',
+            y: 'center',
+            feature: {
+                mark: {
+                    show: true
+                },
+//                dataView: {
+//                    show: true,
+//                    readOnly: false
+//                },
+//                dataZoom: {
+//                    show: true
+//                },
+                restore: {
+                    show: true
+                },
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        roamController: {
+            show: true,
+            x: 'right',
+            mapTypeControl: {
+                'china': true
+            }
+        },
+        series: [{
+            name: 'Number',
+            type: 'map',
+            mapType: 'china',
+            roam: true,
+            zoom: 1.3,
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true
+                    }
+                },
+                emphasis: {
+                    label: {
+                        show: true
+                    }
+                }
+            },
+            data: data2
+        }]
+    };
+    return option3;
+}
+
+
+function getProvinceRankingOption(Y,X) {
+   var option4 = {
+        "title": {
+            "text": "来访目的省份Top",
+            "x": 'center',
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": { // 坐标轴指示器，坐标轴触发有效
+                "type": "shadow" // 默认为直线，可选为："line" | "shadow"
+            }
+        },
+        "grid": {
+            "left": "3%",
+            "right": "10%",
+            "bottom": "3%",
+            "containLabel": true
+        },
+        "yAxis": [{
+            "type": "category",
+            "data": Y,
+            "axisLine": {
+                "show": false
+            },
+            "axisTick": {
+                "show": false,
+                "alignWithLabel": true
+            },
+            "axisLabel": {
+                "textStyle": {
+                    "color": "#ffb069"
+                }
+            }
+        }],
+        "xAxis": [{
+            "type": "value",
+            "axisLine": {
+                "show": false
+            },
+            "axisTick": {
+                "show": false
+            },
+            "axisLabel": {
+                "show": false
+            },
+            "splitLine": {
+                "show": false
+            }
+        }],
+
+        "series": [{
+            "name": "",
+            "type": "bar",
+            "data": X,
+            "barCategoryGap": "10%",
+            "label": {
+                "normal": {
+                    "show": true,
+                    "position": "right",
+                    "formatter": function(params) {
+                        return params.data.name;
+                    },
+                    "textStyle": {
+                        "color": "#bcbfff" //color of value
+                    }
+                }
+            },
+            "itemStyle": {
+                "normal": {
+                    "color": new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+                        "offset": 0,
+                        "color": "#ffb069" // 0% 处的颜色
+                    }, {
+                        "offset": 1,
+                        "color": "#ec2e85" // 100% 处的颜色
+                    }], false)
+                }
+            }
+        }]
+    };
+    return option4;
+}
+
 </script>
 </body>
 <script type="text/html" id="barDemo">

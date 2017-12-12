@@ -8,6 +8,9 @@ import java.util.Map;
 
 public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
 
+    //查询来访者的省份
+    List<Map<String,Object>> findVisitorRegisterProvince();
+
     /**
      * 根据咨询师id查询所对应的客户
      * @param visitorRegister

@@ -22,6 +22,11 @@ public class VisitingRecordServiceImpl extends AbstractService<VisitingRecord> i
     private VisitingRecordMapper visitingRecordMapper;
 
     @Override
+    public List<Map<String, Object>> findComeToCallGoalAreaCount(Map<String, Object> map) {
+        return visitingRecordMapper.findComeToCallGoalAreaCount(map);
+    }
+
+    @Override
     public List<VisitingRecord> findVisitingRecordShaftTimeByCustomerId(VisitingRecord visitingRecord) {
         return visitingRecordMapper.findVisitingRecordShaftTimeByCustomerId(visitingRecord);
     }
@@ -46,7 +51,7 @@ public class VisitingRecordServiceImpl extends AbstractService<VisitingRecord> i
     }
 
     @Override
-    public List<Map<String, Object>> findGoalBarChart() {
-        return visitingRecordMapper.findGoalBarChart();
+    public List<Map<String, Object>> findGoalBarChart(Map<String,Object> map) {
+        return visitingRecordMapper.findGoalBarChart(map);
     }
 }
