@@ -834,12 +834,10 @@ body .eui-layer-title{
     overflow: hidden;
     background: white;
     box-shadow: 0 0 10px #cccccc;
-
-}
-.areal{
     position: relative;
     padding-bottom: 10px;
 }
+
 .areal .arealIn{
     position: absolute;
     display: block;
@@ -1011,3 +1009,22 @@ body .eui-layer-title{
     width: 100%;
     height: 400px;
 }
+
+.areal .eui-tab-title .custTab{
+    border-bottom: 1px solid #e2e2e2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

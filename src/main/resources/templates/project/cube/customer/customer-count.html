@@ -9,25 +9,18 @@
 <div class="eui-layout eui-layout-admin xymfHome">
     <div th:replace="project/cube/common/header :: header(${3})">Header</div>
     <div class="eui-area">
-        <div class="eui-row eui-padding10 eui-font16">
-            <div class="eui-col-md2">
-                <a href="#" class="eui-textIn">
-                    <p class="eui-textNum"><span class="eui-color-blue" id="customerSum">0</span>个</p>
-                    <p class="name">客户总数</p>
-                </a>
+        <a href="#" class="eui-padding10">
+            <p class="name eui-marginL10">客户总数 <span class="eui-color-blue eui-font30" id="customerSum">0</span> 个</p>
+        </a>
+        <div class="eui-margin10 areal">
+            <div class="dataCharts eui-bg-white eui-padding10">
+                <div id="sum" class="mapIn"></div>
             </div>
         </div>
-        <div class="eui-row eui-padding10 eui-font16">
-            <div class="eui-row dataCharts">
-                <div class="eui-col-md12">
-                    <div id="sum" style="width: 100%;height:100%;"></div>
-                </div>
-            </div>
-        </div>
-        <div class="eui-row eui-padding10 eui-font26">
-            <div class="eui-col-md12">
+        <div class="eui-row eui-margin10 eui-font26 eui-bg-white areal eui-marginT20">
+            <div class="eui-col-md12 eui-padding10">
                 <div class="eui-tab">
-                    <ul class="eui-tab-title">
+                    <ul class="eui-tab-title custTab">
                         <li class="eui-this">占比</li>
                         <li>折线</li>
                         <li>分析</li>
@@ -36,21 +29,26 @@
                         <div class="eui-tab-item eui-show">
                             <div class="eui-row dataCharts">
                                 <div class="eui-col-md6">
+                                    <div class="eui-font16 eui-marginB20 eui-marginT10">性别分布</div>
                                     <div id="sex" style="width: 100%;height:320px;"></div>
                                 </div>
                                 <div class="eui-col-md6">
+                                    <div class="eui-font16 eui-marginB20 eui-marginT10">职业分布</div>
                                     <div id="occupation" style="width: 100%;height:320px;"></div>
                                 </div>
                             </div>
                             <div class="eui-row dataCharts">
                                 <div class="eui-col-md6">
+                                    <div class="eui-font16 eui-marginB20 eui-marginT10">收入分布</div>
                                     <div id="income" style="width: 100%;height:320px;"></div>
                                 </div>
                                 <div class="eui-col-md6">
+                                    <div class="eui-font16 eui-marginB20 eui-marginT10">教育程度分布</div>
                                     <div id="level" style="width: 100%;height:320px;"></div>
                                 </div>
                             </div>
-                            <div class="eui-col-md6">
+                            <div class="eui-col-md12">
+                                <div class="eui-font16 eui-marginB20 eui-marginT10">婚姻状况分布</div>
                                 <div id="status" style="width: 100%;height:320px;"></div>
                             </div>
                         </div>
@@ -258,10 +256,6 @@
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById(id), 'macarons');
         option = {
-            title : {
-                text: text,
-                x:'center'
-            },
             tooltip : {
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -296,10 +290,6 @@
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById(id), 'macarons');
         option = {
-            title: {
-                text: text,
-                x: 'center'
-            },
             tooltip: {
                 trigger: 'item',
                 formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -344,10 +334,6 @@
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById(id), 'macarons');
         option = {
-            title : {
-                text: text,
-                x:'center'
-            },
             tooltip : {
                 trigger: 'item',
                 formatter: "{a} <br/>{b} : {c} ({d}%)"
@@ -475,10 +461,6 @@
     function test(id,text,name,data,data1) {
         var myChart = echarts.init(document.getElementById(id), 'macarons');
         option = {
-            title : {
-                text: text,
-                x:'center'
-            },
             color: ['#3398DB'],
             tooltip : {
                 trigger: 'axis',
@@ -506,11 +488,28 @@
                     type : 'value'
                 }
             ],
+            //修改柱状条的颜色color
+            itemStyle: {
+                normal: {
+                    //柱形图圆角，初始化效果
+                    barBorderRadius: [300, 300, 0, 0],
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: '#5ab1ef'
+                    }, {
+                        offset: 1,
+                        color: '#2ec7c9'
+
+                    }]),
+                    shadowBlur: 100,
+                    shadowColor: 'rgba(0, 0, 0, 0.1)'
+                }
+            },
             series : [
                 {
                     name: name,
                     type:'bar',
-                    barWidth: '60%',
+                    barWidth: '24%',
                     data:data1
                 }
             ]
