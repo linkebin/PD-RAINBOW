@@ -227,4 +227,14 @@ public class QuestionnaireController {
             return ResultGenerator.genFailResult("加载出错了！");
         }
     }
+
+    /**
+     * 获取所有问卷
+     * @return
+     */
+    @GetMapping("/detail")
+    public Result findQuestionnaireAll(){
+        List<Questionnaire> list = questionnaireMapper.findQuestionnaireAll();
+        return ResultGenerator.genSuccessResult(list);
+    }
 }

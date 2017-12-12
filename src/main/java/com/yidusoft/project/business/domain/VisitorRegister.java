@@ -280,8 +280,10 @@ public class VisitorRegister {
     private String nativePlace;
 
     @Transient
-    private Questionnaire questionnaire;
+    private Integer count;
 
+    @Transient
+    private String questionnaireName;
 
     public String getIncome() {
         return income;
@@ -1143,11 +1145,19 @@ public class VisitorRegister {
         this.treatmentCondition = treatmentCondition;
     }
 
-    public Questionnaire getQuestionnaire() {
-        return questionnaire;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setQuestionnaire(Questionnaire questionnaire) {
-        this.questionnaire = questionnaire;
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public String getQuestionnaireName() {
+        return questionnaireName;
+    }
+
+    public void setQuestionnaireName(String questionnaireName) {
+        this.questionnaireName = questionnaireName;
     }
 }

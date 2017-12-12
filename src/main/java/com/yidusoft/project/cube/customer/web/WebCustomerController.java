@@ -226,4 +226,9 @@ public class WebCustomerController {
     public String visitorCount(){
         return "project/cube/customer/visitor-count";
     }
+
+    @RequestMapping("/testCount")
+    public String testCount(){
+        return "project/cube/customer/count-test";
+    }
 }
