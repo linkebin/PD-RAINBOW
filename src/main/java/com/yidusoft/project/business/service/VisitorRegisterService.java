@@ -29,10 +29,10 @@ public interface VisitorRegisterService extends Service<VisitorRegister> {
 
     /**
      * 根据创建人id获取其客户的信息
-     * @param creator
+     * @param map
      * @return
      */
-    List<VisitorRegister> findVitorByCreator(String creator);
+    List<VisitorRegister> findVitorByCreator(Map map);
 
     /**
      * 客户统计分析

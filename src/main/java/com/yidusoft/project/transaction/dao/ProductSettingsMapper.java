@@ -13,7 +13,7 @@ public interface ProductSettingsMapper extends Mapper<ProductSettings> {
 
     BigDecimal getUnitPriceByTotal();
 
-    List<ProductSettings> getProductByTime();
+    List<ProductSettings> getProductByTime(ProductSettings productSettings);
 
     List<ProductSettings> getUpdateUnion(String id);
 

@@ -17,7 +17,7 @@ public interface ProductSettingsService extends Service<ProductSettings> {
 
     BigDecimal getUnitPriceByTotal();
 
-    List<ProductSettings> getProductByTime();
+    List<ProductSettings> getProductByTime(ProductSettings productSettings);
 
     List<ProductSettings> getUpdateUnion(String id);
 

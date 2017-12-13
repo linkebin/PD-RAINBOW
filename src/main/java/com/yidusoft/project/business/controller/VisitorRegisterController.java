@@ -106,9 +106,12 @@ public class VisitorRegisterController {
      *
      * @return
      */
-    @GetMapping("/customerCount")
-    public Result count() {
-        List<VisitorRegister> list = visitorRegisterService.findVitorByCreator(Security.getUserId());
+    @PostMapping("/customerCount")
+    public Result count(String occupation) {
+        Map<String,String> map = new HashMap<>();
+        map.put("creator",Security.getUserId());
+        map.put("occupation",occupation);
+        List<VisitorRegister> list = visitorRegisterService.findVitorByCreator(map);
         return ResultGenerator.genSuccessResult(list);
     }
 

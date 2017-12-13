@@ -103,24 +103,16 @@
 
   </select>
 
-  <select id="findVitorByCreator" resultMap="BaseResultMap" parameterType="String">
-    SELECT * FROM visitor_register WHERE deleted=0 AND creator=#{creator}
+  <select id="findVitorByCreator" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT *
+      <if test="occupation!=null and occupation!=''">
+          ,count(occupation) as count
+      </if>
+      FROM visitor_register WHERE deleted=0 AND creator=#{creator}
+    <if test="occupation!=null and occupation!=''">
+      GROUP BY occupation
+    </if>
   </select>
-  <!--<select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
-        SELECT da.*,register.*,que.questionnaire_name FROM visitor_register register,data_acquisition da,questionnaire que,
-        (SELECT visitor_id FROM visiting_record
-        WHERE DATE(create_time) BETWEEN  DATE(#{startTime}) AND DATE(#{endTime})
-        AND deleted=0 GROUP BY visitor_id ) as record
-        WHERE record.visitor_id=register.ID_
-        AND register.deleted=0
-        AND da.deleted=0
-        AND que.deleted=0
-        <if test="sex!=null and sex!=''">
-          AND register.sex=#{sex}
-        </if>
-        AND da.user_id=record.visitor_id
-
-  </select>-->
     <select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
         select a.*,que.questionnaire_name
         <if test="type!=null and type!=''">
@@ -129,7 +121,7 @@
         FROM questionnaire que,(SELECT register.*,count(*) as count,da.data_question FROM visitor_register register,data_acquisition da,
         (SELECT visitor_id,create_time FROM visiting_record
         WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
-        AND deleted=0) as record
+        AND deleted=0 AND creator=#{userId}) as record
         WHERE record.visitor_id=register.ID_
         AND da.user_id=record.visitor_id
         GROUP BY record.create_time) as a
@@ -141,45 +133,4 @@
             GROUP BY que.questionnaire_name
         </if>
     </select>
-    <select id="getQuestion" resultMap="BaseResultMap" parameterType="java.util.Map">
-        SELECT register.*,da.data_question,count(da.data_question) as count,que.questionnaire_name FROM
-        visitor_register register,data_acquisition da,questionnaire que,
-        (SELECT visitor_id,create_time FROM visiting_record
-        WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
-        AND deleted=0) as record
-        WHERE record.visitor_id=register.ID_
-        AND register.deleted=0
-        AND da.deleted=0
-        AND que.deleted=0
-        AND da.user_id=record.visitor_id
-        AND da.data_question = que.ID_
-        GROUP BY da.data_question
-        <if test="sex!=null and sex!=''">
-            AND register.sex=#{sex}
-        </if>
-    </select>
-    <!--<select id="getQuestion" resultMap="BaseResultMap" parameterType="java.util.Map">
-        SELECT da.*,register.*,que.questionnaire_name,count(*) count FROM visitor_register register,data_acquisition da,questionnaire que,
-        (SELECT visitor_id FROM visiting_record
-        WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
-        AND deleted=0 GROUP BY visitor_id ) as record
-        WHERE record.visitor_id=register.ID_
-        AND register.deleted=0
-        AND da.deleted=0
-        AND que.deleted=0
-        <if test="sex!=null and sex!=''">
-            AND register.sex=#{sex}
-        </if>
-        AND da.user_id=record.visitor_id
-        AND que.ID_=da.data_question
-        <if test="name!=null and name!=''">
-            GROUP BY que.questionnaire_name
-        </if>
-        <if test="province!=null and province!=''">
-            GROUP BY register.province ORDER BY count desc
-        </if>
-        <if test="city!=null and city!=''">
-            GROUP BY register.city ORDER BY count desc
-        </if>
-    </select>-->
 </mapper>

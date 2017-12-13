@@ -14,11 +14,25 @@
     </style>
 </head>
 <body>
-<div class="eui-row eui-padding10 eui-borderB">
-    <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAdd">
-        <i class='eui-icon eui-font24'>&#xe654;</i> 选择套餐
+<form class="eui-form" id="searchFrom">
+    <input type="hidden" name="initiatorType" value="2">
+    <div class="eui-input-inline eui-padding10">
+        <input type="text" name="productName" e-verify="title" autocomplete="off" placeholder="套餐名称/关键字"
+               class="eui-input">
     </div>
-</div>
+    <div class="eui-input-inline eui-padding10">
+        <input type="text" name="createTime" id="createTime" readonly placeholder="创建时间"
+               class="eui-input">
+    </div>
+    <div class="eui-input-inline eui-padding10">
+        <input type="text" name="creator" placeholder="创建人"
+               class="eui-input">
+    </div>
+    <div class="eui-input-inline">
+        <span class="eui-btn" onclick="doSearch()">查询</span>
+        <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+    </div>
+</form>
 
 <div class="eui-bg-white eui-row eui-paddingT10">
     <div class="eui-col-md12 eui-paddingR10">
@@ -60,14 +74,22 @@
     $(function () {
         doSearch()
     })
-
+    //重置
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+        doSearch();
+    }
     //加载数据
     function doSearch() {
-        eui.use(['form', 'laypage', 'layer'], function () {
+        eui.use(['form', 'laypage', 'layer', 'laydate'], function () {
             var form = eui.form
                     , laypage = eui.laypage
-                    , layer = eui.layer,
-                    $ = eui.jquery;
+                    , layer = eui.layer
+                    , laydate = eui.laydate
+            laydate.render({
+                elem: '#createTime',
+                type: 'date'
+            })
             //全选
             form.on('checkbox(allChoose)', function (data) {
                 var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
@@ -78,12 +100,15 @@
             });
 
             var params = $("#searchFrom").serializeObject();
+            params.createTime = new Date(params.createTime);
+            console.log(params);
             var index = layer.load(2); //加载
             $.ajax({
                 url: "/product/settings/listPage",
                 data: {
                     page: 1,
-                    size: 10
+                    size: 10,
+                    params: JSON.stringify(params)
                 },
                 type: "post",
                 success: function (result) {
@@ -109,7 +134,8 @@
                                     url: "/product/settings/listPage",
                                     data: {
                                         page: obj.curr,
-                                        size: obj.limit
+                                        size: obj.limit,
+                                        params: JSON.stringify(params)
                                     },
                                     type: "post",
                                     success: function (result) {
