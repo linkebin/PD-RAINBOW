@@ -782,7 +782,7 @@ body .eui-layer-title{
 .chartsShadow{
     box-shadow: 0 0 10px #cccccc;
 }
-.chartsPage .eui-input, .eui-select, .eui-textarea, .eui-btn{
+.chartsPage .eui-input,.chartsPage .eui-select,.chartsPage .eui-textarea,.chartsPage .eui-btn{
     border-radius: 0;
     border: 0;
 }
