@@ -19,30 +19,12 @@
                         </div>
                     </div>
                     <div class="eui-marginT20 eui-form">
-                        <select name="city" e-verify="required">
+                        <select name="template" id="template" e-verify="required" e-filter="template">
                             <option value="010" selected="">请选择模版</option>
-                            <option value="012">模版一</option>
-                            <option value="0571">模版二</option>
                         </select>
                     </div>
                 </div>
                 <ul class="eui-form eui-paddingB10 eui-paddingLR10 filter">
-                    <!--<li>
-                        <div class="eui-form-item chartsTitle">
-                            <label class="eui-form-label eui-textAlignL">区域</label>
-                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
-                            </div>
-                        </div>
-                        <ul class="chartsContent region">
-                            <li class="eui-form-item">
-                                <label class="eui-form-label eui-textAlignL">区域1</label>
-                                <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                    <input type="checkbox" name="like[write]" e-skin="primary" title="">
-                                </div>
-                            </li>
-                        </ul>
-                    </li>-->
                     <li>
                         <div class="eui-form-item chartsTitle">
                             <label class="eui-form-label eui-textAlignL">问卷类型</label>
@@ -324,18 +306,6 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--<tr>
-                                    <td>1</td>
-                                    <td>人格评估</td>
-                                    <td class="eui-row">
-                                        <span class="eui-col-md2">18999</span>
-                                        <div class="eui-progress eui-progress-big eui-col-md10" e-showpercent="yes">
-                                            <div class="eui-progress-bar" e-percent="50%"></div>
-                                        </div>
-                                    </td>
-                                    <td>12% <img src="/Styles/images/xymfImages/xymf/up.png" alt=""/></td>
-                                    <td>2% <img src="/Styles/images/xymfImages/xymf/down.png" alt=""/></td>
-                                </tr>-->
                                 </tbody>
                             </table>
                         </div>
@@ -355,12 +325,12 @@
                                     <div class="eui-col-md2 eui-paddingL10"><img
                                             src="/Styles/images/xymfImages/xymf/man.png" alt=""/></div>
                                     <div class="eui-col-md4">
-                                        <p class="eui-font22 chartsColor1 man">23144人</p>
-                                        <p class="eui-font22 chartsColor1 manPercent">58%</p>
+                                        <p class="eui-font22 chartsColor1 man">0人</p>
+                                        <p class="eui-font22 chartsColor1 manPercent">0%</p>
                                     </div>
                                     <div class="eui-col-md4 eui-textAlignR">
-                                        <p class="eui-font22 chartsColor2 women">20013人</p>
-                                        <p class="eui-font22 chartsColor2 womenPercent">42%</p>
+                                        <p class="eui-font22 chartsColor2 women">0人</p>
+                                        <p class="eui-font22 chartsColor2 womenPercent">0%</p>
                                     </div>
                                     <div class="eui-col-md2 eui-textAlignR eui-paddingR10"><img
                                             src="/Styles/images/xymfImages/xymf/woman.png" alt=""/></div>
@@ -385,32 +355,6 @@
                             </div>
                             <div class="eui-col-md6">
                                 <div class="eui-font16 eui-marginB20 eui-marginT10">婚姻状况</div>
-                                <!--<div class="marriage">
-                                    <div class="marriageIn marriage1">
-                                        <p><span>1210</span>,<span>30%</span></p>
-                                        <p>丧偶独居</p>
-                                    </div>
-                                    <div class="marriageIn marriage2">
-                                        <p><span>1210</span>,<span>30%</span></p>
-                                        <p>已婚分居</p>
-                                    </div>
-                                    <div class="marriageIn marriage3">
-                                        <p><span>1210</span>,<span>30%</span></p>
-                                        <p>再婚</p>
-                                    </div>
-                                    <div class="marriageIn marriage4">
-                                        <p><span>1210</span>,<span>30%</span></p>
-                                        <p>已婚</p>
-                                    </div>
-                                    <div class="marriageIn marriage5">
-                                        <p><span>1210</span>,<span>30%</span></p>
-                                        <p>丧偶独居</p>
-                                    </div>
-                                    <div class="marriageIn marriage6">
-                                        <p><span>1210</span>,<span>30%</span></p>
-                                        <p>离婚独居</p>
-                                    </div>
-                                </div>-->
                                 <div id="marriages" class="charts0"></div>
                             </div>
                             <div class="eui-col-md12">
@@ -448,8 +392,8 @@
     var nowDate = new Date();
     nowDate.setDate(nowDate.getDate() - 7);
     var endDate = new Date();
-    $('.date').each(function (i,data) {
-        $(this).text(new Date(nowDate).Format("yyyy-MM-dd")+" 至 "+new Date().Format("yyyy-MM-dd"));
+    $('.date').each(function (i, data) {
+        $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date().Format("yyyy-MM-dd"));
     })
     var form, layer, element, laydate;
     eui.use(['form', 'layer', 'element', 'laydate'], function () {
@@ -465,8 +409,8 @@
                 nowDate = new Date(now);
                 var end = value.substring(find(value, '-', 2) + 1, value.length);
                 endDate = new Date(end);
-                $('.date').each(function (i,data) {
-                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd")+" 至 "+new Date(endDate).Format("yyyy-MM-dd"));
+                $('.date').each(function (i, data) {
+                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date(endDate).Format("yyyy-MM-dd"));
                 })
                 doSearch();
                 //设置问卷类型名称复选框
@@ -478,16 +422,16 @@
                 $('#time').hide();
                 nowDate = new Date()
                 nowDate.setDate(nowDate.getDate() - 7);
-                $('.date').each(function (i,data) {
-                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd")+" 至 "+new Date().Format("yyyy-MM-dd"));
+                $('.date').each(function (i, data) {
+                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date().Format("yyyy-MM-dd"));
                 })
                 doSearch();
             } else if (data.value == 1) {
                 $('#time').hide();
                 nowDate = new Date()
                 nowDate.setMonth(nowDate.getMonth() - 1);
-                $('.date').each(function (i,data) {
-                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd")+" 至 "+new Date().Format("yyyy-MM-dd"));
+                $('.date').each(function (i, data) {
+                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date().Format("yyyy-MM-dd"));
                 })
                 doSearch();
             } else if (data.value == 2) {
@@ -512,6 +456,7 @@
     $(function () {
         doSearch();
         initType();
+        initTemplate();
     })
     var statusIds = '';
     var beliefIds = '';
@@ -576,8 +521,8 @@
                 belief: beliefIds,
                 questionName: typeIds
             }, function (result) {
-                /*console.log("基本信息");
-                 console.log(result);*/
+                console.log("基本信息");
+                console.log(result);
                 if (result.code = 200) {
                     var manSum = 0;
                     var womenSum = 0;
@@ -721,17 +666,21 @@
                     typeSum++;//表示刷新数据次数+1
                     for (var j in thisYearList) {
                         var thisYear = thisYearList[j];
+                        console.log(thisYear);
                         var tongbi = '--';//同比
                         var mom = '--';//环比
                         var up = 'up';
                         var down = 'up';
                         for (var k in lastPhaseList) {
                             var lastPhase = lastPhaseList[k];
+                            console.log(lastPhase)
                             if (thisYear.id == lastPhase.id) {
                                 if (lastPhase.count != 0) {
                                     mom = parseInt(((thisYear.count - lastPhase.count) / lastPhase.count) * 100) + '%';
                                     if (!judgeSign(thisYear.count - lastPhase.count)) {//如果为负数，则为下降率
                                         down = 'down';
+                                    } else if (lastYear.count < 0) {
+                                        mom = thisYear.count - lastPhase.count
                                     }
                                 }
                                 continue;
@@ -819,10 +768,10 @@
 
     //设置问卷类型名称复选框
     function initType() {
-        eui.use('form',function () {
+        eui.use('form', function () {
             var form = eui.form;
-            $.get('/questionnaire/detail',function (result) {
-                if(result.code == 200){
+            $.get('/questionnaire/detail', function (result) {
+                if (result.code == 200) {
                     var resultList = result.data;
                     var html = '';
                     console.log(resultList);
@@ -839,6 +788,68 @@
                     form.render('checkbox');
                 }
             })
+        })
+    }
+
+    //初始化选择模板下拉框
+    function initTemplate() {
+        eui.use('form', function () {
+            var form = eui.form;
+            $.get("/template/list", function (result) {
+                if (result.code == 200) {
+                    var templateList = result.data;
+                    console.log(templateList);
+                    for (var i in templateList) {
+                        var selectHtml = '';
+                        var template = templateList[i];
+                        selectHtml += '<option value="' + template.id + '">' + template.templateName + '</option>';
+                        $('#template').append(selectHtml);
+                    }
+                    form.render('select');
+                } else {
+                    layer.msg("问卷类型初始化失败", {
+                        icon: 1,
+                        time: 1500
+                    });
+                }
+
+                form.on('select(template)', function (data) {
+                    $('.sex').each(function (i,sexDate) {
+                        sexDate.checked=true;
+                    })
+                    $('input[name="age"]').each(function (i,ageDate) {
+
+                    })
+                    for(var j in templateList){
+                        var template = templateList[j];
+                        if(data.value == template.id){
+                            settingCheck(template.sex,'sex');
+                            settingCheck(template.age,'age');
+                            form.render();
+                        }
+                    }
+                })
+            })
+        })
+    }
+
+    /**
+     * 设置checkbox
+     */
+    function settingCheck(params,name) {
+        var arr=params.split(',');
+        $('input[name="'+name+'"]').each(function (i,data) {
+            var a = false;
+            for(var k in arr){
+                var age = arr[k];
+                if(age == data.value){
+                    a=true;
+                    continue;
+                }
+            }
+            if(!a){
+                data.checked=false;
+            }
         })
     }
     //校验数字是正数还是负数
@@ -1130,6 +1141,36 @@
     // 收藏模版
     $(".collect").click(function () {
         $(this).toggleClass("collectIn");
+        var sexArray = new Array();
+        $(".sex:checked").each(function (i) {
+            var sex = $(this).parent().find("input[name='sex']").val();
+            sexArray[i] = sex;
+        });
+        var sexIds = sexArray.join(",");
+
+        var typeArray = new Array();
+        $('input[name="type"]:checked').each(function (i) {
+            var type = $(this).parent().find("input[name='type']").val();
+            typeArray[i] = type;
+        })
+        var typeIds = typeArray.join(",");
+
+        var ageArray = new Array();
+        $('input[name="age"]:checked').each(function (i) {
+            var age = $(this).parent().find("input[name='age']").val();
+            ageArray[i] = age;
+        })
+        var ageIds = ageArray.join(",");
+        var parameter = {
+            questionType: typeIds,
+            sex: sexIds,
+            age: ageIds,
+            religion: beliefIds,
+            marriage: statusIds
+        }
+        $.post("/template/add", {json: JSON.stringify(parameter)}, function (result) {
+            console.log(result)
+        })
     })
     // 左侧宽度
     var carouselHeight = $(window).height() - 270;

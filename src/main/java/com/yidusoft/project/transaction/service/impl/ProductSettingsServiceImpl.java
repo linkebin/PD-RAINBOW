@@ -53,8 +53,8 @@ public class ProductSettingsServiceImpl extends AbstractService<ProductSettings>
     }
 
     @Override
-    public List<ProductSettings> getProductByTime() {
-        return productSettingsMapper.getProductByTime();
+    public List<ProductSettings> getProductByTime(ProductSettings productSettings) {
+        return productSettingsMapper.getProductByTime(productSettings);
     }
 
     @Override

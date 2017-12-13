@@ -70,8 +70,8 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
     }
 
     @Override
-    public List<VisitorRegister> findVitorByCreator(String creator) {
-        return visitorRegisterMapper.findVitorByCreator(creator);
+    public List<VisitorRegister> findVitorByCreator(Map map) {
+        return visitorRegisterMapper.findVitorByCreator(map);
     }
 
     /**
@@ -104,14 +104,14 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
     @Override
     public Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String type) {
         List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex,type));
-        List<VisitorRegister> list = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(operationDate(startTime), operationDate(endTime), sex,type));
+        List<VisitorRegister> lastYearList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(operationDate(startTime), operationDate(endTime), sex,type));
         Calendar rightNow = Calendar.getInstance();
         rightNow.setTime(startTime);
         rightNow.add(Calendar.DATE, -1);
         Date date = rightNow.getTime();
         List<VisitorRegister> lastPhase = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(lastPhaseDate(startTime,endTime), date, sex,type));
         List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
-        List<VisitorRegister> LastYearList = getList(maritalStatus,belief,questionName,list);
+        List<VisitorRegister> LastYearList = getList(maritalStatus,belief,questionName,lastYearList);
         List<VisitorRegister> lastPhaseList = getList(maritalStatus,belief,questionName,lastPhase);
         Map map = new HashMap();
         map.put("thisYearList",thisYearList);
@@ -129,6 +129,7 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      */
     public Map getMap(Date startTime, Date endTime, String sex,String type) {
         Map map = new HashMap<>();
+        map.put("userId",Security.getUserId());
         map.put("startTime", startTime);
         map.put("endTime", endTime);
         map.put("sex", sex);
