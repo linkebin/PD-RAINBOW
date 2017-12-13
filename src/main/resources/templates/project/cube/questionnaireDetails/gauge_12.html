@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -227,14 +229,14 @@ function  getTable(list) {
         var json=eval("("+dataResult+")");
            totalScore=json.totalScore;
 
-            context+="<p class='eui-margin10'>您的得分：</p>";
-            context+="<p class='eui-margin10'>1、正性事件:"+json.goodDeed+"件</p>";
-            context+="<p class='eui-margin10'>2、负性事件:"+json.badThing+"件</p>";
-            context+="<p class='eui-margin10'>3、生活事件总刺激量："+json.dimension2+"件</p>";
-            context+="<p class='eui-margin10'>4、长期性事件："+json.dimension1+"件</p>";
-            context+="<p class='eui-margin10'>5、精神影响程度在中度以上（包括中度）:"+json.dimension3+"件</p>";
-            context+="<p class='eui-margin10'>6、影响持续时间在半年以上："+json.dimension4+"件</p>";
-            context+="<p class='eui-margin10 eui-lineHeight24'> LES的总分越高反映个体承受的精神压力越大，95%的正常人1年内的LES总分不超过20分，99%的正常人1年内的LES总分不超过32分。如分数过高，需寻求专业人士帮助</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>您的得分：</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>1、正性事件:"+json.goodDeed+"件</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>2、负性事件:"+json.badThing+"件</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>3、生活事件总刺激量："+json.dimension2+"件</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>4、长期性事件："+json.dimension1+"件</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>5、精神影响程度在中度以上（包括中度）:"+json.dimension3+"件</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue eui-marginB10'>6、影响持续时间在半年以上："+json.dimension4+"件</p>";
+            context+="<p class='eui-lineHeight24'> LES的总分越高反映个体承受的精神压力越大，95%的正常人1年内的LES总分不超过20分，99%的正常人1年内的LES总分不超过32分。如分数过高，需寻求专业人士帮助</p>";
         var table1="";
         for(var k in json.goodDeedMap){
             table1+="<tr><td>"+k+"</td><td>"+json.goodDeedMap[k]+"</td></tr>";

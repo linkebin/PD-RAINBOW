@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -197,11 +199,11 @@ function  getTable(list) {
     if(dataResult!=null && dataResult!=""){
         var json=eval("("+dataResult+")");
            totalScore=json.totalScore;
-            context+="<p class='eui-margin10'>标准分:"+json.standardScore+"分</p>";
-            context+="<p class='eui-margin10'>无焦虑：标准分 ＜ 50分</p>";
-            context+="<p class='eui-margin10'>轻度焦虑：标准分 50-59分</p>";
-            context+="<p class='eui-margin10'>中度焦虑：标准分 60-69分</p>";
-            context+="<p class='eui-margin10'>重度焦虑：标准分 70分及以上</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue eui-marginB10'>标准分:"+json.standardScore+"分</p>";
+            context+="<p class='eui-lineHeight24'>无焦虑：标准分 ＜ 50分</p>";
+            context+="<p class='eui-lineHeight24'>轻度焦虑：标准分 50-59分</p>";
+            context+="<p class='eui-lineHeight24'>中度焦虑：标准分 60-69分</p>";
+            context+="<p class='eui-lineHeight24'>重度焦虑：标准分 70分及以上</p>";
     }
 
     $("#main2").append(context);

@@ -762,15 +762,20 @@ body .eui-layer-title{
 
 /* 2017.11.29  */
 
-#dataResult .eui-table tr:last-child{
+.zxsResult .eui-table tr:last-child{
     background: #f4f9fd;
 }
-#dataResult .eui-table tr:last-child td{
+.zxsResult .eui-table tr:last-child td{
     color: #1e9eff;
     font-weight: 800;
 }
-#dataResult .eui-table tr:last-child:hover{
+.zxsResult .eui-table tr:last-child:hover{
     background: #f4f9fd;
+}
+.seResult .resultIn{
+    color: #1e9eff;
+    font-weight: 800;
+    text-align: center;
 }
 
 .classify .eui-colla-content p{
@@ -1014,7 +1019,7 @@ body .eui-layer-title{
     border-bottom: 1px solid #e2e2e2;
 }
 
-
+/* 12.13 */
 
 
 

@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -56,9 +58,6 @@
             <div class="eui-row dataCharts">
                 <div class="eui-col-md6">
                     <div   style="width: 100%;height:320px;" >
-                        <div style="width: 100%;height:30px;">
-
-                        </div>
                         <div id="main2" style="">
 
                         </div>
@@ -209,17 +208,18 @@
             totalScore=json.totalScore;
             console.log(totalScore + "====");
             $("#totalScore").text(totalScore);
-            context+="<p class='eui-margin10'>匹兹堡睡眠质量指数（PSQI）的总分区间为0~21分，我国以“PSQI>7分”作为成人睡眠质量问题的参考值，且得分越高表示睡眠质量越差。：</p>";
 
-            context+="<p class='eui-margin10'>您的得分：</p>";
-            context+="<p class='eui-margin10'>1、	睡眠质量："+json.sleepQuan+"分</p>";
-            context+="<p class='eui-margin10'>2、	入睡时间："+json.fallSleepTime+"分</p>";
-            context+="<p class='eui-margin10'>3、	睡眠时间："+json.sleepTime+"分</p>";
-            context+="<p class='eui-margin10'>4、	睡眠效率："+json.sleepEfficiency+"分</p>";
-           context+="<p class='eui-margin10'>5、	睡眠障碍："+json.dyssomnia+"分</p>";
-            context+="<p class='eui-margin10'>6、	催眠药物："+json.sodiumAmytal+"分</p>";
-            context+="<p class='eui-margin10'>7、	日间功能障碍："+json.daytimeDysfunction+"分</p>";
-            context+="<p class='eui-margin10'>8、	PSQI总分："+totalScore+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>您的得分：</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>1、	睡眠质量："+json.sleepQuan+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>2、	入睡时间："+json.fallSleepTime+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>3、	睡眠时间："+json.sleepTime+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>4、	睡眠效率："+json.sleepEfficiency+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>5、	睡眠障碍："+json.dyssomnia+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>6、	催眠药物："+json.sodiumAmytal+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>7、	日间功能障碍："+json.daytimeDysfunction+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue eui-marginB10'>8、	PSQI总分："+totalScore+"分</p>";
+
+            context+="<p class='eui-lineHeight24'>匹兹堡睡眠质量指数（PSQI）的总分区间为0~21分，我国以“PSQI>7分”作为成人睡眠质量问题的参考值，且得分越高表示睡眠质量越差。</p>";
 
         }
 

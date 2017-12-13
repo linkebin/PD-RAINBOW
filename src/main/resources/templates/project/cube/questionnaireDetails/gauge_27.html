@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -35,14 +37,6 @@
                     </p>
                 </div>
                 <div class="eui-col-md7">
-                    <!-- <p class="eui-marginB10">
-                         <span class="eui-color-gray3">结果：</span>
-                         <span class="eui-color-blue">轻度焦虑</span>
-                     </p>
-                     <p class="eui-marginB10">
-                         <span class="eui-color-gray3">标准分：</span>
-                         <span class="eui-color-blue">55.5</span>
-                     </p>-->
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">总分：</span>
                         <span id="totalScore"></span>
@@ -198,17 +192,17 @@
         if(dataResult!=null && dataResult!=""){
             var json=eval("("+dataResult+")");
             totalScore=json.totalScore;
+            context+="<p class='eui-lineHeight24 eui-color-blue'>您的得分：</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>1、	对自杀行为的态度："+json.f1+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>2、	对自杀者的态度："+json.f2+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>3、	对自杀者家属的态度："+json.f3+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue eui-marginB10'>4、	对安乐死的态度："+json.f4+"分</p>";
 
-            context+="<p class='eui-margin10'>自杀态度问卷（SAQ）参考划界分：</p>";
-            context+="<p class='eui-margin10'>分值≤2.5分，为对自杀持肯定、认定、理解和宽容的态度；</p>";
-            context+="<p class='eui-margin10'>分值在2．5~3.5分，为矛盾或中立态度；</p>";
-            context+="<p class='eui-margin10'>分值≥3.5分，为对自杀持反对、否定、排斥和歧视态度</p>";
+            context+="<p class='eui-lineHeight24'>自杀态度问卷（SAQ）参考划界分：</p>";
+            context+="<p class='eui-lineHeight24'>分值≤2.5分，为对自杀持肯定、认定、理解和宽容的态度；</p>";
+            context+="<p class='eui-lineHeight24'>分值在2．5~3.5分，为矛盾或中立态度；</p>";
+            context+="<p class='eui-lineHeight24'>分值≥3.5分，为对自杀持反对、否定、排斥和歧视态度</p>";
 
-            context+="<p class='eui-margin10'>您的得分：</p>";
-            context+="<p class='eui-margin10'>1、	对自杀行为的态度："+json.f1+"分</p>";
-            context+="<p class='eui-margin10'>2、	对自杀者的态度："+json.f2+"分</p>";
-            context+="<p class='eui-margin10'>3、	对自杀者家属的态度："+json.f3+"分</p>";
-            context+="<p class='eui-margin10'>4、	对安乐死的态度："+json.f4+"分</p>";
 
         }
 
