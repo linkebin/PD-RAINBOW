@@ -8,6 +8,7 @@ import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.core.AbstractService;
 
 import com.yidusoft.project.system.service.SecUserService;
+import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.TimeStampDate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Condition;
 
 
@@ -33,6 +31,64 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
 
     @Resource
     private SecUserService secUserService;
+
+    @Override
+    public List<Map<String, Object>> findChannelListAndTypeAndParameter(Map<String, Object> map) {
+        return channelManageMapper.findChannelListAndTypeAndParameter(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> findAreaChannelTree() {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("type","ProvincesGrouped");
+
+        List<Map<String, Object>> data = new ArrayList<Map<String, Object>>();
+        Map<String,Object> leveL0 = new HashMap<String,Object>();
+        leveL0.put("id", 0);
+        leveL0.put("name","全部");
+        leveL0.put("pid","xx");
+        leveL0.put("level",0);
+        data.add(leveL0);
+
+       List<Map<String,Object>> provinces = channelManageMapper.findChannelListAndTypeAndParameter(map);
+       int count =1;
+       for(Map<String,Object> m :provinces){
+           //第1级省
+           Map<String,Object> leveL1 = new HashMap<String,Object>();
+           leveL1.put("id", "leveL1"+count);
+           leveL1.put("name",m.get("province"));
+           leveL1.put("pid",0);
+           leveL1.put("level",1);
+           data.add(leveL1);
+
+           map.put("type","cityList");
+           map.put("province",m.get("province").toString());
+           List<Map<String,Object>> citys = channelManageMapper.findChannelListAndTypeAndParameter(map);
+            int count2 = 1;
+           for(Map<String,Object> m2 :citys){
+               //第2级市
+               Map<String,Object> leveL2 = new HashMap<String,Object>();
+               leveL2.put("id","leveL1"+count+count2);
+               leveL2.put("name",m2.get("city"));
+               leveL2.put("pid",leveL1.get("id"));
+               leveL2.put("level",2);
+
+               //第3级渠道
+               Map<String,Object> leveL3 = new HashMap<String,Object>();
+               leveL3.put("id",m2.get("id_"));
+               leveL3.put("name",m2.get("channel_name"));
+               leveL3.put("pid",leveL2.get("id"));
+               leveL3.put("level",3);
+
+               data.add(leveL2);
+               data.add(leveL3);
+               count2++;
+           }
+           count++;
+       }
+
+        return data;
+    }
 
     @Override
     public List<ChannelManage> finndChannelByParameterList(ChannelManage channelManage) {

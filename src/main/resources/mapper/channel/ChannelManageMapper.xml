@@ -23,6 +23,30 @@
 
   </resultMap>
 
+  <select id="findChannelListAndTypeAndParameter" parameterType="java.util.Map" resultType="Map">
+        <if test="type == 'ProvincesGrouped'">
+          SELECT cm.province FROM channel_manage cm WHERE cm.`status`=2
+          GROUP BY cm.province
+        </if>
+
+      <if test="type == 'cityList'">
+        SELECT cm.id_,cm.channel_name,cm.province,cm.city FROM channel_manage cm WHERE cm.`status`=2
+          <if test="province!='' and province!=null">
+              AND cm.province=#{province}
+          </if>
+
+          <if test="city!='' and city!=null">
+              AND cm.city=#{city}
+          </if>
+
+          <if test="id_!='' and id_!=null">
+              AND cm.id_=#{id_}
+          </if>
+
+
+      </if>
+  </select>
+
   <select id="finndChannelNotInIdAndParameter"  resultMap="BaseResultMap">
       SELECT * FROM channel_manage cm WHERE cm.deleted=0
 

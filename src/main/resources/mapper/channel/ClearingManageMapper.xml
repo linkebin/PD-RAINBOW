@@ -15,6 +15,28 @@
     <result column="status" jdbcType="INTEGER" property="status" />
   </resultMap>
 
+    <update id="updateBatchStatus">
+        UPDATE clearing_manage
+        SET status=2
+        <if test="null != ids">
+            WHERE clear_id IN
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <select id="findYearMonthlyCommissions" resultType="Map">
+        SELECT DATE_FORMAT(cm.create_time, '%Y-%m') create_time, sum(cm.brokerage) brokerage
+        FROM `clearing_manage` cm WHERE cm.`status`=1
+          GROUP BY
+            DATE_FORMAT(cm.create_time, '%Y-%m')
+    </select>
+
+    <select id="findYearMonthLikeIds" parameterType="java.lang.String"  resultType="java.lang.String">
+        SELECT clear_id FROM clearing_manage WHERE `status`=1 AND create_time LIKE '%${_parameter}%'
+    </select>
+
     <select id="findOrderClearingByChannelCounselorId"  resultType="Map">
     SELECT b.* FROM (
         SELECT oo.ID_,oo.order_code,oo.order_money,oo.clearing_status,oo.creator consultant_name,oo.user_id,oo.payment_time,

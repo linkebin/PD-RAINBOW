@@ -9,6 +9,8 @@ import java.util.Map;
 
 public interface ChannelManageMapper extends Mapper<ChannelManage> {
 
+    List<Map<String,Object>> findChannelListAndTypeAndParameter(Map<String,Object> map);
+
     /**
      * 根据参数查询渠道列表
      * @param channelManage

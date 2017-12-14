@@ -13,6 +13,10 @@ import java.util.Map;
  */
 public interface ChannelManageService extends Service<ChannelManage> {
 
+    List<Map<String,Object>> findChannelListAndTypeAndParameter(Map<String,Object> map);
+    //区域渠道树
+    List<Map<String,Object>> findAreaChannelTree();
+
     /**
      * 根据参数查询渠道列表
      * @param channelManage
