@@ -82,42 +82,10 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @return
      */
     @Override
-    /*public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String name,String province,String city) {
-        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex, name, province,city));
-        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
+    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief) {
+        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex));
+        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,reslutList);
         return ResultGenerator.genSuccessResult(thisYearList);
-    }*/
-    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName) {
-        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex,""));
-        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
-        return ResultGenerator.genSuccessResult(thisYearList);
-    }
-
-    /**
-     * 获取问卷类型
-     * @param startTime
-     * @param endTime
-     * @param sex
-     * @param maritalStatus
-     * @return
-     */
-    @Override
-    public Result getQuestion(Date startTime, Date endTime, String sex, String maritalStatus, String belief,String questionName,String type) {
-        List<VisitorRegister> reslutList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(startTime, endTime, sex,type));
-        List<VisitorRegister> lastYearList = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(operationDate(startTime), operationDate(endTime), sex,type));
-        Calendar rightNow = Calendar.getInstance();
-        rightNow.setTime(startTime);
-        rightNow.add(Calendar.DATE, -1);
-        Date date = rightNow.getTime();
-        List<VisitorRegister> lastPhase = visitorRegisterMapper.acquisitionOfStatisticalAnalysis(getMap(lastPhaseDate(startTime,endTime), date, sex,type));
-        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,questionName,reslutList);
-        List<VisitorRegister> LastYearList = getList(maritalStatus,belief,questionName,lastYearList);
-        List<VisitorRegister> lastPhaseList = getList(maritalStatus,belief,questionName,lastPhase);
-        Map map = new HashMap();
-        map.put("thisYearList",thisYearList);
-        map.put("LastYearList",LastYearList);
-        map.put("lastPhaseList",lastPhaseList);
-        return ResultGenerator.genSuccessResult(map);
     }
 
     /**
@@ -127,13 +95,12 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @param endTime
      * @return
      */
-    public Map getMap(Date startTime, Date endTime, String sex,String type) {
+    public Map getMap(Date startTime, Date endTime, String sex) {
         Map map = new HashMap<>();
         map.put("userId",Security.getUserId());
         map.put("startTime", startTime);
         map.put("endTime", endTime);
         map.put("sex", sex);
-        map.put("type", type);
         return map;
     }
 
@@ -176,11 +143,10 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @param list
      * @return
      */
-    public List getList(String maritalStatus,String belief,String questionName,List<VisitorRegister> list){
+    public List getList(String maritalStatus,String belief,List<VisitorRegister> list){
         List thisYearList = new ArrayList<>();
         String status[] = maritalStatus.split(",");
         String bel[] = belief.split(",");
-        String typeName[] = questionName.split(",");
         for (VisitorRegister visitorRegister : list) {
             if(status.length>1){
                 for (String i : status) {
@@ -188,15 +154,7 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
                         if(bel.length>1){
                             for (String j : bel) {
                                 if (Integer.parseInt(j) == visitorRegister.getReligiousBelief()) {
-                                    if(typeName.length>1){
-                                        for (String name : typeName) {
-                                            if (name.equals(visitorRegister.getQuestionnaireName())) {
-                                                thisYearList.add(visitorRegister);
-                                            }
-                                        }
-                                    }else{
-                                        thisYearList.add(visitorRegister);
-                                    }
+                                    thisYearList.add(visitorRegister);
                                 }
                             }
                         }else{
@@ -207,20 +165,6 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
             }else if(bel.length>1){
                 for (String i : bel) {
                     if (Integer.parseInt(i) == visitorRegister.getReligiousBelief()) {
-                        if(typeName.length>1){
-                            for (String name : typeName) {
-                                if (name.equals(visitorRegister.getQuestionnaireName())) {
-                                    thisYearList.add(visitorRegister);
-                                }
-                            }
-                        }else{
-                            thisYearList.add(visitorRegister);
-                        }
-                    }
-                }
-            } else if(typeName.length>1){
-                for (String name : typeName) {
-                    if (name.equals(visitorRegister.getQuestionnaireName())) {
                         thisYearList.add(visitorRegister);
                     }
                 }
