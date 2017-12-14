@@ -27,7 +27,7 @@
                 <ul class="eui-form eui-paddingB10 eui-paddingLR10 filter">
                     <li>
                         <div class="eui-form-item chartsTitle">
-                            <label class="eui-form-label eui-textAlignL">问卷类型</label>
+                            <label class="eui-form-label eui-textAlignL">来访目的</label>
                             <div class="eui-input-block eui-textAlignR eui-paddingR10">
                                 <input type="checkbox" e-skin="primary" title="" checked="">
                             </div>
@@ -236,7 +236,7 @@
                             <option value="2">选择时间</option>
                         </select>
                     </div>
-                    <div class="eui-col-md3 eui-marginL10"><span class="eui-btn eui-btn-normal">当前数据导出</span></div>
+                    <!--<div class="eui-col-md3 eui-marginL10"><span class="eui-btn eui-btn-normal">当前数据导出</span></div>-->
 
                     <div id="time">
                         <label class="eui-form-label">时间段：</label>
@@ -248,9 +248,9 @@
                 <div class="eui-row eui-marginT20">
                     <div class="eui-col-md1 eui-font18">区域分布</div>
                     <div class="eui-col-md4 eui-color-gray3 eui-marginT5 date"></div>
-                    <div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
+                    <!--<div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
                                                                  alt=""/> 导出
-                    </div>
+                    </div>-->
                     <div class="areal eui-col-md12 eui-padding5 eui-marginT10">
                         <div class="arealIn"></div>
                         <div class="eui-row eui-padding5">
@@ -280,11 +280,11 @@
                     </div>
                 </div>
                 <div class="eui-row eui-marginT20">
-                    <div class="eui-col-md1 eui-font18">问卷类型</div>
+                    <div class="eui-col-md1 eui-font18">来访目的</div>
                     <div class="eui-col-md4 eui-color-gray3 eui-marginT5 date"></div>
-                    <div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
+                    <!--<div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
                                                                  alt=""/> 导出
-                    </div>
+                    </div>-->
                     <div class="areal eui-col-md12 eui-padding5 eui-marginT10 eui-marginB10">
                         <div class="arealIn"></div>
                         <div class="eui-padding5 types">
@@ -299,10 +299,10 @@
                                 <thead>
                                 <tr>
                                     <th>排名</th>
-                                    <th>问卷类型名称</th>
-                                    <th>使用数量/占比</th>
-                                    <th>同比</th>
-                                    <th>环比</th>
+                                    <th>来访目的</th>
+                                    <th>来访次数/占比</th>
+                                    <!--<th>同比</th>
+                                    <th>环比</th>-->
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -314,9 +314,9 @@
                 <div class="eui-row eui-marginT20">
                     <div class="eui-col-md1 eui-font18">人群属性</div>
                     <div class="eui-col-md4 eui-color-gray3 eui-marginT5 date"></div>
-                    <div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
+                    <!--<div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
                                                                  alt=""/> 导出
-                    </div>
+                    </div>-->
                     <div class="areal eui-col-md12 eui-padding20 eui-marginT10 eui-marginB10">
                         <div class="eui-row eui-col-space30">
                             <div class="eui-col-md6">
@@ -325,12 +325,12 @@
                                     <div class="eui-col-md2 eui-paddingL10"><img
                                             src="/Styles/images/xymfImages/xymf/man.png" alt=""/></div>
                                     <div class="eui-col-md4">
-                                        <p class="eui-font22 chartsColor1 man">0人</p>
-                                        <p class="eui-font22 chartsColor1 manPercent">0%</p>
+                                        <p class="eui-font22 chartsColor2 man">0人</p>
+                                        <p class="eui-font22 chartsColor2 manPercent">0%</p>
                                     </div>
                                     <div class="eui-col-md4 eui-textAlignR">
-                                        <p class="eui-font22 chartsColor2 women">0人</p>
-                                        <p class="eui-font22 chartsColor2 womenPercent">0%</p>
+                                        <p class="eui-font22 chartsColor1 women">0人</p>
+                                        <p class="eui-font22 chartsColor1 womenPercent">0%</p>
                                     </div>
                                     <div class="eui-col-md2 eui-textAlignR eui-paddingR10"><img
                                             src="/Styles/images/xymfImages/xymf/woman.png" alt=""/></div>
@@ -413,7 +413,6 @@
                     $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date(endDate).Format("yyyy-MM-dd"));
                 })
                 doSearch();
-                //设置问卷类型名称复选框
             }
         });
         $('#time').hide();
@@ -518,8 +517,7 @@
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
-                belief: beliefIds,
-                questionName: typeIds
+                belief: beliefIds
             }, function (result) {
                 console.log("基本信息");
                 console.log(result);
@@ -617,9 +615,9 @@
                     }
                     ageList(registerList);//计算年龄分布
                     marry(marryData);//初始化婚姻状况
-                    $('.man').text(manSum);
+                    $('.man').text(manSum+"人");
                     $('.manPercent').text(manPercent);
-                    $('.women').text(womenSum);
+                    $('.women').text(womenSum+"人");
                     $('.womenPercent').text(womenPercent);
                     var i = 0
                     $('#sex').html("");
@@ -666,40 +664,6 @@
                     typeSum++;//表示刷新数据次数+1
                     for (var j in thisYearList) {
                         var thisYear = thisYearList[j];
-                        console.log(thisYear);
-                        var tongbi = '--';//同比
-                        var mom = '--';//环比
-                        var up = 'up';
-                        var down = 'up';
-                        for (var k in lastPhaseList) {
-                            var lastPhase = lastPhaseList[k];
-                            console.log(lastPhase)
-                            if (thisYear.id == lastPhase.id) {
-                                if (lastPhase.count != 0) {
-                                    mom = parseInt(((thisYear.count - lastPhase.count) / lastPhase.count) * 100) + '%';
-                                    if (!judgeSign(thisYear.count - lastPhase.count)) {//如果为负数，则为下降率
-                                        down = 'down';
-                                    } else if (lastYear.count < 0) {
-                                        mom = thisYear.count - lastPhase.count
-                                    }
-                                }
-                                continue;
-                            }
-                        }
-                        for (var y in lastYearList) {
-                            var lastYear = lastYearList[y];
-                            if (thisYear.id == lastYear.id) {
-                                if (lastYear.count > 0) {
-                                    tongbi = parseInt(((thisYear.count - lastYear.count) / lastYear.count) * 100) + '%';
-                                    if (!judgeSign(thisYear.count - lastYear.count)) {//如果为负数，则为下降率
-                                        up = 'down';
-                                    }
-                                } else if (lastYear.count < 0) {
-                                    tongbi = thisYear.count - lastYear.count
-                                }
-                                continue;
-                            }
-                        }
                         var progressBar = (thisYear.count / countSum) * 100;
                         progressBar = parseInt(progressBar) + '%';
                         var tableHtml = '';
@@ -712,8 +676,8 @@
                                 '<div class="eui-progress-bar"></div>' +
                                 '</div>' +
                                 '</td>' +
-                                '<td>' + tongbi + '<img src="/Styles/images/xymfImages/xymf/' + up + '.png" alt=""/></td>' +
-                                '<td>' + mom + '<img src="/Styles/images/xymfImages/xymf/' + down + '.png" alt=""/></td>' +
+                                /*'<td>' + tongbi + '<img src="/Styles/images/xymfImages/xymf/' + up + '.png" alt=""/></td>' +
+                                '<td>' + mom + '<img src="/Styles/images/xymfImages/xymf/' + down + '.png" alt=""/></td>' +*/
                                 '</tr>';
                         $('tbody').append(tableHtml);
                         var name = 'question' + j.toString();
@@ -766,7 +730,7 @@
     }
 
 
-    //设置问卷类型名称复选框
+    /*//设置问卷类型名称复选框
     function initType() {
         eui.use('form', function () {
             var form = eui.form;
@@ -789,9 +753,9 @@
                 }
             })
         })
-    }
+    }*/
 
-    //初始化选择模板下拉框
+    /*//初始化选择模板下拉框
     function initTemplate() {
         eui.use('form', function () {
             var form = eui.form;
@@ -831,7 +795,7 @@
                 })
             })
         })
-    }
+    }*/
 
     /**
      * 设置checkbox
@@ -904,8 +868,7 @@
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
-                belief: beliefIds,
-                questionName: typeIds
+                belief: beliefIds
             }, function (result) {
                 /*console.log("省份：");
                  console.log(result);*/
@@ -1037,7 +1000,7 @@
                         index++;
                         count += hist[j]
                         tableHtml += '<li class="eui-marginB10">' +
-                                '<div class="eui-col-md3 eui-textAlignR eui-paddingR10">' + index + '、' + j + '</div>' +
+                                '<div class="eui-col-md3 eui-textAlignL eui-paddingR10">' + index + '、' + j + '</div>' +
                                 '<div class="eui-col-md9 eui-paddingT5">' +
                                 '<div class="eui-progress" e-filter="que' + index + '">' +
                                 '<div class="eui-progress-bar" ></div>' +
@@ -1077,8 +1040,7 @@
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
-                belief: beliefIds,
-                questionName: typeIds
+                belief: beliefIds
             }, function (result) {
                 /*console.log(result);*/
                 if (result.code == 200) {
@@ -1100,11 +1062,12 @@
                     });
                     var citySum = 0;//城市的总数
                     for (var j in cityObj) {
+                        var thisCount = cityObj[j];
                         index++;
                         citySum += cityObj[j];
                         tableHtml += '<li class="eui-marginB10">' +
-                                '<div class="eui-col-md3 eui-textAlignR eui-paddingR10">' + index + '、' + j + '</div>' +
-                                '<div class="eui-col-md9 eui-paddingT5">' +
+                                '<div class="eui-col-md5 eui-textAlignL eui-paddingR10">' + index + '、' + j + '</div>' +
+                                '<div class="eui-col-md7 eui-paddingT5">' +
                                 '<div class="eui-progress" e-filter="que' + index + '">' +
                                 '<div class="eui-progress-bar" ></div>' +
                                 '</div>' +
@@ -1223,6 +1186,7 @@
             yAxis: {
                 position: 'right',
                 type: 'value',
+                minInterval : 1,
                 axisLine: {
                     show: false, // 是否显示坐标轴轴线。
                     lineStyle: {
@@ -1233,7 +1197,7 @@
                     show: false // 是否显示坐标轴刻度。
                 },
                 axisLabel: {
-                    formatter: '{value} %',
+                    formatter: '{value}人',
                     color: '#999999' // 标签文字颜色
                 },
                 splitLine: {
@@ -1267,7 +1231,7 @@
         // 指定图表的配置项和数据
         var option = {
             title: {
-                // text: '年龄分布',
+                // text: '学历分布',
                 textStyle: {
                     color: '#333'
                 }
@@ -1299,7 +1263,7 @@
                 }
             },
             series: [{
-                // name: '年龄分布',
+                 name: '学历分布',
                 areaStyle: {
                     normal: {
                         opacity: 0.6,
@@ -1395,6 +1359,7 @@
             yAxis: {
                 position: 'right',
                 type: 'value',
+                minInterval : 1,
                 axisLine: {
                     show: false, // 是否显示坐标轴轴线。
                     lineStyle: {
@@ -1405,7 +1370,7 @@
                     show: false // 是否显示坐标轴刻度。
                 },
                 axisLabel: {
-                    formatter: '{value} %',
+                    formatter: '{value}人',
                     color: '#999999' // 标签文字颜色
                 },
                 splitLine: {
@@ -1732,6 +1697,11 @@
     }
 
     function initProvince(provinceData) {
+        var value = [];
+        for(var i in provinceData){
+            var province = provinceData[i];
+            value.push(province.value);
+        }
         /*console.log(provinceData);*/
         //地图
         var myChart = echarts.init(document.getElementById('map'), 'macarons');
@@ -1857,7 +1827,7 @@
 
             visualMap: {
                 min: 0,
-                max: 100,
+                max: Math.max.apply(null, value),
                 left: 'left',
                 top: 'bottom',
                 text: ['高', '低'],
