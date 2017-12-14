@@ -38,7 +38,7 @@
                 <!--<div class="eui-col-md6 eui-font18">-->
                     <!--<i class='eui-icon eui-font24'>&#xe61d;</i> 问卷场景列表-->
                 <!--</div>-->
-                <div class="eui-col-md6 eui-textAlignR">
+                <div class="eui-col-md12 eui-textAlignR">
                     <a href="###" onclick="openTab()" class="eui-btn eui-btn-small userAdd">添加场景</a>
                     <a href="###" onclick="deleteQuestionnaireScene('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
@@ -73,17 +73,15 @@
 <!-- 左滑编辑开始 -->
 <div class="taskFiltrate">
 </div>
-<div class="filtrateIn">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAddTag">
-            <i class='eui-icon eui-font24'>&#xe642;</i> 添加场景
-        </div>
-        <div class="eui-col-md2 eui-textAlignR">
-            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
-        </div>
+<div class="" id="sceneAdd" style="display: none">
+    <div class="eui-row eui-padding10 ">
+        <!--<div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAddTag">-->
+            <!--<i class='eui-icon eui-font24'>&#xe642;</i> 添加场景-->
+        <!--</div>-->
+
     </div>
     <input type="hidden" id="sceneName"/>
-    <form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane"
+    <form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 "
           id="questionnaireSceneForm" onsubmit="return false;" style="display: block">
         <input type="hidden" name="id"/>
         <input type="hidden" name="createTime"/>
@@ -98,7 +96,7 @@
                 </div>
             </div>
         </div>
-        <div class="taskConfirm" onclick="addOrUpdateTag()"><span class="eui-btn" id="upOrAddbnt">确认</span></div>
+        <!--<div class="taskConfirm" onclick="addOrUpdateTag()"><span class="eui-btn" id="upOrAddbnt">确认</span></div>-->
 
     </form>
 </div>
@@ -152,7 +150,7 @@
 </script>
 
 <script type="text/javascript">
-
+var title = '';
     $(function () {
         doSearch();
     });
@@ -266,10 +264,44 @@
         //滑出菜单
 
         resetAddOrUpdateForm();
+//
+//        $(".taskFiltrate").show();
+//        $(".filtrateIn").animate({right: '0'}, 400);
+        if ($("[name='id']").val() == '') {
+            //addQuestionnaireScene();
+           title = '添加场景';
+        }else{
+            title = '修改场景';
+        }
+        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+            layer.open({
+                type: 1
+                ,id: ''
+                ,title: title
+                ,area: ['600px', '450px']
+                ,success: function(layero, index){
+                }
+                ,shade: 0
+                ,moveType: 0//拖拽模式，0或者1
+                ,maxmin: true
+                ,content:$('#sceneAdd')
+                ,btn: ['确定', '关闭']
+                ,yes: function(){
 
-        $(".taskFiltrate").show();
-        $(".filtrateIn").animate({right: '0'}, 400);
-        $("#upOrAddTag").text("添加场景");
+                    //得到设置返回的结果
+                    addOrUpdateTag();
+
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+                ,zIndex: layer.zIndex //重点1
+            });
+        });
+
+
 //        element.tabChange('menuFilter', id);
 //        $(".eui-show input[name='account']").removeAttr("disabled");
 
@@ -368,8 +400,8 @@
                 '<td>' + new Date(scene.createTime).Format('yyyy-MM-dd') + '</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick(' + "'edit','" + scene.id + '\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick(' + "'delete','" + scene.id + '\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑场景" onclick="itemclick(' + "'edit','" + scene.id + '\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除场景" onclick="itemclick(' + "'delete','" + scene.id + '\')"><i class="eui-icon">&#xe640;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';
@@ -491,9 +523,9 @@
                 var scene = result.data;
 
                 $("#upOrAddTag").text("修改场景");
-                $(".taskFiltrate").show();
-                $(".filtrateIn").animate({right: '0'}, 400);
-
+//                $(".taskFiltrate").show();
+//                $(".filtrateIn").animate({right: '0'}, 400);
+openTab();
                 $("[name='id']").val(scene.id);
                 $("[name='createTime']").val(format(scene.createTime));
                 $("[name='creator']").val(scene.creator);

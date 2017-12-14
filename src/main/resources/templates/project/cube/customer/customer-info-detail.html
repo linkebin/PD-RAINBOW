@@ -28,7 +28,7 @@
     <div class="eui-area xymf-width1000">
         <div class="visitorTitle eui-row">
             <div class="eui-col-md7"><img src="/Styles/images/xymfImages/cube.png" width="24" alt="">  个人信息卡</div>
-            <div class="eui-col-md5 eui-textAlignR"><span class="eui-btn eui-btn-normal eui-btn-small">打印</span></div>
+            <div class="eui-col-md5 eui-textAlignR"><span class="eui-btn eui-btn-normal eui-btn-small" onclick="printInfo()">打印</span></div>
         </div>
         <div class="eui-row eui-form eui-bg-white card eui-padding10">
             <div class="eui-font16 eui-paddingB10 eui-borderB eui-marginTB10">
@@ -491,5 +491,10 @@
         var infos = idCardNoUtil.getBirthDaySexAge(updateObj.idCard);
         $("#age").html(infos.age);
     });
+    
+    //打印
+    function printInfo() {
+        window.print();
+    }
 </script>
 </html>

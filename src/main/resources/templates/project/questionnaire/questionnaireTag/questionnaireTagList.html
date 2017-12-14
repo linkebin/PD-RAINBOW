@@ -38,7 +38,7 @@
                 <!--<div class="eui-col-md6 eui-font18">-->
                     <!--<i class='eui-icon eui-font24'>&#xe61d;</i> 问卷标签列表-->
                 <!--</div>-->
-                <div class="eui-col-md6 eui-textAlignR">
+                <div class="eui-col-md12 eui-textAlignR">
                     <a href="###" onclick="openTab()" class="eui-btn eui-btn-small userAdd">添加标签</a>
                     <a href="###" onclick="deleteQuestionnaireTag('')" class="eui-btn eui-btn-small">批量删除</a>
                 </div>
@@ -74,14 +74,14 @@
 <!-- 左滑编辑开始 -->
 <div class="taskFiltrate">
 </div>
-<div class="filtrateIn">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAddTag">
-            <i class='eui-icon eui-font24'>&#xe642;</i> 添加标签
-        </div>
-        <div class="eui-col-md2 eui-textAlignR">
-            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
-        </div>
+<div class="" id="tagAdd" style="display: none">
+    <div class="eui-row eui-padding10 ">
+        <!--<div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAddTag">-->
+            <!--<i class='eui-icon eui-font24'>&#xe642;</i> 添加标签-->
+        <!--</div>-->
+        <!--<div class="eui-col-md2 eui-textAlignR">-->
+            <!--<i class='eui-icon eui-font24 taskClose'>&#x1006;</i>-->
+        <!--</div>-->
     </div>
 
     <form class="eui-form eui-marginL10 eui-paddingL10 eui-marginT10 eui-paddingR10 eui-form-pane"
@@ -110,7 +110,7 @@
                 </div>
             </div>
         </div>
-        <div class="taskConfirm" onclick="addOrUpdateTag()"><span class="eui-btn" id="upOrAddbnt">确认</span></div>
+        <!--<div class="taskConfirm" onclick="addOrUpdateTag()"><span class="eui-btn" id="upOrAddbnt">确认</span></div>-->
 
     </form>
 </div>
@@ -271,7 +271,17 @@
            // addQuestionnaireTag();
             checkForAddQuestionnaireTag();
         }else{
-            updateTag();
+            var tagName = trim($("[name='tagName']").val());
+            if( tagName == ''){
+                layer.msg('请填写标签名称！',{
+                    time: 2000
+                });
+                return;
+            }
+
+            //判断标签是否重复
+            var tagName = $("[name='tagName']").val();
+                    updateTag();
         }
     }
 
@@ -380,8 +390,8 @@
                 '<td>' + new Date(question.createTime).Format('yyyy-MM-dd') + '</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑用户" onclick="itemclick(' + "'edit','" + question.id + '\')"><i class="eui-icon">&#xe642;</i></button> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除用户" onclick="itemclick(' + "'delete','" + question.id + '\')"><i class="eui-icon">&#xe640;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="编辑标签" onclick="itemclick(' + "'edit','" + question.id + '\')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除标签" onclick="itemclick(' + "'delete','" + question.id + '\')"><i class="eui-icon">&#xe640;</i></button> ' +
                 '</div>' +
                 '</td>' +
                 '</tr>';
@@ -407,8 +417,36 @@
         resetAddOrUpdateForm();
 
         //滑出菜单
-        $(".taskFiltrate").show();
-        $(".filtrateIn").animate({right: '0'}, 400);
+//        $(".taskFiltrate").show();
+//        $(".filtrateIn").animate({right: '0'}, 400);
+
+        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+            var $ = eui.jquery,
+                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+            layer.open({
+                type: 1
+                ,id: ''
+                ,title: '添加标签'
+                ,area: ['600px', '450px']
+                ,success: function(layero, index){
+                }
+                ,shade: 0
+                ,moveType: 0//拖拽模式，0或者1
+                ,maxmin: true
+                ,content:$('#tagAdd')
+                ,btn: ['确定', '关闭']
+                ,yes: function(){
+
+                    //得到设置返回的结果
+                    addOrUpdateTag();
+                }
+                ,btn2: function(){
+                    layer.closeAll();
+                }
+                ,zIndex: layer.zIndex //重点1
+            });
+        });
+
         $("#upOrAddTag").text("添加标签");
 //        element.tabChange('menuFilter', id);
 //        $(".eui-show input[name='account']").removeAttr("disabled");
@@ -488,8 +526,36 @@
 
 
                $("#upOrAddTag").text("修改标签");
-               $(".taskFiltrate").show();
-               $(".filtrateIn").animate({right: '0'}, 400);
+//               $(".taskFiltrate").show();
+//               $(".filtrateIn").animate({right: '0'}, 400);
+
+
+               eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+                   var $ = eui.jquery,
+                       layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+                   layer.open({
+                       type: 1
+                       ,id: ''
+                       ,title: '修改标签'
+                       ,area: ['600px', '450px']
+                       ,success: function(layero, index){
+                       }
+                       ,shade: 0
+                       ,moveType: 0//拖拽模式，0或者1
+                       ,maxmin: true
+                       ,content:$('#tagAdd')
+                       ,btn: ['确定', '关闭']
+                       ,yes: function(){
+
+                           //得到设置返回的结果
+                           addOrUpdateTag();
+                       }
+                       ,btn2: function(){
+                           layer.closeAll();
+                       }
+                       ,zIndex: layer.zIndex //重点1
+                   });
+               });
 
 
                $("[name='id']").val(question.id);

@@ -19,8 +19,12 @@
 
 <div class="visitorContent" >
     <div class="eui-area xymf-width800 xymf-marginB60">
-        <div class="visitorTitle">
-            <span id="questionnaireName"></span>
+        <!--<div class="visitorTitle">-->
+            <!--<span id="questionnaireName"></span>-->
+        <!--</div>-->
+        <div class="visitorTitle eui-row">
+            <span class="eui-col-md7" id="questionnaireName"></span>
+            <div class="eui-col-md5 eui-textAlignR"><span class="eui-btn eui-btn-normal eui-btn-small" onclick="questionnairePrint()">打印</span></div>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
             <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
@@ -73,7 +77,7 @@
                         <td>11~16</td>
                         <td>8~10</td>
                         <td>5~7</td>
-                        <td class="resultIn">11</td>
+                        <td class="resultIn" id="result1">11</td>
                     </tr>
                     <tr>
                         <td>思维维度</td>
@@ -82,7 +86,7 @@
                         <td>13~18</td>
                         <td>9~12</td>
                         <td>5~8</td>
-                        <td class="resultIn">13</td>
+                        <td class="resultIn" id="result2">13</td>
                     </tr>
                     <tr>
                         <td>个性维度</td>
@@ -91,7 +95,7 @@
                         <td>12~17</td>
                         <td>8~11</td>
                         <td>5~7</td>
-                        <td class="resultIn">7</td>
+                        <td class="resultIn" id="result3">7</td>
                     </tr>
                     <tr>
                         <td>情绪维度</td>
@@ -100,7 +104,7 @@
                         <td>7~10</td>
                         <td>5~6</td>
                         <td>3~4</td>
-                        <td class="resultIn">6</td>
+                        <td class="resultIn" id="result4">6</td>
                     </tr>
                     <tr>
                         <td>意志行为</td>
@@ -109,7 +113,7 @@
                         <td>14~21</td>
                         <td>10~13</td>
                         <td>6~9</td>
-                        <td class="resultIn">12</td>
+                        <td class="resultIn" id="result5">120</td>
                     </tr>
                 </table>
             </div>
@@ -250,14 +254,18 @@ function  getTable(list) {
             factorScore.push(json.volitionalBehavior);
             factorScore.push(json.personalityCharacteristics);
 
-            context+='<div class="eui-font14 eui-form-item" >';
-            context+="<p>认知维度："+json.cognitiveDimension+"分</p> ";
-            context+="<p>思维维度："+json.thinkingDimension+"分</p> ";
-            context+="<p>情绪维度："+json.emotionDimension+"分</p> ";
-            context+="<p>意志行为："+json.volitionalBehavior+"分</p> ";
-            context+="<p>个性维度："+json.personalityCharacteristics+"分</p> ";
-            context+='</div>';
-
+//            context+='<div class="eui-font14 eui-form-item" >';
+//            context+="<p>认知维度："+json.cognitiveDimension+"分</p> ";
+//            context+="<p>思维维度："+json.thinkingDimension+"分</p> ";
+//            context+="<p>情绪维度："+json.emotionDimension+"分</p> ";
+//            context+="<p>意志行为："+json.volitionalBehavior+"分</p> ";
+//            context+="<p>个性维度："+json.personalityCharacteristics+"分</p> ";
+//            context+='</div>';
+        $('#result1').text(json.cognitiveDimension);
+        $('#result2').text(json.thinkingDimension);
+        $('#result3').text(json.emotionDimension);
+        $('#result4').text(json.volitionalBehavior);
+        $('#result5').text(json.personalityCharacteristics);
     }
 
     $("#dataResult").append(context);

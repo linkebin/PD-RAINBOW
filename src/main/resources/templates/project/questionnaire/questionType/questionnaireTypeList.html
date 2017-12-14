@@ -64,7 +64,7 @@
                 <!--<div class="eui-col-md6 eui-font18">-->
                     <!--<i class='eui-icon eui-font24'>&#xe61d;</i> 问卷分类列表-->
                 <!--</div>-->
-                <div class="eui-col-md6 eui-textAlignR">
+                <div class="eui-col-md12 eui-textAlignR">
                     <a href="###" class="eui-btn eui-btn-small" onclick="openTopTab()">添加顶层问卷类型</a>
                     <a href="###" class="eui-btn eui-btn-small" onclick="openTab()">添加普通问卷类型</a>
                     <a href="###" class="eui-btn eui-btn-small" onclick="deleteOrg('')">删除类型</a>
@@ -102,14 +102,14 @@
 <!-- 左滑编辑开始 -->
 <div class="taskFiltrate">
 </div>
-<div class="filtrateIn">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAddMenu">
-            <i class='eui-icon eui-font24'>&#xe642;</i> 修改类型
-        </div>
-        <div class="eui-col-md2 eui-textAlignR">
-            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
-        </div>
+<div class="" id="typeAdd" style="display: none">
+    <div class="eui-row eui-padding10">
+        <!--<div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAddMenu">-->
+            <!--<i class='eui-icon eui-font24'>&#xe642;</i> 修改类型-->
+        <!--</div>-->
+        <!--<div class="eui-col-md2 eui-textAlignR">-->
+            <!--<i class='eui-icon eui-font24 taskClose'>&#x1006;</i>-->
+        <!--</div>-->
     </div>
     <form class="eui-form menuForm eui-marginT10 eui-paddingR10" id="menuForm">
         <input type="hidden" name="creator" th:value="${session.userSession.userName}"/>
@@ -176,7 +176,7 @@
 
 
     </form>
-    <div class="taskConfirm" onclick="save()"><span class="eui-btn" id="upOrAddbnt">确认</span></div>
+    <!--<div class="taskConfirm" onclick="save()"><span class="eui-btn" id="upOrAddbnt">确认</span></div>-->
 </div>
 <!-- 左滑编辑结束 -->
 
@@ -309,6 +309,7 @@
                                 doSearch();
                                 resetForm();
                                 //itemclick('edit',result.data);
+                                layer.closeAll();
                             });
                         } else {
                             layer.msg(msg, {
@@ -336,6 +337,7 @@
                             icon: 1,
                             time: 2000
                         });
+                        layer.closeAll();
                         isUpdate = !isUpdate;
                         eui.use('element', function () {
                             var $ = eui.jquery
@@ -587,8 +589,8 @@
                 tableHtml += '<td>' + new Date(secMenu.createTime).Format('yyyy-MM-dd') + '</td>';
                 tableHtml += '<td>';
                 tableHtml += '<div class="eui-btn-group"> ';
-                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑菜单" onclick="itemclick(' + "'edit'," + "'" + secMenu.id + "','" + secMenu.questionnaireTypeName + "'" + ')"><i class="eui-icon">&#xe642;</i></button> ';
-                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除菜单" onclick="itemclick(' + "'delete'," + "'" + secMenu.id + "','" + secMenu.questionnaireTypeName + "'" + ')"><i class="eui-icon">&#xe640;</i></button> ';
+                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑类型" onclick="itemclick(' + "'edit'," + "'" + secMenu.id + "','" + secMenu.questionnaireTypeName + "'" + ')"><i class="eui-icon">&#xe642;</i></button> ';
+                tableHtml += '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除类型" onclick="itemclick(' + "'delete'," + "'" + secMenu.id + "','" + secMenu.questionnaireTypeName + "'" + ')"><i class="eui-icon">&#xe640;</i></button> ';
                 // '<button class="eui-btn eui-btn-primary eui-btn-small" title="添加菜单" onclick="itemclick('+"'add',"+"'"+secMenu.id+"','"+secMenu.menuName +"'"+')"><i class="eui-icon">&#xe654;</i></button> ' +
                 tableHtml += '</div>';
                 tableHtml += '</td>';
@@ -601,7 +603,7 @@
 
     //修改问卷类型
     function editType(id) {
-        var parentid;
+        var parentid = '';
         $.post("/questionnaire/type/findTypeInfo", {"id": id}, function (result) {
             eui.use('element', function () {
                 var $ = eui.jquery
@@ -628,20 +630,61 @@
 
                 var id = new Date().getTime();
                 $("#upOrAddMenu").text("修改类型");
-                $(".taskFiltrate").show();
-                $(".filtrateIn").animate({right: '0'}, 400);
+//                $(".taskFiltrate").show();
+//                $(".filtrateIn").animate({right: '0'}, 400);
 
                 element.tabChange('menuFilter', id);
                 $(".eui-show input[name='account']").removeAttr("disabled");
 
                 form.render();
                 $("#showParentNameText").show();
-                $("#parentId").val(result.data.pid);
-                parentid = result.data.pid;
-                getParentName(parentid);
-                $("#menuNames").val(result.data.questionnaireTypeName);
-                $("#menuId").val(result.data.id);
-                $("#menuCode").val(result.data.menus.questionnaireTypeCode);
+                if(result.code == 200){
+                    if(result.data != null){
+                        $("#parentId").val(result.data.pid);
+                        parentid = result.data.pid;
+                        console.log('parentid = ' + result.data.pid);
+                        getParentName(parentid);
+                        $("#menuNames").val(result.data.questionnaireTypeName);
+                        $("#menuId").val(result.data.id);
+                        $("#menuCode").val(result.data.questionnaireTypeCode);
+
+
+                        eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+                            var $ = eui.jquery,
+                                layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+                            layer.open({
+                                type: 1
+                                ,id: ''
+                                ,title: '修改类型'
+                                ,area: ['600px', '450px']
+                                ,success: function(layero, index){
+                                }
+                                ,shade: 0
+                                ,moveType: 0//拖拽模式，0或者1
+                                ,maxmin: true
+                                ,content:$('#typeAdd')
+                                ,btn: ['确定', '关闭']
+                                ,yes: function(){
+
+                                    //得到设置返回的结果
+                                    save();
+
+                                }
+                                ,btn2: function(){
+                                    layer.closeAll();
+                                    $("#parentNameText").val('');
+                                }
+                                ,zIndex: layer.zIndex //重点1
+                                ,cancel: function(index, layero){
+                                    layer.closeAll();
+                                    $("#parentNameText").val('');
+                                    return false;
+                                }
+                            });
+                        });
+                    }
+                }
+
 
 //                //打开方式
 //                var openType=result.data.menus.openType;
@@ -676,9 +719,12 @@
 
     function getParentName(parentid) {
         $.post("/questionnaire/type/findParentType", {"pid": parentid}, function (result) {
+            if (result.code == 200){
+                if(result.data != null){
+                    $("#parentNameText").val(result.data.questionnaireTypeName);
+                }
+            }
 
-
-            $("#parentNameText").val(result.data.questionnaireTypeName);
         });
     }
 
@@ -740,8 +786,38 @@
                 , element = eui.element, form = eui.form;
             var id = new Date().getTime();
             document.getElementById('menuForm').reset();
-            $(".taskFiltrate").show();
-            $(".filtrateIn").animate({right: '0'}, 400);
+//            $(".taskFiltrate").show();
+//            $(".filtrateIn").animate({right: '0'}, 400);
+
+
+            eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+                var $ = eui.jquery,
+                    layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+                layer.open({
+                    type: 1
+                    ,id: ''
+                    ,title: '添加顶层类型'
+                    ,area: ['600px', '450px']
+                    ,success: function(layero, index){
+                    }
+                    ,shade: 0
+                    ,moveType: 0//拖拽模式，0或者1
+                    ,maxmin: true
+                    ,content:$('#typeAdd')
+                    ,btn: ['确定', '关闭']
+                    ,yes: function(){
+
+                        //得到设置返回的结果
+                        save();
+
+                    }
+                    ,btn2: function(){
+                        layer.closeAll();
+                    }
+                    ,zIndex: layer.zIndex //重点1
+                });
+            });
+
             $('#upOrAddbnt').attr("disabled", false);
             element.tabChange('menuFilter', id);
             $(".eui-show input[name='account']").removeAttr("disabled");
@@ -779,8 +855,37 @@
                 var id = new Date().getTime();
 //                $("#id").val('');
                 document.getElementById('menuForm').reset();
-                $(".taskFiltrate").show();
-                $(".filtrateIn").animate({right: '0'}, 400);
+//                $(".taskFiltrate").show();
+//                $(".filtrateIn").animate({right: '0'}, 400);
+
+                eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
+                    var $ = eui.jquery,
+                        layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
+                    layer.open({
+                        type: 1
+                        ,id: ''
+                        ,title: '添加普通类型'
+                        ,area: ['600px', '450px']
+                        ,success: function(layero, index){
+                        }
+                        ,shade: 0
+                        ,moveType: 0//拖拽模式，0或者1
+                        ,maxmin: true
+                        ,content:$('#typeAdd')
+                        ,btn: ['确定', '关闭']
+                        ,yes: function(){
+
+                            //得到设置返回的结果
+                            save();
+
+                        }
+                        ,btn2: function(){
+                            layer.closeAll();
+                        }
+                        ,zIndex: layer.zIndex //重点1
+                    });
+                });
+
                 $("#parentNameText").val($("#parentName").val());
                 element.tabChange('menuFilter', id);
                 $(".eui-show input[name='account']").removeAttr("disabled");
