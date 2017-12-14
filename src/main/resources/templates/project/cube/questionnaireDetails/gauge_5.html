@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -35,14 +37,6 @@
                     </p>
                 </div>
                 <div class="eui-col-md7">
-                   <!-- <p class="eui-marginB10">
-                        <span class="eui-color-gray3">结果：</span>
-                        <span class="eui-color-blue">轻度焦虑</span>
-                    </p>
-                    <p class="eui-marginB10">
-                        <span class="eui-color-gray3">标准分：</span>
-                        <span class="eui-color-blue">55.5</span>
-                    </p>-->
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">总分：</span>
                         <span id="totalScore"></span>
@@ -61,8 +55,8 @@
                     <div id="main2"  style="width: 100%;height:320px;"></div>
                 </div>
             </div>
-            <div id="dataResult" class="eui-marginTB20">
-                <table>
+            <div id="dataResult" class="eui-marginTB20 seResult">
+                <table class="eui-table" e-even e-skin="nob" >
                     <tr>
                         <th>维度</th>
                         <th>高健康状态</th>
@@ -70,6 +64,7 @@
                         <th>一般健康状态</th>
                         <th>亚健康状态</th>
                         <th>疾病状态</th>
+                        <th class="resultIn">我的结果</th>
                     </tr>
                     <tr>
                         <td>认知维度</td>
@@ -78,6 +73,7 @@
                         <td>11~16</td>
                         <td>8~10</td>
                         <td>5~7</td>
+                        <td class="resultIn">11</td>
                     </tr>
                     <tr>
                         <td>思维维度</td>
@@ -86,6 +82,7 @@
                         <td>13~18</td>
                         <td>9~12</td>
                         <td>5~8</td>
+                        <td class="resultIn">13</td>
                     </tr>
                     <tr>
                         <td>个性维度</td>
@@ -94,6 +91,7 @@
                         <td>12~17</td>
                         <td>8~11</td>
                         <td>5~7</td>
+                        <td class="resultIn">7</td>
                     </tr>
                     <tr>
                         <td>情绪维度</td>
@@ -102,6 +100,7 @@
                         <td>7~10</td>
                         <td>5~6</td>
                         <td>3~4</td>
+                        <td class="resultIn">6</td>
                     </tr>
                     <tr>
                         <td>意志行为</td>
@@ -110,6 +109,7 @@
                         <td>14~21</td>
                         <td>10~13</td>
                         <td>6~9</td>
+                        <td class="resultIn">12</td>
                     </tr>
                 </table>
             </div>

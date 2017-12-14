@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -201,24 +203,25 @@
         if(dataResult!=null && dataResult!=""){
             var json=eval("("+dataResult+")");
             totalScore=json.totalScore;
+            context+="<p class='eui-lineHeight24 eui-color-blue'>您的得分：</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>1、	情绪症状"+json.emotionalSym+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>2、	品行问题："+json.conductPro+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>3、	多动："+json.hyperactivity+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>4、	同伴交往问题："+json.peerCommunicationProblem+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>5、	亲社会行为："+json.prosocialBehavior+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>6、	影响因子："+json.influence+"分</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue'>7、	问题困扰时间："+json.problemPlaguedTime+"</p>";
+            context+="<p class='eui-lineHeight24 eui-color-blue eui-marginB10'>8、	困难总分："+totalScore+"分</p>";
 
-            context+="<p class='eui-margin10'>情绪症状：正常 0~3， 边缘水平 4， 异常 5~10</p>";
-            context+="<p class='eui-margin10'>品行问题：正常 0~2， 边缘水平 3， 异常 4~10</p>";
-            context+="<p class='eui-margin10'>多动：正常 0~5， 边缘水平 6， 异常 7~10</p>";
-            context+="<p class='eui-margin10'>同伴交往问题：正常 0~2， 边缘水平 3， 异常 4~10</p>";
-            context+="<p class='eui-margin10'>亲社会行为：正常 10~6， 边缘水平 5， 异常 4~0</p>";
-            context+="<p class='eui-margin10'>影响因子：正常 0， 边缘水平 1， 异常 2或以上</p>";
-            context+="<p class='eui-margin10'>困难总分：正常 0~13， 边缘水平 14~16， 异常 17~40</p>";
+            context+="<p class='eui-lineHeight24'>长处和困难问卷(SDQ)家长版参考划界分：</p>";
+            context+="<p class='eui-lineHeight24'>情绪症状：正常 0~3， 边缘水平 4， 异常 5~10</p>";
+            context+="<p class='eui-lineHeight24'>品行问题：正常 0~2， 边缘水平 3， 异常 4~10</p>";
+            context+="<p class='eui-lineHeight24'>多动：正常 0~5， 边缘水平 6， 异常 7~10</p>";
+            context+="<p class='eui-lineHeight24'>同伴交往问题：正常 0~2， 边缘水平 3， 异常 4~10</p>";
+            context+="<p class='eui-lineHeight24'>亲社会行为：正常 10~6， 边缘水平 5， 异常 4~0</p>";
+            context+="<p class='eui-lineHeight24'>影响因子：正常 0， 边缘水平 1， 异常 2或以上</p>";
+            context+="<p class='eui-lineHeight24'>困难总分：正常 0~13， 边缘水平 14~16， 异常 17~40</p>";
 
-            context+="<p class='eui-margin10'>您的得分：</p>";
-            context+="<p class='eui-margin10'>1、	情绪症状"+json.emotionalSym+"分</p>";
-            context+="<p class='eui-margin10'>2、	品行问题："+json.conductPro+"分</p>";
-            context+="<p class='eui-margin10'>3、	多动："+json.hyperactivity+"分</p>";
-            context+="<p class='eui-margin10'>4、	同伴交往问题："+json.peerCommunicationProblem+"分</p>";
-            context+="<p class='eui-margin10'>5、	亲社会行为："+json.prosocialBehavior+"分</p>";
-            context+="<p class='eui-margin10'>6、	影响因子："+json.influence+"分</p>";
-            context+="<p class='eui-margin10'>7、	问题困扰时间："+json.problemPlaguedTime+"</p>";
-            context+="<p class='eui-margin10'>8、	困难总分："+totalScore+"分</p>";
 
         }
 

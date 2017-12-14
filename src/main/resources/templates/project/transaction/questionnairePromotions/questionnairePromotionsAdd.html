@@ -16,14 +16,6 @@
     </style>
 </head>
 <body>
-<div class="eui-row eui-padding10 eui-borderB">
-    <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAdd">
-        <i class='eui-icon eui-font24'>&#xe654;</i> 新建促销
-    </div>
-    <div class="eui-col-md2 eui-textAlignR">
-        <i class='eui-icon eui-font24 promotionClose'>&#x1006;</i>
-    </div>
-</div>
 <form class="eui-form eui-marginT10 eui-paddingR10" id="promotionsForm">
     <input type="hidden" name="id" id="questionId">
     <div class="eui-form-item">
@@ -201,9 +193,6 @@
                 },
                 submitHandler: function () {
                     var params = $("#promotionsForm").serializeObject();
-                    console.info("params");
-                    console.info(params);
-                    return ;
                     if (params.promotionsStart > params.promotionsEnd) {
                         return layer.msg('开始时间不能大于结束时间', {
                             icon: 2,

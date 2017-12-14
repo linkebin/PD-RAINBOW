@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -35,14 +37,6 @@
                     </p>
                 </div>
                 <div class="eui-col-md7">
-                   <!-- <p class="eui-marginB10">
-                        <span class="eui-color-gray3">结果：</span>
-                        <span class="eui-color-blue">轻度焦虑</span>
-                    </p>
-                    <p class="eui-marginB10">
-                        <span class="eui-color-gray3">标准分：</span>
-                        <span class="eui-color-blue">55.5</span>
-                    </p>-->
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">总分：</span>
                         <span id="totalScore"></span>
@@ -53,9 +47,10 @@
                     </p>
                 </div>
             </div>
+
             <div class="eui-row dataCharts">
                 <div class="eui-col-md6">
-                    <div>
+                    <div style="margin-top: 50px;">
                         <div id="main2">
 
                         </div>
@@ -199,11 +194,11 @@ function  getTable(list) {
         var json=eval("("+dataResult+")");
            totalScore=json.totalScore;
 
-            context+="<p class='eui-margin10'>积极应对标准分:"+json.positiveCopingStandard+"分</p>";
-            context+="<p class='eui-margin10'>消极应对标准分:"+json.negativeCopingFactorMap+"</p>";
-            context+="<p class='eui-margin10'>应对倾向"+json.copingTendency+"</p>";
-            context+="<p class='eui-margin10'>应对倾向值大于0，提示该被测者在应急状态时主要采用积极的应对方式</p>";
-            context+="<p class='eui-margin10'>应对倾向值小于0，提示该被测者在应激状态时主要采用消极的应对方式</p>";
+            context+="<p class='eui-lineHeight24'>积极应对标准分:"+json.positiveCopingStandard+"分</p>";
+            context+="<p class='eui-lineHeight24'>消极应对标准分:"+json.negativeCopingFactorMap+"</p>";
+            context+="<p class='eui-lineHeight24'>应对倾向"+json.copingTendency+"</p>";
+            context+="<p class='eui-lineHeight24'>应对倾向值大于0，提示该被测者在应急状态时主要采用积极的应对方式</p>";
+            context+="<p class='eui-lineHeight24'>应对倾向值小于0，提示该被测者在应激状态时主要采用消极的应对方式</p>";
     }
 
     $("#main2").append(context);

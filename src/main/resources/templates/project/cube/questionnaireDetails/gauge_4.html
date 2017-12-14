@@ -23,7 +23,9 @@
             <span id="questionnaireName"></span>
         </div>
         <div id="divSuccess" class="eui-bg-white eui-padding20 visitor">
-            <div class="eui-row eui-font16">
+            <div class="eui-font14 eui-padding10 eui-marginB10" style="background: #fcfaec;">该量表结果仅供咨询师参考，不能作为来访者诊断结果，最终解释权归平台所有。
+            </div>
+            <div class="eui-row eui-font14">
                 <div class="eui-col-md5">
                     <p class="eui-marginB10">
                         <span class="eui-color-gray3">客户名称：</span>
@@ -203,41 +205,41 @@ function  getTable(list) {
             factorScore.push(json.average.恐怖症状);
             factorScore.push(json.average.偏执症状);
             factorScore.push(json.average.精神症状);
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="<p>您的总分为"+json.score.总分+"分，总均分为"+json.score.总均分+"分，标准分为"+json.score.标准分+"分</p>";
             context+="<p>因子分：均分±标准差：</p> 躯体化分:"+json.score.躯体化分+"分，均分"+json.average.躯体化分+"分  （1.37±0.48）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="强迫症状:"+json.score.强迫症状+"分，均分"+json.average.强迫症状+"分  （1.62±0.58）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="人际敏感:"+json.score.人际敏感+"分，均分"+json.average.人际敏感+"分  （1.65±0.51）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="抑郁症状:"+json.score.抑郁症状+"分，均分"+json.average.抑郁症状+"分  （1.50±0.59）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="焦虑症状:"+json.score.焦虑症状+"分，均分"+json.average.焦虑症状+"分  （1.39±0.43）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="敌对症状:"+json.score.敌对症状+"分，均分"+json.average.敌对症状+"分  （1.48±0.56）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="恐怖症状:"+json.score.恐怖症状+"分，均分"+json.average.恐怖症状+"分  （1.23±0.41）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="偏执症状:"+json.score.偏执症状+"分，均分"+json.average.偏执症状+"分  （1.43±0.57）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24 eui-marginB10">';
             context+="精神症状:"+json.score.精神症状+"分，均分"+json.average.精神症状+"分  （1.29±0.42）";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="总分超过160分，单项均分超过2分，应做进一步检查；";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="标准分：＞ 200 分，有很明显的心理问题，可求助于心理咨询；";
             context+='</div>';
-            context+='<div class="eui-font14 eui-form-item" >';
+            context+='<div class="eui-font14 eui-lineHeight24">';
             context+="标准分：＞ 250 分，比较严重，需要做医学上的仔细检查，可能需要做针对性的心理治疗或在医生的指导下服药。";
             context+='</div>';
     }

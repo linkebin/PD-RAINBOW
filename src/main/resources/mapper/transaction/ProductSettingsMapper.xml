@@ -22,7 +22,7 @@
         <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime"/>
     </resultMap>
 
-    <select id="getProductAll" resultMap="BaseResultMap" parameterType="Integer">
+    <select id="getProductAll" resultMap="BaseResultMap">
         SELECT id_,product_code,product_total,product_price,creator,create_time,
         deleted,promotions_id,product_name,promotions_name,product_state,
         product_type,time_limit
@@ -33,18 +33,29 @@
         SELECT product_price FROM product_settings where deleted=0 AND product_total=1
     </select>
 
-    <select id="getProductByTime" resultMap="BaseResultMap">
+    <select id="getProductByTime" resultMap="BaseResultMap" parameterType="com.yidusoft.project.transaction.domain.ProductSettings">
         select  a.* FROM(
-	    select ps.* from product_settings ps,questionnaire_promotions qp
+        select ps.* from product_settings ps,questionnaire_promotions qp
         where ps.promotions_id=qp.ID_
         AND ps.deleted=0 AND qp.deleted=0
-		AND ps.product_state=0
+        AND ps.product_state=0
         AND NOW() > qp.promotions_end
         UNION
 
         SELECT * FROM product_settings WHERE deleted=0 AND promotions_id=''
-				AND product_total!=1 AND product_state=0
+        AND product_total!=1 AND product_state=0
         ) as a
+        <where>
+            <if test="productName!=null and productName!=''">
+                AND a. product_name LIKE '%${productName}%'
+            </if>
+            <if test="creator!=null and creator!=''">
+                AND a.creator LIKE '%${creator}%'
+            </if>
+            <if test="createTime!=null">
+                AND date(a.create_time)=date(#{createTime,jdbcType=TIMESTAMP})
+            </if>
+        </where>
     </select>
 
     <select id="getUpdateUnion" resultMap="BaseResultMap">

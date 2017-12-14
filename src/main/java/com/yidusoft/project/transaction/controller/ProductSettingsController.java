@@ -1,5 +1,6 @@
 package com.yidusoft.project.transaction.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
@@ -118,9 +119,10 @@ public class ProductSettingsController {
      * @return
      */
     @PostMapping("/listPage")
-    public Result listPage(int page, int size) {
+    public Result listPage(int page, int size, String params) {
+        ProductSettings productSettings = JSON.parseObject(params,ProductSettings.class);
         PageHelper.startPage(page, size);
-        List<ProductSettings> list = productSettingsService.getProductByTime();
+        List<ProductSettings> list = productSettingsService.getProductByTime(productSettings);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
