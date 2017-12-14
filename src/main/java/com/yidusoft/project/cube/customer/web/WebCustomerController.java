@@ -231,4 +231,9 @@ public class WebCustomerController {
     public String testCount(){
         return "project/cube/customer/count-test";
     }
+
+    @RequestMapping("/certificationData")
+    public String certificationData(){
+        return "project/cube/customer/costomer-certification-dna";
+    }
 }

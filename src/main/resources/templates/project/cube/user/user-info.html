@@ -150,7 +150,7 @@
 
                     <div style="width: 33%;float: right;" class="eui-paddingT20">
                         <p class="eui-marginB10">
-                            <button type="button" class="eui-btn eui-btn-small eui-btn-normal" id="upCertification"><i class="eui-icon">&#xe67c;</i>资质认证上传
+                            <button type="button" class="eui-btn eui-btn-small eui-btn-normal" onclick="openConversation()" id="upCertification"><i class="eui-icon">&#xe67c;</i>资质认证上传
                             </button>
                         </p>
                         <p class="eui-font12" id="userCertification">(请上传资质证明的相关材料,只支持图片上传,支持jpg,png)</p>
@@ -226,39 +226,51 @@
     /*<![CDATA[*/
     var updateObj  =[[${session.userSession}]];
     /*]]>*/
+    var iframeWin = '';
+function openConversation() {
+    var index = layer.open({
+        title: '阅读上传资质证明'
+        , type: 2
+        , area: ['500px', '350px']
+        ,closeBtn: 0
+        , content: '/web/customer/certificationData',
+        success: function(layero, index){
+            var body = layer.getChildFrame('body', index);
+             iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
 
-    eui.use('upload', function(){
-        var $ = eui.jquery
-            ,upload = eui.upload;
-
-
-        var uploadInst = upload.render({
-            elem: '#upCertification'
-            ,url: '/upload/uploadCertification'
-            ,before: function(obj){
-                //预读本地文件示例，不支持ie8
-                obj.preview(function(index, file, result){
-                    $('#certificationImg').attr('src', result); //图片链接（base64）
-                });
-            }
-            ,done: function(res){
-                //如果上传失败
-                if(res.code > 0){
-                    return layer.msg('上传失败');
-                }
-                //上传成功
-                layer.msg('上传成功');
-                $('#userCertification').text('(已上传资质证明的材料，审核中)');
-            }
-            ,error: function(){
-                //演示失败状态，并实现重传
-                layer.msg('上传出错');
-
-            }
-        });
-
+        }
     });
-
+}
+//    eui.use('upload', function(){
+//        var $ = eui.jquery
+//            ,upload = eui.upload;
+//
+//        var uploadInst = upload.render({
+//            elem: iframeWin.findElementById('r')
+//            ,url: '/upload/uploadCertification'
+//            ,before: function(obj){
+//                //预读本地文件示例，不支持ie8
+//                obj.preview(function(index, file, result){
+//                    $('#certificationImg').attr('src', result); //图片链接（base64）
+//                });
+//            }
+//            ,done: function(res){
+//                //如果上传失败
+//                if(res.code > 0){
+//                    return layer.msg('上传失败');
+//                }
+//                //上传成功
+//                layer.msg('上传成功');
+//                $('#userCertification').text('(已上传资质证明的材料，审核中)');
+//            }
+//            ,error: function(){
+//                //演示失败状态，并实现重传
+//                layer.msg('上传出错');
+//
+//            }
+//        });
+//
+//    });
     $.post("/upload/findCertification", {}, function (result) {
         if (result.code == 200) {
             if (result.data.certification != null && result.data.certificationStatus == 2 && result.data.certification != ''){
@@ -277,7 +289,32 @@
         }
     });
 
+function closeChildWindow() {
+    layer.closeAll();
+}
 
+function dealImg(result) {
+    $('#certificationImg').attr('src', result); //图片链接（base64）
+}
+function dealText() {
+    layer.msg('上传成功');
+    $('#userCertification').text('(已上传资质证明的材料，审核中)');
+}
+//function timeout() {
+//   sure = true;
+//   alert(1);
+//    eui.use('upload', function(){
+//        var $ = eui.jquery
+//            ,upload = eui.upload;
+//alert(2);
+//        if(sure){
+//            alert(3);
+//            layer.closeAll();
+//            $("#upCertification").trigger("click");
+//        }
+//    });
+//
+//}
 </script>
 
 <script>

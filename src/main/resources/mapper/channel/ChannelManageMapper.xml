@@ -213,6 +213,7 @@
     FROM sec_user s
     WHERE
     1=1
+    AND s.account_type = 1
     <if test="channelId !=''">
     AND  s.inviter_user IN
      ( SELECT su.ID_ FROM sec_user su WHERE su.DELETED=0 AND su.channel_id=#{channelId})
@@ -221,6 +222,7 @@
       AND  s.create_time  &gt; #{startTime}   AND    s.create_time  &lt; #{endTime}
     </if>
     AND  deleted=0
+
   </select>
 
   <select id="findChannelManageAll" resultMap="BaseResultMap">
@@ -241,6 +243,24 @@
     AND   city!=""
     AND  deleted=0   group by   city
   </select>
+
+  <!-- 查询市区的咨询师人数-->
+  <select id="findCustomerForCity" parameterType="Map" resultType="java.util.Map">
+    SELECT  city ,sum(1) as num
+    FROM sec_user s
+    WHERE 1=1
+    AND s.account_type = 1
+    <if test="channelId !='' ">
+      AND  s.inviter_user IN
+      ( SELECT su.ID_ FROM sec_user su WHERE su.DELETED=0 AND su.channel_id=#{channelId})
+    </if>
+    <if test="startTime !=null and  endTime !=null">
+      AND  s.create_time  BETWEEN  #{startTime}  AND  #{endTime}
+    </if>
+    AND   city!=""
+    AND  deleted=0   group by   city
+  </select>
+
   <select id="findChannelForTime" parameterType="Map" resultType="java.util.Map">
    SELECT t.times,sum(num) as num  FROM (
     SELECT   DATE_FORMAT(create_time,'%Y-%m') as times ,sum(1) as num

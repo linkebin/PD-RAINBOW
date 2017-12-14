@@ -73,4 +73,11 @@ public interface ChannelManageMapper extends Mapper<ChannelManage> {
      * @return
      */
     List<Map<String,Object>>  findChannelForTime(Map<String,Object> map);
+
+    /**
+     * 查询市区的咨询师人数
+     * @param maps
+     * @return
+     */
+    List<Map<String,Object>> findCustomerForCity(Map<String, Object> maps);
 }

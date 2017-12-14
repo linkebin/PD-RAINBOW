@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>认证说明</title>
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="eui-margin20 eui-lineHeight30 eui-font14">
+    <p class="eui-font24 eui-textAlignC eui-margin20">
+        <strong>认证说明</strong>
+    </p>
+    <p class="eui-textIndent">
+        <span>一、请上传真实有效的认证资料</span>
+    </p>
+    <p class="eui-textIndent">
+        <span>一、请上传真实有效的认证资料</span>    </p>
+    <p class="eui-textIndent">
+        <span>一、请上传真实有效的认证资料</span>    </p>
+    <p class="eui-textIndent">
+        <span>一、请上传真实有效的认证资料</span>    </p>
+    <p class="eui-marginT10 eui-textIndent">
+        <span>一、请上传真实有效的认证资料</span>    </p>
+</div>
+    <div style="margin-left: -50px;" class="agreement" id="code">
+        <button disabled="disabled" id="r"
+                class="eui-btn eui-btn-small eui-btn-normal eui-btn-disabled">确定<span id="d">(10s)</span>
+        </button>
+        <a onclick="closeTab1()" class="eui-btn eui-btn-primary eui-btn-small">取消</a>
+    </div>
+</body>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script>
+    var i;
+    var int = 10
+
+    window.onload=function () {
+        i = self.setInterval("countdown()", 1000);
+    };
+
+    eui.use(['upload', 'layer'], function(){
+        var $ = eui.jquery
+            , layer = eui.layer
+            ,upload = eui.upload;
+
+
+
+        var uploadInst = upload.render({
+            elem: '#r'
+            ,url: '/upload/uploadCertification'
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    parent.dealImg(result);
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    closeTab1();
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                layer.msg('上传成功');
+                parent.dealText();
+                closeTab1();
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                layer.msg('上传出错');
+
+            }
+        });
+
+    });
+
+    function countdown() {
+        document.getElementById("d").innerHTML ="("+ int + "s)";
+        int--;
+        if(int<0){
+            i=window.clearInterval(i)//结束
+            int = 10; //重新赋值
+            document.getElementById("d").innerHTML='';
+            document.getElementById("r").removeAttribute('disabled');
+            $("#r").removeClass('eui-btn-disabled')
+        }
+    }
+
+    function closeTab1() {
+        parent.closeChildWindow();
+    }
+</script>
+</html>

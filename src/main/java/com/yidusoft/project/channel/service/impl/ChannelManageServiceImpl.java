@@ -97,7 +97,7 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
         }
 
         //市区的人数
-        List<Map<String,Object>>   findChannelForCity=channelManageMapper.findChannelForCity(maps);
+        List<Map<String,Object>>   findChannelForCity=channelManageMapper.findCustomerForCity(maps);
        //查询渠道商下面所有的咨询师
         List<Map<String,Object>> consultantForChannel=channelManageMapper.findConsultantForChannel(maps);
 

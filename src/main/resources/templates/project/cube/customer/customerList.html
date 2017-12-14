@@ -228,6 +228,7 @@
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="edit('+id+')" title="编辑客户"><i class="eui-icon">&#xe642;</i></button>' +
                     ' <button class="eui-btn eui-btn-primary eui-btn-mini" onclick="log('+id+')" title="来访记录"><i class="eui-icon">&#xe60e;</i></button>' +
                     ' <button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteCustomer('+id+')" title="删除客户"><i class="eui-icon">&#xe640;</i></button> ' +
+                ' <button class="eui-btn eui-btn-primary eui-btn-mini" onclick="getCustomerAnalysis('+id+')" title="客户分析"><i class="eui-icon">&#xe62c;</i></button> ' +
                     '</div>' +
                 '</td>'
                 '</tr>';
@@ -250,6 +251,10 @@
                 }
             });
         });
+    }
+    //跳转到客户分析页面
+    function  getCustomerAnalysis(userId) {
+        window.open("/web/customer/getCustomerAnalysis?userId="+userId);
     }
 </script>
 </body>
