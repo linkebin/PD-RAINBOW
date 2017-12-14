@@ -27,12 +27,22 @@ public class WebController {
 
     }
     /**
-     * 跳转到支付
+     * 跳转到会员选购
      * @return
      */
     @RequestMapping(value ={"/pay"})
     public String pay(){
             return "project/cube/questionnaire/pay";
+
+    }
+
+    /**
+     * 跳转到券数选购页面
+     * @return
+     */
+    @RequestMapping(value ={"/ticket"})
+    public String ticket(){
+        return "project/cube/questionnaire/ticket";
 
     }
     /**
