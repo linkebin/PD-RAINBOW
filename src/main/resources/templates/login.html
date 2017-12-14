@@ -139,7 +139,7 @@
 
     function sendMsgCode(o) {
         if ($("#vrifyCodeIn").val()!=''){
-            var m = $("#mobile").val();
+            var mobile = $("#mobile").val();
             curCount = count;
             $(o).attr('disabled','true');
 
@@ -147,8 +147,9 @@
                 url:'/sign/code',
                 type:"post",
                 data:{
-                    mobile:m,
-                    vrifyCode:$("#vrifyCodeIn").val()
+                    mobile:mobile,
+                    vrifyCode:$("#vrifyCodeIn").val(),
+                    templateType:'用户注册'
                 },
                 dataType:"json",
                 success:function(data){

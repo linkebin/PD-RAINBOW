@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>收银台</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css">
+    <script th:src="@{/Scripts/date2format.js}" charset="utf-8"></script>
+</head>
+<body class="eui-layout-body">
+<div hidden id="alipayResultForm"></div>
+<div class="eui-layout eui-layout-admin xymfHome xymfPay">
+    <div th:replace="project/cube/common/header :: header(${2})">Header</div>
+
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+</div>
+
+</body>
+</html>

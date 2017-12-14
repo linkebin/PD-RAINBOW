@@ -114,23 +114,20 @@
     </if>
   </select>
     <select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
-        select a.*,que.questionnaire_name
+        select a.*
         <if test="type!=null and type!=''">
             ,count(*)
         </if>
-        FROM questionnaire que,(SELECT register.*,count(*) as count,da.data_question FROM visitor_register register,data_acquisition da,
+        FROM (SELECT register.*,count(*) as count FROM visitor_register register,
         (SELECT visitor_id,create_time FROM visiting_record
         WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
         AND deleted=0 AND creator=#{userId}) as record
         WHERE record.visitor_id=register.ID_
-        AND da.user_id=record.visitor_id
         GROUP BY record.create_time) as a
-        WHERE que.id_ = a.data_question
-        <if test="sex!=null and sex!=''">
-            AND a.sex=#{sex}
-        </if>
-        <if test="type!=null and type!=''">
-            GROUP BY que.questionnaire_name
-        </if>
+        <where>
+            <if test="sex!=null and sex!=''">
+                AND a.sex=#{sex}
+            </if>
+        </where>
     </select>
 </mapper>

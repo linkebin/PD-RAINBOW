@@ -15,11 +15,6 @@
     </style>
 </head>
 <body>
-<div class="eui-row eui-padding10 eui-borderB">
-    <div class="eui-col-md10 eui-font18 eui-lineHeight30" id="upOrAdd">
-        <i class='eui-icon eui-font24'>&#xe654;</i> 编辑促销
-    </div>
-</div>
 <form class="eui-form eui-marginT10 eui-paddingR10" id="promotionsForm" th:object="${promotions}">
     <input type="hidden" name="id" id="questionId" th:value="*{id}">
     <input type="hidden" id="promotionsName" th:value="*{promotionsName}">
@@ -63,7 +58,7 @@
     </div>
     <div class="eui-form-item" id="discount">
         <label class="eui-form-label">促销折扣</label>
-        <div class="eui-input-block">
+        <div class="eui-input-inline">
             <input type="text" name="promotionsDiscount" th:value="*{promotionsDiscount}" e-verify="title"
                    autocomplete="off" class="eui-input"
                    placeholder="请输入折扣，例如:输入0.08=8折;">

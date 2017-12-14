@@ -1,6 +1,7 @@
 package com.yidusoft.project.system.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
@@ -39,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.util.Date;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import static com.yidusoft.utils.Security.getUser;
@@ -235,15 +237,33 @@ public class IndexController {
         }
         return ResultGenerator.genSuccessResult().setMessage("登记成功");
     }
-
     /**
      * 发送注册手机验证码
      * @param request
      * @return
+     *
+     * 模版名称       -  模版CODE:
+     * 用户注册       - SMS_117010038
+     * 登录确认       - SMS_117010040
+     * 修改密码       - SMS_117010037
+     * 参与活动       - SMS_117290172
      */
     @PostMapping("/sign/code")
     @ResponseBody
-    public Result signcode(HttpServletRequest request,String mobile,String vrifyCode) {
+    public Result signcode(HttpServletRequest request,String mobile,String vrifyCode,String templateType) {
+
+        String templateCode  = "";
+        if(StringUtils.equals("用户注册",templateType)){
+            templateCode= "SMS_117010038";
+        }else  if (StringUtils.equals("登录确认",templateType)){
+            templateCode= "SMS_117010040";
+        }else  if (StringUtils.equals("修改密码",templateType)){
+            templateCode= "SMS_117010037";
+        }else  if (StringUtils.equals("参与活动",templateType)){
+            templateCode= "SMS_117290172";
+        }else {
+            return ResultGenerator.genFailResult("验证码发送失败");
+        }
 
         String captchaId = (String) request.getSession().getAttribute("vrifyCode");
         if (!captchaId.equals(vrifyCode) && !"".equals(captchaId)) {
@@ -251,10 +271,11 @@ public class IndexController {
         }
 
         try{
-            String json = SendMessageCode.sendMessageCode(mobile);
-            SMSCode smsCode = JSON.parseObject(json,SMSCode.class);
-            if (smsCode.getCode() == 200){
-                request.getSession().setAttribute("signCode",smsCode.getObj());
+            String signCode = getFourRandom();
+            SendSmsResponse sendSmsResponse = AliyunSMSUtil.sendSms(mobile, templateCode,signCode);
+            if (StringUtils.equals("OK",sendSmsResponse.getCode())){
+                request.getSession().setAttribute("signCode",signCode);
+                return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
             }else{
                 return ResultGenerator.genFailResult("验证码发送失败");
             }
@@ -262,9 +283,21 @@ public class IndexController {
             e.printStackTrace();
             return ResultGenerator.genFailResult("验证码发送失败");
         }
-        return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
     }
-
+    /**
+     * 产生4位随机数(0000-9999)
+     * @return 4位随机数
+     */
+    public static String getFourRandom(){
+        Random random = new Random();
+        String fourRandom = random.nextInt(10000) + "";
+        int randLength = fourRandom.length();
+        if(randLength<4){
+            for(int i=1; i<=4-randLength; i++)
+                fourRandom = "0" + fourRandom  ;
+        }
+        return fourRandom;
+    }
     @RequestMapping(value="/indexInfo")
     public String indexInfo(){
         return "indexInfo";
