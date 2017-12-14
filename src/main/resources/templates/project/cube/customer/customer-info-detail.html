@@ -25,12 +25,252 @@
     </div>
 </div>
 <div class="visitorContent xymfMargin">
-    <div class="eui-area">
+    <div class="eui-area xymf-width1000">
         <div class="visitorTitle eui-row">
             <div class="eui-col-md7"><img src="/Styles/images/xymfImages/cube.png" width="24" alt="">  个人信息卡</div>
+            <div class="eui-col-md5 eui-textAlignR"><span class="eui-btn eui-btn-normal eui-btn-small">打印</span></div>
         </div>
+        <div class="eui-row eui-form eui-bg-white card eui-padding10">
+            <div class="eui-font16 eui-paddingB10 eui-borderB eui-marginTB10">
+                <img alt="" src="/Styles/images/xymfImages/cloud.png"> 来访者基本信息
+            </div>
+            <div class="eui-col-md6">
+                <div class="cardIn">
+                    <div class="cardName">姓名：</div>
+                    <div class="cardContent" th:text="${vr.visitorName}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">出生年月：</div>
+                    <div class="cardContent" th:text="${#dates.format(vr.birthday, 'yyyy-MM-dd')}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">性别：</div>
+                    <div class="cardContent">
+                        <th:block th:if="${vr.sex==0}">
+                            <td >女</td>
+                        </th:block>
+                        <th:block th:if="${vr.sex==1}">
+                            <td >男</td>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">民族：</div>
+                    <div class="cardContent" th:text="${vr.nation}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">Email地址：</div>
+                    <div class="cardContent" th:text="${vr.email}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">职业：</div>
+                    <div class="cardContent" th:text="${vr.occupation}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">紧急联系人关系：</div>
+                    <div class="cardContent" th:text="${vr.exigenceContacts}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">血型：</div>
+                    <div class="cardContent" th:text="${vr.bloodType}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">宗教信仰：</div>
+                    <div class="cardContent" th:text="${vr.religiousBelief}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">结婚年数：</div>
+                    <div class="cardContent" th:text="${vr.marryTotal}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">第一个孩子年龄：</div>
+                    <div class="cardContent" th:text="${vr.childAge}"></div>
+                </div>
 
-        <div class="entirety eui-bg-white">
+            </div>
+            <div class="eui-col-md6">
+                <div class="cardIn">
+                    <div class="cardName">身份证号：</div>
+                    <div class="cardContent" th:text="${vr.idCard}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">籍贯：</div>
+                    <div class="cardContent" th:text="${vr.nativePlace}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">年龄：</div>
+                    <div class="cardContent" id="age"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">手机号码：</div>
+                    <div class="cardContent" th:text="${vr.phone}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">所在地：</div>
+                    <div class="cardContent" th:text="${vr.address}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">收入水平：</div>
+                    <div class="cardContent" th:text="${vr.income}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">紧急联系人电话：</div>
+                    <div class="cardContent" th:text="${vr.exigencePhone}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">教育程度：</div>
+                    <div class="cardContent" th:text="${vr.educationLevel}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">婚姻情况：</div>
+                    <div class="cardContent" th:text="${vr.maritalStatus}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">第一个孩子性别：</div>
+                    <div class="cardContent">
+                        <th:block th:if="${vr.childSex==0}">
+                            <td >女</td>
+                        </th:block>
+                        <th:block th:if="${vr.childSex==1}">
+                            <td >男</td>
+                        </th:block>
+                        <th:block th:if="${vr.childSex==null}">
+                            <td ></td>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="eui-row eui-form eui-bg-white card eui-padding10">
+            <div class="eui-font16 eui-paddingB10 eui-borderB eui-marginTB10">
+                <img alt="" src="/Styles/images/xymfImages/cloud.png"> 来访者家庭情况
+            </div>
+            <div class="eui-col-md6">
+                <div class="cardIn">
+                    <div class="cardName">父亲职业：</div>
+                    <div class="cardContent" th:text="${vr.fatherOccupation}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">父亲学历：</div>
+                    <div class="cardContent" th:text="${vr.fatherEducation}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">母亲年龄：</div>
+                    <div class="cardContent" th:text="${vr.motherAge}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">父亲去世时年龄：</div>
+                    <div class="cardContent" th:text="${vr.fatherDeathYourAge}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">父母分居时你的年龄：</div>
+                    <div class="cardContent" th:text="${vr.parentalSeparationYourAge}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">兄弟姐妹人数：</div>
+                    <div class="cardContent" th:text="${vr.brothersSistersTotal}"></div>
+                </div>
+            </div>
+            <div class="eui-col-md6">
+                <div class="cardIn">
+                    <div class="cardName">父亲年龄：</div>
+                    <div class="cardContent" th:text="${vr.fatherAge}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">母亲职业：</div>
+                    <div class="cardContent" th:text="${vr.motherOccupation}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">母亲学历：</div>
+                    <div class="cardContent" th:text="${vr.motherEducation}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">母亲去世时你的年龄：</div>
+                    <div class="cardContent" th:text="${vr.motherDeathYourAge}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">父母离婚时你的年龄：</div>
+                    <div class="cardContent" th:text="${vr.parentalDivorceYourAge}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">家中排行第几：</div>
+                    <div class="cardContent" th:text="${vr.brothersSistersRanking}"></div>
+                </div>
+            </div>
+        </div>
+        <div class="eui-row eui-form eui-bg-white card eui-padding10">
+            <div class="eui-font16 eui-paddingB10 eui-borderB eui-marginTB10">
+                <img alt="" src="/Styles/images/xymfImages/cloud.png"> 来访者咨询情况
+            </div>
+            <div class="eui-col-md6">
+                <div class="cardIn">
+                    <div class="cardName">做过几次咨询：</div>
+                    <div class="cardContent" th:text="${vr.counselingTotal}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">最近一次咨询的地址：</div>
+                    <div class="cardContent" th:text="${vr.counselingAddress}"></div>
+                </div>
+            </div>
+            <div class="eui-col-md6">
+                <div class="cardIn">
+                    <div class="cardName">最近一次咨询距现在多少天：</div>
+                    <div class="cardContent" th:text="${vr.awayNowTotal}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">是否因心理问题就医：</div>
+                    <div class="cardContent">
+                        <th:block th:if="${vr.medicalTreatment==2}">
+                            <td >否</td>
+                        </th:block>
+                        <th:block th:if="${vr.medicalTreatment==1}">
+                            <td >是</td>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <div class="eui-col-md12">
+                <div class="cardIn">
+                    <div class="cardName">最近一次诊断结果：</div>
+                    <div class="cardContent" th:text="${vr.diagnosisResult}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">是否有慢性疾病，家族病史和过敏史：</div>
+                    <div class="cardContent">
+                        <th:block th:if="${vr.medicalHistory==0}">
+                            <td colspan="3">没有</td>
+                        </th:block>
+                        <th:block th:if="${vr.medicalHistory==1}">
+                            <td colspan="3">有</td>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">具体情况：</div>
+                    <div class="cardContent" th:text="${vr.specificCircumstances}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">曾长期服用过何种药物：</div>
+                    <div class="cardContent">
+                        <th:block th:if="${vr.longMedication==0}">
+                            <td colspan="3">没有</td>
+                        </th:block>
+                        <th:block th:if="${vr.longMedication==1}">
+                            <td colspan="3">有</td>
+                        </th:block>
+                    </div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">药物不良症状：</div>
+                    <div class="cardContent" th:text="${vr.adverseDrugSymptoms}"></div>
+                </div>
+                <div class="cardIn">
+                    <div class="cardName">目前与健康有关的疾病及所接受的治疗：</div>
+                    <div class="cardContent" th:text="${vr.treatmentCondition}"></div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="entirety eui-bg-white">
             <table class="eui-table">
                 <colgroup>
                     <col width="240">
@@ -63,14 +303,12 @@
                     <td>年龄:</td>
                     <td id="age"></td>
                 </tr>
-
                 <tr>
                     <td>民族:</td>
                     <td th:text="${vr.nation}">2017-09-10</td>
                     <td>手机号码:</td>
                     <td th:text="${vr.phone}">2017-09-10</td>
                 </tr>
-
                 <tr>
                     <td>Email地址:</td>
                     <td th:text="${vr.email}">2017-09-10</td>
@@ -236,7 +474,7 @@
 
                 </tbody>
             </table>
-        </div>
+        </div>-->
     </div>
 </div>
 
