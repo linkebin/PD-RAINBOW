@@ -275,7 +275,7 @@ public class IndexController {
             SendSmsResponse sendSmsResponse = AliyunSMSUtil.sendSms(mobile, templateCode,signCode);
             if (StringUtils.equals("OK",sendSmsResponse.getCode())){
                 request.getSession().setAttribute("signCode",signCode);
-                return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
+                return ResultGenerator.genSuccessResult().setMessage("验证码发送成功");
             }else{
                 return ResultGenerator.genFailResult("验证码发送失败");
             }

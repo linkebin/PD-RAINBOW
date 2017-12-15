@@ -163,7 +163,7 @@
                                     <th>性别</th>
                                     <th>年龄</th>
                                     <th>填报时间</th>
-                                    <th>关注度</th>
+                                    <!--<th>关注度</th>-->
                                     <th>操作</th>
                                     </tr>
                                     </thead>
@@ -270,8 +270,8 @@
                     '<td>' + sex + '</td>' +
                     '<td>' + participant.age + '岁</td>' +
                     '<td>' + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
-                    '<td>'+
-                    '</td>' +
+                    /*'<td>'+
+                    '</td>' +*/
                     '<td>' +
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看填报详情" onclick="check(' + id + ',' + createTime + ')"><i class="eui-icon">&#xe621;</i></button>' +
                     '</td>' +
@@ -281,7 +281,7 @@
     }
     //获取活动详情
     function detail() {
-        var index = layer.load(2); //加载
+        var index = layer.load(0, {shade: false}); //加载
         $.post("/launch/activities/detail", {id: $('#id').val()}, function (result) {
             console.log(result);
             if (result.code == 200) {
@@ -307,7 +307,7 @@
                 $('input[name="uestionnaireUri"]').val(uestionnaireUri);
                 $('select[name="uestionnaireId"]').children().each(function (i, data) {
                     if (data.value == activity.uestionnaireId) {
-                        return $(this).attr("selected", true);
+                        $(this).attr("selected", true);
                     }
                 })
                 $('#questionnaireId').val(activity.uestionnaireId);
@@ -368,6 +368,7 @@
      */
     function getQuestions() {
         $.get("/questionnaire/getQuestionnaireByState", function (result) {
+            console.log(result);
             if (result.code == 200) {
                 for (var i in result.data) {
                     var questionnaire = result.data[i];
@@ -395,9 +396,8 @@
                     progressBar+="%";
                 }
                 console.log(progressBar);
-                setTimeout(function () {
-                    element.progress('activity', progressBar);
-                },500);
+                element.progress('activity', progressBar);
+                element.init('progress','activity');
             }
         })
     }
