@@ -454,7 +454,6 @@
     //初始化
     $(function () {
         doSearch();
-        initType();
         initTemplate();
     })
     var statusIds = '';
@@ -658,8 +657,6 @@
                 console.log(result);
                 if (result.code == 200) {
                     var thisYearList = countAge(result.data.thisYearList);
-                    var lastYearList = countAge(result.data.lastYearList);
-                    var lastPhaseList = countAge(result.data.lastPhaseList);
                     var countSum = getCountSum(thisYearList);//问卷总数
                     typeSum++;//表示刷新数据次数+1
                     for (var j in thisYearList) {
@@ -755,7 +752,7 @@
         })
     }*/
 
-    /*//初始化选择模板下拉框
+    //初始化选择模板下拉框
     function initTemplate() {
         eui.use('form', function () {
             var form = eui.form;
@@ -771,7 +768,7 @@
                     }
                     form.render('select');
                 } else {
-                    layer.msg("问卷类型初始化失败", {
+                    layer.msg("初始化模板失败", {
                         icon: 1,
                         time: 1500
                     });
@@ -795,7 +792,7 @@
                 })
             })
         })
-    }*/
+    }
 
     /**
      * 设置checkbox
