@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.channel.dao.PlatformSettlementMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.channel.domain.PlatformSettlement">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="year" jdbcType="VARCHAR" property="year" />
+    <result column="month" jdbcType="VARCHAR" property="month" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="should_be" jdbcType="DECIMAL" property="shouldBe" />
+    <result column="closed" jdbcType="DECIMAL" property="closed" />
+    <result column="unliquidated" jdbcType="DECIMAL" property="unliquidated" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <select id="findAreaAndChannelOrderList"  resultType="Map">
+          SELECT b.* FROM (
+            SELECT cm.*,oo.order_money,oo.order_code,oo.creator consultant_name ,oo.payment_time,
+              (SELECT channel_name FROM channel_manage WHERE id_=cm.channel_id) channel_name,
+              ar.rule,ar.rule_name,oo.user_id,oo.order_state,
+            (SELECT su.USER_NAME FROM sec_user su WHERE su.ID_=(SELECT su.inviter_user FROM sec_user su WHERE su.ID_=oo.user_id))  referrer
+               FROM clearing_manage cm LEFT JOIN order_online oo ON oo.ID_=cm.order_id LEFT JOIN account_rule ar ON ar.rule_id=cm.rule_id
+
+      ) b WHERE b.order_state=1
+
+      <if test="null != ids">
+          AND b.channel_id in
+          <foreach collection="ids" item="item" open="(" separator="," close=")">
+              #{item}
+          </foreach>
+      </if>
+
+  </select>
+
+  <select id="findPlatformSettlementList" parameterType="java.util.Map" resultType="Map">
+    SELECT ps.* FROM platform_settlement ps
+  </select>
+
+  <select id="findPlatformSettlementChannelInfo" parameterType="java.util.Map" resultType="Map">
+        SELECT cc.channel_id,sum(cc.brokerage) brokerage,cm.channel_name,cm.linkman,cm.linkman_tell FROM clearing_manage cc
+        LEFT JOIN channel_manage cm ON cc.channel_id=cm.id_
+        WHERE cc.`status`=2 AND cc.create_time LIKE '%${create_time}%'
+
+        GROUP BY cc.channel_id,cm.channel_name,cm.linkman,cm.linkman_tell
+  </select>
+</mapper>
