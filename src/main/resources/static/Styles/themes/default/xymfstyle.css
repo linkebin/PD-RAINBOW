@@ -562,7 +562,7 @@
     background: #ffffff!important;
 }
 
-body .eui-layer-title{
+body.layoutIn .eui-layer-title{
     background: #f4f9fd;
     border-bottom: 1px solid #1e9eff;
     color: #1e9eff;
