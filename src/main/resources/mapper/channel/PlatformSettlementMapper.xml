@@ -16,6 +16,29 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
 
+    <select id="findAreaAndChannelOrderZYJ"  resultType="Map">
+        SELECT sum(b.brokerage) ZYJ FROM (
+        SELECT cm.*,oo.order_money,oo.order_code,oo.creator consultant_name ,oo.payment_time,
+        (SELECT channel_name FROM channel_manage WHERE id_=cm.channel_id) channel_name,
+        ar.rule,ar.rule_name,oo.user_id,oo.order_state,
+        (SELECT su.USER_NAME FROM sec_user su WHERE su.ID_=(SELECT su.inviter_user FROM sec_user su WHERE su.ID_=oo.user_id))  referrer
+        FROM clearing_manage cm LEFT JOIN order_online oo ON oo.ID_=cm.order_id LEFT JOIN account_rule ar ON ar.rule_id=cm.rule_id
+
+        ) b WHERE b.order_state=1
+
+        <if test="map.startTime != null and map.endTime !=null ">
+            AND b.payment_time &gt; #{map.startTime} AND b.payment_time &lt; #{map.endTime}
+        </if>
+
+        <if test="null != ids">
+            AND b.channel_id in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </select>
+
   <select id="findAreaAndChannelOrderList"  resultType="Map">
           SELECT b.* FROM (
             SELECT cm.*,oo.order_money,oo.order_code,oo.creator consultant_name ,oo.payment_time,
@@ -25,6 +48,10 @@
                FROM clearing_manage cm LEFT JOIN order_online oo ON oo.ID_=cm.order_id LEFT JOIN account_rule ar ON ar.rule_id=cm.rule_id
 
       ) b WHERE b.order_state=1
+
+      <if test="map.startTime != null and map.endTime !=null ">
+          AND b.payment_time &gt; #{map.startTime} AND b.payment_time &lt; #{map.endTime}
+      </if>
 
       <if test="null != ids">
           AND b.channel_id in

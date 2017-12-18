@@ -127,8 +127,8 @@
 
   </select>
 
-  <select id="findChannelOrAccountCounselorListByParameter" parameterType="Map" resultType="java.util.Map">
-     <if test="type == 1">
+  <select id="findChannelOrAccountCounselorListByParameter"  resultType="Map">
+     <if test="map.type == 1">
        SELECT su.ID_, su.ACCOUNT,su.USER_NAME,su.MOBILE,
        (SELECT su1.USER_NAME FROM sec_user su1
        WHERE su1.DELETED=0 AND su1.ID_=#{inviter_user}) inviter_user
@@ -152,38 +152,52 @@
        </if>
      </if>
 
-    <if test="type == 2">
+    <if test="map.type == 2">
 
       SELECT su.ID_, su.ACCOUNT,su.USER_NAME,su.MOBILE,
       (
       SELECT su1.USER_NAME FROM sec_user su1
       WHERE su1.DELETED=0 AND su1.ID_
-      in (SELECT su2.ID_ FROM sec_user su2 WHERE su2.DELETED=0 AND su2.channel_id=#{channel_id} AND su.inviter_user=su2.ID_)
+      in (SELECT su2.ID_ FROM sec_user su2 WHERE su2.DELETED=0  AND su.inviter_user=su2.ID_
+            <if test="null != ids">
+              AND su2.channel_id in
+              <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+              </foreach>
+            </if>
+        )
       ) inviter_user
 
       FROM sec_user su
       WHERE su.DELETED=0 AND su.inviter_user
 
-      in (SELECT su.ID_ FROM sec_user su WHERE su.DELETED=0 AND su.channel_id=#{channel_id})
+      in (SELECT su.ID_ FROM sec_user su WHERE su.DELETED=0
+          <if test="null != ids">
+            AND su.channel_id in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+              #{item}
+            </foreach>
+          </if>
+        )
 
-      <if test="ACCOUNT!=null and ACCOUNT!=''">
-        AND su.ACCOUNT LIKE '%${ACCOUNT}%'
+      <if test="map.ACCOUNT!=null and map.ACCOUNT!=''">
+        AND su.ACCOUNT LIKE '%${map.ACCOUNT}%'
       </if>
-      <if test="USER_NAME!=null and USER_NAME!=''">
-        AND su.USER_NAME LIKE '%${USER_NAME}%'
+      <if test="map.USER_NAME!=null and map.USER_NAME!=''">
+        AND su.USER_NAME LIKE '%${map.USER_NAME}%'
       </if>
-      <if test="MOBILE!=null and MOBILE!=''">
-        AND su.MOBILE LIKE '%${MOBILE}%'
+      <if test="map.MOBILE!=null and map.MOBILE!=''">
+        AND su.MOBILE LIKE '%${map.MOBILE}%'
       </if>
-      <if test="inviter_userName!=null and inviter_userName!=''">
+      <if test="map.inviter_userName!=null and map.inviter_userName!=''">
         AND su.inviter_user in(
-        SELECT uu.ID_ FROM sec_user uu WHERE uu.DELETED=0 AND uu.USER_NAME LIKE '%${inviter_userName}%'
+        SELECT uu.ID_ FROM sec_user uu WHERE uu.DELETED=0 AND uu.USER_NAME LIKE '%${map.inviter_userName}%'
         )
       </if>
 
     </if>
 
-    <if test="type == 3">
+    <if test="map.type == 3">
       SELECT su.ID_, su.ACCOUNT,su.USER_NAME,su.MOBILE,
       (SELECT su1.USER_NAME FROM sec_user su1
       WHERE su1.DELETED=0 AND su1.ID_=su.inviter_user) inviter_user

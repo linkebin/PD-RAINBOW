@@ -16,4 +16,8 @@ public interface PlatformSettlementMapper extends Mapper<PlatformSettlement> {
     //区域和渠道订单列表
     List<Map<String,Object>> findAreaAndChannelOrderList(@Param("ids")List<String> ids,
                                                          @Param("map")Map<String,Object> map);
+
+    List<Map<String,Object>> findAreaAndChannelOrderZYJ(@Param("ids")List<String> ids,
+                                                         @Param("map")Map<String,Object> map);
+
 }

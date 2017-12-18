@@ -13,27 +13,25 @@
         #channelAdd input + label{color: red;}
     </style>
 </head>
-<body>
+<body class="eui-bg-white">
 
 <form class="eui-form eui-padding10" id="channelAdd" onsubmit="return false;">
     <input type="hidden" name="ruleId" id="ruleId" th:value="${UUID}" />
     <input type="hidden" name="add"  value="1" />
     <div class="eui-form-item">
-        <label class="eui-form-label">规则比例</label>
-        <div class="eui-input-inline">
-            <input type="text" name="rule" e-verify="title"  autocomplete="off" placeholder="请输入规则比例" class="eui-input" />
-
-        </div>
         <label class="eui-form-label">规则名称</label>
         <div class="eui-input-inline">
             <input type="text" name="ruleName" e-verify="title" autocomplete="off" placeholder="请输入规则名称" class="eui-input" >
         </div>
 
-        <label class="eui-form-label">是否默认</label>
+        <label class="eui-form-label">规则比例</label>
         <div class="eui-input-inline">
-            <input type="radio" value="0" checked="checked"  name="defaultRule" title="否">
-            <input type="radio" value="1"  name="defaultRule" title="是" >
+            <input type="text" id="rule" name="rule" e-verify="title"  autocomplete="off"
+                   placeholder="请输入规则比例" class="eui-input" />
         </div>
+        <div class="eui-input-inline eui-marginT5">%</div>
+
+        <input type="hidden" name="defaultRule" value="0">
     </div>
 
     <div class="eui-form-item">
@@ -61,7 +59,7 @@
                     class='eui-icon eui-font24'>&#xe61d;</i>添加渠道</a>
         </div>
     </div>
-    <table class="eui-table eui-form" id="productTable">
+    <table class="eui-table eui-form" id="userTable">
         <colgroup>
             <col width="120">
             <col>
@@ -73,6 +71,7 @@
             <th>联系人</th>
             <th>联系人电话</th>
             <th>渠道负责人</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -144,10 +143,26 @@
             var date2 = new Date(Date.parse(value.replace("-", "/")));
             return date1 < date2;
         };
+        jQuery.validator.addMethod("minNumber",function(value, element){
+            var returnVal = true;
+            inputZ=value;
+            var ArrMen= inputZ.split(".");    //截取字符串
+            if(ArrMen.length==2){
+                if(ArrMen[1].length>2){    //判断小数点后面的字符串长度
+                    returnVal = false;
+                    return false;
+                }
+            }
+            return returnVal;
+        },"小数点后最多为两位");
+
         $("#channelAdd").validate({
             rules: {
                 rule: {
-                    required : true
+                    required: true,    //要求输入不能为空
+                    number: true,     //输入必须是数字
+                    min: 0.01,          //输入的数字最小值为0.01，不能为0或者负数
+                    minNumber: $("#rule").val()
                 },
                 ruleName:"required",
                 startTime:"required",
@@ -159,6 +174,9 @@
             messages: {
                 rule: {
                     required : "请输入规则比例",
+                    number: "请正确输入规则比例",
+                    min: "输入最小规则比例为0.01",
+                    length: "输入数字最多小数点后两位"
                 },
                 ruleName: "请输入规则名称",
                 startTime:"请输入规则开始时间",
@@ -195,7 +213,7 @@
 
         var obj = getRuleObj();
         if (obj.startTime==''&&obj.endTime==''){
-            layer.msg("请选择开始时间和结束时间！")
+            layer.msg("请选择开始时间和结束时间！");
             return;
         }
 
@@ -216,6 +234,7 @@
                 if (ids!=''){
                     $.post('/channel/rule/add',{channelIds:ids,ruleId:$("#ruleId").val()},function (result) {
                         layer.closeAll();
+                        doSearch();
                     });
                 }else {
                     layer.msg("请选择数据！")
@@ -230,25 +249,7 @@
     function addAccountRule() {
         var obj = $("#channelAdd").serializeObject();
             if (obj.defaultRule!=undefined){
-                if (obj.defaultRule=='1'){
-                    layer.confirm('当前新建的规则选择了默认规则，将会覆盖之前的默认规则。请确定是否覆盖？', {
-                        btn: ['确认', '取消'],
-                        shade: 0,
-                        title:'提示'
-                    }, function(r){
-                        layer.load();
-                        accountRule1(obj);
-                    },function () {
-                        obj.defaultRule=0;
-                        accountRule1(obj);
-                    });
-                }else {
                     accountRule1(obj);
-                }
-
-            }else {
-                layer.closeAll();
-                layer.msg('是否默认不能为空');
             }
     }
     function accountRule1(obj) {
@@ -274,6 +275,105 @@
             });
         }
         layer.closeAll();
+    }
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','laypage','layer'], function(){
+            var form = eui.form
+                ,laypage = eui.laypage
+                ,layer = eui.layer,
+                $ = eui.jquery;
+            var params = new Object();
+            params.rule_id=$("#ruleId").val();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url:"/channel/rule/channelRuleList",
+                data: {
+                    json:JSON.stringify(params),
+                    page:1,
+                    pagesize:10
+                },
+                type:"post",
+                success:function(result){
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        ,count: result.data.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        ,skip: true
+                        ,jump: function(obj,first){
+                            if (first){
+                                //第一次，不需要查询数据
+                                var userList = result.data.list;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(userList);
+                                $("#userTable tbody").html(tableHtml);
+                                form.render('checkbox');
+                            }else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/channel/rule/channelRuleList",
+                                    data: {
+                                        json: JSON.stringify(params),
+                                        page: obj.curr,
+                                        pagesize: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var userList = result.data.list;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(userList);
+                                        $("#userTable tbody").html(tableHtml);
+                                        //重新加载复选框
+                                        form.render('checkbox');
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+
+    //渲染数据，拼接表格
+    function getTable(userList) {
+        console.log(userList)
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            var id = "'" + secUser.id_ + "'";
+
+            var channelManager = secUser.channel_manager;
+            if (secUser.channel_manager==undefined || secUser.channel_manager==''){
+                channelManager='无';
+            }
+            tableHtml +=  '<tr>' +
+                '<td>'+ secUser.channel_code +'</td>' +
+                '<td>'+ secUser.channel_name +'</td>' +
+                '<td>'+ secUser.linkman +'</td>' +
+                '<td>'+ secUser.linkman_tell +'</td>' +
+                '<td>'+ channelManager +'</td>' +
+                '<td>' +
+                '<div class="eui-btn-group"> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteB('+id+')" title="移除渠道商"><i class="eui-icon">&#xe640;</i></button> ' +
+                '</div>' +
+                '</td>' +
+                '</tr>';
+        }
+        return tableHtml;
+    }
+
+    function deleteB(id) {
+        var data =new Object();
+        data.rule_id = $("#ruleId").val();
+        data.channel_id = id;
+        $.post("/channel/rule/deleteOne",{json:JSON.stringify(data)},function (res) {
+            doSearch();
+        });
     }
 </script>
 </html>

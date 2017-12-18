@@ -39,7 +39,7 @@
 
     <select id="findOrderClearingByChannelCounselorId"  resultType="Map">
     SELECT b.* FROM (
-        SELECT oo.ID_,oo.order_code,oo.order_money,oo.clearing_status,oo.creator consultant_name,oo.user_id,oo.payment_time,
+        SELECT cm.channel_id,oo.ID_,oo.order_code,oo.order_money,oo.clearing_status,oo.creator consultant_name,oo.user_id,oo.payment_time,
         cm.brokerage,cm.create_time,cm.`status`,
         (SELECT su.USER_NAME FROM sec_user su WHERE su.ID_=(SELECT su.inviter_user FROM sec_user su WHERE su.ID_=oo.user_id))  referrer
 
@@ -64,18 +64,18 @@
             AND b.payment_time LIKE '%${map.create_time}%'
         </if>
 
-        <if test="map.startTime !='' and map.endTime!=''">
+        <if test="map.startTime !=null and map.endTime!=null">
             AND b.payment_time &gt;= #{map.startTime}  AND b.payment_time &lt;= #{map.endTime}
         </if>
 
         <if test="null != ids">
-            AND b.user_id in
+            AND b.channel_id in
             <foreach collection="ids" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
 
-        ORDER BY b.create_time DESC
+        ORDER BY b.payment_time DESC
     </select>
 
   <select id="findHasClearingByChannelCounselorId"  resultType="Map">
@@ -158,14 +158,16 @@
 
 
     <select id="findChannelAccountLineChart"  resultType="Map">
-     SELECT date_format(cm.create_time, '%Y-%m') AS create_time,  sum(cm.brokerage) AS brokerage,
+     SELECT date_format(oo.payment_time, '%Y-%m') AS create_time,  sum(cm.brokerage) AS brokerage,
             (
                 SELECT max(maxY) maxY FROM(
                 SELECT  sum(cm.brokerage) maxY  FROM clearing_manage cm WHERE 1=1
-                <if test="map.channel_id != null and map.channel_id!=''">
-                    AND  cm.channel_id=#{map.channel_id}
+                <if test="null != ids">
+                    AND cm.channel_id in
+                    <foreach collection="ids" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
                 </if>
-                GROUP BY  date_format(cm.create_time, '%Y-%m')
             ) v
         ) maxY
 
@@ -174,18 +176,18 @@
         AND  cm.channel_id=#{map.channel_id}
     </if>
 
-    <if test="map.startTime !='' and map.endTime!=''">
+    <if test="map.startTime !=null and map.endTime!=null">
         AND oo.payment_time &gt;= #{map.startTime}  AND oo.payment_time &lt;= #{map.endTime}
     </if>
 
 
     <if test="null != ids">
-        AND oo.user_id in
+        AND cm.channel_id in
         <foreach collection="ids" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
     </if>
 
-        GROUP BY  date_format(cm.create_time, '%Y-%m')
+        GROUP BY  date_format(oo.payment_time, '%Y-%m')
     </select>
 </mapper>

@@ -134,7 +134,7 @@
                         <div  data-toggle="distpicker">
                         <div class="eui-col-md5">
                             <div class="eui-form-item">
-                                <label class="eui-form-label">联系人住址</label>
+                                <label class="eui-form-label">代理范围</label>
                                 <div class="eui-input-block">
                                     <select data-province="" class="eui-input" e-ignore name="province">
                                     </select>
@@ -144,27 +144,27 @@
                         <div class="eui-col-md3 eui-marginL20">
                             <select data-province="" class="eui-input" e-ignore name="city">
                             </select>
+
                         </div>
                         <div class="eui-col-md3 eui-marginL20">
-                            <select data-province="" class="eui-input" e-ignore name="district">
-                            </select>
+                            <p class="eui-font12 eui-color-red">*提示: 如果要代理多个城市,请申请多个账号</p>
                         </div>
                     </div>
                     </div>
                     <div class="eui-col-md4"> <label class="eui-form-label error"></label></div>
                 </div>
 
-                <div class="eui-row eui-marginT5">
-                    <div class="eui-col-md8">
-                            <div class="eui-form-item">
-                                <label class="eui-form-label"></label>
-                                <div class="eui-input-block">
-                                    <input type="text" name="linkmanAddr"    placeholder="请输入详细地址" class="eui-input" />
-                                </div>
-                            </div>
-                    </div>
-                    <div class="eui-col-md4"> <label class="eui-form-label error"></label></div>
-                </div>
+                <!--<div class="eui-row eui-marginT5">-->
+                    <!--<div class="eui-col-md8">-->
+                            <!--<div class="eui-form-item">-->
+                                <!--<label class="eui-form-label"></label>-->
+                                <!--<div class="eui-input-block">-->
+                                    <!--<input type="text" name="linkmanAddr"    placeholder="请输入详细地址" class="eui-input" />-->
+                                <!--</div>-->
+                            <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="eui-col-md4"> <label class="eui-form-label error"></label></div>-->
+                <!--</div>-->
 
                 <div class="eui-row eui-marginT5">
                     <div class="eui-col-md8">
@@ -338,7 +338,7 @@
                 layer.closeAll();
                 layer.msg(resule.message);
                 if (resule.code == 200){
-//                    window.open('/sign/perfact/info?d='+resule.data.id);
+                    location.href='/index';
                 }
             }
         });

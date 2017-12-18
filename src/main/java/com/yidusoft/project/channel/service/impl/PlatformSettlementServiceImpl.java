@@ -62,8 +62,8 @@ public class PlatformSettlementServiceImpl extends AbstractService<PlatformSettl
             platformSettlement.setStatus("1");
             this.save(platformSettlement);
         }
-//        PageHelper.startPage(page, limit);
         PageHelper.startPage(1, 10);
+//        PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
         List<Map<String,Object>> data = platformSettlementMapper.findPlatformSettlementList(map);
 
         return data;
@@ -77,5 +77,10 @@ public class PlatformSettlementServiceImpl extends AbstractService<PlatformSettl
     @Override
     public List<Map<String, Object>> findAreaAndChannelOrderList(List<String> ids, Map<String, Object> map) {
         return platformSettlementMapper.findAreaAndChannelOrderList(ids,map);
+    }
+
+    @Override
+    public List<Map<String, Object>> findAreaAndChannelOrderZYJ(List<String> ids, Map<String, Object> map) {
+        return platformSettlementMapper.findAreaAndChannelOrderZYJ(ids,map);
     }
 }

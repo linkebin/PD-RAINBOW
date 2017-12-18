@@ -78,9 +78,6 @@ public class ChannelManageController {
                 return ResultGenerator.genFailResult("添加失败");
             }
         }
-
-//        channelActivityService.startProcess(channelManage.getId(),channelManage.getChannelName()+" 申请入驻平台");
-
         return ResultGenerator.genSuccessResult("添加成功");
     }
 
@@ -221,9 +218,17 @@ public class ChannelManageController {
     public Result listByAC(Integer page,  Integer limit,String json) {
 
         Map<String,Object> map = JSON.parseObject(json,Map.class);
-
+        List<Map<String,Object>> channels = channelManageService.findChannelListAndTypeAndParameter(map);
+        List<String> ids = new ArrayList<String>();
+        for (Map<String,Object> m3 : channels){
+            ids.add(m3.get("id_").toString());
+        }
+        if (ids.size() == 0){
+            ids.add("9x991000");
+        }
+        map.put("type",2);
         PageHelper.startPage(page, limit);
-        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(map);
+        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(ids,map);
         PageInfo pageInfo = new PageInfo(list);
 
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);

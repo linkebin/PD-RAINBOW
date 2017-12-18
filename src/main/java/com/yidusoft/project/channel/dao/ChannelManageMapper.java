@@ -39,7 +39,8 @@ public interface ChannelManageMapper extends Mapper<ChannelManage> {
      * @param map
      * @return
      */
-    List<Map<String,Object>> findChannelOrAccountCounselorListByParameter(Map<String,Object> map);
+    List<Map<String,Object>> findChannelOrAccountCounselorListByParameter(@Param("ids")List<String> ids,
+                                                                          @Param("map")Map<String,Object> map);
 
     /**
      * 查找未通过认证的咨询师

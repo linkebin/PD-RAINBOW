@@ -5,7 +5,7 @@
     <title>咨询师管理</title>
     <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
 </head>
-<body>
+<body class="eui-bg-white">
 
 <div class="eui-bd eui-padding15">
     <div class="eui-sd1 eui-sd1-type3">
@@ -18,8 +18,6 @@
 
         <div class="eui-mn1-type3">
             <form class="eui-form" id="searchFrom">
-                <input type="hidden" id="id"  name="parentId"/>
-                <input type="hidden"   name="type" value="3"/>
                 <div class="eui-input-inline eui-padding10">
 
                     <input type="text" name="USER_NAME" e-verify="title" value=""
@@ -62,23 +60,23 @@
 <script th:src="@{/Scripts/plugins/md5/md5.min.js}" charset="utf-8"></script>
 
 <script>
-
+    var leftObj;
     var tableIns;
     var table;
     eui.use('table', function(){
         table = eui.table;
 
-        var oj = new Object();
-        oj.type=3;
+        leftObj = new Object();
+        leftObj.type='cityList';
+
          tableIns = table.render({
             id: 'idTest'
             ,elem: '#test2'
             ,url:'/channel/manage/listByAccountCounselor'
             ,method:'post'
-            ,where: {json: JSON.stringify(oj)}
+            ,where: {json: JSON.stringify(leftObj)}
             ,height: 460
             ,cols: [[ //标题栏
-//                {checkbox: true}
                 {field: 'USER_NAME', title: '咨询师姓名', width: 180}
                 ,{field: 'ACCOUNT', title: '咨询师账号', width: 180}
                 ,{field: 'MOBILE', title: '联系方式', width: 180}
@@ -188,21 +186,16 @@
 
     function resetForm() {
         $('#searchFrom')[0].reset();
+        leftObj.USER_NAME=null;
+        leftObj.ACCOUNT=null;
+        leftObj.MOBILE=null;
     }
     function doSearch() {
         var obj =$("#searchFrom").serializeObject();
-
-        if(obj.parentId!=''){
-            if (obj.parentId =='0'){
-                obj.type=2;
-                obj.channel_id=$("#id").attr('searchId');
-            }else {
-                obj.type=1;
-                obj.inviter_user=$("#id").attr('searchId');
-            }
-        }
-
-        dataList(obj);
+        leftObj.USER_NAME=obj.USER_NAME;
+        leftObj.ACCOUNT=obj.ACCOUNT;
+        leftObj.MOBILE=obj.MOBILE;
+        dataList(leftObj);
     }
 
     function dataList(obj) {
@@ -220,7 +213,7 @@
 
     function loadTree() {
         $.ajax({
-            url:"/channel/manage/accounttree",
+            url:"/platform/settlement/areaChannelTrees",
             type:"post",
             success:function(result){
                 //菜单树
@@ -234,20 +227,29 @@
                     isExpand:2,
                     idFieldName: 'id',
                     textFieldName:'name',
-                    parentIDFieldName: 'parentId',
+                    parentIDFieldName: 'pid',
                     onSelect: function (node)
                     {
-                        var obj =$("#searchFrom").serializeObject();
-                        $("#id").val(node.data.parentId)
-                        $("#id").attr('searchId',node.data.id);
-                        if (node.data.parentId =='0'){
-                            obj.type=2;
-                            obj.channel_id=node.data.id;
-                        }else {
-                            obj.type=1;
-                            obj.inviter_user=node.data.id;
+                        leftObj.province=null;
+                        leftObj.city=null;
+                        leftObj.id_=null;
+                        var level = node.data.level;
+                        if (level == 1){
+                            leftObj.province=node.data.name;
+                            leftObj.city=null;
+                            leftObj.id_=null;
                         }
-                        dataList(obj);
+                        if (level == 2){
+                            leftObj.city=node.data.name;
+                            leftObj.province=null;
+                            leftObj.id_=null;
+                        }
+                        if (level == 3){
+                            leftObj.id_=node.data.id;
+                            leftObj.city=null;
+                            leftObj.province=null;
+                        }
+                        dataList(leftObj);
                     },
                     onError:function(node){
 

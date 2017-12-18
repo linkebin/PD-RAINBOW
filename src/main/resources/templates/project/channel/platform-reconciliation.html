@@ -17,18 +17,18 @@
         <div class="eui-mn1-type3">
             <div style="margin-left: 40px;">
                 <div class="eui-form">
-                    <input type="radio" name="month" e-filter="month" value="1" title="上月">
+                    <input type="radio" name="month" e-filter="month" value="1" checked="checked" title="上月">
                     <input type="radio" name="month" e-filter="month" value="3" title="近三月">
                     <input type="radio" name="month" e-filter="month" value="6" title="近半年">
                     <input type="radio" name="month" e-filter="month" value="" title="其他">
-                    <div class="eui-input-inline">
-                        <input type="text" name="xxx" class="eui-input"  placeholder="订单编号" >
+                    <div style="display: none;" id="_qtsj" class="eui-input-inline">
+                        <input type="text" id="qtsj" name="g" class="eui-input"  placeholder="时间区间" >
                     </div>
                 </div>
                 <div class="eui-marginT10">
-                    <span>当前所选: </span><span></span>
-                    <span class="eui-marginL40">订单总数: </span><span></span>
-                    <span class="eui-marginL40">佣金总额: </span><span></span>
+                    <span>当前所选: </span><span class="ac">全部</span>
+                    <span class="eui-marginL40">订单总数: </span><span class="acj">0</span>
+                    <span class="eui-marginL40">佣金总额: </span><span class="acy">0</span>
 
                 </div>
             </div>
@@ -46,12 +46,18 @@
                     </div>
 
                     <div class="eui-input-inline">
-                        <span class="eui-btn" onclick="doSearch()">查询</span>
+                        <span class="eui-btn" onclick="doSearch2()">查询</span>
                         <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
                     </div>
                 </div>
             </form>
-
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 订单列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                </div>
+            </div>
             <table class="eui-marginT10" id="test2"></table>
         </div>
     </div>
@@ -64,6 +70,7 @@
 <script src="/date2format.js" type="text/javascript"></script>
 <script>
     var leftObj;
+    var orderCountFlag = true;
     // 表单
     eui.use(['form', 'laydate', 'layer'], function(){
         var form = eui.form
@@ -71,28 +78,56 @@
             ,laydate = eui.laydate;
 
             laydate.render({
-                elem: '#year'
-                ,type: 'year'
+                elem: '#qtsj'
+                ,type: 'month'
+                ,range: true
+                ,done: function(value, date, endDate){
+                    var startTime = getMonthStartDate(date.year,date.month)+' 00:00:00';
+                    var endTime = getMonthEndDate(endDate.year,endDate.month)+' 24:00:00';
+                    leftObj.startTime=startTime;
+                    leftObj.endTime=endTime;
+                    doSearch()
+                }
             });
 
         form.on('radio(month)', function(data){
             if (data.value!=''){
+                $("#_qtsj").hide();
                 var year = new Date().getFullYear();
                 var month = new Date().getMonth()+1;
                 var startTime = getMonthStartDate(year,month-Number(data.value))+' 00:00:00';
                 var endTime = getMonthEndDate(year,month-1)+' 24:00:00';
+                leftObj.startTime=startTime;
+                leftObj.endTime=endTime;
+                doSearch()
+            }else {
+                leftObj.startTime=null;
+                leftObj.endTime=null;
+                $("#_qtsj").show();
             }
         });
-            loadTree();
-            leftObj = new Object();
-            leftObj.type='cityList';
-            dynamicTable(leftObj);
+
+
+        leftObj = new Object();
+        leftObj.type='cityList';
+        var year = new Date().getFullYear();
+        var month = new Date().getMonth()+1;
+        var startTime = getMonthStartDate(year,month-1)+' 00:00:00';
+        var endTime = getMonthEndDate(year,month-1)+' 24:00:00';
+        leftObj.startTime=startTime;
+        leftObj.endTime=endTime;
+        loadTree();
+        dynamicTable(leftObj);
     });
 
 
 
     function doSearch() {
         dynamicTable(leftObj);
+    }
+    function doSearch2() {
+        orderCountFlag = false;
+        doSearch();
     }
 
     var table;
@@ -115,9 +150,6 @@
                     ,{field: 'payment_time', title: '订单时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
                     ,{field: 'order_money', title: '金额(￥)', width: 100}
                     ,{field: 'brokerage', title: '佣金(￥)', width: 100}
-//                    ,{field: 'creator', title: '结算人', width: 100}
-
-//                    ,{field: 'status', title: '支付状态', width: 100,templet:'<div>{{# if(d.status==2){ }} 已支付  {{#  }else{   }} 未支付 {{# } }}</div>'}
                     ,{field: 'channel_name', title: '渠道商', width: 150}
                     ,{field: 'rule', title: '结算比例', width: 100}
                     ,{field: 'rule_name', title: '结算规则', width: 110}
@@ -136,7 +168,15 @@
                 ,limits: [10,30,50,100]
                 ,limit: 10 //每页默认显示的数量
                 ,done: function(res, curr, count){
+                    if (orderCountFlag){
+                        $(".acy").html('0');
+                        $(".acj").html(count);
+                        if (res.data.length>0){
+                            $(".acy").html(res.data[0].ZYJ);
+                        }
+                    }
                     layer.closeAll();
+                    orderCountFlag = true;
                 }
             });
         });
@@ -155,23 +195,31 @@
                     childIcon: 'leaf' ,
                     slide: false, //是否显示动画
                     nodeWidth: 200,
-                    isExpand:3,
+                    isExpand:2,
                     idFieldName: 'id',
                     textFieldName:'name',
                     parentIDFieldName: 'pid',
                     onSelect: function (node)
                     {
-                         leftObj = new Object();
-                        leftObj.type='cityList';
+                        $(".ac").html(node.data.name);
+                        leftObj.province=null;
+                        leftObj.city=null;
+                        leftObj.id_=null;
                         var level = node.data.level;
                         if (level == 1){
                             leftObj.province=node.data.name;
+                            leftObj.city=null;
+                            leftObj.id_=null;
                         }
                         if (level == 2){
                             leftObj.city=node.data.name;
+                            leftObj.province=null;
+                            leftObj.id_=null;
                         }
                         if (level == 3){
                             leftObj.id_=node.data.id;
+                            leftObj.city=null;
+                            leftObj.province=null;
                         }
                         doSearch();
                     },

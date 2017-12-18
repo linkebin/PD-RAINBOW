@@ -39,6 +39,7 @@ public class PlatformSettlementController {
     public Result areaAndChannelOrderList(Integer page,  Integer limit,String json) {
 
         Map<String,Object> map = JSON.parseObject(json,Map.class);
+
         List<Map<String,Object>> channels = channelManageService.findChannelListAndTypeAndParameter(map);
         List<String> ids = new ArrayList<String>();
         for (Map<String,Object> m3 : channels){
@@ -47,8 +48,17 @@ public class PlatformSettlementController {
         if (ids.size() == 0){
             ids.add("9x991000");
         }
+        List<Map<String,Object>> ZYJ = platformSettlementService.findAreaAndChannelOrderZYJ(ids,map);
 
+        PageHelper.startPage(page, limit);
         List<Map<String,Object>> list = platformSettlementService.findAreaAndChannelOrderList(ids,map);
+        if (list.size()>0) {
+            list.get(0).put("ZYJ", 0);
+            if (ZYJ.size() > 0) {
+                list.get(0).put("ZYJ", ZYJ.get(0).get("ZYJ"));
+            }
+        }
+
         PageInfo pageInfo = new PageInfo(list);
 
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);

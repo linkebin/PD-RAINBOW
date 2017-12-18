@@ -1,16 +1,22 @@
 package com.yidusoft.project.channel.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.activitis.service.ChannelActivityService;
 import com.yidusoft.project.channel.dao.ChannelManageMapper;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.core.AbstractService;
 
+import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.TimeStampDate;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -31,6 +37,26 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
 
     @Resource
     private SecUserService secUserService;
+
+    @Resource
+    private ChannelActivityService channelActivityService;
+
+    @Override
+    public Result signChannel(SecUser secUser, ChannelManage channelManage) throws Exception{
+        try {
+            Result result = secUserService.addUser(JSON.toJSONString(secUser));
+            if (result.getCode() !=200){
+                return result;
+            }
+            this.save(channelManage);
+            String uri = "/web/channel/manage/acdetail?id="+channelManage.getId();
+            channelActivityService.startProcess(channelManage.getId(),channelManage.getChannelName()+"  申请入驻平台",uri);
+            return ResultGenerator.genSuccessResult().setMessage("登记成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("登记失败");
+        }
+    }
 
     @Override
     public List<Map<String, Object>> findChannelListAndTypeAndParameter(Map<String, Object> map) {
@@ -113,8 +139,9 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     }
 
     @Override
-    public List<Map<String, Object>> findChannelOrAccountCounselorListByParameter(Map<String, Object> map) {
-        return channelManageMapper.findChannelOrAccountCounselorListByParameter(map);
+    public List<Map<String, Object>> findChannelOrAccountCounselorListByParameter(List<String> ids,
+                                                                                  Map<String,Object> map) {
+        return channelManageMapper.findChannelOrAccountCounselorListByParameter(ids,map);
     }
 
     @Override

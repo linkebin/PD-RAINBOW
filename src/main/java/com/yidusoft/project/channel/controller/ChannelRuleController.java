@@ -110,7 +110,7 @@ public class ChannelRuleController {
 
     public List<String> getChannelConsultIds(Map<String,Object> map){
         List<String> ids = new ArrayList<String>();
-        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(map);
+        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(null,map);
         for (Map<String,Object> m : list){
             ids.add(m.get("ID_").toString());
         }

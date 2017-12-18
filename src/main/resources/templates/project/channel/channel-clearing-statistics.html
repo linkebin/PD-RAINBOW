@@ -34,13 +34,6 @@
 
         <div class="eui-mn1-type3">
             <form class="eui-form" id="searchFrom">
-                <input type="hidden" id="id"  name="parentId"/>
-                <input type="hidden"   name="type" value="3"/>
-                <!--<div class="eui-input-inline eui-padding10">-->
-
-                    <!--<input type="text" name="creator"  value=""-->
-                            <!--placeholder="支付人/关键字" class="eui-input">-->
-                <!--</div>-->
                 <div class="eui-input-inline eui-padding10">
                     <input type="text" name="startTime" id="startTime"  value=""
                             placeholder="订单起始时间" class="eui-input">
@@ -50,13 +43,7 @@
                     <input type="text" name="endTime" id="endTime"  value=""
                             placeholder="订单结束时间" class="eui-input">
                 </div>
-                <!--<div class="eui-input-inline eui-padding10">-->
-                    <!--<select name="status">-->
-                        <!--<option value="">请选择支付类型</option>-->
-                        <!--<option selected="selected" value="1">未支付</option>-->
-                        <!--<option value="2">已支付</option>-->
-                    <!--</select>-->
-                <!--</div>-->
+
 
                 <div class="eui-input-inline">
                     <span class="eui-btn  eui-btn" onclick="doSearch()">查询</span>
@@ -65,12 +52,9 @@
             </form>
             <div class="eui-row eui-padding10 eui-borderB">
                 <div class="eui-col-md6 eui-font18">
-                    <!--<i class='eui-icon eui-font24'>&#xe61d;</i> 全部-->
                     <span>佣金统计</span>
                 </div>
                 <div class="eui-col-md6 eui-textAlignR">
-                    <!--<a onclick="selectClearing()" class="eui-btn eui-btn-small" href="###">结算选中</a>-->
-                    <a onclick="lookAll()" class="eui-btn eui-btn-small" href="###">查看全部</a>
                 </div>
             </div>
             <div id="analysis"  class="main"></div>
@@ -109,25 +93,17 @@
 
     function resetForm() {
         $('#searchFrom')[0].reset();
+        leftObj.startTime=null;
+        leftObj.endTime=null;
     }
     function doSearch() {
         var obj =$("#searchFrom").serializeObject();
 
         if (obj.startTime!='' &&  obj.endTime!=''){
-            obj.startTime=obj.startTime+' 00:00:00';
-            obj.endTime=obj.endTime+' 24:00:00';
+            leftObj.startTime=obj.startTime+' 00:00:00';
+            leftObj.endTime=obj.endTime+' 24:00:00';
         }
-        if(obj.parentId!=''){
-            if (obj.parentId =='0'){
-                obj.type=2;
-                obj.channel_id=$("#id").attr('searchId');
-            }else {
-                obj.type=1;
-                obj.inviter_user=$("#id").attr('searchId');
-            }
-
-        }
-        dataList(obj);
+        dataList(leftObj);
         lineChartRight(obj.parentId)
     }
 
@@ -146,25 +122,21 @@
     }
 
     var channelTree;
+    var leftObj;
     var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
 
     $(function () {
-       loadTree();
-        lineChartRight('');
-        var o =$("#searchFrom").serializeObject();
-        dynamicTable2(o);
+        loadTree();
+        leftObj = new Object();
+        leftObj.type='cityList';
+        lineChartRight();
+        dynamicTable(leftObj);
 
     });
 
-    function lookAll() {
-        loadTree();
-        lineChartRight('');
-        var o =$("#searchFrom").serializeObject();
-        dynamicTable2(o);
-    }
     function loadTree() {
         $.ajax({
-            url:"/channel/manage/channelTree",
+            url:"/platform/settlement/areaChannelTrees",
             type:"post",
             success:function(result){
                 //菜单树
@@ -177,20 +149,31 @@
                     nodeWidth: 200,
                     isExpand:2,
                     idFieldName: 'id',
-                    textFieldName:'channelName',
-                    parentIDFieldName: 'deleted',
+                    textFieldName:'name',
+                    parentIDFieldName: 'pid',
                     onSelect: function (node)
                     {
-                        lineChartRight(node.data.id);
-                        var oj = $("#searchFrom").serializeObject();
-                        if (oj.startTime!='' &&  oj.endTime!=''){
-                            oj.startTime=oj.startTime+' 00:00:00';
-                            oj.endTime=oj.endTime+' 24:00:00';
+                        leftObj.province=null;
+                        leftObj.city=null;
+                        leftObj.id_=null;
+                        var level = node.data.level;
+                        if (level == 1){
+                            leftObj.province=node.data.name;
+                            leftObj.city=null;
+                            leftObj.id_=null;
                         }
-                        oj.type=2;
-                        oj.channel_id=node.data.id;
-                        dynamicTable(oj);
-                        lineChartRight(oj.channel_id)
+                        if (level == 2){
+                            leftObj.city=node.data.name;
+                            leftObj.province=null;
+                            leftObj.id_=null;
+                        }
+                        if (level == 3){
+                            leftObj.id_=node.data.id;
+                            leftObj.city=null;
+                            leftObj.province=null;
+                        }
+                        lineChartRight();
+                        dynamicTable(leftObj);
                     },
                     onAfterAppend:function (parentNode, newdata) {
 
@@ -205,18 +188,18 @@
         });
     }
 
-    function lineChartRight(channel_id) {
+    function lineChartRight() {
         var timeDataX=new Array;
         var timeDataY=new Array;
         var obj = $("#searchFrom").serializeObject();
         if (obj.startTime!='' &&  obj.endTime!=''){
-            obj.startTime=obj.startTime+' 00:00:00';
-            obj.endTime=obj.endTime+' 24:00:00';
+            leftObj.startTime=obj.startTime+' 00:00:00';
+            leftObj.endTime=obj.endTime+' 24:00:00';
         }
-        if (channel_id!=''){
-            obj.channel_id=channel_id;
+        if (leftObj.id_!=null){
+            leftObj.channel_id=leftObj.id_;
         }
-        $.post('/clearing/manage/clearingLineChart',{json:JSON.stringify(obj)},function (result) {
+        $.post('/clearing/manage/clearingLineChart',{json:JSON.stringify(leftObj)},function (result) {
             var setingObj = new Object();
             setingObj.maxY=100;
             setingObj.interval=25;
@@ -360,80 +343,14 @@
                 }
             });
 
-            tableIns = table.render({//<div>{{# if(d.SEX=="1"){ }} 男  {{#  }else{   }} 女 {{# } }}</div>  <div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>
+            tableIns = table.render({
                 id: 'idTest'
                 ,elem: '#test2'
                 ,url:'/clearing/manage/listOrderOnlineClearing'
                 ,method:'post'
                 ,where: {json: JSON.stringify(obj)}
                 ,height: 420
-                ,cols: [[ //标题栏
-//                    {checkbox: true},
-                    {field: 'order_code', title: '订单编号', width: 120}
-                    ,{field: 'order_money', title: '金额(￥)', width: 100}
-                    ,{field: 'brokerage', title: '佣金(￥)', width: 100,templet:'<div>{{# if(d.brokerage==undefined ){ }} 未结算  {{#  }else{   }} {{ d.brokerage}} {{# } }}</div>'}
-                    ,{field: 'status', title: '支付状态', width: 100,templet:'<div>{{# if(d.status=="1"){ }} 未支付  {{#  } }}  {{# if(d.status=="2"){ }} 已支付  {{#  } }}   {{# if(d.status==undefined){ }} 未结算  {{#  } }}</div>'}
-                    ,{field: 'consultant_name', title: '咨询师', width: 100}
-                    ,{field: 'referrer', title: '推荐人', width: 100}
-                    ,{field: 'payment_time', title: '订单时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
-                    ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{# if(d.create_time==undefined ){ }} 未结算  {{#  }else{   }} {{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}} {{# } }}</div>'}
-
-                ]]
-                ,response: {
-                    statusName: 'code' //数据状态的字段名称，默认：code
-                    ,statusCode: 200 //成功的状态码，默认：0
-                    ,msgName: 'message' //状态信息的字段名称，默认：msg
-                    ,countName: 'count' //数据总数的字段名称，默认：count
-                    ,dataName: 'data' //数据列表的字段名称，默认：data
-                }
-                ,skin: 'row' //表格风格
-                ,even: true
-                ,loading: true
-                ,page: true //是否显示分页
-                ,limits: [10,30,50,100]
-                ,limit: 10 //每页默认显示的数量
-                ,done: function(res, curr, count){
-
-                }
-            });
-
-            //监听工具条
-            table.on('tool(idTest)', function(obj){
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-                if(layEvent === 'edit'){ //编辑
-                    var parentId = channelTree.getSelected().data.parentId;
-                    var list = new Array();
-
-                    var obj = new Object();
-                    obj.ID_=data.ID_;
-                    obj.payment_time=data.payment_time;
-                    obj.order_money=data.order_money;
-                    list.push(obj);
-                    if (parentId=='0'){
-                        parentId=channelTree.getSelected().data.id
-                    }
-                    sendSave(list,parentId);
-                }
-            });
-        });
-    }
-
-
-    function dynamicTable2(obj) {
-        eui.use(['table', 'laydate'], function(){
-            table = eui.table;
-            var laydate = eui.laydate;
-
-            tableIns = table.render({
-                id: 'idTest'
-                ,elem: '#test2'
-                ,url:'/clearing/manage/listClearingAllTable'
-                ,method:'post'
-                ,where: {json: JSON.stringify(obj)}
-                ,height: 420
-                ,cols: [[ //标题栏
+                ,cols: [[
                     {field: 'order_code', title: '订单编号', width: 120}
                     ,{field: 'order_money', title: '金额(￥)', width: 100}
                     ,{field: 'brokerage', title: '佣金(￥)', width: 100,templet:'<div>{{# if(d.brokerage==undefined ){ }} 未结算  {{#  }else{   }} {{ d.brokerage}} {{# } }}</div>'}
@@ -463,7 +380,6 @@
             });
         });
     }
-
 </script>
 </body>
 </html>

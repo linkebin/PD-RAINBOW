@@ -20,4 +20,6 @@ public interface PlatformSettlementService extends Service<PlatformSettlement> {
     List<Map<String,Object>> findAreaAndChannelOrderList(@Param("ids")List<String> ids,
                                                          @Param("map")Map<String,Object> map);
 
+    List<Map<String,Object>> findAreaAndChannelOrderZYJ(@Param("ids")List<String> ids,
+                                                         @Param("map")Map<String,Object> map);
 }
