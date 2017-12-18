@@ -60,6 +60,7 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
             questionnaire.setCreator(Security.getUser().getUserName());
             questionnaire.setCreateTime(new Date());
             questionnaire.setDeleted(0);
+            questionnaire.setSort(questionStr);
             String shelfTime =TimeStampDate.dateToStr(questionnaire.getShelfTime(),"yyyy-MM-dd");
             if(shelfTime.equals(TimeStampDate.dateToStr(new Date(),"yyyy-MM-dd"))){
                 questionnaire.setQuestionnaireState(2);
@@ -133,6 +134,7 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
             if(shelfTime.equals(TimeStampDate.dateToStr(new Date(),"yyyy-MM-dd"))){
                 questionnaire.setQuestionnaireState(2);
             }
+            questionnaire.setSort(questionStr);
             this.update(questionnaire);
             List<QuestionnaireQuestionFactor> questionnaireQuestionFactors=questionnaireQuestionFactorMapper.findQuestionnaireQuestionFactor(questionnaire.getId());
             //删除所有的问卷问题因子
@@ -143,6 +145,7 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
           String [] questionArray=  questionStr.split(",");
            for(int i=0;i<questionArray.length;i++){
                if(!"".equals(questionArray[i])){
+                   System.out.println("questionarray = " + questionArray[i]);
                    QuestionnaireQuestionFactor questionFactor=new QuestionnaireQuestionFactor();
                    questionFactor.setId(UUID.randomUUID().toString());
                    questionFactor.setQuestionId(questionArray[i]);

@@ -76,7 +76,24 @@ public class WebQuestionnaireController {
             model.addAttribute("newQuestion",newQuestion);
             //量表的问题id
             model.addAttribute("gaugeQuestionIds",gaugeQuestionIds);
-
+             String[] temp =   questionnaire.getSort().split(",");
+             questionnaireQuestionIds = new ArrayList<>();
+             for (String d : temp){
+                 questionnaireQuestionIds.add(d);
+             }
+           model.addAttribute("ids",questionnaireQuestionIds);
+            List<Integer> newIdIndex = new ArrayList<>();
+            for(int i = 0; i < questionnaireQuestionIds.size(); i++){
+                for(int y = 0; y < newQuestion.size(); y++){
+                    if(questionnaireQuestionIds.get(i).equals(newQuestion.get(y))){
+                        newIdIndex.add(i);
+                    }
+                }
+            }
+            model.addAttribute("newIdIndex",newIdIndex);
+            System.out.println(questionnaireQuestionIds);
+            System.out.println(newIdIndex);
+            model.addAttribute("sortedQuestionIds",questionnaireQuestionIds);
         }else {
             //不存在量表，只有新加问题的id
             model.addAttribute("newQuestion",questionnaireQuestionIds);
@@ -184,7 +201,24 @@ public class WebQuestionnaireController {
             model.addAttribute("newQuestion",newQuestion);
             //量表的问题id
             model.addAttribute("gaugeQuestionIds",gaugeQuestionIds);
-
+            String[] temp =   questionnaire.getSort().split(",");
+            questionnaireQuestionIds = new ArrayList<>();
+            for (String d : temp){
+                questionnaireQuestionIds.add(d);
+            }
+            model.addAttribute("ids",questionnaireQuestionIds);
+            List<Integer> newIdIndex = new ArrayList<>();
+            for(int i = 0; i < questionnaireQuestionIds.size(); i++){
+                for(int y = 0; y < newQuestion.size(); y++){
+                    if(questionnaireQuestionIds.get(i).equals(newQuestion.get(y))){
+                        newIdIndex.add(i);
+                    }
+                }
+            }
+            model.addAttribute("newIdIndex",newIdIndex);
+            System.out.println(questionnaireQuestionIds);
+            System.out.println(newIdIndex);
+            model.addAttribute("sortedQuestionIds",questionnaireQuestionIds);
         }else {
             //不存在量表，只有新加问题的id
             model.addAttribute("newQuestion",questionnaireQuestionIds);

@@ -19,6 +19,7 @@ import com.yidusoft.project.questionnaire.domain.QuestionnaireAnswer;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.project.questionnaire.service.DataAcquisitionService;
 import com.yidusoft.project.questionnaire.service.QuestionnaireQuestionService;
+import com.yidusoft.project.questionnaire.service.QuestionnaireService;
 import com.yidusoft.project.transaction.dao.UserQuestionnairesMapper;
 import com.yidusoft.project.transaction.domain.AccountInfo;
 import com.yidusoft.project.transaction.domain.UserQuestionnaires;
@@ -66,6 +67,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     private LaunchActivitiesService launchActivitiesService;
     @Resource
     private AccountInfoService accountInfoService;
+    @Resource
+    private QuestionnaireService questionnaireService;
 
     //分页条件查询问题
     @Override
@@ -89,7 +92,24 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     // 查询问卷相关的问题
     @Override
     public List<QuestionnaireQuestion> findQuestionForQuestionnaire(String id) {
-        return questionnaireQuestionMapper.findQuestionForQuestionnaire(id);
+        List<QuestionnaireQuestion> q1= questionnaireQuestionMapper.findQuestionForQuestionnaire(id);
+        List<QuestionnaireQuestion> q3= new ArrayList<>();
+        String ids[] = null;
+        String temp = questionnaireService.findById(id).getSort();
+        if(temp == null || temp.equals("")){
+            q3 = q1;
+        }else{
+            ids = temp.split(",");
+        }
+
+       for (int i = 0; ids != null && i < ids.length; i++){
+           for (int y = 0 ; y < q1.size(); y++){
+               if (ids[i].equals(q1.get(y).getId())){
+                   q3.add(i,q1.get(y));
+               }
+           }
+       }
+        return q3;
     }
 
     /**

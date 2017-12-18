@@ -19,6 +19,16 @@
           right: 15px;
           top: 0;
       }
+      .sortable-ghost {
+          opacity: 0.4;
+          background-color: #F4E2C9;
+      }
+
+      .newlyQuestion{
+          background-image: url("../../../Styles/images/iconStyle3/iconImg-newQuestion.png");
+          background-repeat: no-repeat;
+          background-size: 30px;
+      }
   </style>
 </head>
 <body>
@@ -260,6 +270,8 @@
                         <p  id="pDom" style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="addQuestion()">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>自定义问题</p>
                         <!--<button type="button"  id="addMember"  class="eui-btn eui-btn-small" onclick="checkMember()"><i class="eui-icon">&#xe654;</i> 添加成员</button>-->
+                        <p  id="" style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="adjustSequence()">
+                            <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>调整顺序</p>
                     </div>
                 </div>
             </div>
@@ -271,12 +283,12 @@
                     <!--  这里放选择的量表问题-->
                 </div>
             </div>
-            <div class="eui-colla-item">
-                <h2 class="eui-colla-title" name="transverse">新增的问题</h2>
-                <div class="eui-colla-content" id="addQuestionCollapse">
-                    <!--这里放新添加的问题-->
-                </div>
-            </div>
+            <!--<div class="eui-colla-item">-->
+                <!--<h2 class="eui-colla-title" name="transverse">新增的问题</h2>-->
+                <!--<div class="eui-colla-content" id="addQuestionCollapse">-->
+                    <!--&lt;!&ndash;这里放新添加的问题&ndash;&gt;-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
 </div>
@@ -350,6 +362,7 @@
 <script src="/date2format.js" charset="utf-8"></script>
 <script src="/Scripts/plugins/md5/md5.min.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
+<script src="/Scripts/plugins/Sortable.js"></script>
 
 
 
@@ -364,6 +377,64 @@
             //layer.msg('展开状态：'+ data.show);
         });
     });
+
+
+///////////////////////////////////////////////////////////////////////
+
+//问题拖拽排序
+function sortQuestion() {
+    Sortable.create(document.getElementById('questionCollapse'), {
+        animation: 150, //动画参数
+        onAdd: function (evt){   //拖拽时候添加有新的节点的时候发生该事件
+            console.log('onAdd.foo:', [evt.item, evt.from]);
+        },
+        onUpdate: function (evt){  //拖拽更新节点位置发生该事件
+            console.log('onUpdate.foo:', [evt.item, evt.from]);
+        },
+        onRemove: function (evt){   //删除拖拽节点的时候促发该事件
+            console.log('onRemove.foo:', [evt.item, evt.from]);
+        },
+        onStart:function(evt){  //开始拖拽出发该函数
+            console.log('onStart.foo:', [evt.item, evt.from]);
+
+        },
+        onSort:function(evt){  //发生排序发生该事件
+            console.log('onSort.foo:', [evt.item, evt.from]);
+        },
+        onEnd: function(evt){ //拖拽完毕之后发生该事件
+            console.log('onEnd.foo:', [evt.item, evt.from]);
+            //排序
+            spanSequence();
+        }
+    });
+
+
+}
+
+//弹出调整问题对话框
+function adjustSequence() {
+    layer.open({
+        type: 1
+        ,content: '<div style="padding: 20px 80px;">请拖动问题到所需要的位置，最后按保存按钮保存</div>'
+        ,btn: ['确定','关闭']
+        ,btnAlign: 'r' //按钮居中
+        ,shade: 0 //不显示遮罩
+        ,yes: function(){
+            layer.closeAll();
+            sortQuestion();
+        }
+        ,btn2:function () {
+            layer.closeAll();
+            sortQuestion();
+        }
+        ,cancel:function () {
+            sortQuestion();
+        }
+    });
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -494,8 +565,18 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
   var questionnaireTagList=[[${questionnaireTagList}]];
   var sceneList=[[${sceneList}]];
   var questionnaires=[[${questionnaire}]];
+    var allQuestionIds= new Array();
+    allQuestionIds = [[${ids}]];
+    console.log('allQuestionIds = ' + allQuestionIds);
+    var newIdIndex = [[${newIdIndex}]];
+    console.log('allqids = ' + newIdIndex);
 
+
+    var sortedQuestionIds=[[${sortedQuestionIds}]];
+    console.log('sorte'+ sortedQuestionIds);
   var questionnaireId=questionnaires.id;
+  var sortIndex = new Array();
+    var inserFlag = false;
     console.info("数据");
     console.info(questionnaireQuestionFactorList);
     console.info(questionnaireTagList);
@@ -789,7 +870,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         $.post("/questionnaire/question/findQuestion",{"ids":ids},function (result) {
                 layer.closeAll();
             var context= questionList(result.data,"show");
-            $("#addQuestionCollapse").append(context);
+            $("#questionCollapse").append(context);
             spanSequence();
         });
       });
@@ -800,12 +881,43 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         //type show选择的问题能删除   hide选择的量表不能删除
         var context="";
         for(var item in questionList){
+
          var  question=  questionList[item];
-             context+='<div name="questionIds"  question="'+question.id+'" id="div'+question.id+'" class="eui-colla-item ">';
-             context+='  <h2  class="eui-colla-title"><span name="spanNumber"></span>'+question.questionContent;
-            if(type=='show'){
-               context+='  <i  title="删除" onclick="deleteQuestion(\''+question.id+'\')" class="eui-icon eui-icon-rigth" >&#xe640;</i> ';
+              context+='<div name="questionIds"  question="'+question.id+'" id="div'+question.id+'" class="eui-colla-item ">';
+             if(inserFlag){
+                 if(type == 'show'){
+                     context+='  <h2  class="eui-colla-title newlyQuestion"><span name="spanNumber"></span>'+question.questionContent;
+
+                 }else{
+                     context+='  <h2  class="eui-colla-title"><span name="spanNumber"></span>'+question.questionContent;
+
+                 }
+                 if(type=='show'){
+                     context+='  <i  title="删除" onclick="deleteQuestion(\''+question.id+'\')" class="eui-icon eui-icon-rigth" >&#xe640;</i> ';
+
+                 }
              }
+
+
+            if(newIdIndex.length == 0 && !inserFlag){
+                context+='  <h2  class="eui-colla-title"><span name="spanNumber"></span>'+question.questionContent;
+            }else if(newIdIndex.length > 0){
+                for(var z in newIdIndex){
+
+                    if(newIdIndex[z] == (item)){
+
+                        context+='  <h2  class="eui-colla-title newlyQuestion"><span name="spanNumber"></span>'+question.questionContent;
+                        context+='  <i  title="删除" onclick="deleteQuestion(\''+question.id+'\')" class="eui-icon eui-icon-rigth" >&#xe640;</i> ';
+                        break;
+                    }
+                    if(z == (newIdIndex.length -1)){
+
+                        context+='  <h2  class="eui-colla-title"><span name="spanNumber"></span>'+question.questionContent;
+                    }
+                }
+            }
+
+
              context+='  </h2> ';
              context+=' <div class="eui-colla-content eui-show"> ';
              var optionScore=question.optionScore+"";
@@ -821,6 +933,8 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
              context+='  </div>  ';
              context+='</div>  ';
         }
+        newIdIndex = '';
+        inserFlag = true;
      return context;
     }
 
@@ -870,7 +984,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
          }
          var questionStr=questionArray.join(",");
          $("#questionStr").val(questionStr);
-
+        console.log('questionstr = ' + questionStr);
        //验证
        if($("#questionnaireName").val()==""){
            layer.msg('请填写名称', {
@@ -1186,12 +1300,37 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 for(var i in  newQuestion){
                     ids1 += newQuestion[i]+ ',';
                 }
-                //新增加的问题
-                findQuestion(ids1,'show');
+
             }
+            //新增加的问题
+           // findQuestion(allQuestionIds,'show');
+            console.log('q-id = ' + ids1);
+            console.log('q-id2 = ' + ids);
+            console.log('allquestion = ' + allQuestionIds);
+            console.log('sortedQuestion = ' + sortedQuestionIds);
                 //量表的里的问题 不能删除
-                findQuestion(ids,'hide');
+            //dealSort(ids1,allQuestionIds+',');
+            findQuestion(sortedQuestionIds+',','hide');
         });
+    }
+
+    //判断哪些是新增的问题
+    function dealSort(newIds,allQueIds) {
+        var newArr = newIds.split(',');
+        //var allArr = allIds.split(',');
+        var allArr = allQueIds.split(',');
+        console.log('length = ' + newArr.length + ":" +allArr.length);
+        for(var i = 0; i < allArr.length; i++){
+            for(var y = 0; y < newArr.length; y++){
+                if (allArr[i] == newArr[y]){
+                    sortIndex.push(parseInt(i));
+                    console.log('index = ' + i);
+                }
+            }
+        }
+        console.log('新问题 = '+sortIndex.length);
+        console.log('所有问题 = ' + allQuestionIds);
+        findQuestion(allQuestionIds+',','hide');
     }
 
     //通过问题id 查询问题  填充已选择的问题
@@ -1205,7 +1344,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             if(type=='hide'){
               $("#questionCollapse").append(context);
             }else {
-                $("#addQuestionCollapse").append(context);
+                $("#questionCollapse").append(context);
             }
             spanSequence();
         });
@@ -1378,7 +1517,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 var array=new Array;
                 array[0]=question;
                 var context= questionList(array,"show");
-                $("#addQuestionCollapse").append(context);
+                $("#questionCollapse").append(context);
                 idArray+=","+question.id;
                 spanSequence();
                 layer.msg('操作成功', {

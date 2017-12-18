@@ -22,6 +22,7 @@
     <result column="remarks" jdbcType="LONGVARCHAR" property="remarks" />
     <result column="guide" jdbcType="LONGVARCHAR" property="guide" />
       <result column="questionnaire_permission" jdbcType="INTEGER" property="questionnairePermission" />
+      <result column="sort" jdbcType="LONGVARCHAR" property="sort" />
   </resultMap>
 
     <resultMap id="BaseResultMap1" type="com.yidusoft.project.questionnaire.domain.Questionnaire">
@@ -47,6 +48,7 @@
         <result column="gauge_name" jdbcType="VARCHAR" property="gaugeName" />
         <result column="questionnaire_type_name" jdbcType="VARCHAR" property="questionnaireTypeName" />
         <result column="questionnaire_permission" jdbcType="INTEGER" property="questionnairePermission" />
+        <result column="sort" jdbcType="LONGVARCHAR" property="sort" />
     </resultMap>
 
     <select id="questionnaireListByPage" resultMap="BaseResultMap1" parameterType="com.yidusoft.project.questionnaire.domain.Questionnaire">

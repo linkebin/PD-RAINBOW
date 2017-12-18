@@ -134,6 +134,20 @@ public class Questionnaire {
     @Transient
     private String gaugeName;
 
+    /**
+     * 问题顺序
+     */
+    @Column(name = "sort")
+    private String sort;
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
     public String getGaugeName() {
         return gaugeName;
     }
