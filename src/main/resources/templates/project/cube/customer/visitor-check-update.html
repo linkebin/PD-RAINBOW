@@ -280,12 +280,13 @@
                                         <option value="">请选择</option>
                                         <option th:each="category:${selectOptionList}" th:value="${category.optionName}"
                                                 th:text="${category.optionName}"  ></option>
+                                        <option value="保密">保密</option>
                                     </select>
                                 </div>
 
                                 <label class="eui-form-label">父亲年龄</label>
                                 <div class="eui-input-inline">
-                                    <input type="text" name="fatherAge"   placeholder="请输入父亲年龄" class="eui-input">
+                                    <input type="text" name="fatherAge"    class="eui-input">
                                 </div>
 
                                 <label class="eui-form-label">父亲学历</label>
@@ -299,6 +300,7 @@
                                         <option value="本科">本科</option>
                                         <option value="研究生">研究生</option>
                                         <option value="博士">博士</option>
+                                        <option value="保密">保密</option>
                                     </select>
 
                                 </div>
@@ -330,12 +332,13 @@
                                         <option value="">请选择</option>
                                         <option th:each="category:${selectOptionList}" th:value="${category.optionName}"
                                                 th:text="${category.optionName}"  ></option>
+                                        <option value="保密">保密</option>
                                     </select>
                                 </div>
 
                                 <label class="eui-form-label">母亲年龄</label>
                                 <div class="eui-input-inline">
-                                    <input type="text" name="motherAge"   placeholder="请输入母亲年龄" class="eui-input">
+                                    <input type="text" name="motherAge"    class="eui-input">
                                 </div>
 
                                 <label class="eui-form-label">母亲学历</label>
@@ -349,6 +352,7 @@
                                         <option value="本科">本科</option>
                                         <option value="研究生">研究生</option>
                                         <option value="博士">博士</option>
+                                        <option value="保密">保密</option>
                                     </select>
                                 </div>
 
@@ -686,6 +690,18 @@
             result.data.birthday=new Date(result.data.birthday).Format('yyyy-MM-dd');
 
             var obj = result.data;
+            if (obj.motherAge==0){
+                obj.motherAge='';
+            }
+            if (obj.fatherAge==0){
+                obj.fatherAge='';
+            }
+
+            if (obj.brothersSistersRanking==0){
+                obj.brothersSistersRanking='';
+            }
+
+
             obj.Have_children=0;
 
             if (obj.childSex!=null && obj.childAge!=0){
@@ -1043,9 +1059,12 @@
                 layer.load();
                 $.post('/visitor/register/update',{json:JSON.stringify(empty)},function (result) {
                     if (result.code==200){
-                        layer.msg(result.message);
-                        layer.closeAll();
-                        self.opener.location.reload();
+                        layer.msg(result.message, {
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function(){
+                            layer.closeAll();
+                            self.opener.location.reload();
+                        });
                     }else {
                         layer.msg(result.message);
                     }

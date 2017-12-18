@@ -53,7 +53,7 @@ public class ChannelActivityController {
 
 	//开启渠道审批流程实例
 	@RequestMapping(value = "/channelProcess", method = RequestMethod.POST)
-	public Result startProcessInstance( String channelId, String channelName) {
+	public Result startProcessInstance( String channelId, String channelName) throws Exception{
 		String uri = "/web/channel/manage/acdetail?id="+channelId;
 		channelActivityService.startProcess(channelId,channelName,uri);
 		return  ResultGenerator.genSuccessResult();

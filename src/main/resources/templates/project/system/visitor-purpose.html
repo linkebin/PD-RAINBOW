@@ -10,21 +10,6 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/demo.css" media="all">
     <link rel="stylesheet" href="../../../Scripts/libs/ztree/css/metroStyle/metroStyle.css" type="text/css">
-    <style>
-        .main {
-            /* width: 778px !important; */
-            overflow: hidden;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #e3e3e3;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-        }
-    </style>
 </head>
 <body>
 <div class="eui-bg-white eui-row eui-padding15">
@@ -46,20 +31,23 @@
             </div>
 
             <div class="eui-input-inline eui-padding10">
-                <input type="text" name="endTime" id="endTime"  value=""
-                       placeholder="来访结束时间" class="eui-input">
+                <input type="text" name="endTime" id="endTime"  value="" placeholder="来访结束时间" class="eui-input">
             </div>
-
             <div class="eui-input-inline">
                 <span class="eui-btn  eui-btn" onclick="doSearchA()">查询</span>
                 <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
             </div>
         </form>
+        <div class="chartsA" id="analysis3"></div>
+        <div class="eui-row eui-col-space15">
+            <div class="eui-col-md6">
+                <div class="chartsA" id="analysis4"></div>
+            </div>
+            <div class="eui-col-md6">
+                <div class="chartsA" id="analysis"></div>
+            </div>
 
-        <div class="main" style="height: 400px; width: 48%; float: left;" id="analysis3" ></div>
-        <div class="main" style="height: 400px; width: 48%; float: right" id="analysis4" ></div>
-
-        <div class="main" style="height: 400px; width: 48%; float: left;" id="analysis" ></div>
+        </div>
     </div>
 </div>
 
@@ -314,9 +302,9 @@ function getOption(timeData,data,setingObj) {
                 type:'bar',
                 stack: '总量',
                 itemStyle : { normal: {
-                    color: 'orange',
                     borderRadius: 5,
                     label : {
+                        barWidth: 30,
                         show: true,
                         position: 'left',
                         formatter: '{b}'
@@ -450,7 +438,7 @@ function getProvinceRankingOption(Y,X) {
             },
             "axisLabel": {
                 "textStyle": {
-                    "color": "#ffb069"
+                    "color": "#2ec7c9"
                 }
             }
         }],
@@ -483,18 +471,19 @@ function getProvinceRankingOption(Y,X) {
                         return params.data.name;
                     },
                     "textStyle": {
-                        "color": "#bcbfff" //color of value
+                        "color": "#0f88eb" //color of value
                     }
                 }
             },
+            barWidth: 34,
             "itemStyle": {
                 "normal": {
                     "color": new echarts.graphic.LinearGradient(0, 0, 1, 0, [{
                         "offset": 0,
-                        "color": "#ffb069" // 0% 处的颜色
+                        "color": "#2ec7c9" // 0% 处的颜色
                     }, {
                         "offset": 1,
-                        "color": "#ec2e85" // 100% 处的颜色
+                        "color": "#1dc28e" // 100% 处的颜色
                     }], false)
                 }
             }

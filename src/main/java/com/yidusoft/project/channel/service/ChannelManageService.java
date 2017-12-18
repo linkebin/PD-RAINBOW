@@ -2,6 +2,7 @@ package com.yidusoft.project.channel.service;
 import com.yidusoft.core.Result;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.core.Service;
+import com.yidusoft.project.system.domain.SecUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,6 +13,12 @@ import java.util.Map;
  * Created by CodeGenerator on 2017/10/11.
  */
 public interface ChannelManageService extends Service<ChannelManage> {
+
+    Result signChannel(SecUser secUser,ChannelManage channelManage) throws Exception;
+
+    List<Map<String,Object>> findChannelListAndTypeAndParameter(Map<String,Object> map);
+    //区域渠道树
+    List<Map<String,Object>> findAreaChannelTree();
 
     /**
      * 根据参数查询渠道列表
@@ -47,7 +54,8 @@ public interface ChannelManageService extends Service<ChannelManage> {
      * @param map
      * @return
      */
-    List<Map<String,Object>> findChannelOrAccountCounselorListByParameter(Map<String,Object> map);
+    List<Map<String,Object>> findChannelOrAccountCounselorListByParameter(List<String> ids,
+                                                                          Map<String,Object> map);
 
     /**
      * 渠道审批通过

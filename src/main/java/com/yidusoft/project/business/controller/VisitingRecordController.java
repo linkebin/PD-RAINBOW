@@ -152,10 +152,16 @@ public class VisitingRecordController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PutMapping
-    public Result update(VisitingRecord visitingRecord) {
-        visitingRecordService.update(visitingRecord);
-        return ResultGenerator.genSuccessResult();
+    @PostMapping("/update")
+    public Result update(String json) {
+        VisitingRecord visitingRecord = JSON.parseObject(json,VisitingRecord.class);
+        try {
+            visitingRecordService.update(visitingRecord);
+            return ResultGenerator.genSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("编辑失败");
+        }
     }
 
     @PostMapping("/detail")

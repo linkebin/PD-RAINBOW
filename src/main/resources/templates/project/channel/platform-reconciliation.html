@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>平台对账</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body class="eui-bg-white">
+<div class="eui-bd eui-padding15">
+    <div class="eui-sd1 eui-sd1-type3">
+        <div class="eui-col-md3 etree">
+            <p>渠道树</p>
+            <ul class="eui-padding10" id="channelTree"></ul>
+        </div>
+    </div>
+    <div class="eui-mn1 eui-bg-white">
+        <div class="eui-mn1-type3">
+            <div style="margin-left: 40px;">
+                <div class="eui-form">
+                    <input type="radio" name="month" e-filter="month" value="1" checked="checked" title="上月">
+                    <input type="radio" name="month" e-filter="month" value="3" title="近三月">
+                    <input type="radio" name="month" e-filter="month" value="6" title="近半年">
+                    <input type="radio" name="month" e-filter="month" value="" title="其他">
+                    <div style="display: none;" id="_qtsj" class="eui-input-inline">
+                        <input type="text" id="qtsj" name="g" class="eui-input"  placeholder="时间区间" >
+                    </div>
+                </div>
+                <div class="eui-marginT10">
+                    <span>当前所选: </span><span class="ac">全部</span>
+                    <span class="eui-marginL40">订单总数: </span><span class="acj">0</span>
+                    <span class="eui-marginL40">佣金总额: </span><span class="acy">0</span>
+
+                </div>
+            </div>
+
+            <form class="eui-form eui-marginT20" id="searchFrom">
+                <div class="eui-form-item">
+                    <label class="eui-form-label">订单编号</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="year" class="eui-input"  placeholder="订单编号" >
+                    </div>
+
+                    <label class="eui-form-label">订单时间</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="year" class="eui-input" id="year" placeholder="订单时间" >
+                    </div>
+
+                    <div class="eui-input-inline">
+                        <span class="eui-btn" onclick="doSearch2()">查询</span>
+                        <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                    </div>
+                </div>
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 订单列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                </div>
+            </div>
+            <table class="eui-marginT10" id="test2"></table>
+        </div>
+    </div>
+</div>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/date2format.js" type="text/javascript"></script>
+<script>
+    var leftObj;
+    var orderCountFlag = true;
+    // 表单
+    eui.use(['form', 'laydate', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,laydate = eui.laydate;
+
+            laydate.render({
+                elem: '#qtsj'
+                ,type: 'month'
+                ,range: true
+                ,done: function(value, date, endDate){
+                    var startTime = getMonthStartDate(date.year,date.month)+' 00:00:00';
+                    var endTime = getMonthEndDate(endDate.year,endDate.month)+' 24:00:00';
+                    leftObj.startTime=startTime;
+                    leftObj.endTime=endTime;
+                    doSearch()
+                }
+            });
+
+        form.on('radio(month)', function(data){
+            if (data.value!=''){
+                $("#_qtsj").hide();
+                var year = new Date().getFullYear();
+                var month = new Date().getMonth()+1;
+                var startTime = getMonthStartDate(year,month-Number(data.value))+' 00:00:00';
+                var endTime = getMonthEndDate(year,month-1)+' 24:00:00';
+                leftObj.startTime=startTime;
+                leftObj.endTime=endTime;
+                doSearch()
+            }else {
+                leftObj.startTime=null;
+                leftObj.endTime=null;
+                $("#_qtsj").show();
+            }
+        });
+
+
+        leftObj = new Object();
+        leftObj.type='cityList';
+        var year = new Date().getFullYear();
+        var month = new Date().getMonth()+1;
+        var startTime = getMonthStartDate(year,month-1)+' 00:00:00';
+        var endTime = getMonthEndDate(year,month-1)+' 24:00:00';
+        leftObj.startTime=startTime;
+        leftObj.endTime=endTime;
+        loadTree();
+        dynamicTable(leftObj);
+    });
+
+
+
+    function doSearch() {
+        dynamicTable(leftObj);
+    }
+    function doSearch2() {
+        orderCountFlag = false;
+        doSearch();
+    }
+
+    var table;
+    function dynamicTable(obj) {
+        eui.use(['table', 'laydate','layer'], function(){
+            table = eui.table;
+            var laydate = eui.laydate;
+            var layer = eui.layer;
+
+            layer.load();
+            tableIns = table.render({
+                id: 'idTest'
+                ,elem: '#test2'
+                ,url:'/platform/settlement/areaAndChannelOrderList'
+                ,method:'post'
+                ,where: {json: JSON.stringify(obj)}
+                ,height: 420
+                ,cols: [[ //标题栏
+                    {field: 'order_code', title: '订单编号', width: 200}
+                    ,{field: 'payment_time', title: '订单时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'order_money', title: '金额(￥)', width: 100}
+                    ,{field: 'brokerage', title: '佣金(￥)', width: 100}
+                    ,{field: 'channel_name', title: '渠道商', width: 150}
+                    ,{field: 'rule', title: '结算比例', width: 100}
+                    ,{field: 'rule_name', title: '结算规则', width: 110}
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+                    if (orderCountFlag){
+                        $(".acy").html('0');
+                        $(".acj").html(count);
+                        if (res.data.length>0){
+                            $(".acy").html(res.data[0].ZYJ);
+                        }
+                    }
+                    layer.closeAll();
+                    orderCountFlag = true;
+                }
+            });
+        });
+    }
+
+    function loadTree() {
+        $.ajax({
+            url:"/platform/settlement/areaChannelTrees",
+            type:"post",
+            success:function(result){
+                //菜单树
+                channelTree =   $("#channelTree").ligerTree({
+                    data:result.data,
+                    checkbox: false,
+                    parentIcon: 'folder',
+                    childIcon: 'leaf' ,
+                    slide: false, //是否显示动画
+                    nodeWidth: 200,
+                    isExpand:2,
+                    idFieldName: 'id',
+                    textFieldName:'name',
+                    parentIDFieldName: 'pid',
+                    onSelect: function (node)
+                    {
+                        $(".ac").html(node.data.name);
+                        leftObj.province=null;
+                        leftObj.city=null;
+                        leftObj.id_=null;
+                        var level = node.data.level;
+                        if (level == 1){
+                            leftObj.province=node.data.name;
+                            leftObj.city=null;
+                            leftObj.id_=null;
+                        }
+                        if (level == 2){
+                            leftObj.city=node.data.name;
+                            leftObj.province=null;
+                            leftObj.id_=null;
+                        }
+                        if (level == 3){
+                            leftObj.id_=node.data.id;
+                            leftObj.city=null;
+                            leftObj.province=null;
+                        }
+                        doSearch();
+                    },
+                    onAfterAppend:function (parentNode, newdata) {
+
+                    }
+                });
+                $("#channelTree .l-body").mouseover(function(){
+                    var text =$(this).find('span').html();
+                    $(this).attr("title",text);
+                });
+
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

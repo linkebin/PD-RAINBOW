@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>渠道明细</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body class="eui-bg-white">
+<div class="eui-bg-white eui-row eui-padding15">
+    <div class="eui-col-md12 eui-paddingR10">
+        <input type="hidden" id="ID" th:value="${ID}">
+        <!--<form class="eui-form" id="searchFrom">-->
+            <!--<div class="eui-form-item">-->
+                <!--<label class="eui-form-label">年份</label>-->
+                <!--<div class="eui-input-inline">-->
+                    <!--<input type="text" name="year" class="eui-input" id="year" placeholder="年份" >-->
+                <!--</div>-->
+
+                <!--<label class="eui-form-label">月份</label>-->
+                <!--<div class="eui-input-inline">-->
+                    <!--<select name="month">-->
+                        <!--<option value=""></option>-->
+                        <!--<option value="01">01月</option>-->
+                        <!--<option value="02">02月</option>-->
+                        <!--<option value="03">03月</option>-->
+                        <!--<option value="04">04月</option>-->
+                        <!--<option value="05">05月</option>-->
+                        <!--<option value="06">06月</option>-->
+                        <!--<option value="07">07月</option>-->
+                        <!--<option value="08">08月</option>-->
+                        <!--<option value="09">09月</option>-->
+                        <!--<option value="10">10月</option>-->
+                        <!--<option value="11">11月</option>-->
+                        <!--<option value="12">12月</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+
+                <!--<div class="eui-input-inline">-->
+                    <!--<span class="eui-btn" onclick="doSearch()">查询</span>-->
+                    <!--<span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>-->
+                <!--</div>-->
+            <!--</div>-->
+
+
+
+        <!--</form>-->
+        <table id="test2"></table>
+    </div>
+</div>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script>
+    // 表单
+    eui.use(['form', 'laydate', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,laydate = eui.laydate;
+
+            laydate.render({
+                elem: '#year'
+                ,type: 'year'
+            });
+            var obj = new Object();
+            obj.ID=$("#ID").val();
+            dynamicTable(obj);
+    });
+
+    var table;
+    function dynamicTable(obj) {
+
+        eui.use(['table'], function(){
+            table = eui.table;
+
+            tableIns = table.render({
+                id: 'idTest'
+                ,elem: '#test2'
+                ,url:'/platform/settlement/channelInfos'
+                ,method:'post'
+                ,where: {json: JSON.stringify(obj)}
+                ,height: 280
+                ,cols: [[ //标题栏linkman_tell
+                    {field: 'channel_name', title: '渠道商', width: 192}
+                    ,{field: 'linkman', title: '联系人', width: 192}
+                    ,{field: 'linkman_tell', title: '联系方式', width: 192}
+                    ,{field: 'brokerage', title: '佣金', width: 192}
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+                }
+            });
+        });
+    }
+</script>
+</body>
+</html>

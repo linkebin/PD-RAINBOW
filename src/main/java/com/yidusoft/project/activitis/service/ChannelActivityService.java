@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -55,14 +57,19 @@ public class ChannelActivityService {
      * 开始流程 输入渠道ID
      * @param channelId
      */
-    public void startProcess(String channelId,String channelName,String objuri) {
+    public void startProcess(String channelId,String channelName,String objuri) throws Exception{
 
         ChannelManage channelManage = channelManageService.findById(channelId);
         channelManage.setStatus(1);
         channelManageService.update(channelManage);
 
+        if (Security.getUser()!=null){
+            identityService.setAuthenticatedUserId(Security.getUser().getUserName());
+        }else {
+            identityService.setAuthenticatedUserId("渠道注册");
+        }
         //设置流程的启动人
-        identityService.setAuthenticatedUserId(Security.getUser().getUserName());
+
         Map<String, Object> variables = new HashMap<String, Object>();
         variables.put("objid", channelId);
         variables.put("objname", channelName);

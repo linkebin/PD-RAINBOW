@@ -22,22 +22,22 @@
   </style>
 </head>
 <body>
-<div class="eui-padding15">
+<div class="eui-padding15 eui-bg-white">
 
     <div>
-      <form class="eui-form " action=""  id="formGauge" >
+      <form class="eui-form" action=""  id="formGauge">
         <div class="eui-row eui-searchTitle eui-paddingB10 eui-marginB20">
             <div class="eui-col-md6">
                 <span class="eui-panels-title1">添加量表</span>
             </div>
             <div class="eui-col-md6">
-                <div class="eui-btn-group eui-panelsIn">
+                <div class="eui-panelsIn">
                     <a href="#"  class="eui-btn"  onclick="saveGauge()"><i class="eui-icon">&#xe60a;</i> 保存</a>
                 </div>
             </div>
         </div>
-        <div class="eui-row"   >
-            <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
+        <div class="eui-row">
+            <div class="eui-col-xs6 eui-col-sm6 eui-col-md12">
                     <input type="hidden" id="sceneId" name="sceneId"/>
                     <input type="hidden" id="tagId" name="tagId"/>
                     <input type="hidden" id="questionStr" name="questionStr"/>
@@ -70,7 +70,7 @@
                 <span class="eui-panels-title2"><i class="eui-icon">&#xe600;</i>标签</span>
             </div>
             <div class="eui-col-md6">
-                <div class="eui-btn-group eui-panelsIn">
+                <div class="eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;" >
                         <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"  id=""  class="eui-btn eui-btn-small" onclick="loadTag()">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加标签</p>
@@ -90,7 +90,7 @@
                 <span class="eui-panels-title2"><i class="eui-icon">&#xe62e;</i>场景</span>
             </div>
             <div class="eui-col-md6">
-                <div class="eui-btn-group eui-panelsIn">
+                <div class="eui-panelsIn">
                     <div class="eui-input-block " style="margin-left: 120px;">
                         <p  style="margin-left: 0px; width: 120px; height: 36px; margin-top: 3px; line-height: 36px;"    class="eui-btn eui-btn-small" onclick="loadScene()">
                             <i style="font-size: 30px; line-height: 36px;" class="eui-icon">&#xe608;</i>添加场景</p>
@@ -113,14 +113,14 @@
                 <span class="eui-panels-title2"><i class="eui-icon">&#xe60a;</i>可选的问题</span>
             </div>
             <div class="eui-col-md6">
-                <div class="eui-btn-group eui-panelsIn">
+                <div class="eui-panelsIn">
                     <button class="eui-btn" onclick="chageQuestion()"><i class="eui-icon">&#xe610;</i> 选择</button>
                 </div>
             </div>
         </div>
-        <div class="eui-row"   >
-            <div class="eui-col-xs6 eui-col-sm6 eui-col-md12"  >
-                <form class="eui-form " id="searchFrom" action=""   >
+        <div class="eui-row">
+            <div class="eui-col-xs6 eui-col-sm6 eui-col-md12">
+                <form class="eui-form " id="searchFrom" action="">
                     <blockquote class="eui-elem-quote eui-quote-search">
                         <input type="hidden" id="id" name="id"/>
                         <input type="hidden"  name="ascriptionType" value="2"/>

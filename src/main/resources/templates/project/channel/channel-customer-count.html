@@ -5,66 +5,53 @@
     <title>客户统计</title>
     <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
 </head>
-<body class="eui-layout-body">
-<div class="eui-layout eui-layout-admin xymfHome">
+<body class="eui-layout-body eui-bg-white">
+<div class="eui-layout eui-layout-admin xymfHome eui-padding20">
+    <div class="eui-row eui-form">
+        <!--<label class="eui-col-md1 eui-form-label" style="width: 100px">渠道商：</label>-->
+        <!--<div class="eui-col-md3">-->
+        <!--<select name="city" id="channels" e-verify="required"  e-filter="selected">-->
+        <!--<option value="" >请选择渠道商</option>-->
+        <!--<option th:each="channel:${channelManageAll}"  th:value="${channel.id}" th:text="${channel.channelName}"></option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <label class="eui-form-label">请选择范围</label>
+        <div class="eui-input-inline">
+            <input type="text" class="eui-input" id="times" placeholder=" 选择时间段 ">
+        </div>
+        <span class="eui-btn" onclick="findConsultant ()">查询</span>
+    </div>
 
-    <div class="eui-bd eui-area eui-marginT10 chartsPage">
-        <div class="eui-mn1">
-            <div class="eui-mn1-type1">
-                <div class="eui-row eui-form">
-                    <!--<label class="eui-col-md1 eui-form-label" style="width: 100px">渠道商：</label>-->
-                    <!--<div class="eui-col-md3">-->
-                        <!--<select name="city" id="channels" e-verify="required"  e-filter="selected">-->
-                            <!--<option value="" >请选择渠道商</option>-->
-                            <!--<option th:each="channel:${channelManageAll}"  th:value="${channel.id}" th:text="${channel.channelName}"></option>-->
-                        <!--</select>-->
-                    <!--</div>-->
-                    <label class="eui-form-label">请选择范围</label>
-                    <div class="eui-input-inline">
-                        <input type="text" class="eui-input" id="times" placeholder=" 选择时间段 ">
-                    </div>
-                    <span class="eui-btn" onclick="findConsultant ()">查询</span>
+    <div class="eui-row eui-marginT20">
+        <!--<div class="eui-col-md12 eui-font18">区域分布</div>-->
+        <div class="chartsA eui-col-md12 eui-padding5 eui-marginT10">
+            <div class="arealIn"></div>
+            <div class="eui-row eui-padding5">
+                <div class="eui-col-md7">
+                    <div id="map" class="charts0" style="height: 360px;"></div>
                 </div>
-
-                <div class="eui-row eui-marginT20">
-                    <div class="eui-col-md1 eui-font18">区域分布</div>
-                    <div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png" alt=""/> 导出</div>
-                    <div class="areal eui-col-md12 eui-padding5 eui-marginT10">
-                        <div class="arealIn"></div>
-                        <div class="eui-row eui-padding5">
-                            <div class="eui-col-md7">
-                                <div id="map" class="charts0" style="height: 360px;"></div>
-                            </div>
-                            <div class="eui-col-md5">
-                                <div class="eui-tab eui-tab-brief" e-filter="docDemoTabBrief">
-                                    <ul class="eui-tab-title">
-                                        <li class="eui-this" onclick="channelNums('province')">省份</li>
-                                        <li onclick="channelNums('city')">城市</li>
-                                    </ul>
-                                    <div class="eui-tab-content">
-
-                                        <div class="eui-tab-item eui-show">
-                                            <ul class="statistics" id="channel">
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="eui-col-md5">
+                    <div class="eui-tab eui-tab-brief" e-filter="docDemoTabBrief">
+                        <ul class="eui-tab-title">
+                            <li class="eui-this" onclick="channelNums('province')">省份</li>
+                            <li onclick="channelNums('city')">城市</li>
+                        </ul>
+                        <div class="eui-tab-content">
+                            <div class="eui-tab-item eui-show">
+                                <ul class="statistics" id="channel">
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="eui-row eui-marginT20">
-                    <div class="eui-col-md1 eui-font18">人数增长</div>
-                    <div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png" alt=""/> 导出</div>
-                    <div class="areal eui-col-md12 eui-padding5 eui-marginT10">
-                        <div class="" style="height: 400px" id="channelNums" ></div>
-                        <div class="eui-row eui-padding5"  >
-
-                        </div>
-                    </div>
-                </div>
+    <div class="eui-row eui-marginT20">
+        <div class="chartsA eui-col-md12 eui-padding5 eui-marginT10">
+            <div class="" style="height: 400px" id="channelNums"></div>
+            <div class="eui-row eui-padding5">
             </div>
         </div>
     </div>
@@ -174,26 +161,15 @@
     var option;
     function  startOption() {
        option = {
-
-
         title: {
-//            text: '中国大区分布图',
-//            subtext: '中国的八大区分布',
+            text: '区域分布统计',
             sublink: '#',
-
             itemGap: 30,
-
-            left: 'center',
+            left: 'left',
             textStyle: {
-
-                color: '#1a1b4e',
-
+                color: '#008acd',
                 fontStyle: 'normal',
-
-                fontWeight: 'bold',
-
-                fontSize: 30
-
+                fontSize: 20
             },
 
             subtextStyle: {
@@ -776,9 +752,10 @@
     function optionStrat1() {
         option1 = {
             title: {
-                text: '',
-                x: 'left',
+                text: '人数增长统计',
+                x: 'left'
             },
+
             tooltip: {
                 trigger: 'axis',
 

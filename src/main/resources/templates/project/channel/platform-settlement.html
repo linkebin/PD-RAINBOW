@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>平台结算</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body class="eui-bg-white">
+<div class="eui-bg-white eui-row eui-padding15">
+    <div class="eui-col-md12 eui-paddingR10">
+        <form class="eui-form" id="searchFrom">
+            <div class="eui-form-item">
+                <label class="eui-form-label">年份</label>
+                <div class="eui-input-inline">
+                    <input type="text" name="year" class="eui-input" id="year" placeholder="年份" >
+                </div>
+
+                <label class="eui-form-label">月份</label>
+                <div class="eui-input-inline">
+                    <select name="month">
+                        <option value=""></option>
+                        <option value="01">01月</option>
+                        <option value="02">02月</option>
+                        <option value="03">03月</option>
+                        <option value="04">04月</option>
+                        <option value="05">05月</option>
+                        <option value="06">06月</option>
+                        <option value="07">07月</option>
+                        <option value="08">08月</option>
+                        <option value="09">09月</option>
+                        <option value="10">10月</option>
+                        <option value="11">11月</option>
+                        <option value="12">12月</option>
+                    </select>
+                </div>
+
+                <div class="eui-input-inline">
+                    <span class="eui-btn" onclick="doSearch()">查询</span>
+                    <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                </div>
+            </div>
+        </form>
+
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-col-md6 eui-font18">
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 账单列表
+            </div>
+            <div class="eui-col-md6 eui-textAlignR">
+                <!--<a href="###" class="eui-btn eui-btn-small roleNew"><i class='eui-icon eui-font24'>&#xe654;</i> 新建角色</a>-->
+            </div>
+        </div>
+        <table id="test2"></table>
+    </div>
+</div>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script>
+    // 表单
+    eui.use(['form', 'laydate', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,laydate = eui.laydate;
+
+            laydate.render({
+                elem: '#year'
+                ,type: 'year'
+            });
+            dynamicTable(new Object());
+    });
+
+    var table;
+    function dynamicTable(obj) {
+
+        eui.use(['table'], function(){
+            table = eui.table;
+
+            tableIns = table.render({
+                id: 'idTest'
+                ,elem: '#test2'
+                ,url:'/platform/settlement/list'
+                ,method:'post'
+                ,where: {json: JSON.stringify(obj)}
+                ,height: 420
+                ,cols: [[ //标题栏
+//                    {checkbox: true},
+                    {field: 'code', title: '编号', width: 120},
+                    {field: 'year', title: '年份', width: 100}
+                    ,{field: 'month', title: '月份', width: 100}
+                    ,{field: 'status', title: '状态', width: 150,templet:'<div>{{# if(d.status==1){ }} 未结算  {{# } }} {{# if(d.status==2){ }} 已结算  {{# } }} {{# if(d.status==3){ }} 部分结算  {{# } }}</div>'}
+                    ,{field: 'should_be', title: '应结', width: 150}
+                    ,{field: 'closed', title: '已结', width: 150,templet:'<div>{{# if(d.closed==undefined){ }} 0.00  {{#  }else{   }} {{d.closed}} {{# } }}</div>'}
+                    ,{field: 'unliquidated', title: '未结', width: 150,templet:'<div>{{# if(d.unliquidated==undefined){ }} 0.00  {{#  }else{   }} {{d.unliquidated}} {{# } }}</div>'}
+                    ,{field: 'create_time', title: '创建时间', width: 180,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: '', title: '操作', width: 186,templet:'<div class="eui-btn-group">' +
+                        ' <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
+                            'title="渠道明细" e-event="info" ><i class="eui-icon">&#xe60a;</i>' +
+                        '</button>' +
+                        '<button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
+                            'title="结算" e-event="clearing" ><i class="eui-icon">&#xe605;</i>' +
+                        '</button>' +
+                    '</div>'}
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+                }
+            });
+
+            //监听工具条
+            table.on('tool(idTest)', function(obj){
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                if(layEvent === 'info'){ //编辑
+                    layer.open({
+                        type: 2
+                        ,title: '渠道明细'
+                        ,area: ['800px', '450px']
+                        ,shade: 0
+                        ,moveType: 0//拖拽模式，0或者1
+                        ,content:"/web/platform/settlement/channelInfo?ID="+data.ID_
+                        ,btn: [ '关闭']
+                        ,btn2: function(){
+                            layer.closeAll();
+                        }
+                        ,zIndex: layer.zIndex //重点1
+                    });
+                }
+
+                if(layEvent === 'clearing'){
+                    $("#kjs").val(data.unliquidated+'元');
+                    $("#kjs").attr('money',data.unliquidated);
+                    var index = layer.open({
+                        title: '结算'
+                        , type: 1
+                        , area: ['450px', '330px']
+                        , content: $("#inDiv")
+                        ,btn: ['结算', '取消']
+                        ,yes: function(index, layero){
+                            var money = Number($("#money").val().trim());
+                            if (isNaN(money) || money <=0){
+                                layer.msg("请输入正确结算金额！");
+                                return;
+                            }
+                            if (money>data.unliquidated){
+                                layer.msg("结算金额超出额度！");
+                                return;
+                            }
+                           var index = layer.confirm('确定结算'+money.toFixed(2)+'元？', function(index){
+                                var obj = new Object();
+                                obj.ID_=data.ID_;
+                                obj.money=money.toFixed(2);
+                                layer.close(index);
+                                $.post('/platform/settlement/payment',{json:JSON.stringify(obj)},function (result) {
+                                    if (result.code==200){
+                                        layer.closeAll();
+                                    }
+                                    layer.msg(result.message);
+                                });
+                            });
+                        }
+                        ,btn2: function(index, layero){
+
+                        }
+                    });
+                }
+            });
+        });
+    }
+    function fillMoney() {
+        $("#money").val($("#kjs").attr('money'))
+    }
+</script>
+
+<div id="inDiv" style="display: none">
+    <div class="eui-form eui-padding20">
+        <p  class="eui-margin10 eui-color-red eui-font12">温馨提示: 结算金额只保留到两位小数（如100.25）</p>
+        <div class="eui-form-item">
+            <label class="eui-form-label">未结算金额</label>
+            <div class="eui-input-block">
+                <input class="eui-input" id="kjs" disabled="disabled"  type="text" >
+            </div>
+        </div>
+        <div class="eui-form-item">
+            <label class="eui-form-label">结算金额</label>
+            <div class="eui-input-block">
+                <input class="eui-input" id="money" name="money" placeholder="请输入要结算的金额" type="text">
+                <a style="color: blue; font-size: 12px;" href="###" onclick="fillMoney();">全部结算</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

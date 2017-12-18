@@ -35,6 +35,8 @@ public class WebChannelManageController {
         return "project/channel/channel-list";
     }
 
+
+
     @RequestMapping("/channelPay")
     public String channelPay(String channel_id,Model model) {
         ChannelManage channelManage = channelManageService.findById(channel_id);

@@ -106,15 +106,20 @@
                 <div class="eui-mn1-type1 eui-padding20 eui-bg-white eui-box-shadow">
                     <form  id="searchFrom">
                         <input type="hidden" name="visitorId" th:value="${id}" />
-
                     </form>
                     <div class="DivInfo">
+                        <div class="eui-textAlignR eui-marginR20">
+                            <div class="eui-btn-group">
+                                <a class="eui-btn eui-btn-small eui-btn-normal" onclick="getCustomerAnalysis()" >客户分析</a>
+                                <a class="eui-btn eui-btn-small eui-btn-normal" onclick="loadInfo()">编辑记录</a>
+                            </div>
+                        </div>
                         <p><i class="eui-icon eui-color-blue eui-font18">&#xe60e;</i>
                             <span class="eui-font16">记录时间</span>
                             <span  class="eui-marginL15 createTime"></span>
-                            <span  onclick="getCustomerAnalysis()" class="eui-btn eui-btn-small eui-btn-normal">
-                                <i class="eui-icon">&#xe654;</i> 客户分析
-                            </span>
+                            <!--<span style="float: right;margin-right: 85px;"  onclick="getCustomerAnalysis()" class="eui-btn eui-btn-small  eui-btn-normal">-->
+                                <!--<i class="eui-icon">&#xe654;</i> 客户分析-->
+                            <!--</span>-->
                         </p>
 
                         <p class="eui-marginT15"><i class="eui-icon eui-color-blue eui-font18">&#xe60e;</i>
@@ -126,25 +131,6 @@
                             <span class="eui-font16">来访目的</span>
                             <span  class="eui-marginL15 visitorGoal"></span>
                         </p>
-                        <div class="eui-marginT15 eui-row">
-                            <div class="eui-col-md2 eui-marginT5 eui-font16 questionWhite">
-                                <i class="eui-icon eui-color-blue eui-font18">&#xe622;</i> 问卷填写
-                            </div>
-                            <div class="eui-col-md10 eui-marginL20 eui-marginT5">
-                                <div class="eui-col-md12">
-                                    <div class="eui-col-md3 consultSheet eui-marginR10">长处和困难问卷(SDQ)学生版    &nbsp;&nbsp;<img src="/Styles/images/xymfImages/number.png" height="16" width="16"> </div>
-                                    <span id="" class="eui-btn eui-btn-small eui-btn-normal">
-                                        <i class="eui-icon">&#xe654;</i> 使用问卷
-                                    </span>
-                                </div>
-                                <div class="eui-col-md12">
-                                    <div class="eui-col-md3 consultSheet eui-marginR10">90项症状清单(SCL-90)    &nbsp;&nbsp;<img src="/Styles/images/xymfImages/number.png" height="16" width="16"> </div>
-                                </div>
-                                <div class="eui-col-md12">
-                                    <div class="eui-col-md3 consultSheet eui-marginR10">焦虑自评量表(SAS)    &nbsp;&nbsp;<img src="/Styles/images/xymfImages/number.png" height="16" width="16"> </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="eui-marginT15 eui-row">
                             <div class="eui-col-md2 eui-marginT5 eui-font16 questionWhite">
@@ -152,7 +138,7 @@
                             </div>
                             <div class="eui-col-md10 eui-marginL20">
                                 <div id="addQuestionnaire" onclick="loadQuestionnaire()">
-                                    <span id="noData" class="eui-btn eui-btn-small eui-btn-normal">
+                                    <span  id="noData" class="eui-btn eui-btn-small eui-btn-normal">
                                         <i class="eui-icon">&#xe654;</i> 使用问卷
                                     </span>
                                 </div>
@@ -210,7 +196,8 @@
 
                     <form id="DivAddForm" onsubmit="return false;">
                         <input type="hidden" name="visitorId" th:value="${id}" />
-                        <div style="display: none;" class="DivAdd">
+
+                        <div style="display: none;" id="DivAdd" class="DivAdd">
                         <div style="width: 100%; height: 38px;">
                             <p style="float: left;" class="">
                                 <i class="eui-icon eui-color-blue">&#xe60e;</i>
@@ -401,7 +388,7 @@ var processLogA=null;
             }
         }
          processLogA = UE.getEditor('processLogA', {
-             initialFrameWidth:900,
+//             initialFrameWidth:900,
             initialFrameHeight: 320,//编辑器高度，默认320
             scaleEnabled: true,
              toolbars: [
@@ -482,7 +469,7 @@ var processLogA=null;
         });
 
         remarksA = UE.getEditor('remarksA', {
-            initialFrameWidth:900,
+//            initialFrameWidth:900,
             initialFrameHeight: 320,//编辑器高度，默认320
             scaleEnabled: true,
             toolbars: [
@@ -562,7 +549,7 @@ var processLogA=null;
         ]]
     })
 
-    })
+    });
 
     // 返回顶部
     var winH = $(window).height();
@@ -601,68 +588,22 @@ var processLogA=null;
     $(function () {
         loadShaftTime();
         $('#visitorName').bind('input propertychange', function() {
-
             var textValue = $(this).val();
             var params = new Object();
             params.creator=$("#creator").val();
             params.visitorName=textValue;
-            console.log(params)
             loadCustomerList(params);
         });
-
-
 
     $("#DivAddForm").validate({
         rules: {
             visitorTime: {
                 required : true
-            },
-            interview:{
-                required : true
-            },
-            VisitingPurpose: {
-                required: true
-            },
-            resolved: {
-                required: true
-            },
-            thisTime:{
-                required : true
-            },
-            evaluate: {
-                required: true
-            },
-            FollowUpPlan: {
-                required: true
-            },
-            processLog: {
-                required: true
             }
         },
         messages: {
             visitorTime: {
                 required : "请选择来访时间"
-            },
-            interview:{
-                required : '请输入面询印象简录'
-            },
-            VisitingPurpose: {
-                required: '请输入来访者初诊'
-            },
-            resolved: {
-                required: '请输入已解决的问题'
-            },
-            thisTime:{
-                required : '请输入本次咨询内容'
-            },
-            evaluate: {
-                required: '请输入咨询效果评价'
-            },
-            FollowUpPlan: {
-                required: '请输入咨询中所运用的心理学方法与技术'
-            },
-            processLog: {
-                required: '请输入咨询过程记录'
             }
         },
         submitHandler: function() {
@@ -679,6 +620,43 @@ var processLogA=null;
         }
     });
     });
+
+    function loadInfo() {
+        var id = $("#recordId").val();
+        var iframeWin;
+        var index = layer.open({
+            title: '编辑来访记录'
+            , type: 2
+            ,maxmin:true
+            , area: ['950px', '700px']
+            , content: '/web/visiting/record/consultantUpdate?id='+id
+            ,btn: ['保存', '取消']
+            , success: function (layero, index) {
+                var body = layer.getChildFrame('body', index);
+                iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
+            }
+            ,yes: function(index, layero){
+                var obj = iframeWin.update();
+                $.post('/visiting/record/update',{json:JSON.stringify(obj)},function (result) {
+                    if (result.code==200){
+                        layer.msg('编辑成功', {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function(){
+                            layer.closeAll();
+                            location.reload();
+                        });
+
+                    }else {
+                        layer.msg(result.message);
+                    }
+                });
+            }
+            ,btn2: function(index, layero){
+
+            }
+        });
+    }
 
     function resetCustomer() {
         var params = new Object();
@@ -724,9 +702,7 @@ var processLogA=null;
                 $.each(list, function (index, item) {
                     var icon = '';
                     if (item.flag>0 || item.filesCount>0){
-                        icon = '  <div class="ci-count"> <img src="/Styles/images/xymfImages/number.png" height="16"' +
-                            'width="16"/><span class="eui-color-gray2"> X '+item.flag+'</span> <img class="eui-marginL20" src="/Styles/images/xymfImages/accessory.png" height="16"' +
-                            'width="16"/><span class="eui-color-gray2"> X '+item.filesCount+'</span> </div>'
+                        icon = '  <div class="ci-count"> 问卷<span class="eui-color-gray2"> X '+item.flag+'</span> 文件<span class="eui-color-gray2"> X '+item.filesCount+'</span> </div>'
                     }
                     $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
                         '<div class="eui-timeline-content eui-text"> ' +
@@ -741,7 +717,6 @@ var processLogA=null;
                 $("#shaftTime li").eq(0).find('.eui-timeline-title .guide').html(guide);
                 $("#shaftTime li").eq(0).find('.eui-timeline-title').css('color','#35a9ff');
                 $("#shaftTime li").click(function () {
-
                     $('#resetDiv').hide();
                     var id = $(this).attr('visitorId');
                     loadVisitorRecordDetail(id);
@@ -806,13 +781,17 @@ var processLogA=null;
             $.post("/data/acquisition/findQuestionnaireForVisitor",{"userId":userId,"createTime":createTime},function (result) {
                var list=result.data;
                 var coontext="";
+
                 for(var i in list){
-                    coontext+='<div  name="startAnswer" acquisitionId="'+list[i].id+'" questionnaireId="'+list[i].dataQuestion+'" class="eui-col-md3 consultSheet eui-marginR10">'+list[i].questionnaireName;
-                    coontext+='    &nbsp;&nbsp;<img src="/Styles/images/xymfImages/number.png" height="16" width="16"/>';
-                    coontext+=' </div> ';
+                    coontext+='<div name="startAnswer" acquisitionId="'+list[i].id+'" questionnaireId="'+list[i].dataQuestion+'" class="eui-col-md12"> ' +
+                                ' <div class="eui-col-md3 consultSheet eui-marginR10">' +list[i].questionnaireName+
+                        '<img src="/Styles/images/xymfImages/number.png" height="16" width="16"></div> ' +
+                        '</div>';
+
                 }
-                $("[name='startAnswer']").remove();
-                $('#addQuestionnaire').before(coontext);
+//                $("[name='startAnswer']").remove();
+                $('#reDiv').remove();
+                $('#addQuestionnaire').before('<div id="reDiv" class="eui-col-md10  eui-marginT5">'+coontext+'</div>');
                 $("[name='startAnswer']").on("click",function () {
                      var questionnaireId = $(this).attr("questionnaireId");
                      var acquisitionId = $(this).attr("acquisitionId");
@@ -923,7 +902,7 @@ var processLogA=null;
                 type: 2
                 , id: 'checkQuestionnaire'
                 , title: '选择问卷'
-                , area: ['900px', '600px']
+                , area: ['800px', '500px']
                 , success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
                     iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：

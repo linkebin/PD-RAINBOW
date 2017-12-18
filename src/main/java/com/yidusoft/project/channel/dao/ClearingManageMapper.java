@@ -18,9 +18,12 @@ public interface ClearingManageMapper extends Mapper<ClearingManage> {
     List<Map<String,Object>> findChannelAccountLineChartNew(@Param("ids")List<String> ids,
                                                          @Param("map")Map<String,Object> map);
 
-
-    List<Map<String,Object>> findAllChannelLineChart(@Param("map")Map<String,Object> map);
-
     List<Map<String,Object>> findOrderClearingByChannelCounselorId(@Param("ids")List<String> ids,
                                                                  @Param("map")Map<String,Object> map);
+
+    List<Map<String,Object>> findYearMonthlyCommissions();
+
+    List<String> findYearMonthLikeIds(String yearMonth);
+
+    void updateBatchStatus(@Param("ids")List<String> ids);
 }

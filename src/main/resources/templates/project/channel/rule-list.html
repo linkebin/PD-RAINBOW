@@ -32,8 +32,8 @@
             <input name="endTime" type="hidden" id="joinEndTime" />
 
             <div class="eui-input-inline">
-                <span class="eui-btn eui-btn-small eui-btn" onclick="doSearch()">查询</span>
-                <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                <span class="eui-btn" onclick="doSearch()">查询</span>
+                <span class="eui-btn  eui-btn-primary" onclick="resetForm()">重置</span>
             </div>
         </form>
 
@@ -79,66 +79,6 @@
     </div>
 </div>
 
-<!-- 左滑添加规则开始 -->
-<div class="taskFiltrate">
-</div>
-<div class="filtrateIn">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
-            <i class='eui-icon eui-font24'>&#xe654;</i> <span class="title-add-edit">添加结算规则</span>
-        </div>
-        <div class="eui-col-md2 eui-textAlignR">
-            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
-        </div>
-    </div>
-    <form class="eui-form eui-marginT10 eui-paddingR10" id="channelAdd" onsubmit="return false;">
-        <input type="hidden" id="flag" value="add"/>
-
-        <input type="hidden" name="ruleId" value="">
-        <input type="hidden" name="creator" value="">
-        <input type="hidden" name="deleted" value="">
-        <div class="eui-form-item">
-            <label class="eui-form-label">规则比例</label>
-            <div class="eui-input-block">
-                <input type="text" name="rule" e-verify="title"  autocomplete="off" placeholder="请输入规则比例" class="eui-input" />
-
-            </div>
-        </div>
-        <div class="eui-form-item eui-grade">
-            <label class="eui-form-label">规则名称</label>
-            <div class="eui-input-block">
-                <input type="text" name="ruleName" e-verify="title" autocomplete="off" placeholder="请输入规则名称" class="eui-input" >
-            </div>
-        </div>
-
-        <div class="eui-form-item">
-            <label class="eui-form-label">开始时间</label>
-            <div class="eui-input-block">
-                <input type="text" name="startTime" e-verify="title" id="startTime" readonly="readonly"  placeholder="请输入规则开始时间" class="eui-input">
-            </div>
-        </div>
-        <div class="eui-form-item">
-            <label class="eui-form-label">结束时间</label>
-            <div class="eui-input-block">
-                <input type="text" name="endTime" e-verify="title" id="endTime" readonly="readonly"   placeholder="请输入规则结束时间" class="eui-input" >
-            </div>
-        </div>
-
-        <div class="eui-form-item">
-            <label class="eui-form-label">是否默认</label>
-            <div class="eui-input-block">
-                <input type="radio" value="0"  name="defaultRule" title="否">
-                <input type="radio" value="1"  name="defaultRule" title="是" >
-            </div>
-            <label id="radionull" style="color: red;"></label>
-        </div>
-
-        <div class="taskConfirm"><button type="submit"  class="eui-btn">确定</button>
-        </div>
-    </form>
-</div>
-<!-- 左滑添加规则商结束 -->
-
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 <script src="/Scripts/main.js" charset="utf-8"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
@@ -171,10 +111,6 @@
                 $("#joinStartTime").val(startTime);
                 $("#joinEndTime").val(endTime);
             }
-        });
-
-        form.on('radio(defaultRule)', function(data){
-            $('#radionull').html('');
         });
     });
 
@@ -252,86 +188,7 @@
             });
         }
         parent.element.tabChange("nav-tab", 'xdfvvv');
-
-//        document.getElementById('channelAdd').reset();
     }
-
-    function addAccountRule() {
-        var obj = $("#channelAdd").serializeObject();
-        var flag = $('#flag').val();
-
-        if (flag == 'add'){
-            if (obj.defaultRule!=undefined){
-                if (obj.defaultRule=='1'){
-                    layer.confirm('当前新建的规则选择了默认规则，将会覆盖之前的默认规则。请确定是否覆盖？', {
-                        btn: ['确认', '取消'],
-                        shade: 0,
-                        title:'提示'
-                    }, function(r){
-                        layer.load();
-                        accountRule1(obj);
-                    },function () {
-                        obj.defaultRule=0;
-                        accountRule1(obj);
-                    });
-                }else {
-                    layer.load();
-                    accountRule1(obj);
-                }
-
-            }else {
-                layer.closeAll();
-                $('#radionull').html('是否默认不能为空');
-            }
-
-        }else {
-            $.post('/account/rule/update',{json:JSON.stringify(obj)},function (resuslt) {
-                resultHint(resuslt);
-            });
-        }
-    }
-
-    function accountRule1(obj) {
-        layer.load();
-        $.post('/account/rule/add',{json:JSON.stringify(obj)},function (resuslt) {
-            resultHint(resuslt);
-        });
-    }
-    function resultHint(resuslt) {
-        var msg = resuslt.message;
-        if(msg=="SUCCESS"){
-            layer.msg('保存成功', {
-                icon: 1,
-                time: 2000
-            });
-            $(".filtrateIn").animate({right:'-400px'},400);
-            $(".taskFiltrate").hide();
-            doSearch();
-        }else{
-            layer.msg(msg, {
-                time: 2000
-            });
-        }
-    }
-
-
-    $(".taskFiltrate").hide();
-    $(".userAdd").click(function(event) {
-
-        $(".title-add-edit").html("添加结算规则");
-        $('#flag').val('add');
-
-        document.getElementById('channelAdd').reset();
-        $(".taskFiltrate").show();
-        $(".filtrateIn").animate({right:'0'},400);
-        /* Act on the event */
-    });
-
-    $(".taskClose,.taskFiltrate").click(function(event) {
-        $(".filtrateIn").animate({right:'-400px'},400);
-        $(".taskFiltrate").hide();
-    });
-
     //加载数据
     function doSearch() {
         eui.use(['form','laypage','layer'], function(){
@@ -417,8 +274,8 @@
             tableHtml +=  '<tr>' +
                 '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="userId" ' +
                 'type="hidden" value="' + secUser.ruleId + '"></td>' +
-                '<td>'+ secUser.rule +'</td>' +
                 '<td>'+ secUser.ruleName +'</td>' +
+                '<td>'+ secUser.rule +'%</td>' +
                 '<td>'+ new Date(secUser.startTime).Format('yyyy-MM-dd') +'</td>' +
                 '<td>'+ new Date(secUser.endTime).Format('yyyy-MM-dd') +'</td>' +
                 '<td>'+ defaultRule +'</td>' +
@@ -434,14 +291,53 @@
 
     function forBtns(secUser) {
         var id = "'" + secUser.ruleId + "'";
+        var rule = "'" + secUser.rule + "'";
         if (secUser.defaultRule!=1){
             return '<div class="eui-btn-group"> <button class="eui-btn eui-btn-primary eui-btn-mini" onclick="loadOneData('+id+')" title="修改"><i class="eui-icon">&#xe642;</i></button> ' +
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteB('+id+')" title="删除"><i class="eui-icon">&#xe640;</i></button></div> ';
         }else {
-            return '不可操作';
+            return '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="updateDefault('+id+','+rule+')" title="修改"><i class="eui-icon">&#xe642;</i></button> ';
         }
     }
 
+    function updateDefault(id,rule) {
+        $("#rule").val(rule)
+        var index = layer.open({
+            title: '编辑规则比例'
+            , type: 1
+            , area: ['450px', '220px']
+            , content: $("#inDiv")
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                var value = $("#rule").val();
+                var obj = new Object();
+                obj.ruleId=id;
+                obj.rule=value;
+                layer.load();
+                $.post('/account/rule/update',{json:JSON.stringify(obj)},function (resuslt) {
+                    resultHint(resuslt);
+                    doSearch();
+                });
+            }
+            ,btn2: function(index, layero){
+
+            }
+        });
+    }
+    function resultHint(resuslt) {
+        var msg = resuslt.message;
+        if(msg=="SUCCESS"){
+            layer.msg('保存成功', {
+                icon: 1,
+                time: 3000
+            });
+        }else{
+            layer.msg(msg, {
+                time: 3000
+            });
+        }
+        layer.closeAll();
+    }
     function deleteB(ids) {
         if (ids==''){
             $(".mycheckbox:checked").each(function(i){
@@ -478,4 +374,15 @@
     }
 </script>
 </body>
+<div id="inDiv" style="display: none">
+    <div class="eui-form eui-padding20">
+        <div class="eui-form-item">
+            <label class="eui-form-label">规则比例</label>
+            <div class="eui-input-inline">
+                <input class="eui-input" id="rule"  placeholder="" type="text">
+            </div>
+                <span>%</span>
+        </div>
+    </div>
+</div>
 </html>

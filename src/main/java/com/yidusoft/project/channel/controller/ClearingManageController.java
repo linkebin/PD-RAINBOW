@@ -53,8 +53,16 @@ public class ClearingManageController {
     @PostMapping("/clearingLineChart")
     public Result clearingLineChart(String json) {
         Map<String,Object> map = JSON.parseObject(json,Map.class);
+        List<Map<String,Object>> channels = channelManageService.findChannelListAndTypeAndParameter(map);
+        List<String> ids = new ArrayList<String>();
+        for (Map<String,Object> m3 : channels){
+            ids.add(m3.get("id_").toString());
+        }
+        if (ids.size() == 0){
+            ids.add("9x991000");
+        }
 
-        List<Map<String,Object>> maps = clearingManageService.findChannelAccountLineChart(null,map);
+        List<Map<String,Object>> maps = clearingManageService.findChannelAccountLineChart(ids,map);
 
         return ResultGenerator.genSuccessResult(maps);
     }
@@ -149,7 +157,14 @@ public class ClearingManageController {
     public Result listOrderOnlineClearing(Integer page,  Integer limit,String json) {
         Map<String,Object> map = JSON.parseObject(json,Map.class);
 
-        List<String> ids = getChannelConsultIds(map);
+        List<Map<String,Object>> channels = channelManageService.findChannelListAndTypeAndParameter(map);
+        List<String> ids = new ArrayList<String>();
+        for (Map<String,Object> m3 : channels){
+            ids.add(m3.get("id_").toString());
+        }
+        if (ids.size() == 0){
+            ids.add("9x991000");
+        }
         List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
         if (ids.size()>0){
             List<Map<String,Object>> listAll = clearingManageService.findOrderClearingByChannelCounselorId(ids,map);
@@ -175,7 +190,7 @@ public class ClearingManageController {
 
     public List<String> getChannelConsultIds(Map<String,Object> map){
         List<String> ids = new ArrayList<String>();
-        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(map);
+        List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(null,map);
         for (Map<String,Object> m : list){
             ids.add(m.get("ID_").toString());
         }

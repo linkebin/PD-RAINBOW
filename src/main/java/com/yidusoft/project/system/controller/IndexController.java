@@ -5,6 +5,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.activitis.service.ChannelActivityService;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.monitor.domain.LoginLog;
@@ -54,6 +55,10 @@ public class IndexController {
     SecUserService secUserService;
     @Autowired
     LoginLogService loginLogService;
+
+    @Autowired
+    private ChannelActivityService channelActivityService;
+
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
     /**
      * 跳转到主页
@@ -177,7 +182,7 @@ public class IndexController {
      */
     @PostMapping("/sign/channel")
     @ResponseBody
-    public Result signChannel(String json,HttpServletRequest request) {
+    public Result signChannel(String json,HttpServletRequest request) throws  Exception{
 
         SecUser secUserJ = JSON.parseObject(json,SecUser.class);
 
@@ -214,7 +219,6 @@ public class IndexController {
         secUser.setMobile(channelManage.getLinkmanTell());
         secUser.setChannelId(channelManage.getId());
 
-
         String inviterCode = CodeHelper.randomCode(8);
         SecUser isUser = null;
         if (inviterCode!=null){
@@ -224,18 +228,9 @@ public class IndexController {
             signChannel(json,request);
         }else {
             secUser.setInviterCode(inviterCode);
-            try {
-                Result result = secUserService.addUser(JSON.toJSONString(secUser));
-                if (result.getCode() !=200){
-                    return result;
-                }
-                channelManageService.save(channelManage);
-            }catch (Exception e){
-                e.printStackTrace();
-                return ResultGenerator.genFailResult("登记失败");
-            }
+            return channelManageService.signChannel(secUser,channelManage);
         }
-        return ResultGenerator.genSuccessResult().setMessage("登记成功");
+        return ResultGenerator.genFailResult("登记失败");
     }
     /**
      * 发送注册手机验证码
@@ -275,7 +270,7 @@ public class IndexController {
             SendSmsResponse sendSmsResponse = AliyunSMSUtil.sendSms(mobile, templateCode,signCode);
             if (StringUtils.equals("OK",sendSmsResponse.getCode())){
                 request.getSession().setAttribute("signCode",signCode);
-                return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
+                return ResultGenerator.genSuccessResult().setMessage("验证码发送成功");
             }else{
                 return ResultGenerator.genFailResult("验证码发送失败");
             }
