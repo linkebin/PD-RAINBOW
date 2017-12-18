@@ -26,7 +26,7 @@ public interface OrderOnlineMapper extends Mapper<OrderOnline> {
      * @param id
      * @return
      */
-    String getOrderState(String id);
+    OrderOnline getOrderState(String id);
 
     /**
      * 修改订单的状态为2，即已支付

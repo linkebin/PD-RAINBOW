@@ -66,8 +66,8 @@
         UPDATE order_online SET order_state=3 WHERE product_id=#{productId} AND order_state!=1
     </update>
 
-    <select id="getOrderState" resultType="String" parameterType="String">
-        SELECT order_state FROM  order_online WHERE id_=#{id}
+    <select id="getOrderState" resultMap="BaseResultMap" parameterType="String">
+        SELECT oo.*,ps.product_name FROM  order_online oo,product_settings ps WHERE oo.id_=#{id} AND oo.product_id=ps.id_
     </select>
 
 </mapper>

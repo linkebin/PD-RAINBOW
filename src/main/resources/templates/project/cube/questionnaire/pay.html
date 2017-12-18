@@ -107,8 +107,10 @@
                         total: product.productTotal,
                         productType: product.productType,
                     };
-                    if(product.productType==2){
+                    if(product.productType==1){
                         continue;
+                    }else{
+                        pro.total=  product.timeLimit
                     }
                     for (var index in questionList) {
                         var question = questionList[index];
@@ -128,17 +130,9 @@
                                         if (new Date() > new Date(start) && new Date() < new Date(end)) {
                                             if (question.promotionsType == 1) {//活动类型是折扣
                                                 var discount = question.promotionsDiscount * 10;//折扣
-                                                pro.total = product.productTotal;
                                                 pro.price = (product.productPrice * question.promotionsDiscount).toFixed(1);
                                                 pro.type = discount + "折";
                                                 pro.discountContent = discount + '折';
-                                            } else {//活动类型是买送
-                                                pro.price = product.productPrice;
-                                                pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
-                                                pro.type = "买送";
-                                                pro.discountContent = question.promotionsBuySend + '张问卷';
-                                                //原价
-                                                pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
                                             }
                                             pro.promotionsId = question.id;
                                         }
@@ -161,6 +155,7 @@
                     }
                     price = parseFloat(str);
                     total = (event.delegateTarget.innerText).toString();
+                    console.log(total);
                     if (total.indexOf('张') != -1) {
                         var strTotal;
                         strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
@@ -180,7 +175,6 @@
                         } else {
                             total = strTotal;
                         }
-                        console.log(total);
                     }
                     $('.eui-font24').html(str);
                     var send = event.currentTarget.children[1].value;

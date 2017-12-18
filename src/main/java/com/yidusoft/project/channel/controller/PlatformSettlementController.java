@@ -91,8 +91,10 @@ public class PlatformSettlementController {
     }
 
     @PostMapping("/list")
-    public Result list(String json) {
-        Map<String,Object> map = new HashMap<String,Object>();
+    public Result list(Integer page,  Integer limit,String json) {
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+        map.put("page",page);
+        map.put("limit",limit);
         List<Map<String,Object>>  list = platformSettlementService.findPlatformSettlementList(map);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
@@ -103,6 +105,7 @@ public class PlatformSettlementController {
         Map<String,Object> map = JSON.parseObject(json,Map.class);
         String id = map.get("ID").toString();
         PlatformSettlement platformSettlement = platformSettlementService.findById(id);
+
         int month = (Integer.parseInt(platformSettlement.getMonth())+1);
         map.put("create_time",platformSettlement.getYear()+"-"+month);
         if (month<10){

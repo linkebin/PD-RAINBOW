@@ -10,13 +10,16 @@ public class PlatformSettlement {
     @Column(name = "ID_")
     private String id;
 
+    @Column(name = "code_")
     private String code;
-
+    @Column(name = "year_")
     private String year;
-
+    @Column(name = "month_")
     private String month;
-
+    @Column(name = "status_")
     private String status;
+    @Column(name = "year_month_")
+    private String yearMonth;
 
     @Column(name = "should_be")
     private BigDecimal shouldBe;
@@ -27,6 +30,14 @@ public class PlatformSettlement {
 
     @Column(name = "create_time")
     private Date createTime;
+
+    public String getYearMonth() {
+        return yearMonth;
+    }
+
+    public void setYearMonth(String yearMonth) {
+        this.yearMonth = yearMonth;
+    }
 
     /**
      * @return ID_

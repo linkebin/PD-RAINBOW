@@ -97,29 +97,25 @@
     </div>
 </form>
 <!--<span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>-->
-
-<script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/module/eui.js"></script>
+
 
 <script src="/pack.ajax.js" type="text/javascript"></script>
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <script type="text/javascript" charset="utf-8" src="/Scripts/plugins/utf8-jsp/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/Scripts/plugins/utf8-jsp/ueditor.all.js"> </script>
-</body>
 <script>
     var processLogA=null;
     var remarksA=null;
     var layedit;
     eui.use(['form', 'layedit', 'laydate'], function(){
         var form = eui.form,
-         layer = eui.layer
+            layer = eui.layer
             ,laydate = eui.laydate;
         layedit = eui.layedit;
-        laydate.render({
-            elem: '#visitorTime'
-            ,type: 'datetime'
-        });
+
 
 
         UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
@@ -294,8 +290,12 @@
                 ]]
         })
 
-        loadVisitorRecordDetail($("#id").val());
+
+        remarksA.addListener( 'ready', function( editor ) {
+            loadVisitorRecordDetail($("#id").val());
+        } );
     });
+
 
     function loadVisitorRecordDetail(id) {
         eui.use(['form'], function(){
@@ -319,11 +319,12 @@
                 $("#DivAddForm textarea[name='evaluate']").val(obj.evaluate);
 
                 $("#DivAddForm textarea[name='FollowUpPlan']").val(obj.followUpPlan);
-                $("#DivAddForm textarea[name='processLog']").val(obj.processLog);
-                $("#DivAddForm textarea[name='remarks']").val(obj.remarks);
-//                processLogA.setContent(obj.processLog,true);
-//                remarksA.setContent(obj.remarks,true);
+//                $("#DivAddForm textarea[name='processLog']").val(obj.processLog);
+//                $("#DivAddForm textarea[name='remarks']").val(obj.remarks);
                 form.render();
+                processLogA.setContent(obj.processLog);
+                remarksA.setContent(obj.remarks);
+
                 layer.closeAll();
             });
         });
@@ -335,5 +336,8 @@
         obj.remarks=remarksA.getContent();
         return obj;
     }
+
+
 </script>
+</body>
 </html>

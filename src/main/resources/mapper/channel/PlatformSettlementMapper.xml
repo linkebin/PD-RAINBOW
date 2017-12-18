@@ -6,14 +6,16 @@
       WARNING - @mbg.generated
     -->
     <id column="ID_" jdbcType="VARCHAR" property="id" />
-    <result column="code" jdbcType="VARCHAR" property="code" />
-    <result column="year" jdbcType="VARCHAR" property="year" />
-    <result column="month" jdbcType="VARCHAR" property="month" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="code_" jdbcType="VARCHAR" property="code" />
+    <result column="year_" jdbcType="VARCHAR" property="year" />
+    <result column="month_" jdbcType="VARCHAR" property="month" />
+    <result column="status_" jdbcType="VARCHAR" property="status" />
     <result column="should_be" jdbcType="DECIMAL" property="shouldBe" />
     <result column="closed" jdbcType="DECIMAL" property="closed" />
     <result column="unliquidated" jdbcType="DECIMAL" property="unliquidated" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="year_month_" jdbcType="VARCHAR" property="yearMonth" />
+
   </resultMap>
 
     <select id="findAreaAndChannelOrderZYJ"  resultType="Map">
@@ -52,6 +54,10 @@
       <if test="map.startTime != null and map.endTime !=null ">
           AND b.payment_time &gt; #{map.startTime} AND b.payment_time &lt; #{map.endTime}
       </if>
+      <if test="map.order_code != null and map.order_code !='' ">
+          AND b.order_code LIKE '%${map.order_code}%'
+      </if>
+
 
       <if test="null != ids">
           AND b.channel_id in
@@ -63,7 +69,11 @@
   </select>
 
   <select id="findPlatformSettlementList" parameterType="java.util.Map" resultType="Map">
-    SELECT ps.* FROM platform_settlement ps
+    SELECT ps.* FROM platform_settlement ps WHERE 1=1
+      <if test="yearStart!=null and yearEnd!=null">
+          AND ps.`year_month_` &gt;= #{yearStart} AND ps.`year_month_` &lt;= #{yearEnd}
+      </if>
+
   </select>
 
   <select id="findPlatformSettlementChannelInfo" parameterType="java.util.Map" resultType="Map">

@@ -37,12 +37,12 @@
                 <div class="eui-form-item">
                     <label class="eui-form-label">订单编号</label>
                     <div class="eui-input-inline">
-                        <input type="text" name="year" class="eui-input"  placeholder="订单编号" >
+                        <input type="text" name="order_code" class="eui-input" id="order_code"  placeholder="订单编号" >
                     </div>
 
                     <label class="eui-form-label">订单时间</label>
-                    <div class="eui-input-inline">
-                        <input type="text" name="year" class="eui-input" id="year" placeholder="订单时间" >
+                    <div class="eui-input-inline eui-width300">
+                        <input type="text"  class="eui-input eui-width300" id="orderTime" placeholder="订单时间" >
                     </div>
 
                     <div class="eui-input-inline">
@@ -78,11 +78,25 @@
             ,laydate = eui.laydate;
 
             laydate.render({
+                elem: '#orderTime'
+                ,type:'datetime'
+                ,range: true
+                ,done: function(value, date, endDate){
+                    var startTime = value.split(" - ")[0];
+                    var endTime = value.split(" - ")[1];
+                    leftObj.startTime=startTime;
+                    leftObj.endTime=endTime;
+                    doSearch2()
+
+                }
+            });
+
+            laydate.render({
                 elem: '#qtsj'
                 ,type: 'month'
                 ,range: true
                 ,done: function(value, date, endDate){
-                    var startTime = getMonthStartDate(date.year,date.month)+' 00:00:00';
+                    var startTime = date.year+'-'+date.month+'-01 00:00:00';
                     var endTime = getMonthEndDate(endDate.year,endDate.month)+' 24:00:00';
                     leftObj.startTime=startTime;
                     leftObj.endTime=endTime;
@@ -93,13 +107,11 @@
         form.on('radio(month)', function(data){
             if (data.value!=''){
                 $("#_qtsj").hide();
-                var year = new Date().getFullYear();
-                var month = new Date().getMonth()+1;
-                var startTime = getMonthStartDate(year,month-Number(data.value))+' 00:00:00';
-                var endTime = getMonthEndDate(year,month-1)+' 24:00:00';
-                leftObj.startTime=startTime;
-                leftObj.endTime=endTime;
-                doSearch()
+                var s = getMonthStartDate();
+                leftObj.startTime=removemulMonth(s,Number(data.value))+' 00:00:00';
+                leftObj.endTime=s+' 00:00:00';
+                doSearch();
+
             }else {
                 leftObj.startTime=null;
                 leftObj.endTime=null;
@@ -110,12 +122,9 @@
 
         leftObj = new Object();
         leftObj.type='cityList';
-        var year = new Date().getFullYear();
-        var month = new Date().getMonth()+1;
-        var startTime = getMonthStartDate(year,month-1)+' 00:00:00';
-        var endTime = getMonthEndDate(year,month-1)+' 24:00:00';
-        leftObj.startTime=startTime;
-        leftObj.endTime=endTime;
+        var s = getMonthStartDate();
+        leftObj.startTime=removemulMonth(s,1)+' 00:00:00';
+        leftObj.endTime=s+' 00:00:00';
         loadTree();
         dynamicTable(leftObj);
     });
@@ -126,8 +135,16 @@
         dynamicTable(leftObj);
     }
     function doSearch2() {
+        leftObj.order_code=$("#order_code").val();
         orderCountFlag = false;
         doSearch();
+    }
+
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+        leftObj.startTime=null;
+        leftObj.endTime=null;
+        leftObj.order_cod=null;
     }
 
     var table;
