@@ -14,7 +14,7 @@
         }
     </style>
 </head>
-<body>
+<body class="eui-bg-white">
 
 <div class="eui-bg-white eui-row eui-padding15">
     <div class="eui-col-md12 eui-paddingR10">
@@ -55,7 +55,7 @@
                 <i class='eui-icon eui-font24'>&#xe61d;</i> 待审批渠道列表
             </div>
             <div class="eui-col-md6 eui-textAlignR">
-                <a href="###" class="eui-btn eui-btn-small userAdd">添加渠道商</a>
+                <a href="###" onclick="showAddChannel()" class="eui-btn eui-btn-small userAdd1">添加渠道商</a>
             </div>
         </div>
         <table class="eui-table eui-form" id="userTable">
@@ -94,18 +94,7 @@
 </div>
 
 
-<!-- 左滑添加渠道商开始 -->
-<div class="taskFiltrate">
-</div>
-<div  class="filtrateIn">
-    <div class="eui-row eui-padding10 eui-borderB">
-        <div class="eui-col-md10 eui-font18 eui-lineHeight30">
-            <i class='eui-icon eui-font24'>&#xe654;</i> <span class="title-add-edit">添加渠道商</span>
-        </div>
-        <div class="eui-col-md2 eui-textAlignR">
-            <i class='eui-icon eui-font24 taskClose'>&#x1006;</i>
-        </div>
-    </div>
+<div style="display: none;" id="inDiv" class="eui-padding20">
     <form class="eui-form eui-marginT10 eui-paddingR10" id="channelAdd" onsubmit="return false;">
         <input type="hidden" id="flag" value="add"/>
         <input type="hidden" name="id" value="">
@@ -172,12 +161,9 @@
                 <input type="text" name="createTime" class="eui-input" id="joinTime" placeholder="加入时间" readonly="readonly">
             </div>
         </div>
-
-        <div class="taskConfirm"><button type="submit"  class="eui-btn">确定</button>
-        </div>
+        <button style="display: none" type="submit" id="ssuubb"  class="eui-btn">确定</button>
     </form>
 </div>
-<!-- 左滑添加渠道商结束 -->
 
 
 <script src="/Scripts/module/eui.js" charset="utf-8"></script>
@@ -216,6 +202,21 @@
     });
 
 
+    function showAddChannel() {
+        var index = layer.open({
+            title: '新建渠道'
+            , type: 1
+            , area: ['800px', '600px']
+            , content: $("#inDiv")
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+               $("#ssuubb").click();
+            }
+            ,btn2: function(index, layero){
+
+            }
+        });
+    }
 
     $(function () {
         doSearch();
@@ -272,22 +273,22 @@
     });
 
 
-    $(".taskFiltrate").hide();
-    $(".userAdd").click(function(event) {
-
-        $(".title-add-edit").html("添加渠道商（默认账号使用联系人手机）");
-        $('#flag').val('add');
-
-        document.getElementById('channelAdd').reset()
-        $(".taskFiltrate").show();
-        $(".filtrateIn").animate({right:'0'},400);
-        /* Act on the event */
-    });
-
-    $(".taskClose,.taskFiltrate").click(function(event) {
-        $(".filtrateIn").animate({right:'-400px'},400);
-        $(".taskFiltrate").hide();
-    });
+//    $(".taskFiltrate").hide();
+//    $(".userAdd").click(function(event) {
+//
+//        $(".title-add-edit").html("添加渠道商（默认账号使用联系人手机）");
+//        $('#flag').val('add');
+//
+//        document.getElementById('channelAdd').reset()
+//        $(".taskFiltrate").show();
+//        $(".filtrateIn").animate({right:'0'},400);
+//        /* Act on the event */
+//    });
+//
+//    $(".taskClose,.taskFiltrate").click(function(event) {
+//        $(".filtrateIn").animate({right:'-400px'},400);
+//        $(".taskFiltrate").hide();
+//    });
 
     function resetForm() {
         $('#searchFrom')[0].reset();
