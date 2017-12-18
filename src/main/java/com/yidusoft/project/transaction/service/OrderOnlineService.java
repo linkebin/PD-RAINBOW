@@ -30,7 +30,7 @@ public interface OrderOnlineService extends Service<OrderOnline> {
      * @param id
      * @return
      */
-    String getOrderState(String id);
+    OrderOnline getOrderState(String id);
 
     //查询渠道全部咨询师的订单
     List<Map<String,Object>> findOrderByUserId(List<String> ids,Map<String,Object> map);

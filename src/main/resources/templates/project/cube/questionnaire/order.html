@@ -9,6 +9,7 @@
     <script src="/Scripts/module/eui.js" charset="utf-8"></script>
 </head>
 <body class="eui-layout-body">
+<div hidden id="alipayResultForm"></div>
 <div class="eui-layout eui-layout-admin xymfHome">
     <div class="eui-header">
         <div th:replace="project/cube/common/header :: header(${-1})">Header</div>
@@ -93,7 +94,7 @@
             var form = eui.form
                     , laypage = eui.laypage
                     , layer = eui.layer;
-            $.post("/order/online/list", {orderState: orderState,page:1,size:5}, function (result) {
+            $.post("/order/online/list", {orderState: orderState, page: 1, size: 5}, function (result) {
                 if (result.code = 200) {
                     laypage.render({
                         elem: 'pages'
@@ -101,18 +102,18 @@
                         , count: result.data.total //数据总数
                         , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
                         , limit: 5
-                        , limits: [5,10,15]
+                        , limits: [5, 10, 15]
                         , skip: true
                         , theme: '#1E9FFF'
                         , jump: function (obj, first) {
                             //第一次，不需要查询数据
-                            if(first){
+                            if (first) {
                                 var orderList = result.data.list;
                                 console.log(orderList);
                                 //遍历，拼接表格
                                 var tableHtml = getTable(orderList);
                                 $(".orderIn").html(tableHtml);
-                            }else{
+                            } else {
                                 $.ajax({
                                     url: "/order/online/list",
                                     data: {
@@ -134,9 +135,9 @@
                     });
                 }
                 /*if (result.code = 200) {
-                    var tableHtml = getTable(result.data);
-                    $(".orderIn").html(tableHtml);
-                }*/
+                 var tableHtml = getTable(result.data);
+                 $(".orderIn").html(tableHtml);
+                 }*/
             })
         })
     }
@@ -165,7 +166,7 @@
             }
             if (order.orderState == 1 || order.orderState == 3) {
                 tableHtml += '<td class="eui-textAlignC">' +
-                        '<span class="eui-btn eui-btn-normal" onclick="cancelOrder(' + id + ','+"'delete'"+')">删除订单</span>' +
+                        '<span class="eui-btn eui-btn-normal" onclick="cancelOrder(' + id + ',' + "'delete'" + ')">删除订单</span>' +
                         '</td>' +
                         '</tr>' +
                         '</table>';
@@ -174,7 +175,7 @@
             tableHtml += '<td class="eui-textAlignC">' +
                     '<span class="eui-btn eui-btn-normal" onclick="payment(' + id + ')">立即付款</span>' +
                     '<br>' +
-                    '<div class="eui-color-blue eui-marginT5" onclick="cancelOrder(' + id + ','+"'cancel'"+')">取消订单</div>' +
+                    '<div class="eui-color-blue eui-marginT5" onclick="cancelOrder(' + id + ',' + "'cancel'" + ')">取消订单</div>' +
                     '</td>' +
                     '</tr>' +
                     '</table>';
@@ -187,20 +188,20 @@
      * 取消订单或者删除订单
      * @param id
      */
-    function cancelOrder(id,orderType) {
-        var confirm="确认删除订单吗？删除后不可恢复";
-        if(orderType=="cancel"){
-            confirm="确定取消订单吗？";
+    function cancelOrder(id, orderType) {
+        var confirm = "确认删除订单吗？删除后不可恢复";
+        if (orderType == "cancel") {
+            confirm = "确定取消订单吗？";
         }
-        layer.confirm(confirm,{
-            btn:['确认','取消']
-        },function () {
-            $.post("/order/online/delete", {id: id,orderType:orderType}, function (result) {
+        layer.confirm(confirm, {
+            btn: ['确认', '取消']
+        }, function () {
+            $.post("/order/online/delete", {id: id, orderType: orderType}, function (result) {
                 if (result.message = "SUCCESS") {
-                    if(orderType=="cancel"){
-                        layer.msg('取消成功！',{icon:1});
-                    }else{
-                        layer.msg('删除成功！',{icon:1});
+                    if (orderType == "cancel") {
+                        layer.msg('取消成功！', {icon: 1});
+                    } else {
+                        layer.msg('删除成功！', {icon: 1});
                     }
                     !//刷新数据
                             getDoSearchByState();
@@ -215,21 +216,33 @@
      */
     function payment(id) {
         $.post("/order/online/getState", {id: id}, function (result) {
+            console.log(result);
             if (result.message = "success") {
-                if (result.data == 3) {
+                var orderOnline = result.data;
+                if (orderOnline.orderState == 3) {
                     layer.msg('该套餐已下架！', {});
                     getDoSearchByState();
                 } else {
-                    layer.confirm('确认付款', {
-                        btn: ['确认', '取消']
-                    }, function () {
-                        $.post("/order/online/payment", {id: id,serialNumber:"123213131313"}, function (result) {
-                            if (result.message = "success") {
-                                layer.msg('支付成功！', {icon: 1});
-                                getDoSearchByState();
-                            }
-                        })
-                    })
+                    var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
+                    orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
+                    var obj = new Object();
+                    obj.orderCode = orderCode;
+                    obj.total_amount = orderOnline.orderMoney;//金额
+                    obj.subject = orderOnline.productName;
+                    obj.body = "";
+                    $.ajax({
+                        type: 'POST',
+                        url: '/alipaytradepagepay/paymentByAlipay',
+                        data: {
+                            formDatas: JSON.stringify(obj)
+                        },
+                        dataType: 'html',//支付宝接口响应支付表单字符串
+                        success: function (data) {
+                            console.log(data);
+                            //将响应回来的支付表单插入html，保证此表单为第一表单，以完成表单的默认提交
+                            $("#alipayResultForm").append(data);
+                        }
+                    });
                 }
             } else {
                 layer.msg(result.message, {});
@@ -257,13 +270,13 @@
      */
     function getDoSearchByState() {
         var text = $('.eui-this').text();
-        if(text=='全部订单'){
+        if (text == '全部订单') {
             doSearch();
-        }else if(text=='已支付'){
+        } else if (text == '已支付') {
             doSearch(1);
-        }else if(text=='未支付'){
+        } else if (text == '未支付') {
             doSearch(2);
-        }else{
+        } else {
             doSearch(3);
         }
     }

@@ -99,9 +99,9 @@
 
 <!-- 返回顶部按钮 -->
 <span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>
-
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/active.finish.js"></script>
 <script th:inline="javascript">
     eui.use(['form', 'layedit', 'laydate'], function () {
         var form = eui.form
@@ -269,7 +269,6 @@
     }
     //提交问卷
     function submitQuestionnaire() {
-
         var state = flg();
         //state=""  则是题目都已经做完
         if (state == "") {
@@ -310,66 +309,45 @@
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
             $('#confirm').attr("disabled", true);
             $('#confirm').text("正在提交中...");
-            $.post("/launch/activities/getActivityById", {id: activityId}, function (result) {
-                console.log(result);
-                if (result.code == 200) {
-                    if (result.data != null) {
-                        var activity = result.data;
-                        $.post('/data/acquisition/findCount', {activityId: activity.id}, function (res) {
-                            console.log(res.data);
-                            if (res.code == 200) {
-                                if (res.data >= activity.activityTotal) {
-                                    layer.confirm('活动已结束', {
-                                        btn: ['确定']
-                                    })
-                                    layer.close(index);
-                                    remove();
-                                } else {
-                                    $.post("/cube/questionnaire/subQuestionnaire",
-                                            {
-                                                "param": JSON.stringify(array),
-                                                "questionnaireId": questionnaireId,
-                                                "userId": userId,
-                                                "visitorTimes": visitorTimes,
-                                                "timeConsuming": timeConsuming,
-                                                "activityId": activityId,
-                                                "userName": userName
-                                            }, function (result) {
-                                                layer.closeAll();
-                                                console.log(result);
-                                                if (result.code == 200) {
-                                                    window.location.href = "/web/cube/getSuccess";
-                                                } else {
-                                                    layer.msg('填写失败', {
-                                                        icon: 2,
-                                                        time: 3000
-                                                    });
-                                                    remove();
-                                                }
-                                            });
-                                }
+            var flag = getActiveState(activityId);
+            if(flag==1){
+                $.post("/cube/questionnaire/subQuestionnaire",
+                        {
+                            "param": JSON.stringify(array),
+                            "questionnaireId": questionnaireId,
+                            "userId": userId,
+                            "visitorTimes": visitorTimes,
+                            "timeConsuming": timeConsuming,
+                            "activityId": activityId,
+                            "userName": userName
+                        }, function (result) {
+                            layer.closeAll();
+                            console.log(result);
+                            if (result.code == 200) {
+                                window.location.href = "/web/cube/getSuccess";
                             } else {
-                                layer.msg(result.message, {
+                                layer.msg('填写失败', {
                                     icon: 2,
-                                    time: 3000
+                                    time: 1500
                                 });
                                 layer.close(index);
                                 remove();
                             }
-                        })
-                    } else {
-                        layer.confirm('活动已结束', {
-                            btn: ['确定']
-                        })
-                        layer.close(index);
-                        remove();
-                    }
-                } else {
-                    layer.msg(result.message);
-                    layer.close(index);
-                    remove();
-                }
-            })
+                        });
+            }else if(flag==2){
+                layer.confirm('活动已结束', {
+                    btn: ['确定']
+                })
+                layer.close(index);
+                remove();
+            }else{
+                layer.msg('提交失败', {
+                    icon: 2,
+                    time: 1500
+                });
+                layer.close(index);
+                remove();
+            }
         }
     }
 

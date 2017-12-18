@@ -111,7 +111,7 @@ public class OrderOnlineController {
      */
     @PostMapping("/getState")
     public Result getState(String id) {
-        String orderOnline = orderOnlineService.getOrderState(id);
+        OrderOnline orderOnline = orderOnlineService.getOrderState(id);
         return ResultGenerator.genSuccessResult(orderOnline);
     }
 
