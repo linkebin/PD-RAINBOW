@@ -702,7 +702,7 @@ var processLogA=null;
                 $.each(list, function (index, item) {
                     var icon = '';
                     if (item.flag>0 || item.filesCount>0){
-                        icon = '  <div class="ci-count"> 问卷<span class="eui-color-gray2"> X '+item.flag+'</span> 文件<span class="eui-color-gray2"> X '+item.filesCount+'</span> </div>'
+                        icon = '  <div class="ci-count"> <span class="eui-color-orange">问卷</span><span class="eui-color-gray2"> X '+item.flag+'</span> <span class="eui-color-orange">文件</span><span class="eui-color-gray2"> X '+item.filesCount+'</span> </div>'
                     }
                     $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
                         '<div class="eui-timeline-content eui-text"> ' +

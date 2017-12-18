@@ -8,38 +8,19 @@
 <body class="eui-bg-white">
 <div class="eui-bg-white eui-row eui-padding15">
     <div class="eui-col-md12 eui-paddingR10">
-        <form class="eui-form" id="searchFrom">
-            <div class="eui-form-item">
-                <label class="eui-form-label">年份</label>
-                <div class="eui-input-inline">
-                    <input type="text" name="year" class="eui-input" id="year" placeholder="年份" >
-                </div>
-
-                <label class="eui-form-label">月份</label>
-                <div class="eui-input-inline">
-                    <select name="month">
-                        <option value=""></option>
-                        <option value="01">01月</option>
-                        <option value="02">02月</option>
-                        <option value="03">03月</option>
-                        <option value="04">04月</option>
-                        <option value="05">05月</option>
-                        <option value="06">06月</option>
-                        <option value="07">07月</option>
-                        <option value="08">08月</option>
-                        <option value="09">09月</option>
-                        <option value="10">10月</option>
-                        <option value="11">11月</option>
-                        <option value="12">12月</option>
-                    </select>
-                </div>
-
-                <div class="eui-input-inline">
-                    <span class="eui-btn" onclick="doSearch()">查询</span>
-                    <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+        <div style="margin-left: 40px;">
+            <div class="eui-form">
+                <input type="radio" name="month" e-filter="month" value="-1" title="全部">
+                <input type="radio" name="month" e-filter="month" value="3" checked="checked" title="近三月">
+                <input type="radio" name="month" e-filter="month" value="6" title="近半年">
+                <input type="radio" name="month" e-filter="month" value="12" title="近一年">
+                <input type="radio" name="month" e-filter="month" value="" title="其他">
+                <div style="display: none;" id="_qtsj" class="eui-input-inline">
+                    <input type="text" id="qtsj" name="g" class="eui-input"  placeholder="时间区间" >
                 </div>
             </div>
-        </form>
+        </div>
+
 
         <div class="eui-row eui-padding10 eui-borderB">
             <div class="eui-col-md6 eui-font18">
@@ -57,7 +38,7 @@
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 <script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
 <script src="/pack.ajax.js" type="text/javascript"></script>
-<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/date2format.js" type="text/javascript"></script>
 <script>
     // 表单
     eui.use(['form', 'laydate', 'layer'], function(){
@@ -65,12 +46,46 @@
             ,layer = eui.layer
             ,laydate = eui.laydate;
 
-            laydate.render({
-                elem: '#year'
-                ,type: 'year'
-            });
-            dynamicTable(new Object());
+        laydate.render({
+            elem: '#qtsj'
+            ,type: 'month'
+            ,range: true
+            ,done: function(value, date, endDate){
+                var startTime = date.year+'-'+date.month;
+                var endTime = endDate.year+'-'+endDate.month;
+                leftObj.yearStart = startTime;
+                leftObj.yearEnd = endTime;
+                dynamicTable(leftObj);
+            }
+        });
+
+        form.on('radio(month)', function(data){
+            if (data.value!=''){
+                $("#_qtsj").hide();
+                if (data.value=='-1'){
+                    leftObj.yearStart = null;
+                    leftObj.yearEnd = null;
+                    dynamicTable(leftObj);
+                    return;
+                }
+                var s = getMonthStartDate();
+                leftObj.yearStart = removemulMonth(s,Number(data.value));
+                leftObj.yearEnd = s;
+                dynamicTable(leftObj);
+            }else {
+                leftObj.yearStart = null;
+                leftObj.yearEnd = null;
+                $("#_qtsj").show();
+            }
+        });
+        leftObj = new Object();
+        var s = getMonthStartDate();
+        leftObj.yearStart = removemulMonth(s,3);
+        leftObj.yearEnd = s;
+        dynamicTable(leftObj);
     });
+
+
 
     var table;
     function dynamicTable(obj) {
@@ -86,15 +101,14 @@
                 ,where: {json: JSON.stringify(obj)}
                 ,height: 420
                 ,cols: [[ //标题栏
-//                    {checkbox: true},
-                    {field: 'code', title: '编号', width: 120},
-                    {field: 'year', title: '年份', width: 100}
-                    ,{field: 'month', title: '月份', width: 100}
-                    ,{field: 'status', title: '状态', width: 150,templet:'<div>{{# if(d.status==1){ }} 未结算  {{# } }} {{# if(d.status==2){ }} 已结算  {{# } }} {{# if(d.status==3){ }} 部分结算  {{# } }}</div>'}
+                    {field: 'code_', title: '编号', width: 120},
+                    {field: 'year_', title: '年份', width: 100}
+                    ,{field: 'month_', title: '月份', width: 100}
+                    ,{field: 'status_', title: '状态', width: 150,templet:'<div>{{# if(d.status_==1){ }} 未结算  {{# } }} {{# if(d.status_==2){ }} 已结算  {{# } }} {{# if(d.status_==3){ }} 部分结算  {{# } }}</div>'}
                     ,{field: 'should_be', title: '应结', width: 150}
                     ,{field: 'closed', title: '已结', width: 150,templet:'<div>{{# if(d.closed==undefined){ }} 0.00  {{#  }else{   }} {{d.closed}} {{# } }}</div>'}
                     ,{field: 'unliquidated', title: '未结', width: 150,templet:'<div>{{# if(d.unliquidated==undefined){ }} 0.00  {{#  }else{   }} {{d.unliquidated}} {{# } }}</div>'}
-                    ,{field: 'create_time', title: '创建时间', width: 180,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'create_time', title: '出账时间', width: 180,templet:'<div>{{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
                     ,{field: '', title: '操作', width: 186,templet:'<div class="eui-btn-group">' +
                         ' <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
                             'title="渠道明细" e-event="info" ><i class="eui-icon">&#xe60a;</i>' +

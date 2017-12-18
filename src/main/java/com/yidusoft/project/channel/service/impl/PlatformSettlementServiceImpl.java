@@ -62,8 +62,7 @@ public class PlatformSettlementServiceImpl extends AbstractService<PlatformSettl
             platformSettlement.setStatus("1");
             this.save(platformSettlement);
         }
-        PageHelper.startPage(1, 10);
-//        PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
+        PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
         List<Map<String,Object>> data = platformSettlementMapper.findPlatformSettlementList(map);
 
         return data;
