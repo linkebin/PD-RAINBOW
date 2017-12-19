@@ -117,7 +117,8 @@ public class VisitorRegisterController {
 
     @PostMapping("/getCount")
     public Result getCount(Date startTime, Date endTime, String sex, String maritalStatus, String belief)  {
-        return visitorRegisterService.acquisitionOfStatisticalAnalysis(startTime, endTime, sex, maritalStatus, belief);
+        return visitorRegisterService.acquisitionOfStatisticalAnalysis(
+                startTime, endTime, sex, maritalStatus, belief);
     }
 
     /*@PostMapping("/getQuestionCount")

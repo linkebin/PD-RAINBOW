@@ -2,6 +2,7 @@ package com.yidusoft.project.business.dao;
 
 import com.yidusoft.core.Mapper;
 import com.yidusoft.project.business.domain.VisitorRegister;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,9 @@ public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
      */
     List<VisitorRegister> acquisitionOfStatisticalAnalysis(Map map);
 
+    List<VisitorRegister> acquisitionOfStatisticalAnalysisNew(@Param("maritals")List<String> maritals,
+                                                              @Param("beliefs")List<String> beliefs,
+                                                              @Param("map")Map<String,Object> map);
     /**
      * 获取问卷类型的统计
      * @param map

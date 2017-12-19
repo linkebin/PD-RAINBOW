@@ -121,7 +121,9 @@
         FROM (SELECT register.*,count(*) as count FROM visitor_register register,
         (SELECT visitor_id,create_time FROM visiting_record
         WHERE DATE(create_time) BETWEEN DATE(#{startTime}) AND DATE(#{endTime})
+
         AND deleted=0 AND creator=#{userId}) as record
+
         WHERE record.visitor_id=register.ID_
         GROUP BY record.create_time) as a
         <where>
@@ -129,5 +131,30 @@
                 AND a.sex=#{sex}
             </if>
         </where>
+    </select>
+
+    <select id="acquisitionOfStatisticalAnalysisNew" resultMap="BaseResultMap">
+          SELECT b.* FROM(
+            SELECT vv.*,vr.visitor_goal,vr.deleted deleted2 FROM `visiting_record` vr  LEFT JOIN `visitor_register` vv ON vv.ID_=vr.visitor_id
+        ) b WHERE b.deleted2=0
+
+        <if test="map.userId !=null and map.userId!=''">
+            AND b.creator=#{map.userId}
+        </if>
+
+        <if test="null != maritals and maritals.size>0">
+            AND b.marital_status in
+            <foreach collection="maritals" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        <if test="null != beliefs and beliefs.size>0">
+            AND b.Religious_belief in
+            <foreach collection="beliefs" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
     </select>
 </mapper>

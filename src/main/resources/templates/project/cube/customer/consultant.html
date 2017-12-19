@@ -388,7 +388,6 @@ var processLogA=null;
             }
         }
          processLogA = UE.getEditor('processLogA', {
-//             initialFrameWidth:900,
             initialFrameHeight: 320,//编辑器高度，默认320
             scaleEnabled: true,
              toolbars: [
@@ -469,7 +468,6 @@ var processLogA=null;
         });
 
         remarksA = UE.getEditor('remarksA', {
-//            initialFrameWidth:900,
             initialFrameHeight: 320,//编辑器高度，默认320
             scaleEnabled: true,
             toolbars: [
@@ -693,6 +691,14 @@ var processLogA=null;
             });
         });
     }
+    
+    function full(deleted) {
+        if (deleted==1){
+            return '<img width="16" height="16" src="/Styles/images/xymfImages/xymf/warn.png">';
+        }else {
+            return '';
+        }
+    }
 
     function loadShaftTime() {
         var obj = $("#searchFrom").serializeObject();
@@ -706,7 +712,8 @@ var processLogA=null;
                     }
                     $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
                         '<div class="eui-timeline-content eui-text"> ' +
-                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'<span class="guide ci-guide"></span></div> ' +
+                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'' +full(item.deleted)+
+                        '<span class="guide ci-guide"></span></div> ' +
                         '</div> ' +icon+
                         '<i style="color: #35a9ff;" class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
                         '</li>');

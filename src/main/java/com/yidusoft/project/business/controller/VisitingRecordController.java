@@ -8,13 +8,18 @@ import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.business.domain.Schedule;
 import com.yidusoft.project.business.domain.VisitingRecord;
 import com.yidusoft.project.business.domain.VisitingRecordFile;
+import com.yidusoft.project.business.domain.VisitorRegister;
 import com.yidusoft.project.business.service.ScheduleService;
 import com.yidusoft.project.business.service.VisitingRecordFileService;
 import com.yidusoft.project.business.service.VisitingRecordService;
 import com.yidusoft.project.business.service.VisitorRegisterService;
+import com.yidusoft.project.system.domain.Backlog;
 import com.yidusoft.project.system.domain.SelectOption;
+import com.yidusoft.project.system.service.BacklogService;
 import com.yidusoft.project.system.service.SelectOptionService;
 import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.DateUtils;
+import com.yidusoft.utils.JavaBeanUtil;
 import com.yidusoft.utils.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -126,6 +131,8 @@ public class VisitingRecordController {
         }
         return ResultGenerator.genSuccessResult(maps);
     }
+    @Resource
+    private BacklogService backlogService;
 
 
     @PostMapping("/add")
@@ -138,6 +145,8 @@ public class VisitingRecordController {
         visitingRecord.setRecordCode(CodeHelper.getCode("LF"));
         try {
             visitingRecordService.save(visitingRecord);
+            VisitorRegister visitorRegister = visitorRegisterService.findById(visitingRecord.getVisitorId());
+            saveDBLFJL(visitingRecord,visitorRegister);
         }catch (Exception e){
             e.printStackTrace();
             return ResultGenerator.genFailResult("保存失败！");
@@ -157,10 +166,44 @@ public class VisitingRecordController {
         VisitingRecord visitingRecord = JSON.parseObject(json,VisitingRecord.class);
         try {
             visitingRecordService.update(visitingRecord);
+            String intArray3 [] = {"visitingPurpose","processLog","followUpPlan","interview","evaluate","thisTime","resolved","remarks"};
+            Backlog backlog2 = backlogService.findBy("objid",visitingRecord.getId());
+
+            VisitingRecord visitingRecord2 = visitingRecordService.findById(visitingRecord.getId());
+            VisitorRegister visitorRegister = visitorRegisterService.findById(visitingRecord2.getVisitorId());
+
+            if (JavaBeanUtil.checkFieldValueNull(visitingRecord,intArray3)){
+                if (backlog2!=null){
+                    backlogService.deleteById(backlog2.getId());
+                }
+                saveDBLFJL(visitingRecord2,visitorRegister);
+            }else {
+                if (backlog2!=null){
+                    backlog2.setBacklogStatus("2");
+                    backlogService.update(backlog2);
+                }
+            }
+
             return ResultGenerator.genSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
             return ResultGenerator.genFailResult("编辑失败");
+        }
+    }
+
+    public void saveDBLFJL(VisitingRecord visitingRecord,VisitorRegister visitorRegister){
+        String intArray3 [] = {"visitingPurpose","processLog","followUpPlan","interview","evaluate","thisTime","resolved","remarks"};
+        if (JavaBeanUtil.checkFieldValueNull(visitingRecord,intArray3)){
+            Backlog backlog = new Backlog();
+            backlog.setId(UUID.randomUUID().toString());
+            backlog.setTitle(visitorRegister.getVisitorName() + "   "+ DateUtils.format(visitingRecord.getVisitorTime(),"yyyy-MM-dd") +"    来访记录未填写完整");
+            backlog.setBacklogStatus("1");
+            backlog.setAgentId(visitingRecord.getCreator());
+            backlog.setBacklogType("DBLFJL");
+            backlog.setCreateTime(new Date());
+            backlog.setUrl("web/customer/visitorInfo?id="+visitingRecord.getVisitorId());
+            backlog.setObjid(visitingRecord.getId());
+            backlogService.save(backlog);
         }
     }
 
@@ -200,8 +243,17 @@ public class VisitingRecordController {
         VisitingRecord visitingRecord = JSON.parseObject(json,VisitingRecord.class);
 
         List<VisitingRecord> list = visitingRecordService.findVisitingRecordShaftTimeByCustomerId(visitingRecord);
+        List<VisitingRecord> data = new ArrayList<VisitingRecord>();
+        for (VisitingRecord v : list){
+            v.setDeleted(2);
+            Backlog backlog = backlogService.findBy("objid",v.getId());
+            if (backlog !=null && backlog.getBacklogStatus().equals("1")){
+                v.setDeleted(1);
+            }
+            data.add(v);
+        }
 
-        PageInfo pageInfo = new PageInfo(list);
+        PageInfo pageInfo = new PageInfo(data);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 }
