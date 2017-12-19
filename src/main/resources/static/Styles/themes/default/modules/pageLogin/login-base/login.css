@@ -11,6 +11,7 @@
     position: fixed;
     left: 0;
     top: 0;
+    background-size: cover;
 }
 .loginIn{
     width: 450px;
