@@ -76,12 +76,17 @@ public class WebQuestionnaireController {
             model.addAttribute("newQuestion",newQuestion);
             //量表的问题id
             model.addAttribute("gaugeQuestionIds",gaugeQuestionIds);
-             String[] temp =   questionnaire.getSort().split(",");
-             questionnaireQuestionIds = new ArrayList<>();
-             for (String d : temp){
-                 questionnaireQuestionIds.add(d);
-             }
-           model.addAttribute("ids",questionnaireQuestionIds);
+            if(questionnaire.getSort() != null && questionnaire.getSort() != ""){
+                String[] temp =   questionnaire.getSort().split(",");
+                questionnaireQuestionIds = new ArrayList<>();
+                for (String d : temp){
+                    questionnaireQuestionIds.add(d);
+                }
+                model.addAttribute("ids",questionnaireQuestionIds);
+            }else{
+                model.addAttribute("ids",questionnaireQuestionIds);
+            }
+
             List<Integer> newIdIndex = new ArrayList<>();
             for(int i = 0; i < questionnaireQuestionIds.size(); i++){
                 for(int y = 0; y < newQuestion.size(); y++){
@@ -201,12 +206,18 @@ public class WebQuestionnaireController {
             model.addAttribute("newQuestion",newQuestion);
             //量表的问题id
             model.addAttribute("gaugeQuestionIds",gaugeQuestionIds);
-            String[] temp =   questionnaire.getSort().split(",");
-            questionnaireQuestionIds = new ArrayList<>();
-            for (String d : temp){
-                questionnaireQuestionIds.add(d);
+            if(questionnaire.getSort() != null && questionnaire.getSort() != ""){
+                String[] temp =   questionnaire.getSort().split(",");
+                questionnaireQuestionIds = new ArrayList<>();
+                for (String d : temp){
+                    questionnaireQuestionIds.add(d);
+                }
+                model.addAttribute("ids",questionnaireQuestionIds);
+            }else{
+                model.addAttribute("ids",questionnaireQuestionIds);
+
             }
-            model.addAttribute("ids",questionnaireQuestionIds);
+
             List<Integer> newIdIndex = new ArrayList<>();
             for(int i = 0; i < questionnaireQuestionIds.size(); i++){
                 for(int y = 0; y < newQuestion.size(); y++){
