@@ -33,6 +33,8 @@ import com.yidusoft.utils.EntityReflex;
 import com.yidusoft.utils.MyException;
 import com.yidusoft.utils.Security;
 import org.activiti.engine.runtime.Execution;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
@@ -138,7 +140,9 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             //总分
             int totalScore = getQuestionnaireTotalScore(mapList, dataAcquisitionId, userName,userId);
             //根据客户Id找到咨询师id
-             VisitorRegister visitorRegister= findVisitorRegister(userId);
+             VisitorRegister visitorRegister= findVisitorRegister(userId,activityId);
+
+            Subject subjects= SecurityUtils.getSubject();
             //查询问卷的相关答案
              QuestionnaireAnswer questionnaireAnswer=new QuestionnaireAnswer();
              questionnaireAnswer.setUserId(userId);
@@ -165,7 +169,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setDeleted(0);
             //判断是活动填写问卷  还是来访者填写问卷
             if (StringUtils.isEmpty(activityId)) {
-                dataAcquisition.setDataUser(userName);
+                dataAcquisition.setDataUser(userId);
                 //小写的mm表示的是分钟  
                 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date date=sdf.parse(visitorTimes);
@@ -295,11 +299,15 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
      * 查询来访者是否有咨询师
      * @param userId
      */
-    public VisitorRegister findVisitorRegister(String userId)throws Exception{
-        VisitorRegister visitorRegister = visitorRegisterService.findById(userId);
-        if(visitorRegister==null){
-            throw new MyException("找不到对应的咨询师！");
+    public VisitorRegister findVisitorRegister(String userId,String activityId)throws Exception{
+        VisitorRegister visitorRegister =null;
+        if(StringUtils.isEmpty(activityId)){
+             visitorRegister = visitorRegisterService.findById(userId);
+            if(visitorRegister==null){
+                throw new MyException("找不到对应的咨询师！");
+            }
         }
+
         return visitorRegister;
     }
     //活动提交问卷

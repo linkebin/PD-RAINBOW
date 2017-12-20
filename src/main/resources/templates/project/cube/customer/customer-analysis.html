@@ -100,9 +100,10 @@
                      if(result.data.length>1){
                          $("#analysis").show();
                          for(var i=0;i<result.data.length;i++){
-                             var dataAcquistion=eval('('+result.data[i].dataResult+')');
+                             //var dataAcquistion=eval('('+result.data[i].dataResult+')');
                              timeData[i]= new Date(result.data[i].createTime).Format('yyyy-MM-dd')+"";
-                             score[i]=dataAcquistion.totalScore;
+
+                             score[i]=result.data[i].totalScore;
                          }
                          analysis(questionnaireNmae,timeData,score);
                      }else {
@@ -202,7 +203,7 @@
 
                 type: 'value',
                 max: max,
-                name: '单位:',
+                name: '总分:',
                 min: 0,
                 interval: 25,
 

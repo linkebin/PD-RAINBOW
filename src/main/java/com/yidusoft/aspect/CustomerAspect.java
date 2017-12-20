@@ -125,11 +125,13 @@ public class CustomerAspect {
         String token= customerInterface.getToken();
         //退出登陆
         Subject subject= SecurityUtils.getSubject();
+        //咨询师的id
+        String   consultantId=Security.getUserId();
         subject.logout();
-        //存入session
-         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+         //存入session
          Subject subjects= SecurityUtils.getSubject();
          subjects.getSession().setAttribute("token",token);
+         subjects.getSession().setAttribute("consultantId ",consultantId);
 
         }
     }
@@ -152,11 +154,13 @@ public class CustomerAspect {
             tokenSession!=null&&
             !tokenSession.toString().equals("") &&
             token.equals(tokenSession.toString())){
-             //清空session
-            customerInterface.getSession().removeAttribute("token");
             try {
+                //清空session
+                customerInterface.getSession().removeAttribute("token");
                 //执行方法
                 result=joinPoint.proceed();
+                //清空session
+                customerInterface.getSession().removeAttribute("consultantId");
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
