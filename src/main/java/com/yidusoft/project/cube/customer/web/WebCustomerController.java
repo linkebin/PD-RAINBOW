@@ -223,7 +223,9 @@ public class WebCustomerController {
      * @return
      */
     @RequestMapping("/visitorCount")
-    public String visitorCount(){
+    public String visitorCount(Model model){
+        List<SelectOption> selectOptionList =selectOptionService.findSelectOptionByType("goal");
+        model.addAttribute("selectOptionList",selectOptionList);
         return "project/cube/customer/visitor-count";
     }
 

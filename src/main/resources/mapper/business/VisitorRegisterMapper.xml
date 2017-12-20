@@ -59,6 +59,9 @@
       <result column="count" jdbcType="INTEGER" property="count"></result>
       <result column="questionnaire_name" jdbcType="VARCHAR" property="questionnaireName"></result>
       <result column="data_question" jdbcType="VARCHAR" property="dataQuestion"></result>
+      <result column="option_name" jdbcType="VARCHAR" property="optionName"></result>
+      <result column="visitor_goal" jdbcType="VARCHAR" property="visitorGoal"></result>
+
   </resultMap>
 
     <select id="findVisitorRegisterProvince" resultType="Map">
@@ -134,12 +137,27 @@
     </select>
 
     <select id="acquisitionOfStatisticalAnalysisNew" resultMap="BaseResultMap">
-          SELECT b.* FROM(
-            SELECT vv.*,vr.visitor_goal,vr.deleted deleted2 FROM `visiting_record` vr  LEFT JOIN `visitor_register` vv ON vv.ID_=vr.visitor_id
+          SELECT b.*
+        <if test="map.types !=null and map.types!=''">
+            ,count(1) count
+        </if>
+        FROM(
+            SELECT so.option_name,TIMESTAMPDIFF(YEAR, vv.birthday, CURDATE()) age,vv.*,vr.visitor_goal,vr.deleted deleted2,vr.create_time create_time2
+            FROM `visiting_record` vr  LEFT JOIN `visitor_register` vv ON vv.ID_=vr.visitor_id
+            LEFT JOIN select_option so ON vr.visitor_goal=so.option_id
         ) b WHERE b.deleted2=0
 
         <if test="map.userId !=null and map.userId!=''">
             AND b.creator=#{map.userId}
+        </if>
+
+        AND DATE(b.create_time2) BETWEEN DATE(#{map.startTime}) AND DATE(#{map.endTime})
+
+        <if test="null != sexs and sexs.size>0">
+            AND b.sex in
+            <foreach collection="sexs" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
 
         <if test="null != maritals and maritals.size>0">
@@ -149,11 +167,31 @@
             </foreach>
         </if>
 
+        <if test="null != goals and goals.size>0">
+            AND b.visitor_goal in
+            <foreach collection="goals" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="null != beliefs and beliefs.size>0">
             AND b.Religious_belief in
             <foreach collection="beliefs" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
+        </if>
+
+        <if test="null != ageGroupsIdsMap and ageGroupsIdsMap.size>0">
+            AND (
+                <foreach collection="ageGroupsIdsMap" item="mm" open="" close="" separator="OR">b.age &gt;=#{mm.ageStart}
+                    AND b.age &lt;=#{mm.ageEnd}
+                </foreach>
+            )
+        </if>
+
+
+        <if test="map.types !=null and map.types!=''">
+            GROUP BY b.option_name  ORDER BY count DESC
         </if>
 
     </select>

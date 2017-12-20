@@ -82,27 +82,67 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @return
      */
     @Override
-    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus, String belief) {
+    public Result acquisitionOfStatisticalAnalysis(Date startTime, Date endTime, String sex, String maritalStatus,
+                                                   String belief,String ageGroupsIds,String goalIds,String types) {
         List<String> maritals = new ArrayList<String>();
         List<String> beliefs = new ArrayList<String>();
+        List<Map<String,Object>> ageGroupsIdsMap = new ArrayList<Map<String,Object>>();
+        List<String> sexs = new ArrayList<String>();
+        List<String> goals = new ArrayList<String>();
 
         String mariltalArr [] = maritalStatus.split(",");
         String beliefArr [] = belief.split(",");
+        String ageGroupArr [] = ageGroupsIds.split(",");
+        String sexsArr [] = sex.split(",");
+        String goalsArr [] = goalIds.split(",");
 
             for (String s1 : mariltalArr){
                 maritals.add(s1);
+            }
+            for (String s0 : sexsArr){
+                sexs.add(s0);
             }
 
             for (String s2 : beliefArr){
                 beliefs.add(s2);
             }
 
+            for (String s4 : goalsArr){
+                goals.add(s4);
+            }
+
+            for (String s3 : ageGroupArr){
+                Map<String,Object> map = new HashMap<String,Object>();
+                if (s3.equals("0")){
+                    map.put("ageStart",0);
+                    map.put("ageEnd",18);
+                }
+                if (s3.equals("1")){
+                    map.put("ageStart",19);
+                    map.put("ageEnd",44);
+                }
+                if (s3.equals("2")){
+                    map.put("ageStart",45);
+                    map.put("ageEnd",59);
+                }
+                if (s3.equals("3")){
+                    map.put("ageStart",60);
+                    map.put("ageEnd",74);
+                }
+                if (s3.equals("4")){
+                    map.put("ageStart",75);
+                    map.put("ageEnd",89);
+                }
+                if (s3.equals("5")){
+                    map.put("ageStart",90);
+                    map.put("ageEnd",200);
+                }
+                ageGroupsIdsMap.add(map);
+            }
         List<VisitorRegister> reslutList =
                 visitorRegisterMapper.
-                        acquisitionOfStatisticalAnalysisNew(maritals,beliefs,getMap(startTime, endTime, sex));
-
-        List<VisitorRegister> thisYearList = getList(maritalStatus,belief,reslutList);
-        return ResultGenerator.genSuccessResult(thisYearList);
+                        acquisitionOfStatisticalAnalysisNew(maritals,beliefs,ageGroupsIdsMap,sexs,goals,getMap(startTime, endTime,types));
+        return ResultGenerator.genSuccessResult(reslutList);
     }
 
     /**
@@ -112,82 +152,12 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      * @param endTime
      * @return
      */
-    public Map getMap(Date startTime, Date endTime, String sex) {
+    public Map getMap(Date startTime, Date endTime,String types) {
         Map map = new HashMap<>();
         map.put("userId",Security.getUserId());
         map.put("startTime", startTime);
         map.put("endTime", endTime);
-        map.put("sex", sex);
+        map.put("types", types);
         return map;
     }
-
-    /**
-     * 年份减1
-     *
-     * @param date
-     * @return
-     */
-    public Date operationDate(Date date) {
-        Calendar rightNow = Calendar.getInstance();
-        rightNow.setTime(date);
-        //表示年份减一.
-        rightNow.add(Calendar.YEAR, -1);
-        Date dt = rightNow.getTime();
-        return dt;
-    }
-
-    /**
-     * 获取上一期的时间段
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    public Date lastPhaseDate(Date startTime, Date endTime){
-        long t1 = startTime.getTime();
-        long t2 = endTime.getTime();
-        long millis = t2 - t1;
-        long days = TimeUnit.MILLISECONDS.toDays(millis);
-        Calendar rightNow = Calendar.getInstance();
-        rightNow.setTime(startTime);
-        rightNow.add(Calendar.DATE, -(int)days);
-        Date date = rightNow.getTime();
-        return date;
-    }
-
-    /**
-     * 返回今年的数据集合
-     * @param maritalStatus
-     * @param list
-     * @return
-     */
-    public List getList(String maritalStatus,String belief,List<VisitorRegister> list){
-        List thisYearList = new ArrayList<>();
-        String status[] = maritalStatus.split(",");
-        String bel[] = belief.split(",");
-        for (VisitorRegister visitorRegister : list) {
-            if(status.length>1){
-                for (String i : status) {
-                    if (Integer.parseInt(i) == visitorRegister.getMaritalStatus()) {
-                        if(bel.length>1){
-                            for (String j : bel) {
-                                if (Integer.parseInt(j) == visitorRegister.getReligiousBelief()) {
-                                    thisYearList.add(visitorRegister);
-                                }
-                            }
-                        }else{
-                            thisYearList.add(visitorRegister);
-                        }
-                    }
-                }
-            }else if(bel.length>1){
-                for (String i : bel) {
-                    if (Integer.parseInt(i) == visitorRegister.getReligiousBelief()) {
-                        thisYearList.add(visitorRegister);
-                    }
-                }
-            }
-        }
-        return thisYearList;
-    }
-
 }

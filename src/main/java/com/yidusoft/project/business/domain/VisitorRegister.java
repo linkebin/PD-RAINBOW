@@ -288,6 +288,28 @@ public class VisitorRegister {
     @Transient
     private String dataQuestion;
 
+    @Transient
+    private String optionName;
+
+    @Transient
+    private String visitorGoal;
+
+    public String getVisitorGoal() {
+        return visitorGoal;
+    }
+
+    public void setVisitorGoal(String visitorGoal) {
+        this.visitorGoal = visitorGoal;
+    }
+
+    public String getOptionName() {
+        return optionName;
+    }
+
+    public void setOptionName(String optionName) {
+        this.optionName = optionName;
+    }
+
     public String getIncome() {
         return income;
     }

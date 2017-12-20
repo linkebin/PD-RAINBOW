@@ -8,6 +8,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.business.domain.Schedule;
 import com.yidusoft.project.business.service.ScheduleService;
+import com.yidusoft.project.system.service.BacklogService;
 import com.yidusoft.utils.DateUtils;
 import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +73,8 @@ public class ScheduleController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+    @Resource
+    private BacklogService backlogService;
 
     @PostMapping("/scheduleTimeOrEvent")
     public Result scheduleTimeOrEvent(String type,String json) {
@@ -79,13 +82,31 @@ public class ScheduleController {
          schedule.setConsultantId(Security.getUserId());
 
         List<Schedule> scheduleList = scheduleService.findScheduleDataTimeOrEvent(schedule);
+
+        Map<String,Object> map2 = new HashMap<String,Object>();
+        map2.put("agent_id",Security.getUserId());
+        map2.put("visitorTimeStr",schedule.getVisitorTimeStr());
+
+        List<Map<String,Object>> list = backlogService.findMyBackLogList(map2);
+
         if (type.equals("1")) {
             Map<String,Object> map = new HashMap<String,Object>();
             for (Schedule s:scheduleList) {
                 map.put(DateUtils.format(s.getVisitorTime(),DateUtils.FORMAT_SHORT),"");
             }
+            for (Map<String,Object> mmm:list) {
+                map.put(DateUtils.format((Date) mmm.get("create_time"),DateUtils.FORMAT_SHORT),"");
+            }
+
             return ResultGenerator.genSuccessResult(map);
         }else {
+            for (Map<String,Object> mmm:list) {
+                Schedule schedule1 = new Schedule();
+                schedule1.setVisitorTime((Date) mmm.get("create_time"));
+                schedule1.setDescribes(mmm.get("title").toString());
+                schedule1.setVisitorName("");
+                scheduleList.add(schedule1);
+            }
             return ResultGenerator.genSuccessResult(scheduleList);
         }
     }

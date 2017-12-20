@@ -6,7 +6,7 @@
       WARNING - @mbg.generated
     -->
     <id column="id_" jdbcType="VARCHAR" property="id" />
-    <result column="question_type" jdbcType="VARCHAR" property="questionType" />
+    <result column="goalIds" jdbcType="VARCHAR" property="goalids" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="age" jdbcType="VARCHAR" property="age" />
     <result column="religion" jdbcType="VARCHAR" property="religion" />
@@ -14,10 +14,12 @@
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
 
   <select id="findTemplateByUserId" resultMap="BaseResultMap" parameterType="String">
-    SELECT id_,question_type,sex,age,religion,marriage,user_id,template_name
+    SELECT *
     FROM template WHERE user_id=#{userId}
   </select>
 </mapper>

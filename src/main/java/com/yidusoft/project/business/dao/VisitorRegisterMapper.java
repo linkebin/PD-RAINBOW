@@ -42,6 +42,9 @@ public interface VisitorRegisterMapper extends Mapper<VisitorRegister> {
 
     List<VisitorRegister> acquisitionOfStatisticalAnalysisNew(@Param("maritals")List<String> maritals,
                                                               @Param("beliefs")List<String> beliefs,
+                                                              @Param("ageGroupsIdsMap")List<Map<String,Object>> ageGroupsIdsMap,
+                                                              @Param("sexs")List<String> sexs,
+                                                              @Param("goals")List<String> goals,
                                                               @Param("map")Map<String,Object> map);
     /**
      * 获取问卷类型的统计

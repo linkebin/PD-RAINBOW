@@ -1,26 +1,22 @@
 package com.yidusoft.project.business.domain;
 
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.*;
 
 public class Template {
     @Id
     @Column(name = "id_")
     private String id;
 
-    @Column(name = "question_type")
-    private String questionType;
+    @Column(name = "goalIds")
+    private String goalids;
 
-    @Column(name = "sex")
     private String sex;
 
-    @Column(name = "age")
     private String age;
 
-    @Column(name = "religion")
     private String religion;
 
-    @Column(name = "marriage")
     private String marriage;
 
     @Column(name = "user_id")
@@ -31,6 +27,13 @@ public class Template {
 
     @Column(name = "template_name")
     private String templateName;
+
+    @Column(name = "start_time")
+    private Date startTime;
+
+    @Column(name = "end_time")
+    private Date endTime;
+
     /**
      * @return id_
      */
@@ -46,21 +49,21 @@ public class Template {
     }
 
     /**
-     * @return type
+     * @return goalIds
      */
-    public String getQuestionType() {
-        return questionType;
+    public String getGoalids() {
+        return goalids;
     }
 
     /**
-     * @param questionType
+     * @param goalids
      */
-    public void setQuestionType(String questionType) {
-        this.questionType = questionType;
+    public void setGoalids(String goalids) {
+        this.goalids = goalids;
     }
 
     /**
-     * @return template_sex
+     * @return sex
      */
     public String getSex() {
         return sex;
@@ -116,7 +119,7 @@ public class Template {
     }
 
     /**
-     * @return userId
+     * @return user_id
      */
     public String getUserId() {
         return userId;
@@ -130,7 +133,7 @@ public class Template {
     }
 
     /**
-     * @return userId
+     * @return create_time
      */
     public Date getCreateTime() {
         return createTime;
@@ -144,7 +147,7 @@ public class Template {
     }
 
     /**
-     * @return userId
+     * @return template_name
      */
     public String getTemplateName() {
         return templateName;
@@ -155,5 +158,33 @@ public class Template {
      */
     public void setTemplateName(String templateName) {
         this.templateName = templateName;
+    }
+
+    /**
+     * @return start_time
+     */
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    /**
+     * @param startTime
+     */
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * @return end_time
+     */
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * @param endTime
+     */
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

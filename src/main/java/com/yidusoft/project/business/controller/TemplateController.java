@@ -36,7 +36,12 @@ public class TemplateController {
         template.setCreateTime(new Date());
         template.setUserId(Security.getUserId());
         templateService.save(template);
-        return ResultGenerator.genSuccessResult();
+        try {
+            return ResultGenerator.genSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("");
+        }
     }
 
     /**
@@ -55,8 +60,8 @@ public class TemplateController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @GetMapping("/{id}")
-    public Result detail(@PathVariable String id) {
+    @GetMapping("/detail")
+    public Result detail(String id) {
         Template template = templateService.findById(id);
         return ResultGenerator.genSuccessResult(template);
     }

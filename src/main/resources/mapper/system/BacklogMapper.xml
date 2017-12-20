@@ -17,5 +17,8 @@
 
   <select id="findMyBackLogList" parameterType="java.util.Map" resultType="Map">
         SELECT bl.* FROM `backlog` bl WHERE bl.backlog_status='1' AND bl.agent_id=#{agent_id}
+        <if test="visitorTimeStr!=null and visitorTimeStr!=''">
+          AND bl.create_time LIKE '%${visitorTimeStr}%'
+        </if>
   </select>
 </mapper>
