@@ -139,7 +139,7 @@
     })
     $(function () {
         var startTime = new Date();
-        startTime = startTime.setDate(startTime.getDate() - 7);
+        startTime = startTime.setMonth(startTime.getMonth() - 1);
         $('#startTime').val(new Date(startTime).Format("yyyy/MM/dd"));
         $('#endTime').val(new Date().Format("yyyy/MM/dd"));
         doSearch();//初始化表格数据
@@ -164,7 +164,7 @@
             });
             var startTime = new Date($('#startTime').val()).Format("yyyy-MM-dd");
             var endTime = new Date($('#endTime').val()).Format("yyyy-MM-dd");
-            var index = layer.load(2); //加载
+            var index = layer.load(1); //加载
             $.post("/account/info/listPage", {
                 page: 1,
                 size: 10,
@@ -191,13 +191,14 @@
                                 $("#accountTable tbody").html(tableHtml);
                                 form.render('checkbox');
                             } else {
+                                layer.load(0);
                                 $.ajax({
                                     url: "/account/info/listPage",
                                     data: {
                                         page: obj.curr,
                                         size: obj.limit,
-                                        startTime: params.startTime,
-                                        endTime: params.endTime
+                                        startTime: startTime,
+                                        endTime: endTime
                                     },
                                     type: "post",
                                     success: function (result) {
@@ -208,6 +209,14 @@
                                         $("#accountTable tbody").html(tableHtml);
                                         //重新加载复选框
                                         form.render('checkbox');
+                                        layer.closeAll();
+                                    },
+                                    error: function () {
+                                        layer.msg("加载失败，请重新加载!",{
+                                            icon: 2,
+                                            time: 1500
+                                        });
+                                        layer.closeAll();
                                     }
                                 });
                             }

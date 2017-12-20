@@ -18,7 +18,7 @@
             </div>
             <div class="eui-col-md1 eui-marginR20">支付方式 :</div>
             <ul class="eui-col-md10 payTicket">
-                <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1" id="timeLimit">
+                <li class="eui-float-left payTicket0 eui-lineHeight24" id="timeLimit">
                     <span>会员时长</span>
                     <i class="eui-icon tickFont">&#xe605;</i>
                     <span class="tick"></span>
@@ -82,6 +82,10 @@
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
 <script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
 <script>
+    $(".payTicket li").click(function (event) {
+        $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
+    });
+
     //表单
     eui.use(['form', 'laydate', 'element'], function () {
         var form = eui.form
@@ -112,67 +116,6 @@
     var unitPrice = 1;//问卷单价
     $(function () {
         init(2);
-        /**
-         * 在线下单
-         */
-        $('.ImmediatePay').click(function () {
-            var orderOnline = {
-                questionnaire_total: total,//问卷购买数量
-                order_money: price//应付金额
-            }
-            var promotionId = "";
-            $(".payTicket1").each(function (index) {
-                if (index == 0) {
-                    promotionId = $(this).children()[7].value;//活动id
-                    console.log($(this).children()[7].value);
-                    orderOnline.product_id = $(this).children()[0].value;//所属产品
-                } else {
-                    //支付方式
-                    orderOnline.payment_method = $(this).children()[0].value;
-                }
-            })
-            console.log(orderOnline);
-            var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
-            orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
-            $.post("/order/online/add", {
-                onlineJson: JSON.stringify(orderOnline),
-                orderCode: orderCode
-            }, function (result) {
-                console.log(result);
-                if (result.code = 200) {
-                    $.post("/product/settings/detail", {id: orderOnline.product_id}, function (res) {
-                        if (res.code == 200) {
-                            var product = res.data;
-                            var obj = new Object();
-                            obj.orderCode = orderCode;
-                            obj.total_amount = price;//金额
-                            obj.subject = product.productName;
-                            obj.body = "";
-                            /*window.location.href = "/cube/order";*/
-                            //支付宝支付请求
-                            $.ajax({
-                                type: 'POST',
-                                url: '/alipaytradepagepay/paymentByAlipay',
-                                data: {
-                                    formDatas: JSON.stringify(obj)
-                                },
-                                dataType: 'html',//支付宝接口响应支付表单字符串
-                                success: function (data) {
-                                    console.log(data);
-                                    //将响应回来的支付表单插入html，保证此表单为第一表单，以完成表单的默认提交
-                                    $("#alipayResultForm").append(data);
-                                }
-                            });
-                        }
-                    })
-                }
-            })
-        })
-
-        $(".payTicket li").click(function (event) {
-            $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
-        });
-
     })
 
     function init(type) {
@@ -328,7 +271,7 @@
                 pay.total = pay.total + "张";
             }
             if (item == 0) {
-                tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">' +
+                tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24 payment">' +
                         '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
                         '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                         message +
@@ -339,7 +282,7 @@
                         '<span class="tick"></span></li>';
                 continue;
             }
-            tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24">' +
+            tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24 payment">' +
                     '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
                     '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                     message +
@@ -358,6 +301,63 @@
         return tableHtml;
     }
 
+    /**
+     * 在线下单
+     */
+    $('.ImmediatePay').click(function () {
+        var orderOnline = {
+            questionnaire_total: total,//问卷购买数量
+            order_money: price//应付金额
+        }
+        var promotionId = "";
+        $(".payment").each(function (index) {
+            console.log($(this).children());
+            if (index == 0) {
+                promotionId = $(this).children()[7].value;//活动id
+                console.log($(this).children()[7].value);
+                orderOnline.product_id = $(this).children()[0].value;//所属产品
+            } else {
+                //支付方式
+                orderOnline.payment_method = $(this).children()[0].value;
+            }
+        })
+        console.log(orderOnline);
+        var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
+        orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
+        $.post("/order/online/add", {
+            onlineJson: JSON.stringify(orderOnline),
+            orderCode: orderCode
+        }, function (result) {
+            console.log(result);
+            if (result.code = 200) {
+                $.post("/product/settings/detail", {id: orderOnline.product_id}, function (res) {
+                    if (res.code == 200) {
+                        var product = res.data;
+                        var obj = new Object();
+                        obj.orderCode = orderCode;
+                        obj.total_amount = price;//金额
+                        obj.subject = product.productName;
+                        obj.body = "";
+                        /*window.location.href = "/cube/order";*/
+                        //支付宝支付请求
+                        $.ajax({
+                            type: 'POST',
+                            url: '/alipaytradepagepay/paymentByAlipay',
+                            data: {
+                                formDatas: JSON.stringify(obj)
+                            },
+                            dataType: 'html',//支付宝接口响应支付表单字符串
+                            success: function (data) {
+                                console.log(data);
+                                //将响应回来的支付表单插入html，保证此表单为第一表单，以完成表单的默认提交
+                                $("#alipayResultForm").append(data);
+                            }
+                        });
+                    }
+                })
+            }
+        })
+    })
 </script>
 </body>
 </html>
