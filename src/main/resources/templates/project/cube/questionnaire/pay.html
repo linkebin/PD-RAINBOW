@@ -16,23 +16,25 @@
             <div class="eui-col-md1 eui-marginR20">登录账号 :</div>
             <div class="eui-col-md10" th:text="${session.userSession.userName}"><span class="eui-color-blue">（ID：2017023）</span>
             </div>
-            <div class="eui-col-md1 eui-marginR20">支付方式 :</div>
-            <ul class="eui-col-md10 payTicket">
-                <li class="eui-float-left payTicket0 eui-lineHeight24" id="timeLimit">
-                    <span>会员时长</span>
-                    <i class="eui-icon tickFont">&#xe605;</i>
-                    <span class="tick"></span>
-                </li>
-                <li class="eui-float-left payTicket0 eui-lineHeight24" id="questionTicket">
-                    <span>问卷使用券</span>
-                    <i class="eui-icon tickFont">&#xe605;</i>
-                    <span class="tick"></span>
-                </li>
-            </ul>
+            <div class="eui-row eui-marginB20">
+                <div class="eui-col-md1 eui-marginR20">付费模式 :</div>
+                <ul class="eui-col-md10 payTicket">
+                    <li class="eui-float-left payTicket0 eui-lineHeight30" id="timeLimit">
+                        <span>会员时长</span>
+                        <i class="eui-icon tickFont">&#xe605;</i>
+                        <span class="tick"></span>
+                    </li>
+                    <li class="eui-float-left payTicket0 eui-lineHeight30" id="questionTicket">
+                        <span>问卷使用券</span>
+                        <i class="eui-icon tickFont">&#xe605;</i>
+                        <span class="tick"></span>
+                    </li>
+                </ul>
+            </div>
             <div class="eui-col-md1 eui-marginR20 eui-marginT15">付费价格 :</div>
             <ul class="eui-col-md10 payTicket" id="pay">
             </ul>
-            <div class="eui-col-md12 eui-font12 send"><span class="eui-color-blue"></span></div>
+            <!--<div class="eui-col-md12 eui-font12 send"><span class="eui-color-blue"></span></div>-->
             <div class="eui-col-md1 eui-marginR20 money">应付金额 :</div>
             <div class="eui-col-md10"><span class="pay-color-red eui-font24"></span>元</div>
             <div class="eui-col-md1 eui-marginR20 eui-marginT15">支付方式 :</div>
@@ -55,7 +57,7 @@
                 <span class="eui-btn eui-btn-big pay-color-yellow ImmediatePay">立即支付</span>
             </div>
         </div>
-        <div class="payRight">
+        <div class="payRight payRight1">
             <p class="vipTitle">VIP 专 享 特 权</p>
             <div class="eui-row">
                 <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""></div>
@@ -72,6 +74,25 @@
             <div class="eui-row">
                 <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/free.png" alt=""></div>
                 <div class="eui-col-md9">海量专业问卷</div>
+            </div>
+        </div>
+        <div class="payRight payRight2">
+            <p class="vipTitle2">问卷使用券特权</p>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""></div>
+                <div class="eui-col-md9">享有问卷使用券全部特权</div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/noadv.png" alt=""></div>
+                <div class="eui-col-md9">专享心理问卷大数据信息</div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/voucher.png" alt=""></div>
+                <div class="eui-col-md9">各种问卷量表优惠划算</div>
+            </div>
+            <div class="eui-row">
+                <div class="eui-col-md3"><img src="/Styles/images/xymfImages/xymf/free.png" alt=""></div>
+                <div class="eui-col-md9">更多优质问卷免费使用</div>
             </div>
         </div>
     </div>
@@ -99,14 +120,16 @@
         });
 
     });
-    $('.vipTitle').text("VIP特权");
+    $(".payRight2").hide();
     $('#timeLimit').click(function () {
-        $('.vipTitle').text("VIP特权");
+        $('.payRight1').show();
+        $('.payRight2').hide();
         init(2)
     })
 
     $('#questionTicket').click(function () {
-        $('.vipTitle').text("问卷使用券特权");
+        $('.payRight2').show();
+        $('.payRight1').hide();
         init(1);
     })
 
