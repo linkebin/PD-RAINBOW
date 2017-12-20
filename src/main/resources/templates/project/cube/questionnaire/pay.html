@@ -13,6 +13,7 @@
     <div th:replace="project/cube/common/header :: header(${2})">Header</div>
     <div class="eui-area">
         <div class="payLeft eui-row eui-padding20">
+            <input type="hidden" th:value="${id}" id="activityId">
             <div class="eui-col-md1 eui-marginR20">登录账号 :</div>
             <div class="eui-col-md10" th:text="${session.userSession.userName}"><span class="eui-color-blue">（ID：2017023）</span>
             </div>
@@ -124,13 +125,24 @@
     $('#timeLimit').click(function () {
         $('.payRight1').show();
         $('.payRight2').hide();
-        init(2)
+        $(".send").html("");
+        if ($('#activityId').val() != "null") {
+            initActivity(activityList,2);
+        }else{
+            pay(productList,questionList,2)
+        }
     })
 
     $('#questionTicket').click(function () {
         $('.payRight2').show();
         $('.payRight1').hide();
         init(1);
+        $(".send").html("");
+        if ($('#activityId').val() != "null") {
+            initActivity(activityList,1);
+        }else{
+            pay(productList,questionList,1)
+        }
     })
 
     /* 购买券数 */
@@ -140,125 +152,226 @@
     $(function () {
         init(2);
     })
-
+    var activityList=[];
+    var productList, questionList=[]
     function init(type) {
-        eui.use('layer',function () {
+        eui.use('layer', function () {
             var layer = eui.layer;
-            var loading = layer.load(0, {shade: false});
+            /* var loading = layer.load(0, {shade: false});*/
             $.get("/questionnaire/promotions/getProductAndQuestionPro", function (result) {
                 console.log(result);
                 if (result.code = 200) {
-                    var productList = result.data.productList;
-                    var questionList = result.data.questionList;
-                    var proList = [];
-                    for (var item in productList) {
-                        var product = productList[item];
-                        //如果这个套餐有活动的话
-                        var pro = {
-                            originalPrice: product.productPrice,
-                            type: "",
-                            discountContent: "",
-                            productId: product.id,
-                            promotionsId: "",
-                            price: product.productPrice,
-                            total: product.productTotal,
-                            productType: product.productType,
-                        };
-                        if(product.productType==2 && type==1){
-                            continue;
-                        }
-                        if(product.productType==1 && type==2){
-                            continue;
-                        }
-                        if(product.productType==2){
-                            pro.total=  product.timeLimit;
-                        }
-                        for (var index in questionList) {
-                            var question = questionList[index];
-                            if (product.productTotal == 1) {//问卷单价
-                                unitPrice = product.productPrice;
-                            }
-                            if (product.promotionsId != "") {
-                                //套餐是否启用
-                                if (product.productState == 0) {
-                                    //找到该活动
-                                    if (product.promotionsId == question.id) {
-                                        //活动启用
-                                        if (question.promotionsState == 2) {
-                                            var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
-                                            var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
-                                            //还在活动时间内
-                                            if (new Date() > new Date(start) && new Date() < new Date(end)) {
-                                                if (question.promotionsType == 1) {//活动类型是折扣
-                                                    var discount = question.promotionsDiscount * 10;//折扣
-                                                    pro.total = product.productTotal;
-                                                    pro.price = (product.productPrice * question.promotionsDiscount).toFixed(1);
-                                                    pro.type = discount + "折";
-                                                    pro.discountContent = discount + '折';
-                                                } else {//活动类型是买送
-                                                    pro.price = product.productPrice;
-                                                    pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
-                                                    pro.type = "买送";
-                                                    pro.discountContent = question.promotionsBuySend + '张问卷';
-                                                    //原价
-                                                    pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
-                                                }
-                                                pro.promotionsId = question.id;
-                                            }
-                                        }
-                                    }
+                    productList = result.data.productList;
+                    questionList = result.data.questionList;
+                    console.log($('#activityId').val())
+                    if ($('#activityId').val() != "null") {
+                        $.post("/questionnaire/promotions/getActivityProduct", {id: $('#activityId').val()}, function (result) {
+                            console.log(result);
+                            if (result.code = 200) {
+                                activityList = result.data;
+                                if (result.data[0].promotionsType == 2) {
+                                    $('#timeLimit').removeClass("payTicket1");
+                                    $('#questionTicket').addClass("payTicket1");
+                                    type=1
                                 }
+                                initActivity(result.data, type)
                             }
-                        }
-                        proList.push(pro);
+                        })
+                    } else {
+                        pay(productList, questionList, type)
                     }
-                    var tableHtml = getTable(proList);
-                    $("#pay").html(tableHtml);
-                    $("#pay li").click(function (event) {
-                        $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
-                        var str = (event.delegateTarget.innerText).toString();
-                        if (str.indexOf("买送") != -1) {
-                            str = str.substring(str.indexOf("送") + 1, str.indexOf("元/"));
-                        } else {
-                            str = str.substring(str.indexOf("折") + 1, str.indexOf("元/"));
-                        }
-                        price = parseFloat(str);
-                        total = (event.delegateTarget.innerText).toString();
-                        if (total.indexOf('张') != -1) {
-                            var strTotal;
-                            strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
-                            if (strTotal.indexOf('+') != -1) {
-                                total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
-                                total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
-                            } else {
-                                total = strTotal;
-                            }
-                            console.log(total);
-                        } else if (total.indexOf('个月') != -1) {
-                            var strTotal;
-                            strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("个月"));
-                            if (strTotal.indexOf('+') != -1) {
-                                total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
-                                total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
-                            } else {
-                                total = strTotal;
-                            }
-                            console.log(total);
-                        }
-                        $('.eui-font24').html(str);
-                        var send = event.currentTarget.children[1].value;
-                        if (send.indexOf('张') != -1) {
-                            $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
-                        } else if (send.indexOf('折') != -1) {
-                            $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
-                        } else {
-                            $('.send').html("");
-                        }
-                    });
-                    layer.close(loading);
                 }
             });
         })
+    }
+
+    //活动的购买内容
+    function initActivity(productList, type) {
+        var proList = [];
+        for (var index in productList) {
+            var promotion = productList[index];
+            var product = promotion.productSettings;
+            if (promotion.promotionsType == 2 && product.productType == 2) {
+                continue;
+            }
+            var pro = {
+                originalPrice: product.productPrice,
+                type: "",
+                discountContent: "",
+                productId: product.id,
+                promotionsId: "",
+                price: product.productPrice,
+                total: product.productTotal,
+                productType: product.productType
+            }
+            if (product.productType == 2 && type == 1) {
+                continue;
+            }
+            if (product.productType == 1 && type == 2) {
+                continue;
+            }
+            if (product.productType == 2) {
+                pro.total = product.timeLimit;
+            }
+            var start = new Date(promotion.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
+            var end = new Date(promotion.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
+            //还在活动时间内
+            if (new Date() < new Date(start)) {
+                $('.ImmediatePay').removeClass("pay-color-yellow");
+                $('.ImmediatePay').addClass("pay-color-gray");
+                $('.ImmediatePay').html("活动未开始");
+                $('.ImmediatePay').attr("disabled", "disabled");
+            } else if (new Date() > new Date(end)) {
+                $('.ImmediatePay').removeClass("pay-color-yellow");
+                $('.ImmediatePay').addClass("pay-color-gray");
+                $('.ImmediatePay').html("活动已结束");
+                $('.ImmediatePay').attr("disabled", "disabled");
+            }
+            if (product.productState == 0) {
+                if (promotion.promotionsState == 2) {
+                    if (promotion.promotionsType == 1) {//活动类型是折扣
+                        var discount = promotion.promotionsDiscount * 10;//折扣
+                        pro.total = product.productTotal;
+                        if (product.productType == 2) {
+                            pro.total = product.timeLimit;
+                        }
+                        pro.price = (product.productPrice * promotion.promotionsDiscount).toFixed(1);
+                        pro.type = discount + "折";
+                        pro.discountContent = discount + '折';
+                        console.log(pro.price);
+                    } else {//活动类型是买送
+                        pro.price = product.productPrice;
+                        pro.total = product.productTotal.toString() + "+" + promotion.promotionsBuySend.toString() + "";
+                        if (product.productType == 2) {
+                            pro.total = product.timeLimit;
+                        }
+                        pro.type = "买送";
+                        pro.discountContent = promotion.promotionsBuySend + '张问卷';
+                        //原价
+                        pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * promotion.promotionsBuySend));
+                    }
+                }
+            }
+            proList.push(pro);
+        }
+        setting(proList);
+    }
+
+    function pay(productList, questionList, type) {
+        var proList = [];
+        for (var item in productList) {
+            var product = productList[item];
+            //如果这个套餐有活动的话
+            var pro = {
+                originalPrice: product.productPrice,
+                type: "",
+                discountContent: "",
+                productId: product.id,
+                promotionsId: "",
+                price: product.productPrice,
+                total: product.productTotal,
+                productType: product.productType,
+            };
+            if (product.productType == 2 && type == 1) {
+                continue;
+            }
+            if (product.productType == 1 && type == 2) {
+                continue;
+            }
+            if (product.productType == 2) {
+                pro.total = product.timeLimit;
+            }
+            for (var index in questionList) {
+                var question = questionList[index];
+                if (product.productTotal == 1) {//问卷单价
+                    unitPrice = product.productPrice;
+                }
+                if (product.promotionsId != "") {
+                    //套餐是否启用
+                    if (product.productState == 0) {
+                        //找到该活动
+                        if (product.promotionsId == question.id) {
+                            //活动启用
+                            if (question.promotionsState == 2) {
+                                var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
+                                var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
+                                //还在活动时间内
+                                if (new Date() > new Date(start) && new Date() < new Date(end)) {
+                                    if (question.promotionsType == 1) {//活动类型是折扣
+                                        var discount = question.promotionsDiscount * 10;//折扣
+                                        pro.total = product.productTotal;
+                                        if (product.productType == 2) {
+                                            pro.total = product.timeLimit;
+                                        }
+                                        pro.price = (product.productPrice * question.promotionsDiscount).toFixed(1);
+                                        pro.type = discount + "折";
+                                        pro.discountContent = discount + '折';
+                                    } else {//活动类型是买送
+                                        pro.price = product.productPrice;
+                                        pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
+                                        if (product.productType == 2) {
+                                            pro.total = product.timeLimit;
+                                        }
+                                        pro.type = "买送";
+                                        pro.discountContent = question.promotionsBuySend + '张问卷';
+                                        //原价
+                                        pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
+                                    }
+                                    pro.promotionsId = question.id;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            proList.push(pro);
+        }
+        setting(proList);
+    }
+
+    function setting(proList) {
+        var tableHtml = getTable(proList);
+        $("#pay").html(tableHtml);
+        $("#pay li").click(function (event) {
+            $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
+            var str = (event.delegateTarget.innerText).toString();
+            if (str.indexOf("买送") != -1) {
+                str = str.substring(str.indexOf("送") + 1, str.indexOf("元/"));
+            } else {
+                str = str.substring(str.indexOf("折") + 1, str.indexOf("元/"));
+            }
+            price = parseFloat(str);
+            total = (event.delegateTarget.innerText).toString();
+            if (total.indexOf('张') != -1) {
+                var strTotal;
+                strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
+                if (strTotal.indexOf('+') != -1) {
+                    total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
+                    total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
+                } else {
+                    total = strTotal;
+                }
+            } else if (total.indexOf('个月') != -1) {
+                var strTotal;
+                strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("个月"));
+                if (strTotal.indexOf('+') != -1) {
+                    total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
+                    total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
+                } else {
+                    total = strTotal;
+                }
+                console.log(total);
+            }
+            $('.eui-font24').html(str);
+            var send = event.currentTarget.children[1].value;
+            if (send.indexOf('张') != -1) {
+                $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
+            } else if (send.indexOf('折') != -1) {
+                $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
+            } else {
+                $('.send').html("");
+            }
+        });
     }
 
     /**
@@ -303,6 +416,9 @@
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>';
+                if((parseInt(item) + 1) == payList.length){
+                    tableHtml += '<br><br>';
+                }
                 continue;
             }
             tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24 payment">' +

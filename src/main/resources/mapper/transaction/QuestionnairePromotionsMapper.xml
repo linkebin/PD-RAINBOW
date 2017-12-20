@@ -23,6 +23,8 @@
       <result column="product_total" jdbcType="INTEGER" property="productTotal" />
       <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
       <result column="product_name" jdbcType="VARCHAR" property="productName"></result>
+      <result column="product_type" jdbcType="INTEGER" property="productType"/>
+      <result column="time_limit" jdbcType="INTEGER" property="timeLimit"/>
     </association>
   </resultMap>
   <!--获取所有的活动-->
@@ -42,13 +44,15 @@
 
   <!--获取参与某个活动的所有套餐-->
   <select id="getActivityProduct" resultMap="BaseResultMap" parameterType="String">
-    SELECT	ps.id_,ps.product_name,ps.product_total,ps.product_price,pro.promotions_name,
+    SELECT	ps.id_,ps.product_name,ps.product_total,ps.product_price,ps.product_type,ps.time_limit,pro.promotions_name,
 			pro.promotions_type,pro.promotions_start,pro.promotions_state,
 			pro.promotions_end,pro.promotions_discount,pro.promotions_buy_send
     FROM    product_settings ps JOIN questionnaire_promotions pro
     WHERE 	ps.deleted=0 AND pro.deleted=0
     AND		ps.promotions_id=pro.id_
     AND 	pro.id_=#{id}
+    AND     ps.product_state=0
+	AND     pro.promotions_state=2
   </select>
 
   <select id="getState" resultMap="BaseResultMap">

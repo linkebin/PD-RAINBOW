@@ -178,7 +178,11 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 //扣除余额
                 deleteDuction(visitorRegister.getCreator(),"来访");
             } else {
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date date=sdf.parse(visitorTimes);
+                dataAcquisition.setCreateTime(date);
                 dataAcquisition.setDataUser(userId);
+                dataAcquisitionMapper.insert(dataAcquisition);
                 //添加填报时间
                 ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
                 if(activeParticipant!=null){

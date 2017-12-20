@@ -30,10 +30,10 @@ public class WebController {
      * 跳转到会员选购
      * @return
      */
-    @RequestMapping(value ={"/pay"})
-    public String pay(){
-            return "project/cube/questionnaire/pay";
-
+    @RequestMapping(value ={"/pay/{id}"})
+    public String pay(Model model,@PathVariable String id){
+        model.addAttribute("id",id);
+        return "project/cube/questionnaire/pay";
     }
 
     /**
