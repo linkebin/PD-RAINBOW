@@ -16,7 +16,20 @@
             <div class="eui-col-md1 eui-marginR20">登录账号 :</div>
             <div class="eui-col-md10" th:text="${session.userSession.userName}"><span class="eui-color-blue">（ID：2017023）</span>
             </div>
-            <div class="eui-col-md1 eui-marginR20 eui-marginT15">购买券数 :</div>
+            <div class="eui-col-md1 eui-marginR20">支付方式 :</div>
+            <ul class="eui-col-md10 payTicket">
+                <li class="eui-float-left payTicket0 eui-lineHeight24 payTicket1" id="timeLimit">
+                    <span>会员时长</span>
+                    <i class="eui-icon tickFont">&#xe605;</i>
+                    <span class="tick"></span>
+                </li>
+                <li class="eui-float-left payTicket0 eui-lineHeight24" id="questionTicket">
+                    <span>问卷使用券</span>
+                    <i class="eui-icon tickFont">&#xe605;</i>
+                    <span class="tick"></span>
+                </li>
+            </ul>
+            <div class="eui-col-md1 eui-marginR20 eui-marginT15">付费价格 :</div>
             <ul class="eui-col-md10 payTicket" id="pay">
             </ul>
             <div class="eui-col-md12 eui-font12 send"><span class="eui-color-blue"></span></div>
@@ -82,183 +95,23 @@
         });
 
     });
+    $('.vipTitle').text("问卷使用券特权");
+    $('#timeLimit').click(function () {
+        $('.vipTitle').text("问卷使用券特权");
+        init(1)
+    })
+
+    $('#questionTicket').click(function () {
+        $('.vipTitle').text("VIP特权");
+        init(2);
+    })
 
     /* 购买券数 */
     var price = 0;//选择套餐后的价格
     var total = 0;//选择套餐后的数量
     var unitPrice = 1;//问卷单价
     $(function () {
-        $.get("/questionnaire/promotions/getProductAndQuestionPro", function (result) {
-            console.log(result);
-            if (result.code = 200) {
-                var productList = result.data.productList;
-                var questionList = result.data.questionList;
-                var proList = [];
-                for (var item in productList) {
-                    var product = productList[item];
-                    //如果这个套餐有活动的话
-                    var pro = {
-                        originalPrice: product.productPrice,
-                        type: "",
-                        discountContent: "",
-                        productId: product.id,
-                        promotionsId: "",
-                        price: product.productPrice,
-                        total: product.productTotal,
-                        productType: product.productType,
-                    };
-                    if(product.productType==2){
-                        continue;
-                    }
-                    for (var index in questionList) {
-                        var question = questionList[index];
-                        if (product.productTotal == 1) {//问卷单价
-                            unitPrice = product.productPrice;
-                        }
-                        if (product.promotionsId != "") {
-                            //套餐是否启用
-                            if(product.productState==0){
-                                //找到该活动
-                                if (product.promotionsId == question.id) {
-                                    //活动启用
-                                    if (question.promotionsState == 2) {
-                                        var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
-                                        var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
-                                        //还在活动时间内
-                                        if (new Date() > new Date(start) && new Date() < new Date(end)) {
-                                            if (question.promotionsType == 1) {//活动类型是折扣
-                                                var discount = question.promotionsDiscount * 10;//折扣
-                                                pro.total = product.productTotal;
-                                                pro.price = (product.productPrice * question.promotionsDiscount).toFixed(1);
-                                                pro.type = discount + "折";
-                                                pro.discountContent = discount + '折';
-                                            } else {//活动类型是买送
-                                                pro.price = product.productPrice;
-                                                pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
-                                                pro.type = "买送";
-                                                pro.discountContent = question.promotionsBuySend + '张问卷';
-                                                //原价
-                                                pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
-                                            }
-                                            pro.promotionsId = question.id;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    proList.push(pro);
-                }
-                var tableHtml = getTable(proList);
-                $("#pay").html(tableHtml);
-                $("#pay li").click(function (event) {
-                    $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
-                    var str = (event.delegateTarget.innerText).toString();
-                    if (str.indexOf("买送") != -1) {
-                        str = str.substring(str.indexOf("送") + 1, str.indexOf("元/"));
-                    } else {
-                        str = str.substring(str.indexOf("折") + 1, str.indexOf("元/"));
-                    }
-                    price = parseFloat(str);
-                    total = (event.delegateTarget.innerText).toString();
-                    if (total.indexOf('张') != -1) {
-                        var strTotal;
-                        strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
-                        if (strTotal.indexOf('+') != -1) {
-                            total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
-                            total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
-                        } else {
-                            total = strTotal;
-                        }
-                        console.log(total);
-                    }else if(total.indexOf('个月') != -1){
-                        var strTotal;
-                        strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("个月"));
-                        if (strTotal.indexOf('+') != -1) {
-                            total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
-                            total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
-                        } else {
-                            total = strTotal;
-                        }
-                        console.log(total);
-                    }
-                    $('.eui-font24').html(str);
-                    var send = event.currentTarget.children[1].value;
-                    if (send.indexOf('张') != -1) {
-                        $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
-                    } else if (send.indexOf('折') != -1) {
-                        $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
-                    } else {
-                        $('.send').html("");
-                    }
-                });
-            }
-        });
-
-
-        /**
-         *  拼接表格
-         *  @param payList
-         */
-        function getTable(payList) {
-            var tableHtml = '';
-            for (var item in payList) {
-                var pay = payList[item];
-                console.log(pay);
-                //初始化
-                if ($('.eui-font24').html() == "") {
-                    $('.eui-font24').html(pay.price + " ");
-                    price = pay.price;
-                    total = pay.total;
-                    var send = pay.discountContent;
-                    if (send.indexOf('张') != -1) {
-                        $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
-                    } else if (send.indexOf('折') != -1) {
-                        $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
-                    } else {
-                        $('.send').html("");
-                    }
-                }
-                var message='<span class="discount"></span>';
-                if(pay.type==""){
-                    message="";
-                }
-                if(pay.productType==2){
-                    pay.total = pay.total+"个月";
-                }else{
-                    pay.total = pay.total+"张";
-                }
-                if (item == 0) {
-                    tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">' +
-                            '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
-                            '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
-                            message +
-                            '<span class="discountFont">' + pay.type + '</span>' +
-                            '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
-                            '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
-                            '<i class="eui-icon tickFont">&#xe605;</i>' +
-                            '<span class="tick"></span></li>';
-                    continue;
-                }
-                tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24">' +
-                        '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
-                        '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
-                        message +
-                        '<span class="discountFont">' + pay.type + '</span>' +
-                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
-                        '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
-                        '<i class="eui-icon tickFont">&#xe605;</i>' +
-                        '<span class="tick"></span></li>';
-                if ((parseInt(item) + 1) % 3 == 0) {
-                    tableHtml += '</br><br>';
-                }
-                if ((parseInt(item) + 1) == payList.length && !((parseInt(item) + 1) % 3 == 0)) {
-                    tableHtml += '<br><br>';
-                }
-            }
-            return tableHtml;
-        }
-
+        init(1);
         /**
          * 在线下单
          */
@@ -279,16 +132,19 @@
                 }
             })
             console.log(orderOnline);
-            var orderCode=new Date().Format("yyyy-MM-dd-hh-mm-ss");
-            orderCode=orderCode.replace(/-/g,"")+parseInt(Math.random()*100000);
-            $.post("/order/online/add", {onlineJson: JSON.stringify(orderOnline),orderCode:orderCode}, function (result) {
+            var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
+            orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
+            $.post("/order/online/add", {
+                onlineJson: JSON.stringify(orderOnline),
+                orderCode: orderCode
+            }, function (result) {
                 console.log(result);
                 if (result.code = 200) {
                     $.post("/product/settings/detail", {id: orderOnline.product_id}, function (res) {
                         if (res.code == 200) {
                             var product = res.data;
                             var obj = new Object();
-                            obj.orderCode=orderCode;
+                            obj.orderCode = orderCode;
                             obj.total_amount = price;//金额
                             obj.subject = product.productName;
                             obj.body = "";
@@ -318,6 +174,190 @@
         });
 
     })
+
+    function init(type) {
+        eui.use('layer',function () {
+            var layer = eui.layer;
+            var loading = layer.load(0, {shade: false});
+            $.get("/questionnaire/promotions/getProductAndQuestionPro", function (result) {
+                console.log(result);
+                if (result.code = 200) {
+                    var productList = result.data.productList;
+                    var questionList = result.data.questionList;
+                    var proList = [];
+                    for (var item in productList) {
+                        var product = productList[item];
+                        //如果这个套餐有活动的话
+                        var pro = {
+                            originalPrice: product.productPrice,
+                            type: "",
+                            discountContent: "",
+                            productId: product.id,
+                            promotionsId: "",
+                            price: product.productPrice,
+                            total: product.productTotal,
+                            productType: product.productType,
+                        };
+                        if(product.productType==2 && type==1){
+                            continue;
+                        }
+                        if(product.productType==1 && type==2){
+                            continue;
+                        }
+                        if(product.productType==2){
+                            pro.total=  product.timeLimit;
+                        }
+                        for (var index in questionList) {
+                            var question = questionList[index];
+                            if (product.productTotal == 1) {//问卷单价
+                                unitPrice = product.productPrice;
+                            }
+                            if (product.promotionsId != "") {
+                                //套餐是否启用
+                                if (product.productState == 0) {
+                                    //找到该活动
+                                    if (product.promotionsId == question.id) {
+                                        //活动启用
+                                        if (question.promotionsState == 2) {
+                                            var start = new Date(question.promotionsStart).Format('yyyy-MM-dd hh:mm:ss');
+                                            var end = new Date(question.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss');
+                                            //还在活动时间内
+                                            if (new Date() > new Date(start) && new Date() < new Date(end)) {
+                                                if (question.promotionsType == 1) {//活动类型是折扣
+                                                    var discount = question.promotionsDiscount * 10;//折扣
+                                                    pro.total = product.productTotal;
+                                                    pro.price = (product.productPrice * question.promotionsDiscount).toFixed(1);
+                                                    pro.type = discount + "折";
+                                                    pro.discountContent = discount + '折';
+                                                } else {//活动类型是买送
+                                                    pro.price = product.productPrice;
+                                                    pro.total = product.productTotal.toString() + "+" + question.promotionsBuySend.toString() + "";
+                                                    pro.type = "买送";
+                                                    pro.discountContent = question.promotionsBuySend + '张问卷';
+                                                    //原价
+                                                    pro.originalPrice = parseInt(product.productPrice) + parseFloat((unitPrice * question.promotionsBuySend));
+                                                }
+                                                pro.promotionsId = question.id;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        proList.push(pro);
+                    }
+                    var tableHtml = getTable(proList);
+                    $("#pay").html(tableHtml);
+                    $("#pay li").click(function (event) {
+                        $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
+                        var str = (event.delegateTarget.innerText).toString();
+                        if (str.indexOf("买送") != -1) {
+                            str = str.substring(str.indexOf("送") + 1, str.indexOf("元/"));
+                        } else {
+                            str = str.substring(str.indexOf("折") + 1, str.indexOf("元/"));
+                        }
+                        price = parseFloat(str);
+                        total = (event.delegateTarget.innerText).toString();
+                        if (total.indexOf('张') != -1) {
+                            var strTotal;
+                            strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
+                            if (strTotal.indexOf('+') != -1) {
+                                total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
+                                total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
+                            } else {
+                                total = strTotal;
+                            }
+                            console.log(total);
+                        } else if (total.indexOf('个月') != -1) {
+                            var strTotal;
+                            strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("个月"));
+                            if (strTotal.indexOf('+') != -1) {
+                                total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
+                                total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
+                            } else {
+                                total = strTotal;
+                            }
+                            console.log(total);
+                        }
+                        $('.eui-font24').html(str);
+                        var send = event.currentTarget.children[1].value;
+                        if (send.indexOf('张') != -1) {
+                            $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
+                        } else if (send.indexOf('折') != -1) {
+                            $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
+                        } else {
+                            $('.send').html("");
+                        }
+                    });
+                    layer.close(loading);
+                }
+            });
+        })
+    }
+
+    /**
+     *  拼接表格
+     *  @param payList
+     */
+    function getTable(payList) {
+        var tableHtml = '';
+        for (var item in payList) {
+            var pay = payList[item];
+            console.log(pay);
+            //初始化
+            if ($('.eui-font24').html() == "") {
+                $('.eui-font24').html(pay.price + " ");
+                price = pay.price;
+                total = pay.total;
+                var send = pay.discountContent;
+                if (send.indexOf('张') != -1) {
+                    $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
+                } else if (send.indexOf('折') != -1) {
+                    $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
+                } else {
+                    $('.send').html("");
+                }
+            }
+            var message = '<span class="discount"></span>';
+            if (pay.type == "") {
+                message = "";
+            }
+            if (pay.productType == 2) {
+                pay.total = pay.total + "个月";
+            } else {
+                pay.total = pay.total + "张";
+            }
+            if (item == 0) {
+                tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24">' +
+                        '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
+                        '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
+                        message +
+                        '<span class="discountFont">' + pay.type + '</span>' +
+                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                        '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
+                        '<i class="eui-icon tickFont">&#xe605;</i>' +
+                        '<span class="tick"></span></li>';
+                continue;
+            }
+            tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24">' +
+                    '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
+                    '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
+                    message +
+                    '<span class="discountFont">' + pay.type + '</span>' +
+                    '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                    '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
+                    '<i class="eui-icon tickFont">&#xe605;</i>' +
+                    '<span class="tick"></span></li>';
+            if ((parseInt(item) + 1) % 3 == 0) {
+                tableHtml += '</br><br>';
+            }
+            if ((parseInt(item) + 1) == payList.length && !((parseInt(item) + 1) % 3 == 0)) {
+                tableHtml += '<br><br>';
+            }
+        }
+        return tableHtml;
+    }
+
 </script>
 </body>
 </html>
