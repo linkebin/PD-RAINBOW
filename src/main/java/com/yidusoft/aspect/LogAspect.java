@@ -39,8 +39,7 @@ public class LogAspect {
      private OperLogService operLogService;
 
      private Logger logger =LoggerFactory.getLogger(this.getClass());
-   //  private OperLog operLog=new  OperLog();
-     //private Long operWhenLong;
+
      ThreadLocal<Long> operWhenLong = new ThreadLocal<Long>();
      ThreadLocal<OperLog> operLog = new ThreadLocal<OperLog>();
       /**
@@ -54,7 +53,6 @@ public class LogAspect {
      */
         @Pointcut("execution(* com.yidusoft.project.*.controller..*.*(..))")
         public void webLog(){}
-
         @Before("webLog()")
         public void doBefore(JoinPoint joinPoint){
         //获得进来的时间
@@ -105,7 +103,10 @@ public class LogAspect {
             addOperLog();
           }
 
-        // 所有方法的执行作为切入点 抛出异常执行  
+        /**
+         * 所有方法的执行作为切入点 抛出异常执行
+         * @param ex
+         */
         @AfterThrowing(throwing="ex",pointcut="execution(* com.yidusoft.project.*.controller..*.*(..))")
         public void doRecoveryActions(Throwable ex) {
             // 声明ex时指定的类型会限制目标方法必须抛出指定类型的异常  
@@ -116,8 +117,11 @@ public class LogAspect {
 
         }
 
-        //添加行为操作
-       public void addOperLog(){
+    /**
+     *添加行为操作
+     *
+     */
+    public void addOperLog(){
            //获得进来的时间
            Long now = System.currentTimeMillis();
            operLog.get().setOperWhenLong( now-operWhenLong.get()+"ms");
@@ -133,6 +137,7 @@ public class LogAspect {
                operLog.get().setOperInfo(ResourcesStatic.OPERRESOURCES.get(operLog.get().getOperUrl()).toString());
                operLogService.save( operLog.get());
            }
-
+        operWhenLong.remove();
+        operLog.remove();
     }
 }

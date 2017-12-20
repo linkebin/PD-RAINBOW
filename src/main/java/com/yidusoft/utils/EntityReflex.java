@@ -71,7 +71,6 @@ public  class EntityReflex {
     }
 
     public void sayHello( ArrayList<ActiveParticipant>  params,String  params1){
-    //   System.out.println(params.getAge());
        System.out.println(params1);
     }
 

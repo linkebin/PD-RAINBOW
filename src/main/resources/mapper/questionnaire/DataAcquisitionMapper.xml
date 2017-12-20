@@ -97,20 +97,42 @@
 
     </select>
     <select id="findDataAcquistionForVisitor" parameterType="com.yidusoft.project.questionnaire.domain.DataAcquisition" resultMap="BaseResultMap">
-          SELECT *
+           SELECT *
             FROM  data_acquisition
-            WHERE  data_question=#{dataQuestion}  and   user_id =#{userId}
+            WHERE  data_question  IN
+               (SELECT   ID_  FROM questionnaire WHERE   gauge_id=#{dataQuestion})
+             AND   user_id =#{userId}
             ORDER BY create_time
+
     </select>
 
     <select id="findQuestionnaireForVisitorAll" parameterType="String" resultMap="QuestionnaireUseInfoResultMap">
-         SELECT * FROM (
-        SELECT id_ as data_question ,questionnaire_name FROM questionnaire
-        WHERE id_ IN   (
-        SELECT
-        data_question
-        FROM  data_acquisition
-        WHERE  user_id=#{userId})
-        GROUP BY   data_question,questionnaire_name )  tt
+       SELECT * FROM (
+	        SELECT g.id_  as data_question ,g.gauge_name as questionnaire_name
+              FROM questionnaire q
+              LEFT JOIN  gauge g
+              ON  q.gauge_id=g.id_
+	        WHERE q.id_ IN   (
+	        SELECT
+	        data_question
+	        FROM  data_acquisition
+	        WHERE  user_id=#{userId})
+          GROUP BY  g.id_,g.gauge_name )  tt
+    </select>
+
+    <select id="findVisitorTime" parameterType="String" resultType="java.util.Map">
+
+     SELECT t.visitor_time,t.visitor_id,r.visitor_name  FROM (
+		  SELECT MAX(visitor_time) AS visitor_time,visitor_id FROM   visiting_record
+        WHERE visitor_id=#{userId}
+        GROUP BY    visitor_id
+
+        UNION ALL
+
+      SELECT MIN(visitor_time) AS visitor_time,visitor_id FROM   visiting_record
+        WHERE visitor_id=#{userId}
+        GROUP BY    visitor_id ) t
+      LEFT JOIN visitor_register r
+      ON   t.visitor_id=r.id_
     </select>
 </mapper>

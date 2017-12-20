@@ -23,4 +23,6 @@ public interface DataAcquisitionMapper extends Mapper<DataAcquisition> {
     List<DataAcquisition>findDataAcquistionForVisitor(DataAcquisition dataAcquisition);
     //查询来访者的填写的问卷 不重复
     List<DataAcquisition>  findQuestionnaireForVisitorAll(String userId);
+    //查询用户的最近一次来访 和第一次来访时间
+    List<Map<String,Object>>  findVisitorTime(String userId);
 }

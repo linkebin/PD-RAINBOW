@@ -228,7 +228,7 @@
                                                 console.log(res);
                                                 if (res.code == 200) {
                                                     var time = new Date().Format("yyyy-MM-dd");
-                                                    window.location.href = "/web/cube/getQuestionnaireFill?questionnaireId=" + activity.uestionnaireId + "&userId=" + res.data.id + "&visitorTimes=" + time + "&activityId=" + activity.id + "&userName=" + res.data.fullName;
+                                                    window.location.href = "/web/cube/getQuestionnaireFillIn?questionnaireId=" + activity.uestionnaireId + "&userId=" + res.data.id + "&visitorTimes=" + time + "&activityId=" + activity.id + "&userName=" + res.data.fullName;
                                                 } else {
                                                     layer.msg(res.message, {
                                                         icon: 2,

@@ -38,6 +38,8 @@
                 <input type="hidden" th:value="${questionnaireId}" id="questionnaireId"/>
                 <input type="hidden" th:value="${userId}" id="userId"/>
                 <input type="hidden" th:value="${visitorTimes}" id="visitorTimes"/>
+                <input type="hidden" th:value="${activityId}" id="activityId"/>
+                <input type="hidden" th:value="${userName}" id="userName"/>
                 <div class="eui-form-item eui-padding20">
                   <span id="">
                   </span>
@@ -54,38 +56,6 @@
         </div>
     </div>
 </div>
-<!--<div class="xymfFooter">-->
-<!--<div class="eui-area eui-row">-->
-<!--<div class="eui-col-md2">-->
-<!--<dl class="eui-lineHeight24 eui-color-gray3">-->
-<!--<dt class="eui-darkgreen eui-font16 eui-paddingTB20">关于我们</dt>-->
-<!--<dd>关于我们</dd>-->
-<!--<dd>注册协议</dd>-->
-<!--<dd>保密协议</dd>-->
-<!--<dd>帮助中心</dd>-->
-<!--</dl>-->
-<!--</div>-->
-<!--<div class="eui-col-md3">-->
-<!--<dl>-->
-<!--<dt class="eui-darkgreen eui-font16 eui-paddingTB20">联系我们</dt>-->
-<!--<dd class="visitorPhone1 eui-marginB20">-->
-<!--<p class="eui-darkgreen eui-font16">020-82314165</p>-->
-<!--<p class="eui-color-gray3 eui-font12">平台全国服务热线</p>-->
-<!--</dd>-->
-<!--<dd class="visitorPhone2">-->
-<!--<p class="eui-darkgreen eui-font16">15622183952</p>-->
-<!--<p class="eui-color-gray3 eui-font12">24小时移动热线，实时在您的身边</p>-->
-<!--</dd>-->
-<!--</dl>-->
-<!--</div>-->
-<!--<div class="eui-col-md2 eui-col-md-offset5 eui-textAlignR">-->
-<!--<dl>-->
-<!--<dt class="eui-darkgreen eui-font16 eui-padding20">微信公众号</dt>-->
-<!--<dd><img src="/Styles/images/xymfImages/QRcode.png" alt=""></dd>-->
-<!--</dl>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
 
 <div class="xymfFooter">
     <!-- 底部固定区域 -->
@@ -146,6 +116,7 @@
     });
     //初始化数据
     var questionnaire = [[${questionnaire}]];
+    var token=[[${session.token}]];
 
     $(function () {
         loadQuestion();
@@ -441,29 +412,40 @@
             var questionnaireId = $("#questionnaireId").val();
             var userId = $("#userId").val();
             var timeConsuming = $("#timer").text();
+            var activityId = $("#activityId").val();
+            var userName = $('#userName').val();
             $("#submitQuestionnaire").attr("disabled", "disabled");
-            //加载层
+            //提交问卷
+            submit_Questionnaire(array,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName,token);
+          /*  //加载层
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-            $.post("/cube/questionnaire/submitQuestionnaire",
-                {
-                    "param": JSON.stringify(array),
-                    "questionnaireId": questionnaireId,
-                    "userId": userId,
-                    "visitorTimes": visitorTimes,
-                    "timeConsuming": timeConsuming
-                }, function (result) {
+            $.ajax({
+                url: "/cube/questionnaire/submitQuestionnaire",
+                headers: {
+                    "token":token
+                },
+                data: {
+                    "param":JSON.stringify(array),
+                    "questionnaireId":questionnaireId,
+                    "userId":userId,
+                    "visitorTimes":visitorTimes,
+                    "timeConsuming":timeConsuming
+                },
+                type: "post",
+                success: function (result) {
                     layer.closeAll();
-                    if (result.code = 200) {
-                        window.location.href = "/web/cube/getSuccess";
-                    } else {
-                        $("#submitQuestionnaire").attr("disabled", "false");
+                    if(result.code==200){
+                        window.location.href="/web/cube/getSuccess";
+                    }else {
+                        $("#submitQuestionnaire").attr("disabled","false");
                         layer.msg('填写失败！', {
                             icon: 1,
                             time: 5000
                         });
                     }
-                });
-
+                }
+            });
+*/
         }
     }
 
