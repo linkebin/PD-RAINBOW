@@ -104,9 +104,12 @@ public class ShiroConfigurer {
         filterChainDefinitionMap.put("/upload/uploadImglayUi","anon");
         //活动问卷的放行
         filterChainDefinitionMap.put("/web/activities/fillingPage","anon");
+        filterChainDefinitionMap.put("/sign/code","anon");
+        filterChainDefinitionMap.put("/sign/check/mobileCode","anon");
         filterChainDefinitionMap.put("/launch/activities/getIdByPorn","anon");
         filterChainDefinitionMap.put("/launch/activities/getActivityById","anon");
         filterChainDefinitionMap.put("/data/acquisition/findCount","anon");
+        filterChainDefinitionMap.put("/user/questionnaires/detail","anon");
         filterChainDefinitionMap.put("/active/participant/add","anon");
         filterChainDefinitionMap.put("/web/cube/getQuestionnaireFill","anon");
         filterChainDefinitionMap.put("project/cube/questionnaire/other-questionnaire","anon");
