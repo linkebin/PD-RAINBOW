@@ -318,20 +318,33 @@
     }
 
     function update(obj) {
-        $.post('/launch/activities/update', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+        console.log(obj.activityTotal);
+        $.post("/active/participant/getTotal", {activityId: $('#id').val()}, function (result) {
             console.log(result);
-            if (result.code == 200) {
-                layer.msg("修改成功",{
-                    icon:1,
-                    time:1500
-                })
-                setTimeout(function () {
-                    window.close();
-                },1500)
-            } else {
-                layer.msg(result.message);
+            if(result.code=200){
+                if(obj.activityTotal<result.data){
+                     layer.msg("活动人数不能小于已填报人数！",{
+                        icon: 2,
+                        time :1500
+                    })
+                }else{
+                    $.post('/launch/activities/update', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
+                        console.log(result);
+                        if (result.code == 200) {
+                            layer.msg("修改成功",{
+                                icon:1,
+                                time:1500
+                            })
+                            setTimeout(function () {
+                                window.close();
+                            },1500)
+                        } else {
+                            layer.msg(result.message);
+                        }
+                    });
+                }
             }
-        });
+        })
     }
     function detail(form) {
         $.post("/launch/activities/detail", {id: $('#id').val()}, function (res) {

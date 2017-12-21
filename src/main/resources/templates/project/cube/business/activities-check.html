@@ -387,7 +387,7 @@
         $.post("/active/participant/getTotal", {activityId: $('#id').val()}, function (result) {
             console.log(result);
             if(result.code=200){
-                console.log(result.data/$('input[name="activityTotal"]').val()*100);
+                /*console.log(result.data);*/
                 var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
                 progressBar = parseInt(progressBar);
                 if(progressBar<1 && progressBar>0){
