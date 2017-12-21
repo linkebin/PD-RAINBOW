@@ -224,21 +224,15 @@
                         time: 1500
                     })
                 }
-                var message = "添加";
                 var url = "/product/settings/add";
                 if ($("#id_edit").val() != '') {
                     url = "/product/settings/update"
                     params.id = $("#id_edit").val();
-                    message = "修改";
                 }
                 if ($("#id_edit").val() == '') {
-                    layer.confirm("套餐类型一旦设定，便无法修改。", {
-                        btn: ["确定", "取消"]
-                    }, function () {
-                        sub(url, params, message);
-                    });
+                    sub(url, params);
                 } else {
-                    sub(url, params, message);
+                    sub(url, params);
                 }
 
             }
@@ -246,11 +240,11 @@
 
     });
 
-    function sub(url, params, message) {
+    function sub(url, params) {
         console.log(params);
         $.post(url, {"productJson": JSON.stringify(params)}, function (result) {
-            if (result.message = 'SUCCESS') {
-                layer.msg(message+'成功！', {
+            if (result.code == 200) {
+                layer.msg('操作成功！', {
                     icon: 1,
                     time: 1000 //1秒关闭（如果不配置，默认是3秒）
                 });
@@ -259,7 +253,7 @@
                     doSearch();
                 }, 1000);
             } else {
-                layer.msg(message+'失败！', {
+                layer.msg('操作失败！', {
                     icon: 2,
                     time: 1000 //1秒关闭（如果不配置，默认是3秒）
                 });
@@ -279,6 +273,7 @@
         $(".newProduct").hide();
         $(".taskFiltrate").hide();
         $(".productNew").click(function (event) {
+            document.getElementById('productForm').reset();
             $(".taskFiltrate").show();
             $('.productType').show();
             $('#state').show();
