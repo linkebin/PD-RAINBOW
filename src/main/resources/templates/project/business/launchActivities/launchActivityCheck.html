@@ -89,7 +89,7 @@
             </div>
             <label class="eui-form-label">活动人数</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" readonly th:value="*{activityTotal}">
+                <input type="text" class="eui-input" name="activityTotal" readonly th:value="*{activityTotal}">
             </div>
         </div>
         <div class="eui-form-item">
@@ -361,7 +361,7 @@
     function getTotal() {
         $.post("/active/participant/getTotal", {activityId: $('#activityId').val()}, function (result) {
             if(result.code=200){
-                console.log(result);
+                console.log($('input[name="activityTotal"]').val());
                 console.log(result.data/$('input[name="activityTotal"]').val());
                 var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
                 progressBar = progressBar+"%";
