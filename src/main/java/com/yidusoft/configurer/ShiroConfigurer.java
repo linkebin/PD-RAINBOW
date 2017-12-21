@@ -93,7 +93,8 @@ public class ShiroConfigurer {
         filterChainDefinitionMap.put("/pack.ajax.js","anon");
         filterChainDefinitionMap.put("/utils.js","anon");
         filterChainDefinitionMap.put("/questionnaire/**","anon");
-
+        filterChainDefinitionMap.put("/card.js","anon");
+        filterChainDefinitionMap.put("/nation.js","anon");
 
         filterChainDefinitionMap.put("/login","anon");
         filterChainDefinitionMap.put("/files/**","anon");
@@ -122,6 +123,13 @@ public class ShiroConfigurer {
         filterChainDefinitionMap.put("/web/cube/getQuestionnaireFillIn","anon");
         filterChainDefinitionMap.put("/cube/questionnaire/submitQuestionnaire","anon");
         filterChainDefinitionMap.put("/cube/questionnaire/question/findQuestionForQuestionnaire","anon");
+        //来访登记放行
+        filterChainDefinitionMap.put("/web/customer/checkIn","anon");
+        filterChainDefinitionMap.put("/web/customer/checkInResponse","anon");
+        filterChainDefinitionMap.put("/visitor/register/add","anon");
+        filterChainDefinitionMap.put("/upload/findCertification","anon");
+        filterChainDefinitionMap.put("/web/customer/dna","anon");
+
         //<!-- 过滤链定义，从上向下顺序执行，一般将 *放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         //自定义加载权限资源关系

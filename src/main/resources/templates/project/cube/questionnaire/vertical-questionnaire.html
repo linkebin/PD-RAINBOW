@@ -119,7 +119,8 @@ var questionnaire=[[${questionnaire}]];
 var token=[[${session.token}]];
 
 $(function () {
-          loadQuestion();
+
+           loadQuestion();
     /*
             if (window.history && window.history.pushState) {
                 $(window).on('popstate', function () {
@@ -148,11 +149,14 @@ function  loadQuestion() {
             $ = eui.jquery;
         var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
     $.post("/cube/questionnaire/question/findQuestionForQuestionnaire",{"id":questionnaireId},function (result) {
-         layer.closeAll();
+         layer.close(index);
         var context=  getTable(result.data);
         $("#divTable").html(context);
         formRender();
+
     });
+        //进入全屏
+        fullScreen();
     });
 
 }

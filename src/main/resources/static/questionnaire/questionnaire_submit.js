@@ -131,3 +131,69 @@ submit_Questionnaire=function (array,questionnaireId,userId,visitorTimes,timeCon
         });
     }
 }
+
+
+
+/**
+ * 进入全全屏模式
+ *
+ */
+fullScreen=function(){
+    eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
+        var form = eui.form
+            , layer = eui.layer
+            , layedit = eui.layedit
+            , laydate = eui.laydate
+            , laypage = eui.laypage;
+
+        //全屏模式询问框
+        layer.confirm('欢迎来到本页面，开始答题！', {
+            btn: ['确定'], //按钮
+            closeBtn: 0,
+            btnAlign: 'c'
+        }, function () {
+            launchFullscreen(document.documentElement);
+            layer.closeAll();
+        });
+    });
+
+}
+/**
+ * 全屏的切换
+ */
+toggleFullScreen=function () {
+    if (!document.fullscreenElement &&    // alternative standard method
+        !document.mozFullScreenElement && !document.webkitFullscreenElement) {  // current working methods
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    } else {
+        if (document.cancelFullScreen) {
+            document.cancelFullScreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+        }
+    }
+}
+
+/**
+ * 判断各种浏览器，找到正确的方法
+ * @param element
+ */
+ launchFullscreen=function(element) {
+    if(element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if(element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+    } else if(element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if(element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+}

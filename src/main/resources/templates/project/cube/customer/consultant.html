@@ -909,7 +909,7 @@ var processLogA=null;
                 type: 2
                 , id: 'checkQuestionnaire'
                 , title: '选择问卷'
-                , area: ['800px', '500px']
+                , area: ['850px', '500px']
                 , success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
                     iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
@@ -995,6 +995,7 @@ var processLogA=null;
             var $ = eui.jquery,
                 layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
                 layer.closeAll();
+                window.close();
              });
     }
     //跳转到客户分析页面

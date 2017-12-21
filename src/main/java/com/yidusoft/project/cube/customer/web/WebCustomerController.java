@@ -6,6 +6,7 @@ import com.yidusoft.project.business.domain.VisitorRegister;
 import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.project.system.domain.SelectOption;
 import com.yidusoft.project.system.service.SelectOptionService;
+import com.yidusoft.utils.Security;
 import org.json.JSONObject;
 import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,9 +149,14 @@ public class WebCustomerController {
     public String checkIn(Model model,String creator){
 
         model.addAttribute("creator",creator);
+
+        return "project/cube/customer/visitor-check-in-response";
+    }
+    @RequestMapping("/checkInResponse")
+    public String checkInResponse(Model model,String creator){
+        model.addAttribute("creator",creator);
         List<SelectOption> selectOptionList = selectOptionService.findSelectOptionByType("profession");
         model.addAttribute("selectOptionList",selectOptionList);
-
         return "project/cube/customer/visitor-check-in";
     }
     @RequestMapping("/checkUpdate")

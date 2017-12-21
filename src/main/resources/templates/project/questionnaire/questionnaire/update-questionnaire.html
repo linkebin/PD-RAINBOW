@@ -1025,7 +1025,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
        //  $("#sceneId").val(getTagOrSceneId("scene"));
 
          var formQuestionnaire=$("#formQuestionnaire").serialize();
-
          //加载层
          var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
         $.post("/questionnaire/updateQuestionnaire",formQuestionnaire,function (result) {
@@ -1500,7 +1499,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 }
                 ,cancel: function(){
                     //右上角关闭回调
-                    resetAddOrUpdateForm();
+
                 }
             });
 
@@ -1531,11 +1530,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         });
     }
 
-    //添加修改form表单修改
-    function resetAddOrUpdateForm() {
-        $("#questionForm [name='id']").val("");
-        document.getElementById('questionForm').reset();
-    }
+
     //对问题的排序
     function  spanSequence() {
         var spanNumber=  $("[name='spanNumber']");

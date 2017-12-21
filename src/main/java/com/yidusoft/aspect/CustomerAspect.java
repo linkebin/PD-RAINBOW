@@ -57,6 +57,17 @@ public class CustomerAspect {
      */
     @Pointcut("execution(* com.yidusoft.project.cube.questionnaire.CubeQuestionnaireController.submitQuestionnaire(..))")
     public void reception3 (){}
+
+    /**
+     * 登记页面
+     */
+    @Pointcut("execution(* com.yidusoft.project.cube.customer.web.WebCustomerController.checkIn(..))")
+    public void reception4 (){}
+    /**
+     * 登记提交
+     */
+    @Pointcut("execution(*  com.yidusoft.project.business.controller.VisitorRegisterController.add(..))")
+    public void reception5 (){}
     /**
      * 问卷填写
      */
@@ -117,30 +128,32 @@ public class CustomerAspect {
      * 方法执行retrun时
      *问卷填写之前 来访者登记之前
      */
-    @AfterReturning("reception2()")
+    @AfterReturning("reception2() || reception4()")
     public void  generateToken(JoinPoint  joinPoint) throws  Exception{
-        if(Security.getUser()!=null){
-        CustomerInterface customerInterface =new CustomerIndependence();
-        //获取token
-        String token= customerInterface.getToken();
-        //退出登陆
-        Subject subject= SecurityUtils.getSubject();
-        //咨询师的id
-        String   consultantId=Security.getUserId();
-        subject.logout();
-         //存入session
-         Subject subjects= SecurityUtils.getSubject();
-         subjects.getSession().setAttribute("token",token);
-         subjects.getSession().setAttribute("consultantId ",consultantId);
+        try {
+            if(Security.getUser()!=null){
+                CustomerInterface customerInterface =new CustomerIndependence();
+                //获取token
+                String token= customerInterface.getToken();
+                //退出登陆
+                Subject subject= SecurityUtils.getSubject();
+                subject.logout();
+                //存入session
+                Subject subjects= SecurityUtils.getSubject();
+                subjects.getSession().setAttribute("token",token);
 
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
         }
+
     }
 
     /**
      * 环绕通知
      * 问卷提交  客户登记提交
      */
-     @Around("reception3()")
+     @Around("reception3()||reception5() ")
     public Object  verificationToken(ProceedingJoinPoint joinPoint)throws Exception{
         CustomerInterface customerInterface =new CustomerIndependence();
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -159,8 +172,7 @@ public class CustomerAspect {
                 customerInterface.getSession().removeAttribute("token");
                 //执行方法
                 result=joinPoint.proceed();
-                //清空session
-                customerInterface.getSession().removeAttribute("consultantId");
+
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
