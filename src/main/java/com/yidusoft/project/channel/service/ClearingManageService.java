@@ -1,4 +1,5 @@
 package com.yidusoft.project.channel.service;
+import com.yidusoft.core.Result;
 import com.yidusoft.project.channel.domain.ClearingManage;
 import com.yidusoft.core.Service;
 import org.apache.ibatis.annotations.Param;
@@ -25,5 +26,7 @@ public interface ClearingManageService extends Service<ClearingManage> {
                                                                    Map<String,Object> map);
 
     void updateClearingManageStatus(List<String> ids);
+
+    Result saveClearing(String listMap, String channelId);
 
 }

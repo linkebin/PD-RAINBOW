@@ -264,7 +264,7 @@
   </select>
 
   <select id="findChannelManageAll" resultMap="BaseResultMap">
-    SELECT  *  FROM   channel_manage WHERE  deleted=0
+    SELECT  *  FROM   channel_manage WHERE  deleted=0 AND status=2
   </select>
  <!-- 查询市区的人数-->
   <select id="findChannelForCity" parameterType="Map" resultType="java.util.Map">
