@@ -22,14 +22,14 @@
 </head>
 <body>
 <div class="eui-bg-white eui-row eui-paddingT10" th:object="${activity}">
-    <div class="eui-row eui-padding10 eui-borderB">
+    <!--<div class="eui-row eui-padding10 eui-borderB">
         <div class="eui-col-md10 eui-font18 eui-lineHeight30" th:if="*{activityStatus==1}">
             <i class='eui-icon eui-font24'></i> 调研活动审批
         </div>
         <div class="eui-col-md10 eui-font18 eui-lineHeight30" th:if="*{activityStatus==2}">
             <i class='eui-icon eui-font24'></i> 查看调研活动
         </div>
-    </div>
+    </div>-->
     <form class="eui-form eui-marginT10 eui-paddingR10" id="activityNewForm">
         <input type="hidden" id="activityId" name="id" th:value="*{id}"/>
         <input type="hidden" id="activityStatus" th:value="*{activityStatus}"/>
