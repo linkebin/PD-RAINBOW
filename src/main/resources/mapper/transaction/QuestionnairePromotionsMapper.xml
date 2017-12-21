@@ -52,7 +52,6 @@
     AND		ps.promotions_id=pro.id_
     AND 	pro.id_=#{id}
     AND     ps.product_state=0
-	AND     pro.promotions_state=2
   </select>
 
   <select id="getState" resultMap="BaseResultMap">

@@ -50,7 +50,9 @@
                 <th><input type="checkbox" name="" title="" e-filter="allChoose" e-skin="primary"></th>
                 <th>套餐编号</th>
                 <th>套餐名称</th>
-                <th>问卷数量</th>
+                <th>类型</th>
+                <th>数量</th>
+                <th>时间期限</th>
                 <th>套餐价格</th>
                 <th>创建人</th>
                 <th>创建时间</th>
@@ -164,11 +166,21 @@
                 if($('#type').val()==2 && product.productType==2){
                     continue;
                 }
+                var type = "问卷";
+                var timeLimit = '--'
+                var total = product.productTotal.toString() + "张";
+                if (product.productType == 2) {
+                    timeLimit = product.timeLimit.toString() + "个月";
+                    type = "会员";
+                    total = "--";
+                }
                 tableHtml += '<tr>' +
                         '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="productId" type="hidden" value="' + product.id + '"></td>' +
                         '<td>' + product.productCode + '</td>' +
                         '<td>' + product.productName + '</td>' +
-                        '<td>' + product.productTotal + '</td>' +
+                        '<td>' + type + '</td>' +
+                        '<td>' + total + '</td>' +
+                        '<td>' + timeLimit + '</td>' +
                         '<td>' + product.productPrice + '元</td>' +
                         '<td>' + product.creator + '</td>' +
                         '<td>' + new Date(product.createTime).Format('yyyy-MM-dd') + '</td>' +
