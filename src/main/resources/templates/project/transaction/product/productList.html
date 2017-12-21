@@ -572,13 +572,15 @@
                     layer.closeAll();
                     layer.msg('删除成功！', {
                         icon: 1,
-                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
                     });
-                    doSearch();
+                    setTimeout(function () {
+                        doSearch();
+                    }, 1000);
                 } else {
                     layer.close(indexs);
                     layer.msg('删除失败！', {
-                        time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                        time: 1500 //1秒关闭（如果不配置，默认是3秒）
                     });
                 }
             });
