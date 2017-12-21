@@ -229,6 +229,13 @@ public class WebCustomerController {
         return "project/cube/customer/visitor-count";
     }
 
+    @RequestMapping("/visitorCountBack")
+    public String visitorCountBack(Model model){
+        List<SelectOption> selectOptionList =selectOptionService.findSelectOptionByType("goal");
+        model.addAttribute("selectOptionList",selectOptionList);
+        return "project/cube/customer/visitor-count-back";
+    }
+
     @RequestMapping("/testCount")
     public String testCount(){
         return "project/cube/customer/count-test";

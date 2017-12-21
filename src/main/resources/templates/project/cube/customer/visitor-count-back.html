@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>来访统计</title>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+</head>
+<body class="eui-layout-body">
+<div class="eui-layout eui-layout-admin xymfHome">
+    <div class="eui-header"></div>
+    <div class="eui-bd eui-area eui-marginT10 chartsPage">
+        <div class="eui-sd1 eui-sd1-type3">
+            <div class="chartsLeft eui-bg-white chartsShadow eui-margin10 eui-marginT0">
+                <div class="eui-bg-blue eui-padding10">
+                    <div class="eui-row">
+                        <div class="eui-col-md6 eui-font18">按指标查询</div>
+                        <div class="eui-col-md6 eui-paddingT5 eui-textAlignR">
+                            <p class="collect"><span class="eui-icon">&#xe600;</span> 收藏模版</p>
+                        </div>
+                    </div>
+                    <div class="eui-marginT20 eui-form">
+                        <select name="template" id="template" e-verify="required" e-filter="template">
+                            <option value="" selected="">请选择模版</option>
+                        </select>
+                    </div>
+                </div>
+                <ul class="eui-form eui-paddingB10 eui-paddingLR10 filter eui-marginT10">
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">来访目的</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" e-skin="primary" title="" e-filter="Invert" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <th:block th:each="category:${selectOptionList}">
+                                <li class="eui-form-item">
+                                    <label th:text="${category.optionName}" class="eui-col-md10 eui-paddingT10 eui-textAlignL"></label>
+                                    <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                        <input type="checkbox" name="visitor_goal" e-skin="primary"  th:value="${category.optionId}" checked=""
+                                               e-filter="allChoose">
+                                    </div>
+                                </li>
+                            </th:block>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">性别</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">男</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="sex" e-skin="primary" class="sex" value="1" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">女</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="sex" e-skin="primary" class="sex" value="0" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">年龄</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" name="like[write]" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">18岁以下</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="0" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">19-44岁</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="1" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">45-59</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="2" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">60-74</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="3" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">75-89岁</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="4" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">90岁以上</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="age" value="5" e-skin="primary" title=""
+                                           e-filter="allChoose" checked="">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">宗教</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" e-skin="primary" title="" checked="" e-filter="allChoose">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">没有</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="belief" e-skin="primary" value="0" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">基督教</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="belief" e-skin="primary" value="1" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">佛教</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="belief" e-skin="primary" value="2" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">道教</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="belief" e-skin="primary" value="3" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">天主教</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="belief" e-skin="primary" value="4" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">伊斯兰教</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="belief" e-skin="primary" value="5" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">其他</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="belief" e-skin="primary" value="6" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div class="eui-form-item chartsTitle">
+                            <label class="eui-form-label eui-textAlignL">婚姻</label>
+                            <div class="eui-input-block eui-textAlignR eui-paddingR10">
+                                <input type="checkbox" e-skin="primary" title="" checked="">
+                            </div>
+                        </div>
+                        <ul class="chartsContent">
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">未婚</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="maritalStatus" e-skin="primary" value="1" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">已婚</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="maritalStatus" e-skin="primary" value="2" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">已婚分居</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="maritalStatus" e-skin="primary" value="3" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">再婚</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="maritalStatus" e-skin="primary" value="4" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">离婚独居</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="maritalStatus" e-skin="primary" value="5" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                            <li class="eui-form-item">
+                                <label class="eui-col-md10 eui-paddingT10 eui-textAlignL">丧偶独居</label>
+                                <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                    <input type="checkbox" name="maritalStatus" e-skin="primary" value="6" checked=""
+                                           e-filter="allChoose">
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="eui-mn1">
+            <div  class="eui-mn1-type3">
+                <div id="scr" class="eui-row eui-form">
+                    <label class="eui-col-md1 eui-form-label">时间：</label>
+                    <div class="eui-col-md3">
+                        <select name="city" e-verify="required" e-filter="selected">
+                            <option value="0" selected="">近7天</option>
+                            <option value="1">近30天</option>
+                            <option value="2">选择时间</option>
+                        </select>
+                    </div>
+                    <!--<div class="eui-col-md3 eui-marginL10"><span class="eui-btn eui-btn-normal">当前数据导出</span></div>-->
+
+                    <div id="time">
+                        <label class="eui-form-label">时间段：</label>
+                        <div class="eui-col-md3">
+                            <input class="eui-input" id="timer" placeholder="时间段选择">
+                        </div>
+                    </div>
+                </div>
+                <div class="eui-row eui-marginT20">
+                    <div class="eui-col-md1 eui-font18">区域分布</div>
+                    <div class="eui-col-md4 eui-color-gray3 eui-marginT5 date"></div>
+                    <!--<div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
+                                                                 alt=""/> 导出
+                    </div>-->
+                    <div class="areal eui-col-md12 eui-padding5 eui-marginT10">
+                        <div class="arealIn"></div>
+                        <div class="eui-row eui-padding5">
+                            <div class="eui-col-md7">
+                                <div id="map" class="charts0" style="height: 360px;"></div>
+                            </div>
+                            <div class="eui-col-md5">
+                                <div class="eui-tab eui-tab-brief" e-filter="docDemoTabBrief">
+                                    <ul class="eui-tab-title">
+                                        <li class="eui-this">省份</li>
+                                        <li>城市</li>
+                                    </ul>
+                                    <div class="eui-tab-content">
+                                        <div class="eui-tab-item eui-show">
+                                            <ul class="statistics province">
+                                            </ul>
+                                        </div>
+                                        <div class="eui-tab-item">
+                                            <ul class="statistics city">
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="eui-row eui-marginT20">
+                    <div class="eui-col-md1 eui-font18">来访目的</div>
+                    <div class="eui-col-md4 eui-color-gray3 eui-marginT5 date"></div>
+                    <!--<div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
+                                                                 alt=""/> 导出
+                    </div>-->
+                    <div class="areal eui-col-md12 eui-padding5 eui-marginT10 eui-marginB10">
+                        <div class="arealIn"></div>
+                        <div class="eui-padding5 types">
+                            <table class="eui-table" e-skin="line">
+                                <colgroup>
+                                    <col width="18">
+                                    <col width="150">
+                                    <col width="260">
+                                    <col width="80">
+                                    <col width="80">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th>排名</th>
+                                    <th>来访目的</th>
+                                    <th>来访次数/占比</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>来访目的</th>
+                                        <th>来访次数/占比</th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="eui-row eui-marginT20">
+                    <div class="eui-col-md1 eui-font18">人群属性</div>
+                    <div class="eui-col-md4 eui-color-gray3 eui-marginT5 date"></div>
+                    <!--<div class="eui-col-md7 eui-textAlignR"><img src="/Styles/images/xymfImages/xymf/export.png"
+                                                                 alt=""/> 导出
+                    </div>-->
+                    <div class="areal eui-col-md12 eui-padding20 eui-marginT10 eui-marginB10">
+                        <div class="eui-row eui-col-space30">
+                            <div class="eui-col-md6">
+                                <div class="eui-font16 eui-marginB20 eui-marginT10">性别分布</div>
+                                <div class="eui-row eui-marginB20">
+                                    <div class="eui-col-md2 eui-paddingL10"><img
+                                            src="/Styles/images/xymfImages/xymf/man.png" alt=""/></div>
+                                    <div class="eui-col-md4">
+                                        <p class="eui-font22 chartsColor2 man">0人</p>
+                                        <p class="eui-font22 chartsColor2 manPercent">0%</p>
+                                    </div>
+                                    <div class="eui-col-md4 eui-textAlignR">
+                                        <p class="eui-font22 chartsColor1 women">0人</p>
+                                        <p class="eui-font22 chartsColor1 womenPercent">0%</p>
+                                    </div>
+                                    <div class="eui-col-md2 eui-textAlignR eui-paddingR10"><img
+                                            src="/Styles/images/xymfImages/xymf/woman.png" alt=""/></div>
+                                </div>
+                                <div id="sex">
+
+                                </div>
+                            </div>
+                            <div class="eui-col-md6">
+                                <div class="eui-col-md6 eui-font16 eui-marginB20 eui-marginT10">年龄分布</div>
+                                <div class="eui-col-md12">
+                                    <div id="chart1" class="charts0"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="eui-row eui-col-space30">
+                            <div class="eui-col-md6">
+                                <div class="eui-font16 eui-marginB20 eui-marginT10">学历分布</div>
+                                <div class="eui-col-md12">
+                                    <div id="chart2" class="charts0"></div>
+                                </div>
+                            </div>
+                            <div class="eui-col-md6">
+                                <div class="eui-font16 eui-marginB20 eui-marginT10">婚姻状况</div>
+                                <div id="marriages" class="charts0"></div>
+                            </div>
+                            <div class="eui-col-md12">
+                                <div class="eui-font16 eui-marginB20 eui-marginT10">宗教信仰</div>
+                                <div class="eui-col-md12">
+                                    <div id="chart4" class="charts0"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="project/cube/common/footer :: footer">footer</div>
+</div>
+</body>
+<script src="/Scripts/module/eui.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/Scripts/plugins/echarts/echarts.min.js"></script>
+<!-- 引入 macarons 主题 -->
+<!--<script src="/Scripts/plugins/echarts/macarons.js"></script>-->
+<!--婚姻状况脚本-->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<!--地图脚本-->
+<script src="http://gallery.echartsjs.com/dep/echarts/map/js/china.js"></script>
+<script src="/pack.ajax.js"></script>
+<script src="/card.js"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+
+<script>
+    var nowDate = new Date();
+    nowDate.setDate(nowDate.getDate() - 7);
+    var endDate = new Date();
+    $('.date').each(function (i, data) {
+        $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date().Format("yyyy-MM-dd"));
+    })
+    var form, layer, element, laydate;
+    eui.use(['form', 'layer', 'element', 'laydate'], function () {
+        form = eui.form;
+        layer = eui.layer;
+        element = eui.element;
+        laydate = eui.laydate;
+        laydate.render({
+            elem: '#timer'
+            , range: true
+            , done: function (value, date) {
+                var now = value.substring(0, find(value, '-', 2));
+                nowDate = new Date(now);
+                var end = value.substring(find(value, '-', 2) + 1, value.length);
+                endDate = new Date(end);
+                $('.date').each(function (i, data) {
+                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date(endDate).Format("yyyy-MM-dd"));
+                })
+                doSearch();
+            }
+        });
+        $('#time').hide();
+        form.on('select(selected)', function (data) {
+            if (data.value == 0) {
+                $('#time').hide();
+                nowDate = new Date()
+                nowDate.setDate(nowDate.getDate() - 7);
+                $('.date').each(function (i, data) {
+                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date().Format("yyyy-MM-dd"));
+                })
+                doSearch();
+            } else if (data.value == 1) {
+                $('#time').hide();
+                nowDate = new Date()
+                nowDate.setMonth(nowDate.getMonth() - 1);
+                $('.date').each(function (i, data) {
+                    $(this).text(new Date(nowDate).Format("yyyy-MM-dd") + " 至 " + new Date().Format("yyyy-MM-dd"));
+                })
+                doSearch();
+            } else if (data.value == 2) {
+                $('#time').show();
+            }
+        })
+        form.on('checkbox(allChoose)', function (data) {
+            doSearch();
+        })
+
+        form.on('checkbox(Invert)', function (data) {
+//            alert(1)
+        })
+    })
+
+    //获取字符串的位置
+    function find(str, cha, num) {
+        var x = str.indexOf(cha);
+        for (var i = 0; i < num; i++) {
+            x = str.indexOf(cha, x + 1);
+        }
+        return x;
+
+    }
+    //初始化
+    $(function () {
+        doSearch();
+        initTemplate();
+    })
+    var statusIds = '';
+    var beliefIds = '';
+    var sex = '';
+    var ageGroupsIds = '';
+    var goalIds = '';
+    var timeInterval = '';
+    function doSearch() {
+        eui.use(['element'], function () {
+            var element = eui.element;
+            $('tbody').html("");
+            $('.man').text(0);
+            $('.manPercent').text('0%');
+            $('.women').text(0);
+            $('.womenPercent').text('0%');
+
+            var goalArray = new Array();
+
+            $('input[name="visitor_goal"]:checked').each(function (i) {
+                var id = $(this).val();
+                goalArray[i] = id;
+            });
+            goalIds = goalArray.join(",");
+
+            var sexArray = new Array();
+
+            $('input[name="sex"]:checked').each(function (i) {
+                var id = $(this).val();
+                sexArray[i] = id;
+            });
+            sex = sexArray.join(",");
+
+            var ageGroupArray = new Array();
+            $('input[name="age"]:checked').each(function (i) {
+                var ages = $(this).parent().find("input[name='age']").val();
+                ageGroupArray[i] = ages;
+            })
+            ageGroupsIds = ageGroupArray.join(",");
+
+            var beliefArray = new Array();
+            $('input[name="belief"]:checked').each(function (i) {
+                var belief = $(this).parent().find("input[name='belief']").val();
+                beliefArray[i] = belief;
+            })
+            beliefIds = beliefArray.join(",");
+
+            //婚姻
+            var statusArray = new Array();
+            $('input[name="maritalStatus"]:checked').each(function (i) {
+                var maritalStatus = $(this).parent().find("input[name='maritalStatus']").val();
+                statusArray[i] = maritalStatus;
+            })
+            statusIds = statusArray.join(",");
+
+            $.post("/visitor/register/getCount", {
+                startTime: nowDate,
+                endTime: endDate,
+                sex: sex,
+                maritalStatus: statusIds,
+                belief: beliefIds,
+                goalIds:goalIds,
+                ageGroupsIds:ageGroupsIds
+            }, function (result) {
+                if (result.code = 200) {
+                    var manSum = 0;
+                    var womenSum = 0;
+                    var resuliList = result.data
+                    var value = [0, 0, 0, 0, 0, 0, 0];
+                    var data = [0, 0, 0, 0, 0, 0, 0];
+                    var statusData = [
+                        {"name": "未婚", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "已婚", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "已婚分居", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "再婚", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "离婚独居", "size": 0, "add": "11", "rate": "13%"},
+                        {"name": "丧偶独居", "size": 0, "add": "11", "rate": "13%"},
+                    ]
+                    for (var i in resuliList) {
+                        var register = resuliList[i];
+                        if (register.sex == 1) {
+                            manSum++;
+                        } else {
+                            womenSum++;
+                        }
+
+                        //学历分布
+                        var level = register.educationLevel;
+                        if (level == 1) {
+                            value[0]++;
+                        } else if (level == 2) {
+                            value[1]++;
+                        } else if (level == 3) {
+                            value[2]++;
+                        } else if (level == 4) {
+                            value[3]++;
+                        } else if (level == 5) {
+                            value[4]++;
+                        } else if (level == 6) {
+                            value[5]++;
+                        } else {
+                            value[6]++;
+                        }
+                        //宗教信仰分布
+                        var belief = register.religiousBelief;
+                        if (belief == 0) {
+                            data[0]++;
+                        } else if (belief == 1) {
+                            data[1]++;
+                        } else if (belief == 2) {
+                            data[2]++;
+                        } else if (belief == 3) {
+                            data[3]++;
+                        } else if (belief == 4) {
+                            data[4]++;
+                        } else if (belief == 5) {
+                            data[5]++;
+                        } else {
+                            data[6]++;
+                        }
+
+
+
+                        //婚姻状况分布
+                        var status = register.maritalStatus;
+                        if (status == 1) {
+                            statusData[0].size++;
+                        } else if (status == 2) {
+                            statusData[1].size++;
+                        } else if (status == 3) {
+                            statusData[2].size++;
+                        } else if (status == 4) {
+                            statusData[3].size++;
+                        } else if (status == 5) {
+                            statusData[4].size++;
+                        } else if (status == 6) {
+                            statusData[5].size++;
+                        }
+                    }
+                    var manPercent = '';
+                    var womenPercent = '';
+                    if (resuliList.length != 0) {
+                        manPercent = ((manSum / resuliList.length) * 100).toFixed(1) + "%";
+                        womenPercent = ((womenSum / resuliList.length) * 100).toFixed(1) + "%";
+                    } else {
+                        manPercent = '0%'
+                        womenPercent = '0%'
+                    }
+                    init(value);//学历分布
+                    religiousBelief(data);//宗教信仰分布
+                    var marryData = [];
+                    for (var i in statusData) {
+                        if (statusData[i].size != 0) {
+                            marryData.push(statusData[i]);
+                        }
+                    }
+                    ageList(resuliList);//计算年龄分布
+
+                    marry(marryData);//初始化婚姻状况
+                    $('.man').text(manSum+"人");
+                    $('.manPercent').text(manPercent);
+                    $('.women').text(womenSum+"人");
+                    $('.womenPercent').text(womenPercent);
+                    var i = 0
+                    $('#sex').html("");
+                    for (i; i <= 6; i++) {
+                        var html = '';
+                        html = '<ul class="sexSpread">';
+                        var percent = ((manSum / resuliList.length) * 100).toFixed(1)
+                        var length = parseInt(percent / 5);
+                        if (percent > 0 && percent <= 5) {
+                            length = 1;
+                        }
+                        for (var j = 0; j < length; j++) {
+                            html += '<li></li>';
+                        }
+                        for (var k = 0; k < (20 - parseInt(length)); k++) {
+                            html += '<li class="sexWoman"></li>';
+                        }
+                        html += '</ul>';
+                        $('#sex').append(html);
+                    }
+                } else {
+                    layer.msg("请重新加载", {
+                        icon: 1,
+                        time: 1500
+                    })
+                }
+            });
+            goalRanking();
+        });
+        getProvince();
+        getCity();
+
+    }
+
+
+    function goalRanking() {
+
+        $.post("/visitor/register/getCount", {
+            startTime: nowDate,
+            endTime: endDate,
+            sex: sex,
+            maritalStatus: statusIds,
+            belief: beliefIds,
+            goalIds:goalIds,
+            ageGroupsIds:ageGroupsIds,
+            types:'110'
+        }, function (result) {
+            var restltArr = new Array();
+            var list = result.data;
+            var total = 0;
+            for (var i in list) {
+                total+=list[i].count;
+            }
+            for (var i in list) {
+                var o = new Object();
+                o.sort=Number(i)+1;
+                o.name=list[i].optionName;
+                o.scale=list[i].count+'/'+ (list[i].count/total)*100+'%';
+                restltArr.push(o);
+            }
+            var htmls = getTable(restltArr);
+            $('tbody').html(htmls);
+        });
+    }
+
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            tableHtml +=  '<tr>' +
+                '<td>'+ secUser.sort +'</td>' +
+                '<td>'+ secUser.name +'</td>' +
+                '<td>'+ secUser.scale +'</td>' +
+            '</tr>';
+        }
+        return tableHtml;
+    }
+
+
+    //初始化选择模板下拉框
+    function initTemplate() {
+        eui.use('form', function () {
+            var form = eui.form;
+            $.get("/template/list", function (result) {
+                if (result.code == 200) {
+                    var templateList = result.data;
+                    for (var i in templateList) {
+                        var selectHtml = '';
+                        var template = templateList[i];
+                        selectHtml += '<option value="' + template.id + '">' + template.templateName + '</option>';
+                        $('#template').append(selectHtml);
+                    }
+                    form.render('select');
+                } else {
+                    layer.msg("初始化模板失败", {
+                        icon: 1,
+                        time: 1500
+                    });
+                }
+
+                form.on('select(template)', function (data) {
+                    if (data.value!=''){
+                        $.get("/template/detail",{id:data.value}, function (result) {
+                            var obj = result.data;
+                            console.log(obj)
+                            $('input[name="sex"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='sex']").val();
+                                $(this).parent().find("input[name='sex']").removeAttr('checked');
+                                var of = obj.sex.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='sex']").prop("checked",'checked');
+                                }
+                            });
+
+                            $('input[name="visitor_goal"]').each(function (i) {
+                                var ages = $(this).val();
+                                $(this).removeAttr('checked');
+                                var of = obj.goalids.indexOf(ages);
+                                if (of==0){
+                                    $(this).prop("checked",'checked');
+                                }
+                            });
+
+                            $('input[name="age"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='age']").val();
+                                $(this).parent().find("input[name='age']").removeAttr('checked');
+                                var of = obj.age.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='age']").prop("checked",'checked');
+                                }
+                            });
+                            $('input[name="belief"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='belief']").val();
+                                $(this).parent().find("input[name='belief']").removeAttr('checked');
+                                var of = obj.religion.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='belief']").prop("checked",'checked');
+                                }
+                            });
+
+                            $('input[name="maritalStatus"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='maritalStatus']").val();
+                                $(this).parent().find("input[name='maritalStatus']").removeAttr('checked');
+                                var of = obj.marriage.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='maritalStatus']").prop("checked",'checked');
+                                }
+                            });
+                            nowDate = new Date(obj.startTime);
+                            endDate = new Date(obj.endTime);
+
+                            $('.date').each(function (i, data) {
+                                $(this).text(nowDate.Format("yyyy-MM-dd") + " 至 " + endDate.Format("yyyy-MM-dd"));
+                            });
+                            $("#scr").hide();
+                            form.render();
+                            doSearch();
+                        });
+                    }else {
+                        $("#scr").show();
+                        location.reload();
+                    }
+
+                });
+            })
+        })
+    }
+
+    /**
+     * 设置checkbox
+     */
+    function settingCheck(params,name) {
+        var arr=params.split(',');
+        $('input[name="'+name+'"]').each(function (i,data) {
+            var a = false;
+            for(var k in arr){
+                var age = arr[k];
+                if(age == data.value){
+                    a=true;
+                    continue;
+                }
+            }
+            if(!a){
+                data.checked=false;
+            }
+        })
+    }
+    //校验数字是正数还是负数
+    function judgeSign(num) {
+        var absVal = Math.abs(num);
+        return num == absVal ? true : false;
+    }
+
+
+    var ageNameData = ["<18", "≥19", "≥45", "≥60", "≥75", "≥90"]
+
+    function ageList(registerList) {
+        var ageData = [0, 0, 0, 0, 0, 0];
+        for (var i in registerList) {
+            var register = registerList[i];
+            var age = new Date().getYear() - new Date(register.birthday).getYear();
+            if (age < 18) {
+                ageData[0]++;
+            } else if (age >= 19 && age <= 44) {
+                ageData[1]++;
+            } else if (age >= 45 && age <= 59) {
+                ageData[2]++;
+            } else if (age >= 60 && age <= 74) {
+                ageData[3]++;
+            } else if (age >= 75 && age <= 89) {
+                ageData[4]++;
+            } else {
+                ageData[5]++;
+            }
+        }
+        ageInit(ageNameData, ageData);
+    }
+    /**
+     * 获取省份排名
+     */
+    function getProvince() {
+        eui.use(['form', 'element'], function () {
+            var form = eui.form,
+                    element = eui.element;
+            $.post("/visitor/register/getCount", {
+                startTime: nowDate,
+                endTime: endDate,
+                sex: sex,
+                maritalStatus: statusIds,
+                belief: beliefIds,
+                goalIds:goalIds,
+                ageGroupsIds:ageGroupsIds
+            }, function (result) {
+                var provinceData = [{
+                    name: '北京',
+                    value: 0
+                }, {
+                    name: '天津',
+                    value: 0
+                }, {
+                    name: '上海',
+                    value: 0
+                }, {
+                    name: '重庆',
+                    value: 0
+                }, {
+                    name: '河北',
+                    value: 0
+                }, {
+                    name: '河南',
+                    value: 0
+                }, {
+                    name: '云南',
+                    value: 0
+                }, {
+                    name: '辽宁',
+                    value: 0
+                }, {
+                    name: '黑龙江',
+                    value: 0
+                }, {
+                    name: '湖南',
+                    value: 0
+                }, {
+                    name: '安徽',
+                    value: 0
+                }, {
+                    name: '山东',
+                    value: 0
+                }, {
+                    name: '新疆',
+                    value: 0
+                }, {
+                    name: '江苏',
+                    value: 0
+                }, {
+                    name: '浙江',
+                    value: 0
+                }, {
+                    name: '江西',
+                    value: 0
+                }, {
+                    name: '湖北',
+                    value: 0
+                }, {
+                    name: '广西',
+                    value: 0
+                }, {
+                    name: '甘肃',
+                    value: 0
+                }, {
+                    name: '山西',
+                    value: 0
+                }, {
+                    name: '内蒙古',
+                    value: 0
+                }, {
+                    name: '陕西',
+                    value: 0
+                }, {
+                    name: '吉林',
+                    value: 0
+                }, {
+                    name: '福建',
+                    value: 0
+                }, {
+                    name: '贵州',
+                    value: 0
+                }, {
+                    name: '广东',
+                    value: 0
+                }, {
+                    name: '青海',
+                    value: 0
+                }, {
+                    name: '西藏',
+                    value: 0
+                }, {
+                    name: '四川',
+                    value: 0
+                }, {
+                    name: '宁夏',
+                    value: 0
+                }, {
+                    name: '海南',
+                    value: 0
+                }, {
+                    name: '台湾',
+                    value: 0
+                }, {
+                    name: '香港',
+                    value: 0
+                }, {
+                    name: '澳门',
+                    value: 0
+                }, {
+                    name: '南海诸岛',
+                    value: 0
+                }]
+                if (result.code == 200) {
+                    var resultList = result.data;
+                    var tableHtml = '';
+                    var provinceArray = [];
+                    var provinceGroup = [];
+                    for (var i in resultList) {
+                        var list = resultList[i];
+                        provinceArray.push(list.province);
+                        if (provinceGroup.indexOf(list.province) == -1) {  //判断在s数组中是否存在，不存在则push到s数组中
+                            provinceGroup.push(list.province);
+                        }
+                    }
+                    var hist = {};
+                    provinceArray.map(function (a) {
+                        if (a in hist) hist[a]++; else hist[a] = 1;
+                    });
+                    var index = 0//排名
+                    var count = 0;
+                    for (var j in hist) {
+                        index++;
+                        count += hist[j]
+                        tableHtml += '<li class="eui-marginB10">' +
+                                '<div class="eui-col-md3 eui-textAlignL eui-paddingR10">' + index + '、' + j + '</div>' +
+                                '<div class="eui-col-md9 eui-paddingT5">' +
+                                '<div class="eui-progress" e-filter="que' + index + '">' +
+                                '<div class="eui-progress-bar" ></div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</li>';
+                        for (var k in provinceData) {
+                            var province = provinceData[k];
+                            if (j.indexOf(province.name) != -1) {
+                                province.value = hist[j];
+                            }
+                        }
+                    }
+                    $('.province').html(tableHtml);
+                    var sum = 0;
+                    for (var y in hist) {
+                        sum++;
+                        var thisCount = hist[y]
+                        var progressBar = (thisCount / count) * 100;
+                        progressBar = parseInt(progressBar) + "%";
+                        var name = 'que' + sum;
+                        element.progress(name, progressBar);
+                        element.init('progress', name);
+                    }
+                }
+                initProvince(provinceData);
+            })
+        })
+    }
+
+    //获取城市排名
+    function getCity() {
+        eui.use(['element'], function () {
+            var element = eui.element;
+            $.post("/visitor/register/getCount", {
+                startTime: nowDate,
+                endTime: endDate,
+                sex: sex,
+                maritalStatus: statusIds,
+                belief: beliefIds,
+                goalIds:goalIds,
+                ageGroupsIds:ageGroupsIds
+            }, function (result) {
+                if (result.code == 200) {
+                    var resultList = result.data;
+                    var tableHtml = '';
+                    var cityArray = [];
+                    var cityGroup = [];
+                    for (var i in resultList) {
+                        var list = resultList[i];
+                        cityArray.push(list.city);
+                        if (cityGroup.indexOf(list.city) == -1) {  //判断在s数组中是否存在，不存在则push到s数组中
+                            cityGroup.push(list.city);
+                        }
+                    }
+                    var index = 0
+                    var cityObj = {};
+                    cityArray.map(function (a) {
+                        if (a in cityObj) cityObj[a]++; else cityObj[a] = 1;
+                    });
+                    var citySum = 0;//城市的总数
+                    for (var j in cityObj) {
+                        var thisCount = cityObj[j];
+                        index++;
+                        citySum += cityObj[j];
+                        tableHtml += '<li class="eui-marginB10">' +
+                                '<div class="eui-col-md5 eui-textAlignL eui-paddingR10">' + index + '、' + j + '</div>' +
+                                '<div class="eui-col-md7 eui-paddingT5">' +
+                                '<div class="eui-progress" e-filter="que' + index + '">' +
+                                '<div class="eui-progress-bar" ></div>' +
+                                '</div>' +
+                                '</div>' +
+                                '</li>';
+                    }
+                    $('.city').html(tableHtml);
+                    var cityIndex = 0;
+                    for (var j in cityObj) {
+                        cityIndex++;
+                        var thisCount = cityObj[j];
+                        var progressBar = (thisCount / citySum) * 100;
+                        progressBar = parseInt(progressBar) + "%";
+                        var name = 'que' + '' + cityIndex;
+                        element.progress(name, progressBar);
+                        element.init('progress', progressBar);
+                    }
+                }
+            })
+        })
+    }
+
+    // 左侧筛选栏
+    $(".filter>li .chartsContent").hide();
+    $(".filter>li").click(function () {
+        $(this).siblings().children(".chartsContent").hide();
+        $(this).children(".chartsContent").stop().slideToggle();
+        $(this).children(".chartsTitle").addClass("chartsTitle0").siblings(".filter>li").children(".chartsTitle").removeClass("chartsTitle0");
+        $(".filter>li .eui-form-checkbox").click(function () {
+            event.stopPropagation();
+        });
+    });
+
+    // 收藏模版
+    $(".collect").click(function () {
+        var obj = new Object();
+        obj.sex=sex;
+        obj.age=ageGroupsIds;
+        obj.religion=beliefIds;
+        obj.marriage=statusIds;
+        obj.goalIds=goalIds;
+        obj.startTime=nowDate;
+        obj.endTime=endDate;
+
+        var index = layer.open({
+            title: '添加模板'
+            , type: 1
+            , area: ['400px', '200px']
+            , content: $("#inDiv")
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                obj.templateName=$("#template_name").val();
+                if (obj.templateName!=''){
+                    layer.load();
+                    $.post("/template/add", {json: JSON.stringify(obj)},
+                        function (result) {
+                            if (result.code==200){
+                                layer.msg('添加成功', {
+                                    time: 2000
+                                }, function(){
+                                    location.reload();
+                                });
+                            }else {
+                                layer.msg("添加失败");
+                                layer.close(index);
+                            }
+                        });
+                }else {
+                    layer.msg("请输入模板名称！")
+                }
+            }
+            ,btn2: function(index, layero){
+            }
+        });
+
+    })
+    // 左侧高度
+    var carouselHeight = $(window).height() - 270;
+    $(".filter").css("height", carouselHeight + 'px');
+
+    // 年龄分布
+    function ageInit(ageNameDate, ageData) {
+        var myChart = echarts.init(document.getElementById('chart1'), 'macarons');
+        var option = {
+            tooltip: {},
+            legend: {
+                data: ['年龄']
+            },
+            itemStyle: {
+                normal: {
+                    barBorderRadius: [300, 300, 0, 0],
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: '#ffe575'
+                    }, {
+                        offset: 1,
+                        color: '#ffcf00'
+
+                    }]),
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.1)'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {
+                    show: false, // 是否显示坐标轴轴线。
+                    lineStyle: {
+                        color: '#666666'
+                    }
+                },
+
+                axisTick: {
+                    show: false // 是否显示坐标轴刻度。
+                },
+                axisLabel: {
+                    color: '#333333' // 标签文字颜色
+                },
+                // boundaryGap: false,
+                data: ageNameDate
+            },
+
+            yAxis: {
+                position: 'right',
+                type: 'value',
+                minInterval : 1,
+                axisLine: {
+                    show: false, // 是否显示坐标轴轴线。
+                    lineStyle: {
+                        color: '#999999'
+                    }
+                },
+                axisTick: {
+                    show: false // 是否显示坐标轴刻度。
+                },
+                axisLabel: {
+                    formatter: '{value}人',
+                    color: '#999999' // 标签文字颜色
+                },
+                splitLine: {
+                    lineStyle: {
+                        // 分割线颜色 使用深浅的间隔色
+                        color: ['#eeeeee']
+                    }
+                },
+                // 坐标轴分隔区域的显示间隔
+                splitArea: {
+                    areaStyle: {
+                        color: 'transparent'
+                    }
+                }
+            },
+            series: [{
+                //name: '销量',
+                type: 'bar',
+                barWidth: 24,//柱图宽度
+                data: ageData
+            }]
+        };
+        myChart.setOption(option);
+    }
+
+    // 学历
+    function init(value) {
+        var myChart = echarts.init(document.getElementById('chart2'), 'macarons');
+        var option = {
+            title: {
+                textStyle: {
+                    color: '#333'
+                }
+            },
+            radar: {
+                name: {
+                    textStyle: {
+                        color: '#333', // 字体颜色
+                        borderRadius: 3,
+                        padding: [3, 5]
+                    }
+                },
+                indicator: [
+                    {name: '小学', max: Math.max.apply(null, value)},
+                    {name: '初中', max: Math.max.apply(null, value)},
+                    {name: '高中', max: Math.max.apply(null, value)},
+                    {name: '专科', max: Math.max.apply(null, value)},
+                    {name: '本科', max: Math.max.apply(null, value)},
+                    {name: '研究生', max: Math.max.apply(null, value)},
+                    {name: '博士', max: Math.max.apply(null, value)}
+                ],
+                splitArea: {
+                    areaStyle: {
+                        shadowColor: 'transparent',
+                        shadowBlur: 10
+                    }
+                }
+            },
+            series: [{
+                 name: '学历分布',
+                areaStyle: {
+                    normal: {
+                        opacity: 0.6,
+                        color: new echarts.graphic.RadialGradient(0.7, 0.5, 1, [
+                            {
+                                color: '#1e87d6',
+                                offset: 0
+                            },
+                            {
+                                color: '#02f4cb',
+                                offset: 1
+                            }
+                        ])
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: "#61a0a8", // 图表中各个图区域的边框线拐点颜色
+                        lineStyle: {
+                            color: "rgba(255,255,255,0.4)" // 图表中各个图区域的边框线颜色
+                        },
+                        areaStyle: {
+                            type: 'default'
+                        }
+                    }
+                },
+                label: {
+                    normal: {
+                        show: true
+
+                    }
+                },
+                type: 'radar',
+                data: [
+                    {
+                        value: value,
+                        name: '学历分布'
+                    }
+                ]
+            }]
+        };
+        myChart.setOption(option);
+    }
+
+    //宗教信仰
+    function religiousBelief(data) {
+        /* 宗教信仰 */
+        var myChart = echarts.init(document.getElementById('chart4'), 'macarons');
+        var option = {
+            tooltip: {},
+            legend: {
+                data: ['销量']
+            },
+            xAxis: {
+                data: ["没有", "基督教", "佛教", "道教", "天主教", "伊斯兰教", "其他"]
+            },
+//       修改柱状条的颜色color
+            itemStyle: {
+                normal: {
+                    //柱形图圆角，初始化效果
+                    barBorderRadius: [5, 5, 0, 0],
+                    color: function (params) {
+                        var colorList = ['#ffcf00', '#ff9a63', '#a4de6c', '#82ca9d', '#8dd1e1', '#9cacf1', '#8884d8'];
+                        return colorList[params.dataIndex];
+                    },
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.1)'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                axisLine: {
+                    show: false, // 是否显示坐标轴轴线。
+                    lineStyle: {
+                        color: '#666666'
+                    }
+                },
+
+                axisTick: {
+                    show: false // 是否显示坐标轴刻度。
+                },
+                axisLabel: {
+                    color: '#333333' // 标签文字颜色
+                },
+                // boundaryGap: false,
+                data: ["没有", "基督教", "佛教", "道教", "天主教", "伊斯兰教", "其他"]
+            },
+
+            yAxis: {
+                position: 'right',
+                type: 'value',
+                minInterval : 1,
+                axisLine: {
+                    show: false, // 是否显示坐标轴轴线。
+                    lineStyle: {
+                        color: '#999999'
+                    }
+                },
+                axisTick: {
+                    show: false // 是否显示坐标轴刻度。
+                },
+                axisLabel: {
+                    formatter: '{value}人',
+                    color: '#999999' // 标签文字颜色
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        // 分割线颜色 使用深浅的间隔色
+                        color: ['#eeeeee']
+                    }
+                },
+                // 坐标轴分隔区域的显示间隔
+                splitArea: {
+                    areaStyle: {
+                        color: 'transparent'
+                    }
+                }
+            },
+            series: [{
+//            name: '销量',
+                type: 'bar',
+                barWidth: 30,//柱图宽度
+                data: data
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+    // 婚姻状况
+    function marry(data) {
+        var myChart = echarts.init(document.getElementById('marriages'), 'macarons');
+        //数据
+        var data = {
+            "children": data
+        };
+
+        //配色
+        var getFillColor = function (nodeName, isLeaf) {
+            var fill = {};
+            var baseArray = ["未婚", "已婚", "已婚分居", "再婚", "离婚独居", "丧偶独居"];
+            if ($.inArray(nodeName, baseArray) != -1) {
+                if (isLeaf) {
+                    fill.fillColor = {
+                        type: "radial",
+                        x: 0.7,
+                        y: 0.7,
+                        r: 0.7,
+                        colorStops: [{
+                            offset: 0,
+                            color: "#9f9ce0" // 0% 处的颜色
+                        }, {
+                            offset: 1,
+                            color: "#86a5ee" // 100% 处的颜色
+                        }],
+                        globalCoord: false // 缺省为 false
+                    };
+//                fill.borderColor = "#03a1b3";
+                    fill.borderWidth = 1;
+                    fill.emphasisFillColor = {
+                        type: "radial",
+                        x: 0.7,
+                        y: 0.7,
+                        r: 0.7,
+                        colorStops: [{
+                            offset: 0,
+                            color: "#938edb" // 0% 处的颜色
+                        }, {
+                            offset: 1,
+                            color: "#89a8ef" // 100% 处的颜色
+                        }],
+                        globalCoord: false // 缺省为 false
+                    };
+                    fill.emphasisBorderColor = "#89a8ef";
+                    fill.emphasisborderWidth = 1;
+                } else {
+//                fill.fillColor = "rgba(0, 252, 255, 0.1)";
+//                fill.borderColor = "rgba(11, 72, 115, 1)";
+//                fill.borderWidth = 0;
+//                fill.emphasisFillColor = "rgba(0, 252, 255, 0.1)";
+//                fill.emphasisBorderColor = "rgba(11, 72, 115, 1)";
+//                fill.emphasisborderWidth = 0;
+                }
+            }
+            return fill;
+        };
+
+        //渲染函数
+        var renderItem = function (params, api) {
+            var fillObj = getFillColor(api.value(2), api.value(9));
+            var textPosition = "inside";
+            if (!api.value(9)) {
+                if (api.value(1) == 1) {
+                    if (api.value(6) > api.getWidth() / 2) {
+                        textPosition = "right";
+                    } else {
+                        textPosition = "left";
+                    }
+                } else {
+                    textPosition = "top";
+                }
+            }
+            return {
+                type: "circle",
+                shape: {
+                    cx: api.value(6),
+                    cy: api.value(7),
+                    r: api.value(8)
+                },
+                z2: api.value(1) * 2,
+                style: api.style({
+                    stroke: fillObj.borderColor,
+                    fill: fillObj.fillColor,
+                    textPosition: textPosition,
+                    lineWidth: fillObj.borderWidth
+                    //text: nodeName,
+                    // textFont: textFont,
+                    // textDistance : itemLayout.r,
+                }),
+                styleEmphasis: api.style({
+                    textPosition: textPosition,
+                    stroke: fillObj.emphasisBorderColor,
+                    fill: fillObj.emphasisFillColor,
+                    lineWidth: fillObj.emphasisborderWidth
+                })
+            };
+        };
+
+        var root = d3.hierarchy(data)
+                .sum(function (d) {
+                    return d.size;
+                })
+                .sort(function (a, b) {
+                    return b.value - a.value;
+                });
+        d3.pack()
+                .size([240, 260])
+                .padding(0.5)(root);
+        var maxDepth = 0;
+        var nodeAll = root.descendants();
+        var nodes = nodeAll.filter(function (it) {
+            return it.parent;
+        });
+
+        //获取各圆相关数据
+        var seriesData = nodes.map(function (node) {
+            maxDepth = Math.max(maxDepth, node.depth);
+            var color = "#ffffff";
+            node.isLeaf = !node.children || !node.children.length;
+            if (node.depth == 1) {
+                switch (node.data.name) {
+                    case "健康档案数量":
+                        color = "rgba(14, 149, 156, 1)";
+                        break;
+                }
+                return {
+                    value: [
+                        node.value,
+                        node.depth,
+                        node.data.name,
+                        node.data.size,
+                        node.data.add,
+                        node.data.rate,
+                        node.x,
+                        node.y,
+                        node.r,
+                        node.isLeaf
+                    ],
+                    label: {
+                        normal: {
+                            show: true,
+                            color: color,
+                            formatter: function (params) {
+                                return params.value[2] + "\n" + params.value[3]
+                            },
+                            rich: {
+                                type: {
+                                    fontSize: 14,
+                                    color: color
+                                },
+                                numAll: {
+                                    fontSize: 28,
+                                    padding: [5, 0, 5, 0],
+                                    color: color
+                                },
+                                add: {
+                                    fontSize: 14,
+                                    color: color
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (node.data.name == "家庭医生签约" || node.data.name == "慢性病人管理数") {
+                    color = "rgba(222, 0, 155,1)";
+                }
+                return {
+                    value: [
+                        node.value,
+                        node.depth,
+                        node.data.name,
+                        node.data.size,
+                        node.data.add,
+                        node.data.rate,
+                        node.x,
+                        node.y,
+                        node.r,
+                        node.isLeaf
+                    ],
+                    label: {
+                        normal: {
+                            show: true,
+                            color: color,
+                            position: "inside",
+                            formatter: function (params) {
+                                var result = "";
+                                var nodeName = params.value[2];
+                                if (params.value[9]) {
+                                    if (params.value[8] > 10) {
+                                        var trunText = echarts.format.truncateText(nodeName, 2 * params.value[8], {
+                                            fontSize: 14,
+                                            fontFamily: "微软雅黑"
+                                        }, '.');
+                                        if (trunText.indexOf(".") > 0) {
+                                            var strindex1 = nodeName.indexOf("患者");
+                                            var strindex2 = nodeName.indexOf("管理数");
+                                            if (strindex1 > 0) {
+                                                result += "{type|" + nodeName.substring(0, strindex1) + "}";
+                                            } else {
+                                                result += "{type|" + nodeName.substring(0, strindex2) + "}";
+                                            }
+                                        } else {
+                                            result += "{type|" + nodeName + "}";
+                                        }
+                                        if (params.value[8] > 45) {
+                                            result += "\n{num|" + params.value[3] + "}";
+                                        }
+                                    }
+                                } else {
+                                    result += "{type|" + params.value[2] + "}";
+                                }
+                                return result;
+                            },
+                            rich: {
+                                type: {
+                                    fontSize: 12,
+                                    padding: [5, 0, 5, 0],
+                                    color: color
+                                },
+                                num: {
+                                    fontSize: 16,
+                                    color: color
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        //echarts 配置
+        option = {
+            backgroundColor: "transparent",
+            title: {
+//            text: "2017-10",
+                textStyle: {
+//                color: "rgba(164, 159, 159, 0.21)",
+                    fontSize: 16,
+                    fontFamily: "微软雅黑",
+                    fontWeight: "normal"
+                },
+                right: 0,
+                bottom: 0
+            },
+            xAxis: {
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    show: false
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                axisLine: {
+                    show: false
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLabel: {
+                    show: false
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+            tooltip: {
+                backgroundColor: "rgba(50,50,50,0.6)",
+                formatter: function (params) {
+                    var size = ("" + params.value[3]).replace(/\d{1,3}(?=(\d{3})+$)/g, "$&,");
+                    var add = ("" + params.value[4]).replace(/\d{1,3}(?=(\d{3})+$)/g, "$&,");
+                    var result = "<span>" + params.value[2] + "</span><br>" +
+                            "<span style = 'line-height:30px;font-size : 24px;'>" + size + "</span></br>" +
+                            "<div>" +
+                            "<div style = 'float : left; padding-right:20px; border-right: solid 1px #4c4a4a;'>" +
+                            "</div>" +
+                            "<div style = 'float : right; margin-left:20px;'>";
+                    result += "</div>" +
+                            "</div>";
+                    return result;
+                }
+            },
+            series: {
+                type: "custom",
+                renderItem: renderItem,
+                data: seriesData
+            }
+        };
+        myChart.setOption(option);
+    }
+
+    //中国地图
+    function initProvince(provinceData) {
+        var value = [];
+        for(var i in provinceData){
+            var province = provinceData[i];
+            value.push(province.value);
+        }
+        var myChart = echarts.init(document.getElementById('map'), 'macarons');
+        /*var data = [
+         {
+         name: '齐齐哈尔'
+         }, {
+         name: '盐城'
+         }, {
+         name: '青岛'
+         }, {
+         name: '金昌'
+         }, {
+         name: '泉州'
+         }, {
+         name: '拉萨'
+         }, {
+         name: '上海浦东'
+         }, {
+         name: '攀枝花'
+         }, {
+         name: '威海'
+         }, {
+         name: '承德'
+         }, {
+         name: '汕尾'
+         }, {
+         name: '克拉玛依'
+         }, {
+         name: '重庆市'
+         }
+
+         ];
+
+         var geoCoordMap = {
+
+         '齐齐哈尔': [123.97, 47.33],
+         '盐城': [120.13, 33.38],
+         '青岛': [120.33, 36.07],
+         '金昌': [102.188043, 38.520089],
+         '泉州': [118.58, 24.93],
+         '拉萨': [91.11, 29.97],
+         '上海浦东': [121.48, 31.22],
+         '攀枝花': [101.718637, 26.582347],
+         '威海': [122.1, 37.5],
+         '承德': [117.93, 40.97],
+         '汕尾': [115.375279, 22.786211],
+         '克拉玛依': [84.77, 45.59],
+         '重庆市': [108.384366, 30.439702],
+
+         };*/
+        myChart.setOption({
+            series: [{
+                type: 'map',
+                map: 'china'
+            }]
+        });
+
+        option = {
+            title: {
+                sublink: '#',
+                itemGap: 30,
+                left: 'center',
+                textStyle: {
+                    color: '#1a1b4e',
+                    fontStyle: 'normal',
+                    fontWeight: 'bold',
+                    fontSize: 30
+
+                },
+                subtextStyle: {
+                    color: '#58d9df',
+                    fontStyle: 'normal',
+                    fontWeight: 'bold',
+                    fontSize: 16
+                }
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            visualMap: {
+                min: 0,
+                max: Math.max.apply(null, value),
+                left: 'left',
+                top: 'bottom',
+                text: ['高', '低'],
+                calculable: true,
+                inRange: {
+                    color: ['#ffffff', '#E0DAFF', '#ADBFFF', '#9CB4FF', '#6A9DFF', '#3889FF']
+                }
+            },
+            geo: {
+                map: 'china',
+                zoom: 1.2,
+                label: {
+                    normal: {
+
+                        show: true,
+                        color: '#c1c4c8'
+                    },
+                    emphasis: {
+                        show: false,
+                        color: '#292929'
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#fbfbfb',
+                        borderColor: '#b9b4b7'
+
+                    },
+                    emphasis: {
+                        areaColor: '#1e9fff'
+                    }
+                }
+            },
+            series: [{
+                name: '供需占比',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                symbolSize: 10,
+                showEffectOn: 'render',
+                rippleEffect: {
+                    brushType: 'stroke'
+                },
+                hoverAnimation: true,
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#c60fff',
+                        shadowBlur: 10,
+                        shadowColor: '#333'
+                    }
+                }
+            }, {
+                type: 'map',
+                mapType: 'china',
+                geoIndex: 0,
+                label: {
+                    normal: {
+                        show: true
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: provinceData
+            }]
+        };
+        myChart.setOption(option);
+    }
+
+
+
+</script>
+<div id="inDiv" style="display: none">
+    <div class="eui-form eui-padding20">
+        <div class="eui-form-item">
+            <label class="eui-form-label">模板名称</label>
+            <div class="eui-input-block">
+                <input class="eui-input" id="template_name"  placeholder="" type="text">
+            </div>
+        </div>
+    </div>
+</div>
+</html>

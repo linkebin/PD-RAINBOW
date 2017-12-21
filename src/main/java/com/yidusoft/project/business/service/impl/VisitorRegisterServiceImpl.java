@@ -154,7 +154,9 @@ public class VisitorRegisterServiceImpl extends AbstractService<VisitorRegister>
      */
     public Map getMap(Date startTime, Date endTime,String types) {
         Map map = new HashMap<>();
-        map.put("userId",Security.getUserId());
+        if (Security.getUser().getAccountType()==1){
+            map.put("userId",Security.getUserId());
+        }
         map.put("startTime", startTime);
         map.put("endTime", endTime);
         map.put("types", types);
