@@ -223,10 +223,10 @@
                     layer.msg('该套餐已下架！', {});
                     getDoSearchByState();
                 } else {
-                    var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
-                    orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
+                    /*var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
+                    orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);*/
                     var obj = new Object();
-                    obj.orderCode = orderCode;
+                    obj.orderCode = orderOnline.orderCode;
                     obj.total_amount = orderOnline.orderMoney;//金额
                     obj.subject = orderOnline.productName;
                     obj.body = "";

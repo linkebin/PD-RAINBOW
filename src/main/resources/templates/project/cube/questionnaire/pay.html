@@ -55,7 +55,7 @@
             </ul>
             <!--<div class="eui-col-md12 payCode"><img src="/Styles/images/xymfImages/xymf/pay-code.png" alt=""></div>-->
             <div class="eui-col-md12 payCode">
-                <span class="eui-btn eui-btn-big pay-color-yellow ImmediatePay">立即支付</span>
+                <button class="eui-btn eui-btn-big pay-color-yellow ImmediatePay">立即支付</button>
             </div>
         </div>
         <div class="payRight payRight1">
@@ -381,12 +381,16 @@
      *  @param payList
      */
     function getTable(payList) {
+        if(payList.length==0){
+            $('.eui-font24').html("0");
+            $('.ImmediatePay').attr("disabled", "disabled");
+        }
         var tableHtml = '';
         for (var item in payList) {
             var pay = payList[item];
             console.log(pay);
             //初始化
-            if ($('.eui-font24').html() == "") {
+            if (item==0) {
                 $('.eui-font24').html(pay.price + " ");
                 price = pay.price;
                 total = pay.total;
