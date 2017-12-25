@@ -143,8 +143,8 @@
                     required: true,
                 },
                 msgCode: {
-                 required: true,
-                 }
+                    required: true,
+                }
             },
             messages: {
                 fullName: {
@@ -166,8 +166,8 @@
                     required: '请输入活动邀请码',
                 },
                 msgCode: {
-                 required: '请输入手机验证码',
-                 }
+                    required: '请输入手机验证码',
+                }
             },
 
             submitHandler: function () {
@@ -183,10 +183,10 @@
     });
 
     function add(params, obj) {
-        $.post("/sign/check/mobileCode",{mobile:$("#phone").val(),vrifyCode:$('#msgCode').val()},function (res) {
+        $.post("/sign/check/mobileCode", {mobile: $("#phone").val(), vrifyCode: $('#msgCode').val()}, function (res) {
             console.log(res)
-            if(res.code!=200){
-                return layer.msg(res.message,{
+            if (res.code != 200) {
+                return layer.msg(res.message, {
                     icon: 2,
                     time: 1500
                 })
@@ -212,17 +212,31 @@
                             console.log(res)
                             if (res.code == 200) {
                                 if (res.data >= activity.activityTotal) {
-                                    layer.confirm('活动已结束', {
+                                    layer.confirm('参与活动人数已满', {
                                         btn: ['确定']
                                     })
                                 } else {
                                     $.post("/user/questionnaires/detail", {userId: result.data.userId}, function (result) {
                                         if (result.code == 200) {
-                                            if (result.data.questionnairesTotal == 0) {
-                                                return layer.msg("使用卷不足，请联系咨询师！", {
-                                                    icon: 2,
-                                                    time: 2000
-                                                });
+                                            var accountInfo = result.data;
+                                            if (accountInfo.member == 2) {
+                                                //如果不是会员
+                                                if (accountInfo.questionnairesTotal == 0) {
+                                                    return layer.msg("使用卷不足，请联系咨询师！", {
+                                                        icon: 2,
+                                                        time: 2000
+                                                    });
+                                                }
+                                            } else {
+                                                //如果会员过期
+                                                if (new Date() > new Date(accountInfo.endTime)) {
+                                                    if (accountInfo.questionnairesTotal == 0) {
+                                                        return layer.msg("使用卷不足，请联系咨询师！", {
+                                                            icon: 2,
+                                                            time: 2000
+                                                        });
+                                                    }
+                                                }
                                             }
                                             $.post("/active/participant/add", {json: JSON.stringify(obj)}, function (res) {
                                                 console.log(res);
@@ -263,8 +277,8 @@
     //发送手机验证码
     function sendMsgCode(o) {
         var vrifyCode = $('#vrifyCodeIn').val();
-        if(vrifyCode.trim().length==0){
-            return layer.msg("请输入图形验证码",{
+        if (vrifyCode.trim().length == 0) {
+            return layer.msg("请输入图形验证码", {
                 icon: 2,
                 time: 1000
             });
@@ -284,13 +298,13 @@
             dataType: "json",
             success: function (data) {
                 if (data.code == 200) {
-                    layer.msg(data.message,{
+                    layer.msg(data.message, {
                         icon: 1,
                         time: 1500
                     });
                     InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
                 } else {
-                    layer.msg(data.message,{
+                    layer.msg(data.message, {
                         icon: 2,
                         time: 1500
                     });
@@ -299,8 +313,8 @@
                     $("#btnSendCode").removeAttr('disabled')
                             .css("background", "#7dbbfa").css("color", "#fff").removeClass('eui-btn-disabled');
                 }
-            },error:function (data) {
-                layer.msg(data.message,{
+            }, error: function (data) {
+                layer.msg(data.message, {
                     icon: 2,
                     time: 1500
                 });

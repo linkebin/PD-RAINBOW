@@ -7,7 +7,7 @@
  * @returns {number}
  */
 getActiveState = function (params) {
-    //1为正常进行、2为活动结束、3为请求数据异常
+    //1为正常进行、2为活动人数已满、3为请求数据异常、4为活动已结束
     var state = 3;
     $.ajax({
         url: "/launch/activities/getActivityById",
@@ -37,7 +37,7 @@ getActiveState = function (params) {
                         }
                     })
                 }else{
-                    state = 2;
+                    state = 4;
                 }
             }
         }
@@ -87,18 +87,24 @@ submit_Questionnaire=function (array,questionnaireId,userId,visitorTimes,timeCon
                 }
             });
     }else if(flag==2){
-        layer.confirm('活动已结束', {
+        layer.confirm('参与活动人数已满', {
             btn: ['确定']
         });
         layer.close(index);
           $("#submitQuestionnaire").removeAttr("disabled");
 
-      } else{
+      } else if(flag==3){
         layer.msg('提交失败', {
             icon: 2,
             time: 3000
         });
         layer.close(index);
+          $("#submitQuestionnaire").removeAttr("disabled");
+      }else{
+          layer.confirm('活动已结束', {
+              btn: ['确定']
+          });
+          layer.close(index);
           $("#submitQuestionnaire").removeAttr("disabled");
       }
     }else {
