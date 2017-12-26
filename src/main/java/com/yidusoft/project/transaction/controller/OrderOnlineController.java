@@ -133,12 +133,13 @@ public class OrderOnlineController {
         ProductSettings productSettings = productSettingsService.findById(orderOnline.getProductId());
         if (userQuestionnaires != null) {
             if (productSettings.getProductType() == 1) {
-                userQuestionnaires.setMember(2);
                 userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal() + orderOnline.getQuestionnaireTotal());
             } else {
                 Date date = new Date();
                 if(userQuestionnaires.getEndTime()!=null){
-                    date = userQuestionnaires.getEndTime();
+                    if(userQuestionnaires.getEndTime().getTime()>new Date().getTime()){
+                        date = userQuestionnaires.getEndTime();
+                    }
                 }
                 if(userQuestionnaires.getBuyTime()==null){
                     userQuestionnaires.setBuyTime(new Date());
@@ -147,7 +148,6 @@ public class OrderOnlineController {
                 rightNow.setTime(date);
                 rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
                 date = rightNow.getTime();
-                userQuestionnaires.setMember(1);
                 userQuestionnaires.setEndTime(date);
             }
             userQuestionnairesService.update(userQuestionnaires);

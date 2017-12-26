@@ -259,7 +259,10 @@
 
                 submitHandler: function () {
                     $('.saveInfo').text("正在保存中");
-                    $('.saveInfo').attr("disabled",true);
+                    $('.saveInfo').attr("disabled","disabled");
+                    $('.saveInfo').addClass("pay-color-gray");
+                    $('#sub').attr("disabled","disabled");
+                    console.log("111");
                     var obj = $("#activitiesForm").serializeObject();
                     console.log(obj)
                     obj.activityAddr = obj.province + "-" + obj.city + "-" + obj.district + "-" + obj.activityAddr;
@@ -273,6 +276,8 @@
                     if (obj.activityStart > obj.activityEnd) {
                         $('.saveInfo').text("保存信息");
                         $('.saveInfo').removeAttr("disabled");
+                        $('#sub').removeAttr("disabled");
+                        $('.saveInfo').removeClass("pay-color-gray");
                         return layer.msg('活动开始时间不能大于结束时间',{
                             icon: 2,
                             time: 1500
@@ -299,12 +304,12 @@
                                     window.open("/cube/pay/null");
                                 })
                             }
-                            $('.saveInfo').text("保存信息");
-                            $('.saveInfo').removeAttr("disabled");
                         } else {
                             $('.saveInfo').text("保存信息");
                             $('.saveInfo').removeAttr("disabled");
-                            layer.msg(result.message,{
+                            $('.saveInfo').removeClass("pay-color-gray");
+                            $('#sub').removeAttr("disabled");
+                            layer.msg('系统繁忙,请稍后再试！',{
                                 icon: 2,
                                 time: 1500
                             })
@@ -332,9 +337,16 @@
                 } else {
                     add(obj)
                 }
+            }else{
+                layer.msg('系统繁忙,请稍后再试！',{
+                    icon: 2,
+                    time: 1500
+                })
+                $('.saveInfo').text("保存信息");
+                $('.saveInfo').removeAttr("disabled");
+                $('.saveInfo').removeClass("pay-color-gray");
+                $('#sub').removeAttr("disabled");
             }
-            $('.saveInfo').text("保存信息");
-            $('.saveInfo').removeAttr("disabled");
         })
     }
 
@@ -349,13 +361,15 @@
                     window.close();
                 }, 1500)
             } else {
-                layer.msg("添加失败",{
-                    icon :2,
-                    time :1500
-                });
+                $('.saveInfo').text("保存信息");
+                $('.saveInfo').removeAttr("disabled");
+                $('.saveInfo').removeClass("pay-color-gray");
+                $('#sub').removeAttr("disabled");
+                layer.msg('系统繁忙,请稍后再试！',{
+                    icon: 2,
+                    time: 1500
+                })
             }
-            $('.saveInfo').text("保存信息");
-            $('.saveInfo').removeAttr("disabled");
         });
     }
 
