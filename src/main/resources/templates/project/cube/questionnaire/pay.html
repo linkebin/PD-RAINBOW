@@ -159,11 +159,9 @@
             var layer = eui.layer;
             /* var loading = layer.load(0, {shade: false});*/
             $.get("/questionnaire/promotions/getProductAndQuestionPro", function (result) {
-                console.log(result);
                 if (result.code = 200) {
                     productList = result.data.productList;
                     questionList = result.data.questionList;
-                    console.log($('#activityId').val())
                     if ($('#activityId').val() != "null") {
                         $.post("/questionnaire/promotions/getActivityProduct", {id: $('#activityId').val()}, function (result) {
                             console.log(result);
@@ -336,6 +334,7 @@
         $("#pay").html(tableHtml);
         $("#pay li").click(function (event) {
             $(this).addClass('payTicket1').siblings().removeClass('payTicket1');
+            $(this).addClass('payment').siblings().removeClass('payment');
             var str = (event.delegateTarget.innerText).toString();
             if (str.indexOf("买送") != -1) {
                 str = str.substring(str.indexOf("送") + 1, str.indexOf("元/"));
@@ -362,7 +361,6 @@
                 } else {
                     total = strTotal;
                 }
-                console.log(total);
             }
             $('.money').html(str);
             var send = event.currentTarget.children[1].value;
@@ -387,7 +385,6 @@
         var tableHtml = '';
         for (var item in payList) {
             var pay = payList[item];
-            console.log(pay);
             //初始化
             if (item==0) {
                 $('.money').html(pay.price + " ");
@@ -426,7 +423,7 @@
                 }
                 continue;
             }
-            tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24 payment">' +
+            tableHtml += '<li class="eui-float-left payTicket0 eui-lineHeight24 ">' +
                     '<input type="hidden" class="productId" value="' + pay.productId + '"/>' +
                     '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                     message +
@@ -453,26 +450,24 @@
             questionnaire_total: total,//问卷购买数量
             order_money: price//应付金额
         }
-        var promotionId = "";
+        /*var promotionId = "";*/
         $(".payment").each(function (index) {
             console.log($(this).children());
             if (index == 0) {
-                promotionId = $(this).children()[7].value;//活动id
-                console.log($(this).children()[7].value);
+                /*promotionId = $(this).children()[6].value;//活动id
+                console.log($(this).children()[6].value);*/
                 orderOnline.product_id = $(this).children()[0].value;//所属产品
             } else {
                 //支付方式
                 orderOnline.payment_method = $(this).children()[0].value;
             }
         })
-        console.log(orderOnline);
         var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
         orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
         $.post("/order/online/add", {
             onlineJson: JSON.stringify(orderOnline),
             orderCode: orderCode
         }, function (result) {
-            console.log(result);
             if (result.code = 200) {
                 $.post("/product/settings/detail", {id: orderOnline.product_id}, function (res) {
                     if (res.code == 200) {
@@ -482,6 +477,7 @@
                         obj.total_amount = price;//金额
                         obj.subject = product.productName;
                         obj.body = "";
+                        console.log(obj);
                         /*window.location.href = "/cube/order";*/
                         //支付宝支付请求
                         $.ajax({
