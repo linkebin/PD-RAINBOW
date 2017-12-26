@@ -446,6 +446,7 @@
      * 在线下单
      */
     $('.ImmediatePay').click(function () {
+        $('.ImmediatePay').attr("disabled","disabled");
         var orderOnline = {
             questionnaire_total: total,//问卷购买数量
             order_money: price//应付金额
@@ -457,8 +458,11 @@
                 /*promotionId = $(this).children()[6].value;//活动id
                 console.log($(this).children()[6].value);*/
                 orderOnline.product_id = $(this).children()[0].value;//所属产品
-            } else {
-                //支付方式
+            }
+        })
+
+        $(".payTicket1").each(function (index) {
+            if(index==2){
                 orderOnline.payment_method = $(this).children()[0].value;
             }
         })
@@ -495,6 +499,8 @@
                         });
                     }
                 })
+            }else{
+                $('.ImmediatePay').removeAttr("disabled");
             }
         })
     })

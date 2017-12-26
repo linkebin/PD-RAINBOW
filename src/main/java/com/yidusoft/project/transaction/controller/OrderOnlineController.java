@@ -129,6 +129,7 @@ public class OrderOnlineController {
         orderOnline.setPaymentTime(new Date());
         orderOnline.setSerialNumber(serialNumber);
         orderOnlineService.update(orderOnline);
+        Date buyDate = new Date();
         UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
         ProductSettings productSettings = productSettingsService.findById(orderOnline.getProductId());
         if (userQuestionnaires != null) {
@@ -149,6 +150,7 @@ public class OrderOnlineController {
                 rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
                 date = rightNow.getTime();
                 userQuestionnaires.setEndTime(date);
+                userQuestionnaires.setMember(1);
             }
             userQuestionnairesService.update(userQuestionnaires);
         } else {
@@ -156,6 +158,7 @@ public class OrderOnlineController {
             userQuestionnaire.setId(UUID.randomUUID().toString());
             userQuestionnaire.setUserId(orderOnline.getUserId());
             userQuestionnaire.setQuestionnairesCumulativeTotal(0);
+            userQuestionnaire.setQuestionnairesTotal(0);
             if (productSettings.getProductType() == 1) {
                 userQuestionnaire.setMember(2);
                 userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
@@ -165,7 +168,7 @@ public class OrderOnlineController {
                 rightNow.setTime(date);
                 rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
                 date = rightNow.getTime();
-                userQuestionnaire.setBuyTime(new Date());
+                userQuestionnaire.setBuyTime(buyDate);
                 userQuestionnaire.setMember(1);
                 userQuestionnaire.setEndTime(date);
             }
@@ -177,7 +180,7 @@ public class OrderOnlineController {
         AccountInfo accountInfo = new AccountInfo();
         accountInfo.setId(UUID.randomUUID().toString());
         accountInfo.setSerialNumber(orderCode);
-        accountInfo.setAccountDate(new Date());
+        accountInfo.setAccountDate(buyDate);
         accountInfo.setAccountRemarks("购买了"+productSettings.getProductName());
         String buyTotal = orderOnline.getQuestionnaireTotal().toString()+"个月";
         if(productSettings.getProductType()==1){

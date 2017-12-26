@@ -116,7 +116,7 @@
                             <input type="text" class="eui-input" readonly="readonly" name="activityEnd">
                         </div>
                     </div>
-                    <div class="eui-form-item">
+                    <div class="eui-form-item" id="pornAndUrl">
                         <label class="eui-form-label">活动邀请码</label>
                         <div class="eui-input-inline">
                             <input type="text" class="eui-input" readonly name="activityPorn">
@@ -183,7 +183,7 @@
 
 <div class="xymfFooter">
     <!-- 底部固定区域 -->
-    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+    ? 2017 广州市易度软件开发有限公司旗下心云魔方品牌
 </div>
 
 
@@ -271,7 +271,7 @@
                     '<td>' + participant.age + '岁</td>' +
                     '<td>' + new Date(participant.fillingTime).Format("yyyy-MM-dd hh:mm:ss") + '</td>' +
                     /*'<td>'+
-                    '</td>' +*/
+                     '</td>' +*/
                     '<td>' +
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看填报详情" onclick="check(' + id + ',' + createTime + ')"><i class="eui-icon">&#xe621;</i></button>' +
                     '</td>' +
@@ -279,6 +279,7 @@
         }
         return tableHtml;
     }
+    //默认隐藏活动邀请码和活动填报网址
     //获取活动详情
     function detail() {
         var index = layer.load(0, {shade: false}); //加载
@@ -299,6 +300,11 @@
 
                 $('#district').val(district);
                 $('#district').trigger("change");
+                if(activity.initiatorType==3){
+                    if(activity.activityStatus==1){
+                        $('#pornAndUrl').hide();
+                    }
+                }
                 $("#activityForm").setForm(result.data)
                 $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));

@@ -216,47 +216,40 @@
                                         btn: ['确定']
                                     })
                                 } else {
-                                    $.post("/user/questionnaires/detail", {userId: result.data.userId}, function (result) {
-                                        if (result.code == 200) {
-                                            var accountInfo = result.data;
-                                            if (accountInfo.member == 2) {
-                                                //如果不是会员
-                                                if (accountInfo.questionnairesTotal == 0) {
-                                                    return layer.msg("使用卷不足，请联系咨询师！", {
-                                                        icon: 2,
-                                                        time: 2000
-                                                    });
-                                                }
-                                            } else {
-                                                //如果会员过期
-                                                if (new Date() > new Date(accountInfo.endTime)) {
+                                    if (activity.initiatorType == 3) {
+                                        addActivity(obj, activity);
+                                    } else {
+                                        $.post("/user/questionnaires/detail", {userId: result.data.userId}, function (result) {
+                                            if (result.code == 200) {
+                                                var accountInfo = result.data;
+                                                if (accountInfo.member == 2) {
+                                                    //如果不是会员
                                                     if (accountInfo.questionnairesTotal == 0) {
                                                         return layer.msg("使用卷不足，请联系咨询师！", {
                                                             icon: 2,
                                                             time: 2000
                                                         });
                                                     }
-                                                }
-                                            }
-                                            $.post("/active/participant/add", {json: JSON.stringify(obj)}, function (res) {
-                                                console.log(res);
-                                                if (res.code == 200) {
-                                                    var time = new Date().Format("yyyy-MM-dd");
-                                                    window.location.href = "/web/cube/getQuestionnaireFillIn?questionnaireId=" + activity.uestionnaireId + "&userId=" + res.data.id + "&visitorTimes=" + time + "&activityId=" + activity.id + "&userName=" + res.data.fullName;
                                                 } else {
-                                                    layer.msg(res.message, {
-                                                        icon: 2,
-                                                        time: 1500
-                                                    })
+                                                    //如果会员过期
+                                                    if (new Date() > new Date(accountInfo.endTime)) {
+                                                        if (accountInfo.questionnairesTotal == 0) {
+                                                            return layer.msg("使用卷不足，请联系咨询师！", {
+                                                                icon: 2,
+                                                                time: 2000
+                                                            });
+                                                        }
+                                                    }
                                                 }
-                                            })
-                                        } else {
-                                            layer.msg(res.message, {
-                                                icon: 2,
-                                                time: 1500
-                                            })
-                                        }
-                                    })
+                                                addActivity(obj, activity);
+                                            } else {
+                                                layer.msg(res.message, {
+                                                    icon: 2,
+                                                    time: 1500
+                                                })
+                                            }
+                                        })
+                                    }
                                 }
                             }
                         })
@@ -267,6 +260,24 @@
                     }
                 }
             })
+        })
+    }
+
+    /**
+     * 添加填报人信息
+     */
+    function addActivity(obj, activity) {
+        $.post("/active/participant/add", {json: JSON.stringify(obj)}, function (res) {
+            console.log(res);
+            if (res.code == 200) {
+                var time = new Date().Format("yyyy-MM-dd");
+                window.location.href = "/web/cube/getQuestionnaireFillIn?questionnaireId=" + activity.uestionnaireId + "&userId=" + res.data.id + "&visitorTimes=" + time + "&activityId=" + activity.id + "&userName=" + res.data.fullName;
+            } else {
+                layer.msg(res.message, {
+                    icon: 2,
+                    time: 1500
+                })
+            }
         })
     }
 
