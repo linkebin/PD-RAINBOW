@@ -121,14 +121,15 @@
     }
 
     function newTab() {
-        if(parent.$(".eui-tab-title li[e-id='xdcvb']").length<=0) {
-            parent.element.tabAdd("nav-tab", {
-                title:'新建规则'
-                ,content: '<iframe frameborder=0' +
-                ' class="contentIframe" src="/web/channel/manage/rulechannel"></iframe>'
-                ,id: 'xdcvb'
-            });
+        if(parent.$(".eui-tab-title li[e-id='xdcvb']").length>0) {
+            parent.element.tabDelete("nav-tab", 'xdcvb');
         }
+        parent.element.tabAdd("nav-tab", {
+            title:'新建规则'
+            ,content: '<iframe frameborder=0' +
+            ' class="contentIframe" src="/web/channel/manage/rulechannel"></iframe>'
+            ,id: 'xdcvb'
+        });
         parent.element.tabChange("nav-tab", 'xdcvb');
     }
     parent.element.on('tab(nav-tab)', function(elem){

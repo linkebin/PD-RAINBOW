@@ -171,6 +171,9 @@
             var layEvent = obj.event; //获得 lay-event 对应的值
             var tr = obj.tr; //获得当前行 tr 的DOM对象
             if(layEvent === 'edit'){ //编辑
+                if(parent.$(".eui-tab-title li[e-id='zxs']").length>0) {
+                    parent.element.tabDelete("nav-tab", "zxs");
+                }
                 parent.element.tabAdd("nav-tab", {
                     title:"咨询师信息"
                     ,content: '<iframe frameborder=0 class="contentIframe" src="/web/channel/manage/counselorInfo?id='+data.ID_+'"></iframe>'

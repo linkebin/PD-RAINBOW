@@ -6,13 +6,11 @@ import com.yidusoft.project.questionnaire.domain.*;
 import com.yidusoft.project.questionnaire.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -135,10 +133,14 @@ public class WebQuestionnaireController {
             //获取问题答案
             List<List<String>> answers = questionnaireAnswerService.getAnswers(questionnaireQuestions);
 
+            //获取问卷名称
+           String gaugeName = questionnaire.getGaugeName();
+
             model.addAttribute("optionAnswers", optionAnswers);
             model.addAttribute("questionlist", questionlist);
             model.addAttribute("questionnaireQuestionSize", questionnaireQuestionSize);
             model.addAttribute("scoreList", answers);
+            model.addAttribute("gaugeName", gaugeName);
             return "project/questionnaire/questionnairePreview/questionnaire_horizontal_preview";
 
         }else if(("生活事件量表(LES)").equals(questionnaire.getGaugeName())){

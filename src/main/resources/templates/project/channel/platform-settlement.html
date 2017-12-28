@@ -183,6 +183,7 @@
                                 $.post('/platform/settlement/payment',{json:JSON.stringify(obj)},function (result) {
                                     if (result.code==200){
                                         layer.closeAll();
+                                        dynamicTable(leftObj);
                                     }
                                     layer.msg(result.message);
                                 });
