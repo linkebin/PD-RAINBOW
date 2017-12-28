@@ -127,9 +127,9 @@
         $('.payRight2').hide();
         $(".send").html("");
         if ($('#activityId').val() != "null") {
-            initActivity(activityList,2);
-        }else{
-            pay(productList,questionList,2)
+            initActivity(activityList, 2);
+        } else {
+            pay(productList, questionList, 2)
         }
     })
 
@@ -139,9 +139,9 @@
         init(1);
         $(".send").html("");
         if ($('#activityId').val() != "null") {
-            initActivity(activityList,1);
-        }else{
-            pay(productList,questionList,1)
+            initActivity(activityList, 1);
+        } else {
+            pay(productList, questionList, 1)
         }
     })
 
@@ -152,8 +152,8 @@
     $(function () {
         init(2);
     })
-    var activityList=[];
-    var productList, questionList=[]
+    var activityList = [];
+    var productList, questionList = []
     function init(type) {
         eui.use('layer', function () {
             var layer = eui.layer;
@@ -172,7 +172,7 @@
                                     $('#questionTicket').addClass("payTicket1");
                                     $('.payRight2').show();
                                     $('.payRight1').hide();
-                                    type=1
+                                    type = 1
                                 }
                                 initActivity(result.data, type)
                             }
@@ -192,6 +192,8 @@
             var promotion = productList[index];
             var product = promotion.productSettings;
             if (promotion.promotionsType == 2 && product.productType == 2) {
+                total = 0;
+                price = 0;
                 continue;
             }
             var pro = {
@@ -343,6 +345,7 @@
             }
             price = parseFloat(str);
             total = (event.delegateTarget.innerText).toString();
+            console.log(total);
             if (total.indexOf('张') != -1) {
                 var strTotal;
                 strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
@@ -379,14 +382,14 @@
      *  @param payList
      */
     function getTable(payList) {
-        if(payList.length==0){
+        if (payList.length == 0) {
             $('.money').html("0");
         }
         var tableHtml = '';
         for (var item in payList) {
             var pay = payList[item];
             //初始化
-            if (item==0) {
+            if (item == 0) {
                 $('.money').html(pay.price + " ");
                 price = pay.price;
                 total = pay.total;
@@ -418,7 +421,7 @@
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>';
-                if((parseInt(item) + 1) == payList.length){
+                if ((parseInt(item) + 1) == payList.length) {
                     tableHtml += '<br><br>';
                 }
                 continue;
@@ -446,32 +449,39 @@
      * 在线下单
      */
     $('.ImmediatePay').click(function () {
-        $('.ImmediatePay').attr("disabled","disabled");
+        $('.ImmediatePay').attr("disabled", "disabled");
+        var strTotal = total;
+        if (total.toString().indexOf('+') != -1) {
+            total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
+            total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
+        }
+        console.log(total);
+        console.log(price)
         var orderOnline = {
             questionnaire_total: total,//问卷购买数量
             order_money: price//应付金额
         }
         /*var promotionId = "";*/
         $(".payment").each(function (index) {
-            console.log($(this).children());
             if (index == 0) {
                 /*promotionId = $(this).children()[6].value;//活动id
-                console.log($(this).children()[6].value);*/
+                 console.log($(this).children()[6].value);*/
                 orderOnline.product_id = $(this).children()[0].value;//所属产品
             }
         })
-
         $(".payTicket1").each(function (index) {
-            if(index==2){
+            if (index == 2) {
                 orderOnline.payment_method = $(this).children()[0].value;
             }
         })
+        $('.ImmediatePay').removeAttr("disabled");
         var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
         orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
         $.post("/order/online/add", {
             onlineJson: JSON.stringify(orderOnline),
             orderCode: orderCode
         }, function (result) {
+            console.log(result);
             if (result.code = 200) {
                 $.post("/product/settings/detail", {id: orderOnline.product_id}, function (res) {
                     if (res.code == 200) {
@@ -499,7 +509,7 @@
                         });
                     }
                 })
-            }else{
+            } else {
                 $('.ImmediatePay').removeAttr("disabled");
             }
         })

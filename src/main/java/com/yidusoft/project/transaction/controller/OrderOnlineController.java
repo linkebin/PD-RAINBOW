@@ -143,7 +143,7 @@ public class OrderOnlineController {
                     }
                 }
                 if(userQuestionnaires.getBuyTime()==null){
-                    userQuestionnaires.setBuyTime(new Date());
+                    userQuestionnaires.setBuyTime(buyDate);
                 }
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(date);

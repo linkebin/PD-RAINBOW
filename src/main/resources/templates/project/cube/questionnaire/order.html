@@ -173,7 +173,7 @@
                 continue;
             }
             tableHtml += '<td class="eui-textAlignC">' +
-                    '<span class="eui-btn eui-btn-normal" onclick="payment(' + id + ')">立即付款</span>' +
+                    '<button class="eui-btn eui-btn-normal payment" onclick="payment(' + id + ')">立即付款</button>' +
                     '<br>' +
                     '<div class="eui-color-blue eui-marginT5" onclick="cancelOrder(' + id + ',' + "'cancel'" + ')">取消订单</div>' +
                     '</td>' +
@@ -215,12 +215,17 @@
      * @param id
      */
     function payment(id) {
+        $('.payment').attr("disabled","disabled");
         $.post("/order/online/getState", {id: id}, function (result) {
             console.log(result);
-            if (result.message = "success") {
+            if (result.code = 200) {
                 var orderOnline = result.data;
                 if (orderOnline.orderState == 3) {
-                    layer.msg('该套餐已下架！', {});
+                    layer.msg('该套餐已下架！', {
+                        icon: 2,
+                        time: 1500
+                    });
+                    $('.payment').removeAttr("disabled");
                     getDoSearchByState();
                 } else {
                     /*var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
@@ -239,13 +244,18 @@
                         dataType: 'html',//支付宝接口响应支付表单字符串
                         success: function (data) {
                             console.log(data);
+                            $('.payment').removeAttr("disabled");
                             //将响应回来的支付表单插入html，保证此表单为第一表单，以完成表单的默认提交
                             $("#alipayResultForm").append(data);
                         }
                     });
                 }
             } else {
-                layer.msg(result.message, {});
+                $('.payment').removeAttr("disabled");
+                layer.msg('系统繁忙，请稍后再试！', {
+                    icon: 2,
+                    time: 1500
+                });
             }
         })
     }

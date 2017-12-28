@@ -244,14 +244,15 @@
         console.log(params);
         $.post(url, {"productJson": JSON.stringify(params)}, function (result) {
             if (result.code == 200) {
+                layer.closeAll();
                 layer.msg('操作成功！', {
                     icon: 1,
-                    time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                    time: 1500 //1秒关闭（如果不配置，默认是3秒）
                 });
                 $(".taskFiltrate").hide();
                 setTimeout(function () {
                     doSearch();
-                }, 1000);
+                }, 1500);
             } else {
                 layer.msg('操作失败！', {
                     icon: 2,
