@@ -365,6 +365,7 @@
     function add(obj) {
         $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
             if (result.code == 200) {
+                
                 layer.msg("操作成功", {
                     icon: 1,
                     time: 1500
