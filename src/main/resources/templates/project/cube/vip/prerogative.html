@@ -18,7 +18,7 @@
 
                 <div class="visitorTitle eui-font22">我的特权</div>
                 <div class="eui-marginL20">
-                    <div class="eui-row eui-marginT20">
+                    <div class="eui-row eui-marginT20" id="no">
                         <div class="eui-col-xs9">
                             <div class="eui-font20 eui-color-blue">
                                 <img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""> 您还不是会员
@@ -28,9 +28,19 @@
                             <a href="/cube/pay/null" class="eui-btn eui-btn-normal">开通会员</a>
                         </div>
                     </div>
+                    <div class="eui-row eui-marginT20" id="end">
+                        <div class="eui-col-xs9">
+                            <div class="eui-font20 eui-color-blue">
+                                <img src="/Styles/images/xymfImages/xymf/vip0.png" alt=""> 您的会员已到期
+                            </div>
+                        </div>
+                        <div class="eui-col-xs3">
+                            <a href="/cube/pay/null" class="eui-btn eui-btn-normal">会员续费</a>
+                        </div>
+                    </div>
                     <div class="eui-row  eui-marginT10">
                             <div class="eui-col-xs9">
-                                <div class="eui-font14  eui-color-gray3">开通年费会员，即可享受六大特权</div>
+                                <div class="eui-font14  eui-color-gray3">开通年费会员，享受六大特权</div>
                             </div>
                             <div class="eui-col-xs3">
                                 <div class="eui-font14 eui-marginL10 eui-color-blue">每天仅需5毛钱</div>
@@ -68,5 +78,29 @@
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <script type="text/javascript" th:src="@{/Scripts/cube/header.js}"></script>
 <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script th:inline="javaScript">
+var isVip =[[${isVip}]];
+var isEnd =[[${isEnd}]];
+$(function () {
+    if(isVip){
+        if(isEnd){
+            $("#no").addClass("eui-hide");
+            $("#end").addClass("eui-show");
+        }else{
+            $("#no").addClass("eui-hide");
+            $("#end").addClass("eui-hide");
+        }
+    }else{
+
+        $("#no").addClass("eui-show");
+        $("#end").addClass("eui-hide");
+
+    }
+})
+
+
+
+
+</script>
 </body>
 </html>

@@ -180,14 +180,15 @@
     });
 
     function loadOneData(id) {
-        if(parent.$(".eui-tab-title li[e-id='xdfvvv']").length<=0) {
-            parent.element.tabAdd("nav-tab", {
-                title:'修改规则'
-                ,content: '<iframe frameborder=0' +
-                ' class="contentIframe" src="/web/channel/manage/rulechannelupdate?id='+id+'"></iframe>'
-                ,id: 'xdfvvv'
-            });
+        if(parent.$(".eui-tab-title li[e-id='xdfvvv']").length>0) {
+            parent.element.tabDelete("nav-tab", 'xdfvvv');
         }
+        parent.element.tabAdd("nav-tab", {
+            title:'修改规则'
+            ,content: '<iframe frameborder=0' +
+            ' class="contentIframe" src="/web/channel/manage/rulechannelupdate?id='+id+'"></iframe>'
+            ,id: 'xdfvvv'
+        });
         parent.element.tabChange("nav-tab", 'xdfvvv');
     }
     //加载数据

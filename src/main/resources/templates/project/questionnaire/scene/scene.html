@@ -260,18 +260,17 @@ var title = '';
 
 
     //滑出菜单
-    function openTab() {
+    function openTab(t) {
         //滑出菜单
 
         resetAddOrUpdateForm();
 //
 //        $(".taskFiltrate").show();
 //        $(".filtrateIn").animate({right: '0'}, 400);
-        if ($("[name='id']").val() == '') {
-            //addQuestionnaireScene();
-           title = '添加场景';
-        }else{
+        if (t) {
             title = '修改场景';
+        }else{
+            title = '添加场景';
         }
         eui.use(['form','layer'], function() { //独立版的layer无需执行这一句
             var $ = eui.jquery,
@@ -525,7 +524,7 @@ var title = '';
                 $("#upOrAddTag").text("修改场景");
 //                $(".taskFiltrate").show();
 //                $(".filtrateIn").animate({right: '0'}, 400);
-openTab();
+                openTab(true);
                 $("[name='id']").val(scene.id);
                 $("[name='createTime']").val(format(scene.createTime));
                 $("[name='creator']").val(scene.creator);
