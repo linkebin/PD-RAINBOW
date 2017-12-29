@@ -212,8 +212,9 @@ public class VisitingRecordController {
         VisitingRecord visitingRecord = visitingRecordService.findById(id);
 
         SelectOption selectOption = selectOptionService.findById(visitingRecord.getVisitorGoal());
-        visitingRecord.setVisitorGoal(selectOption.getOptionValue());
-
+        if(selectOption!=null){
+         visitingRecord.setVisitorGoal(selectOption.getOptionValue());
+        }
         VisitingRecordFile visitingRecordFile = new VisitingRecordFile();
         visitingRecordFile.setCreator(Security.getUserId());
 

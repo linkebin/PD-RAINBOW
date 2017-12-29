@@ -270,18 +270,20 @@
     }
 
     function resultHint(resuslt) {
+        layer.closeAll();
         var msg = resuslt.message;
         if(msg=="SUCCESS"){
             layer.msg('保存成功', {
                 icon: 1,
                 time: 4000
             });
+            window.close();
         }else{
             layer.msg(msg, {
                 time: 4000
             });
         }
-        layer.closeAll();
+
     }
 
 
