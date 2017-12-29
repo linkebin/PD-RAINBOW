@@ -80,7 +80,15 @@ public class QuestionnairePromotionsController {
         promotions.setCreator(Security.getUser().getUserName());
         promotions.setCreateTime(new Date());
         promotions.setDeleted(0);
-        promotions.setPromotionsState(1);
+
+        if(promotions.getPromotionsEnd().before(new Date())){
+            return ResultGenerator.genFailResult("活动结束时间小于当前时间");
+        }else if(promotions.getPromotionsStart().before(new Date()) && new Date().before(promotions.getPromotionsEnd())) {
+            promotions.setPromotionsState(2);
+        }else {
+            promotions.setPromotionsState(1);
+        }
+
         if(promotions.getPromotionsType()==1){
             promotions.setPromotionsBuySend(0);
         }else{

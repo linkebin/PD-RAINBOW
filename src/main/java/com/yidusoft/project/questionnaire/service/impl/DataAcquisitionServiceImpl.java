@@ -87,11 +87,14 @@ public class DataAcquisitionServiceImpl extends AbstractService<DataAcquisition>
         //来访总次数
         int visitingTotal= visitingRecordService.getVisitingTotal(userId);
         List<DataAcquisition>  questionnaireList= dataAcquisitionMapper.findQuestionnaireForVisitorAll(userId);
+        //查询用户的最近一次来访 和第一次来访时间
+        List<Map<String,Object>>  visitorTime=dataAcquisitionMapper.findVisitorTime(userId);
         Map<String,Object> map=new HashMap<>();
         map.put("dataAcquisitions",dataAcquisitions);
         map.put("questionnaireList",questionnaireList);
         map.put("dataAcquisitionTotal",dataAcquisitionTotal);
         map.put("visitingTotal",visitingTotal);
+        map.put("visitorTime",visitorTime);
         return ResultGenerator.genSuccessResult(map);
     }
     //保留两位小数 不四舍五入

@@ -20,7 +20,7 @@
                     </div>
                     <div class="eui-marginT20 eui-form">
                         <select name="template" id="template" e-verify="required" e-filter="template">
-                            <option value="010" selected="">请选择模版</option>
+                            <option value="" selected="">请选择模版</option>
                         </select>
                     </div>
                 </div>
@@ -29,10 +29,20 @@
                         <div class="eui-form-item chartsTitle">
                             <label class="eui-form-label eui-textAlignL">来访目的</label>
                             <div class="eui-input-block eui-textAlignR eui-paddingR10">
-                                <input type="checkbox" e-skin="primary" title="" checked="">
+                                <input type="checkbox" e-skin="primary" title="" e-filter="Invert" checked="">
                             </div>
                         </div>
-                        <ul class="chartsContent" id="type">
+                        <ul class="chartsContent">
+                            <th:block th:each="category:${selectOptionList}">
+                                <li class="eui-form-item">
+                                    <label th:text="${category.optionName}" class="eui-col-md10 eui-paddingT10 eui-textAlignL"></label>
+                                    <div class="eui-col-md2 eui-textAlignR eui-paddingR10">
+                                        <input type="checkbox" name="visitor_goal" e-skin="primary"  th:value="${category.optionId}" checked=""
+                                               e-filter="allChoose">
+                                    </div>
+                                </li>
+                            </th:block>
+
                         </ul>
                     </li>
                     <li>
@@ -226,8 +236,8 @@
             </div>
         </div>
         <div class="eui-mn1">
-            <div class="eui-mn1-type3">
-                <div class="eui-row eui-form">
+            <div  class="eui-mn1-type3">
+                <div id="scr" class="eui-row eui-form">
                     <label class="eui-col-md1 eui-form-label">时间：</label>
                     <div class="eui-col-md3">
                         <select name="city" e-verify="required" e-filter="selected">
@@ -301,11 +311,14 @@
                                     <th>排名</th>
                                     <th>来访目的</th>
                                     <th>来访次数/占比</th>
-                                    <!--<th>同比</th>
-                                    <th>环比</th>-->
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <th>排名</th>
+                                        <th>来访目的</th>
+                                        <th>来访次数/占比</th>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -388,7 +401,6 @@
 <script src="/Scripts/date2format.js" type="text/javascript"></script>
 
 <script>
-    var typeSum = 0;//计算初始化的次数
     var nowDate = new Date();
     nowDate.setDate(nowDate.getDate() - 7);
     var endDate = new Date();
@@ -440,6 +452,10 @@
         form.on('checkbox(allChoose)', function (data) {
             doSearch();
         })
+
+        form.on('checkbox(Invert)', function (data) {
+//            alert(1)
+        })
     })
 
     //获取字符串的位置
@@ -458,8 +474,10 @@
     })
     var statusIds = '';
     var beliefIds = '';
-    var sex = 0;
-    var typeIds = '';
+    var sex = '';
+    var ageGroupsIds = '';
+    var goalIds = '';
+    var timeInterval = '';
     function doSearch() {
         eui.use(['element'], function () {
             var element = eui.element;
@@ -468,16 +486,29 @@
             $('.manPercent').text('0%');
             $('.women').text(0);
             $('.womenPercent').text('0%');
-            /*eui.use(['element'], function () {
-             var element = eui.element;*/
-            var sexArray = new Array();
-            var s = 0;
-            $(".sex:checked").each(function (i) {
-                var id = $(this).parent().find("input[name='sex']").val();
-                sexArray[s] = id;
-                sex = id;
-                s++;
+
+            var goalArray = new Array();
+
+            $('input[name="visitor_goal"]:checked').each(function (i) {
+                var id = $(this).val();
+                goalArray[i] = id;
             });
+            goalIds = goalArray.join(",");
+
+            var sexArray = new Array();
+
+            $('input[name="sex"]:checked').each(function (i) {
+                var id = $(this).val();
+                sexArray[i] = id;
+            });
+            sex = sexArray.join(",");
+
+            var ageGroupArray = new Array();
+            $('input[name="age"]:checked').each(function (i) {
+                var ages = $(this).parent().find("input[name='age']").val();
+                ageGroupArray[i] = ages;
+            })
+            ageGroupsIds = ageGroupArray.join(",");
 
             var beliefArray = new Array();
             $('input[name="belief"]:checked').each(function (i) {
@@ -486,6 +517,7 @@
             })
             beliefIds = beliefArray.join(",");
 
+            //婚姻
             var statusArray = new Array();
             $('input[name="maritalStatus"]:checked').each(function (i) {
                 var maritalStatus = $(this).parent().find("input[name='maritalStatus']").val();
@@ -493,38 +525,19 @@
             })
             statusIds = statusArray.join(",");
 
-            var typeArray = new Array();
-            $('input[name="type"]:checked').each(function (i) {
-                var type = $(this).parent().find("input[name='type']").val();
-                typeArray[i] = type;
-            })
-
-            typeIds = typeArray.join(",");
-
-            if (sexArray.length == 2) {
-                sex = '';
-            }
-            if (sexArray.length == 0) {
-                sex = 3;
-            } else if (statusArray.length == 0) {
-                return;
-            } else if (beliefArray.length == 0) {
-                return;
-            }
             $.post("/visitor/register/getCount", {
                 startTime: nowDate,
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
-                belief: beliefIds
+                belief: beliefIds,
+                goalIds:goalIds,
+                ageGroupsIds:ageGroupsIds
             }, function (result) {
-                console.log("基本信息");
-                console.log(result);
                 if (result.code = 200) {
                     var manSum = 0;
                     var womenSum = 0;
                     var resuliList = result.data
-                    var registerList = countAge(resuliList);
                     var value = [0, 0, 0, 0, 0, 0, 0];
                     var data = [0, 0, 0, 0, 0, 0, 0];
                     var statusData = [
@@ -535,8 +548,8 @@
                         {"name": "离婚独居", "size": 0, "add": "11", "rate": "13%"},
                         {"name": "丧偶独居", "size": 0, "add": "11", "rate": "13%"},
                     ]
-                    for (var i in registerList) {
-                        var register = registerList[i];
+                    for (var i in resuliList) {
+                        var register = resuliList[i];
                         if (register.sex == 1) {
                             manSum++;
                         } else {
@@ -578,6 +591,8 @@
                             data[6]++;
                         }
 
+
+
                         //婚姻状况分布
                         var status = register.maritalStatus;
                         if (status == 1) {
@@ -596,14 +611,13 @@
                     }
                     var manPercent = '';
                     var womenPercent = '';
-                    if (registerList.length != 0) {
-                        manPercent = ((manSum / registerList.length) * 100).toFixed(1) + "%";
-                        womenPercent = ((womenSum / registerList.length) * 100).toFixed(1) + "%";
+                    if (resuliList.length != 0) {
+                        manPercent = ((manSum / resuliList.length) * 100).toFixed(1) + "%";
+                        womenPercent = ((womenSum / resuliList.length) * 100).toFixed(1) + "%";
                     } else {
                         manPercent = '0%'
                         womenPercent = '0%'
                     }
-
                     init(value);//学历分布
                     religiousBelief(data);//宗教信仰分布
                     var marryData = [];
@@ -612,7 +626,8 @@
                             marryData.push(statusData[i]);
                         }
                     }
-                    ageList(registerList);//计算年龄分布
+                    ageList(resuliList);//计算年龄分布
+
                     marry(marryData);//初始化婚姻状况
                     $('.man').text(manSum+"人");
                     $('.manPercent').text(manPercent);
@@ -623,9 +638,8 @@
                     for (i; i <= 6; i++) {
                         var html = '';
                         html = '<ul class="sexSpread">';
-                        var percent = ((manSum / registerList.length) * 100).toFixed(1)
+                        var percent = ((manSum / resuliList.length) * 100).toFixed(1)
                         var length = parseInt(percent / 5);
-//                        console.log(length+","+percent);
                         if (percent > 0 && percent <= 5) {
                             length = 1;
                         }
@@ -644,113 +658,58 @@
                         time: 1500
                     })
                 }
-            })
-            $.post("/visitor/register/getQuestionCount", {
-                startTime: nowDate,
-                endTime: endDate,
-                sex: sex,
-                maritalStatus: statusIds,
-                belief: beliefIds,
-                questionName: typeIds,
-                type: 'type'
-            }, function (result) {
-                console.log(result);
-                if (result.code == 200) {
-                    var thisYearList = countAge(result.data.thisYearList);
-                    var countSum = getCountSum(thisYearList);//问卷总数
-                    typeSum++;//表示刷新数据次数+1
-                    for (var j in thisYearList) {
-                        var thisYear = thisYearList[j];
-                        var progressBar = (thisYear.count / countSum) * 100;
-                        progressBar = parseInt(progressBar) + '%';
-                        var tableHtml = '';
-                        tableHtml = '<tr>' +
-                                '<td>' + (parseInt(j) + 1) + '</td>' +
-                                '<td>' + thisYear.questionnaireName + '</td>' +
-                                '<td class="eui-row">' +
-                                '<span class="eui-col-md2">' + thisYear.count + '</span>' +
-                                '<div class="eui-progress eui-col-md10 eui-marginT10" e-showpercent="yes" e-filter="question' + j + '">' +
-                                '<div class="eui-progress-bar"></div>' +
-                                '</div>' +
-                                '</td>' +
-                                /*'<td>' + tongbi + '<img src="/Styles/images/xymfImages/xymf/' + up + '.png" alt=""/></td>' +
-                                '<td>' + mom + '<img src="/Styles/images/xymfImages/xymf/' + down + '.png" alt=""/></td>' +*/
-                                '</tr>';
-                        $('tbody').append(tableHtml);
-                        var name = 'question' + j.toString();
-                        element.progress(name, progressBar);
-                        element.init('progress', name);
-                    }
-                }
-            })
-        })
+            });
+            goalRanking();
+        });
         getProvince();
         getCity();
+
     }
 
-    //计算年龄段后得出的数据
-    function countAge(resuliList) {
-        var registerList = [];
-        $('input[name="age"]:checked').each(function (i) {
-            var ageValue = $(this).parent().find("input[name='age']").val();
-            for (var i in resuliList) {
-                var res = resuliList[i];
-                var age = new Date().getYear() - new Date(res.birthday).getYear();
-                if (ageValue == 0) {
-                    if (age <= 18) {
-                        registerList.push(res);
-                    }
-                } else if (ageValue == 1) {
-                    if (age >= 19 && age <= 44) {
-                        registerList.push(res);
-                    }
-                } else if (ageValue == 2) {
-                    if (age >= 45 && age <= 59) {
-                        registerList.push(res);
-                    }
-                } else if (ageValue == 3) {
-                    if (age >= 60 && age <= 74) {
-                        registerList.push(res);
-                    }
-                } else if (ageValue == 4) {
-                    if (age >= 75 && age <= 89) {
-                        registerList.push(res);
-                    }
-                } else if (ageValue == 5) {
-                    if (age >= 90) {
-                        registerList.push(res);
-                    }
-                }
+
+    function goalRanking() {
+
+        $.post("/visitor/register/getCount", {
+            startTime: nowDate,
+            endTime: endDate,
+            sex: sex,
+            maritalStatus: statusIds,
+            belief: beliefIds,
+            goalIds:goalIds,
+            ageGroupsIds:ageGroupsIds,
+            types:'110'
+        }, function (result) {
+            var restltArr = new Array();
+            var list = result.data;
+            var total = 0;
+            for (var i in list) {
+                total+=list[i].count;
             }
-        })
-        return registerList;
+            for (var i in list) {
+                var o = new Object();
+                o.sort=Number(i)+1;
+                o.name=list[i].optionName;
+                o.scale=list[i].count+'/'+ (list[i].count/total)*100+'%';
+                restltArr.push(o);
+            }
+            var htmls = getTable(restltArr);
+            $('tbody').html(htmls);
+        });
     }
 
+    function getTable(userList) {
+        var tableHtml = '';
+        for (var item in userList){
+            var secUser = userList[item];
+            tableHtml +=  '<tr>' +
+                '<td>'+ secUser.sort +'</td>' +
+                '<td>'+ secUser.name +'</td>' +
+                '<td>'+ secUser.scale +'</td>' +
+            '</tr>';
+        }
+        return tableHtml;
+    }
 
-    /*//设置问卷类型名称复选框
-    function initType() {
-        eui.use('form', function () {
-            var form = eui.form;
-            $.get('/questionnaire/detail', function (result) {
-                if (result.code == 200) {
-                    var resultList = result.data;
-                    var html = '';
-                    console.log(resultList);
-                    for (var i in resultList) {
-                        var thisYear = resultList[i];
-                        html += '<li class="eui-form-item">' +
-                                '<label class="eui-col-md10 eui-paddingT10 eui-textAlignL">' + thisYear.questionnaireName + '</label>' +
-                                '<div class="eui-col-md2 eui-textAlignR eui-paddingR10">' +
-                                '<input type="checkbox" name="type" e-skin="primary" value="' + thisYear.questionnaireName + '" e-filter="allChoose" checked>' +
-                                '</div>' +
-                                '</li>';
-                    }
-                    $('#type').html(html);
-                    form.render('checkbox');
-                }
-            })
-        })
-    }*/
 
     //初始化选择模板下拉框
     function initTemplate() {
@@ -759,7 +718,6 @@
             $.get("/template/list", function (result) {
                 if (result.code == 200) {
                     var templateList = result.data;
-                    console.log(templateList);
                     for (var i in templateList) {
                         var selectHtml = '';
                         var template = templateList[i];
@@ -775,21 +733,69 @@
                 }
 
                 form.on('select(template)', function (data) {
-                    $('.sex').each(function (i,sexDate) {
-                        sexDate.checked=true;
-                    })
-                    $('input[name="age"]').each(function (i,ageDate) {
+                    if (data.value!=''){
+                        $.get("/template/detail",{id:data.value}, function (result) {
+                            var obj = result.data;
+                            console.log(obj)
+                            $('input[name="sex"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='sex']").val();
+                                $(this).parent().find("input[name='sex']").removeAttr('checked');
+                                var of = obj.sex.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='sex']").prop("checked",'checked');
+                                }
+                            });
 
-                    })
-                    for(var j in templateList){
-                        var template = templateList[j];
-                        if(data.value == template.id){
-                            settingCheck(template.sex,'sex');
-                            settingCheck(template.age,'age');
+                            $('input[name="visitor_goal"]').each(function (i) {
+                                var ages = $(this).val();
+                                $(this).removeAttr('checked');
+                                var of = obj.goalids.indexOf(ages);
+                                if (of==0){
+                                    $(this).prop("checked",'checked');
+                                }
+                            });
+
+                            $('input[name="age"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='age']").val();
+                                $(this).parent().find("input[name='age']").removeAttr('checked');
+                                var of = obj.age.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='age']").prop("checked",'checked');
+                                }
+                            });
+                            $('input[name="belief"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='belief']").val();
+                                $(this).parent().find("input[name='belief']").removeAttr('checked');
+                                var of = obj.religion.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='belief']").prop("checked",'checked');
+                                }
+                            });
+
+                            $('input[name="maritalStatus"]').each(function (i) {
+                                var ages = $(this).parent().find("input[name='maritalStatus']").val();
+                                $(this).parent().find("input[name='maritalStatus']").removeAttr('checked');
+                                var of = obj.marriage.indexOf(ages);
+                                if (of==0){
+                                    $(this).parent().find("input[name='maritalStatus']").prop("checked",'checked');
+                                }
+                            });
+                            nowDate = new Date(obj.startTime);
+                            endDate = new Date(obj.endTime);
+
+                            $('.date').each(function (i, data) {
+                                $(this).text(nowDate.Format("yyyy-MM-dd") + " 至 " + endDate.Format("yyyy-MM-dd"));
+                            });
+                            $("#scr").hide();
                             form.render();
-                        }
+                            doSearch();
+                        });
+                    }else {
+                        $("#scr").show();
+                        location.reload();
                     }
-                })
+
+                });
             })
         })
     }
@@ -819,24 +825,14 @@
         return num == absVal ? true : false;
     }
 
-    /**
-     * 计算问卷总数
-     */
-    function getCountSum(list) {
-        var result = 0;
-        for (var i in list) {
-            var obj = list[i];
-            result += obj.count;
-        }
-        return result;
-    }
+
     var ageNameData = ["<18", "≥19", "≥45", "≥60", "≥75", "≥90"]
+
     function ageList(registerList) {
         var ageData = [0, 0, 0, 0, 0, 0];
         for (var i in registerList) {
             var register = registerList[i];
             var age = new Date().getYear() - new Date(register.birthday).getYear();
-            /*console.log("年龄是:"+age);*/
             if (age < 18) {
                 ageData[0]++;
             } else if (age >= 19 && age <= 44) {
@@ -865,10 +861,10 @@
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
-                belief: beliefIds
+                belief: beliefIds,
+                goalIds:goalIds,
+                ageGroupsIds:ageGroupsIds
             }, function (result) {
-                /*console.log("省份：");
-                 console.log(result);*/
                 var provinceData = [{
                     name: '北京',
                     value: 0
@@ -976,7 +972,7 @@
                     value: 0
                 }]
                 if (result.code == 200) {
-                    var resultList = countAge(result.data);
+                    var resultList = result.data;
                     var tableHtml = '';
                     var provinceArray = [];
                     var provinceGroup = [];
@@ -1028,7 +1024,7 @@
         })
     }
 
-
+    //获取城市排名
     function getCity() {
         eui.use(['element'], function () {
             var element = eui.element;
@@ -1037,11 +1033,12 @@
                 endTime: endDate,
                 sex: sex,
                 maritalStatus: statusIds,
-                belief: beliefIds
+                belief: beliefIds,
+                goalIds:goalIds,
+                ageGroupsIds:ageGroupsIds
             }, function (result) {
-                /*console.log(result);*/
                 if (result.code == 200) {
-                    var resultList = countAge(result.data);
+                    var resultList = result.data;
                     var tableHtml = '';
                     var cityArray = [];
                     var cityGroup = [];
@@ -1078,7 +1075,6 @@
                         var thisCount = cityObj[j];
                         var progressBar = (thisCount / citySum) * 100;
                         progressBar = parseInt(progressBar) + "%";
-                        /*console.log(progressBar)*/
                         var name = 'que' + '' + cityIndex;
                         element.progress(name, progressBar);
                         element.init('progress', progressBar);
@@ -1088,7 +1084,7 @@
         })
     }
 
-    // charts用户统计页面左侧筛选栏
+    // 左侧筛选栏
     $(".filter>li .chartsContent").hide();
     $(".filter>li").click(function () {
         $(this).siblings().children(".chartsContent").hide();
@@ -1098,41 +1094,51 @@
             event.stopPropagation();
         });
     });
+
     // 收藏模版
     $(".collect").click(function () {
-        $(this).toggleClass("collectIn");
-        var sexArray = new Array();
-        $(".sex:checked").each(function (i) {
-            var sex = $(this).parent().find("input[name='sex']").val();
-            sexArray[i] = sex;
+        var obj = new Object();
+        obj.sex=sex;
+        obj.age=ageGroupsIds;
+        obj.religion=beliefIds;
+        obj.marriage=statusIds;
+        obj.goalIds=goalIds;
+        obj.startTime=nowDate;
+        obj.endTime=endDate;
+
+        var index = layer.open({
+            title: '添加模板'
+            , type: 1
+            , area: ['400px', '200px']
+            , content: $("#inDiv")
+            ,btn: ['保存', '取消']
+            ,yes: function(index, layero){
+                obj.templateName=$("#template_name").val();
+                if (obj.templateName!=''){
+                    layer.load();
+                    $.post("/template/add", {json: JSON.stringify(obj)},
+                        function (result) {
+                            if (result.code==200){
+                                layer.msg('添加成功', {
+                                    time: 2000
+                                }, function(){
+                                    location.reload();
+                                });
+                            }else {
+                                layer.msg("添加失败");
+                                layer.close(index);
+                            }
+                        });
+                }else {
+                    layer.msg("请输入模板名称！")
+                }
+            }
+            ,btn2: function(index, layero){
+            }
         });
-        var sexIds = sexArray.join(",");
 
-        var typeArray = new Array();
-        $('input[name="type"]:checked').each(function (i) {
-            var type = $(this).parent().find("input[name='type']").val();
-            typeArray[i] = type;
-        })
-        var typeIds = typeArray.join(",");
-
-        var ageArray = new Array();
-        $('input[name="age"]:checked').each(function (i) {
-            var age = $(this).parent().find("input[name='age']").val();
-            ageArray[i] = age;
-        })
-        var ageIds = ageArray.join(",");
-        var parameter = {
-            questionType: typeIds,
-            sex: sexIds,
-            age: ageIds,
-            religion: beliefIds,
-            marriage: statusIds
-        }
-        $.post("/template/add", {json: JSON.stringify(parameter)}, function (result) {
-            console.log(result)
-        })
     })
-    // 左侧宽度
+    // 左侧高度
     var carouselHeight = $(window).height() - 270;
     $(".filter").css("height", carouselHeight + 'px');
 
@@ -1144,10 +1150,8 @@
             legend: {
                 data: ['年龄']
             },
-            //修改柱状条的颜色color
             itemStyle: {
                 normal: {
-                    //柱形图圆角，初始化效果
                     barBorderRadius: [300, 300, 0, 0],
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                         offset: 0,
@@ -1217,18 +1221,14 @@
                 data: ageData
             }]
         };
-        // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
-        //年龄分布
     }
 
+    // 学历
     function init(value) {
-        // 雷达图
         var myChart = echarts.init(document.getElementById('chart2'), 'macarons');
-        // 指定图表的配置项和数据
         var option = {
             title: {
-                // text: '学历分布',
                 textStyle: {
                     color: '#333'
                 }
@@ -1252,8 +1252,6 @@
                 ],
                 splitArea: {
                     areaStyle: {
-                        // 圆背景颜色 rgba(0,73,134,0.8)
-                        // color: ['transparent'],
                         shadowColor: 'transparent',
                         shadowBlur: 10
                     }
@@ -1302,18 +1300,14 @@
                 ]
             }]
         };
-        // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
-        // 雷达图结束
     }
 
+    //宗教信仰
     function religiousBelief(data) {
         /* 宗教信仰 */
         var myChart = echarts.init(document.getElementById('chart4'), 'macarons');
         var option = {
-//    title: {
-//      text: '入门示例'
-//    },
             tooltip: {},
             legend: {
                 data: ['销量']
@@ -1693,18 +1687,15 @@
         myChart.setOption(option);
     }
 
+    //中国地图
     function initProvince(provinceData) {
         var value = [];
         for(var i in provinceData){
             var province = provinceData[i];
             value.push(province.value);
         }
-        /*console.log(provinceData);*/
-        //地图
         var myChart = echarts.init(document.getElementById('map'), 'macarons');
-
         /*var data = [
-
          {
          name: '齐齐哈尔'
          }, {
@@ -1752,8 +1743,6 @@
          '重庆市': [108.384366, 30.439702],
 
          };*/
-
-
         myChart.setOption({
             series: [{
                 type: 'map',
@@ -1761,67 +1750,28 @@
             }]
         });
 
-
-        /*var convertData = function (data) {
-         var res = [];
-
-         for (var i = 0; i < data.length; i++) {
-         var geoCoord = geoCoordMap[data[i].name];
-
-         if (geoCoord) {
-         res.push({
-         name: data[i].name,
-         value: geoCoord.concat(data[i].value)
-         });
-         }
-         }
-
-         return res;
-         };*/
-
         option = {
-
-
             title: {
-//            text: '中国大区分布图',
-//            subtext: '中国的八大区分布',
                 sublink: '#',
-
                 itemGap: 30,
-
                 left: 'center',
                 textStyle: {
-
                     color: '#1a1b4e',
-
                     fontStyle: 'normal',
-
                     fontWeight: 'bold',
-
                     fontSize: 30
 
                 },
-
                 subtextStyle: {
-
-
                     color: '#58d9df',
-
                     fontStyle: 'normal',
-
                     fontWeight: 'bold',
-
                     fontSize: 16
-
-
                 }
             },
-
             tooltip: {
                 trigger: 'item'
-
             },
-
             visualMap: {
                 min: 0,
                 max: Math.max.apply(null, value),
@@ -1833,8 +1783,6 @@
                     color: ['#ffffff', '#E0DAFF', '#ADBFFF', '#9CB4FF', '#6A9DFF', '#3889FF']
                 }
             },
-
-
             geo: {
                 map: 'china',
                 zoom: 1.2,
@@ -1903,374 +1851,20 @@
                 data: provinceData
             }]
         };
-
-
-        myChart.setOption(option);
-
-
-        myChart.on('mouseover', function (params) {
-            var city = params.name;
-
-
-            if (city == '广东' || city == '广西' || city == '海南') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "广东"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "广西"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "海南"
-                });
-
-            }
-
-            if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "山东"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "江苏"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "浙江"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "安徽"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "福建"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "上海"
-                });
-
-            }
-
-            if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "湖北"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "湖南"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "河南"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "江西"
-                });
-
-
-            }
-
-            if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "北京"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "天津"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "河北"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "山西"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "内蒙古"
-                });
-
-
-            }
-            if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "宁夏"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "新疆"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "青海"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "陕西"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "甘肃"
-                });
-
-
-            }
-            if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "四川"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "云南"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "贵州"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "西藏"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "重庆"
-                });
-
-
-            }
-            if (city == '辽宁' || city == '吉林' || city == '黑龙江') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "辽宁"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "吉林"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "黑龙江"
-                });
-
-
-            }
-            if (city == '台湾' || city == '香港' || city == '澳门') {
-
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "台湾"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "香港"
-                });
-                myChart.dispatchAction({
-                    type: 'highlight',
-                    name: "澳门"
-                });
-
-
-            }
-
-
-        });
-
-        myChart.on('mouseout', function (params) {
-            var city = params.name;
-
-
-            if (city == '广东' || city == '广西' || city == '海南') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "广东"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "广西"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "海南"
-                });
-
-            }
-            if (city == '山东' || city == '江苏' || city == '浙江' || city == '安徽' || city == '福建' || city == '上海') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "山东"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "江苏"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "浙江"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "安徽"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "福建"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "上海"
-                });
-
-            }
-            if (city == '湖北' || city == '湖南' || city == '河南' || city == '江西') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "湖北"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "湖南"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "河南"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "江西"
-                });
-
-            }
-            if (city == '北京' || city == '天津' || city == '河北' || city == '山西' || city == '内蒙古') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "北京"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "天津"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "河北"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "山西"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "内蒙古"
-                });
-
-            }
-            if (city == '宁夏' || city == '新疆' || city == '青海' || city == '陕西' || city == '甘肃') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "宁夏"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "新疆"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "青海"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "陕西"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "甘肃"
-                });
-
-            }
-            if (city == '四川' || city == '云南' || city == '贵州' || city == '西藏' || city == '重庆') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "四川"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "云南"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "贵州"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "西藏"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "重庆"
-                });
-
-            }
-            if (city == '辽宁' || city == '黑龙江' || city == '吉林') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "辽宁"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "黑龙江"
-                });
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "吉林"
-                });
-
-            }
-            if (city == '台湾' || city == '香港' || city == '澳门') {
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "台湾"
-                });
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "香港"
-                });
-
-
-                myChart.dispatchAction({
-                    type: 'downplay',
-                    name: "澳门"
-                });
-
-            }
-
-        });
         myChart.setOption(option);
     }
+
+
+
 </script>
+<div id="inDiv" style="display: none">
+    <div class="eui-form eui-padding20">
+        <div class="eui-form-item">
+            <label class="eui-form-label">模板名称</label>
+            <div class="eui-input-block">
+                <input class="eui-input" id="template_name"  placeholder="" type="text">
+            </div>
+        </div>
+    </div>
+</div>
 </html>

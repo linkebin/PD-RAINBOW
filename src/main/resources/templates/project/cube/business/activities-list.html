@@ -79,7 +79,9 @@
                     <div class="eui-marginR20 eui-textAlignR">
                         <div class="eui-btn-group">
                             <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"
-                               onclick="activities()">发起活动</a>
+                               onclick="activities()">发起企业活动</a>
+                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"
+                               onclick="activities('',3)">发起公益活动</a>
                             <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal activityDelete">批量删除</a>
                         </div>
                     </div>
@@ -91,15 +93,18 @@
                                 <col width="100">
                                 <col width="100">
                                 <col width="100">
+                                <col width="100">
+                                <col width="80">
                                 <col width="140">
-                                <col>
                             </colgroup>
                             <thead>
                             <tr>
                                 <th><input type="checkbox" e-filter="allChoose" e-skin="primary"></th>
                                 <th>活动编号</th>
                                 <th>活动名称</th>
+                                <th>活动类型</th>
                                 <th>活动目的</th>
+                                <th>审批状态</th>
                                 <th>操 作</th>
                             </tr>
                             </thead>
@@ -209,14 +214,24 @@
         var tableHtml = '';
         for (var item in activityList) {
             var activity = activityList[item];
-
             var id = "'" + activity.id + "'";
-            var url = activity.uestionnaireUri + '?id=' + activity.id;
+            var state = "不用审批";
+            if (activity.initiatorType == 3 && activity.activityStatus==1) {
+                state = "待审批";
+            }else if(activity.initiatorType == 3 && activity.activityStatus==2){
+                state = "审批通过";
+            }
+            var activityType = "企业活动";
+            if(activity.initiatorType == 3){
+                activityType = "公益活动";
+            }
             tableHtml += '<tr>' +
-                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox" e-filter="allChoose"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
                     '<td>' + activity.activityCode + '</td>' +
                     '<td>' + activity.activityName + '</td>' +
+                    '<td>' + activityType + '</td>' +
                     '<td>' + activity.activityAim + '</td>' +
+                    '<td>' + state + '</td>' +
                     '<td>' +
                     '<i title="查看详情" onclick="checkActivity(' + id + ')" class="eui-icon tb">&#xe621;</i>' +
                     '<a title="编辑" target="_blank" onclick="activities(' + id + ')"><i class="eui-icon tb">&#xe642;</i></a>' +
@@ -228,12 +243,18 @@
     /**
      * 添加活动
      */
-    function activities(id) {
+    function activities(id, type) {
         var winObj;
         if (typeof id != 'undefined' && id != '') {
             winObj = window.open("/web/activities/activitiesUpdate?id=" + id);
         } else {
-            winObj = window.open("/web/activities/initiatingActivities");
+            if (typeof type != 'undefined' && type != '') {
+                //如果类型不为空，则是发起公益活动
+                winObj = window.open("/web/activities/initiatingActivities?type=" + type);
+            } else {
+                //如果类型为空，则是发起企业活动
+                winObj = window.open("/web/activities/initiatingActivities");
+            }
         }
         var loop = setInterval(function () {
             if (winObj.closed) {
@@ -289,7 +310,7 @@
                     });
                     setTimeout(function () {
                         doSearch();
-                    },2000)
+                    }, 2000)
                 } else {
                     layer.msg(result.message, {
                         icon: 1,

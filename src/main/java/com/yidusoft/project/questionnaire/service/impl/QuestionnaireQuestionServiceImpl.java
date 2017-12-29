@@ -6,8 +6,11 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.ActiveParticipant;
 import com.yidusoft.project.business.domain.LaunchActivities;
+import com.yidusoft.project.business.domain.VisitorRegister;
+import com.yidusoft.project.business.domain.VisitorRegister;
 import com.yidusoft.project.business.service.ActiveParticipantService;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
+import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.project.questionnaire.computing.QuestionnaireMethod;
 import com.yidusoft.project.questionnaire.dao.DataAcquisitionMapper;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireAnswerMapper;
@@ -30,8 +33,11 @@ import com.yidusoft.utils.EntityReflex;
 import com.yidusoft.utils.MyException;
 import com.yidusoft.utils.Security;
 import org.activiti.engine.runtime.Execution;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -69,6 +75,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
     private AccountInfoService accountInfoService;
     @Resource
     private QuestionnaireService questionnaireService;
+    @Resource
+    private VisitorRegisterService visitorRegisterService;
 
     //分页条件查询问题
     @Override
@@ -131,7 +139,10 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             String dataAcquisitionId = UUID.randomUUID().toString();
             //总分
             int totalScore = getQuestionnaireTotalScore(mapList, dataAcquisitionId, userName,userId);
+            //根据客户Id找到咨询师id
+             VisitorRegister visitorRegister= findVisitorRegister(userId,activityId);
 
+            Subject subjects= SecurityUtils.getSubject();
             //查询问卷的相关答案
              QuestionnaireAnswer questionnaireAnswer=new QuestionnaireAnswer();
              questionnaireAnswer.setUserId(userId);
@@ -156,19 +167,32 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             dataAcquisition.setTotalScore(totalScore);
             dataAcquisition.setUserId(userId);
             dataAcquisition.setDeleted(0);
-            if (userName != null && userName != "") {
-                dataAcquisition.setDataUser(userName);
+            //判断是活动填写问卷  还是来访者填写问卷
+            if (StringUtils.isEmpty(activityId)) {
+                dataAcquisition.setDataUser(userId);
+                //小写的mm表示的是分钟  
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date date=sdf.parse(visitorTimes);
+                dataAcquisition.setCreateTime(date);
+                dataAcquisitionMapper.insert(dataAcquisition);
+                //扣除余额
+                deleteDuction(visitorRegister.getCreator(),"来访");
             } else {
-                dataAcquisition.setDataUser(Security.getUser().getUserName());
+                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                java.util.Date date=sdf.parse(visitorTimes);
+                dataAcquisition.setCreateTime(date);
+                dataAcquisition.setDataUser(userId);
+                dataAcquisitionMapper.insert(dataAcquisition);
+                //添加填报时间
+                ActiveParticipant activeParticipant=activeParticipantService.findById(userId);
+                if(activeParticipant!=null){
+                    activeParticipant.setFillingTime(new Date());
+                    activeParticipantService.update(activeParticipant);
+                }
+                //扣除余额
+                deleteDuction(activityId,"活动");
             }
-            //小写的mm表示的是分钟  
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date date=sdf.parse(visitorTimes);
-            dataAcquisition.setCreateTime(date);
-            dataAcquisitionMapper.insert(dataAcquisition);
 
-            //扣除余额
-            updateUserQuestionnaires(Security.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult(e.getMessage());
@@ -241,8 +265,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             questionnaireAnswer.setCreator(userName);
             questionnaireAnswer.setDeleted(0);
             questionnaireAnswer.setUserId(userId);
-            //判断  1  单选  2多选  3评分单选
-            if (!questionType.equals("3")) {
+            //判断  1  单选  2多选  3评分单选 4.收集单选 5.收集多选 6.填空
+            if (!questionType.equals("3") && !questionType.equals("6")) {
                 //答案正确
                 if (!flg) {
                     int scores = 0;
@@ -275,7 +299,21 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
      return  totalScore;
     }
 
+    /**
+     * 查询来访者是否有咨询师
+     * @param userId
+     */
+    public VisitorRegister findVisitorRegister(String userId,String activityId)throws Exception{
+        VisitorRegister visitorRegister =null;
+        if(StringUtils.isEmpty(activityId)){
+             visitorRegister = visitorRegisterService.findById(userId);
+            if(visitorRegister==null){
+                throw new MyException("找不到对应的咨询师！");
+            }
+        }
 
+        return visitorRegister;
+    }
     //活动提交问卷
     @Override
     public Result subQuestionnaire(String param, String questionnaireId, String userId, String visitorTimes, String timeConsuming, String activityId, String userName) {
@@ -324,7 +362,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
                 activeParticipant.setFillingTime(new Date());
                 activeParticipantService.update(activeParticipant);
             }
-            deleteDuction(activityId);
+            deleteDuction(activityId,"活动");
             //记录到账户信息
         } catch (Exception e) {
             return ResultGenerator.genFailResult(e.getMessage());
@@ -334,13 +372,19 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
     /**
      * 判断是调研活动还是企业活动
-     * @param activityId
+     * @param ids
      */
-    public void deleteDuction(String activityId)throws Exception {
-        LaunchActivities launchActivities = launchActivitiesService.findById(activityId);
-        if(launchActivities.getInitiatorType()==1){//如果是企业活动
+    public void deleteDuction(String ids,String type)throws Exception {
+        if("活动".equals(type)){
+            LaunchActivities launchActivities = launchActivitiesService.findById(ids);
+            if(launchActivities.getInitiatorType()==1){
+                //如果是企业活动
                 updateUserQuestionnaires(launchActivities.getUserId());
+            }
+        }else  if("来访".equals(type)){
+            updateUserQuestionnaires(ids);
         }
+
     }
 
 

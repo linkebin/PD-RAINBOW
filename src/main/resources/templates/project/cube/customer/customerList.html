@@ -57,8 +57,8 @@
                     </form>
                     <div class="eui-textAlignR eui-marginR20">
                         <div class="eui-btn-group">
-                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal" href="/web/customer/count">客户统计</a>
-                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal" th:href="'/web/customer/checkIn?creator='+${session.userSession.id}">客户登记</a>
+                            <a target="" class="eui-btn eui-btn-small eui-btn-normal" href="/web/customer/count">客户统计</a>
+                            <a target="" class="eui-btn eui-btn-small eui-btn-normal" th:href="'/web/customer/checkIn?creator='+${session.userSession.id}">客户登记</a>
                         </div>
                     </div>
 
@@ -239,7 +239,7 @@
         window.open('/web/customer/checkUpdate?id='+id);
     }
     function log(id) {
-        window.open('/web/customer/visitorInfo?id='+id);
+        window.location.href='/web/customer/visitorInfo?id='+id;
     }
     function deleteCustomer(id) {
         layer.confirm('确定删除该客户吗?', function(index){

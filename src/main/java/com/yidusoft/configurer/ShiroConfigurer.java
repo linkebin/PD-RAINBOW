@@ -11,6 +11,7 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
@@ -91,7 +92,9 @@ public class ShiroConfigurer {
         filterChainDefinitionMap.put("/navConfig.js","anon");
         filterChainDefinitionMap.put("/pack.ajax.js","anon");
         filterChainDefinitionMap.put("/utils.js","anon");
-
+        filterChainDefinitionMap.put("/questionnaire/**","anon");
+        filterChainDefinitionMap.put("/card.js","anon");
+        filterChainDefinitionMap.put("/nation.js","anon");
 
         filterChainDefinitionMap.put("/login","anon");
         filterChainDefinitionMap.put("/files/**","anon");
@@ -99,11 +102,14 @@ public class ShiroConfigurer {
         filterChainDefinitionMap.put("/app/**","anon");
         filterChainDefinitionMap.put("/sign/**","anon");
         filterChainDefinitionMap.put("/upload/uploadImglayUi","anon");
-
+        //活动问卷的放行
         filterChainDefinitionMap.put("/web/activities/fillingPage","anon");
+        filterChainDefinitionMap.put("/sign/code","anon");
+        filterChainDefinitionMap.put("/sign/check/mobileCode","anon");
         filterChainDefinitionMap.put("/launch/activities/getIdByPorn","anon");
         filterChainDefinitionMap.put("/launch/activities/getActivityById","anon");
         filterChainDefinitionMap.put("/data/acquisition/findCount","anon");
+        filterChainDefinitionMap.put("/user/questionnaires/detail","anon");
         filterChainDefinitionMap.put("/active/participant/add","anon");
         filterChainDefinitionMap.put("/web/cube/getQuestionnaireFill","anon");
         filterChainDefinitionMap.put("project/cube/questionnaire/other-questionnaire","anon");
@@ -115,6 +121,17 @@ public class ShiroConfigurer {
         filterChainDefinitionMap.put("/user/modifyPsd/code","anon");
         filterChainDefinitionMap.put("/user/modifyPsd/code","anon");
         filterChainDefinitionMap.put("/user/check/msgCode","anon");
+        //来访者问卷的填写
+        filterChainDefinitionMap.put("/web/cube/getQuestionnaireGuide","anon");
+        filterChainDefinitionMap.put("/web/cube/getQuestionnaireFillIn","anon");
+        filterChainDefinitionMap.put("/cube/questionnaire/submitQuestionnaire","anon");
+        filterChainDefinitionMap.put("/cube/questionnaire/question/findQuestionForQuestionnaire","anon");
+        //来访登记放行
+        filterChainDefinitionMap.put("/web/customer/checkIn","anon");
+        filterChainDefinitionMap.put("/web/customer/checkInResponse","anon");
+        filterChainDefinitionMap.put("/visitor/register/add","anon");
+        filterChainDefinitionMap.put("/upload/findCertification","anon");
+        filterChainDefinitionMap.put("/web/customer/dna","anon");
 
         //<!-- 过滤链定义，从上向下顺序执行，一般将 *放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
@@ -229,6 +246,10 @@ public class ShiroConfigurer {
     public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(redisSessionDAO());
+       // sessionManager.
+        SimpleCookie simpleCookie=new SimpleCookie("sessionIdTo");
+        simpleCookie.setPath("/");
+        sessionManager.setSessionIdCookie(simpleCookie);
         return sessionManager;
     }
 

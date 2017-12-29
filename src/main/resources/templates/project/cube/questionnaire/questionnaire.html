@@ -56,7 +56,7 @@
     <div class="questionSubmit">
         <div class="eui-area eui-textAlignR">
             <!--<img src="/Styles/images/xymfImages/QRcode.png" width="50" alt="">-->
-            <button class="submitBtn eui-btn" id="submitBtn" onclick="calScore();"><img src="/Styles/images/xymfImages/submit.png"
+            <button class="submitBtn eui-btn" id="submitQuestionnaire" onclick="calScore();"><img src="/Styles/images/xymfImages/submit.png"
                                                                               width="30" alt="">提交问卷</button>
         </div>
 
@@ -69,9 +69,11 @@
 <!-- 评分 -->
 <script src="/Scripts/plugins/grade/js/jquery.barrating.js"></script>
 <script src="/Scripts/plugins/grade/js/examples.js"></script>
-
+<!--引入问卷的提交方法-->
+<script src="/questionnaire/questionnaire_submit.js"></script>
 <script th:inline="javascript">
-
+    //初始化
+    var token=[[${session.token}]];
 
     getQuestionsList();
 
@@ -330,8 +332,10 @@
         var timeConsuming=$("#timer").text();
         var activityId = $("#activityId").val();
         var userName = $('#userName').val();
-        $("#submitBtn").attr("disabled","disabled");
-        $.post("/cube/questionnaire/submitQuestionnaire", {
+        $("#submitQuestionnaire").attr("disabled","disabled");
+        //提交问卷
+        submit_Questionnaire(array,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName,token);
+      /*  $.post("/cube/questionnaire/submitQuestionnaire", {
             "param": JSON.stringify(array),
             "questionnaireId": questionnaireId,
             "userId": userId,
@@ -345,7 +349,7 @@
             }else {
                 $("#submitBtn").attr("disabled",false);
             }
-        });
+        });*/
     }
 
     // 判断各种浏览器，找到正确的方法

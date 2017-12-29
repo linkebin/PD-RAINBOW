@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.system.dao.BacklogMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.system.domain.Backlog">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID_" jdbcType="VARCHAR" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="objid" jdbcType="VARCHAR" property="objid" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="backlog_type" jdbcType="VARCHAR" property="backlogType" />
+    <result column="backlog_status" jdbcType="VARCHAR" property="backlogStatus" />
+    <result column="agent_id" jdbcType="VARCHAR" property="agentId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <select id="findMyBackLogList" parameterType="java.util.Map" resultType="Map">
+        SELECT bl.* FROM `backlog` bl WHERE bl.backlog_status='1' AND bl.agent_id=#{agent_id}
+        <if test="visitorTimeStr!=null and visitorTimeStr!=''">
+          AND bl.create_time LIKE '%${visitorTimeStr}%'
+        </if>
+  </select>
+</mapper>

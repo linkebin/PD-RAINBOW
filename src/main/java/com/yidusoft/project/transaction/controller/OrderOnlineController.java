@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.system.domain.Backlog;
+import com.yidusoft.project.system.service.BacklogService;
 import com.yidusoft.project.transaction.domain.AccountInfo;
 import com.yidusoft.project.transaction.service.AccountInfoService;
 import com.yidusoft.project.transaction.domain.OrderOnline;
@@ -44,7 +46,8 @@ public class OrderOnlineController {
 
     @Resource
     private AccountInfoService accountInfoService;
-
+    @Resource
+    private BacklogService backlogService;
     /**
      * 添加订单
      *
@@ -61,7 +64,8 @@ public class OrderOnlineController {
         orderOnline.setDeleted(0);
         orderOnline.setOrderState(2);
         orderOnline.setUserId(Security.getUserId());
-        orderOnlineService.save(orderOnline);
+        orderOnlineService.addOrderOnline(orderOnline);
+
         return ResultGenerator.genSuccessResult();
     }
 
@@ -129,26 +133,32 @@ public class OrderOnlineController {
         orderOnline.setPaymentTime(new Date());
         orderOnline.setSerialNumber(serialNumber);
         orderOnlineService.update(orderOnline);
+        //修改代办状态
+        Backlog backlog= backlogService.findBy("objid",orderOnline.getId());
+        backlog.setBacklogStatus("2");
+        backlogService.update(backlog);
+        Date buyDate = new Date();
         UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
         ProductSettings productSettings = productSettingsService.findById(orderOnline.getProductId());
         if (userQuestionnaires != null) {
             if (productSettings.getProductType() == 1) {
-                userQuestionnaires.setMember(2);
                 userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal() + orderOnline.getQuestionnaireTotal());
             } else {
                 Date date = new Date();
                 if(userQuestionnaires.getEndTime()!=null){
-                    date = userQuestionnaires.getEndTime();
+                    if(userQuestionnaires.getEndTime().getTime()>new Date().getTime()){
+                        date = userQuestionnaires.getEndTime();
+                    }
                 }
                 if(userQuestionnaires.getBuyTime()==null){
-                    userQuestionnaires.setBuyTime(new Date());
+                    userQuestionnaires.setBuyTime(buyDate);
                 }
                 Calendar rightNow = Calendar.getInstance();
                 rightNow.setTime(date);
                 rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
                 date = rightNow.getTime();
-                userQuestionnaires.setMember(1);
                 userQuestionnaires.setEndTime(date);
+                userQuestionnaires.setMember(1);
             }
             userQuestionnairesService.update(userQuestionnaires);
         } else {
@@ -156,6 +166,7 @@ public class OrderOnlineController {
             userQuestionnaire.setId(UUID.randomUUID().toString());
             userQuestionnaire.setUserId(orderOnline.getUserId());
             userQuestionnaire.setQuestionnairesCumulativeTotal(0);
+            userQuestionnaire.setQuestionnairesTotal(0);
             if (productSettings.getProductType() == 1) {
                 userQuestionnaire.setMember(2);
                 userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
@@ -165,7 +176,7 @@ public class OrderOnlineController {
                 rightNow.setTime(date);
                 rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
                 date = rightNow.getTime();
-                userQuestionnaire.setBuyTime(new Date());
+                userQuestionnaire.setBuyTime(buyDate);
                 userQuestionnaire.setMember(1);
                 userQuestionnaire.setEndTime(date);
             }
@@ -177,7 +188,7 @@ public class OrderOnlineController {
         AccountInfo accountInfo = new AccountInfo();
         accountInfo.setId(UUID.randomUUID().toString());
         accountInfo.setSerialNumber(orderCode);
-        accountInfo.setAccountDate(new Date());
+        accountInfo.setAccountDate(buyDate);
         accountInfo.setAccountRemarks("购买了"+productSettings.getProductName());
         String buyTotal = orderOnline.getQuestionnaireTotal().toString()+"个月";
         if(productSettings.getProductType()==1){

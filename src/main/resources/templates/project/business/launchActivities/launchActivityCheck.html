@@ -22,14 +22,14 @@
 </head>
 <body>
 <div class="eui-bg-white eui-row eui-paddingT10" th:object="${activity}">
-    <div class="eui-row eui-padding10 eui-borderB">
+    <!--<div class="eui-row eui-padding10 eui-borderB">
         <div class="eui-col-md10 eui-font18 eui-lineHeight30" th:if="*{activityStatus==1}">
             <i class='eui-icon eui-font24'></i> 调研活动审批
         </div>
         <div class="eui-col-md10 eui-font18 eui-lineHeight30" th:if="*{activityStatus==2}">
             <i class='eui-icon eui-font24'></i> 查看调研活动
         </div>
-    </div>
+    </div>-->
     <form class="eui-form eui-marginT10 eui-paddingR10" id="activityNewForm">
         <input type="hidden" id="activityId" name="id" th:value="*{id}"/>
         <input type="hidden" id="activityStatus" th:value="*{activityStatus}"/>
@@ -89,7 +89,7 @@
             </div>
             <label class="eui-form-label">活动人数</label>
             <div class="eui-input-inline">
-                <input type="text" class="eui-input" readonly th:value="*{activityTotal}">
+                <input type="text" class="eui-input" name="activityTotal" readonly th:value="*{activityTotal}">
             </div>
         </div>
         <div class="eui-form-item">
@@ -134,7 +134,7 @@
                 <div class="eui-col-md12 eui-font16">活动进度</div>
             </div>
             <div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="activity">
-                <div class="eui-progress-bar eui-bg-blue"></div>
+                <div class="eui-progress-bar eui-bg-green"></div>
             </div>
         </div>
         <div class="eui-bg-white eui-padding20">
@@ -162,7 +162,7 @@
 
                             </tbody>
                         </table>
-                        <div id="pages" style="text-align:right;"></div>
+                        <div id="pages" style="text-align:right;" class="pagesBg"></div>
                     </div>
                 </div>
             </div>
@@ -361,7 +361,7 @@
     function getTotal() {
         $.post("/active/participant/getTotal", {activityId: $('#activityId').val()}, function (result) {
             if(result.code=200){
-                console.log(result);
+                console.log($('input[name="activityTotal"]').val());
                 console.log(result.data/$('input[name="activityTotal"]').val());
                 var progressBar = (result.data/$('input[name="activityTotal"]').val())*100;
                 progressBar = progressBar+"%";

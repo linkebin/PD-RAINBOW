@@ -63,30 +63,35 @@
                         </div>
                     </div>
                     <div class="contentForm eui-marginT20">
-                        <div class="formTop eui-row">
-                            <div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">0
-                            </div>
-                            <div class="eui-col-md1 eui-marginT10">积分</div>
-                            <div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC questionnairesTotal"></div>
-                            <div class="eui-col-md1">问卷剩余使用量</div>
-                            <div class="eui-col-md2 eui-col-md-offset1"><span
-                                    class="eui-btn eui-btn-normal eui-font16 purchase"
-                                    onclick="window.open('/cube/pay')">购 买</span>
-                            </div>
-                        </div>
+                        <!--<div class="formTop eui-row">-->
+                            <!--<div class="eui-col-md2 eui-col-md-offset1 eui-font30 eui-color-blue eui-textAlignC">0-->
+                            <!--</div>-->
+                            <!--<div class="eui-col-md1 eui-marginT10">积分</div>-->
+                            <!--<div class="eui-col-md2 eui-font30 eui-color-blue eui-textAlignC questionnairesTotal"></div>-->
+                            <!--<div class="eui-col-md1">问卷剩余使用量</div>-->
+                            <!--<div class="eui-col-md2 eui-col-md-offset1"><span-->
+                                    <!--class="eui-btn eui-btn-normal eui-font16 purchase"-->
+                                    <!--onclick="window.open('/cube/pay')">购 买</span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
                         <div class="xymfForm eui-form">
+                            <!--<div class="eui-row eui-padding5 eui-borderB">-->
+                                <!--<div class="eui-col-md6 eui-font14">-->
+                                    <!--待办-->
+                                <!--</div>-->
+                                <!--<div class="eui-col-md6 eui-textAlignR">-->
+                                <!--</div>-->
+                            <!--</div>-->
                             <table class="eui-table" e-even e-skin="nob" id="questionnaireUseInfo">
                                 <colgroup>
-                                    <col>
                                     <col>
                                     <col>
                                 </colgroup>
                                 <thead>
                                 <tr>
-                                    <th>名称</th>
-                                    <th>客户</th>
+                                    <th>待办事项</th>
                                     <th>时间</th>
-                                    <th>操作</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -260,7 +265,7 @@
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
 
             $.ajax({
-                url: "/cube/questionnaire//findQuestionnaireUseInfoListByPage",
+                url: "/cube/questionnaire/findQuestionnaireUseInfoListByPage",
                 data: {
                     page: 1,
                     size: 5
@@ -324,14 +329,8 @@
         for (var item in questionnaireUseInfoList) {
             var info = questionnaireUseInfoList[item];
             tableHtml += '<tr>' +
-                '<td>' + info.questionnaireName + '</td>' +
-                '<td>' + info.visitorName + '</td>' +
-                '<td>' + new Date(info.createTime).Format('yyyy-MM-dd') + '</td>' +
-                '<td>' +
-                '<div class="eui-btn-group"> ' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini userEdit" title="查看" onclick="selQuestionnaireForVisitor(\''+info.id+'\',\''+info.dataQuestion+'\',\''+info.userId+'\')"><i class="eui-icon">&#xe63c;</i></button> ' +
-                '</div>' +
-                '</td>' +
+                '<td><a target="_blank" href="'+info.url+'">' + info.title + '</a></td>' +
+                '<td>' + new Date(info.create_time).Format('yyyy-MM-dd hh:mm:ss') + '</td>' +
                 '</tr>';
         }
 

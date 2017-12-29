@@ -23,7 +23,7 @@
     <div class="eui-area" style="width: 800px">
         <div class="eui-row visitorTitle">
             <div class="eui-col-xs7">
-                <div> 问题卡</div>
+                <div th:text="${questionnaireName}"> </div>
             </div>
             <div class="eui-col-xs2">
                 <div style="float: right"> 计时:</div>
@@ -38,12 +38,7 @@
                <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
                <input type="hidden" th:value="${userId}"  id="userId"/>
                <input type="hidden" th:value="${visitorTimes}"  id="visitorTimes"/>
-               <div class="eui-form-item eui-padding20">
-                  <span id="remarks">
-                      下面列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。
-                 </span>
-                 <hr/>
-               </div>
+
              <div class="eui-bg-white eui-form" id="divTable" >
                   <!--  问题内容-->
              </div>

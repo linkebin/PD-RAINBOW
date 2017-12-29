@@ -36,7 +36,7 @@
             <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
         </div>
         <form id="activitiesForm" onsubmit="return false;">
-            <input type="hidden" th:value="${session.userSession.id}" id="userId">
+            <input type="hidden" th:value="${type}" id="type">
             <div class="eui-bg-white eui-padding20 activity">
                 <!--<div class="eui-row eui-paddingB10 eui-borderB eui-marginB20">
                     <div class="eui-col-md6 eui-font16">基本信息</div>
@@ -120,7 +120,7 @@
             </div>
 
             <div class="eui-textAlignC eui-bg-white eui-padding20">
-                <span onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big">保存信息</span>
+                <a onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big saveInfo">保存信息</a>
             </div>
 
             <input type="submit" id="sub" style="display: none;" value="提交"/>
@@ -258,6 +258,10 @@
                 },
 
                 submitHandler: function () {
+                    $('.saveInfo').text("正在保存中");
+                    $('.saveInfo').attr("disabled","disabled");
+                    $('.saveInfo').addClass("pay-color-gray");
+                    $('#sub').attr("disabled","disabled");
                     var obj = $("#activitiesForm").serializeObject();
                     console.log(obj)
                     obj.activityAddr = obj.province + "-" + obj.city + "-" + obj.district + "-" + obj.activityAddr;
@@ -267,41 +271,62 @@
                    // obj.uestionnaireName = $('select[name="uestionnaireId"]').find("option:selected").text();
                     obj.uestionnaireName = $('#uestionnaireId').val();
                     obj.uestionnaireId = queName;
+                    console.log($('#type').val())
+                    if($('#type').val()!=''){
+                        obj.initiatorType = $('#type').val();
+                    }
                     console.log(obj);
                     if (obj.activityStart > obj.activityEnd) {
+                        $('.saveInfo').text("保存信息");
+                        $('.saveInfo').removeAttr("disabled");
+                        $('#sub').removeAttr("disabled");
+                        $('.saveInfo').removeClass("pay-color-gray");
                         return layer.msg('活动开始时间不能大于结束时间',{
                             icon: 2,
                             time: 1500
                         });
                     }
-                    $.get("/user/questionnaires/list", function (result) {
-                        console.log(result);
-                        if (result.code = 200) {
-                            if (result.data != null) {
-                                var total = result.data.questionnairesTotal;
-                                if (result.data.member == 1) {//如果是会员
-                                    if (new Date() < new Date(result.data.endTime)) {//如果会员还没到期
-                                        add(obj);
-                                    } else {//会员到期
+                    if($('#type').val()!='' && $('#type').val()==3){
+                        add(obj);
+                    }else{
+                        $.get("/user/questionnaires/list", function (result) {
+                            console.log(result);
+                            if (result.code = 200) {
+                                if (result.data != null) {
+                                    var total = result.data.questionnairesTotal;
+                                    if (result.data.member == 1) {//如果是会员
+                                        if (new Date() < new Date(result.data.endTime)) {//如果会员还没到期
+                                            add(obj);
+                                        } else {//会员到期
+                                            getTotal(total, obj);
+                                        }
+                                    } else {//不是会员
                                         getTotal(total, obj);
                                     }
-                                } else {//不是会员
-                                    getTotal(total, obj);
+                                } else {
+                                    layer.confirm('你的使用卷不足！！', {
+                                        btn: ['前往购买', '取消']
+                                    }, function () {
+                                        window.open("/cube/pay/null");
+                                        layer.closeAll();
+                                    })
+                                    $('.saveInfo').text("保存信息");
+                                    $('.saveInfo').removeAttr("disabled");
+                                    $('.saveInfo').removeClass("pay-color-gray");
+                                    $('#sub').removeAttr("disabled");
                                 }
                             } else {
-                                layer.confirm('你的使用卷不足！！', {
-                                    btn: ['前往购买', '取消']
-                                }, function () {
-                                    window.open("/cube/pay");
+                                $('.saveInfo').text("保存信息");
+                                $('.saveInfo').removeAttr("disabled");
+                                $('.saveInfo').removeClass("pay-color-gray");
+                                $('#sub').removeAttr("disabled");
+                                layer.msg('系统繁忙,请稍后再试！',{
+                                    icon: 2,
+                                    time: 1500
                                 })
                             }
-                        } else {
-                            layer.msg(result.message,{
-                                icon: 2,
-                                time: 1500
-                            })
-                        }
-                    })
+                        })
+                    }
                 }
             });
         });
@@ -319,11 +344,20 @@
                     layer.confirm('你的使用卷不足！！', {
                         btn: ['前往购买', '取消']
                     }, function () {
-                        window.open("/cube/pay");
+                        window.open("/cube/pay/null");
                     })
                 } else {
                     add(obj)
                 }
+            }else{
+                layer.msg('系统繁忙,请稍后再试！',{
+                    icon: 2,
+                    time: 1500
+                })
+                $('.saveInfo').text("保存信息");
+                $('.saveInfo').removeAttr("disabled");
+                $('.saveInfo').removeClass("pay-color-gray");
+                $('#sub').removeAttr("disabled");
             }
         })
     }
@@ -331,6 +365,7 @@
     function add(obj) {
         $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
             if (result.code == 200) {
+
                 layer.msg("操作成功", {
                     icon: 1,
                     time: 1500
@@ -339,10 +374,14 @@
                     window.close();
                 }, 1500)
             } else {
-                layer.msg("添加失败",{
-                    icon :2,
-                    time :1500
-                });
+                $('.saveInfo').text("保存信息");
+                $('.saveInfo').removeAttr("disabled");
+                $('.saveInfo').removeClass("pay-color-gray");
+                $('#sub').removeAttr("disabled");
+                layer.msg('系统繁忙,请稍后再试！',{
+                    icon: 2,
+                    time: 1500
+                })
             }
         });
     }

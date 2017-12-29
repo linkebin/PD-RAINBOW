@@ -15,6 +15,11 @@
             <div class="eui-mn1-type1">
                 <div class="eui-row">
                     <div class="eui-col-md3">
+                        <p class="">最近一次来访时间:<span id="firstTime"></span></p>
+                        <p class="">第一次来访时间:<span id="latelyTime"></span></p>
+                        <p class="">来访人:<span id="visitorName"></span></p>
+                    </div>
+                    <div class="eui-col-md3">
                         <a href="#" class="eui-textIn">
                             <p class="eui-textNum"><span class="eui-color-green" id="visitingTotal"></span> 次</p>
                             <p class="name" >来访总次数</p>
@@ -32,13 +37,14 @@
                             <p class="name">填写问卷类别总数</p>
                         </a>
                     </div>
+
                 </div>
                 <div class="eui-marginT20 eui-paddingT20">
                     <div class=" eui-form-pane eui-form">
-                        <label class="eui-form-label">问卷名称</label>
+                        <label class="eui-form-label">量表名称</label>
                         <div class="eui-input-block">
                             <select name="questionType" id="questionType">
-                                <option value="" >请选择问卷</option>
+                                <option value="" >请选择量表</option>
                             </select>
                         </div>
                     </div>
@@ -94,9 +100,10 @@
                      if(result.data.length>1){
                          $("#analysis").show();
                          for(var i=0;i<result.data.length;i++){
-                             var dataAcquistion=eval('('+result.data[i].dataResult+')');
+                             //var dataAcquistion=eval('('+result.data[i].dataResult+')');
                              timeData[i]= new Date(result.data[i].createTime).Format('yyyy-MM-dd')+"";
-                             score[i]=dataAcquistion.totalScore;
+
+                             score[i]=result.data[i].totalScore;
                          }
                          analysis(questionnaireNmae,timeData,score);
                      }else {
@@ -196,7 +203,7 @@
 
                 type: 'value',
                 max: max,
-                name: '单位:',
+                name: '总分:',
                 min: 0,
                 interval: 25,
 
@@ -292,7 +299,11 @@
             var   dataAcquisitionType= result.data.dataAcquisitions.length;
             //填写问卷总数
             var  dataAcquisitionTotal= result.data.dataAcquisitionTotal;
-
+            //第一次来访时间 最近一次来访时间
+            var  visitorTime= result.data.visitorTime;
+              $("#firstTime").text(new Date(visitorTime[0].visitor_time).Format('yyyy-MM-dd hh:mm:ss'));
+              $("#latelyTime").text(new Date(visitorTime[1].visitor_time).Format('yyyy-MM-dd hh:mm:ss'));
+              $("#visitorName").text(visitorTime[0].visitor_name);
             $("#visitingTotal").text(visitingTotal);
             $("#dataAcquisitionType").text(dataAcquisitionType);
             $("#dataAcquisitionTotal").text(dataAcquisitionTotal);

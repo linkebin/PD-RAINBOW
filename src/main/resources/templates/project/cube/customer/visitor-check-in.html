@@ -17,6 +17,7 @@
         .error{color: red;font-size: 12px;}
     </style>
 </head>
+
 <body class="questionBody layoutIn">
     <div class="questionHeader">
         <div class="eui-row eui-area">
@@ -540,7 +541,8 @@
 <script src="/nation.js"></script>
 <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
-<script>
+<script th:inline="javascript">
+    var token=[[${session.token}]];
     var form,layedit,laydate;
     eui.use(['form', 'layedit', 'laydate'], function(){
         form = eui.form
@@ -926,14 +928,34 @@
                 var empty = Object();
                 var object = $.extend(empty , obj1, obj2,obj3);
                 layer.load();
-                $.post('/visitor/register/add',{json:JSON.stringify(empty)},function (result) {
+                $.ajax({
+                    url: "/visitor/register/add",
+                    headers: {
+                        "token":token
+                    },
+                    data: {
+                        json:JSON.stringify(empty)
+                    },
+                    type: "post",
+                    success: function (result) {
+                        layer.closeAll();
+                        if (result.code==200){
+                            // self.opener.location.reload();
+                            window.location.href="/login";
+                        }else {
+                            layer.msg(result.message);
+                        }
+                    }
+                });
+             /*   $.post('/visitor/register/add',{json:JSON.stringify(empty)},function (result) {
                     if (result.code==200){
-                        self.opener.location.reload();
-                        window.close();
+                        layer.closeAll();
+                       // self.opener.location.reload();
+                        window.location.href="/login";
                     }else {
                         layer.msg(result.message);
                     }
-                });
+                });*/
             }
         });
     }
@@ -1026,6 +1048,11 @@
             }
         });
 
+    }
+
+    function closeTab() {
+       // layer.closeAll();
+        window.location.href="/login";
     }
 
 </script>

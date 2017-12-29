@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -63,4 +65,23 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
         this.update(userQuestionnaires);
     }
 
+    //判断余额是否不等于0
+    public Map getVipInfo() {
+       Map map = new HashMap();
+        UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(Security.getUserId());
+        if(userQuestionnaires.getMember()!=1){
+            //如果不是会员
+            map.put("isVip",false);
+        }else{
+            //如果是会员
+            map.put("isVip",true);
+            if(userQuestionnaires.getEndTime().getTime()-new Date().getTime()<=0){
+                //如果会员到期
+            map.put("isEnd",true);
+            }else {
+                map.put("isEnd",false);
+            }
+        }
+        return map;
+    }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yidusoft.project.business.dao.TemplateMapper">
+  <resultMap id="BaseResultMap" type="com.yidusoft.project.business.domain.Template">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id_" jdbcType="VARCHAR" property="id" />
+    <result column="goalIds" jdbcType="VARCHAR" property="goalids" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="age" jdbcType="VARCHAR" property="age" />
+    <result column="religion" jdbcType="VARCHAR" property="religion" />
+    <result column="marriage" jdbcType="VARCHAR" property="marriage" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+
+  <select id="findTemplateByUserId" resultMap="BaseResultMap" parameterType="String">
+    SELECT *
+    FROM template WHERE user_id=#{userId}
+  </select>
+</mapper>

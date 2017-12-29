@@ -71,11 +71,11 @@
 </div>
 
 <div id="excelForm" style="display: none;">
-
     <form onsubmit="return false;" class="eui-padding20">
         <input id="file" type="file" name="excelFile" />
         <input type="button" id="uploadExcel" value="上传" class="eui-btn eui-btn-small">
     </form>
+    <a class="eui-btn eui-btn-small eui-marginL20" target="_blank" href="/量表模板1.3.xlsx">模板下载</a>
 </div>
 
 
@@ -292,7 +292,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             ,shade: 0
         });
     }
-    //删除问题
+    //删除量表
     function deleteQuestion(ids) {
         if (ids==''){
             $(".mycheckbox:checked").each(function(i){
@@ -301,11 +301,11 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
             });
         }
         if (ids==''){
-            layer.msg('请选择要删除的问题', {
+            layer.msg('请选择要删除的量表', {
                 time: 2000
             });
         }else {
-            layer.confirm('您确定删除该问题吗？', {
+            layer.confirm('您确定删除该量表吗？', {
                 btn: ['确认', '取消'],
                 shade: 0,
                 title:'提示'

@@ -124,6 +124,7 @@ public class Questionnaire {
     /**
      * 注意事项
      */
+    @Column(name = "remarks")
     private String remarks;
 
 
@@ -410,7 +411,9 @@ public class Questionnaire {
     public String getRemarks() {
         return remarks;
     }
-
+    public void  setRemarks(String remarks){
+        this.remarks=remarks;
+    }
     public Integer getAnswerModelType() { return answerModelType; }
 
     public void setAnswerModelType(Integer answerModelType) {

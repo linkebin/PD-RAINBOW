@@ -67,7 +67,7 @@
 <div class="questionHeader">
     <div class="eui-row eui-area">
         <div class="xymfLogo eui-col-md6">
-            <img src="../../Styles/images/xymfImages/xymf/logo.png" alt="">
+            <a href="/index"><img src="../../Styles/images/xymfImages/xymf/logo.png" ></a>
             <span class="payCentre">来访者咨询管理</span>
         </div>
         <div class="eui-col-md6 eui-textAlignR">
@@ -357,6 +357,7 @@
 <script type="text/javascript" charset="utf-8" src="/Scripts/plugins/utf8-jsp/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/Scripts/plugins/utf8-jsp/ueditor.all.js"> </script>
 <script>
+
     $(function(){
         var visiterHeight = window.innerHeight-250;
         $(".visitorLeft .eui-timeline").css("max-height",visiterHeight+"px");
@@ -376,19 +377,20 @@ var processLogA=null;
             ,type: 'datetime'
         });
 
-
         UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
         UE.Editor.prototype.getActionUrl = function(action) {
+            // 部署待办 将下面UR地址L切换
             if (action == 'uploadimage' || action == 'uploadscrawl' || action == 'uploadimage') {
-                return 'http://localhost:8088/upload/ueUploadImg';
+//                return 'http://localhost:8088/upload/ueUploadImg';
+                return 'http://120.78.220.80/upload/ueUploadImg';
             } else if (action == 'uploadvideo') {
-                return 'http://localhost:8088/upload/upFile';
+//                return 'http://localhost:8088/upload/upFile';
+                return 'http://120.78.220.80/upload/upFile';
             } else {
                 return this._bkGetActionUrl.call(this, action);
             }
         }
          processLogA = UE.getEditor('processLogA', {
-//             initialFrameWidth:900,
             initialFrameHeight: 320,//编辑器高度，默认320
             scaleEnabled: true,
              toolbars: [
@@ -469,7 +471,6 @@ var processLogA=null;
         });
 
         remarksA = UE.getEditor('remarksA', {
-//            initialFrameWidth:900,
             initialFrameHeight: 320,//编辑器高度，默认320
             scaleEnabled: true,
             toolbars: [
@@ -693,6 +694,14 @@ var processLogA=null;
             });
         });
     }
+    
+    function full(deleted) {
+        if (deleted==1){
+            return '<img width="16" height="16" src="/Styles/images/xymfImages/xymf/warn.png">';
+        }else {
+            return '';
+        }
+    }
 
     function loadShaftTime() {
         var obj = $("#searchFrom").serializeObject();
@@ -706,7 +715,8 @@ var processLogA=null;
                     }
                     $('#shaftTime').append('<li visitorId="'+item.id+'" class="eui-timeline-item"> ' +
                         '<div class="eui-timeline-content eui-text"> ' +
-                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'<span class="guide ci-guide"></span></div> ' +
+                        '<div class="eui-timeline-title">'+new Date(item.visitorTime).Format('yyyy-MM-dd')+'' +full(item.deleted)+
+                        '<span class="guide ci-guide"></span></div> ' +
                         '</div> ' +icon+
                         '<i style="color: #35a9ff;" class="eui-icon eui-timeline-axis">&#xe63f;</i> ' +
                         '</li>');
@@ -882,6 +892,12 @@ var processLogA=null;
         $(".DivAdd input[name='visitorTime']").val(new Date().Format('yyyy-MM-dd hh:mm:ss'));
         $("#datecre").html(new Date().Format('yyyy-MM-dd hh:mm:ss'));
         $("#shaftTime li").find('i').html('&#xe63f;');
+        $("textarea").keydown(function (e) {
+            if (e.keyCode == "13") {
+                this.value = this.value + '\n';
+            }
+        });
+
     }
 
     function saveData() {
@@ -902,7 +918,7 @@ var processLogA=null;
                 type: 2
                 , id: 'checkQuestionnaire'
                 , title: '选择问卷'
-                , area: ['800px', '500px']
+                , area: ['850px', '500px']
                 , success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
                     iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：
@@ -988,6 +1004,7 @@ var processLogA=null;
             var $ = eui.jquery,
                 layer = eui.layer,form=eui.form; //独立版的layer无需执行这一句
                 layer.closeAll();
+                window.close();
              });
     }
     //跳转到客户分析页面

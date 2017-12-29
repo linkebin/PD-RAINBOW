@@ -20,11 +20,11 @@
 </head>
 <body>
 <div class="eui-bg-white eui-row eui-paddingT10">
-    <div class="eui-row eui-padding10 eui-borderB">
+    <!--<div class="eui-row eui-padding10 eui-borderB">
         <div class="eui-col-md10 eui-font18 eui-lineHeight30">
             <i class='eui-icon eui-font24'>&#xe654;</i> 查看企业活动
         </div>
-    </div>
+    </div>-->
     <form class="eui-form eui-marginT10 eui-paddingR10" id="activityForm" onsubmit="return false;">
         <input type="hidden" th:value="${id}" id="id" name="id"/>
         <!--基本-->
@@ -105,7 +105,7 @@
                 <input type="text" class="eui-input" readonly name="uestionnaireUri" id="url">
             </div>
             <div class="eui-input-inline">
-                <button class="eui-btn eui-btn-normal" id="copyBtn">复制链接</button>
+                <button class="eui-btn" id="copyBtn">复制链接</button>
             </div>
         </div>
 
@@ -122,7 +122,7 @@
             <div class="eui-col-md12 eui-font16">活动进度</div>
         </div>
         <div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="activity">
-            <div class="eui-progress-bar eui-bg-blue"></div>
+            <div class="eui-progress-bar eui-bg-green"></div>
         </div>
     </div>
     <div class="eui-bg-white eui-padding20">
@@ -157,7 +157,7 @@
 
                         </tbody>
                     </table>
-                    <div id="pages" style="text-align:right;"></div>
+                    <div id="pages" style="text-align:right;" class="pagesBg"></div>
                 </div>
             </div>
         </div>

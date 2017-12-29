@@ -1236,7 +1236,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
                 }
                 ,cancel: function(){
                     //右上角关闭回调
-                    resetAddOrUpdateForm();
+
                 }
             });
 
@@ -1244,12 +1244,6 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
 
     }
 
-
-    //添加修改form表单修改
-    function resetAddOrUpdateForm() {
-        $("#questionForm [name='id']").val("");
-        document.getElementById('questionForm').reset();
-    }
 
 
     //对问题的排序

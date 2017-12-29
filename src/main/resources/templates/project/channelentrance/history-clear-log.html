@@ -22,75 +22,64 @@
         }
     </style>
 </head>
-<body class="eui-layout-body">
+<body class="eui-layout-body ">
 <div class="eui-layout eui-layout-admin xymfHome">
     <div th:replace="project/channelentrance/common/header :: header">Header</div>
     <div class="eui-area">
         <div  class="eui-body">
+            <div class="eui-padding20 xymfContent">
+            <input type="hidden" th:value="${session.userSession.channelId}" id="user">
 
-            <div class="xymfContent">
-                <div class="eui-row eui-padding10 eui-borderB">
-                    <div class="eui-col-md6 eui-font18">
-                        佣金结算
+            <div class="eui-form">
+                <input type="radio" name="month" e-filter="month" value="1" checked="checked" title="上月">
+                <input type="radio" name="month" e-filter="month" value="3" title="近三月">
+                <input type="radio" name="month" e-filter="month" value="6" title="近半年">
+                <input type="radio" name="month" e-filter="month" value="" title="其他">
+                <div style="display: none;" id="_qtsj" class="eui-input-inline">
+                    <input type="text" id="qtsj" name="g" class="eui-input"  placeholder="时间区间" >
+                </div>
+            </div>
+            <div class="eui-marginT10">
+                <span class="eui-marginL40">订单总数: </span><span class="acj">0</span>
+                <span class="eui-marginL40">佣金总额: </span><span class="acy">0</span>
+            </div>
+            <form class="eui-form eui-marginT20" id="searchFrom">
+                <div class="eui-form-item">
+                    <label class="eui-form-label">订单编号</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="order_code" class="eui-input" id="order_code"  placeholder="订单编号" >
                     </div>
-                    <div class="eui-col-md6 eui-textAlignR">
+
+                    <label class="eui-form-label">订单时间</label>
+                    <div class="eui-input-inline eui-width300">
+                        <input type="text"  class="eui-input eui-width300" id="orderTime" placeholder="订单时间" >
+                    </div>
+
+                    <div class="eui-input-inline">
+                        <span class="eui-btn" onclick="doSearch2()">查询</span>
+                        <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
                     </div>
                 </div>
-                <form id="searchFrom2" onsubmit="return false;">
-                    <input  type="hidden" id="channelId" name="channel_id" th:value="${session.userSession.channelId}"/>
-                    <div class="eui-form eui-margin10">
-                        <div class="eui-form-item">
-                            <label class="eui-form-label">支付状态</label>
-                            <div class="eui-input-inline">
-                                <select  name="status">
-                                        <option value="">全部</option>
-                                        <option value="1">未支付</option>
-                                        <option value="2">已支付</option>
-                                        <option value="3">未结算</option>
-                                </select>
-                            </div>
-                            <label class="eui-form-label">用户姓名</label>
-                            <div class="eui-input-inline">
-                                <select    name="referrer">
-                                    <option value="">全部</option>
-                                    <th:block th:each="maps : ${channelAccountMap}">
-                                        <option  th:text="${maps.USER_NAME}" th:value="${maps.ID_}"></option>
-                                    </th:block>
-                                </select>
-                            </div>
-                            <div class="eui-input-inline">
-                                <span class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()">查询</span>
-                                <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
-                            </div>
-                        </div>
-
-                        <div class="eui-form-item">
-                            <label class="eui-form-label">起始时间</label>
-                            <div class="eui-input-inline">
-                                <input id="startTime" name="startTime" readonly="readonly" class="eui-input" type="text" value="">
-                            </div>
-
-                            <label class="eui-form-label">截至时间</label>
-                            <div class="eui-input-inline">
-                                <input id="endTime" name="endTime" readonly="readonly" class="eui-input" type="text" value="">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <div class="eui-row eui-padding10 eui-borderB">
-                    <div class="eui-col-md6 eui-font18">
-                        <span style="margin-left: 40px;" class="eui-color-blue">金额: <span id="z">0</span></span>
-                        <span class="eui-color-blue" style="margin-left: 40px;">佣金: <span id="y">0</span> </span>
-                    </div>
-                    <div class="eui-col-md6 eui-textAlignR">
-
-                    </div>
+            </form>
+            <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 佣金统计
                 </div>
-                <div id="analysis"  style="width: 100%;height:250px;"></div>
-                <table id="test2"></table>
+                <div class="eui-col-md6 eui-textAlignR">
+                </div>
+            </div>
+                <div id="analysis"  class="main"></div>
 
-             </div>
-    </div>
+                <div class="eui-row eui-padding10 eui-borderB">
+                <div class="eui-col-md6 eui-font18">
+                    <i class='eui-icon eui-font24'>&#xe61d;</i> 订单列表
+                </div>
+                <div class="eui-col-md6 eui-textAlignR">
+                </div>
+            </div>
+            <table class="eui-marginT10" id="test2"></table>
+            </div>
+        </div>
     <div th:replace="project/channelentrance/common/footer :: footer">footer</div>
 </div>
 </body>
@@ -107,75 +96,142 @@
 <!-- 引入 macarons 主题 -->
 <script src="/Scripts/plugins/echarts/macarons.js"></script>
 <script>
-    var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
-    var tableIns;
-    var table;
-
-
-    var form,laypage,layer,laydate;
-    eui.use(['form','laypage','layer','laydate'], function() {
-         form = eui.form
-            , laypage = eui.laypage
-            , layer = eui.layer
+    var leftObj;
+    var orderCountFlag = true;
+    // 表单
+    eui.use(['form', 'laydate', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
             ,laydate = eui.laydate;
 
-        form.on('select(inviter_user)', function(data){
-            userLineChart();
-        });
-
         laydate.render({
-            elem: '#startTime'
-        });
-        laydate.render({
-            elem: '#endTime'
-        });
+            elem: '#orderTime'
+            ,type:'datetime'
+            ,range: true
+            ,done: function(value, date, endDate){
+                var startTime = value.split(" - ")[0];
+                var endTime = value.split(" - ")[1];
+                leftObj.startTime=startTime;
+                leftObj.endTime=endTime;
+                doSearch2()
 
-    });
-    function resetForm() {
-        document.getElementById('searchFrom2').reset()
-    }
-
-    $(function () {
-        var obj =$("#searchFrom2").serializeObject();
-        obj.type=2;
-        oneLine(obj);
-        dynamicTable(obj);
-
-        myChart.on('click', function (param) {
-            var obj = $("#searchFrom2").serializeObject();
-            if (obj.referrer!=''){
-                obj.type=1;
-                obj.inviter_user=obj.referrer;
-            }else {
-                obj.type=2;
             }
-            obj.create_time=param.name;
-            dynamicTable(obj);
         });
+
+        laydate.render({
+            elem: '#qtsj'
+            ,type: 'month'
+            ,range: true
+            ,done: function(value, date, endDate){
+                var startTime = date.year+'-'+date.month+'-01 00:00:00';
+                var endTime = getMonthEndDate(endDate.year,endDate.month)+' 24:00:00';
+                leftObj.startTime=startTime;
+                leftObj.endTime=endTime;
+                doSearch()
+            }
+        });
+
+        form.on('radio(month)', function(data){
+            if (data.value!=''){
+                $("#_qtsj").hide();
+                var s = getMonthStartDate();
+                leftObj.startTime=removemulMonth(s,Number(data.value))+' 00:00:00';
+                leftObj.endTime=s+' 00:00:00';
+                doSearch();
+
+            }else {
+                leftObj.startTime=null;
+                leftObj.endTime=null;
+                $("#_qtsj").show();
+            }
+        });
+
+
+        leftObj = new Object();
+        leftObj.type='cityList';
+        var s = getMonthStartDate();
+        leftObj.startTime=removemulMonth(s,1)+' 00:00:00';
+        leftObj.endTime=s+' 00:00:00';
+        dynamicTable(leftObj);
     });
+
+
 
     function doSearch() {
-        var obj = $("#searchFrom2").serializeObject();
-        if (obj.startTime!='' &&  obj.endTime!=''){
-            obj.startTime=obj.startTime+' 00:00:00';
-            obj.endTime=obj.endTime+' 24:00:00';
-        }
-
-        if (obj.referrer!=''){
-            obj.type=1;
-            obj.inviter_user=obj.referrer;
-        }else {
-            obj.type=2;
-        }
-        oneLine(obj);
-        dynamicTable(obj);
-
+        dynamicTable(leftObj);
+    }
+    function doSearch2() {
+        leftObj.order_code=$("#order_code").val();
+        orderCountFlag = false;
+        doSearch();
     }
 
-    function oneLine(obj) {
+    function resetForm() {
+        document.getElementById('searchFrom').reset();
+        leftObj.startTime=null;
+        leftObj.endTime=null;
+        leftObj.order_cod=null;
+    }
+
+    var table;
+    function dynamicTable(obj) {
+        //获取渠道ID
+        obj.id_=$("#user").val();
+        lineChartRight(obj)
+        eui.use(['table', 'laydate','layer'], function(){
+            table = eui.table;
+            var laydate = eui.laydate;
+            var layer = eui.layer;
+
+            layer.load();
+            tableIns = table.render({
+                id: 'idTest'
+                ,elem: '#test2'
+                ,url:'/platform/settlement/areaAndChannelOrderList'
+                ,method:'post'
+                ,where: {json: JSON.stringify(obj)}
+                ,height: 420
+                ,cols: [[ //标题栏
+                    {field: 'order_code', title: '订单编号', width: 200}
+                    ,{field: 'payment_time', title: '订单时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
+                    ,{field: 'order_money', title: '金额(￥)', width: 100}
+                    ,{field: 'brokerage', title: '佣金(￥)', width: 100}
+//                    ,{field: 'rule', title: '结算比例', width: 100}
+//                    ,{field: 'rule_name', title: '结算规则', width: 110}
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+                    if (orderCountFlag){
+                        $(".acy").html('0');
+                        $(".acj").html(count);
+                        if (res.data.length>0){
+                            $(".acy").html(res.data[0].ZYJ);
+                        }
+                    }
+                    layer.closeAll();
+                    orderCountFlag = true;
+                }
+            });
+        });
+    }
+    var myChart = echarts.init(document.getElementById('analysis'), 'macarons');
+
+    function lineChartRight(obj) {
         var timeDataX=new Array;
         var timeDataY=new Array;
-        $.post('/clearing/manage/clearingLineChartNew',{json:JSON.stringify(obj)},function (result) {
+        $.post('/clearing/manage/clearingLineChart',{json:JSON.stringify(leftObj)},function (result) {
             var setingObj = new Object();
             setingObj.maxY=100;
             setingObj.interval=25;
@@ -190,7 +246,6 @@
             myChart.setOption(getOption(timeDataX,timeDataY,setingObj));
         }) ;
     }
-
     function getOption(timeData,data,setingObj) {
         option = {
             title: {
@@ -301,98 +356,5 @@
 
         return option;
     }
-
-
-    function dynamicTable(obj) {
-        layer.load(2);
-        eui.use(['table', 'laydate'], function(){
-            table = eui.table;
-            var laydate = eui.laydate;
-
-            laydate.render({
-                elem: '#startTime'
-                ,done: function(value, date, endDate){
-                }
-            });
-            laydate.render({
-                elem: '#endTime'
-                ,done: function(value, date, endDate){
-                }
-            });
-            tableIns = table.render({
-                id: 'idTest'
-                ,elem: '#test2'
-                ,url:'/clearing/manage/listOrderOnlineClearing'
-                ,method:'post'
-                ,where: {json: JSON.stringify(obj)}
-                ,height: 420
-                ,cols: [[ //标题栏
-                    {field: 'order_code', title: '订单编号', width: 120}
-                    ,{field: 'order_money', title: '金额(￥)', width: 100}
-                    ,{field: 'brokerage', title: '佣金(￥)', width: 100,templet:'<div>{{# if(d.brokerage==undefined ){ }} 未结算  {{#  }else{   }} {{ d.brokerage}} {{# } }}</div>'}
-                    ,{field: 'status', title: '支付状态', width: 100,templet:'<div>{{# if(d.status=="1"){ }} 未支付  {{#  } }}  {{# if(d.status=="2"){ }} 已支付  {{#  } }}   {{# if(d.status==undefined){ }} 未结算  {{#  } }}</div>'}
-                    ,{field: 'consultant_name', title: '咨询师', width: 100}
-                    ,{field: 'referrer', title: '推荐人', width: 100}
-                    ,{field: 'payment_time', title: '订单时间', width: 180,templet:'<div>{{new Date(d.payment_time).Format("yyyy-MM-dd hh:mm:ss")}}</div>'}
-                    ,{field: 'create_time', title: '结算时间', width: 180,templet:'<div>{{# if(d.create_time==undefined ){ }} 未结算  {{#  }else{   }} {{new Date(d.create_time).Format("yyyy-MM-dd hh:mm:ss")}} {{# } }}</div>'}
-
-                    ]]
-                ,response: {
-                    statusName: 'code' //数据状态的字段名称，默认：code
-                    ,statusCode: 200 //成功的状态码，默认：0
-                    ,msgName: 'message' //状态信息的字段名称，默认：msg
-                    ,countName: 'count' //数据总数的字段名称，默认：count
-                    ,dataName: 'data' //数据列表的字段名称，默认：data
-                }
-                ,skin: 'row' //表格风格
-                ,even: true
-                ,loading: true
-                ,page: true //是否显示分页
-                ,limits: [10,30,50,100]
-                ,limit: 10 //每页默认显示的数量
-                ,done: function(res, curr, count){
-                    $("#z").html(0);
-                    $("#y").html(0);
-                    if (count>0){
-                        $("#z").html(res.data[0].gross);
-                        $("#y").html(res.data[0].bk);
-                    }
-                    layer.closeAll();
-                }
-            });
-
-            //监听工具条
-            table.on('tool(idTest)', function(obj){
-                var data = obj.data; //获得当前行数据
-                var layEvent = obj.event; //获得 lay-event 对应的值
-                var tr = obj.tr; //获得当前行 tr 的DOM对象
-                if(layEvent === 'edit'){ //编辑
-                    var parentId = channelTree.getSelected().data.parentId;
-                    var list = new Array();
-
-                    var obj = new Object();
-                    obj.ID_=data.ID_;
-                    obj.payment_time=data.payment_time;
-                    obj.order_money=data.order_money;
-                    list.push(obj);
-                    if (parentId=='0'){
-                        parentId=channelTree.getSelected().data.id
-                    }
-                    sendSave(list,parentId);
-                }
-            });
-        });
-    }
-</script>
-<script type="text/html" id="barDemo">
-    <div class="eui-btn-group">
-
-
-        <div>{{# if(d.status=="1"){ }}
-            <button  class="eui-btn eui-btn-primary eui-btn-mini"
-                     title="支付佣金" e-event="edit3" >
-                <i class="eui-icon">&#xe618;</i></button>  {{#  }else{   }}
-            {{# } }}</div>
-    </div>
 </script>
 </html>

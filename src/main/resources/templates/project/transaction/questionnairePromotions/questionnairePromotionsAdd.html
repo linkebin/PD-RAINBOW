@@ -112,12 +112,12 @@
             laydate.render({
                 elem: '#startTime',
                 type: 'datetime',
-                format: 'yyyy年MM月dd日 HH点'
+                format: 'yyyy-MM-dd HH'
             });
             laydate.render({
                 elem: '#endTime'
                 ,type: 'datetime',
-                format: 'yyyy年MM月dd日 HH点'
+                format: 'yyyy-MM-dd HH'
             });
 
             form.on('radio(allChoose)', function (data) {
@@ -193,6 +193,8 @@
                 },
                 submitHandler: function () {
                     var params = $("#promotionsForm").serializeObject();
+                    params.promotionsStart = params.promotionsStart+':00:00';
+                    params.promotionsEnd = params.promotionsEnd+':00:00';
                     if (params.promotionsStart > params.promotionsEnd) {
                         return layer.msg('开始时间不能大于结束时间', {
                             icon: 2,
@@ -274,7 +276,6 @@
                             if (first) {
                                 //第一次，不需要查询数据
                                 var productList = result.data.list;
-                                console.log(productList);
                                 //遍历，拼接表格
                                 var tableHtml = getTable(productList);
                                 $("#productTable tbody").html(tableHtml);
@@ -289,7 +290,6 @@
                                     },
                                     type: "post",
                                     success: function (result) {
-                                        console.log(result);
                                         var productList = result.data.list;
                                         //遍历，拼接表格
                                         var tableHtml = getTable(productList);
@@ -364,7 +364,6 @@
                     ids = iframeWin.chooseProduct();
                     //加载层
                     var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-                    console.log(ids);
                     layer.close(index);
                     if(ids!=''){
                         doSearch(ids);

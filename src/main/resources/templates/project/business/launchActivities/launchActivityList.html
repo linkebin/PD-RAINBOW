@@ -54,18 +54,16 @@
             </div>
             <div class="eui-col-md6 eui-textAlignR">
                 <!--<a href="###" class="eui-btn eui-btn-small activityNew"><i class='eui-icon eui-font24'>&#xe654;</i> 添加活动</a>-->
-                <a href="###" class="eui-btn eui-btn-small activityDelete"><i class='eui-icon eui-font24'>&#xe640;</i>
-                    批量删除</a>
+                <!--<a href="###" class="eui-btn eui-btn-small activityDelete"><i class='eui-icon eui-font24'>&#xe640;</i>
+                    批量删除</a>-->
             </div>
         </div>
         <table class="eui-table eui-form" id="activitiesTable">
             <colgroup>
-                <col width="60">
-                <col>
             </colgroup>
             <thead>
             <tr>
-                <th><input type="checkbox" e-filter="allChoose" e-skin="primary" title=""></th>
+                <!--<th><input type="checkbox" e-filter="allChoose" e-skin="primary" title=""></th>-->
                 <th>活动编号</th>
                 <th>活动名称</th>
                 <th>活动目的</th>
@@ -187,7 +185,7 @@
                 initiatorType="调研活动";
             }
             tableHtml += '<tr>' +
-                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
+                    /*'<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +*/
                     '<td>' + activity.activityCode + '</td>' +
                     '<td>' + activity.activityName + '</td>' +
                     '<td>' + activity.activityAim + '</td>' +
@@ -204,8 +202,7 @@
 
     function Buts(activity) {
         var id = "'" + activity.id + "'";
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ')"><i class="eui-icon tb">&#xe621;</i></button>' +
-                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ')"><i class="eui-icon tb">&#xe621;</i></button>';
     }
 
     parent.element.on('tab(nav-tab)', function(elem){
@@ -229,6 +226,9 @@
     //查看活动详情
     function checkActivity(id) {
         var message = '查看企业活动详情';
+        if(parent.$(".eui-tab-title li[e-id='6']").length>0) {
+            parent.element.tabDelete("nav-tab", '6');
+        }
         parent.element.tabAdd('nav-tab', {
             title: message
             ,type: 2

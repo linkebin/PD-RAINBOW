@@ -25,15 +25,22 @@ public class WebLaunchActivitiesController {
         model.addAttribute("acdetail",launchActivities);
         return "project/business/launchActivities/acdetail";
     }
-
+    //跳转到调研活动管理
     @RequestMapping("/linkList")
     public String linkList() {
         return "project/business/launchActivities/launchActivitiesList";
     }
 
+    //跳转到企业活动管理
     @RequestMapping("/list")
     public String list() {
         return "project/business/launchActivities/launchActivityList";
+    }
+
+    //跳转到公益活动
+    @RequestMapping("/commonwealList")
+    public String commonwealList() {
+        return "project/business/launchActivities/commonwealActiveList";
     }
 
     @RequestMapping("/add")

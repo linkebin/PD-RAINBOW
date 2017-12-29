@@ -2,11 +2,14 @@ package com.yidusoft.project.cube.questionnaire;
 
 import com.yidusoft.project.transaction.domain.IndexImg;
 import com.yidusoft.project.transaction.service.IndexImgService;
+import com.yidusoft.project.transaction.service.UserQuestionnairesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Map;
 
 /**
  * Created by linkb on 2017/10/17.
@@ -16,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class WebController {
     @Autowired
     private IndexImgService indexImgService;
+
+    @Autowired
+    private UserQuestionnairesService userQuestionnairesService;
 
     /**
      * 跳转到订单
@@ -30,10 +36,10 @@ public class WebController {
      * 跳转到会员选购
      * @return
      */
-    @RequestMapping(value ={"/pay"})
-    public String pay(){
-            return "project/cube/questionnaire/pay";
-
+    @RequestMapping(value ={"/pay/{id}"})
+    public String pay(Model model,@PathVariable String id){
+        model.addAttribute("id",id);
+        return "project/cube/questionnaire/pay";
     }
 
     /**
@@ -109,7 +115,10 @@ public class WebController {
      * @return
      */
     @RequestMapping(value = {"/prerogative"})
-    public String prerogative(){
+    public String prerogative(Model model){
+        Map map = userQuestionnairesService.getVipInfo();
+        model.addAttribute("isVip",map.get("isVip"));
+        model.addAttribute("isEnd",map.get("isEnd"));
         return "project/cube/vip/prerogative";
     }
 

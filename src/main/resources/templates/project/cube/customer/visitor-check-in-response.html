@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>客户登记</title>
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/Styles/themes/mycss/animate-tool.css">
+    <style>
+        .default_hide{display: none;}
+        #ui-id-1{height: 200px; overflow: scroll;}
+        .eui-form-label{width: 100px;
+            text-align: left;}
+        .eui-width700{
+            width: 700px!important;
+        }
+        .error{color: red;font-size: 12px;}
+    </style>
+</head>
+<script th:inline="javascript">
+    var creator=[[${creator}]];
+    window.location.href="/web/customer/checkInResponse?creator="+creator;
+</script>
+<body class="">
+
+
+</body>
+
+</html>

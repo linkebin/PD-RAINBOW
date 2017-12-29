@@ -4,11 +4,24 @@ import com.yidusoft.project.questionnaire.domain.Questionnaire;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.project.questionnaire.service.QuestionnaireAnswerService;
 import com.yidusoft.project.questionnaire.service.QuestionnaireService;
+import com.yidusoft.utils.Security;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.session.SessionException;
+import org.apache.shiro.session.mgt.SessionContext;
+import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static com.yidusoft.configurer.ResourcesStatic.GAUGE;
@@ -153,22 +166,5 @@ public class WebCubeQuestionnaireController {
         return "project/cube/questionnaire/questionnaire-fillIn-success";
     }
 
-    @RequestMapping(value ={"/getQuestionnaireFill"})
-    public String getQuestionnaireFill(String questionnaireId,String userId,String visitorTimes,String activityId,String userName,Model model) {
-        model.addAttribute("questionnaireId", questionnaireId);
-        model.addAttribute("activityId", activityId);
-        model.addAttribute("userId", userId);
-        model.addAttribute("visitorTimes", visitorTimes);
-        model.addAttribute("userName", userName);
-        Questionnaire questionnaire = questionnaireService.findById(questionnaireId);
-        model.addAttribute("questionnaire", questionnaire);
-        if (("生活事件量表(LES)").equals(questionnaire.getQuestionnaireName())) {
-            return "project/cube/questionnaireFilling/fillIn_gauge_15";
-        } else if (("长处和困难问卷(SDQ)").equals(questionnaire.getQuestionnaireName())) {
-            return "project/cube/questionnaireFilling/fillIn_gauge_13";
-        } else if (("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getQuestionnaireName())) {
-            return "project/cube/questionnaireFilling/fillIn_gauge_14";
-        }
-        return "project/cube/questionnaire/other-questionnaire";
-    }
+
 }

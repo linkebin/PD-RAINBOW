@@ -30,146 +30,10 @@
         <input type="hidden" th:value="${questionnaireId}"  id="questionnaireId"/>
         <input type="hidden" th:value="${userId}"  id="userId"/>
         <input type="hidden" th:value="${visitorTimes}"  id="visitorTimes"/>
+        <input type="hidden" th:value="${activityId}" id="activityId"/>
+        <input type="hidden" th:value="${userName}" id="userName"/>
         <ul class="eui-bg-white eui-padding20 eui-overflow" id="divTable">
-<!--
-            <li class="eui-form">
-                <h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">2.恋爱失败或破裂</h4>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生时间</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="未发生" title="未发生">
-                        <input type="radio" name="sex" value="一年内" title="一年内">
-                        <input type="radio" name="sex" value="半年内" title="半年内">
-                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
-                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生次数</label>
-                    <div class="eui-input-inline" style="width: 80px;">
-                        <input type="text" name="" class="eui-input">
-                    </div>
-                    <div class="eui-form-mid eui-word-aux">次</div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生性质</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="好事" title="好事">
-                        <input type="radio" name="sex" value="坏事" title="坏事">
-                        <input type="radio" name="sex" value="无影响" title="无影响">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">精神影响程度</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="轻度" title="轻度">
-                        <input type="radio" name="sex" value="中度" title="中度">
-                        <input type="radio" name="sex" value="重度" title="重度">
-                        <input type="radio" name="sex" value="极重" title="极重">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">影响持续时间</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="三个月内" title="未发生">
-                        <input type="radio" name="sex" value="半年内" title="半年内">
-                        <input type="radio" name="sex" value="一年内" title="一年内">
-                        <input type="radio" name="sex" value="一年以上" title="一年以上">
-                    </div>
-                </div>
-            </li>
-            <li class="eui-form">
-                <h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">3.结婚</h4>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生时间</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="未发生" title="未发生">
-                        <input type="radio" name="sex" value="一年前" title="一年前">
-                        <input type="radio" name="sex" value="半年内" title="半年内">
-                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
-                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生次数</label>
-                    <div class="eui-input-inline" style="width: 80px;">
-                        <input type="text" name="" class="eui-input">
-                    </div>
-                    <div class="eui-form-mid eui-word-aux">次</div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生性质</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="好事" title="好事">
-                        <input type="radio" name="sex" value="坏事" title="坏事">
-                        <input type="radio" name="sex" value="无影响" title="无影响">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">精神影响程度</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="轻度" title="轻度">
-                        <input type="radio" name="sex" value="中度" title="中度">
-                        <input type="radio" name="sex" value="重度" title="重度">
-                        <input type="radio" name="sex" value="极重" title="极重">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">影响持续时间</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="三个月内" title="未发生">
-                        <input type="radio" name="sex" value="半年内" title="半年内">
-                        <input type="radio" name="sex" value="一年内" title="一年内">
-                        <input type="radio" name="sex" value="一年以上" title="一年以上">
-                    </div>
-                </div>
-            </li>
-            <li class="eui-form">
-                <h4 class="eui-font16 eui-font-bold eui-paddingTB10 eui-paddingL20">4.自己（爱人）怀孕</h4>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生时间</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="未发生" title="未发生">
-                        <input type="radio" name="sex" value="一年内" title="一年内">
-                        <input type="radio" name="sex" value="半年内" title="半年内">
-                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
-                        <input type="radio" name="sex" value="长期性半年内" title="长期性半年内">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生次数</label>
-                    <div class="eui-input-inline" style="width: 80px;">
-                        <input type="text" name="" class="eui-input">
-                    </div>
-                    <div class="eui-form-mid eui-word-aux">次</div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">事件发生性质</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="好事" title="好事">
-                        <input type="radio" name="sex" value="坏事" title="坏事">
-                        <input type="radio" name="sex" value="无影响" title="无影响">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">精神影响程度</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="轻度" title="轻度">
-                        <input type="radio" name="sex" value="中度" title="中度">
-                        <input type="radio" name="sex" value="重度" title="重度">
-                        <input type="radio" name="sex" value="极重" title="极重">
-                    </div>
-                </div>
-                <div class="eui-form-item" pane="">
-                    <label class="eui-form-label eui-width100">影响持续时间</label>
-                    <div class="eui-input-block">
-                        <input type="radio" name="sex" value="三个月内" title="未发生">
-                        <input type="radio" name="sex" value="半年内" title="半年内">
-                        <input type="radio" name="sex" value="一年内" title="一年内">
-                        <input type="radio" name="sex" value="一年以上" title="一年以上">
-                    </div>
-                </div>
-            </li>-->
+
         </ul>
         <div class="eui-textAlignC eui-bg-white eui-padding20">
             <button id="submitQuestionnaire"  onclick="submitQuestionnaire()" class="eui-btn eui-btn-normal eui-btn-big"><img src="/Styles/images/xymfImages/submit.png" width="24" alt=""> 提交问卷</button>
@@ -198,6 +62,8 @@
 
 <script src="/Scripts/module/eui.js"></script>
 <script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<!--引入问卷的提交方法-->
+<script src="/questionnaire/questionnaire_submit.js"></script>
 <script th:inline="javascript">
     eui.use(['form', 'layedit', 'laydate'], function(){
         var form = eui.form
@@ -209,22 +75,6 @@
         laydate.render({
             elem: '#test1'
         });
-
-      //radio的事件监听
-   /*     form.on('radio(filter)',function(data){
-            console.log(data.elem); //得到radio原始DOM对象
-
-            if(data.elem.attributes.states.value=='0'){
-                data.elem.checked=true;
-                form.render();
-                data.elem.attributes.states.value='1';
-            }else {
-                data.elem.checked=false;
-                form.render();
-                data.elem.attributes.states.value='0';
-            }
-
-        });*/
         form.on('radio(radioNot)',function(data){
             //点击为发生 后面的都不能填写
            var name= data.elem.name;
@@ -292,6 +142,7 @@
     });
     //初始化数据
     var questionnaire=[[${questionnaire}]];
+    var token=[[${session.token}]];
 
     $(function () {
         loadQuestion();
@@ -310,13 +161,15 @@
                 $ = eui.jquery;
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
             $.post("/cube/questionnaire/question/findQuestionForQuestionnaire",{"id":questionnaireId},function (result) {
-                layer.closeAll();
+                layer.close(index);
                 console.info(result.data);
                var context=  getTable(result.data);
                $("#divTable").html(context);
                 checkOptionScoreNum();
                 formRender();
             });
+            //进入全屏
+            fullScreen();
         });
 
     }
@@ -448,27 +301,40 @@
             var questionnaireId=$("#questionnaireId").val();
             var userId=$("#userId").val();
             var timeConsuming=$("#timer").text();
+            var activityId = $("#activityId").val();
+            var userName = $('#userName').val();
             $("#submitQuestionnaire").attr("disabled","disabled");
-            //加载层
+        //提交问卷
+        submit_Questionnaire(array,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName,token);
+       /*     //加载层
             var index = layer.load(0, {shade: false}); //0代表加载的风格，支持0-2
-            $.post("/cube/questionnaire/submitQuestionnaire",
-                {"param":JSON.stringify(array),
-                    "questionnaireId":questionnaireId,
-                    "userId":userId,
-                    "visitorTimes":visitorTimes,
-                    "timeConsuming":timeConsuming
-                },function (result) {
-                    layer.closeAll();
-                    if(result.code==200){
-                        window.location.href="/web/cube/getSuccess";
-                    }else {
-                        $("#submitQuestionnaire").attr("disabled","false");
-                        layer.msg('填写失败！', {
-                            icon: 1,
-                            time: 5000
-                        });
-                    }
-                });
+        $.ajax({
+            url: "/cube/questionnaire/submitQuestionnaire",
+            headers: {
+                "token":token
+            },
+            data: {
+                "param":JSON.stringify(array),
+                "questionnaireId":questionnaireId,
+                "userId":userId,
+                "visitorTimes":visitorTimes,
+                "timeConsuming":timeConsuming
+            },
+            type: "post",
+            success: function (result) {
+                layer.closeAll();
+                if(result.code==200){
+                    window.location.href="/web/cube/getSuccess";
+                }else {
+                    $("#submitQuestionnaire").attr("disabled","false");
+                    layer.msg('填写失败！', {
+                        icon: 1,
+                        time: 5000
+                    });
+                }
+            }
+        });
+*/
     }
     //radio的分数 答案  封装
     function radioObject(dom,doms) {

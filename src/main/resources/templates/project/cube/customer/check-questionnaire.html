@@ -49,8 +49,8 @@
                         <input type="text" name="questionnaireName" e-verify="title" value="" autocomplete="off" placeholder="编号/名称" class="eui-input">
                     </div>
                     <div class="eui-input-inline">
-                        <span class="eui-btn eui-btn-normal" onclick="doSearch()">查询</span>
-                        <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                        <span class="eui-btn eui-btn-normal eui-btn-small" onclick="doSearch()">查询</span>
+                        <span class="eui-btn eui-btn-primary eui-btn-small " onclick="resetForm()">重置</span>
                     </div>
                 </div>
             </form>
@@ -83,22 +83,22 @@
             <!--选择问卷模版-->
             <div class="eui-bd eui-padding10">
                 <div class="eui-sd1 eui-sd1-type3" style="overflow-y: auto;height: 450px">
-                    <ul id="ulScene">
+                    <ul id="ulScene" style="width: 200px">
                        <li class="eui-padding10 eui-borderB"><span class="eui-icon eui-font18">&#xe60a;</span><span class="eui-font-bold">问卷场景</span></li>
 
 
                     </ul>
-                    <ul id="ulTag">
+                    <ul id="ulTag" style="width: 200px">
                         <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font18">&#xe60a;</span><span class="eui-font-bold">问卷标签</span></li>
 
 
                     </ul>
-                    <ul id="ulType">
+                    <ul id="ulType" style="width: 200px">
                         <li class="eui-marginT10 eui-padding10 eui-borderB"><span class="eui-icon eui-font18">&#xe60a;</span><span class="eui-font-bold">问卷类型</span></li>
                     </ul>
                 </div>
                 <div class="eui-mn1">
-                    <div class="eui-mn1-type3 classify" >
+                    <div class="eui-mn1-type2 classify" >
                         <div class="eui-collapse" e-filter="divQuestionnaire" e-accordion="" id="divQuestionnaire" >
 
 
@@ -428,7 +428,7 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
                 layer.open({
                     title:"充值",
                     type: 1,
-                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay">充值</a>！</div>'
+                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay/null">充值</a>！</div>'
                 });
 
             }else {

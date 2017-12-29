@@ -52,7 +52,6 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
         launchActivities.setUserId(Security.getUserId());
         launchActivities.setCreateTime(new Date());
         if (Security.getUser().getAccountType() == 0) {
-
             launchActivities.setInitiatorType(2);
             launchActivities.setActivityStatus(1);
             String uri = "/web/launchActivities/acdetail?id="+launchActivities.getId();
@@ -60,9 +59,15 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
         } else {
             int port = request.getServerPort();//获取服务器端口
             String ip = request.getServerName();//获取服务端ip
-            launchActivities.setInitiatorType(1);
-            launchActivities.setUestionnaireUri("http://" + ip + ":" + port + "/web/activities/fillingPage");
-            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
+            if(launchActivities.getInitiatorType()==null || launchActivities.getInitiatorType()!=3){
+                launchActivities.setInitiatorType(1);
+                launchActivities.setUestionnaireUri("http://" + ip + ":" + port + "/web/activities/fillingPage");
+                launchActivities.setActivityPorn(CodeHelper.randomCode(8));
+            }else{
+                String uri = "/web/launchActivities/acdetail?id="+launchActivities.getId();
+                activityService.startProcess(launchActivities.getId(),launchActivities.getActivityName()+"  活动申请",uri);
+                launchActivities.setActivityStatus(1);
+            }
         }
         launchActivitiesService.save(launchActivities);
 

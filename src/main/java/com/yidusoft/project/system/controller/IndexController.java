@@ -138,7 +138,10 @@ public class IndexController {
         if (!code.equals(secUser.getMsgCode()) ){
             return ResultGenerator.genFailResult("手机验证码错误");
         }
-
+        String mobile = (String) request.getSession().getAttribute("mobile");
+        if (!mobile.equals(secUser.getMobile()) ){
+            return ResultGenerator.genFailResult("手机验证码错误");
+        }
         secUser.setUserName(CodeHelper.getCode("yxmf"));
         String inviterCode = CodeHelper.randomCode(8);
         SecUser isUser = null;
@@ -270,6 +273,7 @@ public class IndexController {
             SendSmsResponse sendSmsResponse = AliyunSMSUtil.sendSms(mobile, templateCode,signCode);
             if (StringUtils.equals("OK",sendSmsResponse.getCode())){
                 request.getSession().setAttribute("signCode",signCode);
+                request.getSession().setAttribute("mobile",mobile);
                 return ResultGenerator.genSuccessResult().setMessage("验证码发送成功");
             }else{
                 return ResultGenerator.genFailResult("验证码发送失败");
@@ -468,6 +472,11 @@ public class IndexController {
             if (!signCode.equals(vrifyCode) && !"".equals(signCode)) {
                 return ResultGenerator.genFailResult("手机验证码错误！");
             }
+            String phone = (String) request.getSession().getAttribute("mobile");
+            if (!phone.equals(mobile) && !"".equals(phone)) {
+                return ResultGenerator.genFailResult("手机验证码错误！");
+            }
+
             return ResultGenerator.genSuccessResult(mobile);
         }else {
             return ResultGenerator.genFailResult("手机验证码错误");

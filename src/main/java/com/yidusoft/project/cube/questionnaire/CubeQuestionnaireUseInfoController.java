@@ -8,6 +8,7 @@ import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.questionnaire.domain.DataAcquisition;
 import com.yidusoft.project.questionnaire.domain.Scene;
 import com.yidusoft.project.questionnaire.service.DataAcquisitionService;
+import com.yidusoft.project.system.service.BacklogService;
 import com.yidusoft.utils.Security;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,11 +33,16 @@ public class CubeQuestionnaireUseInfoController {
     @Resource
     private DataAcquisitionService dataAcquisitionService;
 
+    @Resource
+    private BacklogService backlogService;
+
     @PostMapping("/findQuestionnaireUseInfoListByPage")
     @ResponseBody
     public Result questionnaireUseInfoListByPage(int page,int size){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("agent_id",Security.getUserId());
         PageHelper.startPage(page, size);
-        List<DataAcquisition> list = dataAcquisitionService.questionnaireUseInfoListByPage();
+        List<Map<String,Object>> list = backlogService.findMyBackLogList(map);
         //查询所有的相关数据
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

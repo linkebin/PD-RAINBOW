@@ -11,7 +11,7 @@
         .error{color: red;font-size: 12px;}
     </style>
 </head>
-<body>
+<body class="eui-bg-white">
 
     <input type="hidden" th:value="${type}" id="type" />
     <input type="hidden" th:value="${id}" id="idold" />
@@ -223,7 +223,7 @@
                     page:1,
                     pagesize:11},function (result) {
                     if (result.data.list.length == 0){
-                        $('.infos').html('<label>没有 '+params.visitorName+' 这个客户</label>');
+                        $('.infos').html('<label style="color: red;font-size: 12px">没有 '+params.visitorName+' 这个客户</label>');
                         $(obj).val('');
                     }else {
                         $('.infos').html('')
