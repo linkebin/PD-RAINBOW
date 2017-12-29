@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>企业活动管理</title>
+    <title>公益活动管理</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -25,7 +25,8 @@
             top: 0;
             background: #ffffff;
         }
-        #activityNewForm input + label,select + label{
+
+        #activityNewForm input + label, select + label {
             color: red;
         }
     </style>
@@ -34,14 +35,17 @@
 <div class="eui-bg-white eui-row eui-paddingT10">
     <div class="eui-col-md12 eui-paddingR10">
         <form class="eui-form" id="searchFrom">
-            <input type="hidden" name="initiatorType" value="1">
+            <input type="hidden" name="initiatorType" value="3">
             <div class="eui-input-inline eui-padding10">
                 <input type="text" name="activityName" e-verify="title" autocomplete="off" placeholder="活动名称/关键字"
                        class="eui-input">
             </div>
             <div class="eui-input-inline eui-padding10">
-                <input type="text" name="activityAim" e-verify="title" autocomplete="off" placeholder="活动目的/关键字"
-                       class="eui-input">
+                <select name="activityStatus">
+                    <option value="">审批状态</option>
+                    <option value="1">待审批</option>
+                    <option value="2">审批通过</option>
+                </select>
             </div>
             <div class="eui-input-inline">
                 <span class="eui-btn" onclick="doSearch()">查询</span>
@@ -50,24 +54,22 @@
         </form>
         <div class="eui-row eui-padding10 eui-borderB">
             <div class="eui-col-md6 eui-font18">
-                <i class='eui-icon eui-font24'>&#xe61d;</i> 企业活动
-            </div>
-            <div class="eui-col-md6 eui-textAlignR">
-                <!--<a href="###" class="eui-btn eui-btn-small activityNew"><i class='eui-icon eui-font24'>&#xe654;</i> 添加活动</a>-->
-                <!--<a href="###" class="eui-btn eui-btn-small activityDelete"><i class='eui-icon eui-font24'>&#xe640;</i>
-                    批量删除</a>-->
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 调研活动
             </div>
         </div>
         <table class="eui-table eui-form" id="activitiesTable">
             <colgroup>
+                <col width="60">
+                <col>
             </colgroup>
             <thead>
             <tr>
-                <!--<th><input type="checkbox" e-filter="allChoose" e-skin="primary" title=""></th>-->
+                <th><input type="checkbox" e-filter="allChoose" e-skin="primary" title=""></th>
                 <th>活动编号</th>
                 <th>活动名称</th>
-                <th>活动目的</th>
+                <th>活动类型</th>
                 <th>创建人</th>
+                <th>审批状态</th>
                 <th>操 作</th>
             </tr>
             </thead>
@@ -180,16 +182,23 @@
         var tableHtml = '';
         for (var item in activityList) {
             var activity = activityList[item];
-            var initiatorType="企业活动";//活动类型
-            if(activity.initiatorType==2){
-                initiatorType="调研活动";
+            var status = "不用审批";//审批状态
+            var initiatorType = "公益活动";//活动类型
+            if (activity.activityStatus == 1) {
+                status = "待审批"
+            } else if (activity.activityStatus == 2) {
+                status = "审批通过"
+            } else if (activity.activityStatus == 3) {
+                status = "审批驳回"
             }
+
             tableHtml += '<tr>' +
-                    /*'<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +*/
+                    '<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +
                     '<td>' + activity.activityCode + '</td>' +
                     '<td>' + activity.activityName + '</td>' +
-                    '<td>' + activity.activityAim + '</td>' +
+                    '<td>' + initiatorType + '</td>' +
                     '<td>' + activity.creator + '</td>' +
+                    '<td>' + status + '</td>' +
                     '<td>' +
                     '<div class="eui-btn-group"> ' +
                     '' + Buts(activity) + '' +
@@ -202,40 +211,64 @@
 
     function Buts(activity) {
         var id = "'" + activity.id + "'";
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ')"><i class="eui-icon tb">&#xe621;</i></button>';
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + "'check'," + id + ')"><i class="eui-icon tb">&#xe621;</i></button>';
     }
 
-    parent.element.on('tab(nav-tab)', function(elem){
+    parent.element.on('tab(nav-tab)', function (elem) {
         doSearch();
     });
 
     var form
-    eui.use('form', function () { //独立版的layer无需执行这一句
+    eui.use(['form'], function () { //独立版的layer无需执行这一句
         form = eui.form; //独立版的layer无需执行这一句;
         $('.activityNew').click(function () {
-            parent.element.tabAdd('nav-tab', {
-                title: '添加调研活动'
-                ,type: 2
-                , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/add"></iframe>'
-                , id: 3 //实际使用一般是规定好的id，这里以时间戳模拟下
-            })
-            parent.element.tabChange("nav-tab", 3);
+            //新增一个Tab项
+            if (parent.$(".eui-tab-title li[e-id='10001']").length <= 0) {
+                parent.element.tabAdd('nav-tab', {
+                    title: '添加调研活动'
+                    , type: 2
+                    , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/add"></iframe>'
+                    , id: 10001 //实际使用一般是规定好的id，这里以时间戳模拟下
+                })
+            }
+            parent.element.tabChange("nav-tab", 10001);
         })
     });
 
-    //查看活动详情
-    function checkActivity(id) {
-        var message = '查看企业活动详情';
-        if(parent.$(".eui-tab-title li[e-id='6']").length>0) {
-            parent.element.tabDelete("nav-tab", '6');
+    //编辑活动
+    function activityEdit(id) {
+        if (parent.$(".eui-tab-title li[e-id='10002']").length <= 0) {
+            parent.element.tabAdd('nav-tab', {
+                title: '修改调研活动'
+                ,
+                type: 2
+                ,
+                content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/update/' + id + '"></iframe>'
+                ,
+                id: 10002 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
         }
-        parent.element.tabAdd('nav-tab', {
-            title: message
-            ,type: 2
-            , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/ActivityCheck/'+id+'"></iframe>'
-            , id: 6 //实际使用一般是规定好的id，这里以时间戳模拟下
-        })
-        parent.element.tabChange("nav-tab", 6);
+        parent.element.tabChange("nav-tab", 10002);
+    }
+
+    //查看活动详情
+    function checkActivity(data, id) {
+        var message = '查看公益活动';
+        if (typeof data != 'undefined' && data == "approval") {
+            message = '调研活动审批'
+        }
+        if (parent.$(".eui-tab-title li[e-id='10003']").length <= 0) {
+            parent.element.tabAdd('nav-tab', {
+                title: message
+                ,
+                type: 2
+                ,
+                content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/check/' + id + '"></iframe>'
+                ,
+                id: 10003 //实际使用一般是规定好的id，这里以时间戳模拟下
+            })
+        }
+        parent.element.tabChange("nav-tab", 10003);
     }
 
     /**

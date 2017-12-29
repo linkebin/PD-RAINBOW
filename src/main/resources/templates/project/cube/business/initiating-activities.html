@@ -120,7 +120,7 @@
             </div>
 
             <div class="eui-textAlignC eui-bg-white eui-padding20">
-                <button onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big saveInfo">保存信息</button>
+                <a onclick="formSub()" class="eui-btn eui-btn-normal eui-btn-big saveInfo">保存信息</a>
             </div>
 
             <input type="submit" id="sub" style="display: none;" value="提交"/>
@@ -365,7 +365,7 @@
     function add(obj) {
         $.post('/launch/activities/add', {launchActivitiesJson: JSON.stringify(obj)}, function (result) {
             if (result.code == 200) {
-                
+
                 layer.msg("操作成功", {
                     icon: 1,
                     time: 1500
