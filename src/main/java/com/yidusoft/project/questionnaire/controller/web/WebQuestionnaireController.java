@@ -109,8 +109,8 @@ public class WebQuestionnaireController {
     @RequestMapping(value = "/question_horizontal_or_vertital_preview")
     public String questionnaireHorizontalPreview(String questionnaireId, Model model){
         model.addAttribute("questionnaireId",questionnaireId);
-
         Questionnaire questionnaire= questionnaireService.findQuestionnaireType(questionnaireId);
+        model.addAttribute("questionnaireName", questionnaire.getQuestionnaireName());
         //判断问卷的类型 1 左右滑动 2  平铺
         if(questionnaire.getAnswerModelType()==1
                 && !("生活事件量表(LES)").equals(questionnaire.getGaugeName())

@@ -107,15 +107,19 @@
   </select>
 
   <select id="findVitorByCreator" resultMap="BaseResultMap" parameterType="java.util.Map">
-    SELECT *
+    SELECT
+      <if test="occupation==null or occupation==''">
+        *
+      </if>
       <if test="occupation!=null and occupation!=''">
-          ,count(occupation) as count
+          occupation,count(occupation) as count
       </if>
       FROM visitor_register WHERE deleted=0 AND creator=#{creator}
     <if test="occupation!=null and occupation!=''">
       GROUP BY occupation
     </if>
   </select>
+
     <select id="acquisitionOfStatisticalAnalysis" resultMap="BaseResultMap" parameterType="java.util.Map">
         select a.*
         <if test="type!=null and type!=''">

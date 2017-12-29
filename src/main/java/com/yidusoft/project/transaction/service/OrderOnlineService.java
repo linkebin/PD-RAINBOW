@@ -11,6 +11,11 @@ import java.util.Map;
  * Created by CodeGenerator on 2017/10/11.
  */
 public interface OrderOnlineService extends Service<OrderOnline> {
+    /**
+     * 添加订单
+     * @param orderOnline
+     */
+     void addOrderOnline (OrderOnline orderOnline);
 
     /**
      * 根据订单状态获取用户的订单

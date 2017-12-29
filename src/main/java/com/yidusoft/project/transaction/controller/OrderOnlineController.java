@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
+import com.yidusoft.project.system.domain.Backlog;
+import com.yidusoft.project.system.service.BacklogService;
 import com.yidusoft.project.transaction.domain.AccountInfo;
 import com.yidusoft.project.transaction.service.AccountInfoService;
 import com.yidusoft.project.transaction.domain.OrderOnline;
@@ -44,7 +46,8 @@ public class OrderOnlineController {
 
     @Resource
     private AccountInfoService accountInfoService;
-
+    @Resource
+    private BacklogService backlogService;
     /**
      * 添加订单
      *
@@ -61,7 +64,8 @@ public class OrderOnlineController {
         orderOnline.setDeleted(0);
         orderOnline.setOrderState(2);
         orderOnline.setUserId(Security.getUserId());
-        orderOnlineService.save(orderOnline);
+        orderOnlineService.addOrderOnline(orderOnline);
+
         return ResultGenerator.genSuccessResult();
     }
 
@@ -129,6 +133,10 @@ public class OrderOnlineController {
         orderOnline.setPaymentTime(new Date());
         orderOnline.setSerialNumber(serialNumber);
         orderOnlineService.update(orderOnline);
+        //修改代办状态
+        Backlog backlog= backlogService.findBy("objid",orderOnline.getId());
+        backlog.setBacklogStatus("2");
+        backlogService.update(backlog);
         Date buyDate = new Date();
         UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
         ProductSettings productSettings = productSettingsService.findById(orderOnline.getProductId());
