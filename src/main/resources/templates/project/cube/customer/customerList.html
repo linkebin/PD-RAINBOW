@@ -239,7 +239,7 @@
         window.open('/web/customer/checkUpdate?id='+id);
     }
     function log(id) {
-        window.open('/web/customer/visitorInfo?id='+id);
+        window.location.href='/web/customer/visitorInfo?id='+id;
     }
     function deleteCustomer(id) {
         layer.confirm('确定删除该客户吗?', function(index){
