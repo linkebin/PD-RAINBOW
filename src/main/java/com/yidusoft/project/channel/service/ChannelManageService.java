@@ -1,9 +1,8 @@
 package com.yidusoft.project.channel.service;
 import com.yidusoft.core.Result;
-import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.core.Service;
+import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.system.domain.SecUser;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,12 @@ public interface ChannelManageService extends Service<ChannelManage> {
      * @return
      */
     List<Map<String,Object>> findChannelOrAccountCounselorListByParameter(List<String> ids,
-                                                                          Map<String,Object> map);
+                                                                          Map<String,Object> map);  /**
+     * 查询渠道和账号下的咨询师集合
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> listByAccountCounselorForChannel( Map<String,Object> map);
 
     /**
      * 渠道审批通过

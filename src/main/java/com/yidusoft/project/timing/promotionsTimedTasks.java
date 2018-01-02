@@ -1,13 +1,9 @@
 package com.yidusoft.project.timing;
 
 import com.alibaba.fastjson.JSON;
-import com.yidusoft.core.ResultGenerator;
-import com.yidusoft.project.channel.controller.ChannelRuleController;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.channel.service.ClearingManageService;
-import com.yidusoft.project.questionnaire.service.QuestionnaireService;
-import com.yidusoft.project.transaction.domain.QuestionnairePromotions;
 import com.yidusoft.project.transaction.service.OrderOnlineService;
 import com.yidusoft.project.transaction.service.QuestionnairePromotionsService;
 import org.slf4j.Logger;
@@ -51,7 +47,7 @@ public class promotionsTimedTasks {
 
 
     //每月1号结算订单佣金
-    @Scheduled(cron = "0 01 00 15 * ?")
+    @Scheduled(cron = "0 0 2 1 * ?")
     public void orderAndSettlement(){
         logger.info("结算佣金开始");
         List<ChannelManage> channelManages = channelManageService.findChannelManageAll();

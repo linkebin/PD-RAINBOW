@@ -250,7 +250,7 @@
             var params = $("#searchFrom").serializeObject();
             var index = layer.load(2); //加载
             $.ajax({
-                url:"/channel/manage/listByAccountCounselor",
+                url:"/channel/manage/listByAccountCounselorForChannel",
                 data: {
                     json:JSON.stringify(params),
                     page:1,
@@ -278,7 +278,7 @@
                                 var params = $("#searchFrom").serializeObject();
                                 layer.load(2);
                                 $.ajax({
-                                    url: "/channel/manage/listByAccountCounselor",
+                                    url: "/channel/manage/listByAccountCounselorForChannel",
                                     data: {
                                         json: JSON.stringify(params),
                                         page: obj.curr,
