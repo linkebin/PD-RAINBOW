@@ -106,12 +106,11 @@ public class LaunchActivitiesController {
     @PostMapping("/approval")
     public Result approval(String id,HttpServletRequest request) throws UnknownHostException {
         //获取服务器IP
-        int port = request.getServerPort();//获取服务器端口
         String ip = request.getServerName();//获取服务端ip
         LaunchActivities launchActivities=launchActivitiesService.findById(id);
         launchActivities.setActivityStatus(2);
         launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-        launchActivities.setUestionnaireUri("http://"+ip+":"+port+"/web/activities/fillingPage");
+        launchActivities.setUestionnaireUri("http://"+ip+":/web/activities/fillingPage");
         launchActivitiesService.update(launchActivities);
         return ResultGenerator.genSuccessResult();
     }

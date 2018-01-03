@@ -61,7 +61,7 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
             String ip = request.getServerName();//获取服务端ip
             if(launchActivities.getInitiatorType()==null || launchActivities.getInitiatorType()!=3){
                 launchActivities.setInitiatorType(1);
-                launchActivities.setUestionnaireUri("http://" + ip + ":" + port + "/web/activities/fillingPage");
+                launchActivities.setUestionnaireUri("http://" + ip + ":/web/activities/fillingPage");
                 launchActivities.setActivityPorn(CodeHelper.randomCode(8));
             }else{
                 String uri = "/web/launchActivities/acdetail?id="+launchActivities.getId();

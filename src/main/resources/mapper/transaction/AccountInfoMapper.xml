@@ -21,5 +21,6 @@
         <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
             AND date(account_date) BETWEEN #{startTime} AND #{endTime}
         </if>
+        order by account_date desc
     </select>
 </mapper>
