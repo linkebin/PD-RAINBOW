@@ -181,9 +181,6 @@
         for (var item in activityList) {
             var activity = activityList[item];
             var initiatorType="企业活动";//活动类型
-            if(activity.initiatorType==2){
-                initiatorType="调研活动";
-            }
             tableHtml += '<tr>' +
                     /*'<td><input name="" e-skin="primary" class="mycheckbox" type="checkbox"><input name="activityId" type="hidden" value="' + activity.id + '"></td>' +*/
                     '<td>' + activity.activityCode + '</td>' +
@@ -209,20 +206,6 @@
         doSearch();
     });
 
-    var form
-    eui.use('form', function () { //独立版的layer无需执行这一句
-        form = eui.form; //独立版的layer无需执行这一句;
-        $('.activityNew').click(function () {
-            parent.element.tabAdd('nav-tab', {
-                title: '添加调研活动'
-                ,type: 2
-                , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/add"></iframe>'
-                , id: 3 //实际使用一般是规定好的id，这里以时间戳模拟下
-            })
-            parent.element.tabChange("nav-tab", 3);
-        })
-    });
-
     //查看活动详情
     function checkActivity(id) {
         var message = '查看企业活动详情';
@@ -233,59 +216,9 @@
             title: message
             ,type: 2
             , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/ActivityCheck/'+id+'"></iframe>'
-            , id: 6 //实际使用一般是规定好的id，这里以时间戳模拟下
+            , id: 6 //实际使用一般是规定好的id
         })
         parent.element.tabChange("nav-tab", 6);
-    }
-
-    /**
-     * 批量删除
-     */
-    $('.activityDelete').click(function () {
-        var ids = "";
-        if (ids == "") {
-            var idArray = new Array();
-            var s = 0;
-            $(".mycheckbox:checked").each(function (i) {
-                var id = $(this).parent().find("input[name='activityId']").val();
-                idArray[s] = id;
-                s++;
-            });
-            ids = idArray.join(",");
-        }
-        if (ids == "") {
-            layer.msg('请选择要删除的活动', {
-                icon: 2,
-                time: 2000
-            });
-        } else {
-            deleteActivity(ids);
-        }
-    })
-
-    /**
-     * 删除
-     * @param id
-     */
-    function deleteActivity(id) {
-        layer.confirm('您确定删除吗？', {
-            btn: ['确认', '取消']
-        }, function () {
-            $.post("/launch/activities/delete", {"ids": id}, function (result) {
-                if (result.message = "SUCCESS") {
-                    layer.msg('删除成功', {
-                        icon: 1,
-                        time: 2000
-                    });
-                    doSearch();
-                } else {
-                    layer.msg(result.message, {
-                        icon: 1,
-                        time: 2000
-                    });
-                }
-            })
-        })
     }
 
 </script>
