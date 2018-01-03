@@ -195,9 +195,12 @@
                 element = eui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
         //初始化首页
-        var indexVal = $("ul.navul >li:first-child a span").text(),
-            indexUrl = $("ul.navul >li:first-child a").attr("href");
-        indexId=$("ul.navul >li:first-child a").attr("menuid");
+//        var indexVal = $("ul.navul >li:first-child a span").text(),
+//            indexUrl = $("ul.navul >li:first-child a").attr("href");
+//        indexId=$("ul.navul >li:first-child a").attr("menuid");
+        var indexVal ="首页",
+            indexUrl ="indexInfo";
+           indexId="1";
 
        if (indexUrl!=undefined){
             element.tabAdd("nav-tab", {
