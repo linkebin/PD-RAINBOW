@@ -110,7 +110,7 @@ public class LaunchActivitiesController {
         LaunchActivities launchActivities=launchActivitiesService.findById(id);
         launchActivities.setActivityStatus(2);
         launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-        launchActivities.setUestionnaireUri("http://"+ip+":/web/activities/fillingPage");
+        launchActivities.setUestionnaireUri("http://"+ip+"/web/activities/fillingPage");
         launchActivitiesService.update(launchActivities);
         return ResultGenerator.genSuccessResult();
     }
