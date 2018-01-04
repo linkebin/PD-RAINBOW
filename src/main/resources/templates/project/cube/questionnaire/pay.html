@@ -474,7 +474,7 @@
                 orderOnline.payment_method = $(this).children()[0].value;
             }
         })
-        $('.ImmediatePay').removeAttr("disabled");
+        //$('.ImmediatePay').removeAttr("disabled");
         var orderCode = new Date().Format("yyyy-MM-dd-hh-mm-ss");
         orderCode = orderCode.replace(/-/g, "") + parseInt(Math.random() * 100000);
         $.post("/order/online/add", {

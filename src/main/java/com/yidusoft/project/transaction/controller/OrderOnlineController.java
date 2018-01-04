@@ -48,6 +48,7 @@ public class OrderOnlineController {
     private AccountInfoService accountInfoService;
     @Resource
     private BacklogService backlogService;
+
     /**
      * 添加订单
      *
@@ -127,81 +128,87 @@ public class OrderOnlineController {
      */
     @PostMapping("/payment")
     public Result payment(String id, String serialNumber) {
-        System.out.println("进入更新@@@@@@@@@@@@@@@@@@@@@@@@@@订单号" + id + "流水号：" + serialNumber);
-        OrderOnline orderOnline = orderOnlineService.findById(id);
-        orderOnline.setOrderState(1);
-        orderOnline.setPaymentTime(new Date());
-        orderOnline.setSerialNumber(serialNumber);
-        orderOnlineService.update(orderOnline);
-        //修改代办状态
-        Backlog backlog= backlogService.findBy("objid",orderOnline.getId());
-        backlog.setBacklogStatus("2");
-        backlogService.update(backlog);
-        Date buyDate = new Date();
-        UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
-        ProductSettings productSettings = productSettingsService.findById(orderOnline.getProductId());
-        if (userQuestionnaires != null) {
-            if (productSettings.getProductType() == 1) {
-                userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal() + orderOnline.getQuestionnaireTotal());
-            } else {
-                Date date = new Date();
-                if(userQuestionnaires.getEndTime()!=null){
-                    if(userQuestionnaires.getEndTime().getTime()>new Date().getTime()){
-                        date = userQuestionnaires.getEndTime();
-                    }
-                }
-                if(userQuestionnaires.getBuyTime()==null){
-                    userQuestionnaires.setBuyTime(buyDate);
-                }
-                Calendar rightNow = Calendar.getInstance();
-                rightNow.setTime(date);
-                rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
-                date = rightNow.getTime();
-                userQuestionnaires.setEndTime(date);
-                userQuestionnaires.setMember(1);
-            }
-            userQuestionnairesService.update(userQuestionnaires);
+
+            System.out.println("进入更新@@@@@@@@@@@@@@@@@@@@@@@@@@订单号" + id + "流水号：" + serialNumber);
+            OrderOnline orderOnline = orderOnlineService.findById(id);
+        // 订单存在且支付状态已经是已支付的状态下就不用再进行流水和账户信息的修改了 2018年1月4日bug修复
+        if (orderOnline!= null && orderOnline.getOrderState()==1 && serialNumber.equals(orderOnline.getSerialNumber())) {
+            return ResultGenerator.genSuccessResult();
         } else {
-            UserQuestionnaires userQuestionnaire = new UserQuestionnaires();
-            userQuestionnaire.setId(UUID.randomUUID().toString());
-            userQuestionnaire.setUserId(orderOnline.getUserId());
-            userQuestionnaire.setQuestionnairesCumulativeTotal(0);
-            userQuestionnaire.setQuestionnairesTotal(0);
-            if (productSettings.getProductType() == 1) {
-                userQuestionnaire.setMember(2);
-                userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
-            }else{
-                Date date = new Date();
-                Calendar rightNow = Calendar.getInstance();
-                rightNow.setTime(date);
-                rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
-                date = rightNow.getTime();
-                userQuestionnaire.setBuyTime(buyDate);
-                userQuestionnaire.setMember(1);
-                userQuestionnaire.setEndTime(date);
+            orderOnline.setOrderState(1);
+            orderOnline.setPaymentTime(new Date());
+            orderOnline.setSerialNumber(serialNumber);
+            orderOnlineService.update(orderOnline);
+            //修改代办状态
+            Backlog backlog = backlogService.findBy("objid", orderOnline.getId());
+            backlog.setBacklogStatus("2");
+            backlogService.update(backlog);
+            Date buyDate = new Date();
+            UserQuestionnaires userQuestionnaires = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
+            ProductSettings productSettings = productSettingsService.findById(orderOnline.getProductId());
+            if (userQuestionnaires != null) {
+                if (productSettings.getProductType() == 1) {
+                    userQuestionnaires.setQuestionnairesTotal(userQuestionnaires.getQuestionnairesTotal() + orderOnline.getQuestionnaireTotal());
+                } else {
+                    Date date = new Date();
+                    if (userQuestionnaires.getEndTime() != null) {
+                        if (userQuestionnaires.getEndTime().getTime() > new Date().getTime()) {
+                            date = userQuestionnaires.getEndTime();
+                        }
+                    }
+                    if (userQuestionnaires.getBuyTime() == null) {
+                        userQuestionnaires.setBuyTime(buyDate);
+                    }
+                    Calendar rightNow = Calendar.getInstance();
+                    rightNow.setTime(date);
+                    rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
+                    date = rightNow.getTime();
+                    userQuestionnaires.setEndTime(date);
+                    userQuestionnaires.setMember(1);
+                }
+                userQuestionnairesService.update(userQuestionnaires);
+            } else {
+                UserQuestionnaires userQuestionnaire = new UserQuestionnaires();
+                userQuestionnaire.setId(UUID.randomUUID().toString());
+                userQuestionnaire.setUserId(orderOnline.getUserId());
+                userQuestionnaire.setQuestionnairesCumulativeTotal(0);
+                userQuestionnaire.setQuestionnairesTotal(0);
+                if (productSettings.getProductType() == 1) {
+                    userQuestionnaire.setMember(2);
+                    userQuestionnaire.setQuestionnairesTotal(orderOnline.getQuestionnaireTotal());
+                } else {
+                    Date date = new Date();
+                    Calendar rightNow = Calendar.getInstance();
+                    rightNow.setTime(date);
+                    rightNow.add(Calendar.MONTH, productSettings.getTimeLimit());//日期加几个月
+                    date = rightNow.getTime();
+                    userQuestionnaire.setBuyTime(buyDate);
+                    userQuestionnaire.setMember(1);
+                    userQuestionnaire.setEndTime(date);
+                }
+                userQuestionnairesService.save(userQuestionnaire);
             }
-            userQuestionnairesService.save(userQuestionnaire);
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+            String orderCode = formatter.format(new Date());
+            orderCode = orderCode + "" + (int) Math.random() * 100000;
+            AccountInfo accountInfo = new AccountInfo();
+            accountInfo.setId(UUID.randomUUID().toString());
+            accountInfo.setSerialNumber(orderCode);
+            accountInfo.setAccountDate(buyDate);
+            accountInfo.setAccountRemarks("购买了" + productSettings.getProductName());
+            String buyTotal = orderOnline.getQuestionnaireTotal().toString() + "个月";
+            if (productSettings.getProductType() == 1) {
+                buyTotal = orderOnline.getQuestionnaireTotal().toString() + "张";
+            }
+            accountInfo.setBuyTotal(buyTotal);
+            accountInfo.setAccountTotal("--");
+            accountInfo.setCostMoney(orderOnline.getOrderMoney());
+            accountInfo.setUserId(orderOnline.getUserId());
+            UserQuestionnaires uq = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
+            accountInfo.setAccountSurplus(uq.getQuestionnairesTotal());
+            accountInfoService.save(accountInfo);
+            return ResultGenerator.genSuccessResult();
         }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String orderCode = formatter.format(new Date());
-        orderCode=orderCode+""+(int)Math.random()*100000;
-        AccountInfo accountInfo = new AccountInfo();
-        accountInfo.setId(UUID.randomUUID().toString());
-        accountInfo.setSerialNumber(orderCode);
-        accountInfo.setAccountDate(buyDate);
-        accountInfo.setAccountRemarks("购买了"+productSettings.getProductName());
-        String buyTotal = orderOnline.getQuestionnaireTotal().toString()+"个月";
-        if(productSettings.getProductType()==1){
-            buyTotal = orderOnline.getQuestionnaireTotal().toString()+"张";
-        }
-        accountInfo.setBuyTotal(buyTotal);
-        accountInfo.setAccountTotal("--");
-        accountInfo.setCostMoney(orderOnline.getOrderMoney());
-        accountInfo.setUserId(orderOnline.getUserId());
-        UserQuestionnaires uq = userQuestionnairesService.findBy("userId", orderOnline.getUserId());
-        accountInfo.setAccountSurplus(uq.getQuestionnairesTotal());
-        accountInfoService.save(accountInfo);
-        return ResultGenerator.genSuccessResult();
     }
 
 }
