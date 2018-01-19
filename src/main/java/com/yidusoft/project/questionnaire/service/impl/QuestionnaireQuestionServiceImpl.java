@@ -149,7 +149,7 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             //判断问卷的类型
              Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
              String result = "";
-            String method="common";
+             String method="common";
              if(questionnaire!=null){
                 //获得方法名字
                  method=(GAUGE.get(questionnaire.getGaugeName())==null?"common":GAUGE.get(questionnaire.getGaugeName()).toString());
@@ -196,7 +196,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult(e.getMessage());
+            throw new RuntimeException();
+            //return ResultGenerator.genFailResult(e.getMessage());
         }
         return ResultGenerator.genSuccessResult();
     }
