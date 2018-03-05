@@ -79,18 +79,19 @@
                             </div>
                             <div class="eui-col-md6 eui-textAlignR">
                                 <a onclick="addAccount()" class="eui-btn eui-btn-small eui-btn-normal">添加用户</a>
-                                <a onclick="goTocustomerStatistics()" class="eui-btn eui-btn-small eui-btn-normal">邀请统计</a>
+                                <!--<a onclick="goTocustomerStatistics()" class="eui-btn eui-btn-small eui-btn-normal">邀请统计</a>-->
                             </div>
                         </div>
 
                         <div class="xymfForm">
                             <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
                                 <colgroup>
-                                    <col width="60">
-                                    <col width="150">
+                                    <col width="120">
+                                    <col width="100">
                                     <col width="100">
                                     <col width="200">
-                                    <col width="200">
+                                    <col width="150">
+                                    <col width="100">
                                     <col >
                                 </colgroup>
                                 <thead>
@@ -100,6 +101,7 @@
                                     <th>性别</th>
                                     <th>手机</th>
                                     <th>邮箱</th>
+                                    <th>推广码</th>
                                     <th>操作</th>
                                 </tr>
                                 </thead>
@@ -288,6 +290,7 @@
                 '<td>'+ sex +'</td>' +
                 '<td>'+secUser.MOBILE+'</td>' +
                 '<td>'+ secUser.EMAIL +'</td>' +
+                '<td>'+ secUser.inviter_code +'</td>' +
                 '<td>' +
                 '<div class="eui-btn-group"> ' +str+
                     ' </div>' +

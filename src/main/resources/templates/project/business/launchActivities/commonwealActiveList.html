@@ -54,7 +54,7 @@
         </form>
         <div class="eui-row eui-padding10 eui-borderB">
             <div class="eui-col-md6 eui-font18">
-                <i class='eui-icon eui-font24'>&#xe61d;</i> 调研活动
+                <i class='eui-icon eui-font24'>&#xe61d;</i> 公益活动
             </div>
         </div>
         <table class="eui-table eui-form" id="activitiesTable">
@@ -211,114 +211,26 @@
 
     function Buts(activity) {
         var id = "'" + activity.id + "'";
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + "'check'," + id + ')"><i class="eui-icon tb">&#xe621;</i></button>';
+        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ')"><i class="eui-icon tb">&#xe621;</i></button>';
     }
 
     parent.element.on('tab(nav-tab)', function (elem) {
         doSearch();
     });
 
-    var form
-    eui.use(['form'], function () { //独立版的layer无需执行这一句
-        form = eui.form; //独立版的layer无需执行这一句;
-        $('.activityNew').click(function () {
-            //新增一个Tab项
-            if (parent.$(".eui-tab-title li[e-id='10001']").length <= 0) {
-                parent.element.tabAdd('nav-tab', {
-                    title: '添加调研活动'
-                    , type: 2
-                    , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/add"></iframe>'
-                    , id: 10001 //实际使用一般是规定好的id，这里以时间戳模拟下
-                })
-            }
-            parent.element.tabChange("nav-tab", 10001);
-        })
-    });
-
-    //编辑活动
-    function activityEdit(id) {
-        if (parent.$(".eui-tab-title li[e-id='10002']").length <= 0) {
-            parent.element.tabAdd('nav-tab', {
-                title: '修改调研活动'
-                ,
-                type: 2
-                ,
-                content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/update/' + id + '"></iframe>'
-                ,
-                id: 10002 //实际使用一般是规定好的id，这里以时间戳模拟下
-            })
-        }
-        parent.element.tabChange("nav-tab", 10002);
-    }
-
     //查看活动详情
-    function checkActivity(data, id) {
-        var message = '查看公益活动';
-        if (typeof data != 'undefined' && data == "approval") {
-            message = '调研活动审批'
+    function checkActivity(id) {
+        var message = '查看公益活动详情';
+        if(parent.$(".eui-tab-title li[e-id='10004']").length>0) {
+            parent.element.tabDelete("nav-tab", '10004');
         }
-        if (parent.$(".eui-tab-title li[e-id='10003']").length <= 0) {
-            parent.element.tabAdd('nav-tab', {
-                title: message
-                ,
-                type: 2
-                ,
-                content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/check/' + id + '"></iframe>'
-                ,
-                id: 10003 //实际使用一般是规定好的id，这里以时间戳模拟下
-            })
-        }
-        parent.element.tabChange("nav-tab", 10003);
-    }
-
-    /**
-     * 批量删除
-     */
-    $('.activityDelete').click(function () {
-        var ids = "";
-        if (ids == "") {
-            var idArray = new Array();
-            var s = 0;
-            $(".mycheckbox:checked").each(function (i) {
-                var id = $(this).parent().find("input[name='activityId']").val();
-                idArray[s] = id;
-                s++;
-            });
-            ids = idArray.join(",");
-        }
-        if (ids == "") {
-            layer.msg('请选择要删除的活动', {
-                icon: 2,
-                time: 2000
-            });
-        } else {
-            deleteActivity(ids);
-        }
-    })
-
-    /**
-     * 删除
-     * @param id
-     */
-    function deleteActivity(id) {
-        layer.confirm('您确定删除吗？', {
-            btn: ['确认', '取消']
-        }, function () {
-            $.post("/launch/activities/delete", {"ids": id}, function (result) {
-                if (result.message = "SUCCESS") {
-                    layer.msg('删除成功', {
-                        icon: 1,
-                        time: 2000
-                    });
-                    doSearch();
-                } else {
-                    layer.msg(result.message, {
-                        icon: 1,
-                        time: 2000
-                    });
-                }
-            })
+        parent.element.tabAdd('nav-tab', {
+            title: message
+            ,type: 2
+            , content: '<iframe frameborder=0 class="contentIframe" src="/web/launchActivities/check/'+id+'"></iframe>'
+            , id: 10004 //实际使用一般是规定好的id
         })
+        parent.element.tabChange("nav-tab", 10004);
     }
 
 </script>

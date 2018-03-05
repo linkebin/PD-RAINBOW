@@ -21,9 +21,7 @@ import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class ActivityController {
@@ -65,6 +63,21 @@ public class ActivityController {
 			    taskRepresentation.setObjuri(uri);
 				dtos.add(taskRepresentation);
 		}
+		//根据任务的时间排序
+		Collections.sort(dtos, new Comparator<TaskRepresentation>() {
+			@Override
+			public int compare(TaskRepresentation o1, TaskRepresentation o2) {
+					/*
+					* 返回负数表示：o1 小于o2，
+					* 返回0 表示：o1和o2相等，
+					* 返回正数表示：o1大于o2。
+					*/
+				if(o1.getTaskTime().before( o2.getTaskTime())){
+					return -1;
+				}
+				return 1;
+			}
+		});
 		PageInfo pageInfo = new PageInfo(dtos);
 		pageInfo.setTotal(myService.getTasksCount(assignee));
 		return ResultGenerator.genSuccessResult(pageInfo);

@@ -2,6 +2,7 @@ package com.yidusoft.utils;
 
 import com.yidusoft.core.Result;
 import com.yidusoft.project.business.domain.ActiveParticipant;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -48,13 +49,11 @@ public  class EntityReflex {
     }
 
     public static Result getMethods(Class<?> entity, String method, Object...  params)throws  Exception{
-        //String className = "com.runqianapp.ngr.alias.example.FunClass";
-        //Class clz = Class.forName(className);
+
         Result result=null;
         try {
             Class[] classes=new Class[params.length];
             for(int i=0;i<params.length;i++){
-                //classes[i]=(Class)params[1][i];
                 //通过反射机制得到值属于类型  如：字符串  String
                 classes[i]=params[i].getClass();
             }
@@ -65,24 +64,49 @@ public  class EntityReflex {
             result=(Result) m.invoke(obj,params);
         } catch (Exception e) {
             e.printStackTrace();
-            result=null;
         }
         return  result;
     }
 
-    public void sayHello( ArrayList<ActiveParticipant>  params,String  params1){
-       System.out.println(params1);
+    public  static  void   reflexToMethods(Class<?> entity, String method, Object...  param){
+        try {
+
+            Class[] classes=new  Class[param.length];
+            for(int i=0;i<param.length;i++){
+
+                classes[i]=param[i].getClass();
+            }
+            Object obj=entity.newInstance();
+            //获取方法
+            Method m= obj.getClass().getDeclaredMethod(method,classes);
+            //调用方法
+            m.invoke(obj,param);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void sayHello(ArrayList<ActiveParticipant> params,String  params2){
+
+        System.out.println(params2);
+        System.out.println(params.get(0).getAge());
+
     }
 
 
     public static void main(String[] args) {
-        List<ActiveParticipant> activeParticipants=new ArrayList<>();
+       List<ActiveParticipant> activeParticipants=new ArrayList<>();
         ActiveParticipant activeParticipant=new ActiveParticipant();
         activeParticipant.setAge(10);
         activeParticipants.add(activeParticipant);
-        List list=new ArrayList<>();
+
+       // List list=new ArrayList<>();
         try {
-            EntityReflex.getMethod(EntityReflex.class,"sayHello",activeParticipants,"张安");
+            EntityReflex.reflexToMethods(EntityReflex.class,"sayHello",activeParticipants,"张三");
         } catch (Exception e) {
             e.printStackTrace();
         }

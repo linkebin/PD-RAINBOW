@@ -1,29 +1,21 @@
 package com.yidusoft.project.channel.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.yidusoft.core.AbstractService;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.activitis.service.ChannelActivityService;
 import com.yidusoft.project.channel.dao.ChannelManageMapper;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
-import com.yidusoft.core.AbstractService;
-
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.utils.CodeHelper;
-import com.yidusoft.utils.TimeStampDate;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.locks.Condition;
 
 
 /**
@@ -142,6 +134,11 @@ public class ChannelManageServiceImpl extends AbstractService<ChannelManage> imp
     public List<Map<String, Object>> findChannelOrAccountCounselorListByParameter(List<String> ids,
                                                                                   Map<String,Object> map) {
         return channelManageMapper.findChannelOrAccountCounselorListByParameter(ids,map);
+    }
+
+    @Override
+    public List<Map<String, Object>> listByAccountCounselorForChannel(Map<String, Object> map) {
+        return channelManageMapper.listByAccountCounselorForChannel(map);
     }
 
     @Override

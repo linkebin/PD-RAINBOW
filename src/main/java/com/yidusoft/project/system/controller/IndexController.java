@@ -139,8 +139,8 @@ public class IndexController {
             return ResultGenerator.genFailResult("手机验证码错误");
         }
         String mobile = (String) request.getSession().getAttribute("mobile");
-        if (!mobile.equals(secUser.getMobile()) ){
-            return ResultGenerator.genFailResult("手机验证码错误");
+        if (!mobile.equals(secUser.getAccount()) ){
+            return ResultGenerator.genFailResult("两次号码不一致，请重新输入");
         }
         secUser.setUserName(CodeHelper.getCode("yxmf"));
         String inviterCode = CodeHelper.randomCode(8);

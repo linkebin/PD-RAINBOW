@@ -18,7 +18,22 @@ import java.util.Map;
 
 public class QuestionnaireMethod {
 
-    // 症状自评量表-SCL90  的规则结论
+    /**
+     * 公共的分数计算方法
+     * @return
+     * @throws Exception
+     */
+    public Result common(ArrayList<QuestionnaireAnswer> questionnaireAnswerList)throws  Exception{
+
+        return  ResultGenerator.genSuccessResult("公共方法，结果不一!");
+    }
+
+    /***
+     * 症状自评量表-SCL90  的规则结论
+     * @param questionnaireAnswerList
+     * @return
+     * @throws Exception
+     */
     public Result gauge_4(ArrayList<QuestionnaireAnswer> questionnaireAnswerList) throws  Exception{
         //1.躯体化
        Map<String,Object> factor1=getFactorScore("躯体化分","1,4,12,27,40,42,48,49,52,53,56,58",questionnaireAnswerList);
@@ -117,7 +132,9 @@ public class QuestionnaireMethod {
         return ResultGenerator.genSuccessResult(JSON.toJSONString(maps));
     }
 
-    //焦虑
+    /**
+     *  焦虑
+     */
     public Result gauge_34(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
         //总分
                Map<String,Object> map =getTotalScore("totalScore",questionnaireAnswerList);
@@ -127,8 +144,12 @@ public class QuestionnaireMethod {
         return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
     }
 
-
-    //抑郁 规则结论
+    /***
+     * 抑郁 规则结论
+     * @param questionnaireAnswerList
+     * @return
+     * @throws Exception
+     */
     public Result gauge_30(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
            //总分
           Map<String,Object> map =getTotalScore("totalScore",questionnaireAnswerList);
@@ -139,15 +160,25 @@ public class QuestionnaireMethod {
         return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
     }
 
-
-    //贝克抑郁自评量表gauge_32(BDI)
+    /**
+     * 贝克抑郁自评量表gauge_32(BDI)
+     * @param questionnaireAnswerList
+     * @return
+     * @throws Exception
+     */
     public Result gauge_32(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
         //总分
         Map<String,Object> map =getTotalScore("totalScore",questionnaireAnswerList);
 
         return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
     }
-   //流调用抑郁自评量表(CES-D)
+
+    /****
+     * 流调用抑郁自评量表(CES-D)
+     * @param questionnaireAnswerList
+     * @return
+     * @throws Exception
+     */
     public Result gauge_31(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
        //总分
        Map<String,Object> map =getTotalScore("totalScore",questionnaireAnswerList);
@@ -155,7 +186,12 @@ public class QuestionnaireMethod {
        return  ResultGenerator.genSuccessResult(JSON.toJSONString(map));
    }
 
-   // 儿少心理健康量表(MHS-CA)
+    /***
+     * 儿少心理健康量表(MHS-CA)
+     * @param questionnaireAnswerList
+     * @return
+     * @throws Exception
+     */
     public Result gauge_5(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
         //认知维度 认知维度=感知觉+注意力+记忆力+智力+学习与工作
         Map<String,Object> cognitiveDimensionMap  =getFactorScore("认知维度","1,2,3,4,5",questionnaireAnswerList);
@@ -360,6 +396,8 @@ public class QuestionnaireMethod {
                          dimension4++;
                      }
                      break;
+                  default:
+                      break;
            }
             totalScore+=qa.getAnswerScore();
         }

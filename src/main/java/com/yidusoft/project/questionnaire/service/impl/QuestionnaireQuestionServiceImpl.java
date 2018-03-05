@@ -141,8 +141,6 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             int totalScore = getQuestionnaireTotalScore(mapList, dataAcquisitionId, userName,userId);
             //根据客户Id找到咨询师id
              VisitorRegister visitorRegister= findVisitorRegister(userId,activityId);
-
-            Subject subjects= SecurityUtils.getSubject();
             //查询问卷的相关答案
              QuestionnaireAnswer questionnaireAnswer=new QuestionnaireAnswer();
              questionnaireAnswer.setUserId(userId);
@@ -151,22 +149,25 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
             //判断问卷的类型
              Questionnaire questionnaire = questionnaireMapper.findQuestionnaireType(questionnaireId);
              String result = "";
-             //获得方法名字
-             String method=GAUGE.get(questionnaire.getGaugeName()).toString();
+             String method="common";
+             if(questionnaire!=null){
+                //获得方法名字
+                 method=(GAUGE.get(questionnaire.getGaugeName())==null?"common":GAUGE.get(questionnaire.getGaugeName()).toString());
+             }
              //调QuestionnaireMethod 类里面method的方法 得到返回的分析结果
              Result methodResult= EntityReflex.getMethods(QuestionnaireMethod.class,method,questionnaireAnswerList);
              result= methodResult.getData().toString();
-           //添加使用问卷
-            DataAcquisition dataAcquisition = new DataAcquisition();
-            dataAcquisition.setId(dataAcquisitionId);
-            dataAcquisition.setDataResult(result);
-            dataAcquisition.setTimeConsuming(timeConsuming);
-            dataAcquisition.setDataQuestion(questionnaireId);
-            dataAcquisition.setActivityId(activityId);
-            dataAcquisition.setDataCode(CodeHelper.getCode("SY"));
-            dataAcquisition.setTotalScore(totalScore);
-            dataAcquisition.setUserId(userId);
-            dataAcquisition.setDeleted(0);
+            //添加使用问卷
+             DataAcquisition dataAcquisition = new DataAcquisition();
+             dataAcquisition.setId(dataAcquisitionId);
+             dataAcquisition.setDataResult(result);
+             dataAcquisition.setTimeConsuming(timeConsuming);
+             dataAcquisition.setDataQuestion(questionnaireId);
+             dataAcquisition.setActivityId(activityId);
+             dataAcquisition.setDataCode(CodeHelper.getCode("SY"));
+             dataAcquisition.setTotalScore(totalScore);
+             dataAcquisition.setUserId(userId);
+             dataAcquisition.setDeleted(0);
             //判断是活动填写问卷  还是来访者填写问卷
             if (StringUtils.isEmpty(activityId)) {
                 dataAcquisition.setDataUser(userId);
@@ -195,7 +196,8 @@ public class QuestionnaireQuestionServiceImpl extends AbstractService<Questionna
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult(e.getMessage());
+            throw new RuntimeException();
+            //return ResultGenerator.genFailResult(e.getMessage());
         }
         return ResultGenerator.genSuccessResult();
     }

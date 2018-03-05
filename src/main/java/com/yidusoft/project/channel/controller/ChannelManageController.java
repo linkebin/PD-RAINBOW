@@ -1,13 +1,13 @@
 package com.yidusoft.project.channel.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.activitis.service.ChannelActivityService;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.yidusoft.project.channel.service.ChannelRuleService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
@@ -19,9 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
 * Created by CodeGenerator on 2017/10/11.
@@ -229,6 +230,17 @@ public class ChannelManageController {
         map.put("type",2);
         PageHelper.startPage(page, limit);
         List<Map<String,Object>> list = channelManageService.findChannelOrAccountCounselorListByParameter(ids,map);
+        PageInfo pageInfo = new PageInfo(list);
+
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
+    }
+        //    渠道商查詢咨詢師列表
+    @PostMapping("/listByAccountCounselorForChannel")
+    public Result listByAccountCounselorForChannel(Integer page,  Integer limit,String json) {
+
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+        PageHelper.startPage(page, limit);
+        List<Map<String,Object>> list = channelManageService.listByAccountCounselorForChannel(map);
         PageInfo pageInfo = new PageInfo(list);
 
         return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);

@@ -32,7 +32,8 @@
         // 服务器统一请求接口路径
         // 部署待办 将下面UR地址L切换
         // , serverUrl: URL + "jsp/controller.jsp"
-        , serverUrl: "http://120.78.220.80/upload/ueConfig"
+        // , serverUrl: "http://120.78.220.80/upload/ueConfig"
+        , serverUrl: "/upload/ueConfig"
         // , serverUrl: "http://localhost:8088/upload/ueConfig"
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义

@@ -179,7 +179,7 @@ public class ActivityService {
         if (bool) {
             launchActivities.setActivityStatus(2);
             launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-            launchActivities.setUestionnaireUri("http://"+ip+":"+port+"/web/activities/fillingPage");
+            launchActivities.setUestionnaireUri("http://"+ip+"/web/activities/fillingPage");
             logger.info("活动审批通过");
         } else {
             launchActivities.setActivityStatus(3);

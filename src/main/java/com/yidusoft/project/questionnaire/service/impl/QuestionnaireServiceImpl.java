@@ -95,7 +95,8 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
                }
             }
         }catch (Exception e){
-            return ResultGenerator.genFailResult("操作失败");
+            //return ResultGenerator.genFailResult("操作失败");
+            throw  new RuntimeException();
         }
 
         return ResultGenerator.genSuccessResult();
@@ -180,8 +181,9 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
             }
 
         }catch (Exception e){
-            System.out.println(e.toString());
-            return ResultGenerator.genFailResult("操作失败");
+            e.printStackTrace();
+           // return ResultGenerator.genFailResult("操作失败");
+            throw  new RuntimeException();
         }
 
         return ResultGenerator.genSuccessResult();
@@ -201,7 +203,8 @@ public class QuestionnaireServiceImpl extends AbstractService<Questionnaire> imp
             }
         }catch (Exception e){
             e.printStackTrace();
-            return   ResultGenerator.genFailResult(e.getMessage());
+            //return   ResultGenerator.genFailResult(e.getMessage());
+            throw  new RuntimeException();
         }
 
         return ResultGenerator.genSuccessResult();

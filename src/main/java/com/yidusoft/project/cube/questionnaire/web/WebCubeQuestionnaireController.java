@@ -156,7 +156,10 @@ public class WebCubeQuestionnaireController {
             return "project/cube/questionnaireDetails/gauge_7_a";
         }
         Questionnaire questionnaire = questionnaireService.findQuestionnaireType(questionnaireId);
-        String  htmlName= GAUGE.get(questionnaire.getGaugeName()).toString();
+        String htmlName="gauge_common";
+        if(questionnaire!=null){
+          htmlName=(GAUGE.get(questionnaire.getGaugeName())==null?"gauge_common":GAUGE.get(questionnaire.getGaugeName()).toString());
+        }
 
         return "project/cube/questionnaireDetails/"+htmlName;
     }
