@@ -280,7 +280,15 @@
     //获取问题的数据
     function  getData() {
         $("[name='questionContent']").val($("[name='questionContent']").val().trim());
-        $("[name='optionAnswer']").val($("[name='optionAnswer']").val().trim());
+       // $("[name='optionAnswer']").val($("[name='optionAnswer']").val().trim());
+        var tempOption = $("[name='optionAnswer']");
+        for(var i = 0; i < tempOption.length; i++){
+            $("[name='optionAnswer']").eq(i).val($("[name='optionAnswer']").eq(i).val().trim());
+        }
+        var tempScore = $("[name='optionScore']");
+        for(var i = 0; i < tempScore.length; i++){
+            $("[name='optionScore']").eq(i).val($("[name='optionScore']").eq(i).val().trim());
+        }
        var questionType= $("[name='questionType']").val();
        var obj=new Object();
         obj.answerSequence=1;
@@ -295,8 +303,10 @@
         var option=new Array;
         var answers=new Array;
         var optionScores=new Array;
+        console.log("questioncontent = " + obj + "optionanswer length = " + optionAnswer.length);
         for(var i=0;i<optionAnswer.length;i++){
             option.push(optionAnswer.eq(i).val());
+            console.log('答案是'+i+' = ' + optionAnswer.eq(i).val());
             if(questionType=='1' ||questionType=='2' ){
 
                 if(answer.eq(i).is(':checked')){
