@@ -8,7 +8,6 @@ import com.yidusoft.project.questionnaire.domain.QuestionnaireAnswer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -187,20 +186,20 @@ public class QuestionnaireMethod {
    }
 
     /***
-     * 儿少心理健康量表(MHS-CA)
+     * 少儿心理健康量表(MHS-CA)
      * @param questionnaireAnswerList
      * @return
      * @throws Exception
      */
     public Result gauge_5(ArrayList<QuestionnaireAnswer>  questionnaireAnswerList)throws Exception {
         //认知维度 认知维度=感知觉+注意力+记忆力+智力+学习与工作
-        Map<String,Object> cognitiveDimensionMap  =getFactorScore("认知维度","1,2,3,4,5",questionnaireAnswerList);
+        Map<String,Object> cognitiveDimensionMap  =getFactorScore("认知维度","1,2,3,9,23",questionnaireAnswerList);
         //思维维度  思维维度=思维过程+思维内容+思维自主性+语言表达+语言理解
-        Map<String,Object> thinkingDimensionMap  =getFactorScore("思维维度","6,7,8,9,10",questionnaireAnswerList);
+        Map<String,Object> thinkingDimensionMap  =getFactorScore("思维维度","4,5,6,7,8",questionnaireAnswerList);
         //情绪维度 情绪维度=焦虑体验+愉快体验+情绪反应
-        Map<String,Object> emotionDimensionMap  =getFactorScore("情绪维度","11,12,13",questionnaireAnswerList);
+        Map<String,Object> emotionDimensionMap  =getFactorScore("情绪维度","16,17,18",questionnaireAnswerList);
         //意志行为 意志行为=行为+活动+兴趣+人际交往+健康关注
-        Map<String,Object> volitionalBehaviorMap  =getFactorScore("意志行为","14,15,16,17,18",questionnaireAnswerList);
+        Map<String,Object> volitionalBehaviorMap  =getFactorScore("意志行为","19,20,21,22,24",questionnaireAnswerList);
         //个性特征 个性特征=自信与自尊+安全与信任+责任感+活泼性+仁慈心+需要满足
         Map<String,Object> personalityCharacteristicsMap  =getFactorScore("个性特征","10,11,12,13,14,15",questionnaireAnswerList);
         Map<String,Object> map=new HashMap<>();
