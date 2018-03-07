@@ -58,7 +58,7 @@
                         <input type="text" name="optionAnswer"  placeholder="选项" autocomplete="off" class="eui-input">
                     </div>
                     <div class="eui-input-inline" >
-                        <input name="optionScore" class="eui-input" type="text" placeholder="分数" >
+                        <input name="optionScore" class="eui-input" type="text" placeholder="分数">
                     </div>
                     <div class="eui-input-inline" name="divAnswer">
                         <input name="answer" title="答案" type="checkbox" >
@@ -156,6 +156,7 @@
         if(question==""){
             html=getHtml();
             $("#divOptionAnswer").append(html);
+            checkOptionScoreNum();
         }else {
             //修改填充数据
             questionTypes=question.questionType+"";
@@ -211,7 +212,7 @@
               '<input type="text" name="optionAnswer"  placeholder="选项" autocomplete="off" class="eui-input">'+
               '</div>'+
               '  <div class="eui-input-inline" >'+
-              ' <input  name="optionScore" class="eui-input" type="text" placeholder="分数" >'+
+              ' <input  name="optionScore" class="eui-input" type="text" placeholder="分数">'+
               ' </div>'+
               '  <div class="eui-input-inline" name="divAnswer">'+
               '  <input name="answer" title="答案" type="checkbox" >'+
