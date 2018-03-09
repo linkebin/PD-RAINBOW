@@ -250,9 +250,10 @@ function  getTable(list) {
             totalScore=json.totalScore;
             factorScore.push(json.cognitiveDimension);
             factorScore.push(json.thinkingDimension);
+            factorScore.push(json.personalityCharacteristics);
             factorScore.push(json.emotionDimension);
             factorScore.push(json.volitionalBehavior);
-            factorScore.push(json.personalityCharacteristics);
+
 
 //            context+='<div class="eui-font14 eui-form-item" >';
 //            context+="<p>认知维度："+json.cognitiveDimension+"分</p> ";
@@ -263,9 +264,9 @@ function  getTable(list) {
 //            context+='</div>';
         $('#result1').text(json.cognitiveDimension);
         $('#result2').text(json.thinkingDimension);
-        $('#result3').text(json.emotionDimension);
-        $('#result4').text(json.volitionalBehavior);
-        $('#result5').text(json.personalityCharacteristics);
+        $('#result3').text(json.personalityCharacteristics);
+        $('#result4').text(json.emotionDimension);
+        $('#result5').text(json.volitionalBehavior);
     }
 
     $("#dataResult").append(context);
