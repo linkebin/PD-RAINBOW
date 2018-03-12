@@ -21,6 +21,7 @@
 
       <if test="userName!='' and userName!=null">
         AND user_name LIKE  '%${userName}%'
+          OR user_account LIKE '%${userName}%'
       </if>
       <if test="loginAddr!='' and loginAddr!=null">
         AND login_addr LIKE  '%${loginAddr}%'
