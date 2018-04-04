@@ -227,11 +227,12 @@
     }
     function layuiAlertClose(o) {
         layer.closeAll();
-        if (o){
-            $('#test-n1').html('');
-            var obj = new Object();
-            initLaydateTest_n1(obj);
-        }
+        location.reload();
+//        if (o){
+//            $('#test-n1').html('');
+//            var obj = new Object();
+//            initLaydateTest_n1(obj);
+//        }
     }
     // 表单
     eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {

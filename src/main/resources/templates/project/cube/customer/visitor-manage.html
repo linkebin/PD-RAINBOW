@@ -274,11 +274,11 @@
             var id = "'" + secUser.ID_ + "'";
             var visitor_id = "'" + secUser.visitor_id + "'";
             var type = '来访';
-            var aicon = '<button title="来访记录" class="eui-btn eui-btn-primary eui-btn-mini" onclick="log('+visitor_id+')" ><i class="eui-icon">&#xe60e;</i></button>';
+            var aicon = '<button title="来访记录" class="eui-btn eui-btn-primary eui-btn-mini" onclick="log('+visitor_id+')" ><i class="eui-icon">&#xe621;</i></button>';
 
                 var update = "'update'";
             if (secUser.type == 2){
-                aicon='<button title="预约详情" class="eui-btn eui-btn-primary eui-btn-mini" onclick="openSchrdule('+update+','+id+')" ><i class="eui-icon">&#xe60e;</i></button>';
+                aicon='<button title="预约详情" class="eui-btn eui-btn-primary eui-btn-mini" onclick="openSchrdule('+update+','+id+')" ><i class="eui-icon">&#xe621;</i></button>';
                 type = '预约';
             }
             tableHtml +=  '<tr>' +

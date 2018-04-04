@@ -29,8 +29,9 @@
         <div class="eui-form-item">
             <label class="eui-form-label">预约客户</label>
             <div class="eui-input-inline">
-                <input type="text" name="visitorName" onfocus="defaultData()"
-                       onblur="checkCustomerValidity(this)"  id="visitorName"  placeholder="搜索" class="eui-input eui-width400"/>
+                <input onblur="checkCustomerValidity()" type="text" name="visitorName"
+                         id="visitorName"
+                         class="eui-input eui-width400"/>
                 <span class="infos"></span>
             </div>
         </div>
@@ -84,6 +85,8 @@
                 elem: '#visitorTime'
                 ,type: 'datetime'
             });
+
+            defaultData();
         });
 
         function save() {
@@ -154,13 +157,13 @@
                 }
             });
 
-            $('#visitorName').bind('input propertychange', function() {
-                var textValue = $(this).val();
-                var params = new Object();
-                params.visitorName=textValue;
-                params.creator=$('#creator').val();
-                loadList(params);
-            });
+//            $('#visitorName').bind('input propertychange', function() {
+//                var textValue = $(this).val();
+//                var params = new Object();
+//                params.visitorName=textValue;
+//                params.creator=$('#creator').val();
+////                loadList(params);
+//            });
 
             if ($("#type").val()=='update'){
                 $.post('/schedule/detail',{id:$("#idold").val()},function (result) {
@@ -175,15 +178,15 @@
             var params = new Object();
             params.visitorName='';
             params.creator=$('#creator').val();
-            loadList(params)
+            loadList(params);
         }
         function loadList(params) {
             $.post('/visitor/register/listByparameter',{json:JSON.stringify(params),
                 page:1,
-                pagesize:100},function (result) {
+                pagesize:500},function (result) {
                 var arr = new Array();
                 var projects1 = result.data.list;
-                if (result.data.list.length>0){
+                if (projects1.length>0){
                     for (var i=0;i<projects1.length;i++){
                         var obj = new Object();
                         obj.value=projects1[i].visitorName;
@@ -214,9 +217,12 @@
                 }
             });
         }
-        function checkCustomerValidity(obj) {
+        function checkCustomerValidity() {
+            var obj = $("#visitorName").val();
+
+            if (obj!='') {
             var params = new Object();
-            params.visitorName=$(obj).val();
+            params.visitorName=obj;
             params.creator=$('#creator').val();
             if (params.visitorName!=''){
                 $.post('/visitor/register/listByparameter',{json:JSON.stringify(params),
@@ -232,6 +238,7 @@
                         $("#scheduleForm input[name='phone']").val(result.data.list[0].phone );
                     }
                 });
+            }
             }
         }
 

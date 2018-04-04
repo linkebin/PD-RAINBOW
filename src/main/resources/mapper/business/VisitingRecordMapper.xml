@@ -142,6 +142,8 @@
       AND b.create_time &gt;= #{start1} AND b.create_time &lt;= #{end1}
     </if>
 
+      ORDER BY b.visitor_time DESC
+
   </select>
 
   <select id="getVisitingTotal" resultType="int" parameterType="String">

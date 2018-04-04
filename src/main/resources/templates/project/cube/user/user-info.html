@@ -73,7 +73,9 @@
                             </div>
 
                             <div class="eui-form-item">
-                                <label class="eui-form-label">推广码</label>
+                                <label class="eui-form-label">推广码
+                                    <p class="eui-font12">(推荐好友时该码作为邀请码)</p>
+                                </label>
                                 <div class="eui-input-inline">
                                     <input th:value="${session.userSession.inviterCode}" type="text" name="inviterCode" readonly="readonly"  class="eui-input eui-width400">
                                 </div>

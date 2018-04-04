@@ -32,17 +32,17 @@
             <div class="visitorTitle eui-row">
                 <div class="eui-col-md7"><img src="/Styles/images/xymfImages/cube.png" width="24" alt="">  个人信息卡</div>
                 <div id="ys" class="eui-col-md5 eui-row updateProcess eui-col-offset1">
-                    <div class="updateProcess-this">
+                    <div onclick="tabShowHide(0)" class="updateProcess-this">
                         <p class="updateNum eui-col-md1 eui-col-offset1">1</p>
                         <p class="updateFont eui-col-md1 eui-marginLR5">基本信息</p>
                         <p class="updateLine eui-col-md1"></p>
                     </div>
-                    <div>
+                    <div onclick="$('#baseInfoForm').submit()">
                         <p class="updateNum eui-col-md1">2</p>
                         <p class="updateFont eui-col-md1 eui-marginLR5">家庭信息</p>
                         <p class="updateLine eui-col-md1"></p>
                     </div>
-                    <div>
+                    <div onclick="$('#familyForm').submit()">
                         <p class="updateNum eui-col-md1">3</p>
                         <p class="updateFont eui-col-md1 eui-marginLR5">咨询情况</p>
                     </div>
@@ -941,7 +941,11 @@
                         layer.closeAll();
                         if (result.code==200){
                             // self.opener.location.reload();
-                            window.location.href="/login";
+                            layer.msg('保存成功', {
+                                time: 3000, //20s后自动关闭
+                            },function () {
+                                window.location.href="/login";
+                            });
                         }else {
                             layer.msg(result.message);
                         }

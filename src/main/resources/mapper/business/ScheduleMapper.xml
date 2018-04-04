@@ -33,7 +33,7 @@
   <select id="findScheduleToBackDay30" parameterType="com.yidusoft.project.business.domain.Schedule" resultMap="BaseResultMap">
         SELECT visitor_name,visitor_time,describes,ID_ FROM `schedule` WHERE deleted=0 AND consultant_id=#{consultantId}
 
-         AND visitor_time >=DATE_FORMAT(NOW(),'%Y-%m-%d')  LIMIT 0,30;
+         AND visitor_time >=DATE_FORMAT(NOW(),'%Y-%m-%d')  ORDER BY visitor_time ASC  LIMIT 0,30;
 
 
   </select>

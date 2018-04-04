@@ -330,7 +330,7 @@
 	-webkit-animation-name: flipintoright;
 	-webkit-animation-duration: 225ms;
 	animation-name: flipintoright;
-	animation-duration: 1500ms;
+	/*animation-duration: 1500ms;*/
 }
 .flip.out.reverse {
 	-webkit-transform: rotateY(90deg) scale(.9);
