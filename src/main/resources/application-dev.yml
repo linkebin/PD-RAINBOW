@@ -7,7 +7,7 @@ spring:
     password:
     initialSize: 1
     minIdle: 1
-    maxActive: 20
+    maxActive: 200
   jpa:
     hibernate:
       ddl-auto: update

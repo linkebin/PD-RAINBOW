@@ -202,7 +202,7 @@ function  getTable(list) {
     var dataResult=list.dataAcquisition.dataResult;
     if(dataResult!=null && dataResult!=""){
         var json=eval("("+dataResult+")");
-           totalScore=json.totalScore;
+           totalScore=json.standardScore;
             context+="<p class='eui-lineHeight24 eui-color-blue eui-marginB10'>标准分:"+json.standardScore+"分</p>";
             context+="<p class='eui-lineHeight24'>无焦虑：标准分 ＜ 50分</p>";
             context+="<p class='eui-lineHeight24'>轻度焦虑：标准分 50-59分</p>";
@@ -258,7 +258,7 @@ function initEcharts() {
     // 指定图表的配置项和数据
     var option = {
         title: {
-            text: '总分'
+            text: '标准分'
         },
         tooltip : {
             formatter: "{a} <br/>{b} : {c}"
@@ -272,9 +272,9 @@ function initEcharts() {
             {
                 name: '我的总分',
                 type: 'gauge',
-                max: 400,
+                max: 100,
                 detail: {formatter:'{value}'},
-                data: [{value: totalScore, name: '总分'}]
+                data: [{value: totalScore, name: '标准分'}],
             }
         ]
     };

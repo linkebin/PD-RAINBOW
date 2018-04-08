@@ -6,17 +6,11 @@ import com.yidusoft.project.business.domain.VisitorRegister;
 import com.yidusoft.project.business.service.VisitorRegisterService;
 import com.yidusoft.project.system.domain.SelectOption;
 import com.yidusoft.project.system.service.SelectOptionService;
-import com.yidusoft.utils.Security;
-import org.json.JSONObject;
-import org.omg.CORBA.portable.ApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
