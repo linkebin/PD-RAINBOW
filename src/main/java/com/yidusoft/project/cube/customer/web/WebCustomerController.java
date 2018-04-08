@@ -39,18 +39,18 @@ public class WebCustomerController {
         educationLevel(visitorRegister,map);
         maritalStatus(visitorRegister,map);
 
-        if (visitorRegister.getMotherDeathYourAge()==0){
-            map.put("motherDeathYourAge","");
+        if (visitorRegister.getMotherDeathYourAge()==null ){
+            map.put("motherDeathYourAge","无");
         }
-        if (visitorRegister.getFatherDeathYourAge()==0){
-            map.put("fatherDeathYourAge","");
+        if (visitorRegister.getFatherDeathYourAge() ==null ){
+            map.put("fatherDeathYourAge","无");
         }
 
-        if (visitorRegister.getParentalDivorceYourAge()==0){
-            map.put("parentalDivorceYourAge","");
+        if (visitorRegister.getParentalDivorceYourAge() == null ){
+            map.put("parentalDivorceYourAge","无");
         }
-        if (visitorRegister.getParentalSeparationYourAge()==0){
-            map.put("parentalSeparationYourAge","");
+        if (visitorRegister.getParentalDivorceYourAge()== null ){
+            map.put("parentalSeparationYourAge","无");
         }
         model.addAttribute("vr",map);
 
@@ -58,23 +58,26 @@ public class WebCustomerController {
     }
 
 
-    public void maritalStatus(VisitorRegister visitorRegister,Map<String,Object> map){
-        String str ="未婚";
-        if (visitorRegister.getMaritalStatus()==2){
-            str="已婚";
-        }
-        if (visitorRegister.getMaritalStatus()==3){
-            str="已婚分居";
-        }
-        if (visitorRegister.getMaritalStatus()==4){
-            str="再婚";
-        }
-        if (visitorRegister.getMaritalStatus()==5){
-            str="离婚独居";
-        }
-        if (visitorRegister.getMaritalStatus()==6){
-            str="丧偶独居";
-        }
+    public void maritalStatus(VisitorRegister visitorRegister,Map<String,Object> map) {
+        String str = "未婚";
+        if (visitorRegister.getMaritalStatus() != null) {
+
+            if (visitorRegister.getMaritalStatus() == 2) {
+                str = "已婚";
+            }
+            if (visitorRegister.getMaritalStatus() == 3) {
+                str = "已婚分居";
+            }
+            if (visitorRegister.getMaritalStatus() == 4) {
+                str = "再婚";
+            }
+            if (visitorRegister.getMaritalStatus() == 5) {
+                str = "离婚独居";
+            }
+            if (visitorRegister.getMaritalStatus() == 6) {
+                str = "丧偶独居";
+            }
+    }
         map.put("maritalStatus",str);
     }
     public void educationLevel(VisitorRegister visitorRegister,Map<String,Object> map){
@@ -172,9 +175,10 @@ public class WebCustomerController {
     }
 
     @RequestMapping("/visitorInfo")
-    public String visitorInfo(Model model,String id){
+    public String visitorInfo(Model model,String id,String time){
 
         model.addAttribute("id",id);
+        model.addAttribute("time",time);
         VisitorRegister visitorRegister = visitorRegisterService.findById(id);
         model.addAttribute("visitorRegister",visitorRegister);
         List<SelectOption> selectOptionList =selectOptionService.findSelectOptionByType("goal");

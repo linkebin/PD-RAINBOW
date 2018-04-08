@@ -1,5 +1,6 @@
 package com.yidusoft.project.cube.customer.web;
 
+import com.yidusoft.project.business.service.ScheduleService;
 import com.yidusoft.project.system.domain.SelectOption;
 import com.yidusoft.project.system.service.SelectOptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,15 @@ import java.util.List;
 @RequestMapping("/web/schedule")
 public class WebScheduleController {
 
+    @Autowired
+    private ScheduleService scheduleService;
+
     @RequestMapping("/visitor/schedule")
     public String customerList(String type,Model model,String id){
 
         model.addAttribute("type",type);
         model.addAttribute("id",id);
+        model.addAttribute("schedule",scheduleService.findById(id));
 
         return "project/cube/customer/visitor-schedule";
     }

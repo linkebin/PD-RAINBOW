@@ -356,6 +356,10 @@
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <script type="text/javascript" charset="utf-8" src="/Scripts/plugins/utf8-jsp/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/Scripts/plugins/utf8-jsp/ueditor.all.js"> </script>
+<script th:inline="javascript">
+    var time =[[${time}]];
+</script>
+
 <script>
 
     $(function(){
@@ -746,6 +750,16 @@ var processLogA=null;
                 $("#resetDiv").show();
 
             }
+
+            if (time!=null) {
+                $('#noData').hide();
+                $(".DivInfo").hide();
+                $(".DivAdd").show();
+                $("#resetDiv").show();
+                $(".DivAdd input[name='visitorTime']").val(new Date(time).Format('yyyy-MM-dd hh:mm:ss'));
+            }
+
+
         });
     }
     var visitorTimes="";

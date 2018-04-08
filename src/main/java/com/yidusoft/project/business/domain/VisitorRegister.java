@@ -1,9 +1,8 @@
 package com.yidusoft.project.business.domain;
 
-import com.yidusoft.project.questionnaire.domain.Questionnaire;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "visitor_register")
 public class VisitorRegister {
