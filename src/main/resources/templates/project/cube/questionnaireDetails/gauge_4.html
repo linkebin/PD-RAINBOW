@@ -199,7 +199,7 @@ function  getTable(list) {
     var dataResult=list.dataAcquisition.dataResult;
     if(dataResult!=null && dataResult!=""){
         var json=eval("("+dataResult+")");
-           totalScore=json.score.总分;
+           totalScore=json.score.标准分;
             factorScore.push(json.average.躯体化分);
             factorScore.push(json.average.强迫症状);
             factorScore.push(json.average.人际敏感);
@@ -255,7 +255,7 @@ function  getTable(list) {
     //答案
     var answerList=list.answerList;
     var context="";
-    console.info(answerList);
+
    for(var i in questionList){
     context+='<div questionType="'+questionList[i].questionType+'" radioNmae="answer'+questionList[i].id+'" correctAnswer="'+questionList[i].answer+'" questionId="'+questionList[i].id+'"  class="eui-form-item eui-paddingB10" name="divQuestion">';
     context+='<div class="eui-font14">';
@@ -311,7 +311,7 @@ function initEcharts() {
             {
                 name: '我的总分',
                 type: 'gauge',
-                max: 400,
+                max: 563,
                 detail: {formatter:'{value}'},
                 data: [{value: totalScore, name: '总分'}]
             }

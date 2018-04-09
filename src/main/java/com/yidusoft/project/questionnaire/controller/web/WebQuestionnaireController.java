@@ -110,14 +110,22 @@ public class WebQuestionnaireController {
     }
 
 
-    //跳转到横版或竖版问卷预览
+    /***
+     * 跳转到横版或竖版问卷预览
+     *修改人：张成博
+     *修改内容：将问卷的预览横板显示改为竖版
+     *修改时间：2018-04-08
+     * @param questionnaireId
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/question_horizontal_or_vertital_preview")
     public String questionnaireHorizontalPreview(String questionnaireId, Model model){
         model.addAttribute("questionnaireId",questionnaireId);
         Questionnaire questionnaire= questionnaireService.findQuestionnaireType(questionnaireId);
         model.addAttribute("questionnaireName", questionnaire.getQuestionnaireName());
         //判断问卷的类型 1 左右滑动 2  平铺
-        if(questionnaire.getAnswerModelType()==1
+    /*    if(questionnaire.getAnswerModelType()==1
                 && !("生活事件量表(LES)").equals(questionnaire.getGaugeName())
                 && !("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())
                 && !("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())
@@ -148,7 +156,8 @@ public class WebQuestionnaireController {
             model.addAttribute("gaugeName", gaugeName);
             return "project/questionnaire/questionnairePreview/questionnaire_horizontal_preview";
 
-        }else if(("生活事件量表(LES)").equals(questionnaire.getGaugeName())){
+        }else*/
+        if(("生活事件量表(LES)").equals(questionnaire.getGaugeName())){
             return "project/questionnaire/questionnairePreview/fillIn_gauge_12_preview";
         }else if(("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())){
             return "project/questionnaire/questionnairePreview/fillIn_gauge_7_preview";

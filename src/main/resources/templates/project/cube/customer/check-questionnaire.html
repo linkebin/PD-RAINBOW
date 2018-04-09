@@ -414,7 +414,8 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
     }
     //问卷预览
     function preview(id) {
-        window.open("/web/cube/getQuestionnairePreviewGuide?questionnaireId=" + id);
+
+        window.open("/web/questionnaire/question_horizontal_or_vertital_preview?questionnaireId=" + id);
     }
     //使用问卷
     function useQuestionnaire (questionnaireId) {

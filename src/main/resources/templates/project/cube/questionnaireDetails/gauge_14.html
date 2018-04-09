@@ -253,7 +253,8 @@ function  getTable(list) {
     var dataResult=list.dataAcquisition.dataResult;
     if(dataResult!=null && dataResult!=""){
         var json=eval("("+dataResult+")");
-           totalScore=json.totalScore;
+         //  totalScore=json.totalScore;
+             totalScore=json.totalScoreAverage;
             factorScore.push(json.learningStress);
             factorScore.push(json.teacherStress);
             factorScore.push(json.familyStress);
@@ -348,7 +349,7 @@ function initEcharts() {
             {
                 name: '我的总分',
                 type: 'gauge',
-                max: 400,
+                max: 4,
                 detail: {formatter:'{value}'},
                 data: [{value: totalScore, name: '总分'}]
             }

@@ -186,8 +186,8 @@
                     '<td>' + promotion.promotionsName + '</td>'
             promotion.promotionsType == 1 ? tableHtml += '<td>限时折扣</td>' : tableHtml += '<td>限时买送</td>';
             tableHtml +=
-                    '<td>' + new Date(promotion.promotionsStart).Format('yyyy-MM-dd') + '</td>' +
-                    '<td>' + new Date(promotion.promotionsEnd).Format('yyyy-MM-dd') + '</td>' +
+                    '<td>' + new Date(promotion.promotionsStart).Format('yyyy-MM-dd hh:mm:ss') + '</td>' +
+                    '<td>' + new Date(promotion.promotionsEnd).Format('yyyy-MM-dd hh:mm:ss') + '</td>' +
                     '<td>' + discount + '</td>' +
                     '<td>' + buySend + '</td>' +
                     '<td>' + state + '</td>' +
