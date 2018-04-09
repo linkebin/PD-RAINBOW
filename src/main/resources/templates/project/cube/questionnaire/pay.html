@@ -406,10 +406,18 @@
             if (pay.type == "") {
                 message = "";
             }
+            var t = pay.total;
+
             if (pay.productType == 2) {
                 pay.total = pay.total + "个月";
             } else {
                 pay.total = pay.total + "张";
+            }
+
+            var z =t;
+            if (isNaN(t)) {
+                var arr = t.split('+');
+                z = Number(arr[0])+Number(arr[1]);
             }
             if (item == 0) {
                 tableHtml += '<li class="eui-float-left payTicket0 payTicket1 eui-lineHeight24 payment">' +
@@ -417,7 +425,7 @@
                         '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                         message +
                         '<span class="discountFont">' + pay.type + '</span>' +
-                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">'+showDetail(pay.productType,z,pay.price)+'</span>' +
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>';
@@ -431,7 +439,7 @@
                     '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                     message +
                     '<span class="discountFont">' + pay.type + '</span>' +
-                    '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">(原价： ' + pay.originalPrice + '元)</span>' +
+                    '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">'+showDetail(pay.productType,z,pay.price)+'</span>' +
                     '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                     '<i class="eui-icon tickFont">&#xe605;</i>' +
                     '<span class="tick"></span></li>';
@@ -443,6 +451,14 @@
             }
         }
         return tableHtml;
+    }
+
+    function showDetail(productType,z,price) {
+        if (productType==2) {
+            return '原价：'+price+'元';
+        }else {
+            return '折合单价：'+(price/z).toFixed(2)+'元';
+        }
     }
 
     /**

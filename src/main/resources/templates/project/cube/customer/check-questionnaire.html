@@ -427,8 +427,9 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
                 // 账号余额不足
                 layer.open({
                     title:"充值",
-                    type: 1,
-                    content: '<div style="width: 350px;height: 350px">您的可用问卷余额不足，现在去 <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay/null">充值</a>！</div>'
+                    type: 1
+                    ,area: ['350px', '150px'],
+                    content: $("#hintMoney")
                 });
 
             }else {
@@ -479,6 +480,12 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
 
 
 </script>
-
+<div id="hintMoney" style="display: none">
+    <div class="eui-margin20">
+        您的可用问卷余额不足，现在去
+        <a target="_blank" class="eui-btn eui-btn-normal eui-btn-small" href="/cube/pay/null">
+            充值</a>！
+    </div>
+</div>
 </body>
 </html>
