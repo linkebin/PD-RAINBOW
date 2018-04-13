@@ -343,9 +343,9 @@
             } else {
                 str = str.substring(str.indexOf("折") + 1, str.indexOf("元/"));
             }
+
             price = parseFloat(str);
             total = (event.delegateTarget.innerText).toString();
-            console.log(total);
             if (total.indexOf('张') != -1) {
                 var strTotal;
                 strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("张"));
@@ -355,6 +355,10 @@
                 } else {
                     total = strTotal;
                 }
+                var p = $(this).find('.paymoney').html();
+                $('.money').html(p);
+                price = parseFloat(p);
+
             } else if (total.indexOf('个月') != -1) {
                 var strTotal;
                 strTotal = total.substring(total.indexOf("元/") + 2, total.indexOf("个月"));
@@ -364,16 +368,17 @@
                 } else {
                     total = strTotal;
                 }
+                $('.money').html(str);
             }
-            $('.money').html(str);
-            var send = event.currentTarget.children[1].value;
-            if (send.indexOf('张') != -1) {
-                $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
-            } else if (send.indexOf('折') != -1) {
-                $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
-            } else {
-                $('.send').html("");
-            }
+
+//            var send = event.currentTarget.children[1].value;
+//            if (send.indexOf('张') != -1) {
+//                $('.send').html("限时加赠" + '<span class="eui-color-blue">' + send + '</span>');
+//            } else if (send.indexOf('折') != -1) {
+//                $('.send').html("限时折扣" + '<span class="eui-color-blue">' + send + '</span>');
+//            } else {
+//                $('.send').html("");
+//            }
         });
     }
 
@@ -390,7 +395,7 @@
             var pay = payList[item];
             //初始化
             if (item == 0) {
-                $('.money').html(pay.price + " ");
+                $('.money').html(Number(pay.price).toFixed(2) + " ");
                 price = pay.price;
                 total = pay.total;
                 var send = pay.discountContent;
@@ -425,7 +430,7 @@
                         '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                         message +
                         '<span class="discountFont">' + pay.type + '</span>' +
-                        '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">'+showDetail(pay.productType,z,pay.price)+'</span>' +
+                        '<span class="eui-font30 paymoney">' + Number(pay.price).toFixed(2) + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">'+showDetail(pay.productType,z,pay.price)+'</span>' +
                         '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                         '<i class="eui-icon tickFont">&#xe605;</i>' +
                         '<span class="tick"></span></li>';
@@ -439,7 +444,7 @@
                     '<input type="hidden" class="discountContent" value="' + pay.discountContent + '"/>' +
                     message +
                     '<span class="discountFont">' + pay.type + '</span>' +
-                    '<span class="eui-font30">' + pay.price + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">'+showDetail(pay.productType,z,pay.price)+'</span>' +
+                    '<span class="eui-font30 paymoney">' + Number(pay.price).toFixed(2) + '</span> 元/' + pay.total + ' <br> <span class="eui-color-gray3">'+showDetail(pay.productType,z,pay.price,pay.discountContent)+'</span>' +
                     '<input type="hidden" class="promotion" value="' + pay.promotionsId + '"/>' +
                     '<i class="eui-icon tickFont">&#xe605;</i>' +
                     '<span class="tick"></span></li>';
@@ -453,9 +458,17 @@
         return tableHtml;
     }
 
-    function showDetail(productType,z,price) {
+    function showDetail(productType,z,price,discountContent) {
+
         if (productType==2) {
-            return '原价：'+price+'元';
+            if (discountContent!=undefined && discountContent!='') {
+                var f = discountContent.replace('折','')/10;
+                return '原价：'+(Number(price)/Number(f)).toFixed(2)+'元';
+            }else {
+                return '原价：'+Number(price).toFixed(2)+'元';
+            }
+
+
         }else {
             return '折合单价：'+(price/z).toFixed(2)+'元';
         }
@@ -467,12 +480,13 @@
     $('.ImmediatePay').click(function () {
         $('.ImmediatePay').attr("disabled", "disabled");
         var strTotal = total;
+
         if (total.toString().indexOf('+') != -1) {
             total = strTotal.substring(strTotal.indexOf("+") + 1, total.length);
             total = parseInt(total) + parseInt(strTotal.substring(0, strTotal.indexOf("+")));
         }
-        console.log(total);
-        console.log(price)
+//        alert(total);
+//        alert(price)
         var orderOnline = {
             questionnaire_total: total,//问卷购买数量
             order_money: price//应付金额

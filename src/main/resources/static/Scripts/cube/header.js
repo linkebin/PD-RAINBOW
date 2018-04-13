@@ -77,7 +77,8 @@ function initLaydateTest_n1(obj) {
             var dateFormat = new Date(item.visitorTime).Format('yyyy-MM-dd');
             if($("#list"+dateFormat)[0]){
                 $("#list"+dateFormat).append(' <div class="eui-overflowH eui-font14"> <div class="eui-float-left eui-marginB5">'+ new Date(item.visitorTime).Format('hh:mm')+'</div> ' +
-                    '<div title="'+item.describes+'" style="text-overflow: ellipsis;" class="eui-float-left eui-marginB10 eui-marginL10 test">'+item.visitorName+'  '+item.describes+'</div> ' +
+                    '<div title="'+item.describes+'" style="text-overflow: ellipsis;" ' +
+                    'class="eui-float-left eui-marginB10 eui-marginL10 test" onclick=openDialogsAndTab("'+item.id+'") >'+item.visitorName+'  '+item.describes+'</div> ' +
                     '</div>');
             }
         });
@@ -95,10 +96,27 @@ function loadEvends(obj) {
         }else {
             $.each(v,function (index,item) {
                 $("#scheduleData").append('<div class="eui-overflowH"> ' +
-                    '<div class="eui-float-left eui-marginB5">'+new Date(item.visitorTime).Format('hh:mm')+'</div> ' +
-                    '<div title="'+item.describes+'"  style="text-overflow: ellipsis;" class="eui-float-left eui-marginB10 eui-marginL10 test">'+item.visitorName+'  '+item.describes+'</div></div>')
+                    '<div class="eui-float-left eui-marginB5">'+new Date(item.visitorTime).Format('hh:mm')+'</div> '+linkDiv(item));
             });
         }
         layer.closeAll();
     });
+}
+
+function linkDiv(item) {
+        return '<div title="'+item.describes+'"  style="text-overflow: ellipsis;" ' +
+            'class="eui-float-left eui-marginB10 eui-marginL10 test" onclick=openDialogsAndTab("'+item.id+'","'+item.visitorId+'") >'+item.visitorName+'  '+item.describes+'</div></div>';
+}
+
+function openDialogsAndTab(id,objid) {
+    if (id!='') {
+        var index = layer.open({
+            title: '预约登记'
+            , type: 2
+            , area: ['600px', '500px']
+            , content: '/web/schedule/visitor/schedule?type=update&id='+id
+        });
+    }else {
+        window.open(objid);
+    }
 }

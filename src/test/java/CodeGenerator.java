@@ -16,7 +16,7 @@ import static com.yidusoft.core.ProjectConstant.*;
  */
 public class CodeGenerator {
     //JDBC配置，请修改为你项目的实际配置
-    private static final String JDBC_URL = "jdbc:mysql://192.168.1.35/pd-rainbow";
+    private static final String JDBC_URL = "jdbc:mysql://192.168.1.35/pd_rainbow";
     private static final String JDBC_USERNAME = "root";
     private static final String JDBC_PASSWORD = "";
     private static final String JDBC_DIVER_CLASS_NAME = "com.mysql.jdbc.Driver";
@@ -24,7 +24,7 @@ public class CodeGenerator {
 //    private static final String PROJECT_PATH = System.getProperty("user.dir");//项目在硬盘上的基础路径
 //    private static final String TEMPLATE_FILE_PATH = PROJECT_PATH +"/resources/generator/generator.template";//模板位置
 
-    private static final String PROJECT_PATH = "D:\\yidusoft项目\\心云魔方\\PD-RAINBOW";//项目在硬盘上的基础路径
+    private static final String PROJECT_PATH = "D:\\SourceCode\\yidu\\MicroService\\PD-RAINBOW";//项目在硬盘上的基础路径
     private static final String TEMPLATE_FILE_PATH = PROJECT_PATH +"/src/main/resources/generator/template";//模板位置
 
     private static final String JAVA_PATH = "/src/main/java"; //java文件路径
@@ -39,7 +39,7 @@ public class CodeGenerator {
 
     public static void main(String[] args) {
 //        genCode("visitor_register","sec_menu_member","sec_menu_role","sec_org","sec_role","sec_role_member","sec_user");
-        genCode("select_option");
+        genCode("templatexxxx");
 
     }
 
@@ -47,8 +47,8 @@ public class CodeGenerator {
         for (String tableName : tableNames) {
             //根据需求生成，不需要的注掉，模板有问题的话可以自己修改。
             genModelAndMapper(tableName);
-            genService(tableName);
-            genController(tableName);
+//            genService(tableName);
+//            genController(tableName);
         }
     }
 

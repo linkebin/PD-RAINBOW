@@ -225,6 +225,7 @@
                 '<td>'+ addr +'</td>' +
                 '<td>' +
                     '<div class="eui-btn-group">' +
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="look('+id+')" title="客户详情"><i class="eui-icon">&#xe621;</i></button>' +
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" onclick="edit('+id+')" title="编辑客户"><i class="eui-icon">&#xe642;</i></button>' +
                     ' <button class="eui-btn eui-btn-primary eui-btn-mini" onclick="log('+id+')" title="来访记录"><i class="eui-icon">&#xe60e;</i></button>' +
                     ' <button class="eui-btn eui-btn-primary eui-btn-mini" onclick="deleteCustomer('+id+')" title="删除客户"><i class="eui-icon">&#xe640;</i></button> ' +
@@ -238,6 +239,11 @@
     function edit(id) {
         window.open('/web/customer/checkUpdate?id='+id);
     }
+
+    function look(id) {
+        window.open('/web/customer/customerinfodetail?id='+id);
+    }
+
     function log(id) {
         window.location.href='/web/customer/visitorInfo?id='+id;
     }

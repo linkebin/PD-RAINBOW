@@ -105,7 +105,9 @@ public class ScheduleController {
                 schedule1.setVisitorTime((Date) mmm.get("create_time"));
                 schedule1.setDescribes(mmm.get("title").toString());
                 schedule1.setVisitorName("");
+                schedule1.setVisitorId(mmm.get("url").toString());
                 scheduleList.add(schedule1);
+
             }
             return ResultGenerator.genSuccessResult(scheduleList);
         }

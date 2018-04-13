@@ -62,7 +62,7 @@
             <th:block th:if="${schedule!=null}">
                 <div class="eui-form-item">
                     <label class="eui-form-label">&nbsp;</label>
-                    <a target="_blank"  th:href="@{'/web/customer/visitorInfo?id='+${schedule.visitorId}+'&time='+${schedule.visitorTime}}"
+                    <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"  th:href="@{'/web/customer/visitorInfo?id='+${schedule.visitorId}+'&time='+${schedule.visitorTime}}"
                     >来访记录</a>
                 </div>
             </th:block>
