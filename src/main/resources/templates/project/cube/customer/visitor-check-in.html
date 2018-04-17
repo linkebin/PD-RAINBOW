@@ -425,7 +425,7 @@
                         <input type="hidden" name="creator" th:value="${creator}">
                          <div class="eui-bg-white eui-form">
                         <div class="eui-form-item">
-                            <label class="eui-form-label" style="width: 240px;">以前进行过心里咨询吗？</label>
+                            <label class="eui-form-label" style="width: 240px;">以前进行过心理咨询吗？</label>
                             <div class="eui-input-inline">
                                 <input type="radio" e-filter="psychologicalCounseling" name="psychologicalCounseling" value="0" title="没有" >
                                 <input type="radio" e-filter="psychologicalCounseling" name="psychologicalCounseling" value="1" title="有">
@@ -912,10 +912,10 @@
                 }
             },
             submitHandler: function() {
-                var names = {psychologicalCounseling:'请勾选以前进行过心里咨询吗',
+                var names = {psychologicalCounseling:'请勾选以前进行过心理咨询吗',
                     medicalTreatment:'请勾选是否因心理问题就医',
                     medicalHistory:'请勾选是否慢性疾病,家族病史和过敏史',
-                    psychologicalCounseling:'请勾选以前进行过心里咨询吗',
+                    psychologicalCounseling:'请勾选以前进行过心理咨询吗',
                     'longMedication':'请勾选曾长期服用过何种药物'}
                 var checkNull =   nationUtil.checkRadioFieldNoNull(names,'consultForm');
                 if(checkNull!=''){
