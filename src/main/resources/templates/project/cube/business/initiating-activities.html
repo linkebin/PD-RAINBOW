@@ -24,7 +24,7 @@
 <div class="questionHeader">
     <div class="eui-row eui-area">
         <div class="xymfLogo">
-            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+            <img alt="" onclick="javascript:window.location.href='/index'" src="/Styles/images/xymfImages/xymf/logo.png">
             <span class="payCentre">发起活动</span>
         </div>
     </div>
@@ -290,7 +290,6 @@
                         add(obj);
                     }else{
                         $.get("/user/questionnaires/list", function (result) {
-                            console.log(result);
                             if (result.code = 200) {
                                 if (result.data != null) {
                                     var total = result.data.questionnairesTotal;
@@ -315,6 +314,8 @@
                                     $('.saveInfo').removeClass("pay-color-gray");
                                     $('#sub').removeAttr("disabled");
                                 }
+
+
                             } else {
                                 $('.saveInfo').text("保存信息");
                                 $('.saveInfo').removeAttr("disabled");
@@ -346,6 +347,10 @@
                     }, function () {
                         window.open("/cube/pay/null");
                     })
+                    $('.saveInfo').text("保存信息");
+                    $('.saveInfo').removeAttr("disabled");
+                    $('.saveInfo').removeClass("pay-color-gray");
+                    $('#sub').removeAttr("disabled");
                 } else {
                     add(obj)
                 }

@@ -284,7 +284,6 @@
     function detail() {
         var index = layer.load(0, {shade: false}); //加载
         $.post("/launch/activities/detail", {id: $('#id').val()}, function (result) {
-            console.log(result);
             if (result.code == 200) {
                 var activity = result.data;
                 var address = activity.activityAddr;

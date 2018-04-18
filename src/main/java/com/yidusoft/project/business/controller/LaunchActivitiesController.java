@@ -7,8 +7,10 @@ import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.business.domain.LaunchActivities;
 import com.yidusoft.project.business.service.LaunchActivitiesService;
+import com.yidusoft.project.questionnaire.service.DataAcquisitionService;
 import com.yidusoft.utils.*;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -138,6 +141,8 @@ public class LaunchActivitiesController {
         return ResultGenerator.genSuccessResult().setMessage("验证码发生成功");
     }
 
+    @Autowired
+    private DataAcquisitionService dataAcquisitionService;
     /**
      * 获取用户所有活动的人数
      * @param id
@@ -148,12 +153,16 @@ public class LaunchActivitiesController {
         List<LaunchActivities> list = new ArrayList<>();
         LaunchActivities launchActivities=new LaunchActivities();
         launchActivities.setUserId(Security.getUserId());
+        launchActivities.setActivityEnd(new Date());
         list = launchActivitiesService.getActivityAll(launchActivities);
         int sumTotal=0;
         if(list!=null && list.size()>0){
             for(LaunchActivities la:list){
                 if(!id.equals(la.getId())){
                     sumTotal+=la.getActivityTotal();
+                   int used = dataAcquisitionService.findCountByActivityId(la.getId());
+                    sumTotal-=used;
+
                 }
             }
         }
