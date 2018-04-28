@@ -1,9 +1,13 @@
 package com.yidusoft.project.cube.business.web;
 
+import com.alibaba.fastjson.JSONObject;
+import com.yidusoft.utils.Security;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Map;
+
 
 /**
  * Created by L on 2017/10/30.
@@ -67,5 +71,16 @@ public class WebCubeActivitiesController {
     public String Check(Model model,String id){
         model.addAttribute("id",id);
         return "project/cube/business/activities-check";
+    }
+
+    /**
+     *跳转到活动统计页面
+     * @param model
+     * @return
+     */
+    @RequestMapping(value="/getActivitiesStatistics")
+    public String getActivitiesStatistics(Model model){
+        model.addAttribute("userId", Security.getUserId());
+        return "project/cube/business/activities_statistics";
     }
 }

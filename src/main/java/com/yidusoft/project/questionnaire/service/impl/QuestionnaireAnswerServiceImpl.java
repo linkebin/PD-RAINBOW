@@ -103,5 +103,14 @@ public class QuestionnaireAnswerServiceImpl extends AbstractService<Questionnair
     public List<QuestionnaireAnswer> findAnswerForAcquisition(QuestionnaireAnswer questionnaireAnswer) {
         return questionnaireAnswerMapper.findAnswerForAcquisition(questionnaireAnswer);
     }
+    /**
+     *  查询活动的所有填写答案
+     *  @param activityId
+     */
+    @Override
+    public List<QuestionnaireAnswer> findAnswerForActivity(String activityId) {
+
+        return questionnaireAnswerMapper.findAnswerForActivity(activityId);
+    }
 
 }

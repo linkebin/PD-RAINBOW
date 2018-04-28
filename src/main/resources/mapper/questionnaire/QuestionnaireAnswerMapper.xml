@@ -46,4 +46,16 @@
     SELECT  * FROM questionnaire_answer WHERE user_id =#{userId} AND acquisition_id=#{acquisitionId}
   </select>
 
+  <select id="findAnswerForActivity" resultMap="BaseResultMap" parameterType="String">
+    SELECT
+     q.*
+    FROM
+      data_acquisition d
+    LEFT JOIN
+     questionnaire_answer q
+    ON d.ID_=q.acquisition_id
+    WHERE d.activity_id=#{activityId}
+  </select>
+
+
 </mapper>

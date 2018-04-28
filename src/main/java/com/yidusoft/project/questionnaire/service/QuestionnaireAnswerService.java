@@ -19,5 +19,9 @@ public interface QuestionnaireAnswerService extends Service<QuestionnaireAnswer>
     List<List<String>> getAnswers(List<QuestionnaireQuestion> questionnaireQuestions);
     //查询来访者填写问卷的答案 相关
     List<QuestionnaireAnswer>  findAnswerForAcquisition(QuestionnaireAnswer questionnaireAnswer);
-
+    /**
+     *  查询活动的所有填写答案
+     *  @param activityId
+     */
+    List<QuestionnaireAnswer> findAnswerForActivity(String activityId);
 }

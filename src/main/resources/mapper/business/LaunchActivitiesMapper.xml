@@ -61,4 +61,96 @@
         SELECT * FROM launch_activities where deleted=0 AND id_=#{id}
         AND now() BETWEEN activity_start AND activity_end
     </select>
+
+    <select id="getActivitySchedule"  resultType="java.util.Map"  parameterType="String">
+          SELECT
+               a.activity_name,date_format(a.activity_start,'%Y-%m-%d') as  activity_start,
+               date_format(a.activity_end,'%Y-%m-%d') as  activity_end,q.questionnaire_name,
+               GROUP_CONCAT(d.time_consuming) time_consuming,
+               MAX(TIME_TO_SEC(str_to_date(d.time_consuming, '%H:%i:%s'))) time_second_max,
+               MIN(TIME_TO_SEC(str_to_date(d.time_consuming, '%H:%i:%s'))) time_second_min,
+               AVG(TIME_TO_SEC(str_to_date(d.time_consuming, '%H:%i:%s')))  time_second_avg,
+            CASE
+               WHEN d.id_  is not null
+               THEN  SUM(1)
+               ELSE  0   END  user_number,
+               a.activity_total
+           FROM
+            launch_activities a
+           LEFT JOIN
+             data_acquisition d
+           ON  a.ID_=d.activity_id
+           LEFT JOIN
+             questionnaire q
+           ON  d.data_question=q.ID_
+           WHERE
+            a.ID_=#{activityId}
+            AND  a.deleted=0
+            GROUP BY   a.activity_name,activity_start,activity_end,questionnaire_name,a.activity_total
+    </select>
+
+
+    <select id="getActivityNumberPeopleForResult" resultType="java.util.Map"  parameterType="String">
+          SELECT
+            d.data_result,p.sex,p.age
+            FROM
+            data_acquisition d
+            LEFT JOIN
+            active_participant p
+            ON d.user_id=p.id_
+            WHERE d.activity_id=#{activityId}
+    </select>
+
+    <select id="getLaunchActivityAll" resultType="java.util.Map"  parameterType="java.util.Map">
+        SELECT
+        l.id_,l.activity_name,l.activity_addr,l.creator,l.activity_total,
+        CASE
+          WHEN d.id_ is not null
+             THEN SUM(1)
+             ELSE   0
+          END  as partake_total,
+        CASE
+           WHEN d.id_ is not null
+             THEN   cast((SUM(1)/l.activity_total) as dec(18,4))
+             ELSE   0
+           END  as proportion,
+        CASE
+            WHEN l.initiator_type=1  THEN '企业活动'
+            WHEN l.initiator_type=2  THEN '调研活动'
+            WHEN l.initiator_type=3  THEN '公益活动'
+            END as initiatorType,
+        CASE
+            WHEN  CURDATE() &lt;  l.activity_start  THEN '未开始'
+            WHEN  CURDATE() &gt; l.activity_end THEN '已完成'
+            WHEN  CURDATE() BETWEEN  l.activity_start AND l.activity_end    THEN '进行中'
+            END  as activityStatus
+        FROM  launch_activities l
+        LEFT JOIN data_acquisition d
+        ON  l.ID_=d.activity_id
+        WHERE 1=1
+        <if test="activityName!='' and  activityName!=null">
+            AND   l.activity_name  like   '%${activityName}%'
+        </if >
+        <if test="activityAddr!='' and  activityAddr!=null">
+            AND   l.activity_addr  like   '%${activityAddr}%'
+        </if >
+        <if test="creator!='' and  creator!=null">
+            AND   l.creator  like   '%${creator}%'
+        </if >
+        <if test="userId!='' and  userId!=null">
+            AND   l.user_id=#{userId}
+        </if >
+
+        AND  l.deleted=0
+        GROUP BY  l.activity_name,l.initiator_type,l.activity_addr,l.creator,l.activity_total
+        HAVING    1=1
+        <if test="activityStatus!='' and  activityStatus!=null">
+            AND  activityStatus=#{activityStatus}
+        </if >
+        <if test="initiatorType!='' and  initiatorType!=null">
+            AND  initiatorType=#{initiatorType}
+        </if >
+
+    </select>
+
 </mapper>

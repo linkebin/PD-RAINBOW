@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>活动发起</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .default_hide {
+            display: none;
+        }
+
+        .eui-form-label {
+            width: 100px;
+            text-align: left;
+        }
+
+        #activitiesForm input + label, select + label {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="questionHeader">
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre">活动统计</span>
+        </div>
+    </div>
+</div>
+
+<div class="activityContent xymfMargin">
+
+
+    <div class="eui-area">
+        <!-- 内容主体区域 -->
+
+
+        <div class="visitorTitle">
+            <img src="/Styles/images/xymfImages/cube.png" width="24" alt=""> 活动信息
+        </div>
+        <div class="eui-bg-white eui-padding20 activity">
+            <form id="searchFrom" onsubmit="return false;">
+                <input type="hidden" name="userId" th:value="${userId}"/>
+                <div class="eui-form eui-margin20">
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">活动名称</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="activityName" class="eui-input"   placeholder="" >
+                        </div>
+
+                        <label class="eui-form-label">区域</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="activityAddr"    class="eui-input"   placeholder="" >
+                        </div>
+
+
+                        <div class="eui-input-inline">
+                            <span class="eui-btn eui-btn-small eui-btn-normal" onclick="doSearch()">查询</span>
+                            <span class="eui-btn eui-btn-small eui-btn-primary" onclick="resetForm()">重置</span>
+                        </div>
+                    </div>
+                    <div class="eui-form-item">
+                        <label class="eui-form-label">发起人</label>
+                        <div class="eui-input-inline">
+                            <input type="text" name="creator"    class="eui-input"   placeholder="" >
+                        </div>
+                        <label class="eui-form-label">类型</label>
+                        <div class="eui-input-inline">
+                            <select name="initiatorType">
+                                <option value=""></option>
+                                <option value="企业活动">企业活动</option>
+                                <option value="公益活动">公益活动</option>
+                                <option value="调研活动">调研活动</option>
+                            </select>
+                        </div>
+                        <label class="eui-form-label">状态</label>
+                        <div class="eui-input-inline">
+                            <select name="activityStatus">
+                                <option value=""></option>
+                                <option value="未开始">未开始</option>
+                                <option value="进行中">进行中</option>
+                                <option value="已完成">已完成</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="xymfForm eui-marginLR20">
+                <table class="eui-table eui-form" e-even e-skin="nob" id="userTable">
+                    <colgroup>
+                        <col width="200">
+                        <col width="100">
+                        <col width="300">
+                        <col width="100">
+                        <col width="100">
+                        <col width="300">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>活动名称</th>
+                        <th>类型</th>
+                        <th>区域</th>
+                        <th>发起人</th>
+                        <th>状态</th>
+                        <th>进度</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    </tbody>
+                </table>
+                <div style="margin-left: 30px;" id="pages"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="xymfFooter">
+    <!-- 底部固定区域 -->
+    © 2017 广州市易度软件开发有限公司旗下心云魔方品牌
+</div>
+
+
+<!-- 返回顶部按钮 -->
+<span class="eui-icon eui-backTop" e-type="top">&#xe604;</span>
+
+<script src="/Scripts/module/eui.js"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/plugins/distpicker.data.js"></script>
+<script src="/Scripts/plugins/distpicker.js"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<script src="/pack.ajax.js"></script>
+<script src="/card.js"></script>
+<script th:inline="javaScript">
+
+    // 表单
+    eui.use(['form', 'element','laydate', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,laydate = eui.laydate;
+        var element = eui.element;
+    });
+    $(function () {
+        doSearch();
+    });
+
+
+    //加载数据
+    function doSearch() {
+        eui.use(['form','element', 'laypage', 'layer'], function () {
+            var form = eui.form
+                , laypage = eui.laypage
+                , layer = eui.layer,
+                $ = eui.jquery;
+               var element = eui.element;
+
+            var params = $("#searchFrom").serializeObject();
+            var index = layer.load(2); //加载
+            $.ajax({
+                url: "/launch/activities/getLaunchActivityAll",
+                data: {
+                    param: JSON.stringify(params),
+                    page: 1,
+                    limit: 10
+                },
+                type: "post",
+                success: function (result) {
+
+                    layer.closeAll();
+                    // 分页
+                    laypage.render({
+                        elem: 'pages'
+                        , count: result.count //数据总数
+                        , layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+                        , skip: true
+                        , theme: '#1E9FFF'
+                        , jump: function (obj, first) {
+                            if (first) {
+                                //第一次，不需要查询数据
+                                var activityList = result.data;
+                                //遍历，拼接表格
+                                var tableHtml = getTable(activityList);
+                                $("#userTable tbody").html(tableHtml);
+                                 element.init();
+                            } else {
+                                var params = $("#searchFrom").serializeObject();
+                                $.ajax({
+                                    url: "/launch/activities/getLaunchActivityAll",
+                                    data: {
+                                        param: JSON.stringify(params),
+                                        page: obj.curr,
+                                        limit: obj.limit
+                                    },
+                                    type: "post",
+                                    success: function (result) {
+                                        var activityList = result.data;
+                                        //遍历，拼接表格
+                                        var tableHtml = getTable(activityList);
+                                        $("#userTable tbody").html(tableHtml);
+                                          element.init();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        });
+    }
+    //渲染数据，拼接表格
+    function getTable(activityList) {
+        var tableHtml = '';
+        for (var i=0;i<activityList.length;i++) {
+            var item=activityList[i];
+             var activityStatus="";
+            if(item.activityStatus == "未开始"){
+                activityStatus='<span style="color: red"> '+item.activityStatus+'</span>';
+              } else if(item.activityStatus == "已完成") {
+                activityStatus='<span  style="color: #00B83F"> '+item.activityStatus+'</span>';
+              } else if(item.activityStatus == "进行中") {
+                activityStatus='<span style="color: #5897fb"> </span> '+item.activityStatus+'</span>';
+               }
+
+             var   schedule="";
+            schedule+='<div class="eui-input-inline" style="width: 200px;heigth:30px" >';
+            schedule+='  <div class="eui-progress eui-progress-big"  e-filter="speedOfProgress" e-showpercent="yes">';
+            schedule+='   <div class="eui-progress-bar"  e-percent="'+ (item.proportion*100) +'%"></div>';
+            schedule+='  </div>';
+            schedule+='  </div>';
+            schedule+='  <span class="eui-font14" id="userNum">'+item.partake_total+'/'+item.activity_total+'人</span>';
+            tableHtml +='<tr>';
+            tableHtml +=' <td>'+item.activity_name+'</td>';
+            tableHtml +=' <td>'+item.initiatorType+'</td>';
+            tableHtml +=' <td>'+item.activity_addr+'</td>';
+            tableHtml +=' <td>'+item.creator+'</td>';
+            tableHtml +=' <td>'+activityStatus+'</td>';
+            tableHtml +=' <td>'+schedule+'</td>';
+            tableHtml +='</tr>';
+        }
+        return tableHtml;
+    }
+
+
+    function resetForm(){
+
+        document.getElementById('searchFrom').reset();
+        doSearch();
+    }
+</script>
+
+</body>
+</html>

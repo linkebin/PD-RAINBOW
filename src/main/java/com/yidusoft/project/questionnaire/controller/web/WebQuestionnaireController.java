@@ -238,8 +238,6 @@ public class WebQuestionnaireController {
                 }
             }
             model.addAttribute("newIdIndex",newIdIndex);
-            System.out.println(questionnaireQuestionIds);
-            System.out.println(newIdIndex);
             model.addAttribute("sortedQuestionIds",questionnaireQuestionIds);
         }else {
             //不存在量表，只有新加问题的id

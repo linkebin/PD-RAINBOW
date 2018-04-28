@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>活动管理</title>
+    <link rel="stylesheet" href="/Styles/themes/default/style.css"  media="all">
+</head>
+<body class="eui-bg-white">
+<div class="eui-bd eui-padding15">
+
+    <div class="eui-mn1 eui-bg-white">
+        <div class="">
+            <form class="eui-form eui-marginT20" id="searchFrom">
+                <div class="eui-form-item">
+                    <label class="eui-form-label">活动名称</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="activityName" class="eui-input"   placeholder="" >
+                    </div>
+
+                    <label class="eui-form-label">区域</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="activityAddr"    class="eui-input"   placeholder="" >
+                    </div>
+                    <label class="eui-form-label">发起人</label>
+                    <div class="eui-input-inline">
+                        <input type="text" name="creator"    class="eui-input"   placeholder="" >
+                    </div>
+
+                    <div class="eui-input-inline">
+                        <span class="eui-btn" onclick="doSearch()">查询</span>
+                        <span class="eui-btn eui-btn-primary" onclick="resetForm()">重置</span>
+                    </div>
+                </div>
+                <div class="eui-form-item">
+
+                    <label class="eui-form-label">类型</label>
+                    <div class="eui-input-inline">
+                        <select name="initiatorType">
+                            <option value=""></option>
+                            <option value="企业活动">企业活动</option>
+                            <option value="公益活动">公益活动</option>
+                            <option value="调研活动">调研活动</option>
+                        </select>
+                    </div>
+                    <label class="eui-form-label">状态</label>
+                    <div class="eui-input-inline">
+                        <select name="activityStatus">
+                            <option value=""></option>
+                            <option value="未开始">未开始</option>
+                            <option value="进行中">进行中</option>
+                            <option value="已完成">已完成</option>
+                        </select>
+                    </div>
+
+                </div>
+            </form>
+            <div class="eui-paddingL20">
+                <div class="eui-row eui-padding10 eui-borderB">
+                    <div class="eui-col-md6 eui-font18">
+                        <i class='eui-icon eui-font24'>&#xe61d;</i> 活动管理列表
+                    </div>
+                    <div class="eui-col-md6 eui-textAlignR">
+                    </div>
+                </div>
+                <table class="eui-marginT10" id="tables"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<script src="/Scripts/main.js" charset="utf-8"></script>
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+<script src="/Scripts/libs/ligerUI/js/ligerui.all.js" type="text/javascript"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/date2format.js" type="text/javascript"></script>
+<script>
+    // 表单
+    eui.use(['form', 'element','laydate', 'layer'], function(){
+        var form = eui.form
+            ,layer = eui.layer
+            ,laydate = eui.laydate;
+        var element = eui.element;
+    });
+
+    $(function () {
+        activityTable();
+    });
+    function doSearch() {
+        activityTable();
+    }
+
+    function activityTable() {
+        var obj=$("#searchFrom").serializeObject();
+        eui.use(['table','element', 'laydate','layer'], function(){
+            var  table = eui.table;
+            var laydate = eui.laydate;
+            var layer = eui.layer;
+            var element=eui.element;
+
+            layer.load();
+           var tableIns = table.render({
+                id: 'tableId'
+                ,elem: '#tables'
+                ,url:'/launch/activities/getLaunchActivityAll'
+                ,method:'post'
+                ,where: {param: JSON.stringify(obj)}
+                ,height: 420
+                ,cols: [[ //标题栏
+                    {field: 'activity_name', title: '活动名称', width: 200}
+                    ,{field: 'initiatorType', title: '类型', width: 180}
+                    ,{field: 'activity_addr', title: '区域', width: 300}
+                    ,{field: 'creator', title: '发起人', width: 150}
+                    ,{field: 'activityStatus', title: '状态', width: 100,templet:'#activityStatus'}
+                    ,{field: 'activity_total', title: '进度',width: 300,templet: '#schedule'}
+                    , {fixed: 'right', title: '操作', width: 70, toolbar: '#barDemo'}
+                ]]
+                ,response: {
+                    statusName: 'code' //数据状态的字段名称，默认：code
+                    ,statusCode: 200 //成功的状态码，默认：0
+                    ,msgName: 'message' //状态信息的字段名称，默认：msg
+                    ,countName: 'count' //数据总数的字段名称，默认：count
+                    ,dataName: 'data' //数据列表的字段名称，默认：data
+                }
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,loading: true
+                ,page: true //是否显示分页
+                ,limits: [10,30,50,100]
+                ,limit: 10 //每页默认显示的数量
+                ,done: function(res, curr, count){
+                    layer.closeAll();
+                    element.init();
+                }
+            });
+           //监听工具条
+            table.on('tool(tableId)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+                var tr = obj.tr; //获得当前行 tr 的DOM对象
+                var objId = data.id_;
+                if (layEvent === 'detail') { //查看
+                    showInfo(objId);
+                }
+            });
+
+        });
+    }
+
+    function resetForm(){
+
+       document.getElementById('searchFrom').reset();
+        doSearch();
+    }
+    //查看相关统计
+    function showInfo(objId){
+        window.open("/web/launchActivities/presentation/"+objId);
+    }
+</script>
+
+
+<script type="text/html" id="schedule">
+    <div class="eui-input-inline" style="width: 200px;heigth:30px" >
+        <div class="eui-progress eui-progress-big"  e-filter="speedOfProgress" e-showpercent="yes">
+            <div class="eui-progress-bar"  e-percent="{{ d.proportion*100 }}%"></div>
+        </div>
+    </div>
+    <span class="eui-font14" id="userNum">{{ d.partake_total }}/{{ d.activity_total }}人</span>
+
+   <!-- {{#  if(d.state == "0"){ }}
+    <a class="eui-color-green eui-panels-title1 h1" id="{{ d.id }}" riskState="0" name="tip"  target='_blank' href='/activity/logistics/getLogisticsInfo?id={{ d.id}}'>
+        环节不存在风险
+    </a>
+    {{#  } else { }}
+    <a class='eui-color-red  eui-panels-title1 h1'  id="{{ d.id }}" riskState="1" name="tip" target='_blank' href='/activity/logistics/getLogisticsInfo?id={{ d.id}}'>
+        环节存在风险<img name="imgShow" height="25px" src="../../../Styles/images/iconsImg/iconImg-light-red.png" alt="">
+    </a>
+
+    {{#  } }}-->
+</script>
+<script type="text/html" id="activityStatus">
+    {{#  if(d.activityStatus == "未开始"){ }}
+       <span style="color: red"> {{ d.activityStatus }} </span>
+    {{#  } else if(d.activityStatus == "已完成") { }}
+       <span  style="color: #00B83F"> {{ d.activityStatus }} </span>
+    {{#  } else if(d.activityStatus == "进行中") { }}
+       <span style="color: #5897fb"> {{ d.activityStatus }} </span>
+    {{#  } }}
+ </script>
+<script type="text/html" id="barDemo">
+    <div class="eui-btn-group">
+        <button class="eui-btn eui-btn-primary eui-btn-small" title="详情" e-event="detail"><i class="eui-icon">&#xe63c;</i></button>
+    </div>
+</script>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>活动报告</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../Styles/themes/default/style.css" media="all">
+</head>
+<script src="../../../Scripts/module/eui.js" charset="utf-8"></script>
+<script type="text/javascript" src="../../../Scripts/jquery-1.9.0.min.js"></script>
+<script src="/pack.ajax.js" type="text/javascript"></script>
+<script src="/Scripts/date2format.js" type="text/javascript"></script>
+<script src="/Scripts/plugins/jquery.validate.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="/Scripts/plugins/echarts/echarts.min.js"></script>
+<body class="eui-bg-white">
+<div class="eui-row">
+    <div class=" eui-col-md12" style="text-align:center">
+        <div class="eui-font24" id="activityName"></div>
+    </div>
+</div>
+<div class="eui-row eui-col-space30">
+    <div class="eui-row">
+        <div class="eui-col-md2">
+            <label class="eui-form-label"></label>
+        </div>
+        <div class=" eui-col-md10">
+            <span class="eui-font14">使用问卷：</span>
+            <span class="eui-font14" id="questionnaireName"></span>
+        </div>
+    </div>
+    <div class="eui-row">
+        <div class="eui-col-md2">
+            <label class="eui-form-label"></label>
+        </div>
+        <div class=" eui-col-md10">
+            <span class="eui-font14">活动时间：</span>
+            <span class="eui-font14" id="activityTime">2018.4.1 - 2018.4.2</span>
+        </div>
+    </div>
+    <div class="eui-row">
+        <div class="eui-col-md2">
+            <label class="eui-form-label"></label>
+        </div>
+        <div class=" eui-col-md10">
+            <span class="eui-font14">活动进度：</span>
+            <div class="eui-input-inline" style="width: 200px;heigth:30px" >
+                <div class="eui-progress"  e-filter="speedOfProgress" e-showpercent="yes">
+                   <div class="eui-progress-bar"  e-percent="0%"></div>
+                </div>
+            </div>
+            <span class="eui-font14" id="userNum">100/100人</span>
+        </div>
+    </div>
+</div>
+<div class="eui-row eui-col-space30">
+    <div class="eui-row">
+        <div class="eui-col-md2">
+            <label class="eui-form-label"></label>
+        </div>
+        <div class=" eui-col-md3">
+            <span class="eui-font14">平均耗时：</span>
+            <span class="eui-font14" id="timeSecondAvg">2018.4.1 - 2018.4.2</span>
+        </div>
+        <div class=" eui-col-md3">
+            <span class="eui-font14">最长耗时：</span>
+            <span class="eui-font14" id="timeSecondMax">2018.4.1 - 2018.4.2</span>
+        </div>
+        <div class=" eui-col-md3">
+            <span class="eui-font14">最短耗时：</span>
+            <span class="eui-font14" id="timeSecondMin">2018.4.1 - 2018.4.2</span>
+        </div>
+    </div>
+    <div class="eui-row">
+        <div class="eui-col-md2">
+            <label class="eui-form-label"></label>
+        </div>
+        <div class=" eui-col-md3">
+            <span class="eui-font14">最高标准分：</span>
+            <span class="eui-font14" id="totalScoreMax"></span>
+        </div>
+        <div class=" eui-col-md3">
+            <span class="eui-font14">最低标准分：</span>
+            <span class="eui-font14" id="totalScoreMin"></span>
+        </div>
+        <div class=" eui-col-md3">
+            <span class="eui-font14">平均标准分：</span>
+            <span class="eui-font14" id="totalScoreAvg"></span>
+        </div>
+    </div>
+</div>
+
+<div class=" eui-row eui-paddingT10">
+    <div class="eui-col-md12 eui-paddingR10">
+        <div class="eui-row eui-padding10 eui-borderB">
+            <div class="eui-row eui-padding10 eui-font16 eui-col-space15">
+                <div class="eui-col-md4" style="height: 500px">
+                    <div id="bubble" class="chartsA" style="width: 100%;height:100%;"></div>
+                </div>
+                <div class="eui-col-md4" style="height: 500px">
+                    <div id="proportion" class="chartsA" style="width: 100%;height:100%;"></div>
+                </div>
+                <div class="eui-col-md4" style="height: 500px">
+                    <div id="acreage" class="chartsA" style="width: 100%;height:100%;"></div>
+                </div>
+            </div>
+            <div class="eui-row" id="questionTable">
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+<script th:inline="javascript">
+    var activitiesId=[[${activitiesId}]];
+    //注意进度条依赖 element 模块，否则无法进行正常渲染和功能性操作
+
+    eui.use('element', function(){
+        var element = eui.element;
+    });
+
+    $(function () {
+        //查询参与活动所有人相关问卷结论，性别，年龄
+        getActivityNumberPeopleForResult(0);
+        //查询活动问卷关于所有参与活动的人对应问题的答案，需要进行每题每项答案统计
+        getQuestionForActivityQuestionnaire();
+    });
+    //查询活动的进度，还有相关统计信息
+    function getActivitySchedule() {
+        $.post('/launch/activities/getActivitySchedule',{"activityId":activitiesId},function (result) {
+            var datas=result.data;
+            $("#activityName").text(datas.activity_name);
+            $("#questionnaireName").text(datas.questionnaire_name);
+            $("#activityTime").text(datas.activity_start+" 至 "+datas.activity_end);
+            $("#userNum").text(datas.user_number+"/"+datas.activity_total+"人");
+            $("#timeSecondAvg").text(datas.time_second_avg+"秒");
+            $("#timeSecondMax").text(datas.time_second_max+"秒");
+            $("#timeSecondMin").text(datas.time_second_min+"秒");
+            eui.use('element', function(){
+                var element = eui.element;
+                //进度条
+                element.progress('speedOfProgress', datas.speedOfProgress);
+            });
+
+        });
+    }
+
+    //查询活动问卷关于所有参与活动的人对应问题的答案，需要进行每题每项答案统计
+    function getQuestionForActivityQuestionnaire() {
+        $.post('/launch/activities/getQuestionForActivityQuestionnaire',{"activityId":activitiesId},function (result) {
+            var datas=result.data;
+            var content=getTable(datas);
+            $("#questionTable").html(content);
+            eui.use('element', function(){
+                var element = eui.element;
+                //全局刷新
+                element.init();
+                //由于layui的版本低  element.render('progress','options');无法使用
+                //查询活动的进度，还有相关统计信息
+                getActivitySchedule();
+            });
+        });
+
+    }
+    //查询参与活动所有人相关问卷结论，性别，年龄
+    function getActivityNumberPeopleForResult(type) {
+        $.post('/launch/activities/getActivityNumberPeopleForResult',{"activityId":activitiesId,"type":type},function (result) {
+            console.info(result);
+            var datas=result.data;
+            $("#totalScoreMax").text(datas.totalScoreMax);
+            $("#totalScoreMin").text(datas.totalScoreMin);
+            $("#totalScoreAvg").text(datas.totalScoreAvg);
+            if(type==0){
+            //气泡图形
+             bubbleChart(datas.typeList,datas.typeListY,datas.typeListMax);
+            }
+            //男女比例环形
+            proportionChart(datas.man,datas.woman);
+            //面积统计
+            acreageChart(datas.ageList);
+        });
+
+    }
+    //表格拼接
+     function  getTable(datas) {
+         var content='';
+         for(var t=0;t<datas.length;t++){
+             content +='<div >';
+             content += ' <div class="eui-row">';
+             content += '   <span class="eui-font14" style="font-weight:bold ">第'+(t+1)+'题：</span>';
+             content += '   <span class="eui-font14">'+datas[t].questionContent+'</span>';
+             content += '</div>';
+             content += '<div class="eui-row">';
+             content += '    <span class="eui-font14" style="font-weight:bold ">本题平均分：</span>';
+             content += '     <span class="eui-font14">'+datas[t].avgScore+'</span>';
+             content += '</div>';
+             content += '<table class="eui-table" e-size="sm">';
+             content += '   <colgroup>';
+             content += '       <col>';
+             content += '      <col width="200">';
+             content += '       <col >';
+             content += '   </colgroup>';
+             content += '   <thead>';
+             content += '     <tr>';
+             content += '        <th>选项</th>';
+             content += '        <th>小计</th>';
+             content += '        <th>比例</th>';
+             content += '     </tr>';
+             content += '  </thead>';
+             content += '   <tbody>';
+
+             var  optionAnswers =datas[t].optionAnswer.split("||");
+             for (var i=0;i<optionAnswers.length;i++){
+                 content += '    <tr>';
+                 content += '      <td>'+optionAnswers[i]+'</td>';
+                 content += '      <td>'+datas[t].optionScore[i]+'</td>';
+                 content += '      <td>';
+                 content += '        <div class="eui-input-inline" style="width: 400px" >';
+                 content += '          <div class="eui-progress eui-progress-big" e-filter="options"  e-showpercent="yes">';
+                 content += '             <div class="eui-progress-bar" e-percent="'+datas[t].userProportion[i]+'"></div>';
+                 content += '          </div>';
+                 content += '        </div>';
+                 content += '      </td>';
+                 content += '   </tr>';
+             }
+             content += '  </tbody>';
+             content += ' </table>';
+             content += '</div>';
+     }
+     return content;
+     }
+
+
+    //气泡图形
+   function  bubbleChart (typeList,typeListY,typeListMax){
+        var myChart = echarts.init(document.getElementById('bubble'), 'bubble');
+       myChart.clear();
+        var dataBJ = [
+           [0,typeListY[0],typeList[0],"无"],
+           [1,typeListY[1],typeList[1],"轻度"],
+           [2,typeListY[2],typeList[2],"中度"],
+           [3,typeListY[3],typeList[3],"重度"],
+       ];
+       var schema = [
+           {name: 'date', index: 0, text: '人数比例'},
+           {name: 'AQIindex', index: 1, text: '人数'},
+
+       ];
+       var itemStyle = {
+           normal: {
+               opacity: 0.8,
+               shadowBlur: 10,
+               shadowOffsetX: 0,
+               shadowOffsetY: 0,
+               shadowColor: 'rgba(0, 0, 0, 0.5)'
+           }
+       };
+
+       option = {
+           backgroundColor: 'white',
+           color: [
+               '#dd4444', '#fec42c', '#80F1BE'
+           ],
+           legend: {
+               y: 'top',
+               data: ['焦虑'],
+               textStyle: {
+                   color: '#000000',
+                   fontSize: 16
+               }
+           },
+           grid: {
+               x: '10%',
+               x2: 150,
+               y: '18%',
+               y2: '10%'
+           },
+           tooltip: {
+               padding: 10,
+               backgroundColor: '#222',
+               borderColor: '#777',
+               borderWidth: 1,
+               formatter: function (obj) {
+                   var value = obj.value;
+                   return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+                       + obj.seriesName +":" + value[3]
+                       + '</div>'
+                       + schema[0].text + '：' + value[1] + '<br>'
+                       + schema[1].text + '：' + value[2] + '<br>'
+               }
+           },
+           xAxis: {
+               name: '焦虑',
+               nameGap: 16,
+               nameTextStyle: {
+                   color: '#000000',
+                   fontSize: 14
+               },
+               splitLine: {
+                   show: false
+               },
+               axisLine: {
+                   lineStyle: {
+                       color: '#777'
+                   }
+               },
+               axisLabel: {
+                   formatter: '{value}',
+                   textStyle: {
+                       color: '#000000'
+                   }
+               },"data": ['无','轻度','中度','重度']
+           },
+           yAxis: {
+               type: 'value',
+               name: '人数占比',
+               nameLocation: 'end',
+               nameGap: 20,
+               nameTextStyle: {
+                   color: '#000000',
+                   fontSize: 16
+               },
+               axisLine: {
+                   lineStyle: {
+                       color: '#000000'
+                   }
+               },
+               axisTick: {
+                   lineStyle: {
+                       color: '#000000'
+                   }
+               },
+               splitLine: {
+                   show: false
+               },
+               axisLabel: {
+                   textStyle: {
+                       color: '#000000'
+                   }
+               }
+           },
+           visualMap: [
+               {
+                   left: 'right',
+                   top: '10%',
+                   dimension: 2,
+                   min: 0,
+                   max: typeListMax,
+                   itemWidth: 30,
+                   itemHeight: 120,
+                   calculable: true,
+                   precision: 0.1,
+                   text: ['圆形大小：人数'],
+                   textGap: 30,
+                   textStyle: {
+                       color: '#000000'
+                   },
+                   inRange: {
+                       symbolSize: [10, 70]
+                   },
+                   outOfRange: {
+                       symbolSize: [10, 70],
+                       color: ['rgba(255,255,255,.2)']
+                   },
+                   controller: {
+                       inRange: {
+                           color: ['#c23531']
+                       },
+                       outOfRange: {
+                           color: ['#444']
+                       }
+                   }
+               }
+           ],
+           series: [
+               {
+                   name: '焦虑',
+                   type: 'scatter',
+                   itemStyle: itemStyle,
+                   data: dataBJ
+               }
+
+           ]
+       };
+       myChart.on('click', function (params) {
+           console.info(params.name);
+           if(params.name=='无'){
+               getActivityNumberPeopleForResult(1);
+           }else if(params.name=='轻度'){
+               getActivityNumberPeopleForResult(2);
+           }else if(params.name=='中度'){
+               getActivityNumberPeopleForResult(3);
+           }else if(params.name=='重度'){
+               getActivityNumberPeopleForResult(4);
+           }
+
+       });
+       myChart.setOption(option);
+   }
+   //男女比例环形
+    function  proportionChart(man,woman) {
+        var myChart = echarts.init(document.getElementById('proportion'), 'proportion');
+        myChart.clear();
+        option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data:['女','男']
+            },
+            series: [
+                {
+                    name:'男女比例',
+                    type:'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data:[
+                        {value:woman, name:'女'},
+                        {value:man, name:'男'}
+                    ]
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+   //面积统计
+    function acreageChart(ageList){
+
+        var myChart = echarts.init(document.getElementById('acreage'), 'acreage');
+        myChart.clear();
+        var datas=new Array;
+        var index=0;
+        for (var i=25;i<=45;i++){
+            var num=0;
+            for(var t=0;t<ageList.length;t++){
+                if(i==ageList[t]){
+                    num++;
+                }
+            }
+            datas[index]=num;
+            index++;
+        }
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                position: function (pt) {
+                    return [pt[0], '10%'];
+                }
+            },
+            title: {
+                left: 'center',
+                text: '',
+            },
+            toolbox: {
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                name:'年龄',
+                type: 'category',
+                boundaryGap: false,
+                data: [25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]
+            },
+            yAxis: {
+                name:'人数',
+                type: 'value',
+                boundaryGap: [0, '100%']
+            },
+            dataZoom: [{
+                type: 'inside',
+                start: 0,
+                end: 10
+            }, {
+                start: 0,
+                end: 10,
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }],
+            series: [
+                {
+                    name:'人数',
+                    type:'line',
+                    smooth:true,
+                    symbol: 'none',
+                    sampling: 'average',
+                    itemStyle: {
+                        normal: {
+                            color: 'rgb(255, 70, 131)'
+                        }
+                    },
+                    areaStyle: {
+                        normal: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                offset: 0,
+                                color: 'rgb(255, 158, 68)'
+                            }, {
+                                offset: 1,
+                                color: 'rgb(255, 70, 131)'
+                            }])
+                        }
+                    },
+                    data: datas
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+    }
+</script>
+</html>

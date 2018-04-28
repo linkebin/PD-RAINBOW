@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>开发中</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .eui-col-md7 .degree li {
+            margin-right: 20px;
+        }
+    </style>
+
+</head>
+<body>
+<!--<div class="questionHeader">
+
+</div>-->
+<div class="questionContent">
+    <div class="eui-area" align="center">
+
+        <div class="subject" align="center" style="display:table-cell; vertical-align:middle;">
+            <p class="eui-textAlignC eui-paddingB20"><img src="/Styles/images/xymfImages/success.png" alt=""/></p>
+            <p  id="roloadText" class="eui-textAlignC eui-color-blue eui-font36 eui-marginT20">程序猿小哥哥正在努力开发中......</p>
+        </div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript" src="/Scripts/jquery-1.9.0.min.js"></script>
+
+<script type="text/javascript">
+
+    /*
+
+     $('#questionUl li').eq(0).addClass('current');
+     $('#sliderOl li').eq(0).addClass('current');
+     */
+    $(function () {
+        $('p#roloadText').beatText({isAuth:true,beatHeight:"1em",isRotate:false,upTime:100,downTime:100});
+    });
+</script>
+
+</body>
+</html>

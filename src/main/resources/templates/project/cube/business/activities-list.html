@@ -82,7 +82,10 @@
                                onclick="activities()">发起企业活动</a>
                             <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"
                                onclick="activities('',3)">发起公益活动</a>
+                            <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal"
+                               onclick="getActivitiesStatistics()">活动统计</a>
                             <a target="_blank" class="eui-btn eui-btn-small eui-btn-normal activityDelete">批量删除</a>
+
                         </div>
                     </div>
 
@@ -237,6 +240,7 @@
                     '<td>' +
                     '<i title="查看详情" onclick="checkActivity(' + id + ')" class="eui-icon tb">&#xe621;</i>' +
                     editBtn+
+                    '<i title="活动报告" onclick="showInfo(' + id + ')" class="eui-icon tb">&#xe62d;</i>'+
                     '<i title="删除" onclick="deleteActivity(' + id + ')" class="eui-icon tb">&#xe640;</i></td>' +
                     '</tr>';
         }
@@ -265,6 +269,18 @@
                 doSearch();
             }
         }, 1);
+    }
+
+    //查看相关统计报告
+    function showInfo(objId){
+        window.open("/web/launchActivities/presentation/"+objId);
+    }
+    /***
+     *
+     * 跳转到活动统计
+     */
+    function  getActivitiesStatistics(){
+        window.open("/web/activities/getActivitiesStatistics");
     }
     /**
      * 查看活动详情
