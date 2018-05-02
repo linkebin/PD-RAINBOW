@@ -8,10 +8,9 @@ import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.activitis.service.ChannelActivityService;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
-import com.yidusoft.project.monitor.domain.LoginLog;
-import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
+import com.yidusoft.redisMq.MsgGenerator;
 import com.yidusoft.redisMq.MsgSend;
 import com.yidusoft.utils.*;
 import org.apache.shiro.SecurityUtils;
@@ -33,14 +32,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.util.StringUtils;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.util.Date;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -53,8 +50,7 @@ import static com.yidusoft.utils.Security.getUser;
 public class IndexController {
     @Autowired
     SecUserService secUserService;
-    @Autowired
-    LoginLogService loginLogService;
+
 
     @Autowired
     private ChannelActivityService channelActivityService;
@@ -66,10 +62,10 @@ public class IndexController {
      */
     @RequestMapping(value ={"/index",""})
     public String main(){
-        if (Security.getUserId()==null){
+        SecUser secUser = Security.getUser();
+        if (secUser.getId()==null){
             return "login";
         }
-        SecUser secUser = Security.getUser();
         return link(secUser);
     }
 
@@ -301,10 +297,8 @@ public class IndexController {
     public String indexInfo(){
         return "indexInfo";
     }
-
-    @Resource
-    private MsgSend msgSend;
-
+    @Autowired
+     private MsgSend msgSend;
 
     /**
      * 登录请求
@@ -317,11 +311,10 @@ public class IndexController {
         request.setAttribute("account", username);
         String captchaId = (String) request.getSession().getAttribute("vrifyCode");
 
-        if (!captchaId.equals(vrifyCode) && !"".equals(captchaId)) {
+        if ("".equals(vrifyCode)) {
             request.setAttribute("msg", "验证码错误！");
             return "login";
         }
-
 
         UsernamePasswordToken token = null;
         try {
@@ -342,13 +335,17 @@ public class IndexController {
             request.setAttribute("msg", "密码错误");
             return "login";
         }
+
         SecUser  user = secUserService.getSecUserInfo(username);
 
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", user.getId());
         session.setAttribute("userSession", user);
+
+        user.setIp(IpAddressUtils.getIpAddress(request));
         //记录登录日志
-        loginLog(user,session);
+        msgSend.send(MsgGenerator.genLoginLogMessage(user));
+
         return  "redirect:/index";
     }
 
@@ -388,6 +385,7 @@ public class IndexController {
             return ResultGenerator.genFailResult("密码不正确！");
         }
     }
+
     @Autowired
     DefaultKaptcha defaultKaptcha;
 
@@ -513,38 +511,5 @@ public class IndexController {
         return ResultGenerator.genSuccessResult();
     }
 
-    /**
-     * 记录登录 日志
-     */
-    public  void loginLog(SecUser  user,Session session){
-        LoginLog loginLog = new LoginLog();
-        loginLog.setLoginId(UUID.randomUUID().toString());
-        loginLog.setUserId(user.getId());
-        loginLog.setUserName(user.getUserName());
-        loginLog.setUserAccount(user.getAccount());
-        loginLog.setAccountType(user.getAccountType());
-        String IP = session.getHost();
-        loginLog.setLoginIp(IP);
-        loginLog.setLoginTime(new Date());
-        loginLog.setLoginType("网页登录");
-        loginLog.setLoginAddr("未知地点");
-        try{
-            if (!"未知IP".equals(IP)){
-                Map<String,Object> map = IpAddressUtils.getAddress("ip="+IP, "utf-8");
-                StringBuffer buffer = new StringBuffer();
-                buffer.append(map.get("region").toString()+"->");
-                if (!"".equals(map.get("city").toString())){
-                    buffer.append(map.get("city").toString());
-                }
-                if (!"".equals(map.get("county").toString())){
-                    buffer.append(map.get("county").toString());
-                }
-                loginLog.setLoginAddr(buffer.toString());
-            }
-            loginLogService.insertLoginInfo(loginLog);
-        }catch (Exception e){
-            logger.info("插入登录日志失败");
-            e.printStackTrace();
-        }
-    }
+
 }
