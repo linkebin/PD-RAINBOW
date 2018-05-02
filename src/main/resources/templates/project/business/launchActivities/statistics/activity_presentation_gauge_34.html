@@ -15,104 +15,93 @@
 <script src="/Scripts/plugins/jquery.validate.js"></script>
 <!-- 引入 ECharts 文件 -->
 <script src="/Scripts/plugins/echarts/echarts.min.js"></script>
-<body class="eui-bg-white">
-<div class="eui-row">
-    <div class=" eui-col-md12" style="text-align:center">
-        <div class="eui-font24" id="activityName"></div>
-    </div>
-</div>
-<div class="eui-row eui-col-space30">
-    <div class="eui-row">
-        <div class="eui-col-md2">
-            <label class="eui-form-label"></label>
-        </div>
-        <div class=" eui-col-md10">
-            <span class="eui-font14">使用问卷：</span>
-            <span class="eui-font14" id="questionnaireName"></span>
-        </div>
-    </div>
-    <div class="eui-row">
-        <div class="eui-col-md2">
-            <label class="eui-form-label"></label>
-        </div>
-        <div class=" eui-col-md10">
-            <span class="eui-font14">活动时间：</span>
-            <span class="eui-font14" id="activityTime">2018.4.1 - 2018.4.2</span>
-        </div>
-    </div>
-    <div class="eui-row">
-        <div class="eui-col-md2">
-            <label class="eui-form-label"></label>
-        </div>
-        <div class=" eui-col-md10">
-            <span class="eui-font14">活动进度：</span>
-            <div class="eui-input-inline" style="width: 200px;heigth:30px" >
-                <div class="eui-progress"  e-filter="speedOfProgress" e-showpercent="yes">
-                   <div class="eui-progress-bar"  e-percent="0%"></div>
-                </div>
-            </div>
-            <span class="eui-font14" id="userNum">100/100人</span>
-        </div>
-    </div>
-</div>
-<div class="eui-row eui-col-space30">
-    <div class="eui-row">
-        <div class="eui-col-md2">
-            <label class="eui-form-label"></label>
-        </div>
-        <div class=" eui-col-md3">
-            <span class="eui-font14">平均耗时：</span>
-            <span class="eui-font14" id="timeSecondAvg">2018.4.1 - 2018.4.2</span>
-        </div>
-        <div class=" eui-col-md3">
-            <span class="eui-font14">最长耗时：</span>
-            <span class="eui-font14" id="timeSecondMax">2018.4.1 - 2018.4.2</span>
-        </div>
-        <div class=" eui-col-md3">
-            <span class="eui-font14">最短耗时：</span>
-            <span class="eui-font14" id="timeSecondMin">2018.4.1 - 2018.4.2</span>
-        </div>
-    </div>
-    <div class="eui-row">
-        <div class="eui-col-md2">
-            <label class="eui-form-label"></label>
-        </div>
-        <div class=" eui-col-md3">
-            <span class="eui-font14">最高标准分：</span>
-            <span class="eui-font14" id="totalScoreMax"></span>
-        </div>
-        <div class=" eui-col-md3">
-            <span class="eui-font14">最低标准分：</span>
-            <span class="eui-font14" id="totalScoreMin"></span>
-        </div>
-        <div class=" eui-col-md3">
-            <span class="eui-font14">平均标准分：</span>
-            <span class="eui-font14" id="totalScoreAvg"></span>
+<body class="eui-bg-white questionBody">
+<div class="questionHeader">
+    <div class="eui-row eui-area">
+        <div class="xymfLogo">
+            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+            <span class="payCentre" id="activityName">活动名称</span>
         </div>
     </div>
 </div>
 
-<div class=" eui-row eui-paddingT10">
-    <div class="eui-col-md12 eui-paddingR10">
-        <div class="eui-row eui-padding10 eui-borderB">
-            <div class="eui-row eui-padding10 eui-font16 eui-col-space15">
-                <div class="eui-col-md4" style="height: 500px">
-                    <div id="bubble" class="chartsA" style="width: 100%;height:100%;"></div>
+<div class="visitorContent xymfMargin report">
+    <div class="eui-area xymf-width1000">
+        <div class="visitorTitle eui-row">
+            <div class="eui-col-md12"><img src="/Styles/images/xymfImages/cube.png" width="24" alt="" id="questionnaireName"> 焦虑自评量表（SAS）
+            </div>
+            <!--<div class="eui-col-md5 eui-textAlignR"></div>-->
+        </div>
+        <div class="eui-row eui-form eui-bg-white card eui-padding10">
+            <div class="eui-row eui-col-space30">
+                <div class="eui-row eui-marginT10">
+                    <div class="eui-col-md12">
+                        <span class="eui-font14 eui-color-gray3">活动时间：</span>
+                        <span class="eui-font14" id="activityTime">2018.4.1 - 2018.4.2</span>
+                    </div>
                 </div>
-                <div class="eui-col-md4" style="height: 500px">
-                    <div id="proportion" class="chartsA" style="width: 100%;height:100%;"></div>
+                <div class=" eui-col-md12">
+                    <span class="eui-font14 eui-color-gray3">活动进度：</span>
+                    <div class="eui-input-inline" style="width: 200px;">
+                        <div class="eui-progress" e-filter="speedOfProgress" e-showpercent="yes">
+                            <div class="eui-progress-bar" e-percent="0%"></div>
+                        </div>
+                    </div>
+                    <span class="eui-font14" id="userNum">100/100人</span>
                 </div>
-                <div class="eui-col-md4" style="height: 500px">
-                    <div id="acreage" class="chartsA" style="width: 100%;height:100%;"></div>
+                <div class=" eui-col-md3">
+                    <span class="eui-font14 eui-color-gray3">平均耗时：</span>
+                    <span class="eui-font14" id="timeSecondAvg">2018.4.1 - 2018.4.2</span>
+                </div>
+                <div class=" eui-col-md3">
+                    <span class="eui-font14 eui-color-gray3">最长耗时：</span>
+                    <span class="eui-font14" id="timeSecondMax">2018.4.1 - 2018.4.2</span>
+                </div>
+                <div class=" eui-col-md3">
+                    <span class="eui-font14 eui-color-gray3">最短耗时：</span>
+                    <span class="eui-font14" id="timeSecondMin">2018.4.1 - 2018.4.2</span>
                 </div>
             </div>
-            <div class="eui-row" id="questionTable">
+            <div class="eui-row">
+                <div class=" eui-col-md3">
+                    <span class="eui-font14 eui-color-gray3">最高标准分：</span>
+                    <span class="eui-font14" id="totalScoreMax"></span>
+                </div>
+                <div class=" eui-col-md3">
+                    <span class="eui-font14 eui-color-gray3">最低标准分：</span>
+                    <span class="eui-font14" id="totalScoreMin"></span>
+                </div>
+                <div class=" eui-col-md3">
+                    <span class="eui-font14 eui-color-gray3">平均标准分：</span>
+                    <span class="eui-font14" id="totalScoreAvg"></span>
+                </div>
+            </div>
+        </div>
+        <div class=" eui-row eui-paddingT10">
+            <div class="eui-col-md12 eui-paddingR10">
+                <div class="eui-row eui-padding10 eui-borderB">
+                    <div class="eui-row eui-padding10 eui-font16 eui-col-space15">
+                        <div class="eui-col-md6" style="height: 500px">
+                            <div id="bubble" class="chartsA" style="width: 100%;height:100%;"></div>
+                        </div>
+                        <div class="eui-col-md6" style="height: 500px">
+                            <div id="proportion" class="chartsA" style="width: 100%;height:100%;"></div>
+                        </div>
+                        <div class="eui-col-md12" style="height: 500px">
+                            <div id="acreage" class="chartsA" style="width: 100%;height:100%;"></div>
+                        </div>
+                    </div>
+                    <div class="eui-row" id="questionTable">
+
+                    </div>
+                </div>
 
             </div>
         </div>
-
     </div>
 </div>
+</div>
+
 
 
 </body>
@@ -190,16 +179,16 @@
      function  getTable(datas) {
          var content='';
          for(var t=0;t<datas.length;t++){
-             content +='<div >';
+             content +='<div class="eui-marginT20">';
              content += ' <div class="eui-row">';
              content += '   <span class="eui-font14" style="font-weight:bold ">第'+(t+1)+'题：</span>';
              content += '   <span class="eui-font14">'+datas[t].questionContent+'</span>';
              content += '</div>';
-             content += '<div class="eui-row">';
+             content += '<div class="eui-row eui-paddingTB5">';
              content += '    <span class="eui-font14" style="font-weight:bold ">本题平均分：</span>';
              content += '     <span class="eui-font14">'+datas[t].avgScore+'</span>';
              content += '</div>';
-             content += '<table class="eui-table" e-size="sm">';
+             content += '<table class="eui-table" e-even e-skin="nob" e-size="sm">';
              content += '   <colgroup>';
              content += '       <col>';
              content += '      <col width="200">';
@@ -322,17 +311,17 @@
                nameLocation: 'end',
                nameGap: 20,
                nameTextStyle: {
-                   color: '#000000',
+                   color: '#65bdfe',
                    fontSize: 16
                },
                axisLine: {
                    lineStyle: {
-                       color: '#000000'
+                       color: '#555'
                    }
                },
                axisTick: {
                    lineStyle: {
-                       color: '#000000'
+                       color: '#555'
                    }
                },
                splitLine: {
@@ -340,7 +329,7 @@
                },
                axisLabel: {
                    textStyle: {
-                       color: '#000000'
+                       color: '#555'
                    }
                }
            },
@@ -358,7 +347,7 @@
                    text: ['圆形大小：人数'],
                    textGap: 30,
                    textStyle: {
-                       color: '#000000'
+                       color: '#555'
                    },
                    inRange: {
                        symbolSize: [10, 70]
@@ -369,10 +358,10 @@
                    },
                    controller: {
                        inRange: {
-                           color: ['#c23531']
+                           color: ['#5cb9fe']
                        },
                        outOfRange: {
-                           color: ['#444']
+                           color: ['#555']
                        }
                    }
                }
@@ -385,7 +374,8 @@
                    data: dataBJ
                }
 
-           ]
+           ],
+           color: ['#5cb9fe']
        };
        myChart.on('click', function (params) {
            console.info(params.name);
@@ -441,8 +431,32 @@
                         }
                     },
                     data:[
-                        {value:woman, name:'女'},
-                        {value:man, name:'男'}
+                        {
+                            value:woman,
+                            name:'女',
+                            itemStyle: {
+                                normal: {
+                                    color: '#fe5a77',
+                                    shadowBlur: 50,
+                                    shadowColor: '#fe899d',
+                                    show: true
+                                }
+                            }
+
+                        },
+                        {
+                            value:man,
+                            name:'男',
+                            itemStyle: {
+                                normal: {
+                                    color: '#5cb9fe',
+                                    shadowBlur: 50,
+                                    shadowColor: '#69bffe',
+                                    show: true
+                                }
+                            }
+
+                        }
                     ]
                 }
             ]
@@ -523,17 +537,17 @@
                     sampling: 'average',
                     itemStyle: {
                         normal: {
-                            color: 'rgb(255, 70, 131)'
+                            color: '#33a8fe'
                         }
                     },
                     areaStyle: {
                         normal: {
                             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                 offset: 0,
-                                color: 'rgb(255, 158, 68)'
+                                color: '#8bc5eb'
                             }, {
                                 offset: 1,
-                                color: 'rgb(255, 70, 131)'
+                                color: '#33a8fe'
                             }])
                         }
                     },
