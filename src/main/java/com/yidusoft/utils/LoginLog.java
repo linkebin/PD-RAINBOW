@@ -47,7 +47,7 @@ public class LoginLog {
                 loginLog.setLoginAddr(buffer.toString());
             }
         } catch (Exception e) {
-            logger.info("获取地点失败"+e.getMessage());
+            logger.info("获取地点失败");
         }finally {
             loginLogService.insertLoginInfo(loginLog);
         }

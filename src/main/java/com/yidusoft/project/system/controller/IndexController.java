@@ -9,6 +9,8 @@ import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
+import com.yidusoft.redisMq.MsgGenerator;
+import com.yidusoft.redisMq.MsgSend;
 import com.yidusoft.utils.AliyunSMSUtil;
 import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.PasswordHelper;
@@ -296,6 +298,9 @@ public class IndexController {
     }
 
 
+
+    @Autowired
+    private MsgSend msgSend;
     /**
      * 登录请求
      * @param username
@@ -331,6 +336,11 @@ public class IndexController {
             request.setAttribute("msg", "密码错误");
             return "login";
         }
+        Session session = SecurityUtils.getSubject().getSession();
+        SecUser user =  Security.getUser();
+        user.setIp(session.getHost());
+        //记录登录日志
+        msgSend.send(MsgGenerator.genLoginLogMessage(user));
         return  "redirect:/index";
     }
 

@@ -4,7 +4,6 @@ import com.yidusoft.project.system.domain.SecMenu;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecMenuMemberService;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.redisMq.MsgGenerator;
 import com.yidusoft.redisMq.MsgSend;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -31,8 +30,6 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Resource
     private SecMenuMemberService secMenuMemberService;
-
-
 
     @Autowired
     private MsgSend msgSend;
@@ -70,11 +67,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSessionId", user.getId());
         session.setAttribute("userSession", user);
-
-        user.setIp(session.getHost());
-        //记录登录日志
-        msgSend.send(MsgGenerator.genLoginLogMessage(user));
-
+        //user.setIp(session.getHost());
         return new SimpleAuthenticationInfo(user, user.getUserPass(), ByteSource.Util.bytes("yidusoft"), getName());
     }
 

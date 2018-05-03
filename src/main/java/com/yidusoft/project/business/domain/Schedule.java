@@ -1,9 +1,11 @@
 package com.yidusoft.project.business.domain;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.yidusoft.utils.DateUtils;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Date;
-import javax.persistence.*;
 
 public class Schedule {
     @Id
@@ -146,6 +148,10 @@ public class Schedule {
      */
     public Date getVisitorTime() {
         return visitorTime;
+    }
+
+    public String  getVisitorTimeString() {
+        return DateUtils.format(visitorTime,DateUtils.FORMAT_SHORT);
     }
 
     /**
