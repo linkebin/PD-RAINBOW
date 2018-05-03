@@ -67,9 +67,9 @@
                a.activity_name,date_format(a.activity_start,'%Y-%m-%d') as  activity_start,
                date_format(a.activity_end,'%Y-%m-%d') as  activity_end,q.questionnaire_name,
                GROUP_CONCAT(d.time_consuming) time_consuming,
-               MAX(TIME_TO_SEC(str_to_date(d.time_consuming, '%H:%i:%s'))) time_second_max,
-               MIN(TIME_TO_SEC(str_to_date(d.time_consuming, '%H:%i:%s'))) time_second_min,
-               AVG(TIME_TO_SEC(str_to_date(d.time_consuming, '%H:%i:%s')))  time_second_avg,
+               MAX(TIME_TO_SEC(DATE_FORMAT(CONCAT('0000-00-00 ',d.time_consuming),'%H:%i:%s'))) time_second_max,
+               MIN(TIME_TO_SEC(DATE_FORMAT(CONCAT('0000-00-00 ',d.time_consuming),'%H:%i:%s'))) time_second_min,
+               AVG(TIME_TO_SEC(DATE_FORMAT(CONCAT('0000-00-00 ',d.time_consuming),'%H:%i:%s')))  time_second_avg,
             CASE
                WHEN d.id_  is not null
                THEN  SUM(1)
@@ -86,7 +86,7 @@
            WHERE
             a.ID_=#{activityId}
             AND  a.deleted=0
-            GROUP BY   a.activity_name,activity_start,activity_end,questionnaire_name,a.activity_total
+            GROUP BY   a.activity_name,activity_start,activity_end,questionnaire_name,a.activity_total,d.id_
     </select>
 
 
@@ -102,7 +102,10 @@
     </select>
 
     <select id="getLaunchActivityAll" resultType="java.util.Map"  parameterType="java.util.Map">
-        SELECT
+     SELECT
+        *
+        FROM
+      ( SELECT
         l.id_,l.activity_name,l.activity_addr,l.creator,l.activity_total,
         CASE
           WHEN d.id_ is not null
@@ -140,9 +143,8 @@
         <if test="userId!='' and  userId!=null">
             AND   l.user_id=#{userId}
         </if >
-
         AND  l.deleted=0
-        GROUP BY  l.activity_name,l.initiator_type,l.activity_addr,l.creator,l.activity_total
+        GROUP BY   l.id_,l.activity_name,l.initiator_type,l.activity_addr,l.creator,l.activity_total,d.id_
         HAVING    1=1
         <if test="activityStatus!='' and  activityStatus!=null">
             AND  activityStatus=#{activityStatus}
@@ -150,7 +152,9 @@
         <if test="initiatorType!='' and  initiatorType!=null">
             AND  initiatorType=#{initiatorType}
         </if >
-
+        ORDER  BY l.create_time DESC
+        ) t  WHERE 1=1
+        GROUP BY   t.id_,t.activity_name,t.activity_addr,t.creator,t.activity_total,t.partake_total,t.proportion,t.initiatorType,t.activityStatus
     </select>
 
 </mapper>

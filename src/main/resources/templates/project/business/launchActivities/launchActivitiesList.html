@@ -220,9 +220,11 @@
         var id = "'" + activity.id + "'";
         if (activity.activityStatus == 2) {
             return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity('+"'check'," + id + ')"><i class="eui-icon tb">&#xe621;</i></button>' +
+                    '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看报告" onclick="showInfo(' + id + ')"><i class="eui-icon tb">&#xe63c;</i></button>'+
                     '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
         }
         return  '<button class="eui-btn eui-btn-primary eui-btn-mini" title="编辑活动" onclick="activityEdit(' + id + ')"><i class="eui-icon">&#xe642;</i></button> ' +
+                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看报告" onclick="showInfo(' + id + ')"><i class="eui-icon tb">&#xe63c;</i></button>'+
                 '<button class="eui-btn eui-btn-primary eui-btn-mini" title="删除活动" onclick="deleteActivity(' + id + ')"><i class="eui-icon">&#xe640;</i></button> ';
 //                '<button class="eui-btn eui-btn-primary eui-btn-mini" title="审批" onclick="checkActivity('+"'approval'," + id + ')"><i class="eui-icon tb">&#x1005;</i></button>';
     }
@@ -325,7 +327,10 @@
             })
         })
     }
-
+    //查看相关统计
+    function showInfo(objId){
+        window.open("/web/launchActivities/presentation/"+objId);
+    }
 </script>
 </body>
 </html>
