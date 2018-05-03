@@ -46,10 +46,10 @@ public class LoginLog {
                 }
                 loginLog.setLoginAddr(buffer.toString());
             }
-            loginLogService.insertLoginInfo(loginLog);
         } catch (Exception e) {
-            logger.info("插入登录日志失败");
-            e.printStackTrace();
+            logger.info("获取地点失败"+e.getMessage());
+        }finally {
+            loginLogService.insertLoginInfo(loginLog);
         }
     }
 }

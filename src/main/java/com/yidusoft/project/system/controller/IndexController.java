@@ -5,14 +5,14 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
-import com.yidusoft.project.activitis.service.ChannelActivityService;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.redisMq.MsgGenerator;
-import com.yidusoft.redisMq.MsgSend;
-import com.yidusoft.utils.*;
+import com.yidusoft.utils.AliyunSMSUtil;
+import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.PasswordHelper;
+import com.yidusoft.utils.Security;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -51,9 +51,6 @@ public class IndexController {
     @Autowired
     SecUserService secUserService;
 
-
-    @Autowired
-    private ChannelActivityService channelActivityService;
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
     /**
@@ -297,8 +294,7 @@ public class IndexController {
     public String indexInfo(){
         return "indexInfo";
     }
-    @Autowired
-     private MsgSend msgSend;
+
 
     /**
      * 登录请求
@@ -311,7 +307,7 @@ public class IndexController {
         request.setAttribute("account", username);
         String captchaId = (String) request.getSession().getAttribute("vrifyCode");
 
-        if ("".equals(vrifyCode)) {
+        if (!captchaId.equals(vrifyCode) && !"".equals(captchaId)) {
             request.setAttribute("msg", "验证码错误！");
             return "login";
         }
@@ -335,17 +331,6 @@ public class IndexController {
             request.setAttribute("msg", "密码错误");
             return "login";
         }
-
-        SecUser  user = secUserService.getSecUserInfo(username);
-
-        Session session = SecurityUtils.getSubject().getSession();
-        session.setAttribute("userSessionId", user.getId());
-        session.setAttribute("userSession", user);
-
-        user.setIp(IpAddressUtils.getIpAddress(request));
-        //记录登录日志
-        msgSend.send(MsgGenerator.genLoginLogMessage(user));
-
         return  "redirect:/index";
     }
 

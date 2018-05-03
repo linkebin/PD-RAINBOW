@@ -78,8 +78,34 @@
     </select>
 
   <select id="getSecUserInfo" resultMap="BaseResultMap" parameterType="String" >
-     SELECT * FROM sec_user WHERE DELETED=0
-     AND (ACCOUNT = #{account} OR MOBILE = #{account} OR EMAIL = #{account})
+     SELECT
+      U.ID_,
+      U.ACCOUNT,
+      U.USER_PASS,
+      U.USER_NAME,
+      U.ORG_ID,
+      U.COMPANY_ID,
+      U.MOBILE,
+      U.EMAIL,
+      U.ADDR,
+      U.STATUS,
+      U.SEX,
+      U.CREATOR,
+      U.CREATE_TIME,
+      U.DELETED,
+      U.HEAD_IMG,
+      U.ACCOUNT_TYPE,
+      U.CHANNEL_ID,
+      U.INVITER_CODE,
+      U.INVITER_USER,
+      U.PROVINCE,
+      U.CITY,
+      U.DISTRICT,
+      U.CERTIFICATION,
+      U.CERTIFICATION_STATUS
+      FROM SEC_USER  U
+     WHERE DELETED=0
+     AND (ACCOUNT = #{ACCOUNT} OR MOBILE = #{ACCOUNT} OR EMAIL = #{ACCOUNT})
 
   </select>
   <select id="isSecUser" resultMap="BaseResultMap" parameterType="String" >

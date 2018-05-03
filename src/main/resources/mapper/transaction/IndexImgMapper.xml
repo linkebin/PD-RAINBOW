@@ -17,7 +17,7 @@
     </resultMap>
 
     <select id="getIndexImgAll" resultMap="BaseResultMap">
-        SELECT id,img_type,object_id,img_path,create_time,state,creator,deleted
-        FROM index_img WHERE deleted=0
+        SELECT ID,IMG_TYPE,OBJECT_ID,IMG_PATH,CREATE_TIME,STATE,CREATOR,DELETED
+        FROM INDEX_IMG WHERE DELETED=0
     </select>
 </mapper>

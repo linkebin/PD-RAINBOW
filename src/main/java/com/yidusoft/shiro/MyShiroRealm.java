@@ -1,20 +1,25 @@
 package com.yidusoft.shiro;
 
-import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecMenu;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecMenuMemberService;
 import com.yidusoft.project.system.service.SecUserService;
+import com.yidusoft.redisMq.MsgGenerator;
+import com.yidusoft.redisMq.MsgSend;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangqj on 2017/4/21.
@@ -27,15 +32,16 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Resource
     private SecMenuMemberService secMenuMemberService;
 
-    @Resource
-    private LoginLogService loginLogService;
 
+
+    @Autowired
+    private MsgSend msgSend;
 
     //清空权限
-    public void clearCached() {
-        PrincipalCollection principals = SecurityUtils.getSubject().getPrincipals();
-        super.clearCache(principals);
-    }
+//    public void clearCached() {
+//        PrincipalCollection principals = SecurityUtils.getSubject().getPrincipals();
+//        super.clearCache(principals);
+//    }
 
     //授权
     @Override
@@ -60,6 +66,15 @@ public class MyShiroRealm extends AuthorizingRealm {
         SecUser  user = secUserService.getSecUserInfo(account);
         if(user==null) throw new UnknownAccountException("账号不存在!");//账号删除
         if (user.getStatus()==0) throw new LockedAccountException("账号被锁定!"); // 帐号锁定
+
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute("userSessionId", user.getId());
+        session.setAttribute("userSession", user);
+
+        user.setIp(session.getHost());
+        //记录登录日志
+        msgSend.send(MsgGenerator.genLoginLogMessage(user));
+
         return new SimpleAuthenticationInfo(user, user.getUserPass(), ByteSource.Util.bytes("yidusoft"), getName());
     }
 
