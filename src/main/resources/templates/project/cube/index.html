@@ -141,13 +141,14 @@
 <script type="text/javascript" th:src="@{/Scripts/velocity.js}"></script>
 <script>
     $(function () {
-        $.get("/user/questionnaires/list", function (result) {
-            if (result.data != null) {
-                $('.questionnairesTotal').html(result.data.questionnairesTotal);
-            } else {
-                $('.questionnairesTotal').html(0);
-            }
-        })
+//在代码中检查到并未用到 所以先将他屏蔽掉 2018年5月2日
+//        $.get("/user/questionnaires/list", function (result) {
+//            if (result.data != null) {
+//                $('.questionnairesTotal').html(result.data.questionnairesTotal);
+//            } else {
+//                $('.questionnairesTotal').html(0);
+//            }
+//        })
         init();
     });
 

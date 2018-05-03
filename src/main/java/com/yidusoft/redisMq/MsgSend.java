@@ -19,14 +19,14 @@ public class MsgSend {
     @Autowired
     protected ApplicationContext ctx;
     private static final Logger logger = LoggerFactory.getLogger(MsgSend.class);
-    public void send(SysMessage sysMessage) {
-        String msgJson = JSON.toJSONString(sysMessage);
+    public void send(Message msg) {
+        String msgJson = JSON.toJSONString(msg);
         StringRedisTemplate template = ctx.getBean(StringRedisTemplate.class);
         CountDownLatch latch = ctx.getBean(CountDownLatch.class);
-        template.convertAndSend("msgMq", msgJson);
+        template.convertAndSend("loginLog", msgJson);
         try {
               //发送消息连接等待中
-            logger.info("发送了一条队列消息,消息内容："+sysMessage.toString());
+            logger.info("发送了一条队列消息,消息内容："+msgJson);
             latch.await();
         } catch (InterruptedException e) {
             logger.info("消息发送失败...");

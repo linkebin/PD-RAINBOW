@@ -57,7 +57,7 @@ public class RedisConfigurer extends CachingConfigurerSupport {
 
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, new PatternTopic("msgMq"));
+        container.addMessageListener(listenerAdapter, new PatternTopic("loginLog"));
 
         return container;
     }

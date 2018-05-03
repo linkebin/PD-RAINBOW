@@ -107,6 +107,18 @@ public class SecUser implements Serializable {
     @Column(name = "HEAD_IMG")
     private String headImg;
 
+
+    @Transient
+    private  String ip;
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     /**
      * 获取资质认证
      * @return

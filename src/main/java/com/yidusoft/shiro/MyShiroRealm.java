@@ -1,21 +1,15 @@
 package com.yidusoft.shiro;
 
-import com.yidusoft.project.monitor.domain.LoginLog;
 import com.yidusoft.project.monitor.service.LoginLogService;
 import com.yidusoft.project.system.domain.SecMenu;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecMenuMemberService;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.utils.Base64ToImage;
-import com.yidusoft.utils.IpAddressUtils;
-import com.yidusoft.utils.PasswordHelper;
-import com.yidusoft.utils.Security;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 

@@ -5,6 +5,8 @@ import com.yidusoft.configurer.ResourcesStatic;
 import com.yidusoft.project.monitor.domain.OperLog;
 import com.yidusoft.project.monitor.service.OperLogService;
 import com.yidusoft.project.system.domain.SecUser;
+import com.yidusoft.redisMq.MsgGenerator;
+import com.yidusoft.redisMq.MsgSend;
 import com.yidusoft.utils.Security;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -37,6 +39,9 @@ import java.util.*;
 public class LogAspect {
      @Autowired
      private OperLogService operLogService;
+
+    @Autowired
+    private MsgSend msgSend;
 
      private Logger logger =LoggerFactory.getLogger(this.getClass());
 
@@ -135,7 +140,10 @@ public class LogAspect {
 
            if( ResourcesStatic.OPERRESOURCES.get(operLog.get().getOperUrl())!=null){
                operLog.get().setOperInfo(ResourcesStatic.OPERRESOURCES.get(operLog.get().getOperUrl()).toString());
-               operLogService.save( operLog.get());
+
+               msgSend.send(MsgGenerator.genOperMessage(operLog.get()));
+
+//               operLogService.save( operLog.get());
            }
         operWhenLong.remove();
         operLog.remove();

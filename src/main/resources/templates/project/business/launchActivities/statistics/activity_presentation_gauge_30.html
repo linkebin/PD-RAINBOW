@@ -105,8 +105,8 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
+    </div>
+</div>
 
     </div>
 
@@ -278,6 +278,7 @@
                 '#dd4444', '#fec42c', '#80F1BE'
             ],
             legend: {
+                show:false,
                 y: 'top',
                 data: ['抑郁'],
                 textStyle: {
@@ -361,6 +362,7 @@
                     top: '10%',
                     dimension: 2,
                     min: 0,
+                    show: false,
                     max: typeListMax,
                     itemWidth: 30,
                     itemHeight: 120,
@@ -392,15 +394,21 @@
                 {
                     name: '抑郁',
                     type: 'scatter',
-                    itemStyle: {
+                    itemStyle: itemStyle,
+                    data: dataBJ,
+                    label: {
                         normal: {
+                            formatter: function(obj) {
+
+                                return  obj.value[1]*100+"%";
+                            },
+                            show: true,
                             color: '#5cb9fe',
                             shadowBlur: 20,
                             shadowColor: '#69bffe',
-                            show: true
+                            position: 'top'
                         }
-                    },
-                    data: dataBJ
+                    }
                 }
 
             ],
@@ -426,6 +434,34 @@
     function proportionChart(man, woman) {
         var myChart = echarts.init(document.getElementById('proportion'), 'proportion');
         myChart.clear();
+        var echartData =  [
+            {
+                value: woman,
+                name: '女',
+                itemStyle: {
+                    normal: {
+                        color: '#fe5a77',
+                        shadowBlur: 50,
+                        shadowColor: '#fe899d',
+                        show: true
+                    }
+                }
+            },
+            {
+                value: man,
+                name: '男',
+                itemStyle: {
+                    normal: {
+                        color: '#5cb9fe',
+                        shadowBlur: 50,
+                        shadowColor: '#69bffe',
+                        show: true
+                    }
+                }
+
+            }
+
+        ];
         option = {
             tooltip: {
                 trigger: 'item',
@@ -434,18 +470,26 @@
             legend: {
                 orient: 'vertical',
                 x: 'left',
-                data: ['女', '男']
+                data: ['男', '女']
             },
             series: [
                 {
                     name: '男女比例',
                     type: 'pie',
-                    radius: ['50%', '70%'],
+                    radius: ['30%', '40%'],
                     avoidLabelOverlap: false,
                     label: {
                         normal: {
-                            show: false,
-                            position: 'center'
+                            formatter: function(params, ticket, callback) {
+                                var total = 0; //总数量
+                                var percent = 0; //占比
+                                echartData.forEach(function(value, index, array) {
+                                    total += value.value;
+                                });
+                                percent = ((params.value / total) * 100).toFixed(1);
+                                return  params.name+'('+params.value+'人/'+percent+'%)';
+                            }
+
                         },
                         emphasis: {
                             show: true,
@@ -460,38 +504,9 @@
                             show: false
                         }
                     },
-                    data: [
-                        {
-                            value: woman,
-                            name: '女',
-                            itemStyle: {
-                                normal: {
-                                    color: '#fe5a77',
-                                    shadowBlur: 50,
-                                    shadowColor: '#fe899d',
-                                    show: true
-                                }
-                            }
-                        },
-                        {
-                            value: man,
-                            name: '男',
-                            itemStyle: {
-                                normal: {
-                                    color: '#5cb9fe',
-                                    shadowBlur: 50,
-                                    shadowColor: '#69bffe',
-                                    show: true
-                                }
-                            }
-
-                        },
-
-                    ],
-                },
-
-            ],
-            // color: ['#fe5a77','#5cb9fe']
+                    data:echartData
+                }
+            ]
         };
         myChart.setOption(option);
     }
