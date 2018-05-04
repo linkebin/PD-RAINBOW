@@ -186,7 +186,11 @@
              content += '</div>';
              content += '<div class="eui-row eui-paddingTB5">';
              content += '    <span class="eui-font14" style="font-weight:bold ">本题平均分：</span>';
-             content += '     <span class="eui-font14">'+datas[t].avgScore+'</span>';
+             var avgScore=0;
+             if(datas[t].avgScore!=null){
+                 avgScore=datas[t].avgScore;
+             }
+             content += '     <span class="eui-font14">'+avgScore+'</span>';
              content += '</div>';
              content += '<table class="eui-table" e-even e-skin="nob" e-size="sm">';
              content += '   <colgroup>';
@@ -378,7 +382,7 @@
                        normal: {
                            formatter: function(obj) {
 
-                               return  obj.value[1]*100+"%";
+                               return  mul(obj.value[1],100)+"%";
                            },
                            show: true,
                            position: 'top'
@@ -566,6 +570,19 @@
         };
 
         myChart.setOption(option);
+    }
+
+    function mul(a, b) {
+        var c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+            c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+            c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
     }
 </script>
 </html>

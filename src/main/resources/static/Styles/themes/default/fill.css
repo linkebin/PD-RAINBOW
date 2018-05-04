@@ -1,0 +1,418 @@
+.ui-step-wrap {
+ position: relative;
+}
+
+.ui-step-wrap .ui-step-bg,
+.ui-step-wrap .ui-step-progress {
+ height: 6px;
+
+}
+
+.ui-step-wrap .ui-step-bg {
+ width: 100%;
+ background: #ddd;
+
+}
+
+.ui-step-wrap .ui-step-progress {
+ width: 0;
+ background: #64BD2E;
+ margin-top: -6px;
+}
+
+.ui-step-wrap .ui-step {
+ position: relative;
+ z-index: 1;
+ list-style: none;
+ margin-bottom:10px;
+}
+
+.ui-step-wrap .ui-step:after {
+ content: '';
+ display: table;
+ clear: both;
+}
+
+.ui-step-wrap .ui-step .ui-step-item {
+ float: left;
+}
+
+.ui-step-wrap .ui-step .ui-step-item div {
+ text-align: center;
+ color: #625454;
+}
+
+.ui-step-wrap .ui-step .ui-step-item .ui-step-item-num {
+
+}
+
+.ui-step-wrap .ui-step .ui-step-item .ui-step-item-num span {
+ display: inline-block;
+ width: 26px;
+ height: 26px;
+ line-height:26px;
+ border-radius: 50%;
+ background: #dad9d9;
+}
+
+.ui-step-wrap .ui-step .ui-step-item.active .ui-step-item-num span {
+ color: #fff;
+ background: #64BD2E;
+}
+
+.ui-step-item-title{
+ padding:5px 0;}
+
+/*-------------以上为步骤页面的样式--------------*/
+/*--------------以下为修改的样式---------------*/
+.fWdith{
+/* width: 1000px;
+ margin: 0 auto;*/
+ padding-left:100px!important;
+ padding-right:100px!important;
+}
+.payCentre {
+ display: inline-block;
+ border-left: 2px solid #ddd;
+ padding-left: 10px;
+ margin-left: 10px;
+ font-size: 18px;
+ line-height: 30px;
+
+}
+
+.fillNaire{
+ background: #f0f0f0;
+}
+
+
+.FixHeader,.FixFooter,.tipsDiv{
+ position: fixed;
+ left:0;
+ right: 0;
+
+
+}
+.FixHeader{
+ top:0;
+ height: 60px;
+ background: #ffffff;
+ box-shadow: 0 0 10px #68a8d7;
+ z-index: 99999;
+}
+.FixFooter{
+ position: fixed;
+ bottom:0;
+ height: 45px;
+ background: rgba(0,0,0,0.2);
+}
+
+.FixFooter .eui-btn{
+}
+.tipsDiv{
+ top: 80px;
+ line-height: 25px;
+ font-size: 14px;
+}
+
+.tipsDiv .eui-progress{
+ margin: 8px 0;
+ background-color: #ddd;
+}
+.eui-progress-text {
+ font-weight: bold;
+ white-space: nowrap;
+}
+
+.fillMain{
+position: absolute;
+ left: 100px;
+ right:100px;
+ top: 80px;
+ bottom:60px;
+/*
+ position: absolute;
+ left: 50%;
+ margin-left: -500px;
+ top: 80px;
+ bottom: 60px;
+ width: 1000px;
+ */
+}
+
+
+
+
+
+.fillMain .ui-step-wrap{
+   position: fixed;
+   bottom:0px;
+
+   z-index: 999;
+}
+
+.fillMain #prevBtn,.fillMain #nextBtn{
+   position: absolute;
+ background-image: url(images/arrow.png);
+ top: 50%;
+ margin-top: -50px;
+ background-size: cover;
+}
+.fillMain #prevBtn:hover,.fillMain #nextBtn:hover{
+  background-color: #e9e9e9;
+
+ }
+.fillMain #prevBtn{
+  left: -40px;
+ width: 25px;
+ height: 70px;
+ margin-top: -35px;
+ }
+.fillMain #nextBtn{
+  right: -60px;
+ width: 36px;
+ height: 99px;
+ background-position: right top;
+}
+.stepContentBox{
+
+}
+.stepContentBody{
+ height: 100%;
+ border: 1px solid #ddd;
+ background:#fff;
+}
+.fillMain .stepContent{
+ height: 100%;
+ background:#fff;
+ margin-top: -7px;
+ border: 1px solid #ddd;
+ margin-right: 5px;
+ margin-left: -5px;
+}
+
+.fillMain .stepContent .stepItem{
+ padding: 0 20px;
+}
+
+.fillMain .ui-step-wrap .ui-step .ui-step-item .ui-step-item-num span
+{
+  margin-right: 5px;
+  margin-left: 5px;
+ background: #eeeeee;
+}
+.fillMain .ui-step-bg,.fillMain .ui-step-progress{
+ display: none;
+}
+.fillMain .ui-step-wrap .ui-step .ui-step-item.active .ui-step-item-num span {
+ color: #fff;
+ background: #666666;
+}
+
+.fillMain .ui-step-wrap .ui-step .ui-step-item .ui-step-item-num span {
+
+ width: 22px;
+ height: 22px;
+ line-height: 22px;
+}
+
+.itemList{
+overflow: hidden;
+ border: 1px solid #fff;
+ padding: 0 10px;
+ margin: 5px 0 0 0;
+ position: relative;
+}
+.itemUnSelect{
+ background: #ffebeb;
+ border: 1px solid red!important;
+ border-radius:5px ;
+
+}
+
+.itemUnSelect .itemRight a{
+ background: #cccccc;
+}
+
+
+.itemList:hover{
+ background: #f5f5f5;
+}
+.selectHover{
+ width:100px;
+ background: #f0f0f0;
+ position: absolute;
+ top: 0;
+ bottom: 10px;
+}
+
+.itemListHeader{
+ overflow: hidden;
+ margin-top: 10px;
+}
+.itemList .itemLeft,.itemListHeader .itemLeft{
+ /*    width: 400px;
+     float: left;*/
+ text-align: right;
+ line-height: 18px;
+ padding: 2px 0;
+ font-size: 16px;
+
+margin-right: 52%;
+
+}
+.itemList .itemRight,.itemListHeader .itemRight{
+   /*  margin-left: 410px;*/
+ line-height: 25px;
+ font-size: 16px;
+ float: right;
+ width: 50%;
+
+
+}
+
+.itemList .itemLeft,.itemList .itemRight{
+ top: 50%;
+ position: relative;
+ margin-top: -18px;
+}
+.itemList .itemLeft{
+ padding-top:8px;
+
+}
+.itemList .itemRight{
+ overflow: hidden;
+ position: absolute;
+ right: 0;
+}
+.itemListHeader .itemRight{
+ margin-top: 0px;
+}
+
+
+
+
+
+@media screen and (max-width: 700px) {
+ .itemList{
+  margin-bottom: 10px;
+ }
+ .itemList .itemLeft,.itemListHeader .itemLeft{
+  text-align: left;
+  margin-right:0;
+  top: 0;
+ }
+ .itemList .itemRight,.itemListHeader .itemRight{
+  float: none;
+  width: 100%;
+ }
+ .itemList .itemRight{
+  margin-top:0;
+  position: static;
+  top: 0;
+
+ }
+ .itemList .itemRight a{
+
+   }
+}
+
+
+.itemList .itemRight a,.itemListHeader .itemRight a{
+ display: inline-block;
+ width: 20%;
+ height: 35px;
+ background: #ddd;
+ float: left;
+ border-left: 2px solid #fff;
+ *border-left: 0px solid #fff;
+ margin-left: -2px;
+}
+.itemListHeader .itemRight a{
+
+ height: 30px;
+ text-align: center;
+ font-size: 16px;
+ color: #1e9eff;
+ background: none;
+}
+
+
+.itemList .itemRight a.selected{
+ background: -webkit-linear-gradient(left, #c7e3fa , #a5d2f7); /* Safari 5.1 - 6.0 */
+ background: -o-linear-gradient(right, #c7e3fa, #a5d2f7); /* Opera 11.1 - 12.0 */
+ background: -moz-linear-gradient(right, #c7e3fa, #a5d2f7); /* Firefox 3.6 - 15 */
+ background: linear-gradient(to right, #c7e3fa , #a5d2f7); /* 标准的语法 */
+}
+.itemList .itemRight a:nth-child(2).selected{
+ background: -webkit-linear-gradient(left,#a5d2f7 , #72b9f3); /* Safari 5.1 - 6.0 */
+ background: -o-linear-gradient(right, #a5d2f7, #72b9f3); /* Opera 11.1 - 12.0 */
+ background: -moz-linear-gradient(right, #a5d2f7, #72b9f3); /* Firefox 3.6 - 15 */
+ background: linear-gradient(to right, #a5d2f7 , #72b9f3); /* 标准的语法 */
+}
+.itemList .itemRight a:nth-child(3).selected{
+ background: -webkit-linear-gradient(left,#72b9f3 , #3c9eef); /* Safari 5.1 - 6.0 */
+ background: -o-linear-gradient(right, #72b9f3, #3c9eef); /* Opera 11.1 - 12.0 */
+ background: -moz-linear-gradient(right, #72b9f3, #3c9eef); /* Firefox 3.6 - 15 */
+ background: linear-gradient(to right, #72b9f3 , #3c9eef); /* 标准的语法 */
+}
+.itemList .itemRight a:nth-child(4).selected{
+ background: -webkit-linear-gradient(left,#3c9eef, #2c96ed); /* Safari 5.1 - 6.0 */
+ background: -o-linear-gradient(right, #3c9eef, #2c96ed); /* Opera 11.1 - 12.0 */
+ background: -moz-linear-gradient(right,#3c9eef, #2c96ed); /* Firefox 3.6 - 15 */
+ background: linear-gradient(to right,#3c9eef, #2c96ed); /* 标准的语法 */
+}
+.itemList .itemRight a:nth-child(5).selected{
+ background: -webkit-linear-gradient(left,#2c96ed, #0f84e3); /* Safari 5.1 - 6.0 */
+ background: -o-linear-gradient(right, #2c96ed, #0f84e3); /* Opera 11.1 - 12.0 */
+ background: -moz-linear-gradient(right, #2c96ed, #0f84e3); /* Firefox 3.6 - 15 */
+ background: linear-gradient(to right, #2c96ed, #0f84e3); /* 标准的语法 */
+}
+
+/*----------------*/
+.fillMainRadio{
+ width: 980px;
+ margin: 90px auto 50px auto;
+
+ box-shadow: 2px 2px 10px #b4ccde;
+ border-radius: 5px;
+ background: #fff;
+ padding: 30px;
+
+}
+
+
+.RitemList{
+ margin-bottom: 15px;
+ border: 1px solid #fff;
+ padding: 10px 15px;
+}
+
+
+.itemTitle{
+ margin-bottom: 5px;
+ font-size: 18px;
+}
+
+.RitemList .eui-form-radio{
+ border: 1px solid #ddd;
+ border-radius: 5px;
+ padding: 5px 15px 5px 10px;
+ background: #f8f8f8;
+}
+
+.RitemList .eui-form-radioed{
+ background: #5FB878;
+ border: 1px solid #5FB878;
+ color: #fff;
+}
+.RitemList .eui-form-radioed .eui-icon{
+  color: #fff!important;
+ }
+
+.RitemList .eui-form-radio:hover {
+ background: #f0f0f0;
+}
+.RitemList .eui-form-radioed:hover{
+ background: #5FB878;
+}

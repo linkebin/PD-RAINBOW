@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>问卷填写</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes"/>
+	<link href="/Styles/themes/default/style.css" rel="stylesheet"  media="all" />
+    <style>
+        html{    background: #f0f0f0;}
+    </style>
+</head>
+<body class="fillNaire">
+<div class="FixHeader">
+    <input type="hidden" th:value="${#httpServletRequest.getParameter('questionnaireId')}" id="questionnaireId"/>
+    <input type="hidden" th:value="${userId}" id="userId"/>
+    <input type="hidden" th:value="${visitorTimes}" id="visitorTimes"/>
+    <input type="hidden" th:value="${activityId}" id="activityId"/>
+    <input type="hidden" th:value="${userName}" id="userName"/>
+    <div class="fWdith eui-paddingTB15">
+        <img alt="" src="/Styles/images/xymfImages/xymf/logo.png">
+        <span class="payCentre">问卷填写</span>
+        <span id="timer" class="eui-marginL20 eui-color-blue eui-font20 eui-paddingT5">00:00:00</span>
+        <a href="###" class="eui-btn eui-btn-normal float-right" id="fullScreen">全屏</a>
+    </div>
+</div>
+
+<div class="tipsDiv">
+    <div class="fWdith">
+        下面有<span th:text="${questionnaireQuestionSize}"></span>条测试项目，<span th:text="${remarks}">列出了有些人可能会有的问题，请仔细阅读每一条，然后根据最新一星期以内，您的实际感觉，选择适合的答案点击，请注意不要漏题。</span>
+        <div class="eui-progress eui-progress-big" e-showpercent="yes" e-filter="fillProgress" id="fillProgress">
+            <div class="eui-progress-bar" e-percent="0%"></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="fillMain">
+    <a href="###" id="prevBtn"></a>
+    <a href="###" id="nextBtn"></a>
+
+    <div class="stepContentBody">
+        <div id="step" class="stepContent">
+        </div>
+    </div>
+
+</div>
+
+
+<div class="FixFooter">
+    <!--		<div class="info">第<span id="pageNumber"></span>页</div>-->
+    <div class="fWdith">
+        <a href="javascript:void (0)"  class="eui-btn eui-btn-normal eui-btn-big float-right" id="submitQ"><i class="eui-icon eui-font26">&#xe605;</i> 提交问卷</a>
+    </div>
+</div>
+<script src="/Scripts/jquery-1.9.0.min.js" charset="utf-8"></script>
+<script src="/Scripts/module/eui.js" charset="utf-8"></script>
+<!--引入问卷的提交方法-->
+<script src="/questionnaire/questionnaire_submit.js"></script>
+<script src="/Scripts/plugins/jquery.step.js" charset="utf-8"></script>
+<script src="/questionnaire/question_load.js" charset="utf-8"></script>
+<!--<script src="/questionnaire/questionnaire.js" charset="utf-8"></script>-->
+<script th:inline="javascript">
+    //初始化
+    var token=[[${session.token}]];
+    eui.use(['element','layer','jquery'], function(){
+
+        var element = eui.element
+            ,layer = eui.layer
+            ,jquery = eui.jquery;
+
+        $(function(){
+
+            calculateFillmain();
+            getQuestionsList();
+
+        });
+
+
+
+    // 拼接问题
+    function getQuestionsList() {
+
+        var questionsList = [[${questionlist}]];
+        var optionAnswer = [[${optionAnswers}]];
+        var scoreList = [[${scoreList}]];
+        console.info(questionsList);
+        console.info(optionAnswer);
+        console.info(scoreList);
+        var itemSum=0;
+        var listNum=10;   //一页多少条
+        var con=""
+            ,conbody =""
+            ,number=1;
+       for(var i=0;i<questionsList.length;i++){
+           var data=questionsList[i];
+           var j = 0;
+           con +='<div class="itemList" code="'+ data.id  +'">'
+               +'<div class="itemLeft">'+ number +'、'+ data.questionContent +'</div>'
+               +'<div class="itemRight">';
+           var  options="";
+
+           var optionScore=data.optionScore.split("||");
+           for (var o=0;o<optionAnswer.length;o++){
+               con +=' <a href="javascript:void(0)" score="'+optionScore[o]+'" questionId="'+data.id+'" answer="'+optionAnswer[o]+'" questionType="'+data.questionType+'"></a>';
+               options+='<a href="javascript:void(0)">'+optionAnswer[o]+'</a>'
+               j++;
+           }
+           con +=' </div>'
+               +' </div>';
+
+           itemSum++;
+           number++;
+           if(itemSum%listNum === 0){
+               conbody +='<div class="stepItem" title="">';
+               conbody +='<div class="itemListHeader">';
+               conbody +='<div class="itemLeft">';
+               conbody +=' </div>';
+               conbody +='<div class="itemRight">';
+               conbody +=options;
+               conbody +='</div></div>'+ con +'</div>';
+               $(".stepContent").append(conbody);
+               con="";
+               conbody="";
+           }
+       }
+        //将剩下的进行打包加到后面
+
+        if(itemSum%listNum!="0"){
+            conbody +='<div class="stepItem" title="">'
+                +'<div class="itemListHeader">'
+                +'<div class="itemLeft">'
+                +' </div>'
+                +'<div class="itemRight">'
+                +options
+                +'</div></div>'+ con +'</div>';
+            $(".stepContent").append(conbody);
+        }
+
+
+        var $sum = $("#sumS");
+        //进行渲染
+        var $step = $("#step");
+        $step.step({
+            nextBtnID:""
+        });
+
+        //提示未完成，是否继续下一页
+        $("#nextBtn").on("click", function(e) {
+            var $itemList=$(".stepItem:visible .itemList");
+            var tf=true;
+            var test="";
+            $itemList .each(function () {
+                var s =$(this).find(".itemRight .selected").length;
+                tf= s>0 ? true:false;
+                if(!tf){
+                    $(this).addClass("itemUnSelect");
+                }
+            });
+            if(tf){
+                $step.nextStep();
+            }else {
+                layer.confirm('当前页面还有题目未完成，是否继继进入下一页？', {
+                    title:'提示信息'
+                    ,btn: ['确认','取消'] //按钮
+                }, function(index){
+                    layer.close(index);
+                    //   layer.msg('的确很重要', {icon: 1});
+                    $step.nextStep();
+                });
+            }
+
+        });
+        //提交
+         $("#submitQ").on("click",function () {
+             $("#submitQ").attr("disabled","disabled");
+             submitQuestionnaire();
+             var $itemList=$(".stepItem:visible .itemList");
+             var tf=true;
+             var test="";
+             $itemList .each(function () {
+                 var s =$(this).find(".itemRight .selected").length;
+                 tf= s>0 ? true:false;
+                 if(!tf){
+                     $(this).addClass("itemUnSelect");
+                 }
+             });
+
+         });
+        clickOption(itemSum);
+        calculate();
+    }
+
+
+
+        //点击选择题目（90项清单类型的）
+        function clickOption(e,itemSum) {
+
+            var fpValue=parseInt($("#fillProgress> div").attr("e-percent"))
+                ,addV=parseFloat((100/e).toFixed(2))
+                ,sn=0;
+
+            // var curCode="",optionCode="";
+
+            $(".itemList .itemRight a").on("click", function() {
+                //将当前的选择的答案付给itemRight
+                var parentDom=$(this).parent();
+                parentDom.attr("score",$(this).attr("score"));
+                parentDom.attr("answer",$(this).attr("answer"));
+                parentDom.attr("questiontype",$(this).attr("questiontype"));
+                parentDom.attr("questionid",$(this).attr("questionid"));
+
+                $(this).closest(".itemList").removeClass("itemUnSelect");
+                //进度条
+                var tf=$(this).closest(".itemRight").find("a").hasClass("selected");
+                if(!tf){
+                    fpValue =parseFloat((fpValue + addV).toFixed(2));
+                    ++sn;
+                    sn >= e?element.progress('fillProgress','100%'):element.progress('fillProgress', fpValue+'%');
+
+                    //        curCode=$(this).closest(".itemList").attr("code");
+                }
+
+                //    optionCode=$(this).index()+1;
+                //    console.log("第 "+curCode+" 题，第 "+ optionCode+" 项");
+
+                var index = $(this).index();
+                $(this).closest(".itemRight").find("a:lt("+ index+1 +")").addClass("selected");
+                $(this).closest(".itemRight").find("a:gt("+ index +")").removeClass("selected");
+
+
+
+            });
+
+        }
+
+
+        //计算元素高度：包括内外边距
+        function CH(e) {return $(e).outerHeight(true);}
+
+        var sCH= CH(".stepContent");
+        function calculate() {
+            var itemRightAH=CH(".stepContent")-CH(".itemListHeader")
+                ,itemRightAL=$(".stepItem:visible .itemList").length;
+            $(".itemList").height(itemRightAH/itemRightAL-10);
+
+        }
+
+        function calculateFillmain() {
+            var tipsDivH=$(".tipsDiv").offset().top + $(".tipsDiv").outerHeight();
+            $(".fillMain").css("top",tipsDivH+8);
+        }
+
+
+        //监听浏览器窗口变化
+    $(window).resize(function (){
+        calculateFillmain();
+        calculate();
+    });
+    });
+
+    //判断题目是否答完
+    function isAnswer(){
+       var doms=  $(".itemList .itemRight");
+       var num=0;
+       for(var i=0;i< doms.length;i++){
+           var context=doms.eq(i).attr("questionId");
+           if(context!=null  && context!==""){
+               num++
+           }
+       }
+       if(num==doms.length){
+           return true;
+       }else {
+           return false;
+       }
+    }
+    //提交问卷
+    function submitQuestionnaire() {
+        if(!isAnswer()){
+            layer.msg('请填完所有的题目！');
+            return ;
+        }
+        var array = new Array;
+        var doms=  $(".itemList .itemRight");
+        for (var i = 0; i < doms.length; i++) {
+            var obj = new Object();
+            //分数
+            obj.score = doms.eq(i).attr("score");
+            //问题
+            obj.questionId =doms.eq(i).attr("questionId");
+            obj.answer =doms.eq(i).attr("answer");
+            obj.questionType = doms.eq(i).attr("questionType");
+            array.push(obj);
+        }
+        var questionnaireId = $("#questionnaireId").val();
+        var userId = $("#userId").val();
+        var visitorTimes = $("#visitorTimes").val();
+        var timeConsuming=$("#timer").text();
+        var activityId = $("#activityId").val();
+        var userName = $('#userName').val();
+        $("#submitQuestionnaire").attr("disabled","disabled");
+        //提交问卷
+        submit_Questionnaire(array,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName,token);
+
+    }
+
+
+</script>
+
+</body>
+</html>
+

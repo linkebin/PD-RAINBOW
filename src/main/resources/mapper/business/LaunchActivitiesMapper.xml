@@ -69,11 +69,13 @@
                GROUP_CONCAT(d.time_consuming) time_consuming,
                MAX(TIME_TO_SEC(DATE_FORMAT(CONCAT('0000-00-00 ',d.time_consuming),'%H:%i:%s'))) time_second_max,
                MIN(TIME_TO_SEC(DATE_FORMAT(CONCAT('0000-00-00 ',d.time_consuming),'%H:%i:%s'))) time_second_min,
-               AVG(TIME_TO_SEC(DATE_FORMAT(CONCAT('0000-00-00 ',d.time_consuming),'%H:%i:%s')))  time_second_avg,
-            CASE
-               WHEN d.id_  is not null
-               THEN  SUM(1)
-               ELSE  0   END  user_number,
+               cast((AVG(TIME_TO_SEC(DATE_FORMAT(CONCAT('0000-00-00 ',d.time_consuming),'%H:%i:%s')))) as dec(18,2))  time_second_avg,
+            ( SELECT
+               COUNT(0)
+               from
+               data_acquisition
+               WHERE  activity_id=#{activityId}
+            ) as  user_number,
                a.activity_total
            FROM
             launch_activities a
@@ -86,7 +88,7 @@
            WHERE
             a.ID_=#{activityId}
             AND  a.deleted=0
-            GROUP BY   a.activity_name,activity_start,activity_end,questionnaire_name,a.activity_total,d.id_
+            GROUP BY   a.activity_name,activity_start,activity_end,questionnaire_name,a.activity_total
     </select>
 
 
@@ -102,18 +104,22 @@
     </select>
 
     <select id="getLaunchActivityAll" resultType="java.util.Map"  parameterType="java.util.Map">
-     SELECT
-        *
-        FROM
-      ( SELECT
+      SELECT
         l.id_,l.activity_name,l.activity_addr,l.creator,l.activity_total,
+            ( SELECT
+               COUNT(0)
+               from
+               data_acquisition
+               WHERE  activity_id=l.id_
+            )  as partake_total,
         CASE
-          WHEN d.id_ is not null
-             THEN SUM(1)
-             ELSE   0
-          END  as partake_total,
-        CASE
-           WHEN d.id_ is not null
+           WHEN
+              ( SELECT
+                    COUNT(0)
+                    from
+                    data_acquisition
+                    WHERE  activity_id=l.id_
+                ) !=0
              THEN   cast((SUM(1)/l.activity_total) as dec(18,4))
              ELSE   0
            END  as proportion,
@@ -144,7 +150,7 @@
             AND   l.user_id=#{userId}
         </if >
         AND  l.deleted=0
-        GROUP BY   l.id_,l.activity_name,l.initiator_type,l.activity_addr,l.creator,l.activity_total,d.id_
+        GROUP BY   l.id_,l.activity_name,l.initiator_type,l.activity_addr,l.creator,l.activity_total
         HAVING    1=1
         <if test="activityStatus!='' and  activityStatus!=null">
             AND  activityStatus=#{activityStatus}
@@ -153,8 +159,7 @@
             AND  initiatorType=#{initiatorType}
         </if >
         ORDER  BY l.create_time DESC
-        ) t  WHERE 1=1
-        GROUP BY   t.id_,t.activity_name,t.activity_addr,t.creator,t.activity_total,t.partake_total,t.proportion,t.initiatorType,t.activityStatus
+
     </select>
 
 </mapper>
