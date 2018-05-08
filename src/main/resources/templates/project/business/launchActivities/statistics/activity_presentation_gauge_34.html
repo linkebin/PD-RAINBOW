@@ -159,7 +159,6 @@
     //查询参与活动所有人相关问卷结论，性别，年龄
     function getActivityNumberPeopleForResult(type) {
         $.post('/launch/activities/getActivityNumberPeopleForResult',{"activityId":activitiesId,"type":type},function (result) {
-            console.info(result);
             var datas=result.data;
             $("#totalScoreMax").text(datas.totalScoreMax);
             $("#totalScoreMin").text(datas.totalScoreMin);
@@ -235,8 +234,14 @@
        myChart.clear();
         var dataBJ = [
            [0,typeListY[0],typeList[0],"无"],
+       ];
+       var dataBJ1 = [
            [1,typeListY[1],typeList[1],"轻度"],
+       ];
+       var dataBJ2 = [
            [2,typeListY[2],typeList[2],"中度"],
+       ];
+       var dataBJ3 = [
            [3,typeListY[3],typeList[3],"重度"],
        ];
        var schema = [
@@ -257,12 +262,12 @@
        option = {
            backgroundColor: 'white',
            color: [
-               '#dd4444', '#fec42c', '#80F1BE'
+               '#8dec53','#e3f641','#f8c62c','#f95f6d'
            ],
            legend: {
                show: false,
                y: 'top',
-               data: ['焦虑'],
+               data: ['焦虑','焦虑1','焦虑2','焦虑3'],
                textStyle: {
                    color: '#000000',
                    fontSize: 16
@@ -387,14 +392,65 @@
                            show: true,
                            position: 'top'
                        }
-                   }
+                   },
+                   color: ['#8dec53']
+               },
+               {
+                   name: '焦虑1',
+                   type: 'scatter',
+                   itemStyle: itemStyle,
+                   data: dataBJ1,
+                   label: {
+                       normal: {
+                           formatter: function(obj) {
+
+                               return  mul(obj.value[1],100)+"%";
+                           },
+                           show: true,
+                           position: 'top'
+                       }
+                   },
+                   color: ['#e3f641']
+               },
+               {
+                   name: '焦虑2',
+                   type: 'scatter',
+                   itemStyle: itemStyle,
+                   data: dataBJ2,
+                   label: {
+                       normal: {
+                           formatter: function(obj) {
+
+                               return  mul(obj.value[1],100)+"%";
+                           },
+                           show: true,
+                           position: 'top'
+                       }
+                   },
+                   color: ['#f8c62c']
+               },
+               {
+                   name: '焦虑3',
+                   type: 'scatter',
+                   itemStyle: itemStyle,
+                   data: dataBJ3,
+                   label: {
+                       normal: {
+                           formatter: function(obj) {
+
+                               return  mul(obj.value[1],100)+"%";
+                           },
+                           show: true,
+                           position: 'top'
+                       }
+                   },
+                   color: ['#f95f6d']
                }
 
            ],
-           color: ['#5cb9fe']
+
        };
        myChart.on('click', function (params) {
-           console.info(params.name);
            if(params.name=='无'){
                getActivityNumberPeopleForResult(1);
            }else if(params.name=='轻度'){
