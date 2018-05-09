@@ -139,6 +139,7 @@
     //查询活动的进度，还有相关统计信息
     function getActivitySchedule() {
         $.post('/launch/activities/getActivitySchedule', {"activityId": activitiesId}, function (result) {
+
             var datas = result.data;
             $("#activityName").text(datas.activity_name);
             $("#questionnaireName").text(datas.questionnaire_name);
@@ -149,6 +150,9 @@
             $("#timeSecondMin").text(datas.time_second_min + "秒");
             eui.use('element', function () {
                 var element = eui.element;
+                //全局刷新
+                element.init();
+
                 //进度条
                 element.progress('speedOfProgress', datas.speedOfProgress);
             });
@@ -162,14 +166,10 @@
             var datas = result.data;
             var content = getTable(datas);
             $("#questionTable").html(content);
-            eui.use('element', function () {
-                var element = eui.element;
-                //全局刷新
-                element.init();
-                //由于layui的版本低  element.render('progress','options');无法使用
-                //查询活动的进度，还有相关统计信息
-                getActivitySchedule();
-            });
+            //由于layui的版本低  element.render('progress','options');无法使用
+            //查询活动的进度，还有相关统计信息
+            getActivitySchedule();
+
         });
 
     }
