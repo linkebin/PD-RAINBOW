@@ -66,7 +66,7 @@ public interface SecUserService extends Service<SecUser> {
 
     /**
      * 获取用户树
-     * @param id
+     * @param
      * @return
      */
     List<TreeNode> leadingTreeList(SecUser secUser);
@@ -79,4 +79,10 @@ public interface SecUserService extends Service<SecUser> {
      * @return
      */
     SecUser findChannelDefaultAccount(String channelId);
+
+    //所有客户
+    List<Map<String,Object>> userListForCustomer(Map map);
+
+    //客户区域树
+    List<Map<String,Object>> customerAreaTree();
 }

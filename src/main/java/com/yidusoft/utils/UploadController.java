@@ -12,8 +12,6 @@ import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisSubscribedConnectionException;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Decoder;
@@ -271,7 +269,9 @@ public class UploadController {
         String fileName = file.getOriginalFilename();// 文件原名称
 
         String type = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-
+        if(fileName.contains(":")){
+            fileName = fileName.substring(fileName.lastIndexOf("\\")+1).toLowerCase();
+        }
         if (type.equals(".jpg") || type.equals(".png")) {
             String realPath = System.getProperty("user.dir");
             // 自定义的文件名称

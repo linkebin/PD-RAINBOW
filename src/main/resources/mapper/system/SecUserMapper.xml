@@ -20,7 +20,7 @@
     <result column="DELETED" jdbcType="INTEGER" property="deleted" />
     <result column="HEAD_IMG" jdbcType="VARCHAR" property="headImg" />
     <result column="COMPANY_ID" jdbcType="VARCHAR" property="companyId" />
-    <result column="ACCOUNT_Type" jdbcType="VARCHAR" property="accountType" />
+    <result column="ACCOUNT_TYPE" jdbcType="VARCHAR" property="accountType" />
 
       <result column="inviter_code" jdbcType="VARCHAR" property="inviterCode" />
       <result column="inviter_user" jdbcType="VARCHAR" property="inviterUser" />
@@ -258,4 +258,105 @@
         GROUP BY
             vr.visitor_name
     </select>
+
+    <!--查询所有咨询师（客户)-->
+    <select id="userListForCustomer"  resultType="Map" parameterType="Map">
+        SELECT
+            U.ID_,
+            U.ACCOUNT,
+            U.USER_PASS,
+            U.USER_NAME,
+            U.ORG_ID,
+            U.COMPANY_ID,
+            U.MOBILE,
+            U.EMAIL,
+            U.ADDR,
+            U.STATUS,
+            U.SEX,
+            U.CREATOR,
+            U.CREATE_TIME,
+            U.DELETED,
+            U.HEAD_IMG,
+            U.ACCOUNT_TYPE,
+            U.CHANNEL_ID,
+            U.INVITER_CODE,
+            U.INVITER_USER,
+            U.PROVINCE,
+            U.CITY,
+            U.DISTRICT,
+            U.CERTIFICATION,
+            U.CERTIFICATION_STATUS,
+            SU1.USER_NAME AS INVITER_USER_NAME,
+            CM.CHANNEL_NAME AS CHANNEL_NAME,
+            CM.LINKMAN AS CHANNEL_LINKBMAN_NAME
+        FROM
+            `SEC_USER` U
+        LEFT JOIN SEC_USER SU1 ON U.INVITER_USER = SU1.ID_
+        LEFT JOIN CHANNEL_MANAGE CM ON U.CHANNEL_ID = CM.ID_
+        WHERE
+            U.DELETED = 0
+        AND U.ACCOUNT_TYPE = 1
+
+        <if test="CHANNEL_NAME!=null and CHANNEL_NAME!=''">
+            AND CHANNEL_NAME LIKE '%${CHANNEL_NAME}%'
+        </if>
+        <if test="ACCOUNT!=null and ACCOUNT!=''">
+            AND U.ACCOUNT LIKE '%${ACCOUNT}%'
+        </if>
+        <if test="USER_NAME!=null and USER_NAME!=''">
+            AND U.USER_NAME LIKE '%${USER_NAME}%'
+        </if>
+        <if test="MOBILE!=null and MOBILE!=''">
+            AND U.MOBILE LIKE '%${MOBILE}%'
+        </if>
+        <if test="city!=null and city!=''">
+            AND U.PROVINCE = #{city} or U.CITY = #{city}  or U.DISTRICT = #{city}
+        </if>
+        <if test="noCity!=null and noCity!=''">
+            AND U.PROVINCE is NULL  or U.PROVINCE = ""
+        </if>
+
+    </select>
+
+    <!--客户区域树-->
+    <select id="customerAreaTree" resultType="Map">
+      SELECT
+	U.PROVINCE ID,
+	"全部" PID
+FROM
+	SEC_USER U
+WHERE
+	DELETED = 0
+AND U.ACCOUNT_TYPE = 1
+AND U.PROVINCE IS NOT NULL
+GROUP BY
+	U.PROVINCE
+UNION
+	SELECT
+		U1.CITY ID,
+		U1.PROVINCE PID
+	FROM
+		SEC_USER U1
+	WHERE
+		DELETED = 0
+	AND U1.ACCOUNT_TYPE = 1
+	AND U1.CITY IS NOT NULL
+	GROUP BY
+		U1.CITY,
+		U1.PROVINCE
+	UNION
+		SELECT
+			U2.DISTRICT ID,
+			U2.CITY PID
+		FROM
+			SEC_USER U2
+		WHERE
+			DELETED = 0
+		AND U2.ACCOUNT_TYPE = 1
+		AND U2.DISTRICT IS NOT NULL
+		GROUP BY
+			U2.CITY,
+			U2.DISTRICT
+    </select>
+    
 </mapper>

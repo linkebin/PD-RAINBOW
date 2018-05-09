@@ -52,7 +52,7 @@ public interface SecUserMapper extends Mapper<SecUser> {
 
     /**
      * 查询出用户没有拥有的角色列表
-     * @param arr 已拥有角色的ID数组
+     * @param  已拥有角色的ID数组
      * @return
      */
     List<SecRole> getUserNoRoleList(String userId);
@@ -70,7 +70,7 @@ public interface SecUserMapper extends Mapper<SecUser> {
 
     /**
      * 获取用户树
-     * @param id
+     * @param
      * @return
      */
     List<TreeNode> leadingTreeList(SecUser secUser);
@@ -106,4 +106,11 @@ public interface SecUserMapper extends Mapper<SecUser> {
     List<Map<String,Object>> findAllVisitorCount(String userId);
 
     List<Map<String,Object>> findAreaVisitor(String userId);
+
+    //所有客户
+    List<Map<String,Object>> userListForCustomer(Map map);
+
+    //客户区域树
+    List<Map<String,Object>> customerAreaTree();
+
 }

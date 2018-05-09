@@ -389,6 +389,10 @@
         for (var i in visitorList) {
             var visitor = visitorList[i];
             var date = new Date(visitor.createTime).getMonth()+1;
+            var year = new Date(visitor.createTime).getYear();
+            var now =  new Date().getYear();
+            if(year!=now)
+                continue;
             if(date==1){
                 sum[0]++;
             }else if(date==2){
