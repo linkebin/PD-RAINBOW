@@ -117,7 +117,8 @@
         //查询参与活动所有人相关问卷结论，性别，年龄
         getActivityNumberPeopleForResult(0);
         //查询活动问卷关于所有参与活动的人对应问题的答案，需要进行每题每项答案统计
-        getQuestionForActivityQuestionnaire();
+        //getQuestionForActivityQuestionnaire();
+        getActivitySchedule();
     });
     //查询活动的进度，还有相关统计信息
     function getActivitySchedule() {
@@ -132,6 +133,8 @@
             $("#timeSecondMin").text(datas.time_second_min+"秒");
             eui.use('element', function(){
                 var element = eui.element;
+                //全局刷新
+                 element.init();
                 //进度条
                 element.progress('speedOfProgress', datas.speedOfProgress);
             });
@@ -145,21 +148,17 @@
             var datas=result.data;
             var content=getTable(datas);
             $("#questionTable").html(content);
-            eui.use('element', function(){
-                var element = eui.element;
-                //全局刷新
-                element.init();
-                //由于layui的版本低  element.render('progress','options');无法使用
-                //查询活动的进度，还有相关统计信息
-                getActivitySchedule();
-            });
+            //由于layui的版本低  element.render('progress','options');无法使用
+            //查询活动的进度，还有相关统计信息
+            getActivitySchedule();
+
+
         });
 
     }
     //查询参与活动所有人相关问卷结论，性别，年龄
     function getActivityNumberPeopleForResult(type) {
         $.post('/launch/activities/getActivityNumberPeopleForResult',{"activityId":activitiesId,"type":type},function (result) {
-            console.info(result);
             var datas=result.data;
             $("#totalScoreMax").text(datas.totalScoreMax);
             $("#totalScoreMin").text(datas.totalScoreMin);
@@ -186,7 +185,11 @@
              content += '</div>';
              content += '<div class="eui-row eui-paddingTB5">';
              content += '    <span class="eui-font14" style="font-weight:bold ">本题平均分：</span>';
-             content += '     <span class="eui-font14">'+datas[t].avgScore+'</span>';
+             var avgScore=0;
+             if(datas[t].avgScore!=null){
+                 avgScore=datas[t].avgScore;
+             }
+             content += '     <span class="eui-font14">'+avgScore+'</span>';
              content += '</div>';
              content += '<table class="eui-table" e-even e-skin="nob" e-size="sm">';
              content += '   <colgroup>';
@@ -231,8 +234,14 @@
        myChart.clear();
         var dataBJ = [
            [0,typeListY[0],typeList[0],"无"],
+       ];
+       var dataBJ1 = [
            [1,typeListY[1],typeList[1],"轻度"],
+       ];
+       var dataBJ2 = [
            [2,typeListY[2],typeList[2],"中度"],
+       ];
+       var dataBJ3 = [
            [3,typeListY[3],typeList[3],"重度"],
        ];
        var schema = [
@@ -253,12 +262,12 @@
        option = {
            backgroundColor: 'white',
            color: [
-               '#dd4444', '#fec42c', '#80F1BE'
+               '#8dec53','#e3f641','#f8c62c','#f95f6d'
            ],
            legend: {
                show: false,
                y: 'top',
-               data: ['焦虑'],
+               data: ['焦虑','焦虑1','焦虑2','焦虑3'],
                textStyle: {
                    color: '#000000',
                    fontSize: 16
@@ -378,19 +387,70 @@
                        normal: {
                            formatter: function(obj) {
 
-                               return  obj.value[1]*100+"%";
+                               return  mul(obj.value[1],100)+"%";
                            },
                            show: true,
                            position: 'top'
                        }
-                   }
+                   },
+                   color: ['#8dec53']
+               },
+               {
+                   name: '焦虑1',
+                   type: 'scatter',
+                   itemStyle: itemStyle,
+                   data: dataBJ1,
+                   label: {
+                       normal: {
+                           formatter: function(obj) {
+
+                               return  mul(obj.value[1],100)+"%";
+                           },
+                           show: true,
+                           position: 'top'
+                       }
+                   },
+                   color: ['#e3f641']
+               },
+               {
+                   name: '焦虑2',
+                   type: 'scatter',
+                   itemStyle: itemStyle,
+                   data: dataBJ2,
+                   label: {
+                       normal: {
+                           formatter: function(obj) {
+
+                               return  mul(obj.value[1],100)+"%";
+                           },
+                           show: true,
+                           position: 'top'
+                       }
+                   },
+                   color: ['#f8c62c']
+               },
+               {
+                   name: '焦虑3',
+                   type: 'scatter',
+                   itemStyle: itemStyle,
+                   data: dataBJ3,
+                   label: {
+                       normal: {
+                           formatter: function(obj) {
+
+                               return  mul(obj.value[1],100)+"%";
+                           },
+                           show: true,
+                           position: 'top'
+                       }
+                   },
+                   color: ['#f95f6d']
                }
 
            ],
-           color: ['#5cb9fe']
+
        };
        myChart.on('click', function (params) {
-           console.info(params.name);
            if(params.name=='无'){
                getActivityNumberPeopleForResult(1);
            }else if(params.name=='轻度'){
@@ -490,18 +550,22 @@
 
         var myChart = echarts.init(document.getElementById('acreage'), 'acreage');
         myChart.clear();
-        var datas=new Array;
-        var index=0;
-        for (var i=25;i<=45;i++){
-            var num=0;
-            for(var t=0;t<ageList.length;t++){
-                if(i==ageList[t]){
-                    num++;
-                }
-            }
-            datas[index]=num;
-            index++;
-        }
+        var datas=[0,0,0,0,0,0];
+             for (var t = 0; t < ageList.length; t++) {
+                 if (ageList[t] < 26) {
+                     datas[0]=datas[0]+1
+                 }else  if(ageList[t] >=26 && ageList[t]<=30){
+                     datas[1]=datas[1]+1
+                 }else  if(ageList[t] >=31 && ageList[t]<=35){
+                     datas[2]=datas[2]+1
+                 }else  if(ageList[t] >=36 && ageList[t]<=40){
+                     datas[3]=datas[3]+1
+                 }else  if(ageList[t] >=41 && ageList[t]<=45){
+                     datas[4]=datas[4]+1
+                 }else  if(ageList[t] >45 ){
+                     datas[5]=datas[5]+1
+                 }
+             }
         option = {
             tooltip: {
                 trigger: 'axis',
@@ -526,30 +590,13 @@
                 name:'年龄',
                 type: 'category',
                 boundaryGap: false,
-                data: [25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45]
+                data: ['26以下','26-30','31-35','36-40','41-45','45以上']
             },
             yAxis: {
                 name:'人数',
                 type: 'value',
                 boundaryGap: [0, '100%']
             },
-            dataZoom: [{
-                type: 'inside',
-                start: 0,
-                end: 10
-            }, {
-                start: 0,
-                end: 10,
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
-                handleStyle: {
-                    color: '#fff',
-                    shadowBlur: 3,
-                    shadowColor: 'rgba(0, 0, 0, 0.6)',
-                    shadowOffsetX: 2,
-                    shadowOffsetY: 2
-                }
-            }],
             series: [
                 {
                     name:'人数',
@@ -579,6 +626,19 @@
         };
 
         myChart.setOption(option);
+    }
+
+    function mul(a, b) {
+        var c = 0,
+            d = a.toString(),
+            e = b.toString();
+        try {
+            c += d.split(".")[1].length;
+        } catch (f) {}
+        try {
+            c += e.split(".")[1].length;
+        } catch (f) {}
+        return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
     }
 </script>
 </html>

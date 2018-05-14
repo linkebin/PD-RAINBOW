@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.*;
 
@@ -161,13 +162,13 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
                      }
                 }
                 optionScoreList.add(optionTotalScore);
-                Double proportion=Double.valueOf(userOptionTotal)/Double.valueOf(userTotal)*100;
+                Double proportion=getDouble(Double.valueOf(userOptionTotal)/Double.valueOf(userTotal),4)*100;
                 userProportion.add(proportion+"%");
                 //计算问题的总分
                 optionAnswerTotalScore+=optionTotalScore;
            }
             //题目的平均分
-            map.put("avgScore",Double.valueOf(optionAnswerTotalScore)/Double.valueOf(userTotal));
+            map.put("avgScore",getDouble(Double.valueOf(optionAnswerTotalScore)/Double.valueOf(userTotal),2));
             //题目的选项总分
             map.put("optionScore",optionScoreList);
            //题目的选项比例
@@ -185,7 +186,20 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
      */
     @Override
     public Map<String, Object> getActivitySchedule(String activityId) {
-        return launchActivitiesMapper.getActivitySchedule(activityId);
+        Map<String, Object> map=launchActivitiesMapper.getActivitySchedule(activityId);
+        if(map.size()>0){
+            if(map.get("time_second_max")==null){
+                map.put("time_second_max",0);
+            }
+            if(map.get("time_second_min")==null){
+                map.put("time_second_min",0);
+            }
+            if(map.get("time_second_avg")==null){
+                map.put("time_second_avg",0);
+            }
+
+        }
+        return map;
     }
     /**
      * 查询参与活动所有人相关问卷结论，性别，年龄
@@ -286,7 +300,7 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
             //最低标准分
              totalScoreMin = Collections.min(standardScoreList);
             //平均标准分
-             totalScoreAvg = totalScore / mapList.size();
+             totalScoreAvg = getDouble(totalScore / mapList.size(),2);
         }
         maps.put("totalScoreMax",totalScoreMax);
         maps.put("totalScoreMin",totalScoreMin);
@@ -300,10 +314,10 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
         maps.put("typeList",typeList);
         maps.put("typeListMax",Collections.max(typeList));
         int  total= typeList.stream().mapToInt(Integer::intValue).sum();
-        double y1=Double.valueOf(typeList.get(0))/total;
-        double y2=Double.valueOf(typeList.get(1))/total;
-        double y3=Double.valueOf(typeList.get(2))/total;
-        double y4=Double.valueOf(typeList.get(3))/total;
+        double y1=getDouble(Double.valueOf(typeList.get(0))/total,4);
+        double y2=getDouble(Double.valueOf(typeList.get(1))/total,4);
+        double y3=getDouble(Double.valueOf(typeList.get(2))/total,4);
+        double y4=getDouble(Double.valueOf(typeList.get(3))/total,4);
         List<Double> typeListY =new ArrayList(){{add(y1);add(y2);add(y3);add(y4);}};
         maps.put("typeListY",typeListY);
         return maps;
@@ -402,7 +416,7 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
             //最低抑郁指数
              totalScoreMin=Collections.min(standardScoreList);
             //平均抑郁指数
-             totalScoreAvg=totalScore/mapList.size();
+             totalScoreAvg=getDouble(totalScore/mapList.size(),2);
         }
 
         maps.put("totalScoreMax",totalScoreMax);
@@ -417,10 +431,10 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
         maps.put("typeList",typeList);
         maps.put("typeListMax",Collections.max(typeList));
         int  total= typeList.stream().mapToInt(Integer::intValue).sum();
-        double y1=Double.valueOf(typeList.get(0))/total;
-        double y2=Double.valueOf(typeList.get(1))/total;
-        double y3=Double.valueOf(typeList.get(2))/total;
-        double y4=Double.valueOf(typeList.get(3))/total;
+        double y1=getDouble(Double.valueOf(typeList.get(0))/total,4);
+        double y2=getDouble(Double.valueOf(typeList.get(1))/total,4);
+        double y3=getDouble(Double.valueOf(typeList.get(2))/total,4);
+        double y4=getDouble(Double.valueOf(typeList.get(3))/total,4);
         List<Double> typeListY =new ArrayList(){{add(y1);add(y2);add(y3);add(y4);}};
         maps.put("typeListY",typeListY);
         return maps;
@@ -485,6 +499,21 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
           }
 
         return result.toString();
+    }
+
+    /**
+     * 保留两位小数
+     * @param value
+     * @return
+     */
+    private  double getDouble(Double  value,int position ){
+       if(!value.isNaN() && value!=null){
+           BigDecimal b = new BigDecimal(value);
+           double df = b.setScale(position, BigDecimal.ROUND_HALF_UP).doubleValue();
+           return  df;
+       }
+
+        return  0;
     }
 
 }

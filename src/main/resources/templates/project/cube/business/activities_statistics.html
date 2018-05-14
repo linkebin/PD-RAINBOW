@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
-    <title>活动发起</title>
+    <title>活动统计</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/Styles/themes/default/style.css" rel="stylesheet" type="text/css"/>
     <style>
@@ -225,7 +225,7 @@
               } else if(item.activityStatus == "已完成") {
                 activityStatus='<span  style="color: #00B83F"> '+item.activityStatus+'</span>';
               } else if(item.activityStatus == "进行中") {
-                activityStatus='<span style="color: #5897fb"> </span> '+item.activityStatus+'</span>';
+                activityStatus='<span style="color: #5897fb"> '+item.activityStatus+'</span>';
                }
 
              var   schedule="";

@@ -47,6 +47,7 @@ public class Receiver {
             logger.info("存储用户的操作记录");
             operLogService.save(operLog);
         }
+        logger.info(object.toJSONString());
         latch.countDown();
 
     }

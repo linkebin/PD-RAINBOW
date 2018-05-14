@@ -217,6 +217,9 @@
         var questionsList = [[${questionlist}]];
         var optionAnswer = [[${optionAnswers}]];
         var scoreList = [[${scoreList}]];
+        console.info(questionsList);
+        console.info(optionAnswer);
+        console.info(scoreList);
         var contentHtml = '';
 
         for (var i =0; i < questionsList.length; i++) {
@@ -335,6 +338,7 @@
         $("#submitQuestionnaire").attr("disabled","disabled");
         //提交问卷
         submit_Questionnaire(array,questionnaireId,userId,visitorTimes,timeConsuming,activityId,userName,token);
+
       /*  $.post("/cube/questionnaire/submitQuestionnaire", {
             "param": JSON.stringify(array),
             "questionnaireId": questionnaireId,

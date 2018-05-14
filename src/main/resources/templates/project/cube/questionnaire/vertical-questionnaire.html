@@ -135,6 +135,9 @@ $(function () {
     if(questionnaire.remarks!=""){
        $("#remarks").text(questionnaire.remarks);
 }
+    startTime();
+
+
 });
 
 //问卷id
@@ -332,64 +335,43 @@ function   formRender() {
 }
 
 
-//计时器
+/*----秒表计时器 start------------------------*/
 
-var ele_timer = $("#timer");
-var n_sec = 0; //秒
-var n_min = 0; //分
-var n_hour = 0; //时
+var h=0,m=0,s=0;
+var int;
 
-//60秒 === 1分
-//60分 === 1小时
+function  startTime() {
+    int = setInterval(timer,1000);
+}
+
 function timer() {
-    return setInterval(function () {
-
-        var str_sec = n_sec;
-        var str_min = n_min;
-        var str_hour = n_hour;
-        if ( n_sec < 10) {
-            str_sec = "0" + n_sec;
-        }
-        if ( n_min < 10 ) {
-            str_min = "0" + n_min;
-        }
-
-        if ( n_hour < 10 ) {
-            str_hour = "0" + n_hour;
-        }
-
-        var time = str_hour + ":" + str_min + ":" + str_sec;
-        ele_timer.text(time);
-        n_sec++;
-        if (n_sec > 59){
-            n_sec = 0;
-            n_min++;
-        }
-        if (n_min > 59) {
-            n_sec = 0;
-            n_hour++;
-        }
-
-
-    }, 1000);
-}
-var n_timer = timer();
-
-//暂停和继续
-function pause(self) {
-    var state = self.getAttribute("state");
-    if (state === "on") {
-        clearInterval(n_timer);
-        self.textContent = "继续";
-        self.setAttribute("state", "off");
-    } else {
-        n_timer = timer();
-        self.textContent = "暂停";
-        self.setAttribute("state", "on");
+    s++;
+    if(s>=60){
+        s = 0;
+        m = m+1;
     }
+    if(m>=60){
+        m = 0;
+        h = h+1;
+    }
+    s = checkTime(s);
+    m = checkTime(m);
+    h = checkTime(h);
+    $("#timer").text(h+":"+ m +":"+s);
+    m = parseInt(m);
+    h = parseInt(h);
+}
+
+function checkTime(i)    //检查是否小于10
+{
+    if (i<10){
+        i ="0" + i;
+    }
+    return i;
 }
 
 
+/*------秒表计时器 end----------*/
 </script>
 
 </body>

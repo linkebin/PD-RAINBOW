@@ -57,7 +57,7 @@
             <div class="eui-paddingL20">
                 <div class="eui-row eui-padding10 eui-borderB">
                     <div class="eui-col-md6 eui-font18">
-                        <i class='eui-icon eui-font24'>&#xe61d;</i> 活动管理列表
+                        <i class='eui-icon eui-font24'>&#xe61d;</i> 活动统计列表
                     </div>
                     <div class="eui-col-md6 eui-textAlignR">
                     </div>
@@ -106,13 +106,13 @@
                 ,where: {param: JSON.stringify(obj)}
                 ,height: 420
                 ,cols: [[ //标题栏
-                    {field: 'activity_name', title: '活动名称', width: 200}
+                     {field: 'activity_name', title: '活动名称', width: 200}
                     ,{field: 'initiatorType', title: '类型', width: 180}
-                    ,{field: 'activity_addr', title: '区域', width: 300}
+                    ,{field: 'activity_total', title: '进度',width: 300,templet: '#schedule'}
                     ,{field: 'creator', title: '发起人', width: 150}
                     ,{field: 'activityStatus', title: '状态', width: 100,templet:'#activityStatus'}
-                    ,{field: 'activity_total', title: '进度',width: 300,templet: '#schedule'}
-                    , {fixed: 'right', title: '操作', width: 70, toolbar: '#barDemo'}
+                    ,{field: 'activity_addr', title: '区域', width: 300}
+                    , {fixed: 'right', title: '操作', width: 150, toolbar: '#barDemo'}
                 ]]
                 ,response: {
                     statusName: 'code' //数据状态的字段名称，默认：code
@@ -140,6 +140,8 @@
                 var objId = data.id_;
                 if (layEvent === 'detail') { //查看
                     showInfo(objId);
+                }else  if(layEvent ==='info'){
+                    checkActivity(objId);
                 }
             });
 
@@ -155,6 +157,13 @@
     function showInfo(objId){
         window.open("/web/launchActivities/presentation/"+objId);
     }
+    /**
+     * 查看活动详情
+     */
+    function checkActivity(id) {
+        window.open("/web/activities/activitiesCheck?id=" + id);
+    }
+
 </script>
 
 
@@ -188,7 +197,8 @@
  </script>
 <script type="text/html" id="barDemo">
     <div class="eui-btn-group">
-        <button class="eui-btn eui-btn-primary eui-btn-small" title="详情" e-event="detail"><i class="eui-icon">&#xe63c;</i></button>
+        <button class="eui-btn eui-btn-primary eui-btn-small" title="查看报告" e-event="detail"><i class="eui-icon tb">&#xe63c;</i></button>
+        <button class="eui-btn eui-btn-primary eui-btn-small" title="查看详情" e-event="info"> <i  class="eui-icon tb">&#xe621;</i></button>
     </div>
 </script>
 </body>

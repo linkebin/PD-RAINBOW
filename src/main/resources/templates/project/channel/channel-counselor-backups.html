@@ -10,7 +10,7 @@
 <div class="eui-bd eui-padding15">
     <div class="eui-sd1 eui-sd1-type3">
         <div class="eui-col-md3 etree">
-            <p>客户区域树</p>
+            <p>渠道用户结构树</p>
             <ul style="padding: 10px;" id="channelTree"></ul>
         </div>
     </div>
@@ -18,11 +18,6 @@
 
         <div class="eui-mn1-type3">
             <form class="eui-form" id="searchFrom">
-                <div class="eui-input-inline eui-padding10">
-
-                    <input type="text" name="CHANNEL_NAME" e-verify="title" value=""
-                           autocomplete="off" placeholder="渠道名称/关键字" class="eui-input">
-                </div>
                 <div class="eui-input-inline eui-padding10">
 
                     <input type="text" name="USER_NAME" e-verify="title" value=""
@@ -71,20 +66,20 @@
         table = eui.table;
 
         leftObj = new Object();
+        leftObj.type='cityList';
 
          tableIns = table.render({
             id: 'idTest'
             ,elem: '#test2'
-            ,url:'/sec/user/userListForCustomer'
+            ,url:'/channel/manage/listByAccountCounselor'
             ,method:'post'
             ,where: {json: JSON.stringify(leftObj)}
             ,height: 460
             ,cols: [[ //标题栏
-                {field: 'CHANNEL_NAME', title: '渠道名称', width: 180,templet:'<div>{{# if(d.CHANNEL_NAME==undefined ||d.CHANNEL_NAME == "" ){ }} 无渠道  {{#  }else{   }} {{d.CHANNEL_NAME}} {{# } }}</div>'}
-                ,{field: 'USER_NAME', title: '咨询师姓名', width: 180}
+                {field: 'USER_NAME', title: '咨询师姓名', width: 180}
                 ,{field: 'ACCOUNT', title: '咨询师账号', width: 180}
                 ,{field: 'MOBILE', title: '联系方式', width: 180}
-                ,{field: 'INVITER_USER_NAME', title: '邀请人', width: 150,templet:'<div>{{# if(d.INVITER_USER_NAME==undefined ||d.INVITER_USER_NAME == "" ){ }} 无邀请人  {{#  }else{   }} {{d.INVITER_USER_NAME}} {{# } }}</div>'}
+                ,{field: 'inviter_user', title: '邀请人', width: 150,templet:'<div>{{# if(d.inviter_user==undefined){ }} 无邀请人  {{#  }else{   }} {{d.inviter_user}} {{# } }}</div>'}
                  ,{field: '操作', title: '操作', width: 150,templet:'<div class="eui-btn-group"> <button  class="eui-btn eui-btn-primary eui-btn-mini" ' +
                  'title="详情信息" e-event="edit" ><i class="eui-icon">&#xe621;</i>' +
                  '</button></div>'}
@@ -193,14 +188,12 @@
 
     function resetForm() {
         $('#searchFrom')[0].reset();
-        leftObj.CHANNEL_NAME=null;
         leftObj.USER_NAME=null;
         leftObj.ACCOUNT=null;
         leftObj.MOBILE=null;
     }
     function doSearch() {
         var obj =$("#searchFrom").serializeObject();
-        leftObj.CHANNEL_NAME=obj.CHANNEL_NAME;
         leftObj.USER_NAME=obj.USER_NAME;
         leftObj.ACCOUNT=obj.ACCOUNT;
         leftObj.MOBILE=obj.MOBILE;
@@ -222,33 +215,44 @@
 
     function loadTree() {
         $.ajax({
-            url:"/sec/user/customerAreaTree",
+            url:"/platform/settlement/areaChannelTrees",
             type:"post",
             success:function(result){
+                var list  = result.data;
+                list.push({level: 1, name: "未知渠道", pid: "0", id:"wz" })
                 //菜单树
                 channelTree =   $("#channelTree").ligerTree({
-                    data:result.data,
+                    data:list,
                     checkbox: false,
                     parentIcon: 'folder',
                     childIcon: 'leaf' ,
                     slide: false, //是否显示动画
                     nodeWidth: 200,
                     isExpand:2,
-                    idFieldName: 'ID',
-                    textFieldName:'ID',
-                    parentIDFieldName: 'PID',
+                    idFieldName: 'id',
+                    textFieldName:'name',
+                    parentIDFieldName: 'pid',
                     onSelect: function (node)
                     {
-                        leftObj.city=node.data.ID;
-                        leftObj.noCity="";
-
-                       if(node.data.ID=="未知"){
-                           leftObj.noCity="未知";
-                           leftObj.city="";
-                       }else if (node.data.ID=="全部"){
-                           leftObj.noCity="";
-                           leftObj.city="";
-                       }
+                        leftObj.province=null;
+                        leftObj.city=null;
+                        leftObj.id_=null;
+                        var level = node.data.level;
+                        if (level == 1){
+                            leftObj.province=node.data.name;
+                            leftObj.city=null;
+                            leftObj.id_=null;
+                        }
+                        if (level == 2){
+                            leftObj.city=node.data.name;
+                            leftObj.province=null;
+                            leftObj.id_=null;
+                        }
+                        if (level == 3){
+                            leftObj.id_=node.data.id;
+                            leftObj.city=null;
+                            leftObj.province=null;
+                        }
                         dataList(leftObj);
                     },
                     onError:function(node){

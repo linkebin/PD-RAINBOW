@@ -1,19 +1,20 @@
 package com.yidusoft.project.channel.service.impl;
 
+import com.yidusoft.core.AbstractService;
 import com.yidusoft.core.Result;
 import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.channel.dao.ClearingManageMapper;
 import com.yidusoft.project.channel.domain.AccountRule;
 import com.yidusoft.project.channel.domain.ClearingManage;
+import com.yidusoft.project.channel.domain.PlatformSettlement;
 import com.yidusoft.project.channel.service.AccountRuleService;
 import com.yidusoft.project.channel.service.ChannelRuleService;
 import com.yidusoft.project.channel.service.ClearingManageService;
-import com.yidusoft.core.AbstractService;
-
+import com.yidusoft.project.channel.service.PlatformSettlementService;
 import com.yidusoft.project.transaction.domain.OrderOnline;
 import com.yidusoft.project.transaction.service.OrderOnlineService;
+import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.DateUtils;
-import com.yidusoft.utils.Security;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -129,7 +130,10 @@ public class ClearingManageServiceImpl extends AbstractService<ClearingManage> i
             }
         }
         try {
+            //订单详细
             this.clearingOrder(clearingManageList);
+            //出账单
+            this.platformSettlement();
             return ResultGenerator.genSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
@@ -159,5 +163,38 @@ public class ClearingManageServiceImpl extends AbstractService<ClearingManage> i
             return null;
         }
         return list;
+    }
+    @Resource
+    PlatformSettlementService platformSettlementService;
+    public void  platformSettlement(){
+        List<Map<String,Object>> yearMonthList = clearingManageMapper.findYearMonthlyCommissions();
+        for (Map<String,Object> m : yearMonthList) {
+            List<String> uids = clearingManageMapper.findYearMonthLikeIds(m.get("create_time").toString());
+            if (uids.size()>0){
+                clearingManageMapper.updateBatchStatus(uids);
+            }
+            String year = m.get("create_time").toString().split("-")[0];
+
+            String month = m.get("create_time").toString().split("-")[1];
+
+            PlatformSettlement platformSettlement = new PlatformSettlement();
+            platformSettlement.setId(UUID.randomUUID().toString());
+            platformSettlement.setCode(CodeHelper.getCode("ZD"));
+            platformSettlement.setCreateTime(new Date());
+            platformSettlement.setYear(year);
+
+            int M = Integer.parseInt(month)-1;
+            platformSettlement.setMonth(String.valueOf(M));
+            if (M<10){
+                platformSettlement.setMonth("0"+M);
+            }
+
+            platformSettlement.setShouldBe(new BigDecimal(m.get("brokerage").toString()));
+            platformSettlement.setClosed(new BigDecimal("0.0"));
+            platformSettlement.setUnliquidated(new BigDecimal(m.get("brokerage").toString()));
+            platformSettlement.setStatus("1");
+            platformSettlement.setYearMonth(year+"-"+month);
+            platformSettlementService.save(platformSettlement);
+        }
     }
 }

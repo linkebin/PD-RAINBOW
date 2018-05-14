@@ -260,7 +260,7 @@ function initEcharts() {
     // 指定图表的配置项和数据
     var option = {
         title: {
-            text: '总分'
+            text: '抑郁指数'
         },
         tooltip : {
             formatter: "{a} <br/>{b} : {c}"
@@ -273,11 +273,11 @@ function initEcharts() {
         },
         series: [
             {
-                name: '我的总分',
+                name: '抑郁指数',
                 type: 'gauge',
                 max: 1,
                 detail: {formatter:'{value}'},
-                data: [{value: totalScore, name: '总分'}]
+                data: [{value: totalScore, name: '指数'}]
             }
         ]
     };

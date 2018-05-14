@@ -8,7 +8,6 @@ import com.yidusoft.project.system.dao.SecUserMapper;
 import com.yidusoft.project.system.domain.SecRole;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
-import com.yidusoft.utils.CodeHelper;
 import com.yidusoft.utils.PasswordHelper;
 import com.yidusoft.utils.TreeNode;
 import org.springframework.stereotype.Service;
@@ -205,5 +204,15 @@ public class SecUserServiceImpl extends AbstractService<SecUser> implements SecU
     @Override
     public SecUser findChannelDefaultAccount(String channelId) {
         return secUserMapper.findChannelDefaultAccount(channelId);
+    }
+
+    @Override
+    public List<Map<String, Object>> userListForCustomer(Map map) {
+        return secUserMapper.userListForCustomer(map);
+    }
+
+    @Override
+    public List<Map<String, Object>> customerAreaTree() {
+        return secUserMapper.customerAreaTree();
     }
 }

@@ -1,9 +1,5 @@
 package com.yidusoft.project.channel.controller.web;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.yidusoft.core.Result;
-import com.yidusoft.core.ResultGenerator;
 import com.yidusoft.project.channel.domain.ChannelManage;
 import com.yidusoft.project.channel.service.ChannelManageService;
 import com.yidusoft.project.system.domain.SecUser;

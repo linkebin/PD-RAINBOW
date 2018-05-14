@@ -82,8 +82,8 @@ submit_Questionnaire=function (array,questionnaireId,userId,visitorTimes,timeCon
                         icon: 2,
                         time: 3000
                     });
-                    layer.close(index);
-                    $("#submitQuestionnaire").removeAttr("disabled");
+                    layer.close(index); submitQ
+                    $("#submitQ").removeAttr("disabled");
                 }
             });
     }else if(flag==2){
@@ -91,7 +91,7 @@ submit_Questionnaire=function (array,questionnaireId,userId,visitorTimes,timeCon
             btn: ['确定']
         });
         layer.close(index);
-          $("#submitQuestionnaire").removeAttr("disabled");
+          $("#submitQ").removeAttr("disabled");
 
       } else if(flag==3){
         layer.msg('提交失败', {
@@ -99,13 +99,13 @@ submit_Questionnaire=function (array,questionnaireId,userId,visitorTimes,timeCon
             time: 3000
         });
         layer.close(index);
-          $("#submitQuestionnaire").removeAttr("disabled");
+          $("#submitQ").removeAttr("disabled");
       }else{
           layer.confirm('活动已结束', {
               btn: ['确定']
           });
           layer.close(index);
-          $("#submitQuestionnaire").removeAttr("disabled");
+          $("#submitQ").removeAttr("disabled");
       }
     }else {
         //来访者提交问卷 的方法
@@ -127,7 +127,7 @@ submit_Questionnaire=function (array,questionnaireId,userId,visitorTimes,timeCon
                 if(result.code==200){
                     window.location.href="/web/cube/getSuccess";
                 }else {
-                    $("#submitQuestionnaire").removeAttr("disabled");
+                    $("#submitQ").removeAttr("disabled");
                     layer.msg('填写失败！', {
                         icon: 1,
                         time: 5000
@@ -140,9 +140,10 @@ submit_Questionnaire=function (array,questionnaireId,userId,visitorTimes,timeCon
 
 
 
+
 /**
  * 进入全全屏模式
- *
+ *作废
  */
 fullScreen=function(){
     eui.use(['form', 'layedit', 'laydate', 'laypage', 'layer'], function () {
@@ -166,6 +167,7 @@ fullScreen=function(){
 }
 /**
  * 全屏的切换
+ * 作废
  */
 toggleFullScreen=function () {
     if (!document.fullscreenElement &&    // alternative standard method
@@ -190,6 +192,7 @@ toggleFullScreen=function () {
 
 /**
  * 判断各种浏览器，找到正确的方法
+ * 作废
  * @param element
  */
  launchFullscreen=function(element) {

@@ -209,11 +209,14 @@
         return tableHtml;
     }
 
+
     function Buts(activity) {
         var id = "'" + activity.id + "'";
-        return '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ')"><i class="eui-icon tb">&#xe621;</i></button>';
-    }
+        var htmlText= '<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看详情" onclick="checkActivity(' + id + ')"><i class="eui-icon tb">&#xe621;</i></button>' ;
+        htmlText+='<button class="eui-btn eui-btn-primary eui-btn-mini" title="查看报告" onclick="showInfo(' + id + ')"><i class="eui-icon tb">&#xe63c;</i></button>';
+        return htmlText;
 
+    }
     parent.element.on('tab(nav-tab)', function (elem) {
         doSearch();
     });
@@ -231,6 +234,10 @@
             , id: 10004 //实际使用一般是规定好的id
         })
         parent.element.tabChange("nav-tab", 10004);
+    }
+    //查看相关统计
+    function showInfo(objId){
+        window.open("/web/launchActivities/presentation/"+objId);
     }
 
 </script>

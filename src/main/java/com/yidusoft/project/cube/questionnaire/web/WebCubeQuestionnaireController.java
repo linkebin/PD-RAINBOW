@@ -93,7 +93,7 @@ public class WebCubeQuestionnaireController {
             //获取选项
             List<String> optionAnswers = questionnaireAnswerService.getOptionAnswer(questionnaireQuestions);
             //获取问题，每10道为一页
-            List<List<QuestionnaireQuestion>> questionlist = questionnaireAnswerService.getQuestionnaireByPage(questionnaireQuestions);
+            //List<List<QuestionnaireQuestion>> questionlist = questionnaireAnswerService.getQuestionnaireByPage(questionnaireQuestions);
             //获取题目数量
             int questionnaireQuestionSize = questionnaireQuestions.size();
             //获取问题答案
@@ -102,10 +102,11 @@ public class WebCubeQuestionnaireController {
             String remarks = questionnaire.getRemarks();
             model.addAttribute("remarks",remarks);
             model.addAttribute("optionAnswers", optionAnswers);
-            model.addAttribute("questionlist", questionlist);
+            model.addAttribute("questionlist", questionnaireQuestions);
             model.addAttribute("questionnaireQuestionSize", questionnaireQuestionSize);
             model.addAttribute("scoreList", answers);
-            return "project/cube/questionnaire/questionnaire";
+            return "project/cube/questionnaire/horizontal-questionnaire";
+           // return "project/cube/questionnaire/questionnaire";
         }else if(("生活事件量表(LES)").equals(questionnaire.getGaugeName())){
             return "project/cube/questionnaireFilling/fillIn_gauge_12";
         }else if(("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())){

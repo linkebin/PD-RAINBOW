@@ -10,7 +10,9 @@ import com.yidusoft.project.system.domain.SecMenu;
 import com.yidusoft.project.system.domain.SecRole;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.*;
-import com.yidusoft.utils.*;
+import com.yidusoft.utils.PasswordHelper;
+import com.yidusoft.utils.Security;
+import com.yidusoft.utils.TreeNode;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
@@ -21,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * Created by CodeGenerator on 2017/07/18.
@@ -354,6 +358,35 @@ public class SecUserController {
         SecUser secUser = JSON.parseObject(json,SecUser.class);
         return  ResultGenerator.genSuccessResult(secUserService.leadingTreeList(secUser));
     }
+
+
+
+    @PostMapping("/userListForCustomer")
+    @ResponseBody
+    public Result userListForCustomer(Integer page,  Integer limit,String json){
+        Map<String,Object> map = JSON.parseObject(json,Map.class);
+        PageHelper.startPage(page, limit);
+        List<Map<String,Object>> list = secUserService.userListForCustomer(map);
+        PageInfo pageInfo = new PageInfo(list);
+        return ResultGenerator.genSuccessResult(list).setCount(pageInfo.getTotal()).setCode(0);
+    }
+
+    @PostMapping("/customerAreaTree")
+    @ResponseBody
+    public Result customerAreaTree(){
+        List<Map<String,Object>> list = secUserService.customerAreaTree();
+        Map<String,Object> leveL0 = new HashMap();
+        leveL0.put("ID","全部");
+        leveL0.put("PID","0");
+        Map<String,Object> leveL1 = new HashMap();
+        leveL1.put("ID","未知");
+        leveL1.put("PID","全部");
+        list.add(leveL0);
+        list.add(leveL1);
+        return ResultGenerator.genSuccessResult(list);
+    }
+
+
 
 
 }
