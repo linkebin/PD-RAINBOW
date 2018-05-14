@@ -69,7 +69,7 @@ public class UserQuestionnairesServiceImpl extends AbstractService<UserQuestionn
     public Map getVipInfo() {
        Map map = new HashMap();
         UserQuestionnaires userQuestionnaires= userQuestionnairesMapper.flgBalance(Security.getUserId());
-        if(userQuestionnaires.getMember()!=1){
+        if(userQuestionnaires==null||userQuestionnaires.getMember()!=1){
             //如果不是会员
             map.put("isVip",false);
         }else{
