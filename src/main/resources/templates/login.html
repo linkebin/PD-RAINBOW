@@ -1,64 +1,41 @@
 ﻿<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"  xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="utf-8">
     <title>心云魔方</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Le styles -->
-    <link rel="stylesheet"  th:href="@{/Styles/themes/default/style.css}"   media="all">
-    <link rel="stylesheet"  th:href="@{/Styles/themes/default/modules/pageLogin/login-base/login.css}"   media="all">
-    <style>
-        .loginTips{
-            color: red;
-        }
-        .sign_dig{width: 450px;
-            height: 420px;
-            background: #ffffff;
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            margin-left: -225px;
-            margin-top: -220px;
-            border-radius: 5px;
-            box-shadow: 0 4px 30px #333;}
-
-       .sign_dig .login1 #signForm>p {
-            width: 280px;
-            height: 36px;
-            padding-left: 20px;
-            border: 1px solid #e6e6e6;
-            border-radius: 2px;
-            margin: 0px auto;
-            margin-bottom: 10px;
-        }
-        .sign_dig .login1 #signForm  p input {
-            width: 250px;
-            height: 34px;
-            line-height: 34px;
-            color: #666;
-            border: none;
-        }
-
-
-    </style>
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/style.css}" media="all">
+    <link rel="stylesheet" th:href="@{/Styles/themes/default/modules/pageLogin/login-base/login.css}" media="all">
 </head>
 <body>
-<div  class="Login loginDiv">
+<div class="Login loginDiv">
+    <div class="logo">
+        <div class="eui-container">
+            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+        </div>
+    </div>
+    <div class="loginImg">
+        <img src="/Styles/images/loginImg.png" alt="">
+    </div>
     <div class="loginIn">
         <div id="login1" class="login1">
-            <h3><img src="/Styles/images/xymfImages/xymf/logo.png"></h3>
+            <h3>login</h3>
             <p class="loginTxt"><input type="text" th:value="${account}" id="username" placeholder="请输入手机号"/></p>
             <p class="loginPword"><input type="password" id="password" placeholder="请输入登录密码"/></p>
             <input type="hidden" name="loginType" value="account"/><!--首选登录方式为账号登录-->
             <div style="margin: 10px auto; width: 300px;" class="eui-form">
                 <div class="eui-security">
-                    <input name="vrifyCode" id="vrifyCode" type="text"  placeholder="请输入验证码" autocomplete="off"
+                    <input name="vrifyCode" id="vrifyCode" type="text" placeholder="请输入验证码" autocomplete="off"
                            class="eui-input eui-input-inline  securityCode" value="">
                     <span class="securityImg">
-                        <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="95" alt=""></span>
+                        <img onclick="this.src='/sign/imgcode?d='+new Date()*1" src="/sign/imgcode" width="95"
+                             alt=""></span>
                 </div>
             </div>
-            <div class="loginForget"><a class="register" onclick="showSignDiv();">还没有账号？</a><a target="_blank" href="/sign/forgetpassword">忘记密码？</a></div>
+            <div class="loginForget"><a class="register" onclick="showSignDiv();">还没有账号？</a><a target="_blank"
+                                                                                               href="/sign/forgetpassword">忘记密码？</a>
+            </div>
             <div style="height: 30px;">
                 <span th:text="${msg}" class="loginTips"></span>
             </div>
@@ -69,46 +46,66 @@
             <!--<img th:src="@{/Styles/themes/default/module/login/login-base/images/code.png}" alt="">-->
             <p>请扫码登录</p>
         </div>
-      <!--  <div id="loginImg" class="loginimg"><img id="img1" th:src="@{/Styles/themes/default/module/login/login-base/images/QRcode.png}" alt=""></div>-->
+        <!--  <div id="loginImg" class="loginimg"><img id="img1" th:src="@{/Styles/themes/default/module/login/login-base/images/QRcode.png}" alt=""></div>-->
+    </div>
+    <div class="copyright">
+        <div class="eui-container">
+            Copyright © 2018 北京科奥飞科技有限公司 版权所有 京ICP备17072234号
+        </div>
     </div>
 </div>
 
-<div style="display: none;"   class="sign Login">
-    <div  class="sign_dig">
-        <div  class="login1">
-        <h3 style="text-align: center"><img src="/Styles/images/xymfImages/xymf/logo.png"></h3>
+<div style="display: none;" class="sign Login">
+    <div class="logo">
+        <div class="eui-container">
+            <img src="/Styles/images/xymfImages/xymf/logo.png" alt="">
+        </div>
+    </div>
+    <div class="loginImg">
+        <img src="/Styles/images/loginImg.png" alt="">
+    </div>
+    <div class="sign_dig">
+        <div class="login1">
+            <h3 style="text-align: center">register</h3>
             <form id="signForm" onsubmit="return false;">
-                <p class="signTxt"><input  id="mobile" name="account" type="text" placeholder="手机号码" />
+                <p class="signTxt"><input id="mobile" name="account" type="text" placeholder="手机号码"/>
                 </p>
-                <input type="hidden" value="1"   name="accountType" />
+                <input type="hidden" value="1" name="accountType"/>
                 <div style="margin: 10px auto; width: 300px;" class="eui-form">
                     <div class="eui-security">
-                        <input name="vrifyCode" id="vrifyCodeIn" type="text"  placeholder="请输入图形验证码" autocomplete="off"
+                        <input name="vrifyCode" id="vrifyCodeIn" type="text" placeholder="请输入图形验证码" autocomplete="off"
                                class="eui-input eui-input-inline  securityCode" value="">
                         <span class="securityImg">
-                        <img onclick = "this.src='/sign/imgcode?d='+new Date()*1"  src="/sign/imgcode" width="95" alt=""></span>
+                        <img onclick="this.src='/sign/imgcode?d='+new Date()*1" src="/sign/imgcode" width="95"
+                             alt=""></span>
                     </div>
                 </div>
 
                 <div style="margin: 10px auto; width: 300px;" class="eui-form">
                     <div class="eui-security">
-                        <input name="msgCode" type="text"  placeholder="请输入手机验证码" autocomplete="off"
+                        <input name="msgCode" type="text" placeholder="请输入手机验证码" autocomplete="off"
                                class="eui-input  eui-input-inline  securityCode" value="">
-                        <button disabled="disabled"  onclick="sendMsgCode(this)" id="btnSendCode"
-                                type="button"  class="eui-btn eui-btn-primary  securityBut eui-btn-disabled">点击获取</button>
+                        <button disabled="disabled" onclick="sendMsgCode(this)" id="btnSendCode"
+                                type="button" class="eui-btn eui-btn-primary  securityBut eui-btn-disabled">点击获取
+                        </button>
                     </div>
                 </div>
 
-                <p class="loginPword"><input id="userPass" type="password" name="userPass" placeholder="密码" /></p>
-                <p class="loginPword"><input type="password" name="newPass" placeholder="确认密码" /></p>
+                <p class="loginPword"><input id="userPass" type="password" name="userPass" placeholder="密码"/></p>
+                <p class="loginPword"><input type="password" name="newPass" placeholder="确认密码"/></p>
 
-                <div class="loginForget"><a style="float: left;" class="register"  onclick="showLoginDiv();" >返回登录</a>
+                <div class="loginForget"><a style="float: left;" class="register" onclick="showLoginDiv();">返回登录</a>
                     <a target="_blank" href="/sign/channelin">渠道入驻</a></div>
                 <div id="errorInfo" style="height: 30px;">
 
                 </div>
-                <button   type="submit" class="loginB">注册</button>
+                <button type="submit" class="loginB">注册</button>
             </form>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="eui-container">
+            Copyright © 2018 北京科奥飞科技有限公司 版权所有 京ICP备17072234号
         </div>
     </div>
 </div>
@@ -372,6 +369,7 @@ oLogin2.style.display = 'none';
         //提交数据
         temp_form.submit();
     }
+
 </script>
 </body>
 </html>
