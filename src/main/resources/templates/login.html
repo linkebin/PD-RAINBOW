@@ -20,7 +20,7 @@
     </div>
     <div class="loginIn">
         <div id="login1" class="login1">
-            <h3>login</h3>
+            <h3>登录</h3>
             <p class="loginTxt"><input type="text" th:value="${account}" id="username" placeholder="请输入手机号"/></p>
             <p class="loginPword"><input type="password" id="password" placeholder="请输入登录密码"/></p>
             <input type="hidden" name="loginType" value="account"/><!--首选登录方式为账号登录-->
@@ -29,12 +29,10 @@
                     <input name="vrifyCode" id="vrifyCode" type="text" placeholder="请输入验证码" autocomplete="off"
                            class="eui-input eui-input-inline  securityCode" value="">
                     <span class="securityImg">
-                        <img onclick="this.src='/sign/imgcode?d='+new Date()*1" src="/sign/imgcode" width="95"
-                             alt=""></span>
+                        <img onclick="this.src='/sign/imgcode?d='+new Date()*1" src="/sign/imgcode" width="95" alt=""></span>
                 </div>
             </div>
-            <div class="loginForget"><a class="register" onclick="showSignDiv();">还没有账号？</a><a target="_blank"
-                                                                                               href="/sign/forgetpassword">忘记密码？</a>
+            <div class="loginForget"><a class="register" onclick="showSignDiv();">还没有账号？</a><a target="_blank" href="/sign/forgetpassword">忘记密码？</a>
             </div>
             <div style="height: 30px;">
                 <span th:text="${msg}" class="loginTips"></span>
@@ -66,7 +64,7 @@
     </div>
     <div class="sign_dig">
         <div class="login1">
-            <h3 style="text-align: center">register</h3>
+            <h3 style="text-align: center">注册</h3>
             <form id="signForm" onsubmit="return false;">
                 <p class="signTxt"><input id="mobile" name="account" type="text" placeholder="手机号码"/>
                 </p>
