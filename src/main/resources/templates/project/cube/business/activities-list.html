@@ -225,6 +225,8 @@
                 editBtn= '<a title="编辑" target="_blank" onclick="activities(' + id + ')"><i class="eui-icon tb">&#xe642;</i></a>'
             }else if(activity.initiatorType == 3 && activity.activityStatus==2){
                 state = "审批通过";
+            }else if(activity.initiatorType == 3 && activity.activityStatus==3){
+                state = "未通过";
             }
             var activityType = "企业活动";
             if(activity.initiatorType == 3){
