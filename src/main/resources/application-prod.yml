@@ -28,7 +28,7 @@ spring:
         max-wait: -1
 server:
   port: 8088
-  ip: 120.78.220.80
+  ip: rainbow.xy-cube.com
 
 logging:
    level:

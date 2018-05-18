@@ -7,6 +7,7 @@ import com.yidusoft.project.business.service.LaunchActivitiesService;
 import com.yidusoft.project.system.domain.SecUser;
 import com.yidusoft.project.system.service.SecUserService;
 import com.yidusoft.utils.CodeHelper;
+import com.yidusoft.utils.IpAddressUtils;
 import com.yidusoft.utils.Security;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
@@ -178,8 +179,9 @@ public class ActivityService {
         LaunchActivities launchActivities=launchActivitiesService.findById(launchId);
         if (bool) {
             launchActivities.setActivityStatus(2);
-            launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-            launchActivities.setUestionnaireUri("http://"+ip+"/web/activities/fillingPage");
+            launchActivities.setActivityPorn(CodeHelper.randomCode(4));
+            String url  = "http://"+ip+"/web/activities/fillingPage?id="+launchActivities.getId();
+            launchActivities.setUestionnaireUri(IpAddressUtils.getShortUrl(url));
             logger.info("活动审批通过");
         } else {
             launchActivities.setActivityStatus(3);

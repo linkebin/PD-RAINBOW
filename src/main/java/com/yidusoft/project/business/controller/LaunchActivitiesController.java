@@ -114,8 +114,9 @@ public class LaunchActivitiesController {
         String ip = request.getServerName();//获取服务端ip
         LaunchActivities launchActivities=launchActivitiesService.findById(id);
         launchActivities.setActivityStatus(2);
-        launchActivities.setActivityPorn(CodeHelper.randomCode(8));
-        launchActivities.setUestionnaireUri("http://"+ip+"/web/activities/fillingPage");
+        launchActivities.setActivityPorn(CodeHelper.randomCode(4));
+        String url = "http://"+ip+"/web/activities/fillingPage?id="+launchActivities.getId();
+        launchActivities.setUestionnaireUri(IpAddressUtils.getShortUrl(url));
         launchActivitiesService.update(launchActivities);
         return ResultGenerator.genSuccessResult();
     }

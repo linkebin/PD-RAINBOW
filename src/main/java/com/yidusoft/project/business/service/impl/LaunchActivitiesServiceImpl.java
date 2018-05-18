@@ -16,14 +16,13 @@ import com.yidusoft.project.questionnaire.service.DataAcquisitionService;
 import com.yidusoft.project.questionnaire.service.QuestionnaireAnswerService;
 import com.yidusoft.project.questionnaire.service.QuestionnaireQuestionService;
 import com.yidusoft.utils.CodeHelper;
-import com.yidusoft.utils.IdCard;
+import com.yidusoft.utils.IpAddressUtils;
 import com.yidusoft.utils.Security;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -73,12 +72,14 @@ public class LaunchActivitiesServiceImpl extends AbstractService<LaunchActivitie
         } else {
             int port = request.getServerPort();//获取服务器端口
             String ip = request.getServerName();//获取服务端ip
-
+            String url = "http://" + ip + "/web/activities/fillingPage?id="+launchActivities.getId();
             if(launchActivities.getInitiatorType()==null || launchActivities.getInitiatorType()!=3){
-                launchActivities.setInitiatorType(1);
-                launchActivities.setUestionnaireUri("http://" + ip + "/web/activities/fillingPage");
 
-                launchActivities.setActivityPorn(CodeHelper.randomCode(8));
+                launchActivities.setInitiatorType(1);
+
+                launchActivities.setUestionnaireUri(IpAddressUtils.getShortUrl(url));
+
+                launchActivities.setActivityPorn(CodeHelper.randomCode(4));
             }else{
                 String uri = "/web/launchActivities/acdetail?id="+launchActivities.getId();
                 activityService.startProcess(launchActivities.getId(),launchActivities.getActivityName()+"  活动申请",uri);

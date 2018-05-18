@@ -135,6 +135,15 @@ public class IpAddressUtils {
     }
 
     /**
+     * 转换短网址
+     * @return
+     */
+    public static String getShortUrl(String url){
+        String path = "http://api.kks.me/api.php?url="+url;
+        return  getRs(path,"{}","utf-8");
+    }
+
+    /**
      * 字符转码
      * @param theString
      * @return

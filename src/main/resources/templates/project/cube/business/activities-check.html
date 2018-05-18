@@ -308,7 +308,7 @@
                 $('input[name="activityStart"]').val(new Date(activity.activityStart).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityEnd"]').val(new Date(activity.activityEnd).Format("yyyy-MM-dd hh:mm:ss"));
                 $('input[name="activityAddr"]').val(address);
-                var uestionnaireUri = activity.uestionnaireUri + "?id=" + activity.id;
+                var uestionnaireUri = activity.uestionnaireUri;
                 $('input[name="uestionnaireUri"]').val(uestionnaireUri);
                 $('select[name="uestionnaireId"]').children().each(function (i, data) {
                     if (data.value == activity.uestionnaireId) {
