@@ -135,7 +135,7 @@ public class IpAddressUtils {
     }
 
     /**
-     * 转换短网址
+     * 转换短网址 http://www.alifeifei.net/
      * @return
      */
     public static String getShortUrl(String url){
