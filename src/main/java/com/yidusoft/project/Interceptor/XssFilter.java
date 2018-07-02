@@ -36,16 +36,18 @@ public class XssFilter implements Filter{
 
         //跨站点请求伪造，条件为部署项目地址域名或者ip
         if(referer!=null) {
-            if (referer.indexOf("192.168.1.125") == -1) {
-                chain.doFilter(null, null);
-
+            if (referer.indexOf("192.168.1.128") == -1) {
+                response1.sendRedirect(request1.getContextPath() + "/login");
+                return;
+            }else{
+                chain.doFilter(request, response);
             }
         }else{
-            System.out.println(path);
-            if(path.equals("/login")){
+            if(path.indexOf("/login")!=-1){
                 chain.doFilter(request, response);
-            }else{
-                chain.doFilter(null, null);
+            }else {
+                response1.sendRedirect(request1.getContextPath() + "/login");
+                return;
             }
         }
 
@@ -69,9 +71,11 @@ public class XssFilter implements Filter{
             a=select(value2);
             if(a==1){
                 chain.doFilter(null, response);
+            }else{
+
+
             }
         }
-
 
 
         chain.doFilter(request, response);
