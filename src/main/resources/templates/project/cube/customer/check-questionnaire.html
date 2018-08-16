@@ -444,8 +444,9 @@ eui.use(['form', 'layedit', 'laydate','laypage','element', 'layer'], function(){
     }
     //开始答题
     function startAnswer(questionnaireId,userId,visitorTimes) {
-        window.open("/web/cube/getQuestionnaireGuide?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes);
-        window.close();
+        window.top.location.href="/web/cube/getQuestionnaireGuide?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes;
+       // window.open("/web/cube/getQuestionnaireGuide?questionnaireId="+questionnaireId+"&userId="+userId+"&visitorTimes="+visitorTimes);
+
     }
     //重置
     function resetForm() {

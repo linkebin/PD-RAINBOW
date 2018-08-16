@@ -34,18 +34,16 @@ public class XssFilter implements Filter{
         System.out.println(referer);
         System.out.println(path);
 
-        //跨站点请求伪造，条件为部署项目地址域名或者ip
+        //跨站点请求伪造，条件为部署项目地址域名或者ip rainbow.xy-cube.com
         if(referer!=null) {
-            if (referer.indexOf("192.168.1.128") == -1) {
+            if (referer.indexOf("rainbow.xy-cube.com") == -1) {
+                chain.doFilter(null, response);
                 response1.sendRedirect(request1.getContextPath() + "/login");
                 return;
-            }else{
-                chain.doFilter(request, response);
             }
         }else{
-            if(path.indexOf("/login")!=-1){
-                chain.doFilter(request, response);
-            }else {
+            if(path.indexOf("/login")==-1){
+                chain.doFilter(null, response);
                 response1.sendRedirect(request1.getContextPath() + "/login");
                 return;
             }
