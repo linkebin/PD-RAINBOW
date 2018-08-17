@@ -59,8 +59,14 @@ public class XssFilter implements Filter{
             if(paramName.equals("t")){
                 break;
             }
+            if(paramName.equals("image")&&request.getParameter(paramName).toString().indexOf("data:image")!=-1){
+                break;
+            }
 
-            //防止拦截请求参数里面的数据格式符号
+            //防止拦截请求参数里面的数据格式符号(请勿随意修改顺序)
+            value2=value2.replace("(中国标准时间)", "");
+            value2=value2.replace("GMT+0800", "");
+            value2=value2.replace("(??????)", "");
             value2=value2.replace("\",\"", "");
             value2=value2.replace("\":[\"", "");
             value2=value2.replace("{\"","");
