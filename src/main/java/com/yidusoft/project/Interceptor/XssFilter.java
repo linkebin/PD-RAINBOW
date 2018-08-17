@@ -67,6 +67,9 @@ public class XssFilter implements Filter{
             value2=value2.replace("(中国标准时间)", "");
             value2=value2.replace("GMT+0800", "");
             value2=value2.replace("(??????)", "");
+            if(value2.indexOf("imageText")!=-1){
+                value2=value2.replace(value2.substring(value2.indexOf("imageText"),value2.length()), "");
+            }
             value2=value2.replace("\",\"", "");
             value2=value2.replace("\":[\"", "");
             value2=value2.replace("{\"","");
