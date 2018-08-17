@@ -36,16 +36,14 @@ public class XssFilter implements Filter{
 
         //跨站点请求伪造，条件为部署项目地址域名或者ip
         if(referer!=null) {
-            if (referer.indexOf("192.168.1.128") == -1) {
+            if (referer.indexOf("localhost") == -1) {
+                chain.doFilter(null, response);
                 response1.sendRedirect(request1.getContextPath() + "/login");
                 return;
-            }else{
-                chain.doFilter(request, response);
             }
         }else{
-            if(path.indexOf("/login")!=-1){
-                chain.doFilter(request, response);
-            }else {
+            if(path.indexOf("/login")==-1){
+                chain.doFilter(null, response);
                 response1.sendRedirect(request1.getContextPath() + "/login");
                 return;
             }
@@ -64,9 +62,15 @@ public class XssFilter implements Filter{
 
             //防止拦截请求参数里面的数据格式符号
             value2=value2.replace("\",\"", "");
+            value2=value2.replace("\":[\"", "");
             value2=value2.replace("{\"","");
+            value2=value2.replace("\"]}","");
             value2=value2.replace("\"}","");
             value2=value2.replace("\":\"", "");
+            value2=value2.replace("\":null,\"", "");
+            value2=value2.replace("\":null", "");
+            value2=value2.replace("\":", "");
+            value2=value2.replace(",\"", "");
             System.out.println(value2);
             a=select(value2);
             if(a==1){
