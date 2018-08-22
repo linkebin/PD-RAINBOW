@@ -34,9 +34,9 @@ public class XssFilter implements Filter{
         System.out.println(referer);
         System.out.println(path);
 
-        //跨站点请求伪造，条件为部署项目地址域名或者ip rainbow.xy-cube.com
+        //跨站点请求伪造，条件为部署项目地址域名或者ip
         if(referer!=null) {
-            if (referer.indexOf("rainbow.xy-cube.com") == -1) {
+            if (referer.indexOf("localhost") == -1) {
                 chain.doFilter(null, response);
                 response1.sendRedirect(request1.getContextPath() + "/login");
                 return;
@@ -59,12 +59,27 @@ public class XssFilter implements Filter{
             if(paramName.equals("t")){
                 break;
             }
+            if(paramName.equals("image")&&request.getParameter(paramName).toString().indexOf("data:image")!=-1){
+                break;
+            }
 
-            //防止拦截请求参数里面的数据格式符号
+            //防止拦截请求参数里面的数据格式符号(请勿随意修改顺序)
+            value2=value2.replace("(中国标准时间)", "");
+            value2=value2.replace("GMT+0800", "");
+            value2=value2.replace("(??????)", "");
+            if(value2.indexOf("imageText")!=-1){
+                value2=value2.replace(value2.substring(value2.indexOf("imageText"),value2.length()), "");
+            }
             value2=value2.replace("\",\"", "");
+            value2=value2.replace("\":[\"", "");
             value2=value2.replace("{\"","");
+            value2=value2.replace("\"]}","");
             value2=value2.replace("\"}","");
             value2=value2.replace("\":\"", "");
+            value2=value2.replace("\":null,\"", "");
+            value2=value2.replace("\":null", "");
+            value2=value2.replace("\":", "");
+            value2=value2.replace(",\"", "");
             System.out.println(value2);
             a=select(value2);
             if(a==1){
