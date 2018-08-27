@@ -45,7 +45,7 @@ public class XssFilter implements Filter {
                 return;
             }
         } else {
-            if (path.indexOf("/login") == -1) {
+            if (path.indexOf("/login") == -1&&path.indexOf("alipay/notify") == -1 && path.indexOf("web/activities/fillingPage") == -1 ) {
                 chain.doFilter(null, response);
                 response1.sendRedirect(request1.getContextPath() + "/login");
                 return;
@@ -58,7 +58,7 @@ public class XssFilter implements Filter {
         while (e.hasMoreElements()) {
             String paramName = (String) e.nextElement();
             String value2 = new String(request.getParameter(paramName).getBytes("ISO-8859-1"), "gb2312");
-//            System.out.println(paramName + "=" + request.getParameter(paramName));
+//            System.out.println("---原始参数---："+paramName + "=" + request.getParameter(paramName));
             if (paramName.equals("t")) {
                 break;
             }
@@ -83,8 +83,9 @@ public class XssFilter implements Filter {
             value2 = value2.replace("\":null", "");
             value2 = value2.replace("\":", "");
             value2 = value2.replace(",\"", "");
-            System.out.println(value2);
-            a = select(value2);
+            if (path.indexOf("alipay/notify") == -1) {
+                a = select(value2);
+            }
             if (a == 1) {
                 chain.doFilter(null, response);
             }
@@ -101,6 +102,7 @@ public class XssFilter implements Filter {
 
     public int select(String value) {
         if (value.indexOf(">") != -1 || value.indexOf("<") != -1 || value.indexOf("+") != -1 || value.indexOf("&") != -1 || value.indexOf(")") != -1 || value.indexOf("(") != -1 || value.indexOf("%") != -1 || value.indexOf(";") != -1 || value.indexOf("\'") != -1 || value.indexOf("\"") != -1) {
+            System.out.println("被拦截："+value);
             return 1;
         }
         return 0;
