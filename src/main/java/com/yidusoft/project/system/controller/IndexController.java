@@ -462,7 +462,7 @@ public class IndexController {
     public Result signCheckMobileCode(String mobile,String vrifyCode,HttpServletRequest request){
         if (!"".equals(vrifyCode) && !"".equals(mobile)){
             String signCode = (String) request.getSession().getAttribute("signCode");
-            if (!signCode.equals(vrifyCode) && !"".equals(signCode)) {
+            if (!vrifyCode.equals(signCode) && !"".equals(signCode)) {
                 return ResultGenerator.genFailResult("手机验证码错误！");
             }
             String phone = (String) request.getSession().getAttribute("mobile");
