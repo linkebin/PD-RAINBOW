@@ -1,5 +1,6 @@
 package com.yidusoft.project.cube.questionnaire.web;
 
+import com.yidusoft.configurer.ResourcesStatic;
 import com.yidusoft.project.questionnaire.domain.Questionnaire;
 import com.yidusoft.project.questionnaire.domain.QuestionnaireQuestion;
 import com.yidusoft.project.questionnaire.service.QuestionnaireAnswerService;
@@ -82,9 +83,9 @@ public class WebCubeQuestionnaireController {
         model.addAttribute("questionnaire",questionnaire);
         //判断问卷的类型 1 左右滑动 2  平铺
         if(questionnaire.getAnswerModelType()==1
-                && !("生活事件量表(LES)").equals(questionnaire.getGaugeName())
-                && !("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())
-                && !("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())
+                && !(ResourcesStatic.GAUGE_7).equals(questionnaire.getGaugeName())
+                && !(ResourcesStatic.GAUGE_10).equals(questionnaire.getGaugeName())
+                && !(ResourcesStatic.GAUGE_12).equals(questionnaire.getGaugeName())
                 ){
             List<QuestionnaireQuestion> questionnaireQuestions = null;
             if (questionnaireId != null && questionnaireId != "") {
@@ -107,11 +108,11 @@ public class WebCubeQuestionnaireController {
             model.addAttribute("scoreList", answers);
             return "project/cube/questionnaire/horizontal-questionnaire";
            // return "project/cube/questionnaire/questionnaire";
-        }else if(("生活事件量表(LES)").equals(questionnaire.getGaugeName())){
+        }else if((ResourcesStatic.GAUGE_12).equals(questionnaire.getGaugeName())){
             return "project/cube/questionnaireFilling/fillIn_gauge_12";
-        }else if(("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())){
+        }else if((ResourcesStatic.GAUGE_7).equals(questionnaire.getGaugeName())){
             return "project/cube/questionnaireFilling/fillIn_gauge_7";
-        }else  if(("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())){
+        }else  if((ResourcesStatic.GAUGE_10).equals(questionnaire.getGaugeName())){
             return "project/cube/questionnaireFilling/fillIn_gauge_10";
         }else {
             return "project/cube/questionnaire/vertical-questionnaire";
@@ -148,12 +149,13 @@ public class WebCubeQuestionnaireController {
         model.addAttribute("questionnaireId",questionnaireId);
         model.addAttribute("userId",userId);
         model.addAttribute("acquisitionId",acquisitionId);
+        //这是由于这种量表有三种类型的问卷，则通过问卷名称特殊处理，后续建议还是创建三种名字不同的量表
         Questionnaire questionnaires=questionnaireService.findById(questionnaireId);
-        if("长处和困难问卷(SDQ)家长版".equals(questionnaires.getQuestionnaireName())){
+        if("长处和困难问卷（SDQ）家长版".equals(questionnaires.getQuestionnaireName())){
             return "project/cube/questionnaireDetails/gauge_7_b";
-        }else if("长处和困难问卷(SDQ)老师版".equals(questionnaires.getQuestionnaireName())) {
+        }else if("长处和困难问卷（SDQ）老师版".equals(questionnaires.getQuestionnaireName())) {
             return "project/cube/questionnaireDetails/gauge_7_c";
-        }else if("长处和困难问卷(SDQ)学生版".equals(questionnaires.getQuestionnaireName())){
+        }else if("长处和困难问卷（SDQ）学生版".equals(questionnaires.getQuestionnaireName())){
             return "project/cube/questionnaireDetails/gauge_7_a";
         }
         Questionnaire questionnaire = questionnaireService.findQuestionnaireType(questionnaireId);

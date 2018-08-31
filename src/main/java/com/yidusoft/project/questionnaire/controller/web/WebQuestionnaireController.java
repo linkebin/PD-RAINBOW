@@ -1,6 +1,7 @@
 package com.yidusoft.project.questionnaire.controller.web;
 
 
+import com.yidusoft.configurer.ResourcesStatic;
 import com.yidusoft.project.questionnaire.dao.QuestionnaireQuestionFactorMapper;
 import com.yidusoft.project.questionnaire.domain.*;
 import com.yidusoft.project.questionnaire.service.*;
@@ -124,44 +125,12 @@ public class WebQuestionnaireController {
         model.addAttribute("questionnaireId",questionnaireId);
         Questionnaire questionnaire= questionnaireService.findQuestionnaireType(questionnaireId);
         model.addAttribute("questionnaireName", questionnaire.getQuestionnaireName());
-        //判断问卷的类型 1 左右滑动 2  平铺
-    /*    if(questionnaire.getAnswerModelType()==1
-                && !("生活事件量表(LES)").equals(questionnaire.getGaugeName())
-                && !("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())
-                && !("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())
-                ){
-            List<QuestionnaireQuestion> questionnaireQuestions = null;
-            if (questionnaireId != null && questionnaireId != "") {
-                questionnaireQuestions = questionnaireAnswerService.questionList(questionnaireId);
-            }
-            //获取选项
-            List<String> optionAnswers = questionnaireAnswerService.getOptionAnswer(questionnaireQuestions);
 
-            //获取问题，每10道为一页
-            List<List<QuestionnaireQuestion>> questionlist = questionnaireAnswerService.getQuestionnaireByPage(questionnaireQuestions);
-
-            //获取题目数量
-            int questionnaireQuestionSize = questionnaireQuestions.size();
-
-            //获取问题答案
-            List<List<String>> answers = questionnaireAnswerService.getAnswers(questionnaireQuestions);
-
-            //获取问卷名称
-           String gaugeName = questionnaire.getGaugeName();
-
-            model.addAttribute("optionAnswers", optionAnswers);
-            model.addAttribute("questionlist", questionlist);
-            model.addAttribute("questionnaireQuestionSize", questionnaireQuestionSize);
-            model.addAttribute("scoreList", answers);
-            model.addAttribute("gaugeName", gaugeName);
-            return "project/questionnaire/questionnairePreview/questionnaire_horizontal_preview";
-
-        }else*/
-        if(("生活事件量表(LES)").equals(questionnaire.getGaugeName())){
+        if((ResourcesStatic.GAUGE_12).equals(questionnaire.getGaugeName())){
             return "project/questionnaire/questionnairePreview/fillIn_gauge_12_preview";
-        }else if(("长处和困难问卷(SDQ)").equals(questionnaire.getGaugeName())){
+        }else if((ResourcesStatic.GAUGE_7).equals(questionnaire.getGaugeName())){
             return "project/questionnaire/questionnairePreview/fillIn_gauge_7_preview";
-        }else  if(("匹兹堡睡眠质量指数(PSQI)").equals(questionnaire.getGaugeName())){
+        }else  if((ResourcesStatic.GAUGE_10).equals(questionnaire.getGaugeName())){
             return "project/questionnaire/questionnairePreview/fillIn_gauge_10_preview";
         }else {
             return "project/questionnaire/questionnairePreview/questionnaire_vertical_preview";

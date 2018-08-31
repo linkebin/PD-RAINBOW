@@ -115,4 +115,8 @@ public  class  ResourcesStatic {
         GAUGE.put("心理授权问卷", "gauge_1");
         GAUGE.put("大学生文科兴趣量表", "gauge_1");
     }
+    //全局静态常量
+    public  static  final String GAUGE_7="长处和困难问卷（SDQ）";
+    public  static  final String GAUGE_10="匹兹堡睡眠质量指数（PSQI）";
+    public  static  final String GAUGE_12="生活事件量表（LES）";
 }

@@ -471,7 +471,7 @@ eui.use(['form', 'layedit', 'laydate','laypage', 'layer'], function(){
         checkGauge(data.value);
         var gaugeName=$("#gaugeId").find("option:selected").text().trim();
         //选择的如果是特定的量表 则模板类型为固定模板
-        if(gaugeName=="生活事件量表(LES)" || gaugeName=="长处和困难问卷(SDQ)" || gaugeName=="匹兹堡睡眠质量指数(PSQI)"){
+        if(gaugeName=="生活事件量表（LES）" || gaugeName=="长处和困难问卷（SDQ）" || gaugeName=="匹兹堡睡眠质量指数（PSQI）"){
             $("#options").remove();
             var options='<option id="options" value="3">固定模版</option>';
             $("#answerModelType").append(options);
