@@ -100,7 +100,9 @@ $(function() {
                         $("#doc-modal-1").hide();
                         $(".am-active").hide();
                         parent.childCallParent('/files'+result.data+'?t='+ Math.random())
-                	}
+                	}else {
+                        layer.msg(result.message);
+                    }
                 },
                 error: function(){
                 	$modal.modal('close');
