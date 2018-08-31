@@ -344,9 +344,9 @@ public class UploadController {
 
     }
 
-    @PostMapping("/upload/cropHeadImg")
-    public Result cropHeadImg(   HttpServletRequest request) {
-        String image =request.getParameter("image");
+    @RequestMapping(value = "/upload/cropHeadImg", produces="application/json;charset=utf-8;")
+    @ResponseBody
+    public Result cropHeadImg( @RequestBody String image) {
         String saveFileName = "";
         String path = "";
         FileResponseData fileResponseData = null;
@@ -402,7 +402,7 @@ public class UploadController {
                 secUserService.update(secUser);
                 return ResultGenerator.genSuccessResult(childPath + "/" + saveFileName);
             }else {
-                return  ResultGenerator.genFailResult("图片过大，请重新上传！");
+                return  ResultGenerator.genFailResult("传入的图片无效，请重新上传！");
             }
         } catch (Exception e) {
             return ResultGenerator.genFailResult("上传图片失败！");

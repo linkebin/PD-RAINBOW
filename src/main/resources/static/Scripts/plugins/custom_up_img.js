@@ -83,12 +83,15 @@ $(function() {
         $modal.modal('close');
     	var url=$(this).attr("url");
     	var canvas=$("#image").cropper('getCroppedCanvas');
-    	var data=canvas.toDataURL(); //转成base64
+    	var data=canvas.toDataURL().toString(); //转成base64
+        var jsonObj  =new Object();  ;
+        jsonObj.image=data;
         $.ajax( {
                 url:url,
-                dataType:'json',
+                contentType: "application/json;charset=utf-8",
+                dataType:"json",
                 type: "POST",
-                data: {"image":data.toString()},
+                data: JSON.stringify(jsonObj),
                 success: function(result){
                     $modal.modal();
                     $modal.modal('close');
