@@ -45,7 +45,7 @@ public class XssFilter implements Filter {
                 return;
             }
         } else {
-            if (path.indexOf("/login") == -1&&path.indexOf("alipay/notify") == -1 && path.indexOf("web/activities/fillingPage") == -1 ) {
+            if (path.indexOf("/login") == -1&&path.indexOf("alipay/notify") == -1 && path.indexOf("web/activities/fillingPage") == -1&&path.indexOf("/Scripts") == -1) {
                 chain.doFilter(null, response);
                 response1.sendRedirect(request1.getContextPath() + "/login");
                 return;
@@ -59,7 +59,7 @@ public class XssFilter implements Filter {
             String paramName = (String) e.nextElement();
             String value2 = new String(request.getParameter(paramName).getBytes("ISO-8859-1"), "gb2312");
 //            System.out.println("---原始参数---："+paramName + "=" + request.getParameter(paramName));
-            if (paramName.equals("t")) {
+            if (paramName.equals("t")||paramName.equals("json")) {
                 break;
             }
             if (paramName.equals("image") && request.getParameter(paramName).toString().indexOf("data:image") != -1) {
